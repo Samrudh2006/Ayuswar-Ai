@@ -32,21 +32,22 @@ import {
   QrCode,
   ArrowUpRight
 } from 'lucide-react';
+import FeatureDetailModal from './FeatureDetailModal';
 
 /**
  * HeroLanding Component
  * Complete, world-class enterprise marketing site for AyuSwar AI.
  * Built with full-width modern layout, interactive language carousel with live Timbre voice playback,
- * before-vs-after comparison toggles, 6-bento interactive deep-tech moats, and portal gateways.
+ * before-vs-after comparison toggles, 6-bento interactive deep-tech moats, and dedicated feature detail modals.
  */
 export default function HeroLanding({ 
   onLaunchStudio, 
   onOpenTechModal, 
-  onOpenAuthModal,
-  onOpenDoctorPortal,
-  onOpenPatientPortal
+  onOpenDoctorAuthModal,
+  onOpenPatientAuthModal
 }) {
   const [activeFeature, setActiveFeature] = useState(0);
+  const [selectedFeatureModalKey, setSelectedFeatureModalKey] = useState(null);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
   
   // Before vs After Toggle
@@ -215,8 +216,26 @@ export default function HeroLanding({
   return (
     <div style={{ position: 'relative', overflow: 'hidden', background: '#F8FAFC' }}>
       {/* =========================================================================
-          HERO SECTION (FULL WIDTH & BEAUTIFULLY PROPORTIONED)
+          HERO SECTION (WITH AUTHENTIC AYUSHMAN CLINIC BACKGROUND IMAGE)
           ========================================================================= */}
+      {/* Prominently Visible Ayushman Bharat Health Clinic Background */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        width: '56%',
+        height: '100%',
+        minHeight: '680px',
+        backgroundImage: 'url(/assets/ayuswar_hero_bg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center right',
+        opacity: 0.65,
+        maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 12%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,1) 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 12%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,1) 100%)',
+        pointerEvents: 'none',
+        zIndex: 0
+      }}></div>
+
       <div style={{
         maxWidth: '1380px',
         margin: '0 auto',
@@ -290,7 +309,7 @@ export default function HeroLanding({
               <strong style={{ color: '#0A2540' }}>AyuSwar AI</strong> is the Ambient Clinical Voice OS that listens, understands and speaks – in every Indian language. Built for every doctor, in every corner of Bharat.
             </p>
 
-            {/* 5 Feature Icons Row */}
+            {/* 5 Feature Icons Row (Each opens separate comprehensive feature matter modal) */}
             <div style={{
               display: 'flex',
               alignItems: 'stretch',
@@ -301,10 +320,21 @@ export default function HeroLanding({
               {features.map((item) => {
                 const IconComponent = item.icon;
                 const isSelected = activeFeature === item.id;
+                const featureKeyMap = [
+                  'ambient_listening',
+                  'multilingual_transcription',
+                  'acoustic_biomarkers',
+                  'prescription_scanner',
+                  'spoken_audio_rx'
+                ];
                 return (
                   <div
                     key={item.id}
-                    onClick={() => setActiveFeature(item.id)}
+                    onClick={() => {
+                      setActiveFeature(item.id);
+                      setSelectedFeatureModalKey(featureKeyMap[item.id]);
+                    }}
+                    title={`Click to inspect deep technical matter for ${item.title}`}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -312,9 +342,9 @@ export default function HeroLanding({
                       textAlign: 'center',
                       padding: '12px 10px',
                       borderRadius: '16px',
-                      background: isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                      background: isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.75)',
                       border: isSelected ? '1.5px solid #008B8B' : '1px solid #E2E8F0',
-                      boxShadow: isSelected ? '0 8px 20px rgba(0, 139, 139, 0.12)' : '0 2px 8px rgba(10, 37, 64, 0.03)',
+                      boxShadow: isSelected ? '0 8px 20px rgba(0, 139, 139, 0.14)' : '0 2px 8px rgba(10, 37, 64, 0.03)',
                       cursor: 'pointer',
                       width: '104px',
                       transition: 'all 0.2s ease',
@@ -350,9 +380,10 @@ export default function HeroLanding({
             {/* CTAs */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <button 
-                onClick={onLaunchStudio}
+                onClick={() => setSelectedFeatureModalKey('clinical_studio_overview')}
                 className="btn-primary"
                 style={{ fontSize: '16px', padding: '14px 30px' }}
+                title="View Live Clinical Studio Architecture"
               >
                 <span>Explore Live Studio</span>
                 <ArrowRight size={18} />
@@ -362,6 +393,7 @@ export default function HeroLanding({
                 onClick={onOpenTechModal}
                 className="btn-outline"
                 style={{ fontSize: '15px', padding: '13px 26px' }}
+                title="View Technical Architecture & HLD Diagram"
               >
                 <div style={{
                   width: '24px',
@@ -379,7 +411,7 @@ export default function HeroLanding({
             </div>
           </div>
 
-          {/* Right Column: Doctor Portrait with Radiating Soundwave Rings */}
+          {/* Right Column: Doctor Portrait with Radiating Soundwave Rings & Clinic Backdrop */}
           <div style={{
             position: 'relative',
             display: 'flex',
@@ -395,6 +427,20 @@ export default function HeroLanding({
               alignItems: 'center',
               justifyContent: 'center'
             }}>
+              {/* Soft ambient clinic glow backdrop */}
+              <div style={{
+                position: 'absolute',
+                width: '420px',
+                height: '420px',
+                borderRadius: '50%',
+                backgroundImage: 'url(/assets/ayuswar_hero_bg.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(30px)',
+                opacity: 0.28,
+                zIndex: 0
+              }}></div>
+
               {/* Outer Cyan Sound Ring */}
               <div style={{
                 position: 'absolute',
@@ -403,7 +449,8 @@ export default function HeroLanding({
                 borderRadius: '50%',
                 border: '1.5px solid rgba(0, 139, 139, 0.35)',
                 boxShadow: '0 0 30px rgba(0, 139, 139, 0.1)',
-                animation: 'pulseGlow 4s ease-in-out infinite'
+                animation: 'pulseGlow 4s ease-in-out infinite',
+                zIndex: 1
               }}></div>
 
               {/* Middle Amber Sound Ring */}
@@ -536,100 +583,7 @@ export default function HeroLanding({
         </div>
       </div>
 
-      {/* =========================================================================
-          GATEWAY CARDS: ENTER DOCTOR WORKSPACE OR PATIENT SEVA HUB
-          ========================================================================= */}
-      <div style={{ maxWidth: '1380px', margin: '0 auto 60px auto', padding: '0 24px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-          {/* Card 1: Doctor Portal Gateway */}
-          <div 
-            onClick={onOpenDoctorPortal}
-            className="glass-panel" 
-            style={{
-              padding: '24px 28px',
-              cursor: 'pointer',
-              border: '1.5px solid rgba(0, 139, 139, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              transition: 'all 200ms ease'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-              <div style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '14px',
-                background: 'rgba(0, 139, 139, 0.12)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#008B8B'
-              }}>
-                <Stethoscope size={26} />
-              </div>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>
-                    Doctor Portal (OPD Queue)
-                  </h3>
-                  <span style={{ fontSize: '10px', background: '#008B8B', color: '#ffffff', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
-                    PHYSICIAN WORKSPACE
-                  </span>
-                </div>
-                <p style={{ fontSize: '13px', color: '#64748B', marginTop: '4px' }}>
-                  Manage patient triage queue, inspect vitals, and trigger ambient voice documentation.
-                </p>
-              </div>
-            </div>
-            <ArrowUpRight size={22} color="#008B8B" />
-          </div>
 
-          {/* Card 2: Patient Portal Gateway */}
-          <div 
-            onClick={onOpenPatientPortal}
-            className="glass-panel" 
-            style={{
-              padding: '24px 28px',
-              cursor: 'pointer',
-              border: '1.5px solid rgba(217, 119, 6, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              transition: 'all 200ms ease'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-              <div style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '14px',
-                background: 'rgba(217, 119, 6, 0.12)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#D97706'
-              }}>
-                <Pill size={26} />
-              </div>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>
-                    Patient Seva Portal (Audio-Rx)
-                  </h3>
-                  <span style={{ fontSize: '10px', background: '#D97706', color: '#ffffff', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
-                    CITIZEN APP
-                  </span>
-                </div>
-                <p style={{ fontSize: '13px', color: '#64748B', marginTop: '4px' }}>
-                  View ABHA Health Card, replay spoken prescriptions in native dialect, and check daily pills.
-                </p>
-              </div>
-            </div>
-            <ArrowUpRight size={22} color="#D97706" />
-          </div>
-        </div>
-      </div>
 
       {/* =========================================================================
           BOTTOM METRICS & IMPACT RIBBON (EXACT TO REFERENCE)
@@ -896,7 +850,7 @@ export default function HeroLanding({
       </section>
 
       {/* =========================================================================
-          SECTION 4: 6 DEEP-TECH MOATS (CLICKABLE TO LAUNCH STUDIO)
+          SECTION 4: 6 DEEP-TECH MOATS (CLICKABLE FOR DETAILED TECHNICAL MATTER)
           ========================================================================= */}
       <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '80px 24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 50px auto' }}>
@@ -907,13 +861,13 @@ export default function HeroLanding({
             6 Deep-Tech Moats That Define AyuSwar AI
           </h2>
           <p style={{ fontSize: '16px', color: '#5A7184' }}>
-            Click on any moat to explore the live interactive algorithm in our Clinical Studio.
+            Click on any moat to inspect the dedicated mathematical architecture, algorithms, and Indic clinical benchmarks.
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
           {/* Moat 1: Acoustic Respiratory Stethoscope */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('acoustic_biomarkers')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 139, 139, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#008B8B' }}>
                 <Activity size={22} />
@@ -926,11 +880,11 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Implements spectral centroid, rolloff, and jitter metrics derived from IISc Bangalore’s Coswara research to classify dry vs wet cough and pediatric stridor directly from ambient microphone input.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#008B8B' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#008B8B' }}>View Acoustic Architecture & Specs →</div>
           </div>
 
           {/* Moat 2: Vernacular Ontology Resolver */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('multilingual_transcription')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
                 <Languages size={22} />
@@ -943,11 +897,11 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Translates regional colloquial metaphors (e.g., Telugu "గుండెల్లో దడ" or Hindi "पसली चलना") into formal WHO ICD-10 (R00.2) and SNOMED-CT clinical tokens in real-time.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#D97706' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#D97706' }}>View Indic NLP Architecture & Specs →</div>
           </div>
 
           {/* Moat 3: Karaoke Spoken Audio-Rx */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('spoken_audio_rx')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
                 <Volume2 size={22} />
@@ -960,11 +914,11 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Pairs Gnani.ai Timbre v2.5 voice synthesis with active, word-by-word visual glowing highlights across color-coded morning, afternoon, and night pill schedule cards.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#10B981' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#10B981' }}>View Timbre Voice Architecture & Specs →</div>
           </div>
 
           {/* Moat 4: OpenCV Blister Strip Scanner */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('prescription_scanner')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6366F1' }}>
                 <Scan size={22} />
@@ -977,11 +931,11 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Computer vision pipeline detects physical medicine packaging contours, runs text bounding-box extraction, and verifies against India’s National Formulary to prevent double-dosing.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#6366F1' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#6366F1' }}>View Computer Vision Architecture & Specs →</div>
           </div>
 
           {/* Moat 5: Drug-Drug Interaction Sentinel */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('cdss_safety')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
                 <ShieldCheck size={22} />
@@ -994,11 +948,11 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Autonomous safety agent flags CYP450 contraindications, age-adjusted pediatric dosages, and patient comorbidities (e.g., Peptic Ulcers + NSAIDs) with immediate audible warnings.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#EF4444' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#EF4444' }}>View Pharmacopeia Architecture & Specs →</div>
           </div>
 
           {/* Moat 6: ABDM FHIR R4 Bundle Generator */}
-          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+          <div className="bento-card" onClick={() => setSelectedFeatureModalKey('abdm_fhir')} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0EA5E9' }}>
                 <FileCheck size={22} />
@@ -1011,7 +965,7 @@ export default function HeroLanding({
             <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               1-click export of verified Ayushman Bharat Digital Mission JSON bundles and QR-code enabled print summaries that link patient ABHA health accounts.
             </p>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#0EA5E9' }}>Explore in Clinical Studio →</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#0EA5E9' }}>View FHIR Schema Architecture & Specs →</div>
           </div>
         </div>
       </section>
@@ -1288,10 +1242,10 @@ export default function HeroLanding({
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Solutions</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>OPD Ambient Scribe</span>
-              <span onClick={onOpenPatientPortal} style={{ cursor: 'pointer' }}>Vernacular Audio-Rx</span>
-              <span onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>OpenCV Blister OCR</span>
-              <span onClick={onOpenDoctorPortal} style={{ cursor: 'pointer' }}>Pediatric Triage Sentinel</span>
+              <span onClick={() => setSelectedFeatureModalKey('ambient_listening')} style={{ cursor: 'pointer' }}>OPD Ambient Scribe</span>
+              <span onClick={() => setSelectedFeatureModalKey('spoken_audio_rx')} style={{ cursor: 'pointer' }}>Vernacular Audio-Rx</span>
+              <span onClick={() => setSelectedFeatureModalKey('prescription_scanner')} style={{ cursor: 'pointer' }}>OpenCV Blister OCR</span>
+              <span onClick={() => setSelectedFeatureModalKey('acoustic_biomarkers')} style={{ cursor: 'pointer' }}>Pediatric Triage Sentinel</span>
             </div>
           </div>
 
@@ -1337,6 +1291,16 @@ export default function HeroLanding({
           </div>
         </div>
       </footer>
+
+      {/* Feature Architecture & Detail Modal (In-depth separate matter, no sudden redirect!) */}
+      <FeatureDetailModal 
+        featureKey={selectedFeatureModalKey}
+        onClose={() => setSelectedFeatureModalKey(null)}
+        onLaunchLogin={() => {
+          setSelectedFeatureModalKey(null);
+          onOpenDoctorAuthModal();
+        }}
+      />
     </div>
   );
 }

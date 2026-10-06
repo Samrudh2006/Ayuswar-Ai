@@ -5,27 +5,32 @@ import {
   Sparkles, 
   User, 
   ShieldCheck, 
-  Layers, 
   Activity, 
   FileCode2, 
   BookOpen, 
   CheckCircle2, 
-  LogOut 
+  LogOut,
+  Pill,
+  Radio,
+  ArrowRight
 } from 'lucide-react';
 
 /**
  * Navbar Component
- * World-class enterprise navigation bar following Emil Kowalski's tactile design principles.
- * Includes dropdown menus, official Gnani model status, and ABDM Doctor login portal.
+ * Enterprise navigation bar.
+ * Provides explicit, secure access to Doctor Portal and Patient Seva Portal,
+ * with role-based authenticated session indicators.
  */
 export default function Navbar({ 
   activeView, 
   setActiveView, 
   onOpenTechModal, 
-  onOpenAuthModal, 
-  doctorProfile, 
+  onOpenDoctorAuthModal,
+  onOpenPatientAuthModal,
+  doctorProfile,
+  patientProfile,
   onLogoutDoctor,
-  onNavigateSection 
+  onLogoutPatient
 }) {
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
@@ -35,7 +40,7 @@ export default function Navbar({
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      background: 'rgba(255, 255, 255, 0.94)',
+      background: 'rgba(255, 255, 255, 0.95)',
       backdropFilter: 'blur(16px)',
       borderBottom: '1px solid rgba(216, 231, 235, 0.8)',
       boxShadow: '0 4px 20px rgba(10, 37, 64, 0.03)'
@@ -51,7 +56,10 @@ export default function Navbar({
       }}>
         {/* Brand Logo & Tagline */}
         <div 
-          onClick={() => setActiveView('landing')}
+          onClick={() => {
+            setActiveView('landing');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
           style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', userSelect: 'none' }}
         >
           <div style={{
@@ -117,8 +125,7 @@ export default function Navbar({
               fontWeight: activeView === 'landing' ? 750 : 500,
               color: activeView === 'landing' ? '#008B8B' : '#0B2545',
               cursor: 'pointer',
-              padding: '6px 4px',
-              transition: 'color 160ms ease'
+              padding: '6px 4px'
             }}
           >
             Home
@@ -166,24 +173,36 @@ export default function Navbar({
                 zIndex: 200
               }}>
                 <div 
-                  onClick={() => { setActiveView('console'); setSolutionsOpen(false); }}
+                  onClick={() => {
+                    const el = document.getElementById('solutions-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    setSolutionsOpen(false);
+                  }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.05)' }}
                 >
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540' }}>OPD Ambient Scribe</div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>Real-time dual-speaker medical dictation</div>
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>OPD Ambient Scribe</div>
+                  <div style={{ fontSize: '11px', color: '#64748B' }}>Real-time dual-speaker clinical dictation</div>
                 </div>
                 <div 
-                  onClick={() => { setActiveView('console'); setSolutionsOpen(false); }}
+                  onClick={() => {
+                    const el = document.getElementById('solutions-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    setSolutionsOpen(false);
+                  }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
                 >
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540' }}>Vernacular Audio-Rx</div>
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>Vernacular Audio-Rx</div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>Timbre v2.5 spoken dosage instructions</div>
                 </div>
                 <div 
-                  onClick={() => { setActiveView('console'); setSolutionsOpen(false); }}
+                  onClick={() => {
+                    const el = document.getElementById('solutions-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    setSolutionsOpen(false);
+                  }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
                 >
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540' }}>OpenCV Strip Scanner</div>
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>OpenCV Strip Scanner</div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>Computer vision blister strip validation</div>
                 </div>
               </div>
@@ -197,8 +216,8 @@ export default function Navbar({
               border: 'none',
               fontFamily: 'Outfit, sans-serif',
               fontSize: '14.5px',
-              fontWeight: 500,
-              color: '#0B2545',
+              fontWeight: activeView === 'tech_specs' ? 750 : 500,
+              color: activeView === 'tech_specs' ? '#008B8B' : '#0B2545',
               cursor: 'pointer',
               padding: '6px 4px'
             }}
@@ -227,148 +246,75 @@ export default function Navbar({
           >
             Clinical Impact
           </button>
-
-          {/* Resources Dropdown */}
-          <div 
-            style={{ position: 'relative' }}
-            onMouseEnter={() => setResourcesOpen(true)}
-            onMouseLeave={() => setResourcesOpen(false)}
-          >
-            <button 
-              style={{
-                background: 'none',
-                border: 'none',
-                fontFamily: 'Outfit, sans-serif',
-                fontSize: '14.5px',
-                fontWeight: 500,
-                color: '#0B2545',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '6px 4px'
-              }}
-            >
-              <span>Resources</span>
-              <ChevronDown size={14} color="#64748B" />
-            </button>
-
-            {resourcesOpen && (
-              <div style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                width: '260px',
-                background: '#ffffff',
-                border: '1px solid #D8E7EB',
-                borderRadius: '14px',
-                boxShadow: '0 12px 36px rgba(10, 37, 64, 0.12)',
-                padding: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '6px',
-                zIndex: 200
-              }}>
-                <div onClick={onOpenTechModal} style={{ padding: '8px 12px', borderRadius: '8px', cursor: 'pointer' }}>
-                  <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#0A2540' }}>IISc Coswara Dataset</div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>Acoustic cough & dyspnea biomarkers</div>
-                </div>
-                <div onClick={onOpenTechModal} style={{ padding: '8px 12px', borderRadius: '8px', cursor: 'pointer' }}>
-                  <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#0A2540' }}>ABDM FHIR R4 Schema</div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>Official National Health Authority spec</div>
-                </div>
-                <div onClick={onOpenTechModal} style={{ padding: '8px 12px', borderRadius: '8px', cursor: 'pointer' }}>
-                  <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#0A2540' }}>Gnani API Integration</div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>Prisma STT & Timbre TTS pipeline</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Direct Switch to Clinical Studio */}
-          <button 
-            onClick={() => setActiveView('console')}
-            style={{
-              background: activeView === 'console' ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
-              border: activeView === 'console' ? '1.5px solid #008B8B' : '1px solid transparent',
-              borderRadius: '20px',
-              fontFamily: 'Outfit, sans-serif',
-              fontSize: '14px',
-              fontWeight: 700,
-              color: '#008B8B',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 14px',
-              transition: 'all 160ms ease'
-            }}
-          >
-            <span>Clinical Studio</span>
-            <span style={{
-              background: '#008B8B',
-              color: '#ffffff',
-              fontSize: '10px',
-              padding: '2px 6px',
-              borderRadius: '10px',
-              fontWeight: 750
-            }}>LIVE</span>
-          </button>
         </nav>
 
-        {/* Doctor Login / Profile & CTA Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {doctorProfile ? (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              background: 'rgba(16, 185, 129, 0.08)',
-              border: '1.5px solid rgba(16, 185, 129, 0.3)',
-              borderRadius: '24px',
-              fontSize: '12.5px',
-              color: '#065F46',
-              fontWeight: 700
-            }}>
-              <CheckCircle2 size={16} color="#10B981" />
-              <span>{doctorProfile.doctorName}</span>
-              <button 
-                onClick={onLogoutDoctor}
-                title="Logout Doctor Session"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B', display: 'flex', alignItems: 'center', padding: '0 2px' }}
-              >
-                <LogOut size={14} />
-              </button>
-            </div>
-          ) : (
-            <button 
-              onClick={onOpenAuthModal}
-              className="btn-outline"
-              style={{ fontSize: '13px', padding: '8px 18px', borderRadius: '24px' }}
-            >
-              <User size={15} />
-              <span>Doctor Portal</span>
-            </button>
-          )}
-
+        {/* Portals Access & Login CTAs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {activeView === 'landing' ? (
-            <button 
-              onClick={() => setActiveView('console')}
-              className="btn-primary"
-              style={{ fontSize: '13.5px', padding: '10px 22px' }}
-            >
-              <Sparkles size={16} />
-              <span>Launch Studio</span>
-            </button>
+            // Clean, unauthenticated landing page header
+            <>
+              <button 
+                onClick={onOpenDoctorAuthModal}
+                className="btn-outline"
+                style={{ fontSize: '13px', padding: '8px 16px', borderRadius: '24px' }}
+                title="Sign in as Physician / Hospital Administrator"
+              >
+                <Stethoscope size={15} color="#008B8B" />
+                <span>Doctor Portal</span>
+              </button>
+
+              <button 
+                onClick={onOpenPatientAuthModal}
+                className="btn-outline"
+                style={{ fontSize: '13px', padding: '8px 16px', borderRadius: '24px', borderColor: 'rgba(217, 119, 6, 0.4)', color: '#D97706' }}
+                title="Sign in as Citizen / ABHA Patient"
+              >
+                <Pill size={15} color="#D97706" />
+                <span>Patient Portal</span>
+              </button>
+            </>
           ) : (
-            <button 
-              onClick={() => setActiveView('landing')}
-              className="btn-outline"
-              style={{ fontSize: '13px', padding: '10px 18px' }}
-            >
-              <span>← Back to Overview</span>
-            </button>
+            // In-workspace navigation header
+            <>
+              <button 
+                onClick={() => {
+                  setActiveView('landing');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="btn-outline"
+                style={{ fontSize: '12.5px', padding: '7px 14px', borderRadius: '20px' }}
+              >
+                <span>← Back to Overview</span>
+              </button>
+
+              {activeView === 'doctor_portal' && (
+                <button 
+                  onClick={() => {
+                    onLogoutDoctor();
+                    setActiveView('landing');
+                  }}
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '6px 12px', borderRadius: '20px', color: '#EF4444', borderColor: '#FCA5A5' }}
+                >
+                  <LogOut size={13} />
+                  <span>Exit Portal</span>
+                </button>
+              )}
+
+              {activeView === 'patient_portal' && (
+                <button 
+                  onClick={() => {
+                    onLogoutPatient();
+                    setActiveView('landing');
+                  }}
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '6px 12px', borderRadius: '20px', color: '#EF4444', borderColor: '#FCA5A5' }}
+                >
+                  <LogOut size={13} />
+                  <span>Exit Portal</span>
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>

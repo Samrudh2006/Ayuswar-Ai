@@ -8,31 +8,33 @@ import PatientPortal from './components/PatientPortal';
 import TechSpecsView from './components/TechSpecsView';
 import ArchitectureModal from './components/ArchitectureModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
+import PatientAuthModal from './components/PatientAuthModal';
 import NotificationDrawer from './components/NotificationDrawer';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
  * Architecture Decision:
  * - Public Landing Page is a stunning full-width, edge-to-edge marketing showcase (no sidebar crowding!).
- * - The Collapsible Sidebar ONLY activates when entering application workspaces:
- *   Doctor Portal, Clinical Studio, Patient Portal, and Tech Specs.
+ * - Interactive elements on the landing page explain features with deep dedicated matter (no premature redirects).
+ * - Workspaces require role-based authentication:
+ *   • Doctor Portal: Verified ABDM Healthcare Professional Registry (HPR).
+ *   • Patient Portal: Verified ABHA Citizen Health Account.
+ * - The Collapsible Sidebar ONLY activates inside authenticated workspaces.
  */
 export default function App() {
   const [activeView, setActiveView] = useState('landing');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isDoctorAuthModalOpen, setIsDoctorAuthModalOpen] = useState(false);
+  const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
 
-  // Authenticated doctor profile
-  const [doctorProfile, setDoctorProfile] = useState({
-    doctorName: 'Dr. Ananya Sharma, MD',
-    hprId: 'ABHA-HPR-8921-9942',
-    facility: 'Kurnool District Hospital (ABDM PHC #1402)'
-  });
+  // Authenticated profiles (null by default until verified login)
+  const [doctorProfile, setDoctorProfile] = useState(null);
+  const [patientProfile, setPatientProfile] = useState(null);
 
-  const handleLoginSuccess = (profile) => {
+  const handleDoctorLoginSuccess = (profile) => {
     setDoctorProfile(profile);
     setActiveView('doctor_portal');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -40,6 +42,18 @@ export default function App() {
 
   const handleLogoutDoctor = () => {
     setDoctorProfile(null);
+    setActiveView('landing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePatientLoginSuccess = (profile) => {
+    setPatientProfile(profile);
+    setActiveView('patient_portal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogoutPatient = () => {
+    setPatientProfile(null);
     setActiveView('landing');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -59,18 +73,58 @@ export default function App() {
       <Navbar 
         activeView={activeView} 
         setActiveView={setActiveView} 
-        onOpenTechModal={() => {
-          setActiveView('tech_specs');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onOpenTechModal={() => setIsTechModalOpen(true)}
+        onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
+        onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
         doctorProfile={doctorProfile}
+        patientProfile={patientProfile}
         onLogoutDoctor={handleLogoutDoctor}
+        onLogoutPatient={handleLogoutPatient}
       />
 
       {/* Main View Container */}
-      {isAppWorkspaceMode ? (
-        // App Workspace Layout with Collapsible Sidebar
+      {activeView === 'landing' && (
+        <main style={{ flex: 1 }}>
+          <HeroLanding 
+            onLaunchStudio={() => setIsDoctorAuthModalOpen(true)} 
+            onOpenTechModal={() => setIsTechModalOpen(true)}
+            onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
+            onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
+          />
+        </main>
+      )}
+
+      {activeView === 'doctor_portal' && (
+        <main style={{ flex: 1 }}>
+          <DoctorPortal 
+            doctorProfile={doctorProfile || {
+              doctorName: 'Dr. Priya Sharma',
+              specialty: 'Pulmonologist',
+              hprId: 'ABHA-HPR-8921-9942',
+              facility: 'District Hospital / Tier-1 Pulmonology OPD'
+            }}
+            onSelectEncounterAndLaunch={handleLaunchEncounterFromDoctorQueue}
+            onOpenTechModal={() => setIsTechModalOpen(true)}
+          />
+        </main>
+      )}
+
+      {activeView === 'patient_portal' && (
+        <main style={{ flex: 1 }}>
+          <PatientPortal 
+            patientProfile={patientProfile || {
+              patientName: 'Ananya Rao',
+              age: 28,
+              gender: 'Female',
+              language: 'Telugu',
+              abhaId: '91-4521-8932-1049'
+            }}
+            onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
+          />
+        </main>
+      )}
+
+      {(activeView === 'console' || activeView === 'tech_specs') && (
         <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 68px)' }}>
           <Sidebar 
             activeView={activeView}
@@ -83,13 +137,6 @@ export default function App() {
           />
 
           <main style={{ flex: 1, overflowY: 'auto', background: '#F8FAFC' }}>
-            {activeView === 'doctor_portal' && (
-              <DoctorPortal 
-                doctorProfile={doctorProfile}
-                onSelectEncounterAndLaunch={handleLaunchEncounterFromDoctorQueue}
-              />
-            )}
-
             {activeView === 'console' && (
               <ClinicalConsole 
                 doctorProfile={doctorProfile}
@@ -97,43 +144,20 @@ export default function App() {
               />
             )}
 
-            {activeView === 'patient_portal' && (
-              <PatientPortal />
-            )}
-
             {activeView === 'tech_specs' && (
               <TechSpecsView 
                 onLaunchConsole={() => {
-                  setActiveView('console');
+                  if (doctorProfile) {
+                    setActiveView('console');
+                  } else {
+                    setIsDoctorAuthModalOpen(true);
+                  }
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
               />
             )}
           </main>
         </div>
-      ) : (
-        // Full-Width Landing Page (No sidebar squeezing the marketing site!)
-        <main style={{ flex: 1 }}>
-          <HeroLanding 
-            onLaunchStudio={() => {
-              setActiveView('console');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} 
-            onOpenTechModal={() => {
-              setActiveView('tech_specs');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-            onOpenDoctorPortal={() => {
-              setActiveView('doctor_portal');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onOpenPatientPortal={() => {
-              setActiveView('patient_portal');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
-        </main>
       )}
 
       {/* Real-Time Clinical Notification Drawer */}
@@ -144,9 +168,16 @@ export default function App() {
 
       {/* Doctor Authentication Modal */}
       <DoctorAuthModal 
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLoginSuccess={handleLoginSuccess}
+        isOpen={isDoctorAuthModalOpen}
+        onClose={() => setIsDoctorAuthModalOpen(false)}
+        onLoginSuccess={handleDoctorLoginSuccess}
+      />
+
+      {/* Patient Authentication Modal */}
+      <PatientAuthModal 
+        isOpen={isPatientAuthModalOpen}
+        onClose={() => setIsPatientAuthModalOpen(false)}
+        onLoginSuccess={handlePatientLoginSuccess}
       />
 
       {/* Architecture Telemetry Modal Fallback */}
