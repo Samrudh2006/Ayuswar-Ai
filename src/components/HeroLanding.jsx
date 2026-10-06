@@ -30,7 +30,8 @@ import {
   Pill,
   Radio,
   QrCode,
-  ArrowUpRight
+  ArrowUpRight,
+  X
 } from 'lucide-react';
 import FeatureDetailModal from './FeatureDetailModal';
 
@@ -59,6 +60,7 @@ export default function HeroLanding({
   // Pan-India Language Carousel & Audio State
   const [selectedLanguageRegion, setSelectedLanguageRegion] = useState('all');
   const [playingLangSample, setPlayingLangSample] = useState(null);
+  const [isAllDialectsModalOpen, setIsAllDialectsModalOpen] = useState(false);
   const carouselScrollRef = useRef(null);
 
   const features = [
@@ -931,73 +933,44 @@ export default function HeroLanding({
                 ))}
               </div>
 
-              {/* Side Scroll Arrows (< and >) */}
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <button
-                  onClick={() => scrollCarousel('left')}
-                  style={{
-                    width: '38px',
-                    height: '38px',
-                    borderRadius: '50%',
-                    background: '#ffffff',
-                    border: '1.5px solid #CBD5E1',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    color: '#0A2540'
-                  }}
-                  title="Scroll Left"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  onClick={() => scrollCarousel('right')}
-                  style={{
-                    width: '38px',
-                    height: '38px',
-                    borderRadius: '50%',
-                    background: '#0A2540',
-                    border: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    color: '#ffffff'
-                  }}
-                  title="Scroll Right"
-                >
-                  <ChevronRight size={20} />
-                </button>
+              {/* Active Demos Indicator Badge */}
+              <div style={{
+                background: 'rgba(0, 139, 139, 0.1)',
+                color: '#008B8B',
+                padding: '6px 14px',
+                borderRadius: '20px',
+                fontSize: '12px',
+                fontWeight: 750,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#008B8B', display: 'inline-block' }} />
+                <span>3 Core Demos + 47 More</span>
               </div>
             </div>
           </div>
 
-          {/* Horizontal Scrollable Carousel Container */}
+          {/* 3 Core Interactive Demos + 1 '+47 More' Dialects Card (Zero Horizontal Overflow) */}
           <div 
-            ref={carouselScrollRef}
             style={{
-              display: 'flex',
-              gap: '18px',
-              overflowX: 'auto',
-              paddingBottom: '16px',
-              scrollSnapType: 'x mandatory'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '20px'
             }}
           >
-            {filteredLanguages.map((lang) => {
+            {/* Exactly 3 Core Demos */}
+            {filteredLanguages.slice(0, 3).map((lang) => {
               const isPlaying = playingLangSample === lang.id;
               return (
                 <div
                   key={lang.id}
                   style={{
-                    minWidth: '310px',
-                    maxWidth: '310px',
                     background: isPlaying ? 'linear-gradient(135deg, rgba(0, 139, 139, 0.08) 0%, rgba(217, 119, 6, 0.05) 100%)' : '#ffffff',
                     border: isPlaying ? '2px solid #008B8B' : '1px solid #E2E8F0',
                     borderRadius: '16px',
-                    padding: '22px',
+                    padding: '24px',
                     boxShadow: isPlaying ? '0 12px 30px rgba(0, 139, 139, 0.15)' : '0 4px 14px rgba(10, 37, 64, 0.03)',
-                    scrollSnapAlign: 'start',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -1006,23 +979,24 @@ export default function HeroLanding({
                 >
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                      <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>{lang.name}</div>
-                      <div style={{ fontSize: '17px', fontWeight: 800, color: '#008B8B' }}>{lang.native}</div>
+                      <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540' }}>{lang.name}</div>
+                      <div style={{ fontSize: '18px', fontWeight: 800, color: '#008B8B' }}>{lang.native}</div>
                     </div>
 
-                    <div style={{ fontSize: '11.5px', color: '#64748B', marginBottom: '14px' }}>
+                    <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '14px' }}>
                       {lang.state}
                     </div>
 
                     <div style={{
                       background: '#F1F5F9',
-                      padding: '12px',
+                      padding: '14px',
                       borderRadius: '10px',
                       fontSize: '13px',
                       color: '#1E293B',
                       fontStyle: 'italic',
                       lineHeight: 1.5,
-                      marginBottom: '16px'
+                      marginBottom: '16px',
+                      minHeight: '62px'
                     }}>
                       "{lang.sample}"
                     </div>
@@ -1033,7 +1007,7 @@ export default function HeroLanding({
                     onClick={() => handlePlayLanguageSample(lang)}
                     style={{
                       width: '100%',
-                      padding: '10px 14px',
+                      padding: '11px 16px',
                       borderRadius: '24px',
                       border: isPlaying ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
                       background: isPlaying ? '#008B8B' : '#ffffff',
@@ -1045,7 +1019,8 @@ export default function HeroLanding({
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      transition: 'all 160ms ease'
+                      transition: 'all 160ms ease',
+                      boxShadow: isPlaying ? '0 4px 15px rgba(0, 139, 139, 0.25)' : 'none'
                     }}
                   >
                     {isPlaying ? <Pause size={14} /> : <Play size={14} fill={isPlaying ? "#ffffff" : "#0A2540"} />}
@@ -1054,6 +1029,107 @@ export default function HeroLanding({
                 </div>
               );
             })}
+
+            {/* 4th Card: +47 More Dialects Across Bharat */}
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #0A2540 0%, #0D3B66 50%, #008B8B 100%)',
+                borderRadius: '16px',
+                padding: '24px',
+                color: '#ffffff',
+                boxShadow: '0 8px 24px rgba(10, 37, 64, 0.12)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ 
+                    background: 'rgba(255, 255, 255, 0.15)', 
+                    padding: '3px 10px', 
+                    borderRadius: '20px', 
+                    fontSize: '11px', 
+                    fontWeight: 800, 
+                    letterSpacing: '0.5px' 
+                  }}>
+                    +47 MORE DIALECTS
+                  </span>
+                  <span style={{ fontSize: '13px', color: '#93C5FD', fontWeight: 700 }}>భారతీయ భాషలు</span>
+                </div>
+
+                <div style={{ fontSize: '20px', fontWeight: 800, margin: '6px 0 4px 0', fontFamily: 'Outfit, sans-serif' }}>
+                  Pan-India Coverage
+                </div>
+                <div style={{ fontSize: '12px', color: '#CBD5E1', marginBottom: '14px', lineHeight: 1.4 }}>
+                  Covering 22 official scheduled languages & 50+ regional sub-dialects across every corner of Bharat.
+                </div>
+
+                {/* Dialect chips badge cloud */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
+                  {[
+                    { name: 'Kannada', script: 'ಕನ್ನಡ' },
+                    { name: 'Marathi', script: 'मराठी' },
+                    { name: 'Bengali', script: 'বাংলা' },
+                    { name: 'Gujarati', script: 'ગુજરાતી' },
+                    { name: 'Malayalam', script: 'മലയാളം' },
+                    { name: 'Odia', script: 'ଓଡ଼ିଆ' },
+                    { name: 'Punjabi', script: 'ਪੰਜਾਬੀ' },
+                    { name: 'Assamese', script: 'অসমীয়া' }
+                  ].map((d, i) => (
+                    <span 
+                      key={i} 
+                      style={{ 
+                        background: 'rgba(255, 255, 255, 0.12)', 
+                        padding: '3px 8px', 
+                        borderRadius: '6px', 
+                        fontSize: '11px', 
+                        fontWeight: 650,
+                        border: '1px solid rgba(255, 255, 255, 0.15)' 
+                      }}
+                    >
+                      {d.script} ({d.name})
+                    </span>
+                  ))}
+                  <span style={{ 
+                    background: 'rgba(0, 139, 139, 0.4)', 
+                    padding: '3px 8px', 
+                    borderRadius: '6px', 
+                    fontSize: '11px', 
+                    fontWeight: 800 
+                  }}>
+                    +39 More...
+                  </span>
+                </div>
+              </div>
+
+              {/* Modal trigger button */}
+              <button
+                onClick={() => setIsAllDialectsModalOpen(true)}
+                style={{
+                  width: '100%',
+                  padding: '11px 16px',
+                  borderRadius: '24px',
+                  border: 'none',
+                  background: '#ffffff',
+                  color: '#0A2540',
+                  fontSize: '12.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  transition: 'all 160ms ease',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <span>Explore All 50+ Dialects</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
           </div>
         </div>
       </section>

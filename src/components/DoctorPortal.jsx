@@ -37,7 +37,8 @@ import {
   Share2,
   PhoneCall,
   UserCheck,
-  Check
+  Check,
+  LogOut
 } from 'lucide-react';
 
 /**
@@ -52,7 +53,13 @@ import {
  * 7. Clinical Library (WHO ICD-10 taxonomy, colloquial Indic symptom resolver, clinical protocols)
  * 8. Settings (ABDM HPR credentials, hospital facility #1402, WebAudio mic VAD calibration)
  */
-export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch, onOpenTechModal }) {
+export default function DoctorPortal({ 
+  doctorProfile, 
+  onSelectEncounterAndLaunch, 
+  onOpenTechModal, 
+  onLogoutDoctor, 
+  registeredPatients = [] 
+}) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [analyticsRange, setAnalyticsRange] = useState('weekly');
   const [aiPrompt, setAiPrompt] = useState('');
@@ -62,10 +69,32 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
   const [patientSearchTerm, setPatientSearchTerm] = useState('');
   const [patientTriageFilter, setPatientTriageFilter] = useState('all');
 
-  const doctorName = doctorProfile?.doctorName || 'Dr. Priya Sharma';
-  const doctorSpecialty = doctorProfile?.specialty || 'Pulmonologist';
+  // Physician Settings State Suite
+  const [docScribeEngine, setDocScribeEngine] = useState('gnani_prisma');
+  const [docNoiseCancellation, setDocNoiseCancellation] = useState('crowded_opd');
+  const [docAutoCoding, setDocAutoCoding] = useState(true);
+  const [docDdiSentinel, setDocDdiSentinel] = useState(true);
+  const [docGenericPref, setDocGenericPref] = useState(true);
+  const [docDigitalSign, setDocDigitalSign] = useState(true);
+  const [docAbdmAutoSync, setDocAbdmAutoSync] = useState(true);
+  const [docWhatsAppPush, setDocWhatsAppPush] = useState(true);
+  const [docSettingsSaved, setDocSettingsSaved] = useState(false);
 
-  // OPD Registry
+  const doctorName = doctorProfile?.doctorName || 'Dr. Priya Sharma, MD';
+  const doctorSpecialty = doctorProfile?.specialty || 'Pulmonology & Critical Care';
+
+  // Determine clinical domain of logged-in doctor
+  const isRespiratoryDoctor = 
+    doctorSpecialty.toLowerCase().includes('pulmon') || 
+    doctorSpecialty.toLowerCase().includes('resp') ||
+    doctorSpecialty.toLowerCase().includes('chest');
+
+  const isCardioDoctor = 
+    doctorSpecialty.toLowerCase().includes('cardio') || 
+    doctorSpecialty.toLowerCase().includes('diabet') ||
+    doctorSpecialty.toLowerCase().includes('heart');
+
+  // OPD Registry with domain tags
   const patientsList = [
     {
       id: 0,
@@ -82,7 +111,8 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       vitals: { bp: '140/90', hr: '88 bpm', spo2: '96%', rbs: '168 mg/dL' },
       history: 'Known Type-2 Diabetes (7 yrs), Mild Hypertension. Smoker (quit 2 yrs ago).',
       allergies: 'Sulfa Drugs',
-      encounterIndex: 0
+      encounterIndex: 0,
+      domain: 'cardiometabolic'
     },
     {
       id: 1,
@@ -99,7 +129,8 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       vitals: { bp: '95/62', hr: '124 bpm', spo2: '94%', temp: '101.4°F' },
       history: 'Recurrent wheezing since age 2. Mother reports persistent cough waking him at night.',
       allergies: 'None documented',
-      encounterIndex: 1
+      encounterIndex: 1,
+      domain: 'respiratory'
     },
     {
       id: 2,
@@ -110,13 +141,14 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       gender: 'Female',
       language: 'Telugu / English',
       abhaId: '91-4521-8932-1049',
-      chiefComplaint: 'Acute High-Grade Pyrexia & Dry Throat',
+      chiefComplaint: 'Acute High-Grade Pyrexia & Dry Airway Wheeze',
       triage: 'Moderate',
       triageColor: '#3B82F6',
       vitals: { bp: '115/76', hr: '72 bpm', spo2: '99%', temp: '102.1°F' },
-      history: 'Seasonal allergic rhinitis. No chronic comorbidities.',
+      history: 'Seasonal allergic rhinitis & bronchial sensitivity.',
       allergies: 'Penicillin (mild rash)',
-      encounterIndex: 1
+      encounterIndex: 1,
+      domain: 'respiratory'
     },
     {
       id: 3,
@@ -133,7 +165,8 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       vitals: { bp: '122/80', hr: '78 bpm', spo2: '98%', rbs: '104 mg/dL' },
       history: 'Extrinsic bronchial asthma. Uses Budesonide inhaler.',
       allergies: 'Aspirin (Bronchospasm)',
-      encounterIndex: 0
+      encounterIndex: 0,
+      domain: 'respiratory'
     },
     {
       id: 4,
@@ -143,14 +176,15 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       age: 56,
       gender: 'Male',
       language: 'Telugu',
-      abhaId: '91-7741-2311-6652',
-      chiefComplaint: 'Diabetic Foot Paresthesia & Routine HbA1c Check',
+      abhaId: '91-5542-8812-3301',
+      chiefComplaint: 'Type-2 Diabetes HbA1c Review & Dyslipidemia',
       triage: 'Stable',
       triageColor: '#10B981',
-      vitals: { bp: '130/84', hr: '74 bpm', spo2: '98%', rbs: '210 mg/dL' },
-      history: 'Type-2 Diabetes on Metformin 500mg BD. Dyslipidemia.',
+      vitals: { bp: '134/84', hr: '74 bpm', spo2: '98%', rbs: '142 mg/dL' },
+      history: 'Type-2 Diabetes (11 yrs). On Metformin & Statin.',
       allergies: 'No known allergies',
-      encounterIndex: 2
+      encounterIndex: 2,
+      domain: 'cardiometabolic'
     },
     {
       id: 5,
@@ -167,9 +201,37 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
       vitals: { bp: '118/74', hr: '82 bpm', spo2: '97%', temp: '99.1°F' },
       history: 'Mild allergic bronchitis. Non-smoker.',
       allergies: 'No known allergies',
-      encounterIndex: 0
+      encounterIndex: 0,
+      domain: 'respiratory'
     }
   ];
+
+  const formattedRegistered = (registeredPatients || []).map((rp, idx) => ({
+    id: `reg_${idx}`,
+    token: `OPD-${201 + idx}`,
+    name: rp.patientName,
+    vernacular: rp.patientName,
+    age: rp.age || 40,
+    gender: rp.gender || 'Female',
+    language: rp.language || 'Telugu',
+    abhaId: rp.abhaId,
+    chiefComplaint: `${rp.condition || 'Consultation'} (${rp.relation || 'Registered Citizen'})`,
+    triage: 'Moderate',
+    triageColor: '#3B82F6',
+    vitals: rp.vitals || { bp: '120/80', hr: '76 bpm', spo2: '98%' },
+    history: `Registered via Family Health Locker. Condition: ${rp.condition}`,
+    allergies: 'None documented',
+    encounterIndex: 0,
+    domain: rp.domain || (rp.condition?.toLowerCase().includes('diabet') || rp.condition?.toLowerCase().includes('hypertens') ? 'cardiometabolic' : (rp.condition?.toLowerCase().includes('asthma') ? 'respiratory' : 'general'))
+  }));
+
+  const allPatients = [...formattedRegistered, ...patientsList];
+
+  const domainPatients = allPatients.filter(p => {
+    if (isRespiratoryDoctor) return p.domain === 'respiratory';
+    if (isCardioDoctor) return p.domain === 'cardiometabolic';
+    return true; // General sees all
+  });
 
   const appointments = [
     {
@@ -292,7 +354,7 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
     setAiResponses(prev => [{ q: newQuery, a: answer }, ...prev]);
   };
 
-  const filteredPatients = patientsList.filter(p => {
+  const filteredPatients = domainPatients.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(patientSearchTerm.toLowerCase()) ||
                           p.token.toLowerCase().includes(patientSearchTerm.toLowerCase()) ||
                           p.chiefComplaint.toLowerCase().includes(patientSearchTerm.toLowerCase());
@@ -439,9 +501,9 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
             />
           </div>
 
-          {/* Profile & Notifications */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ position: 'relative', cursor: 'pointer' }}>
+          {/* Profile, Switcher & Logout */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative' }}>
+            <div style={{ position: 'relative', cursor: 'pointer' }} title="2 Pending Critical Notifications">
               <Bell size={20} color="#64748B" />
               <span style={{
                 position: 'absolute',
@@ -455,13 +517,26 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
               }}></span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+            {/* Single Doctor Login Badge (No Switcher) */}
+            <div 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '6px 14px',
+                borderRadius: '14px',
+                background: 'rgba(0, 139, 139, 0.06)',
+                border: '1.5px solid rgba(0, 139, 139, 0.22)'
+              }}
+              title="Verified Physician ABDM Session (Single Doctor Login)"
+            >
               <div style={{
                 width: '38px',
                 height: '38px',
                 borderRadius: '50%',
                 overflow: 'hidden',
-                border: '2px solid #008B8B'
+                border: '2px solid #008B8B',
+                flexShrink: 0
               }}>
                 <img 
                   src="/assets/dr_ananya_avatar.jpg" 
@@ -469,12 +544,43 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
               </div>
-              <div>
-                <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#0A2540' }}>{doctorName}</div>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>{doctorSpecialty}</div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{doctorName}</span>
+                  <span style={{ fontSize: '9px', background: '#DCFCE7', color: '#166534', padding: '1px 6px', borderRadius: '4px', fontWeight: 800 }}>
+                    NMC VERIFIED
+                  </span>
+                </div>
+                <div style={{ fontSize: '11px', color: '#008B8B', fontWeight: 650 }}>
+                  {doctorSpecialty} • {doctorProfile?.facility || 'Kurnool District Hospital'}
+                </div>
               </div>
-              <ChevronDown size={14} color="#64748B" />
             </div>
+
+            {/* Prominent Header Logout Button */}
+            <button
+              onClick={() => {
+                if (onLogoutDoctor) onLogoutDoctor();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#FEF2F2',
+                border: '1.5px solid #FCA5A5',
+                color: '#DC2626',
+                padding: '7px 14px',
+                borderRadius: '18px',
+                fontSize: '12px',
+                fontWeight: 750,
+                cursor: 'pointer',
+                transition: 'all 140ms ease'
+              }}
+              title="Securely exit doctor portal and ABDM session"
+            >
+              <LogOut size={13} />
+              <span>Logout</span>
+            </button>
           </div>
         </header>
 
@@ -897,60 +1003,6 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
-
-              {/* Bottom Bar: Doctor Features */}
-              <div style={{ marginTop: '10px', paddingTop: '20px', borderTop: '1px solid #E2E8F0' }}>
-                <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Doctor Features
-                </h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px' }}>
-                  {[
-                    { title: 'Patient Management', desc: 'View history & records', icon: Users, tab: 'patients' },
-                    { title: 'AI Clinical Assistant', desc: 'Guidelines & drug info', icon: Sparkles, tab: 'ai_assistant' },
-                    { title: 'E-Prescriptions', desc: 'Quick & secure', icon: Pill, tab: 'prescriptions' },
-                    { title: 'Reports & Diagnostics', desc: 'Lab & imaging results', icon: FileCheck, tab: 'reports' },
-                    { title: 'Appointments', desc: 'Schedule & follow-ups', icon: Calendar, tab: 'appointments' },
-                    { title: 'Clinical Knowledge Base', desc: 'Latest medical updates', icon: BookOpen, tab: 'clinical_library' }
-                  ].map((feat, i) => {
-                    const FeatIcon = feat.icon;
-                    return (
-                      <div
-                        key={i}
-                        onClick={() => setActiveTab(feat.tab)}
-                        style={{
-                          background: '#ffffff',
-                          borderRadius: '12px',
-                          padding: '14px 12px',
-                          border: '1px solid #E2E8F0',
-                          textAlign: 'center',
-                          cursor: 'pointer',
-                          transition: 'all 160ms ease'
-                        }}
-                      >
-                        <div style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '8px',
-                          background: 'rgba(0, 139, 139, 0.08)',
-                          color: '#008B8B',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          margin: '0 auto 8px auto'
-                        }}>
-                          <FeatIcon size={16} />
-                        </div>
-                        <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '2px' }}>
-                          {feat.title}
-                        </div>
-                        <div style={{ fontSize: '10px', color: '#64748B' }}>
-                          {feat.desc}
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
             </>
@@ -1512,37 +1564,228 @@ export default function DoctorPortal({ doctorProfile, onSelectEncounterAndLaunch
               --------------------------------------------------------------------- */}
           {activeTab === 'settings' && (
             <div>
-              <div style={{ marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                  Physician Credentials & System Calibration
-                </h2>
-                <p style={{ fontSize: '13px', color: '#64748B' }}>
-                  ABDM Healthcare Professional Registry (HPR) identity, acoustic microphone hardware, and privacy policies.
-                </p>
+              <div style={{ 
+                background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 50%, #008B8B 100%)', 
+                borderRadius: '20px', 
+                padding: '24px 28px', 
+                color: '#ffffff',
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '16px'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                    <span style={{ 
+                      background: 'rgba(0, 139, 139, 0.3)', 
+                      padding: '4px 10px', 
+                      borderRadius: '20px', 
+                      fontSize: '11px', 
+                      fontWeight: 800, 
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      border: '1px solid rgba(255,255,255,0.2)' 
+                    }}>
+                      ABDM Healthcare Professional Registry (HPR)
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#93C5FD' }}>• Verified Physician Console</span>
+                  </div>
+                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0' }}>
+                    Physician Credentials, AI Scribe Engine & ABDM Calibration
+                  </h2>
+                  <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
+                    Configure ambient acoustic ingestion, Gnani.ai Prisma v2.5 voice models, automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setDocSettingsSaved(true);
+                    setTimeout(() => setDocSettingsSaved(false), 4000);
+                  }}
+                  className="btn-primary"
+                  style={{ padding: '12px 24px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <ShieldCheck size={16} />
+                  <span>Save Configuration</span>
+                </button>
               </div>
 
+              {/* Toast Feedback */}
+              {docSettingsSaved && (
+                <div style={{ 
+                  background: '#ECFDF5', 
+                  border: '1.5px solid #10B981', 
+                  borderRadius: '12px', 
+                  padding: '14px 20px', 
+                  marginBottom: '20px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '12px',
+                  color: '#065F46',
+                  fontSize: '13.5px',
+                  fontWeight: 700
+                }}>
+                  <CheckCircle2 size={20} color="#10B981" />
+                  <span>Physician clinical preferences, acoustic noise profiles, and DSC e-Sign credentials saved successfully!</span>
+                </div>
+              )}
+
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+                {/* 1. ABDM HPR Registry */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                    ABDM Healthcare Professional Registry
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <ShieldCheck size={18} color="#008B8B" />
+                    <span>ABDM Healthcare Professional Registry (HPR)</span>
                   </h3>
-                  <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                    <div>Practitioner Name: <strong>Dr. Priya Sharma, MD</strong></div>
-                    <div>HPR Token ID: <code>ABHA-HPR-8921-9942</code></div>
-                    <div>Health Facility Registry (HFR): <strong>Kurnool District Hospital (HFR #1402)</strong></div>
-                    <div>ABDM Compliance: <span style={{ color: '#059669', fontWeight: 750 }}>Verified (Milestone M1, M2, M3)</span></div>
+                  <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.8 }}>
+                    <div>Practitioner Name: <strong>{doctorName}</strong></div>
+                    <div>HPR Token ID: <code>ABHA-HPR-8921-9942-IN</code></div>
+                    <div>Medical Council: <strong>National Medical Commission (NMC) AP-67420</strong></div>
+                    <div>Facility: <strong>{doctorProfile?.facility || 'Kurnool District Hospital (HFR #1402)'}</strong></div>
+                    <div>ABDM Milestones: <span style={{ color: '#059669', fontWeight: 750 }}>M1 (Registry) • M2 (HIP Record Provider) • M3 (HIU)</span></div>
                   </div>
                 </div>
 
+                {/* 2. Microphone & AudioWorklet VAD Calibration */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                    Microphone & Acoustic VAD Calibration
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Mic size={18} color="#2563EB" />
+                    <span>Microphone & Acoustic VAD Calibration</span>
                   </h3>
-                  <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.6 }}>
-                    <div>Audio Ingestion Engine: <strong>WebAudio AudioWorklet (16 kHz PCM)</strong></div>
-                    <div>Spectral Noise Floor: <strong>65 dB Adaptive Cancellation</strong></div>
-                    <div>Default Indic Scribe Engine: <strong>Gnani.ai Prisma v2.5</strong></div>
-                    <div>Voice Diarization: <span style={{ color: '#008B8B', fontWeight: 750 }}>Dual Speaker (Doctor / Patient)</span></div>
+                  
+                  <div style={{ marginBottom: '12px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+                      Clinical Ambient Scribe Engine
+                    </label>
+                    <select
+                      value={docScribeEngine}
+                      onChange={e => setDocScribeEngine(e.target.value)}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', fontWeight: 650 }}
+                    >
+                      <option value="gnani_prisma">Gnani.ai Prisma v2.5 (Sub-dialectal Indic Model)</option>
+                      <option value="google_medlm">Google MedLM Clinical Ambient (Bio-Clinical)</option>
+                      <option value="whisper_indic">Whisper Large-v3 (Fine-tuned Telugu/Hindi)</option>
+                    </select>
+                  </div>
+
+                  <div style={{ marginBottom: '12px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+                      Acoustic Noise Floor Profile
+                    </label>
+                    <select
+                      value={docNoiseCancellation}
+                      onChange={e => setDocNoiseCancellation(e.target.value)}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', fontWeight: 650 }}
+                    >
+                      <option value="crowded_opd">Crowded OPD Waiting Hall (65 dB Spectral Subtraction)</option>
+                      <option value="quiet_chamber">Private Doctor Chamber (40 dB Noise Gate)</option>
+                      <option value="icu_ward">Emergency / ICU Tele-Consultation (High Sensitivity)</option>
+                    </select>
+                  </div>
+
+                  <div style={{ fontSize: '12px', color: '#64748B' }}>
+                    Sampling Rate: <strong>16,000 Hz Linear PCM</strong> • Diarization: <strong style={{ color: '#008B8B' }}>Doctor / Patient Dual-Channel</strong>
+                  </div>
+                </div>
+
+                {/* 3. Clinical AI Guardrails & Auto-Coding */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Stethoscope size={18} color="#059669" />
+                    <span>Clinical Guardrails & Auto-Coding</span>
+                  </h3>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Automated ICD-10 & SNOMED CT Extraction</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Maps colloquial Indian phrases to clinical billing codes</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docAutoCoding}
+                        onChange={e => setDocAutoCoding(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#008B8B', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Drug-Drug Interaction (DDI) & Allergy Sentinel</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Real-time alert before confirming e-Prescription</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docDdiSentinel}
+                        onChange={e => setDocDdiSentinel(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#DC2626', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>NFI Formulary Generic Drug Preference</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Prioritize Jan Aushadhi generic equivalents</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docGenericPref}
+                        onChange={e => setDocGenericPref(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#10B981', cursor: 'pointer' }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* 4. Digital Signature & Patient Push */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <FileCheck size={18} color="#D97706" />
+                    <span>Digital Signature & Tele-OPD Dispatch</span>
+                  </h3>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Class-3 DSC e-Signature Stamp</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Cryptographic PKI e-sign on official OPD Rx sheets</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docDigitalSign}
+                        onChange={e => setDocDigitalSign(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#D97706', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>ABDM Gateway Auto-Sync</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Transmit FHIR R4 encounter bundle upon consultation sign-off</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docAbdmAutoSync}
+                        onChange={e => setDocAbdmAutoSync(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Automatic WhatsApp Spoken Audio Dispatch</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Send regional voice note directly to patient upon prescription closure</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={docWhatsAppPush}
+                        onChange={e => setDocWhatsAppPush(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#2563EB', cursor: 'pointer' }}
+                      />
+                    </label>
                   </div>
                 </div>
               </div>

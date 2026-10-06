@@ -27,6 +27,7 @@ export default function Navbar({
   onOpenTechModal, 
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal,
+  onOpenSpotlight,
   doctorProfile,
   patientProfile,
   onLogoutDoctor,
@@ -311,39 +312,43 @@ export default function Navbar({
               </div>
             )}
           </div>
+        </nav>
 
-          {/* Clinical Studio LIVE link */}
-          <button 
-            onClick={() => setActiveView('console')}
+        {/* Portals Access & Spotlight Search CTAs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* macOS Spotlight Button */}
+          <button
+            onClick={onOpenSpotlight}
             style={{
-              background: 'none',
-              border: 'none',
-              fontFamily: 'Outfit, sans-serif',
-              fontSize: '14.5px',
-              fontWeight: 700,
-              color: '#008B8B',
-              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '6px 4px'
+              background: '#F1F5F9',
+              border: '1px solid #E2E8F0',
+              borderRadius: '20px',
+              padding: '6px 12px',
+              fontSize: '12.5px',
+              color: '#64748B',
+              cursor: 'pointer',
+              transition: 'all 180ms ease'
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#008B8B';
+              e.currentTarget.style.color = '#0A2540';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#E2E8F0';
+              e.currentTarget.style.color = '#64748B';
+            }}
+            title="Search clinical records, prescriptions, & Indic tools (⌘K)"
           >
-            <span>Clinical Studio</span>
-            <span style={{
-              background: '#10B981',
-              color: '#ffffff',
-              fontSize: '10px',
-              fontWeight: 800,
-              padding: '2px 6px',
-              borderRadius: '10px',
-              letterSpacing: '0.5px'
-            }}>LIVE</span>
+            <span>🔍</span>
+            <span style={{ fontWeight: 500 }}>Search</span>
+            <kbd style={{ fontSize: '10px', background: '#FFFFFF', padding: '1px 5px', borderRadius: '4px', border: '1px solid #CBD5E1', fontWeight: 700, color: '#0A2540' }}>
+              ⌘K
+            </kbd>
           </button>
-        </nav>
 
-        {/* Portals Access & Login CTAs */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {activeView === 'landing' ? (
             // Clean, unauthenticated landing page header
             <>
@@ -365,17 +370,6 @@ export default function Navbar({
               >
                 <Pill size={15} color="#D97706" />
                 <span>Patient Portal</span>
-              </button>
-
-              <button 
-                onClick={() => setActiveView('console')}
-                className="btn-primary"
-                style={{ fontSize: '13px', padding: '8px 18px', borderRadius: '24px', background: '#0A2540', color: '#ffffff' }}
-                title="Launch Live Clinical Studio"
-              >
-                <Sparkles size={14} color="#00E5C9" />
-                <span>Launch Studio</span>
-                <ArrowRight size={14} />
               </button>
             </>
           ) : (
