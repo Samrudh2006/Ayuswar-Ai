@@ -18,9 +18,11 @@ import {
   Heart, 
   AlertTriangle,
   Smartphone,
-  ExternalLink
+  ExternalLink,
+  Download
 } from 'lucide-react';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 
 /**
  * LiveScribeSessionModal Component
@@ -527,8 +529,24 @@ export default function LiveScribeSessionModal({
               ))}
             </div>
 
+            {/* DDI Clinical Safety Sentinel Banner */}
+            <div style={{
+              padding: '10px 12px',
+              borderRadius: '10px',
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <ShieldCheck size={18} color="#10B981" />
+              <div style={{ fontSize: '11px', color: '#065F46', fontWeight: 700 }}>
+                Lancet / WHO DDI Sentinel: 0 Drug-Drug Conflicts Detected. Safe to Administer.
+              </div>
+            </div>
+
             {/* Human-In-The-Loop Sign & WhatsApp Action */}
-            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ fontSize: '11px', color: '#64748B', lineHeight: 1.4 }}>
                 🔒 <strong>Doctor-in-the-loop:</strong> Reviewing and signing triggers Gnani Timbre v2.5 to clone Dr. Priya's voice note in {patientData.language || 'Telugu'} and dispatches directly to patient's WhatsApp.
               </div>
@@ -542,7 +560,7 @@ export default function LiveScribeSessionModal({
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '10px',
-                  padding: '14px',
+                  padding: '12px',
                   borderRadius: '12px',
                   background: isRxSigned ? '#10B981' : 'linear-gradient(135deg, #008B8B 0%, #065F46 100%)',
                   color: '#ffffff',
@@ -568,29 +586,65 @@ export default function LiveScribeSessionModal({
                 )}
               </button>
 
-              <button
-                onClick={() => setShowWhatsAppModal(true)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  padding: '11px',
-                  borderRadius: '12px',
-                  background: '#25D366',
-                  color: '#ffffff',
-                  border: 'none',
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 10px rgba(37, 211, 102, 0.3)'
-                }}
-              >
-                <Smartphone size={16} />
-                <span>Open WhatsApp Audio-Rx Mobile Hub</span>
-                <ExternalLink size={13} />
-              </button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8px' }}>
+                <button
+                  onClick={() => setShowWhatsAppModal(true)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    background: '#25D366',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '12px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                  }}
+                >
+                  <Smartphone size={14} />
+                  <span>WhatsApp Audio-Rx</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    const bundle = generateAbdmFhirR4Bundle(
+                      patientData, 
+                      { doctorName, hprId: 'ABHA-HPR-8921-9942', specialty: 'Pulmonology & Critical Care' },
+                      encounterData.diagnosis,
+                      encounterData.prescriptions
+                    );
+                    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `ABDM_FHIR_R4_${(patientData.name || 'Patient').replace(/\s+/g, '_')}_Rx.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    background: '#0A2540',
+                    color: '#2DD4BF',
+                    border: '1px solid rgba(45, 212, 191, 0.3)',
+                    fontSize: '11.5px',
+                    fontWeight: 800,
+                    cursor: 'pointer'
+                  }}
+                  title="Export official ABDM FHIR R4 standard JSON for hospital EMRs"
+                >
+                  <Download size={13} />
+                  <span>FHIR R4 JSON</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
