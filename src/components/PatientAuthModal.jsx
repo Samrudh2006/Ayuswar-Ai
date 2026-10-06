@@ -112,7 +112,63 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
             relation: 'Self',
             facility: 'Kurnool District Hospital',
             ...clin,
-            familyMembers: [] // Single login mode
+            familyMembers: []
+          };
+        } else if (loginPatientSelect === 'sunita') {
+          const clin = generateClinicalProfile('Sunita Devi', 'Seasonal Viral Pyrexia', 'Hindi');
+          selectedProfile = {
+            patientName: 'Sunita Devi (सुनीता देवी)',
+            age: 42,
+            gender: 'Female',
+            language: 'Hindi',
+            abhaId: '91-3310-9082-4123',
+            condition: 'Post-Viral Bronchial Sensitivity',
+            relation: 'Self',
+            facility: 'Warangal Rural PHC #09',
+            ...clin,
+            familyMembers: []
+          };
+        } else if (loginPatientSelect === 'aarav') {
+          const clin = generateClinicalProfile('Aarav Kumar', 'Pediatric Wheeze & Bronchospasm', 'Hindi');
+          selectedProfile = {
+            patientName: 'Aarav Kumar (आरव कुमार)',
+            age: 4,
+            gender: 'Male',
+            language: 'Hindi',
+            abhaId: '91-8821-4432-9012',
+            condition: 'Pediatric Wheeze & Bronchospasm',
+            relation: 'Self',
+            facility: 'Niloufer Children Hospital',
+            ...clin,
+            familyMembers: []
+          };
+        } else if (loginPatientSelect === 'suresh') {
+          const clin = generateClinicalProfile('Suresh Babu', 'Type-2 Diabetes & Dyslipidemia', 'Telugu');
+          selectedProfile = {
+            patientName: 'Suresh Babu (సురేష్ బాబు)',
+            age: 56,
+            gender: 'Male',
+            language: 'Telugu',
+            abhaId: '91-5542-8812-3301',
+            condition: 'Type-2 Diabetes & Dyslipidemia',
+            relation: 'Self',
+            facility: 'Nizam Heart & Metabolism Center',
+            ...clin,
+            familyMembers: []
+          };
+        } else if (loginPatientSelect === 'meera') {
+          const clin = generateClinicalProfile('Meera Nair', 'Post-viral productive cough & wheezing', 'English');
+          selectedProfile = {
+            patientName: 'Meera Nair (മീര നായർ)',
+            age: 34,
+            gender: 'Female',
+            language: 'English',
+            abhaId: '91-6632-1923-4411',
+            condition: 'Post-viral productive cough & wheezing',
+            relation: 'Self',
+            facility: 'Kurnool District Hospital',
+            ...clin,
+            familyMembers: []
           };
         } else {
           const clin = generateClinicalProfile('Narayana Rao', 'Type-2 Diabetes & Hypertension', 'Telugu');
@@ -126,7 +182,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
             relation: 'Self',
             facility: 'Anantapur Community Health Centre',
             ...clin,
-            familyMembers: [] // Single login mode
+            familyMembers: []
           };
         }
 
@@ -352,8 +408,12 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     background: '#ffffff'
                   }}
                 >
-                  <option value="narayana">Narayana Rao (58y, Male) — Type-2 Diabetes & HTN (Assigned to Dr. Rajesh)</option>
-                  <option value="ananya">Ananya Rao (28y, Female) — Asthma & Allergic Wheeze (Assigned to Dr. Priya)</option>
+                  <option value="narayana">👴 Narayana Rao (58y, Male, Telugu) — Type-2 Diabetes & HTN (Dr. Rajesh)</option>
+                  <option value="ananya">👩 Ananya Rao (28y, Female, Telugu) — Asthma & Allergic Wheeze (Dr. Priya)</option>
+                  <option value="sunita">🧕 Sunita Devi (42y, Female, Hindi) — Post-Viral Bronchial Sensitivity (Dr. Priya)</option>
+                  <option value="aarav">👦 Aarav Kumar (4y, Male, Hindi) — Pediatric Wheeze (Dr. Vikram Seth)</option>
+                  <option value="suresh">👨 Suresh Babu (56y, Male, Telugu) — Type-2 Diabetes & Dyslipidemia (Dr. Rajesh)</option>
+                  <option value="meera">👩 Meera Nair (34y, Female, English) — Productive Cough & Wheeze (Dr. Priya)</option>
                 </select>
               </div>
 

@@ -40,6 +40,42 @@ export const DOCTOR_REGISTRY = {
     experience: '10 years',
     avatar: '/assets/dr_ananya_avatar.jpg',
     specialtyDomain: 'general'
+  },
+  pediatrics: {
+    id: 'doc_vikram',
+    doctorName: 'Dr. Vikram Seth, MBBS, MD (Pediatrics)',
+    specialty: 'Pediatrics & Neonatology',
+    department: 'Child Health & Pediatric Critical Care',
+    facility: 'Niloufer Children Hospital & ABDM Hub',
+    hprId: 'ABHA-HPR-5521-1049',
+    nmcRegNo: 'NMC-TS-2014-38290',
+    experience: '16 years',
+    avatar: '/assets/dr_ananya_avatar.jpg',
+    specialtyDomain: 'pediatrics'
+  },
+  orthopedics: {
+    id: 'doc_meenakshi',
+    doctorName: 'Dr. Meenakshi Sundaram, MS (Ortho)',
+    specialty: 'Orthopedics & Joint Replacement',
+    department: 'Musculoskeletal & Trauma Surgery',
+    facility: 'Apollo Bone & Joint Institute',
+    hprId: 'ABHA-HPR-3319-8802',
+    nmcRegNo: 'NMC-AP-2011-20941',
+    experience: '20 years',
+    avatar: '/assets/dr_ananya_avatar.jpg',
+    specialtyDomain: 'orthopedics'
+  },
+  neurology: {
+    id: 'doc_arishti',
+    doctorName: 'Dr. Arishti Banerjee, MD, DM (Neuro)',
+    specialty: 'Neurology & Stroke Medicine',
+    department: 'Neurosciences & Cognitive Disorders',
+    facility: 'National Institute of Neurosciences',
+    hprId: 'ABHA-HPR-9920-4138',
+    nmcRegNo: 'NMC-TS-2015-77412',
+    experience: '15 years',
+    avatar: '/assets/dr_ananya_avatar.jpg',
+    specialtyDomain: 'neurology'
   }
 };
 
@@ -64,6 +100,50 @@ export function triagePatientCondition(condition = '') {
       domain: 'respiratory',
       doctor: DOCTOR_REGISTRY.pulmonology,
       domainLabel: 'Respiratory & Pulmonology'
+    };
+  }
+
+  if (
+    condLower.includes('child') ||
+    condLower.includes('pediatric') ||
+    condLower.includes('infant') ||
+    condLower.includes('baby') ||
+    condLower.includes('chinna')
+  ) {
+    return {
+      domain: 'pediatrics',
+      doctor: DOCTOR_REGISTRY.pediatrics,
+      domainLabel: 'Pediatrics & Child Care'
+    };
+  }
+
+  if (
+    condLower.includes('joint') ||
+    condLower.includes('bone') ||
+    condLower.includes('knee') ||
+    condLower.includes('arthritis') ||
+    condLower.includes('fracture') ||
+    condLower.includes('ortho')
+  ) {
+    return {
+      domain: 'orthopedics',
+      doctor: DOCTOR_REGISTRY.orthopedics,
+      domainLabel: 'Orthopedics & Joint Care'
+    };
+  }
+
+  if (
+    condLower.includes('neuro') ||
+    condLower.includes('headache') ||
+    condLower.includes('migraine') ||
+    condLower.includes('stroke') ||
+    condLower.includes('seizure') ||
+    condLower.includes('vertigo')
+  ) {
+    return {
+      domain: 'neurology',
+      doctor: DOCTOR_REGISTRY.neurology,
+      domainLabel: 'Neurology & Brain Sciences'
     };
   }
 

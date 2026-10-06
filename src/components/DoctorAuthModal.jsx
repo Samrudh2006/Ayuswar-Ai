@@ -46,18 +46,29 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
       setIsLoading(false);
 
       if (authMode === 'login') {
-        const docObj = selectedDoctorId === 'doc_priya' 
-          ? DOCTOR_REGISTRY.pulmonology 
-          : (selectedDoctorId === 'doc_rajesh' ? DOCTOR_REGISTRY.cardiology : DOCTOR_REGISTRY.general);
+        const docObj = DOCTOR_REGISTRY[selectedDoctorId.replace('doc_', '')] ||
+          (selectedDoctorId === 'doc_priya' ? DOCTOR_REGISTRY.pulmonology :
+           selectedDoctorId === 'doc_rajesh' ? DOCTOR_REGISTRY.cardiology :
+           selectedDoctorId === 'doc_vikram' ? DOCTOR_REGISTRY.pediatrics :
+           selectedDoctorId === 'doc_meenakshi' ? DOCTOR_REGISTRY.orthopedics :
+           selectedDoctorId === 'doc_arishti' ? DOCTOR_REGISTRY.neurology :
+           DOCTOR_REGISTRY.general);
 
         onLoginSuccess(docObj);
       } else {
         // Registering new doctor
         let specialtyDomain = 'general';
-        if (regSpecialty.toLowerCase().includes('pulmon') || regSpecialty.toLowerCase().includes('resp')) {
+        const sLower = regSpecialty.toLowerCase();
+        if (sLower.includes('pulmon') || sLower.includes('resp') || sLower.includes('chest')) {
           specialtyDomain = 'respiratory';
-        } else if (regSpecialty.toLowerCase().includes('cardio') || regSpecialty.toLowerCase().includes('diabet')) {
+        } else if (sLower.includes('cardio') || sLower.includes('diabet') || sLower.includes('heart')) {
           specialtyDomain = 'cardiometabolic';
+        } else if (sLower.includes('pediatric') || sLower.includes('child')) {
+          specialtyDomain = 'pediatrics';
+        } else if (sLower.includes('ortho') || sLower.includes('joint') || sLower.includes('bone')) {
+          specialtyDomain = 'orthopedics';
+        } else if (sLower.includes('neuro') || sLower.includes('brain')) {
+          specialtyDomain = 'neurology';
         }
 
         const newDocProfile = {
@@ -246,9 +257,12 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     background: '#ffffff'
                   }}
                 >
-                  <option value="doc_priya">Dr. Priya Sharma, MD — Pulmonologist (Views Respiratory OPD)</option>
-                  <option value="doc_rajesh">Dr. Rajesh Verma, MD — Cardiologist & Diabetologist (Views Cardiac & Sugar OPD)</option>
-                  <option value="doc_kavitha">Dr. Kavitha Reddy, MBBS — General Physician & Pediatrics (Views Family Health OPD)</option>
+                  <option value="doc_priya">🫁 Dr. Priya Sharma, MD — Pulmonology & Critical Care</option>
+                  <option value="doc_rajesh">🩸 Dr. Rajesh Verma, MD, DM — Cardiology & Diabetology</option>
+                  <option value="doc_kavitha">🌡️ Dr. Kavitha Reddy, MBBS, MS — General Medicine & Primary Care</option>
+                  <option value="doc_vikram">👶 Dr. Vikram Seth, MD — Pediatrics & Neonatology</option>
+                  <option value="doc_meenakshi">🦴 Dr. Meenakshi Sundaram, MS — Orthopedics & Joint Replacement</option>
+                  <option value="doc_arishti">🧠 Dr. Arishti Banerjee, MD, DM — Neurology & Stroke Medicine</option>
                 </select>
               </div>
 
@@ -320,9 +334,12 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   onChange={e => setRegSpecialty(e.target.value)}
                   style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #008B8B', fontSize: '12.5px', background: '#fff', fontWeight: 650 }}
                 >
-                  <option value="Pulmonology & Critical Care">🫁 Pulmonology & Critical Care (Respiratory Diseases)</option>
-                  <option value="Cardiology & Diabetology">🩸 Cardiology & Diabetology (Cardiometabolic Diseases)</option>
-                  <option value="General Medicine & Family Health">🌡️ General Medicine & Family Health (Primary Care / Pediatrics)</option>
+                  <option value="Pulmonology & Critical Care">🫁 Pulmonology & Critical Care (Respiratory OPD)</option>
+                  <option value="Cardiology & Diabetology">🩸 Cardiology & Diabetology (Cardiometabolic OPD)</option>
+                  <option value="General Medicine & Family Health">🌡️ General Medicine & Family Health (Primary Care OPD)</option>
+                  <option value="Pediatrics & Neonatology">👶 Pediatrics & Neonatology (Child Health OPD)</option>
+                  <option value="Orthopedics & Joint Care">🦴 Orthopedics & Joint Replacement (Musculoskeletal OPD)</option>
+                  <option value="Neurology & Stroke Medicine">🧠 Neurology & Brain Sciences (Neurology OPD)</option>
                 </select>
               </div>
 

@@ -93,6 +93,12 @@ export default function DoctorPortal({
   const [selectedOntologyTerm, setSelectedOntologyTerm] = useState(null);
   const [liveResolverInput, setLiveResolverInput] = useState('రెండు రోజుల నుండి గుండెల్లో దడగా ఉండి ఉడుకుబోస్తోంది. మెట్లు ఎక్కితే దమ్ము వస్తోంది.');
 
+  // AyuVision Blister Pack OCR & NFI Formulary Suite
+  const [ocrSampleIdx, setOcrSampleIdx] = useState(0);
+  const [isOcrScanning, setIsOcrScanning] = useState(false);
+  const [ocrScanComplete, setOcrScanComplete] = useState(false);
+  const [printableRxData, setPrintableRxData] = useState(null);
+
   // Physician Settings State Suite
   const [docScribeEngine, setDocScribeEngine] = useState('gnani_prisma');
   const [docNoiseCancellation, setDocNoiseCancellation] = useState('crowded_opd');
@@ -407,6 +413,91 @@ export default function DoctorPortal({
       utter.rate = 0.88;
       window.speechSynthesis.speak(utter);
     }
+  };
+
+  const ocrSamples = [
+    {
+      id: 'ocr_01',
+      title: 'Pan-D Capsule Strip',
+      type: 'Blister Foil Pack',
+      imageIcon: '💊',
+      brandName: 'PAN-D Capsule SR',
+      genericSalt: 'Pantoprazole (40mg) + Domperidone (30mg SR)',
+      manufacturer: 'Alkem Laboratories Ltd.',
+      batchNo: 'ALK-24B09',
+      expDate: '11/2027 (Valid)',
+      brandMrp: 198,
+      janAushadhiGeneric: 'Pantoprazole 40mg + Domperidone 30mg SR',
+      janAushadhiPrice: 28,
+      savingsPercent: 86,
+      indications: 'Gastroesophageal Reflux Disease (GERD), Hyperacidity, Eructation',
+      contraindication: 'Caution in cardiac arrhythmia / prolonged QT interval',
+      vernacularSummary: 'ఉదయం టిఫిన్ ముందు 1 గోళీ (కడుపులో మంట మరియు తేన్పుల కోసం)'
+    },
+    {
+      id: 'ocr_02',
+      title: 'Glycomet-GP 2 Tablet Strip',
+      type: 'Blister Foil Pack',
+      imageIcon: '💊',
+      brandName: 'Glycomet-GP 2 Forte',
+      genericSalt: 'Glimepiride (2mg) + Metformin Hydrochloride (500mg SR)',
+      manufacturer: 'USV Private Limited',
+      batchNo: 'USV-7718',
+      expDate: '09/2026 (Valid)',
+      brandMrp: 245,
+      janAushadhiGeneric: 'Glimepiride 2mg + Metformin 500mg SR',
+      janAushadhiPrice: 35,
+      savingsPercent: 85,
+      indications: 'Type-2 Diabetes Mellitus glycemic control',
+      contraindication: 'Check eGFR. Withhold if severe renal impairment (<30 mL/min)',
+      vernacularSummary: 'రాత్రి భోజనం తర్వాత 1 గోళీ (షుగర్ నియంత్రణ కోసం)'
+    },
+    {
+      id: 'ocr_03',
+      title: 'Augmentin 625 Duo Strip',
+      type: 'Alu-Alu Blister Strip',
+      imageIcon: '💊',
+      brandName: 'Augmentin 625 Duo Tablet',
+      genericSalt: 'Amoxicillin (500mg) + Potassium Clavulanate (125mg)',
+      manufacturer: 'GlaxoSmithKline Pharmaceuticals',
+      batchNo: 'GSK-9921',
+      expDate: '04/2026 (Valid)',
+      brandMrp: 215,
+      janAushadhiGeneric: 'Amoxycillin 500mg + Clavulanic Acid 125mg',
+      janAushadhiPrice: 48,
+      savingsPercent: 78,
+      indications: 'Bacterial respiratory tract infections, sinusitis, acute bronchitis',
+      contraindication: 'Strictly avoid in penicillin hypersensitivity / anaphylaxis',
+      vernacularSummary: 'ఉదయం మరియు రాత్రి భోజనం తర్వాత 1 గోళీ (ఇన్ఫెక్షన్ తగ్గడానికి)'
+    },
+    {
+      id: 'ocr_04',
+      title: 'Handwritten Doctor Rx Note',
+      type: 'Doctor Handwriting (Cursive)',
+      imageIcon: '📝',
+      brandName: 'Rx: Inhaler Budecort 200 + Tab Levocet 5mg',
+      genericSalt: 'Budesonide Rotacaps 200mcg (BID) + Levocetirizine 5mg (HS)',
+      manufacturer: 'Decoded by AyuSwar Handwriting Vision OCR',
+      batchNo: 'N/A (Clinical Order)',
+      expDate: '30 Days Supply',
+      brandMrp: 380,
+      janAushadhiGeneric: 'Budesonide 200mcg Inhalation Caps + Levocetirizine 5mg',
+      janAushadhiPrice: 62,
+      savingsPercent: 84,
+      indications: 'Bronchial Asthma maintenance & Allergic Rhinitis',
+      contraindication: 'Rinse mouth after steroid inhalation to prevent oral candidiasis',
+      vernacularSummary: 'రోజుకు 2 సార్లు పీల్చండి, పీల్చిన తర్వాత నోరు పుక్కిలించండి'
+    }
+  ];
+
+  const triggerOcrScan = (sampleIndex) => {
+    setOcrSampleIdx(sampleIndex);
+    setIsOcrScanning(true);
+    setOcrScanComplete(false);
+    setTimeout(() => {
+      setIsOcrScanning(false);
+      setOcrScanComplete(true);
+    }, 1200);
   };
 
   return (
@@ -1760,23 +1851,254 @@ export default function DoctorPortal({
               --------------------------------------------------------------------- */}
           {activeTab === 'prescriptions' && (
             <div>
-              <div style={{ marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                  E-Prescriptions, Formulary & Blister OCR
-                </h2>
-                <p style={{ fontSize: '13px', color: '#64748B' }}>
-                  Digitally sign clinical regimens, cross-verify against the National Formulary of India (NFI), and synthesize spoken audio.
-                </p>
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
+                      E-Prescriptions, Jan Aushadhi Formulary & AyuVision OCR
+                    </h2>
+                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 139, 139, 0.12)', color: '#008B8B', padding: '3px 10px', borderRadius: '12px', border: '1px solid rgba(0,139,139,0.3)' }}>
+                      NFI & PMBJP 2025 Mapped
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#64748B' }}>
+                    Computer Vision OCR for medicine blister foils and cursive doctor handwriting, paired with Pradhan Mantri Jan Aushadhi generic price optimizer.
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => {
+                      const sample = ocrSamples[0];
+                      setPrintableRxData({
+                        patientName: 'Narayana Rao',
+                        vernacularName: 'నారాయణ రావు',
+                        abhaId: '91-4521-8932-1049',
+                        age: 58,
+                        gender: 'Male',
+                        diagnosis: 'Type-2 Diabetes Mellitus & Dyslipidemia (E11.9)',
+                        vitals: 'BP: 140/90 mmHg, HR: 88 bpm, RBS: 168 mg/dL',
+                        date: new Date().toLocaleDateString('en-GB'),
+                        medications: [
+                          { name: 'Pantoprazole 40mg (పసుపు గోళీ)', timing: '08:30 AM (టిఫిన్ ముందు)', days: '30 Days', generic: 'Pantoprazole 40mg (Jan Aushadhi - ₹28)' },
+                          { name: 'Metformin 500mg SR (గులాబీ గోళీ)', timing: '08:30 PM (భోజనం తర్వాత)', days: '30 Days', generic: 'Metformin 500mg SR (Jan Aushadhi - ₹35)' }
+                        ]
+                      });
+                    }}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '10px',
+                      border: '1px solid #CBD5E1',
+                      background: '#ffffff',
+                      color: '#0A2540',
+                      fontSize: '12.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <FileText size={14} color="#008B8B" />
+                    <span>Print Official Color Rx Slip</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* AyuVision Smart OCR & Blister Lens Studio */}
+              <div style={{
+                background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
+                color: '#ffffff',
+                borderRadius: '16px',
+                padding: '22px 26px',
+                marginBottom: '22px',
+                border: '1px solid #1E293B',
+                boxShadow: '0 10px 30px rgba(10, 37, 64, 0.15)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#38BDF8', color: '#0A2540', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Scan size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: '#ffffff' }}>
+                        AyuVision™ Blister Pack & Handwritten Prescription OCR Lens
+                      </h3>
+                      <div style={{ fontSize: '11.5px', color: '#94A3B8' }}>
+                        Deep neural text extraction for crinkled foil strips, batch codes, and doctor handwriting.
+                      </div>
+                    </div>
+                  </div>
+
+                  <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '3px 10px', borderRadius: '12px', fontWeight: 700 }}>
+                    99.2% Character Accuracy
+                  </span>
+                </div>
+
+                {/* Sample Selection Bar */}
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: 700 }}>Select Sample to Scan:</span>
+                  {ocrSamples.map((sample, sIdx) => (
+                    <button
+                      key={sample.id}
+                      onClick={() => triggerOcrScan(sIdx)}
+                      style={{
+                        padding: '5px 12px',
+                        borderRadius: '16px',
+                        fontSize: '11.5px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        border: ocrSampleIdx === sIdx ? '1.5px solid #38BDF8' : '1px solid rgba(255,255,255,0.2)',
+                        background: ocrSampleIdx === sIdx ? '#38BDF8' : 'rgba(255,255,255,0.08)',
+                        color: ocrSampleIdx === sIdx ? '#0A2540' : '#E2E8F0',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {sample.imageIcon} {sample.title}
+                    </button>
+                  ))}
+                </div>
+
+                {/* OCR Scanner Viewport & Extraction Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.4fr', gap: '16px' }}>
+                  {/* Scanner Visual Box */}
+                  <div style={{
+                    background: '#0B132B',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    minHeight: '220px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
+                  }}>
+                    {/* Simulated Laser Scan Animation */}
+                    {isOcrScanning && (
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: '#38BDF8',
+                        boxShadow: '0 0 12px #38BDF8',
+                        animation: 'scanLaser 1.2s infinite alternate'
+                      }} />
+                    )}
+
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                        <span style={{ fontSize: '11px', color: '#38BDF8', fontWeight: 750, fontFamily: 'monospace' }}>
+                          SCANNING FEED • {ocrSamples[ocrSampleIdx].type}
+                        </span>
+                        <span style={{ fontSize: '10px', background: 'rgba(16, 185, 129, 0.2)', color: '#34D399', padding: '2px 6px', borderRadius: '4px' }}>
+                          LIVE
+                        </span>
+                      </div>
+
+                      {/* Mock Optical Bounding Boxes */}
+                      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '14px', border: '1px dashed #38BDF8', position: 'relative' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
+                          {ocrSamples[ocrSampleIdx].brandName}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '6px' }}>
+                          {ocrSamples[ocrSampleIdx].genericSalt}
+                        </div>
+                        <div style={{ fontSize: '11px', color: '#38BDF8', fontFamily: 'monospace' }}>
+                          BATCH: {ocrSamples[ocrSampleIdx].batchNo} • EXP: {ocrSamples[ocrSampleIdx].expDate}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px' }}>
+                      <span style={{ fontSize: '10.5px', color: '#64748B' }}>
+                        OpenCV + Tesseract Indic VAD Model
+                      </span>
+                      <button
+                        onClick={() => triggerOcrScan(ocrSampleIdx)}
+                        style={{
+                          padding: '4px 12px',
+                          borderRadius: '6px',
+                          background: '#008B8B',
+                          color: '#ffffff',
+                          border: 'none',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {isOcrScanning ? 'Scanning...' : 'Re-Scan Image'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Decoded NFI Comparison & Jan Aushadhi Switcher */}
+                  <div style={{ background: '#ffffff', borderRadius: '12px', padding: '16px 18px', color: '#0A2540', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>
+                          Decoded Composition & Indications
+                        </span>
+                        <span style={{ fontSize: '11px', background: '#DCFCE7', color: '#15803D', padding: '2px 8px', borderRadius: '6px', fontWeight: 750 }}>
+                          ✓ NFI Verified
+                        </span>
+                      </div>
+
+                      <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', margin: '0 0 4px 0' }}>
+                        {ocrSamples[ocrSampleIdx].genericSalt}
+                      </h4>
+                      <div style={{ fontSize: '12px', color: '#475569', marginBottom: '10px' }}>
+                        <strong>Indications:</strong> {ocrSamples[ocrSampleIdx].indications}
+                      </div>
+
+                      {/* Jan Aushadhi Price Comparison Box */}
+                      <div style={{ background: '#F0FDF4', borderRadius: '10px', padding: '10px 12px', border: '1px solid #BBF7D0', marginBottom: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <div>
+                            <div style={{ fontSize: '10.5px', color: '#166534', fontWeight: 750 }}>PMBJP Jan Aushadhi Equivalent:</div>
+                            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#15803D' }}>{ocrSamples[ocrSampleIdx].janAushadhiGeneric}</div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '10.5px', color: '#64748B', textDecoration: 'line-through' }}>MRP: ₹{ocrSamples[ocrSampleIdx].brandMrp}</div>
+                            <div style={{ fontSize: '14px', fontWeight: 800, color: '#15803D' }}>₹{ocrSamples[ocrSampleIdx].janAushadhiPrice}</div>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: '11px', color: '#059669', fontWeight: 700, marginTop: '4px' }}>
+                          💰 Saves patient {ocrSamples[ocrSampleIdx].savingsPercent}% (₹{ocrSamples[ocrSampleIdx].brandMrp - ocrSamples[ocrSampleIdx].janAushadhiPrice} saved per strip!)
+                        </div>
+                      </div>
+
+                      {/* Vernacular Spoken Tip */}
+                      <div style={{ fontSize: '11.5px', color: '#0369A1', background: '#E0F2FE', padding: '6px 10px', borderRadius: '6px', fontWeight: 650 }}>
+                        📢 <strong>తెలుగు సూచన:</strong> {ocrSamples[ocrSampleIdx].vernacularSummary}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setFhirToast(`Switched ${ocrSamples[ocrSampleIdx].brandName} to Jan Aushadhi generic (₹${ocrSamples[ocrSampleIdx].janAushadhiPrice}). Added to prescription.`);
+                        setTimeout(() => setFhirToast(null), 4000);
+                      }}
+                      className="btn-primary"
+                      style={{ marginTop: '12px', padding: '8px 14px', fontSize: '12px' }}
+                    >
+                      Apply Jan Aushadhi Generic to Rx (Save ₹{ocrSamples[ocrSampleIdx].brandMrp - ocrSamples[ocrSampleIdx].janAushadhiPrice})
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Active Prescriptions Table */}
               <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', marginBottom: '22px' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Today's Active Regimens
+                  Today's Active Regimens & Patient Dispatches
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {[
-                    { id: 1, patient: 'Narayana Rao', vernacular: 'నారాయణ రావు', phone: '+91 98490 12345', abhaId: '91-4521-8932-1049', lang: 'te', med: 'Pantoprazole 40mg + Metformin 500mg', schedule: 'Early Morning (06:30 AM) + Post-dinner (08:30 PM)', status: 'Active • Timbre Telugu Synthesized' },
+                    { id: 1, patient: 'Narayana Rao', vernacular: 'నారాయణ రావు', phone: '+91 98490 12345', abhaId: '91-4521-8932-1049', lang: 'te', med: 'Pantoprazole 40mg + Metformin 500mg', schedule: 'Morning (08:30 AM) + Post-dinner (08:30 PM)', status: 'Active • Timbre Telugu Synthesized' },
                     { id: 2, patient: 'Aarav Kumar', vernacular: 'आरव कुमार', phone: '+91 99887 65432', abhaId: '91-8821-4432-9012', lang: 'hi', med: 'Budesonide Nebulization (0.5mg) + Salbutamol', schedule: 'BD (Morning 08:30 AM & Night 08:30 PM)', status: 'Active • Timbre Hindi Synthesized' },
                     { id: 3, patient: 'Ananya Rao', vernacular: 'అనన్య రావు', phone: '+91 98480 22334', abhaId: '91-4521-8932-1049', lang: 'te', med: 'Montelukast 10mg + Levocetirizine', schedule: 'Night at bedtime (09:30 PM)', status: 'Active • Verified' }
                   ].map(rx => (
@@ -1804,10 +2126,43 @@ export default function DoctorPortal({
                         <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>Timing: {rx.schedule}</div>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '11px', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '8px', fontWeight: 700 }}>
                           {rx.status}
                         </span>
+
+                        <button
+                          onClick={() => setPrintableRxData({
+                            patientName: rx.patient,
+                            vernacularName: rx.vernacular,
+                            abhaId: rx.abhaId,
+                            age: 42,
+                            gender: 'Male',
+                            diagnosis: 'Clinical Consultation & Prescription',
+                            vitals: 'BP: 120/80 mmHg, HR: 76 bpm, SpO2: 98%',
+                            date: new Date().toLocaleDateString('en-GB'),
+                            medications: [
+                              { name: rx.med.split('+')[0]?.trim() || rx.med, timing: rx.schedule.split('+')[0]?.trim() || 'Morning', days: '30 Days', generic: 'Generic Equivalent' },
+                              ...(rx.med.includes('+') ? [{ name: rx.med.split('+')[1]?.trim(), timing: rx.schedule.split('+')[1]?.trim() || 'Night', days: '30 Days', generic: 'Generic Equivalent' }] : [])
+                            ]
+                          })}
+                          style={{
+                            padding: '7px 12px',
+                            borderRadius: '8px',
+                            border: '1px solid #CBD5E1',
+                            background: '#ffffff',
+                            color: '#334155',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <FileText size={13} />
+                          <span>Print Slip</span>
+                        </button>
 
                         <button
                           onClick={() => setWhatsAppModalPatient({
@@ -3163,6 +3518,254 @@ export default function DoctorPortal({
         </div>
       )}
       
+      {/* Official Color Printable Prescription Modal */}
+      {printableRxData && (
+        <div className="modal-overlay" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1100,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(10, 37, 64, 0.75)',
+          backdropFilter: 'blur(6px)',
+          padding: '20px'
+        }}>
+          <div className="printable-rx-container" style={{
+            background: '#ffffff',
+            width: '680px',
+            maxHeight: '94vh',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            border: '1px solid #D8E7EB'
+          }}>
+            {/* Header / Actions Bar */}
+            <div style={{
+              background: '#0A2540',
+              color: '#ffffff',
+              padding: '14px 22px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FileCheck size={20} color="#00D2D3" />
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>Official Color Prescription Slip</div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>National ABDM Standard R4 • Digitally Signed</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <button
+                  onClick={() => window.print()}
+                  className="btn-primary"
+                  style={{
+                    padding: '7px 14px',
+                    fontSize: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <Download size={14} />
+                  <span>Print / Save PDF</span>
+                </button>
+
+                <button
+                  onClick={() => setPrintableRxData(null)}
+                  style={{
+                    background: 'rgba(255,255,255,0.15)',
+                    border: 'none',
+                    color: '#ffffff',
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Printable Body */}
+            <div style={{ padding: '26px 30px', overflowY: 'auto', flex: 1, color: '#1E293B', fontFamily: 'Inter, sans-serif' }}>
+              
+              {/* Government / Hospital Letterhead */}
+              <div style={{
+                borderBottom: '2px solid #008B8B',
+                paddingBottom: '16px',
+                marginBottom: '16px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start'
+              }}>
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#D97706', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                    Government of India • Ministry of Health & Family Welfare
+                  </div>
+                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#0A2540', margin: '3px 0' }}>
+                    {doctorProfile?.facility || 'Kurnool District Hospital (ABDM PHC #1402)'}
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                    Department of {doctorSpecialty} • National Health Authority HFR ID: HFR-AP-14029
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#008B8B' }}>{doctorName}</div>
+                  <div style={{ fontSize: '11px', color: '#475569' }}>{doctorProfile?.nmcRegNo || 'NMC-TS-2016-48291'}</div>
+                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>HPR: {doctorProfile?.hprId || 'ABHA-HPR-8921-9942'}</div>
+                </div>
+              </div>
+
+              {/* Patient Barcode & Demographics Grid */}
+              <div style={{
+                background: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                borderRadius: '10px',
+                padding: '12px 16px',
+                marginBottom: '18px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '12px',
+                fontSize: '12px'
+              }}>
+                <div>
+                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>PATIENT NAME</span>
+                  <strong style={{ color: '#0A2540', fontSize: '13px' }}>{printableRxData.patientName}</strong>
+                  <span style={{ color: '#008B8B', fontSize: '11px', display: 'block' }}>{printableRxData.vernacularName}</span>
+                </div>
+                <div>
+                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>AGE / GENDER</span>
+                  <strong style={{ color: '#0A2540' }}>{printableRxData.age} Yrs • {printableRxData.gender}</strong>
+                </div>
+                <div>
+                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>ABHA ID</span>
+                  <strong style={{ color: '#0A2540', fontFamily: 'monospace' }}>{printableRxData.abhaId}</strong>
+                </div>
+                <div>
+                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>DATE OF ISSUE</span>
+                  <strong style={{ color: '#0A2540' }}>{printableRxData.date}</strong>
+                </div>
+              </div>
+
+              {/* Vitals & Provisional Diagnosis */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', textTransform: 'uppercase', marginBottom: '4px' }}>
+                  Recorded Vitals & Clinical Assessment
+                </div>
+                <div style={{ fontSize: '12.5px', background: '#F1F5F9', padding: '8px 12px', borderRadius: '8px', color: '#334155', marginBottom: '8px' }}>
+                  {printableRxData.vitals}
+                </div>
+                <div style={{ fontSize: '13px', color: '#0A2540', background: 'rgba(0, 139, 139, 0.08)', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #008B8B' }}>
+                  <strong>Provisional Diagnosis (ICD-10): </strong> {printableRxData.diagnosis}
+                </div>
+              </div>
+
+              {/* Prescribed Medications Table */}
+              <div style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '20px', color: '#008B8B', fontWeight: 900, fontFamily: 'serif' }}>℞</span>
+                  <span style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase' }}>
+                    Prescribed Medications (Jan Aushadhi Generic Optimized)
+                  </span>
+                </div>
+
+                <div style={{ border: '1px solid #E2E8F0', borderRadius: '10px', overflow: 'hidden' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                    <thead>
+                      <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', color: '#475569', textAlign: 'left' }}>
+                        <th style={{ padding: '10px 12px' }}>Medicine & Generic Equivalent</th>
+                        <th style={{ padding: '10px 12px' }}>Timing & Indic Context</th>
+                        <th style={{ padding: '10px 12px' }}>Duration</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {printableRxData.medications.map((med, mIdx) => (
+                        <tr key={mIdx} style={{ borderBottom: mIdx < printableRxData.medications.length - 1 ? '1px solid #F1F5F9' : 'none' }}>
+                          <td style={{ padding: '10px 12px' }}>
+                            <strong style={{ color: '#0A2540', fontSize: '12.5px' }}>{med.name}</strong>
+                            <div style={{ fontSize: '11px', color: '#15803D', fontWeight: 650, marginTop: '2px' }}>
+                              ✓ PMBJP Generic: {med.generic}
+                            </div>
+                          </td>
+                          <td style={{ padding: '10px 12px', color: '#0A2540', fontWeight: 600 }}>
+                            {med.timing}
+                          </td>
+                          <td style={{ padding: '10px 12px', color: '#475569', fontWeight: 700 }}>
+                            {med.days}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* QR Verification & DSC e-Signature Footer */}
+              <div style={{
+                borderTop: '2px dashed #CBD5E1',
+                paddingTop: '16px',
+                marginTop: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    background: '#0A2540',
+                    borderRadius: '8px',
+                    color: '#ffffff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4px'
+                  }}>
+                    <QrCode size={36} color="#00D2D3" />
+                    <span style={{ fontSize: '7px', color: '#94A3B8' }}>SCAN TO VERIFY</span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
+                    ABDM Health Record Token: <strong>HRT-2025-9942</strong><br />
+                    Encrypted with SHA-256 digital certificate.
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{
+                    display: 'inline-block',
+                    border: '1.5px solid #008B8B',
+                    borderRadius: '8px',
+                    padding: '6px 14px',
+                    background: 'rgba(0, 139, 139, 0.05)',
+                    marginBottom: '4px'
+                  }}>
+                    <div style={{ fontSize: '10px', color: '#008B8B', fontWeight: 800 }}>CLASS-3 DIGITAL SIGNATURE (DSC)</div>
+                    <div style={{ fontSize: '12.5px', fontWeight: 900, color: '#0A2540' }}>{doctorName}</div>
+                    <div style={{ fontSize: '10px', color: '#64748B' }}>MCI Verified Physician</div>
+                  </div>
+                  <div style={{ fontSize: '10px', color: '#94A3B8' }}>Generated via AyuSwar Ambient Clinical AI</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Live Ambient Voice Scribe Studio Modal (In-Situ Telemetry Studio) */}
       <LiveScribeSessionModal
         isOpen={!!activeScribeSessionPatient}

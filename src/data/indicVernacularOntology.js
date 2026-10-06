@@ -503,7 +503,7 @@ export const INDIC_VERNACULAR_ONTOLOGY = [
 export function resolveIndicVernacular(text) {
   if (!text || typeof text !== 'string') return [];
   const normalized = text.toLowerCase();
-  
+
   return INDIC_VERNACULAR_ONTOLOGY.filter(item => {
     const vernacularMatch = normalized.includes(item.vernacular.toLowerCase());
     const transliterationMatch = item.transliteration.toLowerCase().split(' ').some(word => word.length > 3 && normalized.includes(word));
