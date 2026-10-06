@@ -770,6 +770,72 @@ export default function WhatsAppAudioRxModal({
               </button>
             </div>
 
+            {/* Print & Download Action Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <button
+                onClick={() => {
+                  window.print();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  background: '#ffffff',
+                  color: '#0A2540',
+                  border: '1.5px solid #CBD5E1',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                <span>🖨️ Print Visual Rx Slip</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const blob = new Blob([
+                    `AYUSWAR AI — VERNACULAR SPOKEN AUDIO-RX\n\n` +
+                    `Patient: ${patient.name} (${patient.abhaId})\n` +
+                    `Doctor: ${doctorName}\n` +
+                    `Language: ${currentRx.langLabel}\n` +
+                    `Timestamp: ${new Date().toLocaleString()}\n\n` +
+                    `--- CLONED DOCTOR VOICE NOTE TEXT ---\n` +
+                    `${currentRx.speechText}\n\n` +
+                    `--- MEDICATIONS & COLOR CHRONOTHERAPY ---\n` +
+                    `🟡 Morning: Pantoprazole 40mg (After Breakfast / 08:30 AM)\n` +
+                    `🟣 Night: Metformin 500mg (After Dinner / 08:30 PM)\n\n` +
+                    `Verified by ABDM HPR #8921-9942`
+                  ], { type: 'text/plain;charset=utf-8' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `AyuSwar_AudioRx_${patient.name.replace(/\s+/g, '_')}_Transcript.txt`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(0, 139, 139, 0.08)',
+                  color: '#008B8B',
+                  border: '1.5px solid rgba(0, 139, 139, 0.3)',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                <Download size={14} />
+                <span>Download Audio-Rx Note</span>
+              </button>
+            </div>
+
             {sendSuccessToast && (
               <div style={{
                 background: '#ECFDF5',
