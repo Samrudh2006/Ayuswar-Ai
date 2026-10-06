@@ -5,9 +5,10 @@ import {
   REGIONAL_COLLOQUIAL_DICTIONARY,
   predictClinicalDiagnosis 
 } from '../data/kaggleClinicalDataset';
+import { TOP_RESEARCH_DOMAINS } from '../data/researchPapersRepository';
 
 export default function DatasetExplorerModal({ isOpen, onClose }) {
-  const [activeTab, setActiveTab] = useState('predictor'); // 'predictor' | 'diseases' | 'metrics' | 'dictionary'
+  const [activeTab, setActiveTab] = useState('predictor'); // 'predictor' | 'diseases' | 'dictionary' | 'papers' | 'metrics'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [symptomInput, setSymptomInput] = useState('తీవ్రమైన ఆయాసం, రాత్రి వేళ పొడి దగ్గు మరియు పీకల్లో పిల్లికూతలు (Wheezing)');
@@ -113,6 +114,16 @@ export default function DatasetExplorerModal({ isOpen, onClose }) {
             <span>📚</span> 50+ Disease & Drug Dataset ({CLINICAL_DISEASE_DATASET.length})
           </button>
           <button
+            onClick={() => setActiveTab('papers')}
+            className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all flex items-center gap-2 ${
+              activeTab === 'papers'
+                ? 'bg-teal-500 text-slate-950 shadow-lg shadow-teal-500/20 font-bold'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            <span>📄</span> Peer-Reviewed Research Papers (NEJM/Lancet/IISc)
+          </button>
+          <button
             onClick={() => setActiveTab('dictionary')}
             className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all flex items-center gap-2 ${
               activeTab === 'dictionary'
@@ -120,7 +131,7 @@ export default function DatasetExplorerModal({ isOpen, onClose }) {
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            <span>🗣️</span> Indic Colloquial Dictionary (Telugu/Hindi)
+            <span>🗣️</span> Indic Colloquial Dictionary
           </button>
           <button
             onClick={() => setActiveTab('metrics')}
@@ -465,7 +476,69 @@ export default function DatasetExplorerModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* TAB 4: KAGGLE & IISC BENCHMARKS */}
+          {/* TAB 4: PEER-REVIEWED RESEARCH PAPERS & CLINICAL RECOMMENDATIONS */}
+          {activeTab === 'papers' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="p-4 rounded-2xl bg-teal-950/20 border border-teal-500/30 flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-bold text-teal-300">
+                    Peer-Reviewed Scientific Foundations & Architectural Decisions
+                  </h4>
+                  <p className="text-xs text-slate-300 mt-1">
+                    How AyuSwar AI incorporates landmark findings from NEJM AI, Nature Digital Medicine, Interspeech, and ICMR.
+                  </p>
+                </div>
+                <span className="px-3 py-1 bg-teal-500/20 text-teal-300 rounded-full text-xs font-bold border border-teal-500/40">
+                  10+ Landmark Studies
+                </span>
+              </div>
+
+              <div className="space-y-6">
+                {TOP_RESEARCH_DOMAINS.map((domainItem, dIdx) => (
+                  <div key={dIdx} className="space-y-3">
+                    <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+                      <span className="text-sm font-bold text-teal-400"># {domainItem.domain}</span>
+                      <span className="text-[11px] text-slate-400">({domainItem.topVenues})</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {domainItem.papers.map((p) => (
+                        <div key={p.id} className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                            <div>
+                              <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">{p.journal} • {p.citationCount} Citations</span>
+                              <h5 className="text-sm font-bold text-white mt-0.5">{p.title}</h5>
+                              <p className="text-xs text-slate-400">{p.authors}</p>
+                            </div>
+                            {p.doi && (
+                              <span className="font-mono text-[11px] text-teal-400 px-2 py-1 bg-slate-900 rounded-md border border-slate-800 self-start">
+                                DOI: {p.doi}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs space-y-2">
+                            <p className="text-slate-300">
+                              <strong className="text-teal-300">💡 Landmark Finding:</strong> {p.coreInsight}
+                            </p>
+                            <p className="text-slate-300">
+                              <strong className="text-amber-300">🎯 Scientific Recommendation:</strong> {p.recommendationForAyuSwar}
+                            </p>
+                            <div className="pt-1 border-t border-slate-800/80 flex items-center gap-2 text-emerald-400 font-semibold text-[11px]">
+                              <span>✅ Applied in AyuSwar AI:</span>
+                              <span className="text-slate-300 font-normal">{p.appliedInProject}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: KAGGLE & IISC BENCHMARKS */}
           {activeTab === 'metrics' && (
             <div className="space-y-6 animate-fadeIn">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
