@@ -417,3 +417,40 @@ h1, h2, h3, h4, h5, h6 {
   transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Apple Intelligence Aurora Glow (iOS 18 Siri Screen Aura) */
+@keyframes auroraBorder {
+  0% {
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.4);
+    border-color: rgba(0, 229, 255, 0.7);
+  }
+  33% {
+    box-shadow: 0 0 35px rgba(236, 72, 153, 0.6), inset 0 0 20px rgba(0, 229, 255, 0.4);
+    border-color: rgba(236, 72, 153, 0.8);
+  }
+  66% {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6), inset 0 0 18px rgba(236, 72, 153, 0.4);
+    border-color: rgba(168, 85, 247, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.4);
+    border-color: rgba(0, 229, 255, 0.7);
+  }
+}
+
+.apple-intelligence-glow {
+  animation: auroraBorder 4s ease-in-out infinite alternate;
+  will-change: box-shadow, border-color;
+}
+
+/* StandBy Live Activity Widget */
+.ios-standby-widget {
+  background: linear-gradient(135deg, #061626 0%, #0A2540 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.35);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+
