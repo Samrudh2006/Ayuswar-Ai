@@ -70,18 +70,34 @@ export default function WhatsAppAudioRxModal({
   const karaokeTimerRef = useRef(null);
   const progressTimerRef = useRef(null);
 
-  // Preset Prescriptions per Language
+  // Doctor-configurable dosage schedule timings & meal relationships
+  const [morningTime, setMorningTime] = useState('08:30 AM');
+  const [morningMeal, setMorningMeal] = useState('after'); // 'before' | 'after'
+  const [morningDoseText, setMorningDoseText] = useState('Pantoprazole 40mg (పసుపు గోళీ)');
+
+  const [nightTime, setNightTime] = useState('08:30 PM');
+  const [nightMeal, setNightMeal] = useState('after'); // 'before' | 'after'
+  const [nightDoseText, setNightDoseText] = useState('Metformin 500mg (గులాబీ గోళీ)');
+
+  const morningMealTelugu = morningMeal === 'before' ? 'టిఫిన్ ముందు' : 'టిఫిన్ తర్వాత';
+  const morningMealHindi = morningMeal === 'before' ? 'नाश्ते से पहले' : 'नाश्ते के बाद';
+  const morningMealEnglish = morningMeal === 'before' ? 'before breakfast' : 'after breakfast';
+
+  const nightMealTelugu = nightMeal === 'before' ? 'భోజనం ముందు' : 'భోజనం తర్వాత';
+  const nightMealHindi = nightMeal === 'before' ? 'रात के खाने से पहले' : 'रात के खाने के बाद';
+  const nightMealEnglish = nightMeal === 'before' ? 'before dinner' : 'after dinner';
+
+  // Preset Prescriptions per Language (Dynamically formatted with doctor's selected times)
   const rxContent = {
     te: {
       langLabel: 'తెలుగు (Telugu)',
       langCode: 'te-IN',
       doctorVernacular: 'డాక్టర్ ప్రియా శర్మ',
       audioDuration: '0:24',
-      speechText: 'నమస్కారం నారాయణ రావు గారు. నేను మీ డాక్టర్ ప్రియాని మాట్లాడుతున్నాను. పసుపు రంగు టాబ్లెట్ ఉదయం టిఫిన్ తర్వాత ఒక గోళీ వేసుకోండి. గులాబీ రంగు టాబ్లెట్ రాత్రి భోజనం తర్వాత ఒక గోళీ వేసుకోండి. మందులు అస్సలు మర్చిపోవద్దు, వేళకు వేసుకోండి.',
+      speechText: `నమస్కారం ${patient.name} గారు. నేను మీ డాక్టర్ ప్రియాని మాట్లాడుతున్నాను. పసుపు రంగు టాబ్లెట్ ఉదయం ${morningMealTelugu} ${morningTime} గంటలకు ఒక గోళీ వేసుకోండి. గులాబీ రంగు టాబ్లెట్ రాత్రి ${nightMealTelugu} ${nightTime} గంటలకు ఒక గోళీ వేసుకోండి. మందులు అస్సలు మర్చిపోవద్దు, వేళకు వేసుకోండి.`,
       karaokeTokens: [
         { word: 'నమస్కారం', pill: null },
-        { word: 'నారాయణ', pill: null },
-        { word: 'రావు', pill: null },
+        { word: patient.name.split(' ')[0], pill: null },
         { word: 'గారు.', pill: null },
         { word: 'నేను', pill: null },
         { word: 'మీ', pill: null },
@@ -91,32 +107,33 @@ export default function WhatsAppAudioRxModal({
         { word: 'రంగు', pill: 'morning' },
         { word: 'టాబ్లెట్', pill: 'morning' },
         { word: 'ఉదయం', pill: 'morning' },
-        { word: 'టిఫిన్', pill: 'morning' },
-        { word: 'తర్వాత', pill: 'morning' },
+        { word: morningMealTelugu.split(' ')[0], pill: 'morning' },
+        { word: morningMealTelugu.split(' ')[1] || '', pill: 'morning' },
+        { word: morningTime, pill: 'morning' },
         { word: 'ఒకటి,', pill: 'morning' },
         { word: 'గులాబీ', pill: 'night' },
         { word: 'రంగు', pill: 'night' },
         { word: 'టాబ్లెట్', pill: 'night' },
         { word: 'రాత్రి', pill: 'night' },
-        { word: 'భోజనం', pill: 'night' },
-        { word: 'తర్వాత', pill: 'night' },
+        { word: nightMealTelugu.split(' ')[0], pill: 'night' },
+        { word: nightMealTelugu.split(' ')[1] || '', pill: 'night' },
+        { word: nightTime, pill: 'night' },
         { word: 'ఒకటి.', pill: 'night' },
         { word: 'వేళకు', pill: null },
         { word: 'మందులు', pill: null },
         { word: 'వాడండి.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nనమస్కారం *${patient.name}* (${patient.vernacularName || ''}) గారు,\n\nమీ డాక్టర్ *${doctorName}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n🟡 *పసుపు రంగు టాబ్లెట్* (Pantoprazole 40mg): ఉదయం టిఫిన్ తర్వాత 1 గోళీ.\n🟣 *గులాబీ రంగు టాబ్లెట్* (Metformin 500mg): రాత్రి భోజనం తర్వాత 1 గోళీ.\n\n🔊 ఆడియో సూచనలు వినడానికి క్లిక్ చేయండి: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nఎమర్జెన్సీ హెల్ప్‌లైన్: 108 / 104\nABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nనమస్కారం *${patient.name}* (${patient.vernacularName || ''}) గారు,\n\nమీ డాక్టర్ *${doctorName}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n🟡 *పసుపు రంగు టాబ్లెట్* (Pantoprazole 40mg): ఉదయం ${morningMealTelugu} (${morningTime}) - 1 గోళీ.\n🟣 *గులాబీ రంగు టాబ్లెట్* (Metformin 500mg): రాత్రి ${nightMealTelugu} (${nightTime}) - 1 గోళీ.\n\n🔊 ఆడియో సూచనలు వినడానికి క్లిక్ చేయండి: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nఎమర్జెన్సీ హెల్ప్‌లైన్: 108 / 104\nABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
     },
     hi: {
       langLabel: 'हिंदी (Hindi)',
       langCode: 'hi-IN',
       doctorVernacular: 'डॉ. प्रिया शर्मा',
       audioDuration: '0:22',
-      speechText: 'नमस्ते नारायण राव जी। मैं आपकी डॉक्टर प्रिया बोल रही हूँ। पीली वाली गोली सुबह नाश्ते के बाद एक खानी है। गुलाबी वाली गोली रात को खाने के बाद एक लेनी है। दवा समय पर लें और पानी ज्यादा पिएं।',
+      speechText: `नमस्ते ${patient.name} जी। मैं आपकी डॉक्टर प्रिया बोल रही हूँ। पीली वाली गोली सुबह ${morningMealHindi} ${morningTime} बजे एक खानी है। गुलाबी वाली गोली रात को ${nightMealHindi} ${nightTime} बजे एक लेनी है। दवा समय पर लें और पानी ज्यादा पिएं।`,
       karaokeTokens: [
         { word: 'नमस्ते', pill: null },
-        { word: 'नारायण', pill: null },
-        { word: 'राव', pill: null },
+        { word: patient.name.split(' ')[0], pill: null },
         { word: 'जी।', pill: null },
         { word: 'मैं', pill: null },
         { word: 'आपकी', pill: null },
@@ -129,31 +146,29 @@ export default function WhatsAppAudioRxModal({
         { word: 'वाली', pill: 'morning' },
         { word: 'गोली', pill: 'morning' },
         { word: 'सुबह', pill: 'morning' },
-        { word: 'नाश्ते', pill: 'morning' },
-        { word: 'के', pill: 'morning' },
-        { word: 'बाद', pill: 'morning' },
+        { word: morningMealHindi, pill: 'morning' },
+        { word: morningTime, pill: 'morning' },
         { word: 'एक,', pill: 'morning' },
         { word: 'गुलाबी', pill: 'night' },
         { word: 'वाली', pill: 'night' },
         { word: 'गोली', pill: 'night' },
         { word: 'रात', pill: 'night' },
-        { word: 'खाने', pill: 'night' },
-        { word: 'के', pill: 'night' },
-        { word: 'बाद', pill: 'night' },
+        { word: nightMealHindi, pill: 'night' },
+        { word: nightTime, pill: 'night' },
         { word: 'एक।', pill: 'night' },
         { word: 'दवा', pill: null },
         { word: 'समय', pill: null },
         { word: 'पर', pill: null },
         { word: 'लें।', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्ते *${patient.name}* जी,\n\nआपकी डॉक्टर *${doctorName}* की आवाज में दवा का ऑडियो पर्चा:\n\n🟡 *पीली गोली* (Pantoprazole 40mg): सुबह नाश्ते के बाद 1 गोली।\n🟣 *गुलाबी गोली* (Metformin 500mg): रात के खाने के बाद 1 गोली।\n\n🔊 ऑडियो सुनने के लिए लिंक खोलें: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nआपातकालीन सहायता: 108 / 104\nABDM डिजिटल हेल्थ रिकॉर्ड प्रमाणित ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्ते *${patient.name}* जी,\n\nआपकी डॉक्टर *${doctorName}* की आवाज में दवा का ऑडियो पर्चा:\n\n🟡 *पीली गोली* (Pantoprazole 40mg): सुबह ${morningMealHindi} (${morningTime}) - 1 गोली।\n🟣 *गुलाबी गोली* (Metformin 500mg): रात ${nightMealHindi} (${nightTime}) - 1 गोली।\n\n🔊 ऑडियो सुनने के लिए लिंक खोलें: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nआपातकालीन सहायता: 108 / 104\nABDM डिजिटल हेल्थ रिकॉर्ड प्रमाणित ✅`
     },
     en: {
       langLabel: 'English (Indic Accent)',
       langCode: 'en-IN',
       doctorVernacular: 'Dr. Priya Sharma',
       audioDuration: '0:20',
-      speechText: `Hello ${patient.name}. This is Dr. Priya. Please take the yellow tablet once in the morning after breakfast. Take the pink tablet once at night after dinner. Do not skip your medicines.`,
+      speechText: `Hello ${patient.name}. This is Dr. Priya. Please take the yellow tablet once in the morning ${morningMealEnglish} at ${morningTime}. Take the pink tablet once at night ${nightMealEnglish} at ${nightTime}. Do not skip your medicines.`,
       karaokeTokens: [
         { word: 'Hello', pill: null },
         { word: patient.name.split(' ')[0], pill: null },
@@ -165,21 +180,19 @@ export default function WhatsAppAudioRxModal({
         { word: 'the', pill: 'morning' },
         { word: 'yellow', pill: 'morning' },
         { word: 'tablet', pill: 'morning' },
-        { word: 'morning', pill: 'morning' },
-        { word: 'after', pill: 'morning' },
-        { word: 'breakfast,', pill: 'morning' },
+        { word: morningMealEnglish, pill: 'morning' },
+        { word: morningTime, pill: 'morning' },
         { word: 'and', pill: 'night' },
         { word: 'the', pill: 'night' },
         { word: 'pink', pill: 'night' },
         { word: 'tablet', pill: 'night' },
         { word: 'at', pill: 'night' },
-        { word: 'night', pill: 'night' },
-        { word: 'after', pill: 'night' },
-        { word: 'dinner.', pill: 'night' },
+        { word: nightMealEnglish, pill: 'night' },
+        { word: nightTime, pill: 'night' },
         { word: 'Stay', pill: null },
         { word: 'healthy.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nHello *${patient.name}*,\n\nAudio Prescription from *${doctorName}*:\n\n🟡 *Yellow Tablet* (Pantoprazole 40mg): Morning after breakfast (1 Tab)\n🟣 *Pink Tablet* (Metformin 500mg): Night after dinner (1 Tab)\n\n🔊 Listen to Spoken Rx: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nEmergency: 108 / 104 | ABDM FHIR R4 Verified ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nHello *${patient.name}*,\n\nAudio Prescription from *${doctorName}*:\n\n🟡 *Yellow Tablet* (Pantoprazole 40mg): Morning ${morningMealEnglish} (${morningTime}) - 1 Tab\n🟣 *Pink Tablet* (Metformin 500mg): Night ${nightMealEnglish} (${nightTime}) - 1 Tab\n\n🔊 Listen to Spoken Rx: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nEmergency: 108 / 104 | ABDM FHIR R4 Verified ✅`
     }
   };
 
@@ -631,17 +644,23 @@ export default function WhatsAppAudioRxModal({
               </div>
             </div>
 
-            {/* Visual Color-Coded Pill Schedule (High Visibility for Illiterate Patients) */}
+            {/* Visual Color-Coded Pill Schedule (Doctor-Configurable Timings) */}
             <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
-                Non-Reading Visual Pill Schedule (Synchronized Glow)
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Doctor-Selected Dosage Schedule & Meal Timings
+                </div>
+                <span style={{ fontSize: '10px', background: '#F1F5F9', color: '#008B8B', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
+                  Live Voice Synchronized
+                </span>
               </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                {/* Morning Pill */}
+                {/* Morning Pill Card with Doctor Timing Controls */}
                 <div style={{
                   padding: '14px',
                   borderRadius: '12px',
-                  background: activePillHighlight === 'morning' ? 'rgba(251, 191, 36, 0.15)' : '#FFFBEB',
+                  background: activePillHighlight === 'morning' ? 'rgba(251, 191, 36, 0.18)' : '#FFFBEB',
                   border: activePillHighlight === 'morning' ? '2px solid #F59E0B' : '1px solid #FDE68A',
                   boxShadow: activePillHighlight === 'morning' ? '0 0 16px rgba(245, 158, 11, 0.35)' : 'none',
                   transform: activePillHighlight === 'morning' ? 'scale(1.02)' : 'scale(1)',
@@ -672,16 +691,76 @@ export default function WhatsAppAudioRxModal({
                       </div>
                     </div>
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#78350F', fontWeight: 600 }}>
-                    ⏰ టిఫిన్ తర్వాత (08:30 AM)
+
+                  {/* Doctor Time Selector */}
+                  <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(245, 158, 11, 0.2)' }}>
+                    <div style={{ fontSize: '10.5px', color: '#78350F', fontWeight: 700, marginBottom: '4px' }}>
+                      Select Dosage Time:
+                    </div>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                      {['07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM'].map(t => (
+                        <button
+                          key={t}
+                          onClick={() => setMorningTime(t)}
+                          style={{
+                            padding: '2px 7px',
+                            borderRadius: '6px',
+                            border: morningTime === t ? '1.5px solid #D97706' : '1px solid #FCD34D',
+                            background: morningTime === t ? '#D97706' : '#ffffff',
+                            color: morningTime === t ? '#ffffff' : '#78350F',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Meal Relation Toggle */}
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      <button
+                        onClick={() => setMorningMeal('before')}
+                        style={{
+                          flex: 1,
+                          padding: '3px',
+                          borderRadius: '6px',
+                          border: morningMeal === 'before' ? '1.5px solid #D97706' : '1px solid #FCD34D',
+                          background: morningMeal === 'before' ? '#D97706' : '#ffffff',
+                          color: morningMeal === 'before' ? '#ffffff' : '#78350F',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        టిఫిన్ ముందు (Before)
+                      </button>
+                      <button
+                        onClick={() => setMorningMeal('after')}
+                        style={{
+                          flex: 1,
+                          padding: '3px',
+                          borderRadius: '6px',
+                          border: morningMeal === 'after' ? '1.5px solid #D97706' : '1px solid #FCD34D',
+                          background: morningMeal === 'after' ? '#D97706' : '#ffffff',
+                          color: morningMeal === 'after' ? '#ffffff' : '#78350F',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        టిఫిన్ తర్వాత (After)
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Night Pill */}
+                {/* Night Pill Card with Doctor Timing Controls */}
                 <div style={{
                   padding: '14px',
                   borderRadius: '12px',
-                  background: activePillHighlight === 'night' ? 'rgba(236, 72, 153, 0.15)' : '#FDF2F8',
+                  background: activePillHighlight === 'night' ? 'rgba(236, 72, 153, 0.18)' : '#FDF2F8',
                   border: activePillHighlight === 'night' ? '2px solid #EC4899' : '1px solid #FBCFE8',
                   boxShadow: activePillHighlight === 'night' ? '0 0 16px rgba(236, 72, 153, 0.35)' : 'none',
                   transform: activePillHighlight === 'night' ? 'scale(1.02)' : 'scale(1)',
@@ -712,8 +791,68 @@ export default function WhatsAppAudioRxModal({
                       </div>
                     </div>
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#831843', fontWeight: 600 }}>
-                    ⏰ రాత్రి భోజనం తర్వాత (08:30 PM)
+
+                  {/* Doctor Time Selector */}
+                  <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(236, 72, 153, 0.2)' }}>
+                    <div style={{ fontSize: '10.5px', color: '#831843', fontWeight: 700, marginBottom: '4px' }}>
+                      Select Dosage Time:
+                    </div>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                      {['08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM'].map(t => (
+                        <button
+                          key={t}
+                          onClick={() => setNightTime(t)}
+                          style={{
+                            padding: '2px 7px',
+                            borderRadius: '6px',
+                            border: nightTime === t ? '1.5px solid #DB2777' : '1px solid #F472B6',
+                            background: nightTime === t ? '#DB2777' : '#ffffff',
+                            color: nightTime === t ? '#ffffff' : '#831843',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Meal Relation Toggle */}
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                      <button
+                        onClick={() => setNightMeal('before')}
+                        style={{
+                          flex: 1,
+                          padding: '3px',
+                          borderRadius: '6px',
+                          border: nightMeal === 'before' ? '1.5px solid #DB2777' : '1px solid #F472B6',
+                          background: nightMeal === 'before' ? '#DB2777' : '#ffffff',
+                          color: nightMeal === 'before' ? '#ffffff' : '#831843',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        భోజనం ముందు (Before)
+                      </button>
+                      <button
+                        onClick={() => setNightMeal('after')}
+                        style={{
+                          flex: 1,
+                          padding: '3px',
+                          borderRadius: '6px',
+                          border: nightMeal === 'after' ? '1.5px solid #DB2777' : '1px solid #F472B6',
+                          background: nightMeal === 'after' ? '#DB2777' : '#ffffff',
+                          color: nightMeal === 'after' ? '#ffffff' : '#831843',
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        భోజనం తర్వాత (After)
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1023,11 +1162,11 @@ export default function WhatsAppAudioRxModal({
                   </div>
 
                   <div style={{ background: '#FFFBEB', padding: '6px 8px', borderRadius: '6px', marginBottom: '6px', borderLeft: '3px solid #F59E0B' }}>
-                    🟡 <strong>పసుపు రంగు (Morning):</strong> Pantoprazole 40mg (1 గోళీ టిఫిన్ తర్వాత)
+                    🟡 <strong>{selectedLanguage === 'te' ? 'పసుపు రంగు (Morning)' : (selectedLanguage === 'hi' ? 'पीली गोली (Morning)' : 'Yellow Pill (Morning)')}:</strong> Pantoprazole 40mg (1 {selectedLanguage === 'te' ? 'గోళీ' : 'Tab'} {selectedLanguage === 'te' ? morningMealTelugu : (selectedLanguage === 'hi' ? morningMealHindi : morningMealEnglish)} - {morningTime})
                   </div>
 
                   <div style={{ background: '#FDF2F8', padding: '6px 8px', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #EC4899' }}>
-                    🟣 <strong>గులాబీ రంగు (Night):</strong> Metformin 500mg (1 గోళీ భోజనం తర్వాత)
+                    🟣 <strong>{selectedLanguage === 'te' ? 'గులాబీ రంగు (Night)' : (selectedLanguage === 'hi' ? 'गुलाबी गोली (Night)' : 'Pink Pill (Night)')}:</strong> Metformin 500mg (1 {selectedLanguage === 'te' ? 'గోళీ' : 'Tab'} {selectedLanguage === 'te' ? nightMealTelugu : (selectedLanguage === 'hi' ? nightMealHindi : nightMealEnglish)} - {nightTime})
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '10px', color: '#667781', marginTop: '6px' }}>
