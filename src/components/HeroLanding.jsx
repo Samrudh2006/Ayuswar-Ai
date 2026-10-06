@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Mic, 
   Languages, 
@@ -7,6 +7,7 @@ import {
   Volume2, 
   ArrowRight, 
   Play, 
+  Pause,
   ShieldCheck, 
   Globe2, 
   Building2, 
@@ -20,26 +21,47 @@ import {
   Layers, 
   ChevronDown, 
   ChevronUp, 
+  ChevronLeft, 
+  ChevronRight, 
   Lock, 
   Stethoscope, 
   Smartphone, 
-  FileText 
+  FileText,
+  Pill,
+  Radio,
+  QrCode,
+  ArrowUpRight
 } from 'lucide-react';
 
 /**
  * HeroLanding Component
- * Complete, production-grade enterprise marketing showcase for AyuSwar AI.
- * Implements the exact aesthetic from the reference image, followed by comprehensive
- * clinical problem metrics, architecture loops, 6-bento feature moats, dialect matrix,
- * testimonials, compliance badges, and interactive FAQs.
+ * Complete, world-class enterprise marketing site for AyuSwar AI.
+ * Built with full-width modern layout, interactive language carousel with live Timbre voice playback,
+ * before-vs-after comparison toggles, 6-bento interactive deep-tech moats, and portal gateways.
  */
-export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAuthModal }) {
+export default function HeroLanding({ 
+  onLaunchStudio, 
+  onOpenTechModal, 
+  onOpenAuthModal,
+  onOpenDoctorPortal,
+  onOpenPatientPortal
+}) {
   const [activeFeature, setActiveFeature] = useState(0);
-  const [selectedLanguageTab, setSelectedLanguageTab] = useState('Telugu');
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
+  
+  // Before vs After Toggle
+  const [comparisonMode, setComparisonMode] = useState('after'); // 'before' | 'after'
+
+  // Interactive 4-Step Pipeline Step
+  const [activePipelineStep, setActivePipelineStep] = useState(0);
+
+  // Pan-India Language Carousel & Audio State
+  const [selectedLanguageRegion, setSelectedLanguageRegion] = useState('all');
+  const [playingLangSample, setPlayingLangSample] = useState(null);
+  const carouselScrollRef = useRef(null);
 
   const features = [
-    { id: 0, title: 'Ambient Voice Listening', icon: Mic, desc: 'Dual-speaker ambient capture with speaker diarization in OPD chaos' },
+    { id: 0, title: 'Ambient Voice Listening', icon: Mic, desc: 'Dual-speaker ambient capture with speaker diarization in chaotic OPDs' },
     { id: 1, title: 'Multilingual Transcription', icon: Languages, desc: 'Prisma v2.5 powered Indic code-mixed transcription (Telugu, Hindi, Tenglish)' },
     { id: 2, title: 'Acoustic Biomarkers', icon: Activity, desc: 'Real-time DSP extraction of wheeze, cough spectral index & respiratory strain' },
     { id: 3, title: 'Prescription Scanner', icon: Scan, desc: 'OpenCV computer vision scanning of physical medicine blister strips & paper Rx' },
@@ -47,15 +69,129 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
   ];
 
   const indicLanguages = [
-    { name: 'Telugu', native: 'తెలుగు', sample: 'ఈ ఆకుపచ్చ మాత్ర ఉదయం వేసుకోవాలి', region: 'Andhra Pradesh & Telangana' },
-    { name: 'Hindi', native: 'हिन्दी', sample: 'यह पीला सिरप रोज सुबह नाश्ते के बाद लें', region: 'North & Central India' },
-    { name: 'Tamil', native: 'தமிழ்', sample: 'இந்த நீல நிற மாத்திரையை இரவில் உட்கொள்ளுங்கள்', region: 'Tamil Nadu & Puducherry' },
-    { name: 'Kannada', native: 'ಕನ್ನಡ', sample: 'ಈ ಮಾತ್ರೆಗಳನ್ನು ಊಟದ ನಂತರ ಸೇವಿಸಿ', region: 'Karnataka' },
-    { name: 'Marathi', native: 'मराठी', sample: 'हे औषध रात्री जेवणानंतर घ्या', region: 'Maharashtra' },
-    { name: 'Bengali', native: 'বাংলা', sample: 'এই ট্যাবলেটটি সকালে জল দিয়ে খান', region: 'West Bengal & Tripura' },
-    { name: 'Gujarati', native: 'ગુજરાતી', sample: 'આ દવા જમ્યા પછી લેવી', region: 'Gujarat' },
-    { name: 'Malayalam', native: 'മലയാളം', sample: 'ഈ മരുന്ന് രാത്രി ഭക്ഷണത്തിന് ശേഷം കഴിക്കുക', region: 'Kerala' }
+    { 
+      id: 'te', 
+      name: 'Telugu', 
+      native: 'తెలుగు', 
+      region: 'South', 
+      state: 'Andhra Pradesh & Telangana',
+      sample: 'ఈ ఆకుపచ్చ మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి', 
+      langCode: 'te-IN' 
+    },
+    { 
+      id: 'hi', 
+      name: 'Hindi', 
+      native: 'हिन्दी', 
+      region: 'North', 
+      state: 'Uttar Pradesh, MP, Bihar, Delhi',
+      sample: 'यह पीला सिरप रोज सुबह नाश्ते के बाद 5ml देना है', 
+      langCode: 'hi-IN' 
+    },
+    { 
+      id: 'ta', 
+      name: 'Tamil', 
+      native: 'தமிழ்', 
+      region: 'South', 
+      state: 'Tamil Nadu & Puducherry',
+      sample: 'இந்த நீல நிற மாத்திரையை இரவு உணவிற்குப் பிறகு உட்கொள்ளுங்கள்', 
+      langCode: 'ta-IN' 
+    },
+    { 
+      id: 'kn', 
+      name: 'Kannada', 
+      native: 'ಕನ್ನಡ', 
+      region: 'South', 
+      state: 'Karnataka',
+      sample: 'ಈ ಹಸಿರು ಮಾತ್ರೆಗಳನ್ನು ಬೆಳಗಿನ ಉಪಾಹಾರದ ನಂತರ ಸೇವಿಸಿ', 
+      langCode: 'kn-IN' 
+    },
+    { 
+      id: 'mr', 
+      name: 'Marathi', 
+      native: 'मराठी', 
+      region: 'West', 
+      state: 'Maharashtra',
+      sample: 'हे औषध दररोज रात्री जेवणानंतर एक गोळी घ्या', 
+      langCode: 'mr-IN' 
+    },
+    { 
+      id: 'bn', 
+      name: 'Bengali', 
+      native: 'বাংলা', 
+      region: 'East', 
+      state: 'West Bengal & Tripura',
+      sample: 'এই নীল ট্যাবলেটটি রাতে খাওয়ার পরে জল দিয়ে খাবেন', 
+      langCode: 'bn-IN' 
+    },
+    { 
+      id: 'gu', 
+      name: 'Gujarati', 
+      native: 'ગુજરાતી', 
+      region: 'West', 
+      state: 'Gujarat',
+      sample: 'આ પીળી દવા સવારે નાસ્તા પછી એક ચમચી લેવી', 
+      langCode: 'gu-IN' 
+    },
+    { 
+      id: 'ml', 
+      name: 'Malayalam', 
+      native: 'മലയാളം', 
+      region: 'South', 
+      state: 'Kerala',
+      sample: 'ഈ മരുന്ന് രാത്രി ഭക്ഷണത്തിന് ശേഷം ഒരു ഗുളിക കഴിക്കുക', 
+      langCode: 'ml-IN' 
+    },
+    { 
+      id: 'pa', 
+      name: 'Punjabi', 
+      native: 'ਪੰਜਾਬੀ', 
+      region: 'North', 
+      state: 'Punjab & Chandigarh',
+      sample: 'ਇਹ ਦਵਾਈ ਰੋਜ਼ਾਨਾ ਸਵੇਰੇ ਰੋਟੀ ਖਾਣ ਤੋਂ ਬਾਅਦ ਲਵੋ', 
+      langCode: 'pa-IN' 
+    },
+    { 
+      id: 'or', 
+      name: 'Odia', 
+      native: 'ଓଡ଼ିଆ', 
+      region: 'East', 
+      state: 'Odisha',
+      sample: 'ଏହି ଔଷଧ ସକାଳେ ଜଳଖିଆ ଖାଇବା ପରେ ଗୋଟିଏ ନିଅନ୍ତୁ', 
+      langCode: 'or-IN' 
+    }
   ];
+
+  // Play Language Audio Sample
+  const handlePlayLanguageSample = (lang) => {
+    if (playingLangSample === lang.id) {
+      setPlayingLangSample(null);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    } else {
+      setPlayingLangSample(lang.id);
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(lang.sample);
+        utterance.lang = lang.langCode;
+        utterance.rate = 0.95;
+        utterance.onend = () => setPlayingLangSample(null);
+        utterance.onerror = () => setPlayingLangSample(null);
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setTimeout(() => setPlayingLangSample(null), 3500);
+      }
+    }
+  };
+
+  const scrollCarousel = (direction) => {
+    if (carouselScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -340 : 340;
+      carouselScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const filteredLanguages = selectedLanguageRegion === 'all' 
+    ? indicLanguages 
+    : indicLanguages.filter(l => l.region.toLowerCase() === selectedLanguageRegion.toLowerCase());
 
   const faqs = [
     {
@@ -77,14 +213,14 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
   ];
 
   return (
-    <div style={{ position: 'relative', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', overflow: 'hidden', background: '#F8FAFC' }}>
       {/* =========================================================================
-          HERO SECTION (FAITHFUL TO USER'S UPLOADED DESIGN REFERENCE)
+          HERO SECTION (FULL WIDTH & BEAUTIFULLY PROPORTIONED)
           ========================================================================= */}
       <div style={{
         maxWidth: '1380px',
         margin: '0 auto',
-        padding: '48px 24px 64px 24px',
+        padding: '52px 24px 70px 24px',
         position: 'relative',
         zIndex: 1
       }}>
@@ -401,6 +537,101 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
       </div>
 
       {/* =========================================================================
+          GATEWAY CARDS: ENTER DOCTOR WORKSPACE OR PATIENT SEVA HUB
+          ========================================================================= */}
+      <div style={{ maxWidth: '1380px', margin: '0 auto 60px auto', padding: '0 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          {/* Card 1: Doctor Portal Gateway */}
+          <div 
+            onClick={onOpenDoctorPortal}
+            className="glass-panel" 
+            style={{
+              padding: '24px 28px',
+              cursor: 'pointer',
+              border: '1.5px solid rgba(0, 139, 139, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 200ms ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+              <div style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '14px',
+                background: 'rgba(0, 139, 139, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#008B8B'
+              }}>
+                <Stethoscope size={26} />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>
+                    Doctor Portal (OPD Queue)
+                  </h3>
+                  <span style={{ fontSize: '10px', background: '#008B8B', color: '#ffffff', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                    PHYSICIAN WORKSPACE
+                  </span>
+                </div>
+                <p style={{ fontSize: '13px', color: '#64748B', marginTop: '4px' }}>
+                  Manage patient triage queue, inspect vitals, and trigger ambient voice documentation.
+                </p>
+              </div>
+            </div>
+            <ArrowUpRight size={22} color="#008B8B" />
+          </div>
+
+          {/* Card 2: Patient Portal Gateway */}
+          <div 
+            onClick={onOpenPatientPortal}
+            className="glass-panel" 
+            style={{
+              padding: '24px 28px',
+              cursor: 'pointer',
+              border: '1.5px solid rgba(217, 119, 6, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 200ms ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+              <div style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '14px',
+                background: 'rgba(217, 119, 6, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#D97706'
+              }}>
+                <Pill size={26} />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>
+                    Patient Seva Portal (Audio-Rx)
+                  </h3>
+                  <span style={{ fontSize: '10px', background: '#D97706', color: '#ffffff', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                    CITIZEN APP
+                  </span>
+                </div>
+                <p style={{ fontSize: '13px', color: '#64748B', marginTop: '4px' }}>
+                  View ABHA Health Card, replay spoken prescriptions in native dialect, and check daily pills.
+                </p>
+              </div>
+            </div>
+            <ArrowUpRight size={22} color="#D97706" />
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
           BOTTOM METRICS & IMPACT RIBBON (EXACT TO REFERENCE)
           ========================================================================= */}
       <div style={{
@@ -487,10 +718,10 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
       </div>
 
       {/* =========================================================================
-          SECTION 2: THE CLINICAL DOCUMENTATION CRISIS IN BHARAT
+          SECTION 2: THE CLINICAL DOCUMENTATION CRISIS (WITH BEFORE VS AFTER TOGGLE)
           ========================================================================= */}
       <section id="impact-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '80px 24px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 50px auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px auto' }}>
           <div style={{ fontSize: '12px', fontWeight: 800, color: '#D97706', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
             THE NATIONAL HEALTHCARE GAP
           </div>
@@ -500,49 +731,98 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
           <p style={{ fontSize: '16px', color: '#5A7184', lineHeight: 1.6 }}>
             In primary health centers across rural India, doctors are overwhelmed by patient volume while citizens are locked out of their own medical records by language and literacy barriers.
           </p>
-        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '28px' }}>
-          <div className="bento-card" style={{ borderLeft: '4px solid #EF4444' }}>
-            <div style={{ fontSize: '36px', fontWeight: 850, color: '#EF4444', fontFamily: 'Outfit, sans-serif', marginBottom: '8px' }}>
-              1 : 1,456
-            </div>
-            <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
-              Doctor-to-Patient Ratio
-            </h3>
-            <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55 }}>
-              Doctors in government OPDs consult 80 to 100 patients daily, spending less than 2 minutes per patient with zero bandwidth to type into computers.
-            </p>
-          </div>
-
-          <div className="bento-card" style={{ borderLeft: '4px solid #D97706' }}>
-            <div style={{ fontSize: '36px', fontWeight: 850, color: '#D97706', fontFamily: 'Outfit, sans-serif', marginBottom: '8px' }}>
-              600 Million+
-            </div>
-            <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
-              Health-Illiterate Citizens
-            </h3>
-            <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55 }}>
-              Over half a billion citizens in Tier 3/4 Bharat cannot read English medical abbreviations or doctor scribbles, leading to catastrophic medication errors.
-            </p>
-          </div>
-
-          <div className="bento-card" style={{ borderLeft: '4px solid #008B8B' }}>
-            <div style={{ fontSize: '36px', fontWeight: 850, color: '#008B8B', fontFamily: 'Outfit, sans-serif', marginBottom: '8px' }}>
-              45%
-            </div>
-            <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
-              Medication Non-Adherence
-            </h3>
-            <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55 }}>
-              Patients stop critical diabetes, hypertension, and antibiotic regimens early simply because nobody explained the dosage in their native mother tongue.
-            </p>
+          {/* Before vs After Interactive Toggle */}
+          <div style={{ display: 'inline-flex', padding: '4px', background: '#E2E8F0', borderRadius: '30px', marginTop: '20px' }}>
+            <button
+              onClick={() => setComparisonMode('before')}
+              style={{
+                padding: '8px 22px',
+                borderRadius: '24px',
+                border: 'none',
+                background: comparisonMode === 'before' ? '#EF4444' : 'transparent',
+                color: comparisonMode === 'before' ? '#ffffff' : '#475569',
+                fontSize: '13px',
+                fontWeight: 750,
+                cursor: 'pointer',
+                transition: 'all 160ms ease'
+              }}
+            >
+              Without AyuSwar (Status Quo)
+            </button>
+            <button
+              onClick={() => setComparisonMode('after')}
+              style={{
+                padding: '8px 22px',
+                borderRadius: '24px',
+                border: 'none',
+                background: comparisonMode === 'after' ? '#008B8B' : 'transparent',
+                color: comparisonMode === 'after' ? '#ffffff' : '#475569',
+                fontSize: '13px',
+                fontWeight: 750,
+                cursor: 'pointer',
+                transition: 'all 160ms ease'
+              }}
+            >
+              With AyuSwar AI (Ambient Closed-Loop)
+            </button>
           </div>
         </div>
+
+        {/* Dynamic Comparison Cards */}
+        {comparisonMode === 'before' ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+            <div className="bento-card" style={{ borderLeft: '4px solid #EF4444', background: '#FFF5F5' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#EF4444', textTransform: 'uppercase', marginBottom: '6px' }}>Status Quo: Clinical Burnout</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>1.5 Minutes per Patient</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Doctors rush through 80+ daily OPD encounters, scribbling illegible abbreviations on paper with zero time for preventive counseling.
+              </p>
+            </div>
+            <div className="bento-card" style={{ borderLeft: '4px solid #EF4444', background: '#FFF5F5' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#EF4444', textTransform: 'uppercase', marginBottom: '6px' }}>Status Quo: Zero Digital Health</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>Lost Longitudinal History</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Paper prescription slips are regularly lost or ruined by water. Subsequent doctors have zero access to prior diagnoses or allergies.
+              </p>
+            </div>
+            <div className="bento-card" style={{ borderLeft: '4px solid #EF4444', background: '#FFF5F5' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#EF4444', textTransform: 'uppercase', marginBottom: '6px' }}>Status Quo: Fatal Medication Errors</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>45% Non-Adherence</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Illiterate patients confuse morning and evening pills, taking insulin or hypertensive pills incorrectly, resulting in preventable ER admissions.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+            <div className="bento-card" style={{ borderLeft: '4px solid #008B8B', background: '#F0FDFA' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', marginBottom: '6px' }}>With AyuSwar: Zero-Touch Scribing</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>Zero Keyboard Required</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Doctor looks at the patient, talks naturally in mixed Telugu/Hindi/English. AyuSwar transcribes and structures the ABDM EHR passively.
+              </p>
+            </div>
+            <div className="bento-card" style={{ borderLeft: '4px solid #008B8B', background: '#F0FDFA' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', marginBottom: '6px' }}>With AyuSwar: Official ABDM FHIR R4</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>Instant ABHA Digital Sync</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Standardized structured JSON bundle automatically linked to the patient's Ayushman Bharat Health Account with QR verification.
+              </p>
+            </div>
+            <div className="bento-card" style={{ borderLeft: '4px solid #008B8B', background: '#F0FDFA' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', marginBottom: '6px' }}>With AyuSwar: Spoken Audio-Rx</div>
+              <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>Native Spoken Pills Guide</h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+                Illiterate patients listen to Dr. Ananya's voice in Telugu/Hindi on WhatsApp with glowing karaoke pill schedules!
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* =========================================================================
-          SECTION 3: HOW AYUSWAR WORKS — THE 4-STEP CLOSED-LOOP ARCHITECTURE
+          SECTION 3: HOW AYUSWAR WORKS — INTERACTIVE STEPPED PIPELINE
           ========================================================================= */}
       <section style={{ background: '#F1F5F9', padding: '80px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
@@ -581,12 +861,24 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
                 desc: 'Synthesizes native spoken pill schedules with word-by-word karaoke synchronization for non-reading patients.'
               }
             ].map((st, i) => (
-              <div key={i} className="glass-panel" style={{ padding: '28px 22px', position: 'relative' }}>
+              <div 
+                key={i} 
+                onClick={() => setActivePipelineStep(i)}
+                className="glass-panel" 
+                style={{ 
+                  padding: '28px 22px', 
+                  position: 'relative',
+                  cursor: 'pointer',
+                  border: activePipelineStep === i ? '2px solid #008B8B' : '1px solid rgba(255,255,255,0.8)',
+                  boxShadow: activePipelineStep === i ? '0 12px 30px rgba(0, 139, 139, 0.15)' : 'none',
+                  transition: 'all 200ms ease'
+                }}
+              >
                 <div style={{
                   fontSize: '32px',
                   fontWeight: 900,
                   fontFamily: 'Outfit, sans-serif',
-                  color: 'rgba(0, 139, 139, 0.25)',
+                  color: activePipelineStep === i ? '#008B8B' : 'rgba(0, 139, 139, 0.25)',
                   marginBottom: '12px'
                 }}>
                   {st.step}
@@ -604,7 +896,7 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
       </section>
 
       {/* =========================================================================
-          SECTION 4: THE 6 DEEP-TECH MOATS BENTO GRID
+          SECTION 4: 6 DEEP-TECH MOATS (CLICKABLE TO LAUNCH STUDIO)
           ========================================================================= */}
       <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '80px 24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 50px auto' }}>
@@ -615,144 +907,280 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
             6 Deep-Tech Moats That Define AyuSwar AI
           </h2>
           <p style={{ fontSize: '16px', color: '#5A7184' }}>
-            We engineered beyond a simple chatbot wrapper — constructing a multimodal, signal-processed clinical operating system.
+            Click on any moat to explore the live interactive algorithm in our Clinical Studio.
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '24px'
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
           {/* Moat 1: Acoustic Respiratory Stethoscope */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 139, 139, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#008B8B', marginBottom: '16px' }}>
-              <Activity size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 139, 139, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#008B8B' }}>
+                <Activity size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#008B8B" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               Acoustic Respiratory Stethoscope
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Implements spectral centroid, rolloff, and jitter metrics derived from IISc Bangalore’s Coswara research to classify dry vs wet cough and pediatric stridor directly from ambient microphone input.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#008B8B' }}>Explore in Clinical Studio →</div>
           </div>
 
           {/* Moat 2: Vernacular Ontology Resolver */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706', marginBottom: '16px' }}>
-              <Languages size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
+                <Languages size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#D97706" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               Vernacular Semantic Resolver
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Translates regional colloquial metaphors (e.g., Telugu "గుండెల్లో దడ" or Hindi "पसली चलना") into formal WHO ICD-10 (R00.2) and SNOMED-CT clinical tokens in real-time.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#D97706' }}>Explore in Clinical Studio →</div>
           </div>
 
           {/* Moat 3: Karaoke Spoken Audio-Rx */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981', marginBottom: '16px' }}>
-              <Volume2 size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
+                <Volume2 size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#10B981" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               Synchronized Karaoke Audio-Rx
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Pairs Gnani.ai Timbre v2.5 voice synthesis with active, word-by-word visual glowing highlights across color-coded morning, afternoon, and night pill schedule cards.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#10B981' }}>Explore in Clinical Studio →</div>
           </div>
 
           {/* Moat 4: OpenCV Blister Strip Scanner */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6366F1', marginBottom: '16px' }}>
-              <Scan size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6366F1' }}>
+                <Scan size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#6366F1" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               OpenCV Blister Strip Scanner
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Computer vision pipeline detects physical medicine packaging contours, runs text bounding-box extraction, and verifies against India’s National Formulary to prevent double-dosing.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#6366F1' }}>Explore in Clinical Studio →</div>
           </div>
 
           {/* Moat 5: Drug-Drug Interaction Sentinel */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444', marginBottom: '16px' }}>
-              <ShieldCheck size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
+                <ShieldCheck size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#EF4444" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               Clinical Decision Support (CDSS)
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               Autonomous safety agent flags CYP450 contraindications, age-adjusted pediatric dosages, and patient comorbidities (e.g., Peptic Ulcers + NSAIDs) with immediate audible warnings.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#EF4444' }}>Explore in Clinical Studio →</div>
           </div>
 
           {/* Moat 6: ABDM FHIR R4 Bundle Generator */}
-          <div className="bento-card">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0EA5E9', marginBottom: '16px' }}>
-              <FileCheck size={22} />
+          <div className="bento-card" onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0EA5E9' }}>
+                <FileCheck size={22} />
+              </div>
+              <ArrowUpRight size={18} color="#0EA5E9" />
             </div>
             <h3 style={{ fontSize: '18px', color: '#0A2540', marginBottom: '8px' }}>
               Official ABDM FHIR R4 Standard
             </h3>
-            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '12px' }}>
               1-click export of verified Ayushman Bharat Digital Mission JSON bundles and QR-code enabled print summaries that link patient ABHA health accounts.
             </p>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#0EA5E9' }}>Explore in Clinical Studio →</div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 5: INDIC LANGUAGE & DIALECT MATRIX
+          SECTION 5: PAN-INDIA LINGUISTIC COVERAGE CAROUSEL WITH LIVE TIMBRE AUDIO!
           ========================================================================= */}
       <section style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0', padding: '80px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 40px auto' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
-              PAN-INDIA LINGUISTIC COVERAGE
+          {/* Header & Carousel Arrow Controls */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '20px' }}>
+            <div>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                PAN-INDIA LINGUISTIC COVERAGE
+              </div>
+              <h2 style={{ fontSize: '38px', color: '#0A2540', marginBottom: '8px' }}>
+                Listening & Speaking in 50+ Dialects Across Bharat
+              </h2>
+              <p style={{ fontSize: '15px', color: '#5A7184' }}>
+                Click any card to hear live voice synthesis generated by Gnani.ai Timbre v2.5.
+              </p>
             </div>
-            <h2 style={{ fontSize: '38px', color: '#0A2540', marginBottom: '16px' }}>
-              Listening & Speaking in 50+ Dialects Across Bharat
-            </h2>
-            <p style={{ fontSize: '16px', color: '#5A7184' }}>
-              Powered by Gnani.ai Prisma v2.5 and Timbre v2.5 voice architectures, trained specifically for Indian accents, phonemes, and code-mixing.
-            </p>
+
+            {/* Region Filter Buttons & Scroll Arrows */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '6px', background: '#E2E8F0', padding: '3px', borderRadius: '24px' }}>
+                {['all', 'South', 'North', 'West', 'East'].map((region) => (
+                  <button
+                    key={region}
+                    onClick={() => setSelectedLanguageRegion(region)}
+                    style={{
+                      padding: '5px 14px',
+                      borderRadius: '20px',
+                      border: 'none',
+                      background: selectedLanguageRegion.toLowerCase() === region.toLowerCase() ? '#008B8B' : 'transparent',
+                      color: selectedLanguageRegion.toLowerCase() === region.toLowerCase() ? '#ffffff' : '#475569',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {region === 'all' ? 'All India' : region}
+                  </button>
+                ))}
+              </div>
+
+              {/* Side Scroll Arrows (< and >) */}
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  onClick={() => scrollCarousel('left')}
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    background: '#ffffff',
+                    border: '1.5px solid #CBD5E1',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    color: '#0A2540'
+                  }}
+                  title="Scroll Left"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  onClick={() => scrollCarousel('right')}
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '50%',
+                    background: '#0A2540',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    color: '#ffffff'
+                  }}
+                  title="Scroll Right"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-            {indicLanguages.map((lang) => (
-              <div
-                key={lang.name}
-                onClick={() => setSelectedLanguageTab(lang.name)}
-                style={{
-                  background: selectedLanguageTab === lang.name ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                  border: selectedLanguageTab === lang.name ? '2px solid #008B8B' : '1px solid #E2E8F0',
-                  borderRadius: '14px',
-                  padding: '18px',
-                  cursor: 'pointer',
-                  boxShadow: selectedLanguageTab === lang.name ? '0 8px 24px rgba(0, 139, 139, 0.12)' : 'none',
-                  transition: 'all 160ms ease'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 750, color: '#0A2540' }}>{lang.name}</div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#008B8B' }}>{lang.native}</div>
+          {/* Horizontal Scrollable Carousel Container */}
+          <div 
+            ref={carouselScrollRef}
+            style={{
+              display: 'flex',
+              gap: '18px',
+              overflowX: 'auto',
+              paddingBottom: '16px',
+              scrollSnapType: 'x mandatory'
+            }}
+          >
+            {filteredLanguages.map((lang) => {
+              const isPlaying = playingLangSample === lang.id;
+              return (
+                <div
+                  key={lang.id}
+                  style={{
+                    minWidth: '310px',
+                    maxWidth: '310px',
+                    background: isPlaying ? 'linear-gradient(135deg, rgba(0, 139, 139, 0.08) 0%, rgba(217, 119, 6, 0.05) 100%)' : '#ffffff',
+                    border: isPlaying ? '2px solid #008B8B' : '1px solid #E2E8F0',
+                    borderRadius: '16px',
+                    padding: '22px',
+                    boxShadow: isPlaying ? '0 12px 30px rgba(0, 139, 139, 0.15)' : '0 4px 14px rgba(10, 37, 64, 0.03)',
+                    scrollSnapAlign: 'start',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'all 200ms ease'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <div style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>{lang.name}</div>
+                      <div style={{ fontSize: '17px', fontWeight: 800, color: '#008B8B' }}>{lang.native}</div>
+                    </div>
+
+                    <div style={{ fontSize: '11.5px', color: '#64748B', marginBottom: '14px' }}>
+                      {lang.state}
+                    </div>
+
+                    <div style={{
+                      background: '#F1F5F9',
+                      padding: '12px',
+                      borderRadius: '10px',
+                      fontSize: '13px',
+                      color: '#1E293B',
+                      fontStyle: 'italic',
+                      lineHeight: 1.5,
+                      marginBottom: '16px'
+                    }}>
+                      "{lang.sample}"
+                    </div>
+                  </div>
+
+                  {/* Play Voice Sample Button with Live Equalizer */}
+                  <button
+                    onClick={() => handlePlayLanguageSample(lang)}
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '24px',
+                      border: isPlaying ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
+                      background: isPlaying ? '#008B8B' : '#ffffff',
+                      color: isPlaying ? '#ffffff' : '#0A2540',
+                      fontSize: '12.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'all 160ms ease'
+                    }}
+                  >
+                    {isPlaying ? <Pause size={14} /> : <Play size={14} fill={isPlaying ? "#ffffff" : "#0A2540"} />}
+                    <span>{isPlaying ? 'Playing Timbre Voice...' : 'Play Vernacular Voice Sample'}</span>
+                  </button>
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748B', marginBottom: '10px' }}>{lang.region}</div>
-                <div style={{
-                  background: '#F1F5F9',
-                  padding: '8px 10px',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                  color: '#334155',
-                  fontStyle: 'italic'
-                }}>
-                  "{lang.sample}"
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -860,10 +1288,10 @@ export default function HeroLanding({ onLaunchStudio, onOpenTechModal, onOpenAut
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Solutions</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span>OPD Ambient Scribe</span>
-              <span>Vernacular Audio-Rx</span>
-              <span>OpenCV Blister OCR</span>
-              <span>Pediatric Triage Sentinel</span>
+              <span onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>OPD Ambient Scribe</span>
+              <span onClick={onOpenPatientPortal} style={{ cursor: 'pointer' }}>Vernacular Audio-Rx</span>
+              <span onClick={onLaunchStudio} style={{ cursor: 'pointer' }}>OpenCV Blister OCR</span>
+              <span onClick={onOpenDoctorPortal} style={{ cursor: 'pointer' }}>Pediatric Triage Sentinel</span>
             </div>
           </div>
 

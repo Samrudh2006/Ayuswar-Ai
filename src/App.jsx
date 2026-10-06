@@ -12,12 +12,10 @@ import NotificationDrawer from './components/NotificationDrawer';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
- * Connects the multi-portal architecture:
- * 1. Public Showcase (World-class marketing site)
- * 2. Doctor Portal (Live Outpatient Queue & Physician KPIs)
- * 3. Clinical Studio (Live Ambient Scribe & Karaoke Audio-Rx Telemetry)
- * 4. Patient Portal (Citizen ABHA Digital Card & Spoken Audio Pillbox)
- * 5. Tech Specs (Deep-tech HLD, LLD & DSP Math)
+ * Architecture Decision:
+ * - Public Landing Page is a stunning full-width, edge-to-edge marketing showcase (no sidebar crowding!).
+ * - The Collapsible Sidebar ONLY activates when entering application workspaces:
+ *   Doctor Portal, Clinical Studio, Patient Portal, and Tech Specs.
  */
 export default function App() {
   const [activeView, setActiveView] = useState('landing');
@@ -37,11 +35,13 @@ export default function App() {
   const handleLoginSuccess = (profile) => {
     setDoctorProfile(profile);
     setActiveView('doctor_portal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleLogoutDoctor = () => {
     setDoctorProfile(null);
     setActiveView('landing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleLaunchEncounterFromDoctorQueue = (encounterIndex) => {
@@ -50,68 +50,91 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Determine if we are in app workspace mode (needs sidebar)
+  const isAppWorkspaceMode = activeView !== 'landing';
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8FAFC' }}>
       {/* Top Navigation Bar */}
       <Navbar 
         activeView={activeView} 
         setActiveView={setActiveView} 
-        onOpenTechModal={() => setActiveView('tech_specs')}
+        onOpenTechModal={() => {
+          setActiveView('tech_specs');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         doctorProfile={doctorProfile}
         onLogoutDoctor={handleLogoutDoctor}
       />
 
-      {/* Main Layout Body with Collapsible Sidebar */}
-      <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 68px)' }}>
-        <Sidebar 
-          activeView={activeView}
-          setActiveView={setActiveView}
-          onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
-          unreadNotificationsCount={2}
-          doctorProfile={doctorProfile}
-          isCollapsed={isSidebarCollapsed}
-          setIsCollapsed={setIsSidebarCollapsed}
-        />
+      {/* Main View Container */}
+      {isAppWorkspaceMode ? (
+        // App Workspace Layout with Collapsible Sidebar
+        <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 68px)' }}>
+          <Sidebar 
+            activeView={activeView}
+            setActiveView={setActiveView}
+            onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
+            unreadNotificationsCount={2}
+            doctorProfile={doctorProfile}
+            isCollapsed={isSidebarCollapsed}
+            setIsCollapsed={setIsSidebarCollapsed}
+          />
 
-        {/* View Routing Surface */}
-        <main style={{ flex: 1, overflowY: 'auto' }}>
-          {activeView === 'landing' && (
-            <HeroLanding 
-              onLaunchStudio={() => {
-                setActiveView('console');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }} 
-              onOpenTechModal={() => setActiveView('tech_specs')}
-              onOpenAuthModal={() => setIsAuthModalOpen(true)}
-            />
-          )}
+          <main style={{ flex: 1, overflowY: 'auto', background: '#F8FAFC' }}>
+            {activeView === 'doctor_portal' && (
+              <DoctorPortal 
+                doctorProfile={doctorProfile}
+                onSelectEncounterAndLaunch={handleLaunchEncounterFromDoctorQueue}
+              />
+            )}
 
-          {activeView === 'doctor_portal' && (
-            <DoctorPortal 
-              doctorProfile={doctorProfile}
-              onSelectEncounterAndLaunch={handleLaunchEncounterFromDoctorQueue}
-            />
-          )}
+            {activeView === 'console' && (
+              <ClinicalConsole 
+                doctorProfile={doctorProfile}
+                initialEncounterIndex={selectedEncounterIndex}
+              />
+            )}
 
-          {activeView === 'console' && (
-            <ClinicalConsole 
-              doctorProfile={doctorProfile}
-              initialEncounterIndex={selectedEncounterIndex}
-            />
-          )}
+            {activeView === 'patient_portal' && (
+              <PatientPortal />
+            )}
 
-          {activeView === 'patient_portal' && (
-            <PatientPortal />
-          )}
-
-          {activeView === 'tech_specs' && (
-            <TechSpecsView 
-              onLaunchConsole={() => setActiveView('console')}
-            />
-          )}
+            {activeView === 'tech_specs' && (
+              <TechSpecsView 
+                onLaunchConsole={() => {
+                  setActiveView('console');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            )}
+          </main>
+        </div>
+      ) : (
+        // Full-Width Landing Page (No sidebar squeezing the marketing site!)
+        <main style={{ flex: 1 }}>
+          <HeroLanding 
+            onLaunchStudio={() => {
+              setActiveView('console');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} 
+            onOpenTechModal={() => {
+              setActiveView('tech_specs');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenAuthModal={() => setIsAuthModalOpen(true)}
+            onOpenDoctorPortal={() => {
+              setActiveView('doctor_portal');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenPatientPortal={() => {
+              setActiveView('patient_portal');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         </main>
-      </div>
+      )}
 
       {/* Real-Time Clinical Notification Drawer */}
       <NotificationDrawer 
@@ -126,7 +149,7 @@ export default function App() {
         onLoginSuccess={handleLoginSuccess}
       />
 
-      {/* Deep-Tech Telemetry Modal Fallback */}
+      {/* Architecture Telemetry Modal Fallback */}
       <ArchitectureModal 
         isOpen={isTechModalOpen}
         onClose={() => setIsTechModalOpen(false)}
