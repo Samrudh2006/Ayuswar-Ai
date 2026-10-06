@@ -147,6 +147,38 @@ export default function App() {
     }));
   };
 
+  const handleDoctorLoginSuccess = (profile) => {
+    setDoctorProfile(profile);
+    setIsDoctorAuthModalOpen(false);
+    setActiveView('doctor_portal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePatientLoginSuccess = (profile) => {
+    setPatientProfile(profile);
+    setIsPatientAuthModalOpen(false);
+    setActiveView('patient_portal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogoutDoctor = () => {
+    setDoctorProfile(null);
+    setActiveView('landing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogoutPatient = () => {
+    setPatientProfile(null);
+    setActiveView('landing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLaunchEncounterFromDoctorQueue = (index) => {
+    setSelectedEncounterIndex(index);
+    setActiveView('console');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8FAFC' }}>
       {/* Top Navigation Bar */}

@@ -517,30 +517,7 @@ export default function DoctorPortal({
           </div>
 
           {/* Profile, Switcher, Settings & Logout */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
-            {onOpenDatasetModal && (
-              <button
-                onClick={onOpenDatasetModal}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 12px',
-                  borderRadius: '10px',
-                  background: 'rgba(0, 139, 139, 0.08)',
-                  border: '1px solid rgba(0, 139, 139, 0.3)',
-                  color: '#008B8B',
-                  fontSize: '12px',
-                  fontWeight: 750,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <span>🔬 Kaggle Datasets & ML</span>
-                <span style={{ fontSize: '10px', background: '#008B8B', color: '#fff', padding: '1px 5px', borderRadius: '6px' }}>54 ICDs</span>
-              </button>
-            )}
-
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative' }}>
             <div 
               onClick={() => setActiveTab('settings')}
               style={{ 

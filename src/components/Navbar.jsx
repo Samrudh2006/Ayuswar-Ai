@@ -248,37 +248,6 @@ export default function Navbar({
             Clinical Impact
           </button>
 
-          {/* Kaggle & IISc Dataset Explorer Nav Button */}
-          <button 
-            onClick={onOpenDatasetModal}
-            style={{
-              background: 'rgba(0, 139, 139, 0.08)',
-              border: '1px solid rgba(0, 139, 139, 0.35)',
-              borderRadius: '20px',
-              fontFamily: 'Outfit, sans-serif',
-              fontSize: '13.5px',
-              fontWeight: 700,
-              color: '#008B8B',
-              cursor: 'pointer',
-              padding: '5px 12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 139, 139, 0.15)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 139, 139, 0.08)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <span>🔬 Kaggle & IISc Datasets</span>
-            <span style={{ fontSize: '10px', background: '#008B8B', color: '#ffffff', padding: '1px 6px', borderRadius: '10px', fontWeight: 800 }}>12.4k</span>
-          </button>
-
           {/* Resources Dropdown */}
           <div 
             style={{ position: 'relative' }}
