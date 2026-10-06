@@ -216,41 +216,117 @@ export default function HeroLanding({
   return (
     <div style={{ position: 'relative', overflow: 'hidden', background: '#F8FAFC' }}>
       {/* =========================================================================
-          HERO SECTION (WITH AUTHENTIC AYUSHMAN CLINIC BACKGROUND IMAGE)
+          HERO SECTION (PREMIUM MEDICAL-AI CLINICAL VOICE OS - FULL-BLEED ZERO-GAP)
           ========================================================================= */}
-      {/* Prominently Visible Ayushman Bharat Health Clinic Background */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        width: '56%',
-        height: '100%',
-        minHeight: '680px',
-        backgroundImage: 'url(/assets/ayuswar_hero_bg.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center right',
-        opacity: 0.65,
-        maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 12%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,1) 100%)',
-        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 12%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,1) 100%)',
-        pointerEvents: 'none',
-        zIndex: 0
-      }}></div>
-
-      <div style={{
-        maxWidth: '1380px',
-        margin: '0 auto',
-        padding: '52px 24px 70px 24px',
+      <section style={{
         position: 'relative',
-        zIndex: 1
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #FFFFFF 0%, #F5FBFC 25%, #EAF7F9 60%, #DBF3F6 100%)',
+        minHeight: '680px',
+        width: '100%',
+        margin: 0,
+        padding: 0
       }}>
+        {/* Subtle Ambient High-Tech Atmospheric Light Glows */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1.05fr 0.95fr',
-          gap: '40px',
-          alignItems: 'center'
+          position: 'absolute',
+          top: '-15%',
+          left: '5%',
+          width: '550px',
+          height: '550px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(0, 168, 150, 0.08) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+          zIndex: 0
+        }}></div>
+
+        <div style={{
+          position: 'absolute',
+          top: '15%',
+          right: '5%',
+          width: '650px',
+          height: '650px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(0, 194, 203, 0.12) 0%, transparent 65%)',
+          filter: 'blur(70px)',
+          pointerEvents: 'none',
+          zIndex: 0
+        }}></div>
+
+        {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual (NO BAKED-IN HEADER, LARGE & MAJESTIC, FLUSH TO RIGHT) */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: '52%',
+          minWidth: '580px',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          pointerEvents: 'none',
+          zIndex: 1
         }}>
-          {/* Left Column: Typography, Feature Pills, & CTAs */}
-          <div>
+          <img 
+            src="/assets/ayuswar_doctor_hero_no_header.png" 
+            alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
+            style={{
+              width: '100%',
+              height: '100%',
+              maxHeight: '740px',
+              objectFit: 'contain',
+              objectPosition: 'right bottom',
+              filter: 'drop-shadow(0 20px 45px rgba(0, 139, 139, 0.14))',
+              userSelect: 'none'
+            }}
+            onError={(e) => {
+              e.target.src = '/assets/ayuswar_doctor_hero_ultra.png';
+            }}
+          />
+        </div>
+
+        {/* Flowing Translucent Turquoise/Cyan Waves Across Bottom (Full Width 100%) */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: '110px',
+          pointerEvents: 'none',
+          zIndex: 2,
+          overflow: 'hidden'
+        }}>
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', preserveAspectRatio: 'none' }}>
+            <path d="M0,45 C280,95 480,-5 820,50 C1100,95 1300,25 1440,60 L1440,120 L0,120 Z" fill="url(#tealWaveGrad1)" opacity="0.6" />
+            <path d="M0,65 C320,110 540,25 900,70 C1180,110 1360,55 1440,75 L1440,120 L0,120 Z" fill="url(#tealWaveGrad2)" opacity="0.8" />
+            <defs>
+              <linearGradient id="tealWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#028090" stopOpacity="0.35" />
+                <stop offset="50%" stopColor="#00A896" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#02C39A" stopOpacity="0.75" />
+              </linearGradient>
+              <linearGradient id="tealWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#005C6E" stopOpacity="0.45" />
+                <stop offset="50%" stopColor="#00A896" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#00E5C9" stopOpacity="0.85" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Hero Left Content Container (Fits flush from left with elegant clamp padding) */}
+        <div style={{
+          width: '100%',
+          padding: '48px clamp(24px, 5vw, 68px) 70px clamp(24px, 5vw, 68px)',
+          position: 'relative',
+          zIndex: 3,
+          boxSizing: 'border-box'
+        }}>
+          <div style={{
+            maxWidth: '680px'
+          }}>
             {/* Pill Badge: VOICE AI FOR BHARAT */}
             <div style={{
               display: 'inline-flex',
@@ -296,32 +372,30 @@ export default function HeroLanding({
               </span>
             </h1>
 
-            {/* Subtitle */}
+            {/* Subtitle Description */}
             <p style={{
-              fontFamily: 'Plus Jakarta Sans, sans-serif',
-              fontSize: '18px',
-              lineHeight: 1.6,
-              color: '#475569',
+              fontSize: '17px',
+              lineHeight: 1.65,
+              color: '#334155',
+              fontWeight: 500,
               maxWidth: '560px',
-              marginBottom: '36px',
-              fontWeight: 450
+              marginBottom: '32px'
             }}>
-              <strong style={{ color: '#0A2540' }}>AyuSwar AI</strong> is the Ambient Clinical Voice OS that listens, understands and speaks – in every Indian language. Built for every doctor, in every corner of Bharat.
+              <strong style={{ color: '#0A2540', fontWeight: 700 }}>AyuSwar AI</strong> is the Ambient Clinical Voice OS that listens, understands and speaks – in every Indian language. Built for every doctor, in every corner of Bharat.
             </p>
 
-            {/* 5 Feature Icons Row (Each opens separate comprehensive feature matter modal) */}
+            {/* 5 Distinct Feature Pills (Exact to reference) */}
             <div style={{
               display: 'flex',
-              alignItems: 'stretch',
-              gap: '12px',
-              marginBottom: '36px',
+              gap: '10px',
+              marginBottom: '38px',
               flexWrap: 'wrap'
             }}>
               {features.map((item) => {
-                const IconComponent = item.icon;
                 const isSelected = activeFeature === item.id;
+                const IconComponent = item.icon;
                 const featureKeyMap = [
-                  'ambient_listening',
+                  'ambient_voice_listening',
                   'multilingual_transcription',
                   'acoustic_biomarkers',
                   'prescription_scanner',
@@ -393,7 +467,7 @@ export default function HeroLanding({
                 onClick={onOpenTechModal}
                 className="btn-outline"
                 style={{ fontSize: '15px', padding: '13px 26px' }}
-                title="View Technical Architecture & HLD Diagram"
+                title="View Technical Architecture"
               >
                 <div style={{
                   width: '24px',
@@ -410,180 +484,25 @@ export default function HeroLanding({
               </button>
             </div>
           </div>
-
-          {/* Right Column: Doctor Portrait with Radiating Soundwave Rings & Clinic Backdrop */}
-          <div style={{
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '20px 0'
-          }}>
-            <div style={{
-              position: 'relative',
-              width: '460px',
-              height: '460px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              {/* Soft ambient clinic glow backdrop */}
-              <div style={{
-                position: 'absolute',
-                width: '420px',
-                height: '420px',
-                borderRadius: '50%',
-                backgroundImage: 'url(/assets/ayuswar_hero_bg.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'blur(30px)',
-                opacity: 0.28,
-                zIndex: 0
-              }}></div>
-
-              {/* Outer Cyan Sound Ring */}
-              <div style={{
-                position: 'absolute',
-                width: '440px',
-                height: '440px',
-                borderRadius: '50%',
-                border: '1.5px solid rgba(0, 139, 139, 0.35)',
-                boxShadow: '0 0 30px rgba(0, 139, 139, 0.1)',
-                animation: 'pulseGlow 4s ease-in-out infinite',
-                zIndex: 1
-              }}></div>
-
-              {/* Middle Amber Sound Ring */}
-              <div style={{
-                position: 'absolute',
-                width: '380px',
-                height: '380px',
-                borderRadius: '50%',
-                border: '1.5px dashed rgba(217, 119, 6, 0.35)',
-                animation: 'rotateSlow 40s linear infinite'
-              }}></div>
-
-              {/* Decorative Audio Frequency Bars on Left & Right */}
-              <div style={{
-                position: 'absolute',
-                left: '-25px',
-                top: '46%',
-                transform: 'translateY(-50%)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                zIndex: 3
-              }}>
-                <span style={{ width: '3px', height: '14px', background: '#008B8B', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '28px', background: '#008B8B', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '48px', background: '#008B8B', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '34px', background: '#008B8B', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '18px', background: '#008B8B', borderRadius: '3px' }}></span>
-              </div>
-
-              <div style={{
-                position: 'absolute',
-                right: '-25px',
-                top: '46%',
-                transform: 'translateY(-50%)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                zIndex: 3
-              }}>
-                <span style={{ width: '3px', height: '16px', background: '#D97706', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '32px', background: '#D97706', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '46px', background: '#D97706', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '24px', background: '#D97706', borderRadius: '3px' }}></span>
-                <span style={{ width: '3px', height: '12px', background: '#D97706', borderRadius: '3px' }}></span>
-              </div>
-
-              {/* Doctor Avatar Portrait Frame */}
-              <div style={{
-                width: '320px',
-                height: '320px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '4px solid #ffffff',
-                boxShadow: '0 20px 50px rgba(10, 37, 64, 0.18)',
-                position: 'relative',
-                zIndex: 2,
-                background: 'linear-gradient(135deg, #e6f7f8 0%, #ffffff 100%)'
-              }}>
-                <img 
-                  src="/assets/dr_ananya_avatar.jpg" 
-                  alt="Dr. Ananya — AyuSwar Virtual Attending Physician"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center top'
-                  }}
-                  onError={(e) => {
-                    e.target.src = '/assets/ayuswar_hero_banner.jpg';
-                  }}
-                />
-              </div>
-
-              {/* Floating ABDM Compliant Badge */}
-              <div style={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '-10px',
-                zIndex: 10,
-                background: 'rgba(255, 255, 255, 0.94)',
-                backdropFilter: 'blur(12px)',
-                border: '1.5px solid rgba(0, 139, 139, 0.3)',
-                boxShadow: '0 12px 30px rgba(10, 37, 64, 0.12)',
-                borderRadius: '16px',
-                padding: '12px 18px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                animation: 'floatSlow 4s ease-in-out infinite'
-              }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '10px',
-                  background: 'rgba(0, 139, 139, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#008B8B'
-                }}>
-                  <ShieldCheck size={22} />
-                </div>
-                <div>
-                  <div style={{
-                    fontSize: '13px',
-                    fontWeight: 750,
-                    color: '#0A2540',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}>
-                    ABDM Compliant
-                    <span style={{
-                      fontSize: '9px',
-                      background: '#10B981',
-                      color: '#ffffff',
-                      padding: '1px 5px',
-                      borderRadius: '8px',
-                      fontWeight: 700
-                    }}>FHIR R4</span>
-                  </div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B', fontWeight: 500 }}>
-                    Secured. Private. Trusted. Built for Bharat.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
 
-
+        {/* Interactive ABDM Compliant Hotspot Card at Lower Right */}
+        <div 
+          onClick={() => setSelectedFeatureModalKey('abdm')}
+          style={{
+            position: 'absolute',
+            bottom: '24px',
+            right: '24px',
+            zIndex: 10,
+            cursor: 'pointer',
+            width: '240px',
+            height: '56px',
+            borderRadius: '16px',
+            background: 'transparent'
+          }}
+          title="ABDM Compliant FHIR R4 Architecture - Click to inspect specs"
+        />
+      </section>
 
       {/* =========================================================================
           BOTTOM METRICS & IMPACT RIBBON (EXACT TO REFERENCE)

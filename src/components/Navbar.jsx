@@ -246,6 +246,100 @@ export default function Navbar({
           >
             Clinical Impact
           </button>
+
+          {/* Resources Dropdown */}
+          <div 
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setResourcesOpen(true)}
+            onMouseLeave={() => setResourcesOpen(false)}
+          >
+            <button 
+              style={{
+                background: 'none',
+                border: 'none',
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '14.5px',
+                fontWeight: 500,
+                color: '#0B2545',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '6px 4px'
+              }}
+            >
+              <span>Resources</span>
+              <ChevronDown size={14} color="#64748B" />
+            </button>
+
+            {resourcesOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                width: '270px',
+                background: '#ffffff',
+                border: '1px solid #D8E7EB',
+                borderRadius: '14px',
+                boxShadow: '0 12px 36px rgba(10, 37, 64, 0.12)',
+                padding: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+                zIndex: 200
+              }}>
+                <div 
+                  onClick={() => {
+                    onOpenTechModal();
+                    setResourcesOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.05)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>Indic Voice Benchmarks</div>
+                  <div style={{ fontSize: '11px', color: '#64748B' }}>50+ dialects WER & acoustic accuracy</div>
+                </div>
+                <div 
+                  onClick={() => {
+                    onOpenTechModal();
+                    setResourcesOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>ABDM & FHIR R4 Whitepaper</div>
+                  <div style={{ fontSize: '11px', color: '#64748B' }}>Consent management & HPR gateway</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Clinical Studio LIVE link */}
+          <button 
+            onClick={() => setActiveView('console')}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontFamily: 'Outfit, sans-serif',
+              fontSize: '14.5px',
+              fontWeight: 700,
+              color: '#008B8B',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 4px'
+            }}
+          >
+            <span>Clinical Studio</span>
+            <span style={{
+              background: '#10B981',
+              color: '#ffffff',
+              fontSize: '10px',
+              fontWeight: 800,
+              padding: '2px 6px',
+              borderRadius: '10px',
+              letterSpacing: '0.5px'
+            }}>LIVE</span>
+          </button>
         </nav>
 
         {/* Portals Access & Login CTAs */}
@@ -271,6 +365,17 @@ export default function Navbar({
               >
                 <Pill size={15} color="#D97706" />
                 <span>Patient Portal</span>
+              </button>
+
+              <button 
+                onClick={() => setActiveView('console')}
+                className="btn-primary"
+                style={{ fontSize: '13px', padding: '8px 18px', borderRadius: '24px', background: '#0A2540', color: '#ffffff' }}
+                title="Launch Live Clinical Studio"
+              >
+                <Sparkles size={14} color="#00E5C9" />
+                <span>Launch Studio</span>
+                <ArrowRight size={14} />
               </button>
             </>
           ) : (
