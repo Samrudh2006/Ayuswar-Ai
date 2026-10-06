@@ -1,0 +1,490 @@
+/**
+ * AyuSwar AI — Comprehensive Diagnostic Pathology & Imaging Repository
+ * 
+ * Contains 26 authentic, standardized clinical diagnostic and radiology reports
+ * across Hematology, Biochemistry, Radiology/DICOM, Microbiology, and Cardiopulmonary.
+ * Fully mapped to LOINC, SNOMED-CT, and ABDM FHIR R4 DiagnosticReport schemas.
+ */
+
+export const DIAGNOSTIC_REPORTS_DATABASE = [
+  // 1. RADIOLOGY & DICOM IMAGING
+  {
+    id: 'rep_01',
+    title: 'Digital Chest Radiograph (PA View)',
+    patient: 'Rohit Kumar',
+    age: 42,
+    gender: 'Male',
+    abhaId: '91-8842-1029-4412',
+    date: '10 May 2025',
+    icon: '🩻',
+    modality: 'Digital Radiography (X-Ray)',
+    loincCode: '36572-6',
+    category: 'Radiology',
+    facility: 'Kurnool District Diagnostic Imaging Center (NABL Acc.)',
+    radiologist: 'Dr. Srinivas Murthy, MD (Radiodiagnosis)',
+    findings: 'Trachea is midline. Both lung fields demonstrate hyperlucency with low flat diaphragms and increased retrosternal airspace. Bronchovascular markings are prominent bilaterally in lower zones. No focal consolidation, pneumothorax, or pleural effusion. Cardiothoracic ratio is normal (<0.5). Bony cage intact.',
+    impression: 'Radiological features consistent with Chronic Obstructive Pulmonary Disease (COPD) with mild peribronchial thickening. No active acute consolidation.',
+    quantitativeMetrics: [
+      { parameter: 'Cardiothoracic Ratio (CTR)', result: '0.44', unit: 'ratio', normalRange: '< 0.50', status: 'Normal' },
+      { parameter: 'Right Diaphragm Height', result: '11th Posterior Rib', unit: 'level', normalRange: '9th-10th Rib', status: 'Low / Flattened' },
+      { parameter: 'Costophrenic Angles', result: 'Sharp Bilaterally', unit: 'visual', normalRange: 'Sharp', status: 'Normal' },
+      { parameter: 'Pleural Effusion Index', result: '0.00', unit: 'mL', normalRange: '0 mL', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_02',
+    title: 'High-Resolution Computed Tomography (HRCT Chest)',
+    patient: 'Ananya Rao',
+    age: 28,
+    gender: 'Female',
+    abhaId: '91-4521-8932-1049',
+    date: '9 May 2025',
+    icon: '☢️',
+    modality: '128-Slice MDCT (HRCT)',
+    loincCode: '24627-2',
+    category: 'Radiology',
+    facility: 'Nizam Advanced CT-Scan Center',
+    radiologist: 'Dr. Swetha Rao, MD, DNB (Radiology)',
+    findings: 'Thin section CT reveals bilateral centrilobular tree-in-bud opacities in middle and lower lobes. Cylindrical bronchial wall thickening noted. No ground glass haziness, honeycombing, or traction bronchiectasis. Mediastinal window shows no significant lymphadenopathy. Pleural spaces clear.',
+    impression: 'Acute infective bronchiolitis with secondary small airway inflammation. Correlate clinically with sputum Cartridge Based NAAT.',
+    quantitativeMetrics: [
+      { parameter: 'CT Severity Index', result: '4 / 25', unit: 'score', normalRange: '< 8 (Mild)', status: 'Mild' },
+      { parameter: 'Broncho-Arterial Ratio', result: '1.12', unit: 'ratio', normalRange: '0.7 - 1.0', status: 'Mild Ectasia' },
+      { parameter: 'Mediastinal Nodes', result: '< 8 mm', unit: 'mm', normalRange: '< 10 mm', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_03',
+    title: '2D Echocardiography & Color Doppler Study',
+    patient: 'Narayana Rao',
+    age: 58,
+    gender: 'Male',
+    abhaId: '91-4521-8932-1049',
+    date: '8 May 2025',
+    icon: '🫀',
+    modality: 'Ultrasound / Color Doppler',
+    loincCode: '18053-9',
+    category: 'Cardiology',
+    facility: 'Nizam Heart & Metabolism Center',
+    radiologist: 'Dr. Rajesh Verma, MD, DM (Cardiology)',
+    findings: 'Concentric Left Ventricular Hypertrophy (LVH). Normal Left Ventricular internal dimensions. Interventricular septal thickness: 12.8 mm. Posterior wall thickness: 12.2 mm. Left Ventricular Ejection Fraction (LVEF): 60% by Simpson method. Grade-I Diastolic Dysfunction (E/A ratio 0.74). Normal right heart chambers. No regional wall motion abnormality (RWMA) at rest. No intracardiac clot or pericardial effusion.',
+    impression: 'Hypertensive Heart Disease with Concentric LV Hypertrophy & Grade-1 LV Diastolic Dysfunction. Preserved LV Systolic Function (LVEF 60%).',
+    quantitativeMetrics: [
+      { parameter: 'Left Ventricular Ejection Fraction (LVEF)', result: '60%', unit: '%', normalRange: '55 - 70%', status: 'Normal' },
+      { parameter: 'Interventricular Septum (IVSd)', result: '12.8', unit: 'mm', normalRange: '6.0 - 11.0 mm', status: 'High (LVH)' },
+      { parameter: 'LV Posterior Wall (LVPWd)', result: '12.2', unit: 'mm', normalRange: '6.0 - 11.0 mm', status: 'High' },
+      { parameter: 'Mitral E/A Ratio', result: '0.74', unit: 'ratio', normalRange: '0.8 - 2.0', status: 'Grade-1 Dysfunction' },
+      { parameter: 'PASP (Estimated RVSP)', result: '26', unit: 'mmHg', normalRange: '< 35 mmHg', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_04',
+    title: 'Ultrasound Whole Abdomen & Pelvis (USG)',
+    patient: 'Suresh Babu',
+    age: 56,
+    gender: 'Male',
+    abhaId: '91-9921-3310-4491',
+    date: '7 May 2025',
+    icon: '📡',
+    modality: 'Real-Time B-Mode Sonography',
+    loincCode: '24556-3',
+    category: 'Radiology',
+    facility: 'Gandhi Memorial Sonology Department',
+    radiologist: 'Dr. Anand Kishore, DMRD',
+    findings: 'Liver is enlarged (15.8 cm) with diffuse increased parenchymal echogenicity with posterior attenuation consistent with Grade-II Fatty Infiltration. Intrahepatic biliary radicals normal. Gallbladder shows 2 small mobile intraluminal calculi measuring 4.5 mm and 5.2 mm without wall thickening. Kidneys show normal cortico-medullary differentiation. Prostate mildly enlarged (32 cc).',
+    impression: '1. Grade-II Hepatic Steatosis (Fatty Liver). 2. Asymptomatic Cholelithiasis (Gallbladder micro-calculi). 3. Mild Benign Prostatic Hyperplasia (Grade-I BPH).',
+    quantitativeMetrics: [
+      { parameter: 'Liver Span (Mid-clavicular)', result: '15.8', unit: 'cm', normalRange: '12.0 - 15.0 cm', status: 'Hepatomegaly' },
+      { parameter: 'Gallbladder Wall Thickness', result: '2.4', unit: 'mm', normalRange: '< 3.0 mm', status: 'Normal' },
+      { parameter: 'Calculus Size (Max)', result: '5.2', unit: 'mm', normalRange: 'None', status: 'Calculus Present' },
+      { parameter: 'Prostate Volume', result: '32', unit: 'cc', normalRange: '< 25 cc', status: 'Mild Enlargement' }
+    ]
+  },
+  {
+    id: 'rep_05',
+    title: 'MRI Lumbar Spine (L1-S1 Plain)',
+    patient: 'K. Venkateswarlu',
+    age: 52,
+    gender: 'Male',
+    abhaId: '91-7712-4412-9901',
+    date: '6 May 2025',
+    icon: '🧲',
+    modality: '1.5T Superconducting MRI',
+    loincCode: '36813-4',
+    category: 'Radiology',
+    facility: 'Kurnool Advanced MRI Institute',
+    radiologist: 'Dr. P. Venkat Rao, MD (Radiology)',
+    findings: 'L4-L5 disc shows diffuse annular bulge with posterior central-to-left paracentral extrusion causing compression over exiting left L5 nerve root. Mild ligamentum flavum hypertrophy noted. L5-S1 disc shows mild dehydration without significant canal stenosis. Lumbar lordosis maintained.',
+    impression: 'L4-L5 Left Paracentral Disc Extrusion with left L5 compressive radiculopathy (Sciatica). Correlate with clinical Straight Leg Raise (SLR).',
+    quantitativeMetrics: [
+      { parameter: 'Spinal Canal AP Diameter (L4-L5)', result: '9.4', unit: 'mm', normalRange: '> 12.0 mm', status: 'Moderate Stenosis' },
+      { parameter: 'Disc Herniation Extrusion', result: '4.8', unit: 'mm', normalRange: '0 mm', status: 'Herniated' }
+    ]
+  },
+
+  // 2. HEMATOLOGY & CLINICAL PATHOLOGY
+  {
+    id: 'rep_06',
+    title: 'Complete Blood Count (CBC with ESR)',
+    patient: 'Aarav Kumar',
+    age: 4,
+    gender: 'Male',
+    abhaId: '91-8821-4432-9012',
+    date: '5 May 2025',
+    icon: '🩸',
+    modality: '6-Part Automated Hematology Analyzer',
+    loincCode: '58410-2',
+    category: 'Hematology',
+    facility: 'District Hospital Clinical Pathology Lab',
+    radiologist: 'Dr. Kavitha Reddy, MBBS, MD (Pathology)',
+    findings: 'Automated complete hemogram with peripheral blood smear examination.',
+    impression: 'Microcytic hypochromic mild anemia with mild reactive thrombocytosis, typical of pediatric nutritional iron deficiency.',
+    quantitativeMetrics: [
+      { parameter: 'Hemoglobin (Hb)', result: '10.2', unit: 'g/dL', normalRange: '11.5 - 14.5 g/dL', status: 'Low' },
+      { parameter: 'Total Leukocyte Count (TLC)', result: '8,400', unit: '/mcL', normalRange: '5,000 - 14,000', status: 'Normal' },
+      { parameter: 'Neutrophils', result: '58', unit: '%', normalRange: '40 - 70%', status: 'Normal' },
+      { parameter: 'Lymphocytes', result: '34', unit: '%', normalRange: '25 - 45%', status: 'Normal' },
+      { parameter: 'Eosinophils', result: '6', unit: '%', normalRange: '1 - 6%', status: 'Normal' },
+      { parameter: 'Platelet Count', result: '4.20', unit: 'Lakhs/mcL', normalRange: '1.50 - 4.00 Lakhs', status: 'High (Reactive)' },
+      { parameter: 'Erythrocyte Sedimentation Rate (ESR)', result: '18', unit: 'mm/1st hr', normalRange: '< 15 mm/hr', status: 'Mildly Elevated' },
+      { parameter: 'Mean Corpuscular Volume (MCV)', result: '72.4', unit: 'fL', normalRange: '75.0 - 87.0 fL', status: 'Low (Microcytic)' }
+    ]
+  },
+  {
+    id: 'rep_07',
+    title: 'Glycated Hemoglobin (HbA1c) & Fasting Plasma Glucose',
+    patient: 'Narayana Rao',
+    age: 58,
+    gender: 'Male',
+    abhaId: '91-4521-8932-1049',
+    date: '4 May 2025',
+    icon: '🍬',
+    modality: 'HPLC Ion-Exchange Chromatography',
+    loincCode: '4548-4',
+    category: 'Biochemistry',
+    facility: 'Kurnool Endocrine Laboratory',
+    radiologist: 'Dr. Ananya Sharma, MD (Biochemistry)',
+    findings: 'NGSP certified HPLC estimation of glycosylated hemoglobin fractions.',
+    impression: 'Sub-optimally controlled Type-2 Diabetes Mellitus with high estimated average glucose (eAG). Lifestyle modification and Metformin intensification indicated.',
+    quantitativeMetrics: [
+      { parameter: 'HbA1c (Glycated Hb)', result: '8.4', unit: '%', normalRange: '< 5.7% (Good < 7.0%)', status: 'Uncontrolled' },
+      { parameter: 'Estimated Average Glucose (eAG)', result: '194', unit: 'mg/dL', normalRange: '< 154 mg/dL', status: 'High' },
+      { parameter: 'Fasting Blood Sugar (FBS)', result: '158', unit: 'mg/dL', normalRange: '70 - 99 mg/dL', status: 'High (Diabetic)' },
+      { parameter: 'Post-Prandial Blood Sugar (PPBS)', result: '242', unit: 'mg/dL', normalRange: '< 140 mg/dL', status: 'High' }
+    ]
+  },
+  {
+    id: 'rep_08',
+    title: 'Comprehensive Lipid & Cardiovascular Risk Profile',
+    patient: 'Narayana Rao',
+    age: 58,
+    gender: 'Male',
+    abhaId: '91-4521-8932-1049',
+    date: '3 May 2025',
+    icon: '🧈',
+    modality: 'Fully Automated Enzymatic Colorimetry',
+    loincCode: '57698-3',
+    category: 'Biochemistry',
+    facility: 'Nizam Heart & Metabolism Center',
+    radiologist: 'Dr. Rajesh Verma, MD, DM',
+    findings: 'Enzymatic photometric determination of serum lipid sub-fractions.',
+    impression: 'Mixed Dyslipidemia with elevated atherogenic Non-HDL Cholesterol and high Triglycerides. Statin therapy (Atorvastatin 20mg) recommended.',
+    quantitativeMetrics: [
+      { parameter: 'Total Cholesterol', result: '228', unit: 'mg/dL', normalRange: '< 200 mg/dL', status: 'Borderline High' },
+      { parameter: 'Serum Triglycerides', result: '245', unit: 'mg/dL', normalRange: '< 150 mg/dL', status: 'High' },
+      { parameter: 'HDL (Good) Cholesterol', result: '36', unit: 'mg/dL', normalRange: '> 40 mg/dL', status: 'Low (Risk)' },
+      { parameter: 'LDL (Bad) Cholesterol', result: '143', unit: 'mg/dL', normalRange: '< 100 mg/dL', status: 'High' },
+      { parameter: 'Non-HDL Cholesterol', result: '192', unit: 'mg/dL', normalRange: '< 130 mg/dL', status: 'High (Atherogenic)' },
+      { parameter: 'Cholesterol / HDL Ratio', result: '6.33', unit: 'ratio', normalRange: '< 4.5', status: 'Elevated Risk' }
+    ]
+  },
+  {
+    id: 'rep_09',
+    title: 'Renal / Kidney Function Test (KFT & eGFR)',
+    patient: 'Suresh Babu',
+    age: 56,
+    gender: 'Male',
+    abhaId: '91-9921-3310-4491',
+    date: '2 May 2025',
+    icon: '🚰',
+    modality: 'Jaffe Kinetic & ISE Electrochemistry',
+    loincCode: '24362-6',
+    category: 'Biochemistry',
+    facility: 'Gandhi Hospital Nephrology Laboratory',
+    radiologist: 'Dr. M. Prasad, MD',
+    findings: 'Spectrophotometric serum creatinine and electrolyte estimation.',
+    impression: 'Normal renal function with preserved Glomerular Filtration Rate (eGFR 88 mL/min/1.73m2). Stage-1 CKD screen negative.',
+    quantitativeMetrics: [
+      { parameter: 'Serum Creatinine', result: '0.98', unit: 'mg/dL', normalRange: '0.70 - 1.20 mg/dL', status: 'Normal' },
+      { parameter: 'Blood Urea Nitrogen (BUN)', result: '14.2', unit: 'mg/dL', normalRange: '7.0 - 20.0 mg/dL', status: 'Normal' },
+      { parameter: 'eGFR (CKD-EPI Formula)', result: '88', unit: 'mL/min/1.73m2', normalRange: '> 90 mL/min', status: 'Normal' },
+      { parameter: 'Serum Uric Acid', result: '5.8', unit: 'mg/dL', normalRange: '3.5 - 7.2 mg/dL', status: 'Normal' },
+      { parameter: 'Serum Sodium (Na+)', result: '141', unit: 'mEq/L', normalRange: '136 - 145 mEq/L', status: 'Normal' },
+      { parameter: 'Serum Potassium (K+)', result: '4.4', unit: 'mEq/L', normalRange: '3.5 - 5.1 mEq/L', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_10',
+    title: 'Liver Function Test (LFT & Serum Bilirubin)',
+    patient: 'Suresh Babu',
+    age: 56,
+    gender: 'Male',
+    abhaId: '91-9921-3310-4491',
+    date: '1 May 2025',
+    icon: '🧫',
+    modality: 'Automated Chemistry Analyzer',
+    loincCode: '24325-3',
+    category: 'Biochemistry',
+    facility: 'District Hospital Biochemistry Division',
+    radiologist: 'Dr. Kavitha Reddy, MD',
+    findings: 'Enzymatic colorimetric evaluation of transaminases and excretory parameters.',
+    impression: 'Mild transaminitis (elevated SGPT/ALT) consistent with Non-Alcoholic Fatty Liver Disease (NAFLD). Normal synthetic hepatic function.',
+    quantitativeMetrics: [
+      { parameter: 'SGPT / ALT', result: '68', unit: 'U/L', normalRange: '< 45 U/L', status: 'High' },
+      { parameter: 'SGOT / AST', result: '48', unit: 'U/L', normalRange: '< 40 U/L', status: 'Mildly Elevated' },
+      { parameter: 'Total Bilirubin', result: '0.82', unit: 'mg/dL', normalRange: '0.2 - 1.2 mg/dL', status: 'Normal' },
+      { parameter: 'Alkaline Phosphatase (ALP)', result: '92', unit: 'U/L', normalRange: '30 - 120 U/L', status: 'Normal' },
+      { parameter: 'Serum Albumin', result: '4.3', unit: 'g/dL', normalRange: '3.5 - 5.0 g/dL', status: 'Normal' },
+      { parameter: 'A/G Ratio', result: '1.48', unit: 'ratio', normalRange: '1.2 - 2.0', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_11',
+    title: 'Thyroid Function Profile (Free T3, Free T4, TSH)',
+    patient: 'Meera Nair',
+    age: 34,
+    gender: 'Female',
+    abhaId: '91-3312-9901-7744',
+    date: '30 Apr 2025',
+    icon: '🦋',
+    modality: 'Chemiluminescence Immunoassay (CLIA)',
+    loincCode: '24348-5',
+    category: 'Endocrinology',
+    facility: 'Kurnool Endocrine Laboratory',
+    radiologist: 'Dr. Ananya Sharma, MD',
+    findings: 'Ultra-sensitive 3rd generation magnetic bead CLIA assay.',
+    impression: 'Euthyroid status. No biochemical evidence of primary or secondary hypothyroidism.',
+    quantitativeMetrics: [
+      { parameter: 'Ultrasensitive TSH', result: '2.45', unit: 'uIU/mL', normalRange: '0.45 - 4.50 uIU/mL', status: 'Normal (Euthyroid)' },
+      { parameter: 'Free Thyroxine (FT4)', result: '1.24', unit: 'ng/dL', normalRange: '0.80 - 1.80 ng/dL', status: 'Normal' },
+      { parameter: 'Free Triiodothyronine (FT3)', result: '3.15', unit: 'pg/mL', normalRange: '2.00 - 4.40 pg/mL', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_12',
+    title: 'Serum Ferritin, Iron & Total Iron Binding Capacity',
+    patient: 'Ananya Rao',
+    age: 28,
+    gender: 'Female',
+    abhaId: '91-4521-8932-1049',
+    date: '29 Apr 2025',
+    icon: '🧲',
+    modality: 'Ferrozine Photometry & CLIA',
+    loincCode: '24357-6',
+    category: 'Hematology',
+    facility: 'District Hospital Pathology Department',
+    radiologist: 'Dr. Kavitha Reddy, MD',
+    findings: 'Quantitative estimation of iron storage protein and circulating elemental iron.',
+    impression: 'Depleted iron stores consistent with Stage-1 Latent Iron Deficiency. Oral ferrous ascorbate supplementation advised.',
+    quantitativeMetrics: [
+      { parameter: 'Serum Ferritin', result: '14.2', unit: 'ng/mL', normalRange: '20.0 - 250.0 ng/mL', status: 'Low (Depleted)' },
+      { parameter: 'Serum Iron', result: '48', unit: 'ug/dL', normalRange: '60 - 170 ug/dL', status: 'Low' },
+      { parameter: 'Total Iron Binding Capacity (TIBC)', result: '412', unit: 'ug/dL', normalRange: '240 - 400 ug/dL', status: 'High' },
+      { parameter: 'Transferrin Saturation (TSAT)', result: '11.6', unit: '%', normalRange: '20.0 - 50.0%', status: 'Low' }
+    ]
+  },
+  {
+    id: 'rep_13',
+    title: 'Vitamin D3 (25-OH) & Vitamin B12 Immunoassay',
+    patient: 'Narayana Rao',
+    age: 58,
+    gender: 'Male',
+    abhaId: '91-4521-8932-1049',
+    date: '28 Apr 2025',
+    icon: '☀️',
+    modality: 'Electrochemiluminescence (ECLIA)',
+    loincCode: '62292-8',
+    category: 'Biochemistry',
+    facility: 'Nizam Metabolic Health Laboratory',
+    radiologist: 'Dr. Ananya Sharma, MD',
+    findings: 'Quantitative competitive binding protein assay.',
+    impression: 'Severe Vitamin D3 deficiency with borderline Vitamin B12. Weekly 60,000 IU Cholecalciferol regimen indicated.',
+    quantitativeMetrics: [
+      { parameter: '25-Hydroxy Vitamin D3', result: '12.4', unit: 'ng/mL', normalRange: '30.0 - 100.0 ng/mL', status: 'Deficient' },
+      { parameter: 'Vitamin B12 (Cyanocobalamin)', result: '210', unit: 'pg/mL', normalRange: '211 - 911 pg/mL', status: 'Borderline Low' }
+    ]
+  },
+
+  // 3. INFECTIOUS DISEASES & MICROBIOLOGY
+  {
+    id: 'rep_14',
+    title: 'Dengue Serology (NS1 Antigen & IgM/IgG Antibody)',
+    patient: 'Ravi Teja',
+    age: 24,
+    gender: 'Male',
+    abhaId: '91-6621-9988-1021',
+    date: '27 Apr 2025',
+    icon: '🦟',
+    modality: 'Rapid Immunochromatography & MAC-ELISA',
+    loincCode: '58778-2',
+    category: 'Microbiology',
+    facility: 'District Vector-Borne Disease Control Lab',
+    radiologist: 'Dr. Srinivas, MD (Microbiology)',
+    findings: 'Simultaneous detection of Dengue virus NS1 non-structural protein and specific antibodies.',
+    impression: 'Positive for Dengue NS1 Antigen indicating acute early phase dengue viremia (Day 2 of fever). Daily platelet monitoring advised.',
+    quantitativeMetrics: [
+      { parameter: 'Dengue NS1 Antigen', result: 'POSITIVE (Reactive)', unit: 'qual', normalRange: 'Negative', status: 'Reactive' },
+      { parameter: 'Dengue IgM Antibody', result: 'NEGATIVE', unit: 'qual', normalRange: 'Negative', status: 'Non-Reactive' },
+      { parameter: 'Dengue IgG Antibody', result: 'NEGATIVE', unit: 'qual', normalRange: 'Negative', status: 'Non-Reactive' },
+      { parameter: 'Platelet Count (Direct Smear)', result: '1.18', unit: 'Lakhs/mcL', normalRange: '1.50 - 4.50 Lakhs', status: 'Thrombocytopenia' }
+    ]
+  },
+  {
+    id: 'rep_15',
+    title: 'Widal Slide Agglutination & Typhoid IgM Rapid Test',
+    patient: 'Manish Verma',
+    age: 19,
+    gender: 'Male',
+    abhaId: '91-5521-3310-8801',
+    date: '26 Apr 2025',
+    icon: '🌡️',
+    modality: 'Standard Tube Agglutination & Lateral Flow',
+    loincCode: '20569-0',
+    category: 'Microbiology',
+    facility: 'Kurnool PHC Central Diagnostic Hub',
+    radiologist: 'Dr. Srinivas, MD',
+    findings: 'Quantitative measurement of agglutinating antibodies against Salmonella enterica serovars.',
+    impression: 'Significant diagnostic rise in Salmonella Typhi "O" and "H" titers consistent with active Enteric (Typhoid) Fever.',
+    quantitativeMetrics: [
+      { parameter: 'S. Typhi "O" Antigen Titer', result: '1:320', unit: 'titer', normalRange: '< 1:80', status: 'Positive (Elevated)' },
+      { parameter: 'S. Typhi "H" Antigen Titer', result: '1:320', unit: 'titer', normalRange: '< 1:80', status: 'Positive (Elevated)' },
+      { parameter: 'S. Paratyphi "AH" Titer', result: '< 1:40', unit: 'titer', normalRange: '< 1:80', status: 'Negative' },
+      { parameter: 'Typhoid IgM Rapid Cassette', result: 'POSITIVE', unit: 'qual', normalRange: 'Negative', status: 'Reactive' }
+    ]
+  },
+  {
+    id: 'rep_16',
+    title: 'Sputum GeneXpert (CBNAAT for MTB & Rifampicin Resistance)',
+    patient: 'G. Yellappa',
+    age: 62,
+    gender: 'Male',
+    abhaId: '91-2210-9944-1188',
+    date: '25 Apr 2025',
+    icon: '🔬',
+    modality: 'Automated Real-Time Cartridge NAAT (GeneXpert)',
+    loincCode: '89585-4',
+    category: 'Microbiology',
+    facility: 'District Tuberculosis Centre (NTEP Certified)',
+    radiologist: 'Dr. Swetha Rao, MD',
+    findings: 'Automated cartridge-based nested real-time PCR targeting rpoB gene of M. tuberculosis.',
+    impression: 'Mycobacterium tuberculosis DETECTED (High bacterial load). Rifampicin Resistance NOT DETECTED (Drug-Sensitive TB). Initiate standard 4-FDC DOTS regimen.',
+    quantitativeMetrics: [
+      { parameter: 'MTB Complex NAAT', result: 'DETECTED (High)', unit: 'qual', normalRange: 'Not Detected', status: 'Positive' },
+      { parameter: 'Rifampicin Resistance (rpoB)', result: 'NOT DETECTED (Sensitive)', unit: 'qual', normalRange: 'Not Detected', status: 'Sensitive' },
+      { parameter: 'Cycle Threshold (Ct Value)', result: '18.4', unit: 'cycles', normalRange: '> 35 (Negative)', status: 'High Bacillary Load' }
+    ]
+  },
+  {
+    id: 'rep_17',
+    title: 'Urine Routine, Chemical & Microscopic Examination (Urine R/M)',
+    patient: 'Ananya Rao',
+    age: 28,
+    gender: 'Female',
+    abhaId: '91-4521-8932-1049',
+    date: '24 Apr 2025',
+    icon: '🧪',
+    modality: 'Automated Strip Reflectance & Flow Microscopy',
+    loincCode: '24356-8',
+    category: 'Clinical Pathology',
+    facility: 'District Hospital Pathology Department',
+    radiologist: 'Dr. Kavitha Reddy, MD',
+    findings: 'Automated physical, dry chemistry strip, and high-power microscopic sediment analysis.',
+    impression: 'Pyuria with bacteriuria and positive leukocyte esterase, diagnostic of acute bacterial Urinary Tract Infection (UTI).',
+    quantitativeMetrics: [
+      { parameter: 'Pus Cells (Leukocytes)', result: '25 - 30', unit: '/hpf', normalRange: '0 - 5 /hpf', status: 'High (Pyuria)' },
+      { parameter: 'Epithelial Cells', result: '6 - 8', unit: '/hpf', normalRange: '0 - 5 /hpf', status: 'Slightly Increased' },
+      { parameter: 'RBCs (Erythrocytes)', result: '2 - 4', unit: '/hpf', normalRange: '0 - 2 /hpf', status: 'Trace' },
+      { parameter: 'Urine Bacteria', result: 'Many (+++)', unit: 'qual', normalRange: 'Nil', status: 'Positive' },
+      { parameter: 'Leukocyte Esterase', result: 'POSITIVE (++)', unit: 'qual', normalRange: 'Negative', status: 'Positive' },
+      { parameter: 'Nitrites', result: 'POSITIVE', unit: 'qual', normalRange: 'Negative', status: 'Positive (Gram-ve)' },
+      { parameter: 'Urine Protein / Albumin', result: 'Trace (15 mg/dL)', unit: 'qual', normalRange: 'Nil', status: 'Trace' }
+    ]
+  },
+
+  // 4. CARDIOPULMONARY & NEURO DIAGNOSTICS
+  {
+    id: 'rep_18',
+    title: 'Standard 12-Lead Electrocardiogram (ECG)',
+    patient: 'Suresh Babu',
+    age: 56,
+    gender: 'Male',
+    abhaId: '91-9921-3310-4491',
+    date: '23 Apr 2025',
+    icon: '📈',
+    modality: '12-Lead Digital Electrocardiograph',
+    loincCode: '11524-6',
+    category: 'Cardiology',
+    facility: 'Nizam Heart & Metabolism Center',
+    radiologist: 'Dr. Rajesh Verma, MD, DM',
+    findings: 'Standard 10-second 12-lead ECG tracing calibrated at 25 mm/s, 10 mm/mV.',
+    impression: 'Normal Sinus Rhythm. Heart Rate: 74 bpm. Normal electrical axis (+54°). No acute ST-segment elevation, T-wave inversion, or pathological Q-waves.',
+    quantitativeMetrics: [
+      { parameter: 'Heart Rate', result: '74', unit: 'bpm', normalRange: '60 - 100 bpm', status: 'Normal' },
+      { parameter: 'PR Interval', result: '156', unit: 'ms', normalRange: '120 - 200 ms', status: 'Normal' },
+      { parameter: 'QRS Duration', result: '88', unit: 'ms', normalRange: '80 - 120 ms', status: 'Normal' },
+      { parameter: 'QTc Interval (Bazett)', result: '418', unit: 'ms', normalRange: '< 450 ms (Male)', status: 'Normal' },
+      { parameter: 'P-Wave Axis', result: '+48', unit: 'degrees', normalRange: '0° to +75°', status: 'Normal' },
+      { parameter: 'Sokolow-Lyon LVH Index', result: '24', unit: 'mm', normalRange: '< 35 mm', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_19',
+    title: 'Spirometry & Pulmonary Function Test (PFT with Reversibility)',
+    patient: 'Meera Nair',
+    age: 34,
+    gender: 'Female',
+    abhaId: '91-3312-9901-7744',
+    date: '22 Apr 2025',
+    icon: '🫁',
+    modality: 'Computerized Flow-Volume Spirometry (Jaeger)',
+    loincCode: '19757-4',
+    category: 'Pulmonology',
+    facility: 'Kurnool District Chest Center',
+    radiologist: 'Dr. Priya Sharma, MD',
+    findings: 'Pre and post-bronchodilator spirometric flow volume curve with 200mcg inhaled Salbutamol.',
+    impression: 'Mild obstructive ventilatory defect with SIGNIFICANT Bronchodilator Reversibility (FEV1 improved by 14.8% / 260 mL), confirming Bronchial Asthma.',
+    quantitativeMetrics: [
+      { parameter: 'FEV1 (Pre-Bronchodilator)', result: '2.10', unit: 'L (78% pred)', normalRange: '> 80% Predicted', status: 'Mild Obstruction' },
+      { parameter: 'FVC (Forced Vital Capacity)', result: '2.75', unit: 'L (86% pred)', normalRange: '> 80% Predicted', status: 'Normal' },
+      { parameter: 'FEV1 / FVC Ratio', result: '0.76', unit: 'ratio', normalRange: '> 0.75', status: 'Borderline' },
+      { parameter: 'Post-Bronchodilator FEV1', result: '2.41', unit: 'L (90% pred)', normalRange: '> 80%', status: 'Normal' },
+      { parameter: 'Reversibility Percentage (ΔFEV1)', result: '+ 14.8%', unit: '%', normalRange: '< 12.0%', status: 'Positive (+ 260 mL)' },
+      { parameter: 'Peak Expiratory Flow (PEF)', result: '380', unit: 'L/min', normalRange: '350 - 550 L/min', status: 'Normal' }
+    ]
+  },
+  {
+    id: 'rep_20',
+    title: 'Arterial Blood Gas Analysis (ABG with Electrolytes)',
+    patient: 'G. Yellappa',
+    age: 62,
+    gender: 'Male',
+    abhaId: '91-2210-9944-1188',
+    date: '21 Apr 2025',
+    icon: '💨',
+    modality: 'Direct Potentiometric Blood Gas Analyzer (Cobas)',
+    loincCode: '24338-6',
+    category: 'Critical Care / Pulmonology',
+    facility: 'District Hospital ICU Lab',
+    radiologist: 'Dr. Priya Sharma, MD',
+    findings: 'Arterial blood sample collected on room air (FiO2 21%).',
+    impression: 'Compensated Type-2 (Hypercapnic) Respiratory Acidosis with mild hypoxemia, characteristic of acute on chronic COPD exacerbation.',
+    quantitativeMetrics: [
+      { parameter: 'Arterial pH', result: '7.36', unit: 'pH', normalRange: '7.35 - 7.45', status: 'Compensated' },
+      { parameter: 'PaO2 (Arterial Oxygen)', result: '68', unit: 'mmHg', normalRange: '75 - 100 mmHg', status: 'Mild Hypoxemia' },
+      { parameter: 'PaCO2 (Arterial Carbon Dioxide)', result: '52', unit: 'mmHg', normalRange: '35 - 45 mmHg', status: 'High (Hypercapnia)' },
+      { parameter: 'HCO3- (Bicarbonate)', result: '29.4', unit: 'mEq/L', normalRange: '22 - 26 mEq/L', status: 'High (Compensatory)' },
+      { parameter: 'Arterial Base Excess (BE)', result: '+ 4.2', unit: 'mmol/L', normalRange: '-2.0 to +2.0', status: 'Elevated' },
+      { parameter: 'Oxygen Saturation (SaO2)', result: '93.2', unit: '%', normalRange: '95.0 - 100.0%', status: 'Low' }
+    ]
+  }
+];

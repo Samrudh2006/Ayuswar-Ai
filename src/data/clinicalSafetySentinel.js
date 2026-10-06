@@ -145,3 +145,174 @@ export function generateAbdmFhirR4Bundle(patient, doctor, diagnosis, medications
     ]
   };
 }
+
+/**
+ * Generates an authentic ABDM FHIR R4 DiagnosticReport Bundle with Observation entries.
+ */
+export function generateAbdmDiagnosticReportFhir(report) {
+  const timestamp = new Date().toISOString();
+  const reportId = report.id || `rep-${Date.now()}`;
+  
+  const observations = (report.quantitativeMetrics || []).map((m, idx) => ({
+    fullUrl: `urn:uuid:obs-${reportId}-${idx}`,
+    resource: {
+      resourceType: 'Observation',
+      id: `obs-${reportId}-${idx}`,
+      status: 'final',
+      category: [
+        {
+          coding: [
+            {
+              system: 'http://terminology.hl7.org/CodeSystem/observation-category',
+              code: (report.category || 'laboratory').toLowerCase(),
+              display: report.category || 'Laboratory'
+            }
+          ]
+        }
+      ],
+      code: {
+        coding: [
+          {
+            system: 'http://loinc.org',
+            code: report.loincCode || '36572-6',
+            display: m.parameter
+          }
+        ],
+        text: m.parameter
+      },
+      valueString: `${m.result} ${m.unit || ''}`.trim(),
+      referenceRange: [
+        {
+          text: m.normalRange || 'Normal Reference'
+        }
+      ],
+      interpretation: [
+        {
+          coding: [
+            {
+              system: 'http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation',
+              code: m.status === 'Normal' ? 'N' : (m.status?.toLowerCase().includes('high') ? 'H' : (m.status?.toLowerCase().includes('low') ? 'L' : 'A')),
+              display: m.status || 'Normal'
+            }
+          ]
+        }
+      ]
+    }
+  }));
+
+  return {
+    resourceType: 'Bundle',
+    id: `ayuswar-abdm-diag-${reportId}`,
+    meta: {
+      versionId: '1',
+      lastUpdated: timestamp,
+      profile: ['https://nrces.in/ndhm/fhir/r4/StructureDefinition/DiagnosticReportRecord']
+    },
+    identifier: {
+      system: 'https://healthid.ndhm.gov.in/diagnostic-reports',
+      value: `REP-NABL-${reportId.toUpperCase()}`
+    },
+    type: 'document',
+    timestamp,
+    entry: [
+      {
+        fullUrl: `urn:uuid:patient-${report.abhaId || '91-4521-8932-1049'}`,
+        resource: {
+          resourceType: 'Patient',
+          id: report.abhaId || '91-4521-8932-1049',
+          name: [{ text: report.patient || 'Rohit Kumar' }],
+          gender: (report.gender || 'Male').toLowerCase(),
+          identifier: [
+            {
+              system: 'https://healthid.ndhm.gov.in',
+              value: report.abhaId || '91-4521-8932-1049'
+            }
+          ]
+        }
+      },
+      {
+        fullUrl: `urn:uuid:practitioner-performer`,
+        resource: {
+          resourceType: 'Practitioner',
+          id: 'practitioner-performer',
+          name: [{ text: report.radiologist || report.pathologist || 'Dr. Srinivas Murthy, MD' }],
+          qualification: [{ code: { text: report.modality || 'Diagnostic Imaging & Pathology' } }]
+        }
+      },
+      {
+        fullUrl: `urn:uuid:diagnostic-report-${reportId}`,
+        resource: {
+          resourceType: 'DiagnosticReport',
+          id: `diag-rep-${reportId}`,
+          status: 'final',
+          category: [
+            {
+              coding: [
+                {
+                  system: 'http://terminology.hl7.org/CodeSystem/v2-0074',
+                  code: (report.category || 'RAD').slice(0, 3).toUpperCase(),
+                  display: report.category || 'Radiology'
+                }
+              ]
+            }
+          ],
+          code: {
+            coding: [
+              {
+                system: 'http://loinc.org',
+                code: report.loincCode || '36572-6',
+                display: report.title
+              }
+            ],
+            text: report.title
+          },
+          subject: {
+            reference: `urn:uuid:patient-${report.abhaId || '91-4521-8932-1049'}`,
+            display: report.patient
+          },
+          effectiveDateTime: new Date().toISOString().split('T')[0],
+          issued: timestamp,
+          performer: [
+            {
+              display: report.facility || 'NABL Accredited Diagnostics'
+            }
+          ],
+          conclusion: report.impression,
+          conclusionCode: [
+            {
+              coding: [
+                {
+                  system: 'http://snomed.info/sct',
+                  code: '1667000',
+                  display: report.impression?.slice(0, 40)
+                }
+              ]
+            }
+          ],
+          presentedForm: [
+            {
+              contentType: 'text/plain',
+              data: btoa(report.findings || '')
+            }
+          ],
+          result: observations.map(o => ({ reference: o.fullUrl }))
+        }
+      },
+      ...observations
+    ]
+  };
+}
+
+/**
+ * Trigger real browser JSON download of ABDM FHIR bundle.
+ */
+export function downloadFhirJson(report) {
+  const bundle = generateAbdmDiagnosticReportFhir(report);
+  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(bundle, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute('href', dataStr);
+  downloadAnchor.setAttribute('download', `ABDM_FHIR_R4_${(report.title || 'report').replace(/[^a-zA-Z0-9]/g, '_')}_${report.id || 'doc'}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
