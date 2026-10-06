@@ -26,6 +26,7 @@ export default function Navbar({
   setActiveView, 
   onOpenTechModal, 
   onOpenDatasetModal,
+  onOpenAcousticLab,
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal,
   doctorProfile,
@@ -300,6 +301,19 @@ export default function Navbar({
                     <span>🔬</span> Kaggle Clinical Dataset Hub
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>54 ICD-10 diseases & IISc Coswara acoustic data</div>
+                </div>
+
+                <div 
+                  onClick={() => {
+                    onOpenAcousticLab && onOpenAcousticLab();
+                    setResourcesOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(2, 132, 199, 0.08)', border: '1px solid rgba(2, 132, 199, 0.2)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#0284C7', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>🎙️</span> Acoustic AI & Vocal Biomarker Lab
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#475569' }}>IISc Coswara & Mayo Clinic voice disease detection</div>
                 </div>
                 <div 
                   onClick={() => {

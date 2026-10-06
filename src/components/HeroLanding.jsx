@@ -44,6 +44,8 @@ import FeatureDetailModal from './FeatureDetailModal';
 export default function HeroLanding({ 
   onLaunchStudio, 
   onOpenTechModal, 
+  onOpenDatasetModal,
+  onOpenAcousticLab,
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal
 }) {
@@ -566,6 +568,30 @@ export default function HeroLanding({
               >
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FEF08A', boxShadow: '0 0 8px #FEF08A' }}></span>
                 <span>⚡ 2-Min Live Clinical Walkthrough</span>
+              </button>
+
+              <button 
+                onClick={() => onOpenAcousticLab && onOpenAcousticLab()}
+                style={{
+                  background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
+                  color: '#ffffff',
+                  border: '1.5px solid #00D2D3',
+                  borderRadius: '30px',
+                  padding: '12px 20px',
+                  fontSize: '14px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 16px rgba(0, 210, 211, 0.25)',
+                  transition: 'all 160ms ease'
+                }}
+                title="Launch Vocal Biomarker & Acoustic Disease Diagnostic Lab"
+              >
+                <span style={{ fontSize: '15px' }}>🎙️</span>
+                <span>Vocal Biomarker AI Lab</span>
+                <span style={{ fontSize: '10px', background: '#00D2D3', color: '#0A2540', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>NEW</span>
               </button>
 
               <button 

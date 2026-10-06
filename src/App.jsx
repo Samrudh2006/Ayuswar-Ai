@@ -12,6 +12,7 @@ import PatientAuthModal from './components/PatientAuthModal';
 import NotificationDrawer from './components/NotificationDrawer';
 import FloatingAssistant from './components/FloatingAssistant';
 import DatasetExplorerModal from './components/DatasetExplorerModal';
+import AcousticBiomarkerLabModal from './components/AcousticBiomarkerLabModal';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
@@ -21,6 +22,7 @@ import DatasetExplorerModal from './components/DatasetExplorerModal';
  * - Workspaces require role-based authentication:
  *   • Doctor Portal: Verified ABDM Healthcare Professional Registry (HPR).
  *   • Patient Portal: Verified ABHA Citizen Health Account.
+ *   • Acoustic AI Biomarker Lab: Live vocal disease diagnostic laboratory.
  * - Multi-Doctor & Multi-Patient account switching supported with session state persistence.
  * - Floating Voice Assistant (5-state ambient AI assistant) mounted with real-time Indic voice capabilities.
  */
@@ -32,6 +34,7 @@ export default function App() {
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
   const [isDatasetModalOpen, setIsDatasetModalOpen] = useState(false);
+  const [isAcousticLabOpen, setIsAcousticLabOpen] = useState(false);
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
 
   // Authenticated profiles (null by default until verified login)
@@ -187,6 +190,7 @@ export default function App() {
         setActiveView={setActiveView} 
         onOpenTechModal={() => setIsTechModalOpen(true)}
         onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
+        onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
         onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
         onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
         doctorProfile={doctorProfile}
@@ -202,6 +206,7 @@ export default function App() {
             onLaunchStudio={() => setIsDoctorAuthModalOpen(true)} 
             onOpenTechModal={() => setIsTechModalOpen(true)}
             onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
+            onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
             onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
             onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
           />
@@ -334,6 +339,12 @@ export default function App() {
       <DatasetExplorerModal 
         isOpen={isDatasetModalOpen}
         onClose={() => setIsDatasetModalOpen(false)}
+      />
+
+      {/* Acoustic AI & Vocal Biomarker Diagnostic Laboratory Modal */}
+      <AcousticBiomarkerLabModal
+        isOpen={isAcousticLabOpen}
+        onClose={() => setIsAcousticLabOpen(false)}
       />
     </div>
   );
