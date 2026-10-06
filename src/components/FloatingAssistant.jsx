@@ -18,8 +18,12 @@ import {
   Pill, 
   CheckCircle2,
   ChevronRight,
-  Activity
+  Activity,
+  Settings,
+  Cpu,
+  ShieldCheck
 } from 'lucide-react';
+import { askAyuSwarBrain, getAiConfig, saveAiConfig, AI_PROVIDERS } from '../services/aiBrainService';
 
 /**
  * 4K Sharp Vector Emblem for AyuSwar AI
@@ -77,13 +81,19 @@ export default function FloatingAssistant({
   const [listeningSeconds, setListeningSeconds] = useState(12);
   const [liveTranscript, setLiveTranscript] = useState('');
   const [speechLanguage, setSpeechLanguage] = useState('te-IN'); // Telugu default, or hi-IN, en-IN
+  const [currentAiReply, setCurrentAiReply] = useState('');
+  const [isProcessingQuery, setIsProcessingQuery] = useState(false);
+  const [showAiSettingsModal, setShowAiSettingsModal] = useState(false);
+  
+  // AI Provider & Key Settings
+  const [selectedProvider, setSelectedProvider] = useState(() => getAiConfig().provider);
+  const [apiKeyInput, setApiKeyInput] = useState(() => getAiConfig().apiKey);
+  const [keySavedToast, setKeySavedToast] = useState(false);
 
-  // Determine role: Doctor mode vs Patient mode
+  // Determine role: Doctor mode vs Patient mode vs Receptionist on landing page
   const isDoctorMode = activeView === 'doctor_portal' || activeView === 'console';
   const isPatientMode = activeView === 'patient_portal';
-  // If on landing page, default to role of choice with toggle
-  const [demoRole, setDemoRole] = useState('doctor'); // 'doctor' | 'patient'
-  const effectiveRole = isDoctorMode ? 'doctor' : (isPatientMode ? 'patient' : demoRole);
+  const effectiveRole = isDoctorMode ? 'doctor' : (isPatientMode ? 'patient' : 'receptionist');
 
   const doctorName = doctorProfile?.doctorName || 'Dr. Priya';
   const patientName = patientProfile?.patientName || 'Ananya';
@@ -105,11 +115,13 @@ export default function FloatingAssistant({
   // Handle active listening countdown & speech recognition
   useEffect(() => {
     if (assistantState === 'listening') {
-      setListeningSeconds(effectiveRole === 'doctor' ? 12 : 14);
+      setListeningSeconds(effectiveRole === 'doctor' ? 12 : (effectiveRole === 'patient' ? 14 : 10));
       setLiveTranscript(
         effectiveRole === 'doctor' 
           ? 'Listening to clinical query...' 
-          : 'Listening to your health symptom...'
+          : (effectiveRole === 'patient'
+            ? 'Listening to your health symptom...'
+            : 'Listening to your hospital query or token request...')
       );
 
       // Attempt webkitSpeechRecognition if supported
@@ -127,8 +139,15 @@ export default function FloatingAssistant({
             setLiveTranscript(transcript);
           };
 
+          recognition.onend = () => {
+            // Once user stops speaking, process question through Brain
+            if (liveTranscript && !liveTranscript.startsWith('Listening to')) {
+              handleProcessQuestion(liveTranscript);
+            }
+          };
+
           recognition.onerror = () => {
-            // Graceful fallback to simulated prompt
+            // Graceful fallback to default query
           };
 
           recognition.start();
@@ -142,8 +161,8 @@ export default function FloatingAssistant({
         setListeningSeconds(prev => {
           if (prev <= 1) {
             clearInterval(timerRef.current);
-            // Auto transition to Speaking state
-            triggerAiSpeakingReply();
+            // Auto transition to Speaking state with processed answer
+            handleProcessQuestion(liveTranscript.startsWith('Listening to') ? (effectiveRole === 'receptionist' ? 'book opd token' : 'cough and fever') : liveTranscript);
             return 0;
           }
           return prev - 1;
@@ -160,20 +179,53 @@ export default function FloatingAssistant({
     }
   }, [assistantState, effectiveRole]);
 
-  // Trigger Speaking (AI Reply) state with Voice Synthesis
-  const triggerAiSpeakingReply = (customQuery = null) => {
+  // Process question via AyuSwar Brain (API / Open-Source / Local Indic NLP)
+  const handleProcessQuestion = async (queryText) => {
+    setIsProcessingQuery(true);
     setAssistantState('speaking');
+    
+    try {
+      const answer = await askAyuSwarBrain(queryText, effectiveRole, { patientProfile, doctorProfile });
+      setCurrentAiReply(answer);
+      speakOutLoud(answer);
+    } catch {
+      const fallback = effectiveRole === 'receptionist' 
+        ? "Namaste! Welcome to AyuSwar Hospital. Token #14 assigned with Dr. Ananya Sharma. Wait time ~8 mins."
+        : "I have recorded your symptom. Dr. Priya has been notified and your vitals are stable.";
+      setCurrentAiReply(fallback);
+      speakOutLoud(fallback);
+    } finally {
+      setIsProcessingQuery(false);
+    }
+  };
 
-    const replyText = effectiveRole === 'doctor'
-      ? "Rohit Kumar's latest reports show improvement in HbA1c levels. His BP is stable at 118/76. Would you like me to open his prescription or view the full spirometry report?"
-      : "Your appointment with Dr. Priya is tomorrow at 10:15 AM. Your latest chest report is now available in the Reports section. Would you like me to go through it with you?";
-
+  const speakOutLoud = (text) => {
     if ('speechSynthesis' in window && !isMuted) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(replyText);
+      const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.95;
       utterance.pitch = 1.0;
+      // Auto detect language
+      if (/[\u0C00-\u0C7F]/.test(text)) {
+        utterance.lang = 'te-IN';
+      } else if (/[\u0900-\u097F]/.test(text)) {
+        utterance.lang = 'hi-IN';
+      } else {
+        utterance.lang = 'en-IN';
+      }
       window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Trigger Speaking (AI Reply) state with Voice Synthesis
+  const triggerAiSpeakingReply = (customQuery = null) => {
+    if (customQuery) {
+      handleProcessQuestion(customQuery);
+    } else {
+      const defaultQ = effectiveRole === 'doctor' 
+        ? 'latest patient reports and asthma GINA guidelines' 
+        : (effectiveRole === 'patient' ? 'my appointment and medications' : 'book opd token for doctor');
+      handleProcessQuestion(defaultQ);
     }
   };
 
@@ -199,7 +251,7 @@ export default function FloatingAssistant({
         if (onNavigateTab) onNavigateTab('appointments');
         triggerAiSpeakingReply("Opening live OPD Token schedule. You have 12 appointments today.");
       }
-    } else {
+    } else if (effectiveRole === 'patient') {
       if (action === 'My Health') {
         if (onNavigateTab) onNavigateTab('my_health');
         triggerAiSpeakingReply("Loading your ABHA health record and recent vitals history.");
@@ -209,6 +261,19 @@ export default function FloatingAssistant({
       } else if (action === 'Medications') {
         if (onNavigateTab) onNavigateTab('medications');
         triggerAiSpeakingReply("Opening your personalized Indic Chronotherapy pill schedule.");
+      }
+    } else {
+      // Receptionist quick actions
+      if (action === 'Book Token') {
+        triggerAiSpeakingReply("Namaste! I've assigned you OPD Token #14 for General Medicine with Dr. Ananya Sharma. Estimated wait time is 8 minutes.");
+      } else if (action === 'Doctor Portal') {
+        if (onOpenDoctorPortal) onOpenDoctorPortal();
+        triggerAiSpeakingReply("Opening AyuSwar Clinical Studio for Doctors. Ambient dual-speaker recording ready.");
+      } else if (action === 'Patient Portal') {
+        if (onOpenPatientPortal) onOpenPatientPortal();
+        triggerAiSpeakingReply("Opening Patient ABHA Portal. Access your audio prescription and health records.");
+      } else if (action === 'Indic Voice') {
+        triggerAiSpeakingReply("AyuSwar AI supports seamless real-time voice translation across 22+ Indic languages including Telugu, Hindi, Tamil, and Bengali.");
       }
     }
   };
@@ -271,17 +336,19 @@ export default function FloatingAssistant({
               <span style={{
                 fontSize: '9.5px',
                 fontWeight: 800,
-                background: effectiveRole === 'doctor' ? '#008B8B' : '#D97706',
+                background: effectiveRole === 'doctor' ? '#008B8B' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
                 color: '#ffffff',
                 padding: '1px 6px',
                 borderRadius: '8px',
                 textTransform: 'uppercase'
               }}>
-                {effectiveRole === 'doctor' ? 'MD' : 'Pt'}
+                {effectiveRole === 'doctor' ? 'MD' : (effectiveRole === 'patient' ? 'Pt' : 'Reception')}
               </span>
             </span>
             <span style={{ fontSize: '10px', color: '#64748B', fontWeight: 600 }}>
-              {effectiveRole === 'doctor' ? 'Clinical Co-Pilot' : 'Your Health Companion'}
+              {effectiveRole === 'doctor' 
+                ? 'Clinical Co-Pilot' 
+                : (effectiveRole === 'patient' ? 'Your Health Companion' : 'AI Clinic Helpdesk')}
             </span>
           </div>
 
@@ -334,31 +401,35 @@ export default function FloatingAssistant({
                   Ayu<span style={{ color: '#008B8B' }}>Swar</span> AI
                 </span>
                 <span style={{ fontSize: '10px', color: '#64748B', marginLeft: '6px' }}>
-                  {effectiveRole === 'doctor' ? 'Doctor Mode' : 'Patient Mode'}
+                  {effectiveRole === 'doctor' 
+                    ? 'Doctor Mode' 
+                    : (effectiveRole === 'patient' ? 'Patient Mode' : 'AI Clinic Receptionist')}
                 </span>
               </div>
             </div>
 
-            {/* Window Controls: Role Toggle, Minimize, Close */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {activeView === 'landing' && (
-                <button
-                  onClick={() => setDemoRole(demoRole === 'doctor' ? 'patient' : 'doctor')}
-                  style={{
-                    background: 'none',
-                    border: '1px solid #CBD5E1',
-                    borderRadius: '12px',
-                    padding: '2px 8px',
-                    fontSize: '10px',
-                    fontWeight: 750,
-                    color: '#008B8B',
-                    cursor: 'pointer'
-                  }}
-                  title="Switch between Doctor Mode and Patient Mode"
-                >
-                  Switch: {demoRole === 'doctor' ? 'Patient' : 'Doctor'}
-                </button>
-              )}
+            {/* Window Controls: AI Engine Settings, Minimize, Close */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                onClick={() => setShowAiSettingsModal(true)}
+                style={{
+                  background: 'rgba(0, 139, 139, 0.08)',
+                  border: '1px solid rgba(0, 139, 139, 0.25)',
+                  color: '#008B8B',
+                  cursor: 'pointer',
+                  padding: '3px 7px',
+                  borderRadius: '12px',
+                  fontSize: '10px',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+                title="AI Brain & Open-Source LLM Settings"
+              >
+                <Cpu size={12} />
+                <span>AI Brain</span>
+              </button>
 
               <button
                 onClick={() => setAssistantState('collapsed')}
@@ -398,16 +469,24 @@ export default function FloatingAssistant({
           {assistantState === 'expanded' && (
             <div style={{ padding: '22px 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
-                  {effectiveRole === 'doctor' ? `Good morning, ${doctorName}.` : `Hi ${patientName}.`}
+                <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                  {effectiveRole === 'doctor' 
+                    ? `Good morning, ${doctorName}.` 
+                    : (effectiveRole === 'patient' 
+                      ? `Hi ${patientName}.` 
+                      : 'Namaste! Welcome to AyuSwar.')}
                 </h3>
                 <div style={{ fontSize: '12px', color: '#64748B', marginTop: '3px' }}>
                   {effectiveRole === 'doctor' 
                     ? '12 appointments · 5 reports pending' 
-                    : 'Appointment tomorrow · 10:15 AM'}
+                    : (effectiveRole === 'patient'
+                      ? 'Appointment tomorrow · 10:15 AM'
+                      : 'Live OPD Token Desk · Multilingual Helpdesk')}
                 </div>
-                <div style={{ fontSize: '14px', fontWeight: 650, color: '#008B8B', marginTop: '8px' }}>
-                  {effectiveRole === 'doctor' ? 'How can I help?' : 'How can I help you today?'}
+                <div style={{ fontSize: '13.5px', fontWeight: 650, color: '#008B8B', marginTop: '8px' }}>
+                  {effectiveRole === 'doctor' 
+                    ? 'How can I help?' 
+                    : (effectiveRole === 'patient' ? 'How can I help you today?' : 'How can I assist your visit today?')}
                 </div>
               </div>
 
@@ -454,7 +533,7 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
@@ -475,7 +554,7 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
@@ -496,7 +575,7 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
@@ -505,7 +584,7 @@ export default function FloatingAssistant({
                       <span>Appointments</span>
                     </button>
                   </>
-                ) : (
+                ) : effectiveRole === 'patient' ? (
                   <>
                     <button
                       onClick={() => handleQuickAction('My Health')}
@@ -520,7 +599,7 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
@@ -541,7 +620,7 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
@@ -562,13 +641,105 @@ export default function FloatingAssistant({
                         border: '1px solid #CBD5E1',
                         background: '#ffffff',
                         fontSize: '11.5px',
-                        fontWeight: 700,
+                        fontWeight: 750,
                         color: '#0A2540',
                         cursor: 'pointer'
                       }}
                     >
                       <Pill size={13} color="#D97706" />
                       <span>Medications</span>
+                    </button>
+                  </>
+                ) : (
+                  /* Receptionist Mode Action Pills */
+                  <>
+                    <button
+                      onClick={() => handleQuickAction('Book Token')}
+                      style={{
+                        flex: 1,
+                        minWidth: '135px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '8px 10px',
+                        borderRadius: '20px',
+                        border: '1px solid #99F6E4',
+                        background: '#F0FDFA',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        color: '#0F766E',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Activity size={13} color="#0D9488" />
+                      <span>🎟️ Book OPD Token</span>
+                    </button>
+                    <button
+                      onClick={() => handleQuickAction('Doctor Portal')}
+                      style={{
+                        flex: 1,
+                        minWidth: '120px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '8px 10px',
+                        borderRadius: '20px',
+                        border: '1px solid #CBD5E1',
+                        background: '#ffffff',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        color: '#0A2540',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <User size={13} color="#008B8B" />
+                      <span>👨‍⚕️ Doctor Portal</span>
+                    </button>
+                    <button
+                      onClick={() => handleQuickAction('Patient Portal')}
+                      style={{
+                        flex: 1,
+                        minWidth: '120px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '8px 10px',
+                        borderRadius: '20px',
+                        border: '1px solid #CBD5E1',
+                        background: '#ffffff',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        color: '#0A2540',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Heart size={13} color="#D97706" />
+                      <span>👤 Patient ABHA</span>
+                    </button>
+                    <button
+                      onClick={() => handleQuickAction('Indic Voice')}
+                      style={{
+                        flex: 1,
+                        minWidth: '110px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '8px 10px',
+                        borderRadius: '20px',
+                        border: '1px solid #CBD5E1',
+                        background: '#ffffff',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        color: '#0A2540',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Volume2 size={13} color="#008B8B" />
+                      <span>🌐 Indic Voice</span>
                     </button>
                   </>
                 )}
@@ -668,7 +839,9 @@ export default function FloatingAssistant({
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Sparkles size={16} color="#008B8B" />
                 <span style={{ fontSize: '12px', fontWeight: 750, color: '#008B8B' }}>
-                  {effectiveRole === 'doctor' ? 'Analyzing patient data...' : 'AyuSwar is responding...'}
+                  {effectiveRole === 'doctor' 
+                    ? 'Analyzing patient data...' 
+                    : (effectiveRole === 'patient' ? 'AyuSwar is responding...' : 'Receptionist is answering...')}
                 </span>
               </div>
 
@@ -700,22 +873,28 @@ export default function FloatingAssistant({
               {/* Response Text Card */}
               <div style={{
                 background: '#F8FAFC',
-                border: '1px solid #E2E8F0',
+                border: '1.5px solid #E2E8F0',
                 borderRadius: '14px',
                 padding: '14px 16px',
                 fontSize: '12.5px',
                 lineHeight: 1.5,
                 color: '#1E293B',
-                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.02)'
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.02)',
+                whiteSpace: 'pre-line'
               }}>
-                {effectiveRole === 'doctor' ? (
-                  <>
-                    "Rohit Kumar's latest reports show improvement in HbA1c levels. His BP is stable. Would you like me to open his prescription or view the full report?"
-                  </>
+                {isProcessingQuery ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#008B8B', fontWeight: 700 }}>
+                    <Sparkles size={14} className="animate-spin" />
+                    <span>AyuSwar Brain is analyzing query...</span>
+                  </div>
                 ) : (
-                  <>
-                    "Your appointment with Dr. Priya is tomorrow at 10:15 AM. Your latest report is now available in the Reports section. Would you like me to go through it with you?"
-                  </>
+                  currentAiReply || (effectiveRole === 'doctor' ? (
+                    "Rohit Kumar's latest reports show improvement in HbA1c levels. His BP is stable at 118/76. Would you like me to open his prescription or view the full spirometry report?"
+                  ) : effectiveRole === 'patient' ? (
+                    "Your appointment with Dr. Priya is tomorrow at 10:15 AM. Your latest chest report is now available in the Reports section. Would you like me to go through it with you?"
+                  ) : (
+                    "Namaste! Welcome to AyuSwar Hospital Helpdesk. Token #14 assigned with Dr. Ananya Sharma. Current wait time is ~8 minutes in Room 104."
+                  ))
                 )}
               </div>
             </div>
@@ -748,10 +927,10 @@ export default function FloatingAssistant({
               </div>
 
               <div style={{ fontSize: '17px', fontWeight: 800, color: '#0A2540' }}>
-                Call Ended
+                {effectiveRole === 'receptionist' ? 'Inquiry Completed' : 'Call Ended'}
               </div>
               <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px', fontFamily: 'monospace' }}>
-                {effectiveRole === 'doctor' ? '00:48' : '01:02'}
+                {effectiveRole === 'doctor' ? '00:48' : (effectiveRole === 'patient' ? '01:02' : '00:35')}
               </div>
 
               {/* Discussion Recap Box */}
@@ -766,7 +945,9 @@ export default function FloatingAssistant({
                 marginBottom: '18px'
               }}>
                 <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
-                  {effectiveRole === 'doctor' ? "Here's what we discussed:" : "Here's what I found for you:"}
+                  {effectiveRole === 'doctor' 
+                    ? "Here's what we discussed:" 
+                    : (effectiveRole === 'patient' ? "Here's what I found for you:" : "Reception Desk Summary:")}
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#475569', lineHeight: 1.6 }}>
                   {effectiveRole === 'doctor' ? (
@@ -775,11 +956,17 @@ export default function FloatingAssistant({
                       <li>1 prescription updated</li>
                       <li>Next follow-up: 28 May 2025</li>
                     </>
-                  ) : (
+                  ) : effectiveRole === 'patient' ? (
                     <>
                       <li>Appointment tomorrow · 10:15 AM</li>
                       <li>2 reports available</li>
                       <li>1 medication due today</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>OPD Token #14 assigned (General OPD)</li>
+                      <li>Attending: Dr. Ananya Sharma MD</li>
+                      <li>Indic Voice & ABHA consent verified</li>
                     </>
                   )}
                 </ul>
@@ -789,8 +976,10 @@ export default function FloatingAssistant({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
                 <button
                   onClick={() => {
-                    if (onNavigateTab) {
-                      onNavigateTab(effectiveRole === 'doctor' ? 'reports' : 'medications');
+                    if (effectiveRole === 'doctor' && onNavigateTab) {
+                      onNavigateTab('reports');
+                    } else if (effectiveRole === 'patient' && onNavigateTab) {
+                      onNavigateTab('medications');
                     }
                     setAssistantState('collapsed');
                   }}
@@ -806,7 +995,7 @@ export default function FloatingAssistant({
                     cursor: 'pointer'
                   }}
                 >
-                  {effectiveRole === 'doctor' ? 'View Summary' : 'View Details'}
+                  {effectiveRole === 'doctor' ? 'View Summary' : (effectiveRole === 'patient' ? 'View Details' : 'Close & Continue')}
                 </button>
 
                 <button
@@ -821,7 +1010,7 @@ export default function FloatingAssistant({
                     padding: '4px'
                   }}
                 >
-                  Start New Call
+                  Start New Inquiry
                 </button>
               </div>
             </div>
@@ -979,6 +1168,167 @@ export default function FloatingAssistant({
               </button>
             </form>
           )}
+        </div>
+      )}
+
+      {/* =========================================================================
+          AI BRAIN & OPEN-SOURCE MODEL SETTINGS MODAL
+          ========================================================================= */}
+      {showAiSettingsModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(10, 37, 64, 0.55)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 1400,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            width: '460px',
+            maxWidth: '95vw',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
+            border: '2px solid #008B8B',
+            overflow: 'hidden'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              background: 'linear-gradient(135deg, #0A2540 0%, #061B30 100%)',
+              color: '#ffffff',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Cpu size={18} color="#00D2D3" />
+                <span style={{ fontSize: '15px', fontWeight: 800 }}>AyuSwar AI Brain Settings</span>
+              </div>
+              <button
+                onClick={() => setShowAiSettingsModal(false)}
+                style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '16px' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#0A2540', marginBottom: '6px' }}>
+                  Select AI LLM Engine / Provider:
+                </label>
+                <select
+                  value={selectedProvider}
+                  onChange={(e) => setSelectedProvider(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #CBD5E1',
+                    fontSize: '12.5px',
+                    fontWeight: 650,
+                    color: '#0A2540',
+                    outline: 'none'
+                  }}
+                >
+                  {AI_PROVIDERS.map(prov => (
+                    <option key={prov.id} value={prov.id}>
+                      {prov.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedProvider !== 'local_offline' && (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540' }}>
+                      {selectedProvider === 'gemini_free' ? 'Google Gemini API Key (Free):' : 'API Key / Token:'}
+                    </label>
+                    <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>Free Tier Supported</span>
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="Paste AI API Key here..."
+                    value={apiKeyInput}
+                    onChange={(e) => setApiKeyInput(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '10px',
+                      border: '1.5px solid #CBD5E1',
+                      fontSize: '12.5px',
+                      fontFamily: 'monospace',
+                      outline: 'none'
+                    }}
+                  />
+                  <div style={{ fontSize: '10.5px', color: '#64748B', marginTop: '4px' }}>
+                    🔒 Key stored securely in your browser's local memory. Never sent to third parties.
+                  </div>
+                </div>
+              )}
+
+              <div style={{
+                background: selectedProvider === 'local_offline' ? '#ECFDF5' : '#F0F9FF',
+                border: selectedProvider === 'local_offline' ? '1px solid #A7F3D0' : '1px solid #BAE6FD',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                fontSize: '12px',
+                color: selectedProvider === 'local_offline' ? '#065F46' : '#0369A1',
+                lineHeight: 1.45
+              }}>
+                {selectedProvider === 'local_offline' ? (
+                  <>
+                    ✅ <strong>100% Free & Offline Mode Active:</strong> Uses AyuSwar's autonomous Indic Clinical Ontology & Triage Rule Engine. No API keys or internet connection required.
+                  </>
+                ) : (
+                  <>
+                    ⚡ <strong>Live LLM Mode Active:</strong> Queries will be routed through the selected open-source/free API model with autonomous fallback if limits are reached.
+                  </>
+                )}
+              </div>
+
+              {keySavedToast && (
+                <div style={{ background: '#DCFCE7', color: '#166534', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 750, textAlign: 'center' }}>
+                  ✓ AI Brain settings saved successfully!
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+                <button
+                  onClick={() => {
+                    saveAiConfig(selectedProvider, apiKeyInput);
+                    setKeySavedToast(true);
+                    setTimeout(() => {
+                      setKeySavedToast(false);
+                      setShowAiSettingsModal(false);
+                    }, 1200);
+                  }}
+                  className="btn-primary"
+                  style={{ flex: 1, padding: '10px', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                >
+                  <ShieldCheck size={16} />
+                  <span>Save AI Engine</span>
+                </button>
+                <button
+                  onClick={() => setShowAiSettingsModal(false)}
+                  className="btn-outline"
+                  style={{ padding: '10px 16px', fontSize: '13px' }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

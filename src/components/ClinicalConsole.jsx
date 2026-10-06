@@ -23,9 +23,12 @@ import {
   Thermometer,
   Droplets,
   Printer,
-  ChevronRight
+  ChevronRight,
+  Send,
+  MessageSquare
 } from 'lucide-react';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
+import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 
 /**
  * ClinicalConsole Component
@@ -55,8 +58,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   // OpenCV Strip Scanner Simulation
   const [showVisionScanner, setShowVisionScanner] = useState(false);
   const [scannedStripStatus, setScannedStripStatus] = useState(null);
-
-  // Simulated WhatsApp & FHIR Modals
+  
+  // WhatsApp Vernacular Audio-Rx Modal
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
   const [showFhirModal, setShowFhirModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
@@ -592,15 +595,39 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               ))}
             </div>
 
-            {/* Audio Rx Play Button */}
-            <button
-              onClick={togglePlayAudioRx}
-              className="btn-teal"
-              style={{ width: '100%', justifyContent: 'center', padding: '13px', fontSize: '14px', marginBottom: '18px' }}
-            >
-              {isPlayingAudioRx ? <Pause size={16} /> : <Play size={16} fill="#ffffff" />}
-              <span>{isPlayingAudioRx ? 'Pause Spoken Audio-Rx' : 'Play Vernacular Audio-Rx (Timbre v2.5)'}</span>
-            </button>
+            {/* Audio Rx Action Buttons */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px', marginBottom: '18px' }}>
+              <button
+                onClick={togglePlayAudioRx}
+                className="btn-teal"
+                style={{ justifyContent: 'center', padding: '12px 14px', fontSize: '13px' }}
+              >
+                {isPlayingAudioRx ? <Pause size={15} /> : <Play size={15} fill="#ffffff" />}
+                <span>{isPlayingAudioRx ? 'Pause Voice Note' : 'Play Vernacular Rx'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowWhatsAppModal(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(37, 211, 102, 0.35)'
+                }}
+              >
+                <Smartphone size={16} />
+                <span>WhatsApp Audio-Rx</span>
+              </button>
+            </div>
 
             {/* Visual Color-Coded Pill Schedule */}
             <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540', marginBottom: '10px' }}>
@@ -720,98 +747,25 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       </div>
 
       {/* =========================================================================
-          SIMULATED WHATSAPP MODAL
+          VERNACULAR WHATSAPP AUDIO-RX MODAL (TIMBRE v2.5)
           ========================================================================= */}
-      {showWhatsAppModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1100,
-          padding: '20px'
-        }}>
-          <div className="modal-content" style={{
-            width: '380px',
-            background: '#ffffff',
-            borderRadius: '24px',
-            overflow: 'hidden',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.4)',
-            border: '8px solid #1E293B'
-          }}>
-            {/* Phone Header */}
-            <div style={{ background: '#075E54', padding: '14px 16px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#ffffff', overflow: 'hidden' }}>
-                  <img src="/assets/ayuswar_logo.jpg" alt="AyuSwar Bot" style={{ width: '100%', height: '100%' }} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700 }}>AyuSwar Seva Bot</div>
-                  <div style={{ fontSize: '10px', opacity: 0.8 }}>ABDM Verified Hospital Service</div>
-                </div>
-              </div>
-              <button 
-                onClick={() => setShowWhatsAppModal(false)}
-                style={{ background: 'none', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Chat Body */}
-            <div style={{ background: '#E5DDD5', padding: '16px', minHeight: '340px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ alignSelf: 'center', background: '#D1E8E2', padding: '4px 12px', borderRadius: '8px', fontSize: '10px', color: '#075E54', fontWeight: 600 }}>
-                TODAY • ENCRYPTED END-TO-END
-              </div>
-
-              {/* Spoken Voice Note Card */}
-              <div style={{ background: '#ffffff', padding: '12px', borderRadius: '12px', maxWidth: '90%', alignSelf: 'flex-start', boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                  <button 
-                    onClick={togglePlayAudioRx}
-                    style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#128C7E', border: 'none', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-                  >
-                    <Play size={14} fill="#ffffff" />
-                  </button>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 700, color: '#1E293B' }}>Voice Prescription ({currentEncounter.language})</div>
-                    <div style={{ fontSize: '10px', color: '#64748B' }}>0:24 • Spoken Pill Instructions</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: '11px', color: '#475569', borderTop: '1px solid #F1F5F9', paddingTop: '6px' }}>
-                  {currentEncounter.fullAudioRxTelugu}
-                </div>
-              </div>
-
-              {/* PDF Document Card */}
-              <div style={{ background: '#ffffff', padding: '10px', borderRadius: '12px', maxWidth: '85%', alignSelf: 'flex-start', boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FileText size={24} color="#EF4444" />
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 700 }}>ABDM_Rx_{currentEncounter.patient.abhaId}.pdf</div>
-                    <div style={{ fontSize: '10px', color: '#64748B' }}>148 KB • Verified Digital Rx</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Close Action */}
-            <div style={{ padding: '12px', background: '#F0F2F5', textAlign: 'center' }}>
-              <button 
-                onClick={() => setShowWhatsAppModal(false)}
-                className="btn-primary"
-                style={{ width: '100%', justifyContent: 'center', fontSize: '13px', padding: '8px' }}
-              >
-                Close WhatsApp Simulator
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <WhatsAppAudioRxModal 
+        isOpen={showWhatsAppModal}
+        onClose={() => setShowWhatsAppModal(false)}
+        patientData={{
+          name: currentEncounter.patient.name,
+          vernacularName: currentEncounter.language.includes('Telugu') ? 'నారాయణ రావు' : 'आरव कुमार',
+          phone: '+91 98490 12345',
+          cleanPhone: '919849012345',
+          age: currentEncounter.patient.age,
+          gender: currentEncounter.patient.gender,
+          abhaId: currentEncounter.patient.abhaId,
+          language: currentEncounter.language,
+          langCode: currentEncounter.langCode || 'te-IN'
+        }}
+        doctorName={doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}
+        initialLanguage={currentEncounter.langCode?.includes('hi') ? 'hi' : 'te'}
+      />
 
       {/* =========================================================================
           ABDM FHIR R4 JSON MODAL

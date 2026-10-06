@@ -25,9 +25,9 @@ export default function Navbar({
   activeView, 
   setActiveView, 
   onOpenTechModal, 
+  onOpenDatasetModal,
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal,
-  onOpenSpotlight,
   doctorProfile,
   patientProfile,
   onLogoutDoctor,
@@ -248,6 +248,37 @@ export default function Navbar({
             Clinical Impact
           </button>
 
+          {/* Kaggle & IISc Dataset Explorer Nav Button */}
+          <button 
+            onClick={onOpenDatasetModal}
+            style={{
+              background: 'rgba(0, 139, 139, 0.08)',
+              border: '1px solid rgba(0, 139, 139, 0.35)',
+              borderRadius: '20px',
+              fontFamily: 'Outfit, sans-serif',
+              fontSize: '13.5px',
+              fontWeight: 700,
+              color: '#008B8B',
+              cursor: 'pointer',
+              padding: '5px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(0, 139, 139, 0.15)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(0, 139, 139, 0.08)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <span>🔬 Kaggle & IISc Datasets</span>
+            <span style={{ fontSize: '10px', background: '#008B8B', color: '#ffffff', padding: '1px 6px', borderRadius: '10px', fontWeight: 800 }}>12.4k</span>
+          </button>
+
           {/* Resources Dropdown */}
           <div 
             style={{ position: 'relative' }}
@@ -278,7 +309,7 @@ export default function Navbar({
                 position: 'absolute',
                 top: '100%',
                 left: 0,
-                width: '270px',
+                width: '280px',
                 background: '#ffffff',
                 border: '1px solid #D8E7EB',
                 borderRadius: '14px',
@@ -289,6 +320,18 @@ export default function Navbar({
                 gap: '6px',
                 zIndex: 200
               }}>
+                <div 
+                  onClick={() => {
+                    onOpenDatasetModal && onOpenDatasetModal();
+                    setResourcesOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.06)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 750, color: '#008B8B', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>🔬</span> Kaggle Clinical Dataset Hub
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#64748B' }}>54 ICD-10 diseases & IISc Coswara acoustic data</div>
+                </div>
                 <div 
                   onClick={() => {
                     onOpenTechModal();
@@ -314,41 +357,8 @@ export default function Navbar({
           </div>
         </nav>
 
-        {/* Portals Access & Spotlight Search CTAs */}
+        {/* Portals Access & Login CTAs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* macOS Spotlight Button */}
-          <button
-            onClick={onOpenSpotlight}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: '#F1F5F9',
-              border: '1px solid #E2E8F0',
-              borderRadius: '20px',
-              padding: '6px 12px',
-              fontSize: '12.5px',
-              color: '#64748B',
-              cursor: 'pointer',
-              transition: 'all 180ms ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#008B8B';
-              e.currentTarget.style.color = '#0A2540';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#E2E8F0';
-              e.currentTarget.style.color = '#64748B';
-            }}
-            title="Search clinical records, prescriptions, & Indic tools (⌘K)"
-          >
-            <span>🔍</span>
-            <span style={{ fontWeight: 500 }}>Search</span>
-            <kbd style={{ fontSize: '10px', background: '#FFFFFF', padding: '1px 5px', borderRadius: '4px', border: '1px solid #CBD5E1', fontWeight: 700, color: '#0A2540' }}>
-              ⌘K
-            </kbd>
-          </button>
-
           {activeView === 'landing' ? (
             // Clean, unauthenticated landing page header
             <>

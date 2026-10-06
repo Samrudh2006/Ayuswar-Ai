@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AppleHealthRing from './AppleHealthRing';
-import AppleWalletPass from './AppleWalletPass';
-import IosSegmentedControl from './IosSegmentedControl';
-import IosGroupedList from './IosGroupedList';
-import IosBottomSheet from './IosBottomSheet';
 import { 
   Home, 
   Heart, 
@@ -48,8 +43,12 @@ import {
   RefreshCw,
   Smartphone,
   Sliders,
-  Shield
+  Shield,
+  WifiOff
 } from 'lucide-react';
+import { askAyuSwarBrain } from '../services/aiBrainService';
+import AbhaDigitalCard from './AbhaDigitalCard';
+import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 
 /**
  * PatientPortal Component — Complete Enterprise Citizen Healthcare Operating System
@@ -63,8 +62,27 @@ import {
  * 7. Health Goals (10k steps tracker, hydration glasses, medication adherence streak, sleep tracker)
  * 8. Settings (Native Indic dialect selector, ABHA family locker switcher, WhatsApp voice reminder preferences)
  */
-export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, onLogoutPatient, onSwitchPatient }) {
+export default function PatientPortal({ 
+  patientProfile, 
+  onOpenDoctorAuthModal, 
+  onLogoutPatient, 
+  onSwitchPatient,
+  appointmentsQueue = [],
+  onBookAppointment
+}) {
   const [activeTab, setActiveTab] = useState('home');
+  const [showWhatsAppRxModal, setShowWhatsAppRxModal] = useState(false);
+  
+  // Book Consultation Modal State
+  const [isBookConsultationModalOpen, setIsBookConsultationModalOpen] = useState(false);
+  const [bookingDoctor, setBookingDoctor] = useState('Dr. Priya Sharma, MD');
+  const [bookingSpecialty, setBookingSpecialty] = useState('Pulmonology & Critical Care');
+  const [bookingDate, setBookingDate] = useState('Tomorrow');
+  const [bookingTime, setBookingTime] = useState('10:00 AM');
+  const [bookingMode, setBookingMode] = useState('In-Person OPD');
+  const [bookingReason, setBookingReason] = useState('ఛాతీలో అసౌకర్యం మరియు శ్వాస తీసుకోవడంలో ఇబ్బంది (Chest discomfort & dyspnea)');
+  const [bookingSuccessToast, setBookingSuccessToast] = useState(false);
+
   const [patientQuestion, setPatientQuestion] = useState('');
   const [chatMessages, setChatMessages] = useState([
     {
@@ -393,25 +411,36 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
     }
   };
 
-  const handleSendChat = (e) => {
+  const handleSendChat = async (e) => {
     e?.preventDefault();
     if (!patientQuestion.trim()) return;
 
     const userText = patientQuestion.trim();
     setPatientQuestion('');
 
-    let aiReply = "AyuSwar AI has recorded your query. Stay comfortable, drink plenty of fluids, and your care team led by Dr. Priya has been informed.";
-    if (userText.toLowerCase().includes('medicine') || userText.toLowerCase().includes('tablet') || userText.toLowerCase().includes('pill')) {
-      aiReply = "Please follow your personalized Chronotherapy schedule in the Medications tab. Always take medications with the recommended meal context (empty stomach vs after meals).";
-    } else if (userText.toLowerCase().includes('chest pain') || userText.toLowerCase().includes('breath') || userText.toLowerCase().includes('choking')) {
-      aiReply = "⚠️ RED ALERT: If experiencing severe chest pain or acute breathlessness, dial 108 Emergency Medical Services immediately or reach the nearest district hospital emergency triage.";
-    }
-
     setChatMessages(prev => [
       ...prev,
       { sender: 'user', text: userText },
-      { sender: 'ai', text: aiReply }
+      { sender: 'ai', text: 'Analyzing symptom against ICMR guidelines...' }
     ]);
+
+    try {
+      const aiReply = await askAyuSwarBrain(userText, 'patient');
+      setChatMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { sender: 'ai', text: aiReply };
+        return updated;
+      });
+    } catch {
+      setChatMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { 
+          sender: 'ai', 
+          text: "AyuSwar AI has recorded your query. Stay comfortable, drink plenty of fluids, and your care team led by Dr. Priya has been informed." 
+        };
+        return updated;
+      });
+    }
   };
 
   return (
@@ -533,6 +562,23 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
           zIndex: 50,
           gap: '16px'
         }}>
+          <div 
+            onClick={() => setActiveTab('settings')}
+            style={{ 
+              cursor: 'pointer',
+              padding: '6px',
+              borderRadius: '8px',
+              background: activeTab === 'settings' ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 150ms ease'
+            }} 
+            title="Citizen Settings & ABHA Locker Preferences"
+          >
+            <Settings size={20} color={activeTab === 'settings' ? '#008B8B' : '#64748B'} />
+          </div>
+
           <div style={{ position: 'relative', cursor: 'pointer' }} title="1 New Lab Report Alert">
             <Bell size={20} color="#64748B" />
             <span style={{
@@ -698,42 +744,41 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
               --------------------------------------------------------------------- */}
           {activeTab === 'home' && (
             <>
-              {/* Apple-Grade Hero Welcome Card with Activity Rings */}
-              <div 
-                className="mac-glass apple-card-hover"
-                style={{
-                  borderRadius: '24px',
-                  padding: '24px 30px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '24px',
-                  gap: '24px',
-                  flexWrap: 'wrap'
-                }}
-              >
-                <div style={{ flex: 1, minWidth: '260px' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 139, 139, 0.1)', padding: '4px 10px', borderRadius: '12px', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '13px' }}>🌿</span>
-                    <span style={{ fontSize: '11px', fontWeight: 750, color: '#008B8B' }}>ABHA Digital Health Passport Active</span>
-                  </div>
-                  <h1 style={{ fontSize: '26px', fontWeight: 850, color: '#0A2540', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>
+              {/* Hero Welcome Card */}
+              <div style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #F0FDFA 100%)',
+                borderRadius: '16px',
+                padding: '24px 28px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                border: '1px solid #CCFBF1',
+                marginBottom: '24px',
+                boxShadow: '0 2px 10px rgba(0, 139, 139, 0.04)'
+              }}>
+                <div>
+                  <h1 style={{ fontSize: '24px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
                     Hello {patientName.split(' ')[0]},
                   </h1>
-                  <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px', maxWidth: '440px' }}>
-                    Your continuous vitals, Indic voice prescriptions, and clinical chronotherapy records are up-to-date.
+                  <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px' }}>
+                    Your health journey, our priority.
                   </p>
                 </div>
 
-                {/* Concentric Apple Health Rings */}
-                <div style={{ background: '#FFFFFF', padding: '12px 18px', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 14px rgba(10, 37, 64, 0.04)' }}>
-                  <AppleHealthRing 
-                    adherence={88}
-                    precision={99.4}
-                    abdmSync={100}
-                    size={120}
-                    showLabels={true}
-                  />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 16px',
+                  background: '#ffffff',
+                  borderRadius: '24px',
+                  border: '1px solid #CCFBF1',
+                  boxShadow: '0 2px 8px rgba(0, 139, 139, 0.06)'
+                }}>
+                  <span style={{ fontSize: '16px' }}>🌿</span>
+                  <span style={{ fontSize: '12px', fontWeight: 750, color: '#008B8B' }}>
+                    Small steps. Better health.
+                  </span>
                 </div>
               </div>
 
@@ -1102,15 +1147,20 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
                 </p>
               </div>
 
-              {/* Apple Wallet Style 3D Interactive ABHA Health Pass */}
-              <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
-                <AppleWalletPass 
-                  patientProfile={patientProfile}
-                  assignedDoctor={assignedDoctor}
+              {/* Authentic ABHA Digital Smart Card + Mobile Dossier Inspector */}
+              <div style={{ marginBottom: '26px', maxWidth: '620px' }}>
+                <AbhaDigitalCard 
+                  patient={{
+                    patientName: patientName,
+                    vernacular: patientProfile?.vernacular || (patientName === 'Narayana Rao' ? 'నారాయణ రావు' : 'అనన్య రావు'),
+                    abhaAddress: `${patientName.toLowerCase().split(' ')[0]}@abdm`,
+                    abhaId: abhaId,
+                    dob: patientProfile?.dob || '14-08-1996',
+                    gender: patientProfile?.gender || 'Female',
+                    bloodGroup: patientProfile?.bloodGroup || 'O+ve',
+                    avatar: patientProfile?.avatar || '/assets/dr_ananya_avatar.jpg'
+                  }} 
                 />
-                <div style={{ fontSize: '12px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '4px' }}>
-                  <span>💡 <em>Click / Tap the card to 3D flip and view emergency contacts & allergy specs.</em></span>
-                </div>
               </div>
 
               {/* Vitals Tracker */}
@@ -1157,55 +1207,365 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
                 </div>
 
                 <button
-                  onClick={() => alert('Appointment Booking wizard opened for Kurnool District Hospital OPD.')}
+                  onClick={() => setIsBookConsultationModalOpen(true)}
                   style={{
                     background: '#008B8B',
                     color: '#ffffff',
                     border: 'none',
                     borderRadius: '10px',
-                    padding: '10px 18px',
+                    padding: '10px 20px',
                     fontSize: '13px',
                     fontWeight: 750,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 4px 12px rgba(0, 139, 139, 0.25)'
                   }}
                 >
-                  + Book New Consultation
+                  <Plus size={16} />
+                  <span>Book New Consultation</span>
                 </button>
               </div>
 
+              {bookingSuccessToast && (
+                <div style={{
+                  background: '#ECFDF5',
+                  border: '1.5px solid #10B981',
+                  padding: '12px 18px',
+                  borderRadius: '12px',
+                  color: '#065F46',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  marginBottom: '16px'
+                }}>
+                  <CheckCircle2 size={18} color="#10B981" />
+                  <span>Consultation Request Sent! Doctor will review and assign your OPD Room Token instantly.</span>
+                </div>
+              )}
+
+              {/* Interactive Book Consultation Modal */}
+              {isBookConsultationModalOpen && (
+                <div className="modal-overlay" style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 1300,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(6, 22, 38, 0.8)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '20px'
+                }}>
+                  <div className="modal-content" style={{
+                    background: '#ffffff',
+                    width: '560px',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
+                    border: '1px solid #D8E7EB'
+                  }}>
+                    {/* Header */}
+                    <div style={{
+                      background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+                      padding: '20px 24px',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <Calendar size={22} color="#2DD4BF" />
+                        <div>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                            Book Clinical Consultation
+                          </h3>
+                          <div style={{ fontSize: '11.5px', color: '#CCFBF1' }}>
+                            Kurnool District Hospital • ABDM Health Facility #1402
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setIsBookConsultationModalOpen(false)}
+                        style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px' }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* Body Form */}
+                    <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {/* Select Doctor */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                          Select Consulting Specialist
+                        </label>
+                        <select
+                          value={bookingDoctor}
+                          onChange={e => {
+                            setBookingDoctor(e.target.value);
+                            if (e.target.value.includes('Priya')) setBookingSpecialty('Pulmonology & Critical Care');
+                            else if (e.target.value.includes('Rajesh')) setBookingSpecialty('Cardiology & Hypertension');
+                            else setBookingSpecialty('General Medicine');
+                          }}
+                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1.5px solid #CBD5E1', fontSize: '13px', fontWeight: 700, color: '#0A2540' }}
+                        >
+                          <option value="Dr. Priya Sharma, MD">Dr. Priya Sharma, MD (Pulmonology & Critical Care)</option>
+                          <option value="Dr. Rajesh Varma, MD, DM">Dr. Rajesh Varma, MD, DM (Cardiology & Heart Health)</option>
+                          <option value="Dr. Sneha Reddy, MBBS, DNB">Dr. Sneha Reddy, MBBS (General Medicine & Diabetology)</option>
+                          <option value="Dr. Amit Patel, MD">Dr. Amit Patel, MD (Pediatrics & Child Care)</option>
+                        </select>
+                      </div>
+
+                      {/* Select Date */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                          Select Consultation Date
+                        </label>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          {['Today', 'Tomorrow', 'Wed, May 14', 'Thu, May 15'].map(d => (
+                            <button
+                              key={d}
+                              type="button"
+                              onClick={() => setBookingDate(d)}
+                              style={{
+                                flex: 1,
+                                padding: '8px 10px',
+                                borderRadius: '8px',
+                                border: bookingDate === d ? '2px solid #008B8B' : '1px solid #CBD5E1',
+                                background: bookingDate === d ? 'rgba(0, 139, 139, 0.1)' : '#ffffff',
+                                color: bookingDate === d ? '#008B8B' : '#475569',
+                                fontSize: '12px',
+                                fontWeight: 750,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              {d}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Select Time Slot */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                          Select Preferred Time Slot
+                        </label>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                          {['09:30 AM', '10:15 AM', '11:30 AM', '02:30 PM', '03:15 PM', '04:00 PM', '05:00 PM', '06:00 PM'].map(slot => (
+                            <button
+                              key={slot}
+                              type="button"
+                              onClick={() => setBookingTime(slot)}
+                              style={{
+                                padding: '8px',
+                                borderRadius: '8px',
+                                border: bookingTime === slot ? '2px solid #008B8B' : '1px solid #E2E8F0',
+                                background: bookingTime === slot ? '#0A2540' : '#F8FAFC',
+                                color: bookingTime === slot ? '#ffffff' : '#475569',
+                                fontSize: '11.5px',
+                                fontWeight: 750,
+                                cursor: 'pointer',
+                                textAlign: 'center'
+                              }}
+                            >
+                              {slot}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Consultation Mode */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                          Consultation Mode
+                        </label>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          {['In-Person OPD (Hospital Visit)', 'Video / Telehealth Call'].map(m => (
+                            <button
+                              key={m}
+                              type="button"
+                              onClick={() => setBookingMode(m.split(' ')[0])}
+                              style={{
+                                flex: 1,
+                                padding: '9px 12px',
+                                borderRadius: '10px',
+                                border: bookingMode.includes(m.split(' ')[0]) ? '2px solid #008B8B' : '1px solid #E2E8F0',
+                                background: bookingMode.includes(m.split(' ')[0]) ? 'rgba(0, 139, 139, 0.08)' : '#ffffff',
+                                color: bookingMode.includes(m.split(' ')[0]) ? '#008B8B' : '#475569',
+                                fontSize: '12px',
+                                fontWeight: 750,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              {m}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Chief Complaint / Symptoms */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                          Symptoms / Chief Complaint (తెలుగు / हिन्दी / English)
+                        </label>
+                        <input
+                          type="text"
+                          value={bookingReason}
+                          onChange={e => setBookingReason(e.target.value)}
+                          placeholder="e.g. ఛాతీలో దడ మరియు దగ్గు (Chest discomfort & cough)"
+                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', color: '#0A2540', boxSizing: 'border-box' }}
+                        />
+                      </div>
+
+                      {/* Submit Booking Button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onBookAppointment) {
+                            onBookAppointment({
+                              patientName: patientName,
+                              vernacular: selectedLanguage === 'Telugu' ? 'అనన్య రావు' : 'अनन्या राव',
+                              phone: emergencyPhone || '+91 98480 22334',
+                              age: patientProfile?.age || 28,
+                              gender: patientProfile?.gender || 'Female',
+                              language: selectedLanguage,
+                              abhaId: abhaId,
+                              doctorName: bookingDoctor,
+                              specialty: bookingSpecialty,
+                              date: bookingDate,
+                              time: bookingTime,
+                              mode: bookingMode,
+                              reason: bookingReason
+                            });
+                          }
+                          setIsBookConsultationModalOpen(false);
+                          setBookingSuccessToast(true);
+                          setTimeout(() => setBookingSuccessToast(false), 5000);
+                        }}
+                        style={{
+                          background: 'linear-gradient(135deg, #008B8B 0%, #065F46 100%)',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '12px',
+                          padding: '13px',
+                          fontSize: '14px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          boxShadow: '0 4px 14px rgba(0, 139, 139, 0.3)',
+                          marginTop: '6px'
+                        }}
+                      >
+                        <CheckCircle2 size={18} />
+                        <span>Confirm & Send Booking Request to Doctor</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Appointments List */}
               <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Confirmed Sessions
+                  Scheduled Sessions & Active OPD Queue
                 </h3>
-                <div style={{ padding: '16px', borderRadius: '12px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ background: 'rgba(0, 139, 139, 0.1)', color: '#008B8B', padding: '8px 12px', borderRadius: '10px', textAlign: 'center', fontWeight: 800 }}>
-                      Tue<br />May 13
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>{assignedDoctor.doctorName}</div>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>{assignedDoctor.specialty} • Video Call • 10:15 AM - 10:30 AM</div>
-                      <div style={{ fontSize: '12px', color: '#008B8B', marginTop: '2px', fontWeight: 650 }}>Reason: {patientProfile?.condition || 'Clinical Follow-up & Assessment'}</div>
-                    </div>
-                  </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {(appointmentsQueue.length > 0 ? appointmentsQueue : [
+                    {
+                      id: 'demo_1',
+                      token: 'OPD-103',
+                      doctorName: assignedDoctor.doctorName,
+                      specialty: assignedDoctor.specialty,
+                      date: 'Tue, May 13',
+                      time: '10:15 AM',
+                      mode: 'Video Call',
+                      reason: patientProfile?.condition || 'Clinical Follow-up & Assessment',
+                      status: 'confirmed'
+                    }
+                  ]).map((appt, idx) => {
+                    const isPending = appt.status === 'pending';
+                    return (
+                      <div
+                        key={appt.id || idx}
+                        style={{
+                          padding: '16px 20px',
+                          borderRadius: '14px',
+                          background: isPending ? '#FFFBEB' : '#F8FAFC',
+                          border: isPending ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '14px'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div style={{
+                            background: isPending ? '#FEF3C7' : 'rgba(0, 139, 139, 0.1)',
+                            color: isPending ? '#D97706' : '#008B8B',
+                            padding: '8px 12px',
+                            borderRadius: '10px',
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            fontSize: '12px'
+                          }}>
+                            {appt.date || 'Today'}<br />
+                            <span style={{ fontSize: '13px' }}>{appt.time || '10:00 AM'}</span>
+                          </div>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>{appt.doctorName}</span>
+                              <span style={{
+                                fontSize: '10.5px',
+                                fontWeight: 800,
+                                background: isPending ? '#FEF3C7' : 'rgba(16, 185, 129, 0.1)',
+                                color: isPending ? '#D97706' : '#059669',
+                                padding: '2px 8px',
+                                borderRadius: '6px'
+                              }}>
+                                {isPending ? 'PENDING DOCTOR ACCEPTANCE' : 'CONFIRMED • READY'}
+                              </span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#64748B' }}>
+                              {appt.specialty} • {appt.mode || 'In-Person OPD'} • Token #{appt.token || 'OPD-103'}
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#008B8B', marginTop: '2px', fontWeight: 650 }}>
+                              Reason: {appt.reason}
+                            </div>
+                          </div>
+                        </div>
 
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={() => alert('Opening consultation portal...')}
-                      style={{
-                        background: '#008B8B',
-                        color: '#ffffff',
-                        border: 'none',
-                        borderRadius: '8px',
-                        padding: '8px 16px',
-                        fontSize: '12.5px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Join Tele-Consultation
-                    </button>
-                  </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            onClick={() => alert(`Connecting with ${appt.doctorName} for session #${appt.token}...`)}
+                            style={{
+                              background: isPending ? '#94A3B8' : '#008B8B',
+                              color: '#ffffff',
+                              border: 'none',
+                              borderRadius: '8px',
+                              padding: '8px 16px',
+                              fontSize: '12.5px',
+                              fontWeight: 750,
+                              cursor: isPending ? 'not-allowed' : 'pointer'
+                            }}
+                            disabled={isPending}
+                          >
+                            {isPending ? 'Awaiting Doctor' : 'Join Consultation'}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -1610,6 +1970,27 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
                   >
                     <Plus size={15} />
                     <span>Add Medication Manually</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowWhatsAppRxModal(true)}
+                    style={{
+                      background: '#25D366',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '10px',
+                      padding: '8px 16px',
+                      fontSize: '12.5px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      boxShadow: '0 2px 8px rgba(37, 211, 102, 0.35)'
+                    }}
+                  >
+                    <Send size={14} />
+                    <span>Receive on WhatsApp (ఆడియో నోట్)</span>
                   </button>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -2601,171 +2982,391 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
                 </div>
               )}
 
-              {/* iOS Inset-Grouped Settings Suite (Apple Style Visual Library) */}
+              {/* Settings Sections Grid (2 Columns) */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '22px' }}>
                 
-                {/* Left Column: Voice & Dispatches */}
-                <div>
-                  <IosGroupedList 
-                    title="Indic Clinical Voice & Dialect Engine"
-                    footer="Acoustic models adapt to Rayalaseema & Telangana regional vernacular idioms."
-                    items={[
-                      {
-                        id: 'lang',
-                        icon: '🗣️',
-                        iconBg: 'linear-gradient(135deg, #008B8B, #00A896)',
-                        title: 'Primary Vernacular Dialect',
-                        subtitle: `${selectedLanguage} (Rayalaseema & Coastal Dialect)`,
-                        badge: '99.4% Acc',
-                        showChevron: true,
-                        onClick: () => {
-                          const nextLang = selectedLanguage === 'Telugu' ? 'Hindi' : selectedLanguage === 'Hindi' ? 'Tamil' : 'Telugu';
-                          setSelectedLanguage(nextLang);
-                        }
-                      },
-                      {
-                        id: 'timbre',
-                        icon: '🎙️',
-                        iconBg: 'linear-gradient(135deg, #3B82F6, #1D4ED8)',
-                        title: 'Voice Persona & Timbre',
-                        subtitle: voiceTimbre === 'female_compassionate' ? 'Dr. Priya (Empathetic Female)' : 'Dr. Rajesh (Senior Physician)',
-                        showChevron: true,
-                        onClick: () => {
-                          setVoiceTimbre(prev => prev === 'female_compassionate' ? 'male_calm' : 'female_compassionate');
-                        }
-                      },
-                      {
-                        id: 'tempo',
-                        icon: '⏱️',
-                        iconBg: 'linear-gradient(135deg, #F59E0B, #D97706)',
-                        title: 'Speech Tempo / Playback Speed',
-                        subtitle: `${speechTempo} (Conversational — Clear for elderly)`,
-                        showChevron: true,
-                        onClick: () => {
-                          const nextTempo = speechTempo === '1.0x' ? '0.75x' : speechTempo === '0.75x' ? '1.25x' : '1.0x';
-                          setSpeechTempo(nextTempo);
-                        }
-                      },
-                      {
-                        id: 'autoplay',
-                        icon: '🔊',
-                        iconBg: 'linear-gradient(135deg, #8B5CF6, #6D28D9)',
-                        title: 'Auto-Play Spoken Narrations',
-                        subtitle: 'Instantly reads out lab reports and pill directions',
-                        checked: autoPlayAudio,
-                        onToggle: (val) => setAutoPlayAudio(val)
-                      },
-                      {
-                        id: 'offline',
-                        icon: '⚡',
-                        iconBg: 'linear-gradient(135deg, #10B981, #059669)',
-                        title: 'Offline Voice Cache (Rural PHC)',
-                        subtitle: `Pre-cached on device • ${cacheSizeMb} storage used`,
-                        checked: offlineVoiceCaching,
-                        onToggle: (val) => setOfflineVoiceCaching(val)
-                      }
-                    ]}
-                  />
+                {/* 1. AyuSwar Indic Voice & Dialect Engine */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0, 139, 139, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#008B8B' }}>
+                      <Languages size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>Indic Voice & Dialect Synthesis</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>Configure pronunciation, regional idioms, and tempo</div>
+                    </div>
+                  </div>
 
-                  <IosGroupedList 
-                    title="Omnichannel Tele-Dispatch"
-                    footer="Sends synchronized Indic spoken audio directly to citizen WhatsApp and basic feature phones."
-                    items={[
-                      {
-                        id: 'whatsapp',
-                        icon: '💬',
-                        iconBg: 'linear-gradient(135deg, #25D366, #128C7E)',
-                        title: 'WhatsApp Audio Prescriptions',
-                        subtitle: 'Sends 24kHz .opus voice note + Telugu PDF',
-                        checked: enableWhatsAppData,
-                        onToggle: (val) => setEnableWhatsAppData(val)
-                      },
-                      {
-                        id: 'ivr',
-                        icon: '📞',
-                        iconBg: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
-                        title: 'Automated IVR Phone Calls',
-                        subtitle: 'Rings telephone for elderly patients unable to read',
-                        checked: enableIvrPhoneCalls,
-                        onToggle: (val) => setEnableIvrPhoneCalls(val)
-                      },
-                      {
-                        id: 'sms',
-                        icon: '✉️',
-                        iconBg: 'linear-gradient(135deg, #EC4899, #DB2777)',
-                        title: 'Regional Unicode SMS Alerts',
-                        subtitle: '2G network fallback in native Telugu script (మీ మందుల సమయం)',
-                        checked: enableSmsRegional,
-                        onToggle: (val) => setEnableSmsRegional(val)
-                      }
-                    ]}
-                  />
+                  <div style={{ marginBottom: '14px' }}>
+                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                      Primary Vernacular Dialect
+                    </label>
+                    <select
+                      value={selectedLanguage}
+                      onChange={e => setSelectedLanguage(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '10px 14px',
+                        borderRadius: '10px',
+                        border: '1.5px solid #CBD5E1',
+                        fontSize: '13px',
+                        fontWeight: 650,
+                        color: '#0A2540'
+                      }}
+                    >
+                      <option value="Telugu">తెలుగు (Telugu - Rayalaseema & Coastal Dialect)</option>
+                      <option value="Hindi">हिन्दी (Hindi - Awadhi / Standard Khari Boli)</option>
+                      <option value="Tamil">தமிழ் (Tamil - Madurai / Chennai Colloquial)</option>
+                      <option value="Kannada">ಕನ್ನಡ (Kannada - Old Mysuru & Hubballi)</option>
+                      <option value="Marathi">मराठी (Marathi - Deshi / Vidarbha)</option>
+                      <option value="Bengali">বাংলা (Bengali - Rarh & Sundarbans)</option>
+                      <option value="Odia">ଓଡ଼ିଆ (Odia - Coastal Cuttack)</option>
+                    </select>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '14px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '6px' }}>
+                        Voice Timbre & Persona
+                      </label>
+                      <select
+                        value={voiceTimbre}
+                        onChange={e => setVoiceTimbre(e.target.value)}
+                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', fontWeight: 650 }}
+                      >
+                        <option value="female_compassionate">Dr. Priya (Empathetic Female)</option>
+                        <option value="male_calm">Dr. Rajesh (Senior Male Physician)</option>
+                        <option value="elder_warm">ASHA Sister (Maternal Guide)</option>
+                        <option value="maternal_sister">Community Health Worker (Warm)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '6px' }}>
+                        Speech Tempo / Playback Speed
+                      </label>
+                      <select
+                        value={speechTempo}
+                        onChange={e => setSpeechTempo(e.target.value)}
+                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', fontWeight: 650 }}
+                      >
+                        <option value="0.75x">0.75x (Slow & Clear — Best for elderly)</option>
+                        <option value="1.0x">1.0x (Standard Conversational)</option>
+                        <option value="1.25x">1.25x (Brisk Clinical)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Auto-Play Spoken Narrations</div>
+                      <div style={{ fontSize: '11px', color: '#64748B' }}>Instantly read lab reports and pills when opened</div>
+                    </div>
+                    <input 
+                      type="checkbox" 
+                      checked={autoPlayAudio} 
+                      onChange={e => setAutoPlayAudio(e.target.checked)}
+                      style={{ width: '18px', height: '18px', accentColor: '#008B8B', cursor: 'pointer' }}
+                    />
+                  </div>
                 </div>
 
-                {/* Right Column: ABDM & Emergency SOS */}
-                <div>
-                  <IosGroupedList 
-                    title="ABDM Health Locker & Governance"
-                    footer="Protected under National Health Authority ABDM Milestone M1/M2/M3 compliance."
-                    items={[
-                      {
-                        id: 'abha_status',
-                        icon: '🛡️',
-                        iconBg: 'linear-gradient(135deg, #0A2540, #1E3A8A)',
-                        title: 'ABHA Citizen ID Status',
-                        subtitle: abhaId,
-                        badge: 'Tier-1 Verified',
-                        badgeBg: '#ECFDF5',
-                        badgeColor: '#059669'
-                      },
-                      {
-                        id: 'consent',
-                        icon: '📄',
-                        iconBg: 'linear-gradient(135deg, #6366F1, #4F46E5)',
-                        title: 'Consent Duration Expiry',
-                        subtitle: `${consentDurationDays} Days (Quarterly Chronic Care)`,
-                        showChevron: true,
-                        onClick: () => {
-                          const nextDays = consentDurationDays === 30 ? 90 : consentDurationDays === 90 ? 365 : 30;
-                          setConsentDurationDays(nextDays);
-                        }
-                      },
-                      {
-                        id: 'masking',
-                        icon: '🔒',
-                        iconBg: 'linear-gradient(135deg, #64748B, #334155)',
-                        title: 'FHIR Diagnostic Masking',
-                        subtitle: 'Hide private psychiatric or oncology records from clinics',
-                        checked: fhirDataMasking,
-                        onToggle: (val) => setFhirDataMasking(val)
-                      }
-                    ]}
-                  />
+                {/* 2. Omnichannel Alerts & Tele-Dispatch */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(37, 99, 235, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563EB' }}>
+                      <Smartphone size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>Omnichannel Tele-Dispatch</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>WhatsApp Voice Notes, IVR Phone Calls & Regional SMS</div>
+                    </div>
+                  </div>
 
-                  <IosGroupedList 
-                    title="Emergency Caregiver & 108 SOS"
-                    footer="Instant automated telemetry packet dispatch during acute respiratory or cardiac alerts."
-                    items={[
-                      {
-                        id: 'caregiver',
-                        icon: '👤',
-                        iconBg: 'linear-gradient(135deg, #DC2626, #991B1B)',
-                        title: 'Designated Caregiver Contact',
-                        subtitle: `${emergencyContactName} • ${emergencyPhone}`,
-                        showChevron: true
-                      },
-                      {
-                        id: 'auto_108',
-                        icon: '🚑',
-                        iconBg: 'linear-gradient(135deg, #EF4444, #B91C1C)',
-                        title: 'Auto-Transmit GPS & Vitals to 108',
-                        subtitle: 'Transmits live PEFR & allergy sentinel upon SOS',
-                        checked: emergencyAutoTransmit108,
-                        onToggle: (val) => setEmergencyAutoTransmit108(val)
-                      }
-                    ]}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>WhatsApp Audio Prescriptions</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Send .opus audio note + Telugu PDF after doctor visit</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={enableWhatsAppData} 
+                        onChange={e => setEnableWhatsAppData(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#10B981', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Automated IVR Phone Call Reminders</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Phone rings for elderly patients who cannot read screens</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={enableIvrPhoneCalls} 
+                        onChange={e => setEnableIvrPhoneCalls(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#2563EB', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Unicode Regional SMS Alerts</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>2G network fallback in native Telugu script (మీ మందుల సమయం)</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={enableSmsRegional} 
+                        onChange={e => setEnableSmsRegional(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#D97706', cursor: 'pointer' }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 650 }}>Scheduled Dispatch Slot:</span>
+                    <select
+                      value={preferredReminderTime}
+                      onChange={e => setPreferredReminderTime(e.target.value)}
+                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', fontWeight: 700 }}
+                    >
+                      <option value="06:30 AM">06:30 AM (Early Morning Empty Stomach)</option>
+                      <option value="08:30 AM">08:30 AM (Post-Breakfast)</option>
+                      <option value="01:00 PM">01:00 PM (Post-Lunch)</option>
+                      <option value="08:30 PM">08:30 PM (Post-Dinner & Bedtime)</option>
+                    </select>
+                  </div>
                 </div>
+
+                {/* 3. Emergency Caregiver Escalation & 108 SOS */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#DC2626' }}>
+                      <PhoneCall size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>Emergency Caregiver Escalation</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>Designated contact & automated 108 ambulance dispatch</div>
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: '12px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+                      Primary Caregiver / Attendant Name
+                    </label>
+                    <input
+                      type="text"
+                      value={emergencyContactName}
+                      onChange={e => setEmergencyContactName(e.target.value)}
+                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '13px', fontWeight: 650 }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: '14px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+                      Emergency Mobile Number
+                    </label>
+                    <input
+                      type="text"
+                      value={emergencyPhone}
+                      onChange={e => setEmergencyPhone(e.target.value)}
+                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '13px', fontWeight: 650 }}
+                    />
+                  </div>
+
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FEF2F2', border: '1px solid #FECACA', cursor: 'pointer', marginBottom: '14px' }}>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#991B1B' }}>Auto-Transmit GPS & ABHA Summary to 108</div>
+                      <div style={{ fontSize: '11px', color: '#B91C1C' }}>Transmits live vitals & allergy sentinel if SOS is triggered</div>
+                    </div>
+                    <input 
+                      type="checkbox" 
+                      checked={emergencyAutoTransmit108} 
+                      onChange={e => setEmergencyAutoTransmit108(e.target.checked)}
+                      style={{ width: '18px', height: '18px', accentColor: '#DC2626', cursor: 'pointer' }}
+                    />
+                  </label>
+
+                  <button
+                    onClick={() => alert(`Simulated Alert Sent to Caregiver ${emergencyContactName} (${emergencyPhone}): "AyuSwar Alert: Emergency test ping successful. Patient is stable."`)}
+                    style={{ width: '100%', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 750, color: '#0A2540', cursor: 'pointer' }}
+                  >
+                    Send Test Ping to Caregiver Mobile
+                  </button>
+                </div>
+
+                {/* 4. ABDM & ABHA Health Locker Consent Governance */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>ABDM Consent Governance</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>National Health Authority digital health locker permissions</div>
+                    </div>
+                  </div>
+
+                  <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '12px', color: '#64748B' }}>ABHA Number Status:</span>
+                      <span style={{ fontSize: '11px', background: '#ECFDF5', color: '#059669', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>Tier-1 Verified</span>
+                    </div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540', fontFamily: 'monospace' }}>
+                      {abhaId}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 700, color: '#0A2540' }}>Consent Duration Expiry:</span>
+                    <select
+                      value={consentDurationDays}
+                      onChange={e => setConsentDurationDays(Number(e.target.value))}
+                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', fontWeight: 650 }}
+                    >
+                      <option value={7}>7 Days (Temporary)</option>
+                      <option value={30}>30 Days (Recommended)</option>
+                      <option value={90}>90 Days (Quarterly Chronic Care)</option>
+                      <option value={365}>1 Year (Full Coverage)</option>
+                    </select>
+                  </div>
+
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer', marginBottom: '14px' }}>
+                    <div>
+                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Auto-Grant Specialist Access</div>
+                      <div style={{ fontSize: '11px', color: '#64748B' }}>Allow {assignedDoctor.doctorName} to access prior discharge records</div>
+                    </div>
+                    <input 
+                      type="checkbox" 
+                      checked={autoShareEmergencyRecords} 
+                      onChange={e => setAutoShareEmergencyRecords(e.target.checked)}
+                      style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
+                    />
+                  </label>
+
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={() => alert(`Downloading Official Government ABHA Card for ${patientName} (ABHA: ${abhaId}) with bilingual QR code...`)}
+                      style={{ flex: 1, background: '#008B8B', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '8px', fontSize: '11.5px', fontWeight: 750, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                    >
+                      <Download size={13} />
+                      <span>ABHA Card PDF</span>
+                    </button>
+                    <button
+                      onClick={() => alert(`Exporting FHIR R4 JSON Bundle (Encounters, Observations, MedicationRequests) for ${patientName}...`)}
+                      style={{ flex: 1, background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '8px', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                    >
+                      <FileCheck size={13} />
+                      <span>FHIR R4 JSON</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5. Family Locker & Caregiver Privacy Controls */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
+                      <UserCheck size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>Family Locker Sharing Permissions</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>Manage view permissions across registered family members</div>
+                    </div>
+                  </div>
+
+                  <div style={{ fontSize: '12.5px', color: '#475569', marginBottom: '12px' }}>
+                    Linked Accounts: <strong>{familyListToDisplay.map(f => f.patientName).join(', ')}</strong>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Shared Medication Dashboard</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Caregiver can view which pills have been taken today</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        defaultChecked 
+                        style={{ width: '18px', height: '18px', accentColor: '#D97706', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Sensitive Diagnostic Masking</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Mask private psychiatric, fertility or oncology records</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={fhirDataMasking}
+                        onChange={e => setFhirDataMasking(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#D97706', cursor: 'pointer' }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ fontSize: '11.5px', color: '#64748B', background: '#FEF3C7', padding: '10px', borderRadius: '8px', color: '#92400E' }}>
+                    🔒 <strong>Privacy Guard:</strong> Individual consent artifacts adhere to India Digital Personal Data Protection (DPDP) Act 2023.
+                  </div>
+                </div>
+
+                {/* 6. Rural PHC Offline Mode & Low Data Compression */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284C7' }}>
+                      <WifiOff size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>Offline Mode & Rural Network Optimization</h3>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>Zero-internet spoken audio playback for rural PHC visits</div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Offline Spoken Rx Caching</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Keep regional voice prescriptions cached locally on device</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={offlineVoiceCaching}
+                        onChange={e => setOfflineVoiceCaching(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#0284C7', cursor: 'pointer' }}
+                      />
+                    </label>
+
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0A2540' }}>Low-Bandwidth Audio Compression</div>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>Transmits audio at 12 kbps Opus to preserve 2G cellular data</div>
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        checked={lowDataAudioCodec}
+                        onChange={e => setLowDataAudioCodec(e.target.checked)}
+                        style={{ width: '18px', height: '18px', accentColor: '#0284C7', cursor: 'pointer' }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#F0F9FF', padding: '10px 12px', borderRadius: '8px', border: '1px solid #BAE6FD' }}>
+                    <div style={{ fontSize: '12px', color: '#0369A1', fontWeight: 700 }}>
+                      Device Cache: <strong>{cacheSizeMb}</strong>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setCacheSizeMb('0.0 MB');
+                        alert('Local offline audio cache cleared successfully.');
+                      }}
+                      style={{ background: '#0284C7', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: 750, cursor: 'pointer' }}
+                    >
+                      Clear Cache
+                    </button>
+                  </div>
+                </div>
+
               </div>
 
               {/* Bottom Action Footer */}
@@ -2793,6 +3394,24 @@ export default function PatientPortal({ patientProfile, onOpenDoctorAuthModal, o
 
         </div>
       </div>
+      {/* WhatsApp Vernacular Audio-Rx Modal */}
+      <WhatsAppAudioRxModal 
+        isOpen={showWhatsAppRxModal}
+        onClose={() => setShowWhatsAppRxModal(false)}
+        patientData={{
+          name: patientName,
+          vernacularName: selectedLanguage === 'Telugu' ? 'నారాయణ రావు' : 'आरव कुमार',
+          phone: emergencyPhone || '+91 98490 12345',
+          cleanPhone: '919849012345',
+          age: patientProfile?.age || 28,
+          gender: patientProfile?.gender || 'Female',
+          abhaId: abhaId,
+          language: selectedLanguage,
+          langCode: selectedLanguage === 'Telugu' ? 'te-IN' : 'hi-IN'
+        }}
+        doctorName={assignedDoctor.doctorName}
+        initialLanguage={selectedLanguage === 'Telugu' ? 'te' : 'hi'}
+      />
     </div>
   );
 }
