@@ -228,6 +228,18 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     loadHospitals(hospitalFilter);
   }, [callerCoords.lat, callerCoords.lng, geoAddress, hospitalFilter]);
 
+  // Helper: Calculate forward bearing between two coordinates
+  const calculateBearing = (startLat, startLng, endLat, endLng) => {
+    const toRad = (deg) => (deg * Math.PI) / 180;
+    const toDeg = (rad) => (rad * 180) / Math.PI;
+    const φ1 = toRad(startLat);
+    const φ2 = toRad(endLat);
+    const Δλ = toRad(endLng - startLng);
+    const y = Math.sin(Δλ) * Math.cos(φ2);
+    const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    return Math.round((toDeg(Math.atan2(y, x)) + 360) % 360);
+  };
+
   // =========================================================================
   // 4. COMPUTE TRAFFIC-AWARE ROAD ROUTE VIA MAPBOX DIRECTIONS API
   // =========================================================================
@@ -246,7 +258,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       if (route.trafficStatus) setTrafficStatus(route.trafficStatus);
     }
     updateRoute();
-  }, [selectedHospital, ambulanceData.lat, ambulanceData.lng]);
+  }, [selectedHospital?.id]);
 
   // =========================================================================
   // 5. LIVE MOVING AMBULANCE SIMULATION ALONG ROAD NETWORK
@@ -255,17 +267,23 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     if (!isSimRunning || dispatchState < 2 || !routeCoordinates || routeCoordinates.length === 0) return;
 
     let stepIndex = 0;
-    const intervalMs = Math.max(400, 2200 / simSpeed);
+    const intervalMs = Math.max(300, 1800 / simSpeed);
 
     const interval = setInterval(() => {
       if (stepIndex < routeCoordinates.length) {
         const [nextLng, nextLat] = routeCoordinates[stepIndex];
+        let newHeading = 52;
+        if (stepIndex + 1 < routeCoordinates.length) {
+          const [futureLng, futureLat] = routeCoordinates[stepIndex + 1];
+          newHeading = calculateBearing(nextLat, nextLng, futureLat, futureLng);
+        }
         setAmbulanceData((prev) => ({
           ...prev,
           lat: nextLat,
           lng: nextLng,
+          heading: newHeading,
           status: 'EN_ROUTE',
-          speed: Math.round(42 + Math.random() * 8)
+          speed: Math.round(52 + Math.random() * 14)
         }));
         stepIndex++;
       } else {
