@@ -30,6 +30,7 @@ export default function Navbar({
   onOpenAcousticLab,
   onOpenBenchmarkSuite,
   onOpenSanjivaniModal,
+  onOpenPrescriptionPdf,
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal,
   doctorProfile,
@@ -214,6 +215,16 @@ export default function Navbar({
                 >
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#DC2626' }}>🚨 Sanjivani-108 SOS Dispatch</div>
                   <div style={{ fontSize: '11px', color: '#EF4444' }}>Acoustic distress triage & Evon parallel rescue</div>
+                </div>
+                <div 
+                  onClick={() => {
+                    onOpenPrescriptionPdf && onOpenPrescriptionPdf();
+                    setSolutionsOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(2, 132, 199, 0.06)', border: '1px solid rgba(2, 132, 199, 0.25)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#0284C7' }}>📄 Official ABDM Prescription (PDF)</div>
+                  <div style={{ fontSize: '11px', color: '#0369A1' }}>Bilingual Rx, QR Code & HPR Digital Stamp</div>
                 </div>
               </div>
             )}

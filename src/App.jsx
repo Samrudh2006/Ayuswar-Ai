@@ -16,6 +16,7 @@ import AcousticBiomarkerLabModal from './components/AcousticBiomarkerLabModal';
 import ClinicalBenchmarkTestSuiteModal from './components/ClinicalBenchmarkTestSuiteModal';
 import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DetailedModuleView from './components/DetailedModuleView';
+import AbdmPrescriptionPdfModal from './components/AbdmPrescriptionPdfModal';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
@@ -42,6 +43,7 @@ export default function App() {
   const [isAcousticLabOpen, setIsAcousticLabOpen] = useState(false);
   const [isBenchmarkSuiteOpen, setIsBenchmarkSuiteOpen] = useState(false);
   const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
+  const [isPrescriptionPdfOpen, setIsPrescriptionPdfOpen] = useState(false);
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
   const [selectedModuleId, setSelectedModuleId] = useState('opd_ambient_scribe');
 
@@ -66,6 +68,8 @@ export default function App() {
       setIsDatasetModalOpen(true);
     } else if (modalKey === 'benchmark_suite') {
       setIsBenchmarkSuiteOpen(true);
+    } else if (modalKey === 'prescription_pdf' || modalKey === 'pdf_rx') {
+      setIsPrescriptionPdfOpen(true);
     } else if (modalKey === 'patient_portal') {
       if (patientProfile) {
         setActiveView('patient_portal');
@@ -232,6 +236,7 @@ export default function App() {
         onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
         onOpenBenchmarkSuite={() => setIsBenchmarkSuiteOpen(true)}
         onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
+        onOpenPrescriptionPdf={() => setIsPrescriptionPdfOpen(true)}
         onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
         onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
         doctorProfile={doctorProfile}
@@ -417,6 +422,12 @@ export default function App() {
       <SanjivaniEmergencyModal
         isOpen={isSanjivaniModalOpen}
         onClose={() => setIsSanjivaniModalOpen(false)}
+      />
+
+      {/* Official ABDM FHIR Clinical PDF Prescription Export & Print Modal */}
+      <AbdmPrescriptionPdfModal
+        isOpen={isPrescriptionPdfOpen}
+        onClose={() => setIsPrescriptionPdfOpen(false)}
       />
     </div>
   );
