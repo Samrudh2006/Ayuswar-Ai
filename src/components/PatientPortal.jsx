@@ -461,22 +461,24 @@ export default function PatientPortal({
       }}>
         <div>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingLeft: '8px', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', marginBottom: '32px' }}>
             <div style={{
-              width: '36px',
-              height: '36px',
+              width: '48px',
+              height: '48px',
               borderRadius: '50%',
-              border: '2px solid #008B8B',
+              border: '2.5px solid #008B8B',
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: '#ffffff'
+              background: '#ffffff',
+              boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)',
+              flexShrink: 0
             }}>
-              <img src="/assets/ayuswar_logo.jpg" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#0A2540' }}>
-              Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#008B8B' }}>AI</span>
+            <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '21px', fontWeight: 800, color: '#0A2540' }}>
+              Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
             </div>
           </div>
 

@@ -573,17 +573,6 @@ export default function DatasetExplorerModal({ isOpen, onClose }) {
 
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between flex-shrink-0 text-xs text-slate-400">
-          <span>Trained with complete Indic Clinical Knowledge Graph & Acoustic Datasets</span>
-          <button
-            onClick={onClose}
-            className="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors"
-          >
-            Close Explorer
-          </button>
-        </div>
-
       </div>
     </div>
   );

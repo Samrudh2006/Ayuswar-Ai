@@ -24,9 +24,12 @@ import {
 export default function Navbar({ 
   activeView, 
   setActiveView, 
+  onSelectModule,
   onOpenTechModal, 
   onOpenDatasetModal,
   onOpenAcousticLab,
+  onOpenBenchmarkSuite,
+  onOpenSanjivaniModal,
   onOpenDoctorAuthModal,
   onOpenPatientAuthModal,
   doctorProfile,
@@ -65,46 +68,44 @@ export default function Navbar({
           style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', userSelect: 'none' }}
         >
           <div style={{
-            width: '44px',
-            height: '44px',
+            position: 'relative',
+            width: '68px',
+            height: '68px',
             borderRadius: '50%',
             overflow: 'hidden',
-            boxShadow: '0 4px 14px rgba(0, 139, 139, 0.28)',
-            border: '2px solid #008B8B',
+            boxShadow: '0 4px 20px rgba(0, 168, 150, 0.4)',
+            border: '2.5px solid #008B8B',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: '#ffffff'
+            background: '#061626',
+            flexShrink: 0
           }}>
             <img 
-              src="/assets/ayuswar_logo.jpg" 
-              alt="AyuSwar AI Emblem" 
+              src="/assets/ayuswar_master_emblem.png" 
+              alt="AyuSwar AI Master Clinical Emblem" 
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
             />
-            <Stethoscope size={22} color="#008B8B" style={{ position: 'absolute' }} />
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
               <span style={{
                 fontFamily: 'Outfit, sans-serif',
-                fontWeight: 850,
-                fontSize: '23px',
+                fontWeight: 900,
+                fontSize: '26px',
                 color: '#0A2540',
                 letterSpacing: '-0.5px'
               }}>
-                Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706', fontSize: '19px' }}>AI</span>
+                Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706', fontSize: '21px' }}>AI</span>
               </span>
             </div>
             <div style={{
-              fontSize: '8px',
-              fontWeight: 750,
+              fontSize: '9.5px',
+              fontWeight: 800,
               letterSpacing: '1.2px',
               textTransform: 'uppercase',
-              color: '#5A7184',
+              color: '#475569',
               marginTop: '-2px'
             }}>
               Ambient Clinical Voice Intelligence
@@ -176,8 +177,7 @@ export default function Navbar({
               }}>
                 <div 
                   onClick={() => {
-                    const el = document.getElementById('solutions-section');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    onSelectModule ? onSelectModule('opd_ambient_scribe') : setActiveView('landing');
                     setSolutionsOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.05)' }}
@@ -187,8 +187,7 @@ export default function Navbar({
                 </div>
                 <div 
                   onClick={() => {
-                    const el = document.getElementById('solutions-section');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    onSelectModule ? onSelectModule('vernacular_audio_rx') : setActiveView('landing');
                     setSolutionsOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
@@ -198,8 +197,7 @@ export default function Navbar({
                 </div>
                 <div 
                   onClick={() => {
-                    const el = document.getElementById('solutions-section');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    onSelectModule ? onSelectModule('opencv_strip_scanner') : setActiveView('landing');
                     setSolutionsOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
@@ -207,19 +205,31 @@ export default function Navbar({
                   <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>OpenCV Strip Scanner</div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>Computer vision blister strip validation</div>
                 </div>
+                <div 
+                  onClick={() => {
+                    onSelectModule ? onSelectModule('sanjivani_108_sos') : onOpenSanjivaniModal();
+                    setSolutionsOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#DC2626' }}>🚨 Sanjivani-108 SOS Dispatch</div>
+                  <div style={{ fontSize: '11px', color: '#EF4444' }}>Acoustic distress triage & Evon parallel rescue</div>
+                </div>
               </div>
             )}
           </div>
 
           <button 
-            onClick={onOpenTechModal}
+            onClick={() => {
+              onSelectModule ? onSelectModule('technology_hld') : onOpenTechModal();
+            }}
             style={{
               background: 'none',
               border: 'none',
               fontFamily: 'Outfit, sans-serif',
               fontSize: '14.5px',
-              fontWeight: activeView === 'tech_specs' ? 750 : 500,
-              color: activeView === 'tech_specs' ? '#008B8B' : '#0B2545',
+              fontWeight: activeView === 'module_detail' ? 750 : 500,
+              color: activeView === 'module_detail' ? '#008B8B' : '#0B2545',
               cursor: 'pointer',
               padding: '6px 4px'
             }}
@@ -229,11 +239,7 @@ export default function Navbar({
 
           <button 
             onClick={() => {
-              setActiveView('landing');
-              setTimeout(() => {
-                const el = document.getElementById('impact-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+              onSelectModule ? onSelectModule('clinical_impact') : setActiveView('landing');
             }}
             style={{
               background: 'none',
@@ -292,7 +298,7 @@ export default function Navbar({
               }}>
                 <div 
                   onClick={() => {
-                    onOpenDatasetModal && onOpenDatasetModal();
+                    onSelectModule ? onSelectModule('kaggle_dataset_hub') : (onOpenDatasetModal && onOpenDatasetModal());
                     setResourcesOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.06)' }}
@@ -305,7 +311,7 @@ export default function Navbar({
 
                 <div 
                   onClick={() => {
-                    onOpenAcousticLab && onOpenAcousticLab();
+                    onSelectModule ? onSelectModule('acoustic_biomarker_lab') : (onOpenAcousticLab && onOpenAcousticLab());
                     setResourcesOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(2, 132, 199, 0.08)', border: '1px solid rgba(2, 132, 199, 0.2)' }}
@@ -315,9 +321,22 @@ export default function Navbar({
                   </div>
                   <div style={{ fontSize: '11px', color: '#475569' }}>IISc Coswara & Mayo Clinic voice disease detection</div>
                 </div>
+
                 <div 
                   onClick={() => {
-                    onOpenTechModal();
+                    onSelectModule ? onSelectModule('clinical_benchmark_suite') : (onOpenBenchmarkSuite && onOpenBenchmarkSuite());
+                    setResourcesOpen(false);
+                  }}
+                  style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)' }}
+                >
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>⚡</span> 24-Point Clinical Test Suite & Benchmarks
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#475569' }}>Automated test runner & comparative radar matrix</div>
+                </div>
+                <div 
+                  onClick={() => {
+                    onSelectModule ? onSelectModule('indic_voice_benchmarks') : onOpenTechModal();
                     setResourcesOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer', background: 'rgba(0, 139, 139, 0.05)' }}
@@ -327,7 +346,7 @@ export default function Navbar({
                 </div>
                 <div 
                   onClick={() => {
-                    onOpenTechModal();
+                    onSelectModule ? onSelectModule('abdm_fhir_whitepaper') : onOpenTechModal();
                     setResourcesOpen(false);
                   }}
                   style={{ padding: '10px 12px', borderRadius: '10px', cursor: 'pointer' }}
@@ -345,6 +364,29 @@ export default function Navbar({
           {activeView === 'landing' ? (
             // Clean, unauthenticated landing page header
             <>
+              <button 
+                onClick={onOpenSanjivaniModal}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '12.5px',
+                  fontWeight: 800,
+                  padding: '7px 14px',
+                  borderRadius: '24px',
+                  background: 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 14px rgba(239, 68, 68, 0.45)',
+                  letterSpacing: '0.2px'
+                }}
+                title="Sanjivani-108: Acoustic Distress Triage & Emergency Dispatch"
+              >
+                <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#FFFFFF' }} />
+                <span>🚨 108 Sanjivani</span>
+              </button>
+
               <button 
                 onClick={onOpenDoctorAuthModal}
                 className="btn-outline"

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Mic, 
   Languages, 
@@ -46,11 +46,56 @@ export default function HeroLanding({
   onOpenTechModal, 
   onOpenDatasetModal,
   onOpenAcousticLab,
+  onOpenBenchmarkSuite,
+  onOpenSanjivaniModal,
   onOpenDoctorAuthModal,
-  onOpenPatientAuthModal
+  onOpenPatientAuthModal,
+  onSelectModule
 }) {
   const [activeFeature, setActiveFeature] = useState(0);
   const [selectedFeatureModalKey, setSelectedFeatureModalKey] = useState(null);
+
+  // Dynamic Real-Time Typing Animation Phrases for Bharat Clinical Voice OS
+  const typewriterPhrases = [
+    'Listens in Telugu, Hindi, Tamil & 15+ Indic Dialects',
+    'Converts 90-sec Rural OPD Dialogues to FHIR R4 in 180 ms',
+    'Generates Vernacular Audio-Rx for Illiterate Patients',
+    'Acoustic Lab: Wheeze, Stridor & Biomarker Detection',
+    'Sanjivani-108: Autonomous Distress Triage & CPR Metronome',
+    'Zero Keyboard Typing. 100% Attending Physician Consent'
+  ];
+
+  const [typedPhraseIndex, setTypedPhraseIndex] = useState(0);
+  const [typedText, setTypedText] = useState('');
+  const [isTypingDeleting, setIsTypingDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = typewriterPhrases[typedPhraseIndex];
+    let timer;
+
+    if (!isTypingDeleting) {
+      if (typedText.length < currentPhrase.length) {
+        timer = setTimeout(() => {
+          setTypedText(currentPhrase.slice(0, typedText.length + 1));
+        }, 40);
+      } else {
+        timer = setTimeout(() => {
+          setIsTypingDeleting(true);
+        }, 2200);
+      }
+    } else {
+      if (typedText.length > 0) {
+        timer = setTimeout(() => {
+          setTypedText(currentPhrase.slice(0, typedText.length - 1));
+        }, 22);
+      } else {
+        setIsTypingDeleting(false);
+        setTypedPhraseIndex((prev) => (prev + 1) % typewriterPhrases.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [typedText, isTypingDeleting, typedPhraseIndex]);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
   
   // Before vs After Toggle
@@ -448,6 +493,50 @@ export default function HeroLanding({
               </span>
             </h1>
 
+            {/* Dynamic Real-Time Typing Animation Pill */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '8px 18px',
+              borderRadius: '999px',
+              background: 'linear-gradient(135deg, rgba(0, 139, 139, 0.08) 0%, rgba(0, 180, 216, 0.08) 100%)',
+              border: '1.5px solid rgba(0, 139, 139, 0.25)',
+              boxShadow: '0 4px 16px rgba(0, 139, 139, 0.08)',
+              marginBottom: '20px',
+              maxWidth: '92%'
+            }}>
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: '#10B981',
+                display: 'inline-block',
+                boxShadow: '0 0 10px #10B981',
+                flexShrink: 0
+              }}></span>
+              <span style={{
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '14.5px',
+                fontWeight: 750,
+                color: '#0D6868',
+                letterSpacing: '-0.2px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                {typedText}
+              </span>
+              <span style={{
+                width: '2px',
+                height: '16px',
+                background: '#008B8B',
+                display: 'inline-block',
+                flexShrink: 0,
+                animation: 'blinkCursor 0.8s infinite'
+              }}></span>
+            </div>
+
             {/* Subtitle Description */}
             <p style={{
               fontSize: '16.5px',
@@ -530,24 +619,14 @@ export default function HeroLanding({
             {/* CTAs */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
               <button 
-                onClick={() => setSelectedFeatureModalKey('clinical_studio_overview')}
-                className="btn-primary"
-                style={{ fontSize: '15px', padding: '13px 26px' }}
-                title="View Live Clinical Studio Architecture"
-              >
-                <span>Explore Live Studio</span>
-                <ArrowRight size={18} />
-              </button>
-
-              <button 
                 onClick={() => setIsGoldenStoryOpen(true)}
                 style={{
                   background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: '30px',
-                  padding: '12px 22px',
-                  fontSize: '14.5px',
+                  padding: '13px 26px',
+                  fontSize: '15px',
                   fontWeight: 750,
                   cursor: 'pointer',
                   display: 'inline-flex',
@@ -577,8 +656,8 @@ export default function HeroLanding({
                   color: '#ffffff',
                   border: '1.5px solid #00D2D3',
                   borderRadius: '30px',
-                  padding: '12px 20px',
-                  fontSize: '14px',
+                  padding: '13px 24px',
+                  fontSize: '14.5px',
                   fontWeight: 800,
                   cursor: 'pointer',
                   display: 'inline-flex',
@@ -592,26 +671,6 @@ export default function HeroLanding({
                 <span style={{ fontSize: '15px' }}>🎙️</span>
                 <span>Vocal Biomarker AI Lab</span>
                 <span style={{ fontSize: '10px', background: '#00D2D3', color: '#0A2540', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>NEW</span>
-              </button>
-
-              <button 
-                onClick={onOpenTechModal}
-                className="btn-outline"
-                style={{ fontSize: '14px', padding: '11px 20px' }}
-                title="View Technical Architecture"
-              >
-                <div style={{
-                  width: '22px',
-                  height: '22px',
-                  borderRadius: '50%',
-                  background: 'rgba(10, 37, 64, 0.08)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Play size={11} fill="#0A2540" />
-                </div>
-                <span>Architecture & HLD</span>
               </button>
             </div>
 
@@ -1812,11 +1871,11 @@ export default function HeroLanding({
           marginBottom: '50px'
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#ffffff', overflow: 'hidden' }}>
-                <img src="/assets/ayuswar_logo.jpg" alt="AyuSwar AI" style={{ width: '100%', height: '100%' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ffffff', overflow: 'hidden', border: '2px solid #00D2D3', boxShadow: '0 4px 16px rgba(0, 210, 211, 0.3)', flexShrink: 0 }}>
+                <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>
                 Ayu<span style={{ color: '#00D2D3' }}>Swar</span> AI
               </span>
             </div>

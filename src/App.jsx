@@ -13,6 +13,9 @@ import NotificationDrawer from './components/NotificationDrawer';
 import FloatingAssistant from './components/FloatingAssistant';
 import DatasetExplorerModal from './components/DatasetExplorerModal';
 import AcousticBiomarkerLabModal from './components/AcousticBiomarkerLabModal';
+import ClinicalBenchmarkTestSuiteModal from './components/ClinicalBenchmarkTestSuiteModal';
+import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
+import DetailedModuleView from './components/DetailedModuleView';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
@@ -23,6 +26,8 @@ import AcousticBiomarkerLabModal from './components/AcousticBiomarkerLabModal';
  *   • Doctor Portal: Verified ABDM Healthcare Professional Registry (HPR).
  *   • Patient Portal: Verified ABHA Citizen Health Account.
  *   • Acoustic AI Biomarker Lab: Live vocal disease diagnostic laboratory.
+ *   • 24-Point Clinical Test Suite: Automated clinical assertion and benchmark verification harness.
+ *   • Sanjivani-108: Autonomous Acoustic Distress Triage & Emergency Dispatch Agent.
  * - Multi-Doctor & Multi-Patient account switching supported with session state persistence.
  * - Floating Voice Assistant (5-state ambient AI assistant) mounted with real-time Indic voice capabilities.
  */
@@ -35,7 +40,40 @@ export default function App() {
   const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
   const [isDatasetModalOpen, setIsDatasetModalOpen] = useState(false);
   const [isAcousticLabOpen, setIsAcousticLabOpen] = useState(false);
+  const [isBenchmarkSuiteOpen, setIsBenchmarkSuiteOpen] = useState(false);
+  const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
+  const [selectedModuleId, setSelectedModuleId] = useState('opd_ambient_scribe');
+
+  const handleSelectModule = (modId) => {
+    setSelectedModuleId(modId);
+    setActiveView('module_detail');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLaunchInteractiveModal = (modalKey) => {
+    if (modalKey === 'scribe' || modalKey === 'console') {
+      if (doctorProfile) {
+        setActiveView('console');
+      } else {
+        setIsDoctorAuthModalOpen(true);
+      }
+    } else if (modalKey === 'sanjivani') {
+      setIsSanjivaniModalOpen(true);
+    } else if (modalKey === 'acoustic_lab') {
+      setIsAcousticLabOpen(true);
+    } else if (modalKey === 'kaggle_hub' || modalKey === 'dataset') {
+      setIsDatasetModalOpen(true);
+    } else if (modalKey === 'benchmark_suite') {
+      setIsBenchmarkSuiteOpen(true);
+    } else if (modalKey === 'patient_portal') {
+      if (patientProfile) {
+        setActiveView('patient_portal');
+      } else {
+        setIsPatientAuthModalOpen(true);
+      }
+    }
+  };
 
   // Authenticated profiles (null by default until verified login)
   const [doctorProfile, setDoctorProfile] = useState(null);
@@ -188,9 +226,12 @@ export default function App() {
       <Navbar 
         activeView={activeView} 
         setActiveView={setActiveView} 
+        onSelectModule={handleSelectModule}
         onOpenTechModal={() => setIsTechModalOpen(true)}
         onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
         onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
+        onOpenBenchmarkSuite={() => setIsBenchmarkSuiteOpen(true)}
+        onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
         onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
         onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
         doctorProfile={doctorProfile}
@@ -207,8 +248,25 @@ export default function App() {
             onOpenTechModal={() => setIsTechModalOpen(true)}
             onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
             onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
+            onOpenBenchmarkSuite={() => setIsBenchmarkSuiteOpen(true)}
+            onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
             onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
             onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
+            onSelectModule={handleSelectModule}
+          />
+        </main>
+      )}
+
+      {activeView === 'module_detail' && (
+        <main style={{ flex: 1, minHeight: 'calc(100vh - 68px)', background: '#F8FAFC' }}>
+          <DetailedModuleView
+            moduleId={selectedModuleId}
+            onBackToHome={() => {
+              setActiveView('landing');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateModule={handleSelectModule}
+            onLaunchInteractiveModal={handleLaunchInteractiveModal}
           />
         </main>
       )}
@@ -288,26 +346,28 @@ export default function App() {
         </div>
       )}
 
-      {/* Ambient Floating AI Voice Assistant Widget (5-State Indic Audio Engine) */}
-      <FloatingAssistant 
-        activeView={activeView}
-        doctorProfile={doctorProfile}
-        patientProfile={patientProfile}
-        onOpenDoctorPortal={() => {
-          if (!doctorProfile) {
-            setIsDoctorAuthModalOpen(true);
-          } else {
-            setActiveView('doctor_portal');
-          }
-        }}
-        onOpenPatientPortal={() => {
-          if (!patientProfile) {
-            setIsPatientAuthModalOpen(true);
-          } else {
-            setActiveView('patient_portal');
-          }
-        }}
-      />
+      {/* Ambient Floating AI Voice Assistant Widget (Hidden during full-screen emergency / lab modals to avoid occlusion) */}
+      {!isSanjivaniModalOpen && !isBenchmarkSuiteOpen && !isAcousticLabOpen && (
+        <FloatingAssistant 
+          activeView={activeView}
+          doctorProfile={doctorProfile}
+          patientProfile={patientProfile}
+          onOpenDoctorPortal={() => {
+            if (!doctorProfile) {
+              setIsDoctorAuthModalOpen(true);
+            } else {
+              setActiveView('doctor_portal');
+            }
+          }}
+          onOpenPatientPortal={() => {
+            if (!patientProfile) {
+              setIsPatientAuthModalOpen(true);
+            } else {
+              setActiveView('patient_portal');
+            }
+          }}
+        />
+      )}
 
       {/* Real-Time Clinical Notification Drawer */}
       <NotificationDrawer 
@@ -345,6 +405,18 @@ export default function App() {
       <AcousticBiomarkerLabModal
         isOpen={isAcousticLabOpen}
         onClose={() => setIsAcousticLabOpen(false)}
+      />
+
+      {/* 24-Point Automated Clinical Test Suite & Benchmark Matrix Modal */}
+      <ClinicalBenchmarkTestSuiteModal
+        isOpen={isBenchmarkSuiteOpen}
+        onClose={() => setIsBenchmarkSuiteOpen(false)}
+      />
+
+      {/* Sanjivani-108 Autonomous Acoustic Distress Triage & Emergency Dispatch Agent Modal */}
+      <SanjivaniEmergencyModal
+        isOpen={isSanjivaniModalOpen}
+        onClose={() => setIsSanjivaniModalOpen(false)}
       />
     </div>
   );

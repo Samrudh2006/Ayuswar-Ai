@@ -55,20 +55,21 @@ export default function Sidebar({
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           {!isCollapsed && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '11px', overflow: 'hidden' }}>
               <div style={{
-                width: '36px',
-                height: '36px',
+                width: '46px',
+                height: '46px',
                 borderRadius: '50%',
-                background: '#ffffff',
+                background: '#061626',
                 overflow: 'hidden',
                 flexShrink: 0,
-                border: '2px solid #008B8B'
+                border: '2px solid #00D2D3',
+                boxShadow: '0 2px 10px rgba(0, 210, 211, 0.3)'
               }}>
-                <img src="/assets/ayuswar_logo.jpg" alt="AyuSwar AI" style={{ width: '100%', height: '100%' }} />
+                <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div style={{ whiteSpace: 'nowrap' }}>
-                <div style={{ fontSize: '17px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
+                <div style={{ fontSize: '18px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
                   Ayu<span style={{ color: '#00D2D3' }}>Swar</span> AI
                 </div>
                 <div style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '-2px' }}>
@@ -80,14 +81,15 @@ export default function Sidebar({
 
           {isCollapsed && (
             <div style={{
-              width: '36px',
-              height: '36px',
+              width: '44px',
+              height: '44px',
               borderRadius: '50%',
-              background: '#ffffff',
+              background: '#061626',
               overflow: 'hidden',
-              border: '2px solid #008B8B'
+              border: '2px solid #00D2D3',
+              boxShadow: '0 2px 10px rgba(0, 210, 211, 0.3)'
             }}>
-              <img src="/assets/ayuswar_logo.jpg" alt="AyuSwar AI" style={{ width: '100%', height: '100%' }} />
+              <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
 
