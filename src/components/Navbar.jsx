@@ -46,10 +46,11 @@ export default function Navbar({
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      background: 'rgba(255, 255, 255, 0.95)',
-      backdropFilter: 'blur(16px)',
-      borderBottom: '1px solid rgba(216, 231, 235, 0.8)',
-      boxShadow: '0 4px 20px rgba(10, 37, 64, 0.03)'
+      background: 'rgba(255, 255, 255, 0.92)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      borderBottom: '1px solid rgba(216, 231, 235, 0.75)',
+      boxShadow: 'inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 4px 24px rgba(10, 37, 64, 0.04)'
     }}>
       <div style={{
         maxWidth: '1380px',

@@ -456,11 +456,12 @@ export default function HeroLanding({
               padding: '6px 16px',
               borderRadius: '30px',
               background: 'rgba(0, 139, 139, 0.08)',
-              border: '1.5px solid rgba(0, 139, 139, 0.25)',
+              border: '1.5px solid rgba(0, 139, 139, 0.28)',
+              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 139, 139, 0.08)',
               color: '#008B8B',
-              fontSize: '12px',
+              fontSize: '11.5px',
               fontWeight: 800,
-              letterSpacing: '1px',
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
               marginBottom: '18px'
             }}>
@@ -478,8 +479,9 @@ export default function HeroLanding({
               fontSize: '64px',
               lineHeight: 1.08,
               fontWeight: 850,
-              color: '#0A2540',
-              letterSpacing: '-1.5px',
+              color: '#061A2D',
+              letterSpacing: '-0.035em',
+              textWrap: 'balance',
               marginBottom: '18px'
             }}>
               Every Voice.<br />
@@ -810,19 +812,28 @@ export default function HeroLanding({
           </p>
 
           {/* Before vs After Interactive Toggle */}
-          <div style={{ display: 'inline-flex', padding: '4px', background: '#E2E8F0', borderRadius: '30px', marginTop: '16px' }}>
+          <div style={{ 
+            display: 'inline-flex', 
+            padding: '5px', 
+            background: '#E2E8F0', 
+            borderRadius: '999px', 
+            marginTop: '16px',
+            boxShadow: 'inset 0 1px 3px rgba(10, 37, 64, 0.08), inset 0 0 0 1px rgba(0, 0, 0, 0.04)'
+          }}>
             <button
               onClick={() => setComparisonMode('before')}
               style={{
-                padding: '7px 20px',
-                borderRadius: '24px',
+                padding: '8px 22px',
+                borderRadius: '999px',
                 border: 'none',
                 background: comparisonMode === 'before' ? '#EF4444' : 'transparent',
                 color: comparisonMode === 'before' ? '#ffffff' : '#475569',
                 fontSize: '12.5px',
                 fontWeight: 750,
+                letterSpacing: '-0.01em',
                 cursor: 'pointer',
-                transition: 'all 160ms ease'
+                transition: 'all 160ms cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: comparisonMode === 'before' ? '0 2px 8px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25)' : 'none'
               }}
             >
               Without AyuSwar (Status Quo)
@@ -830,15 +841,17 @@ export default function HeroLanding({
             <button
               onClick={() => setComparisonMode('after')}
               style={{
-                padding: '7px 20px',
-                borderRadius: '24px',
+                padding: '8px 22px',
+                borderRadius: '999px',
                 border: 'none',
-                background: comparisonMode === 'after' ? '#008B8B' : 'transparent',
+                background: comparisonMode === 'after' ? 'linear-gradient(135deg, #008B8B 0%, #00A896 100%)' : 'transparent',
                 color: comparisonMode === 'after' ? '#ffffff' : '#475569',
                 fontSize: '12.5px',
                 fontWeight: 750,
+                letterSpacing: '-0.01em',
                 cursor: 'pointer',
-                transition: 'all 160ms ease'
+                transition: 'all 160ms cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: comparisonMode === 'after' ? '0 2px 8px rgba(0, 139, 139, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25)' : 'none'
               }}
             >
               With AyuSwar AI (Ambient Closed-Loop)
