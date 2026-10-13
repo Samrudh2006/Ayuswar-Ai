@@ -17,6 +17,7 @@ import ClinicalBenchmarkTestSuiteModal from './components/ClinicalBenchmarkTestS
 import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DetailedModuleView from './components/DetailedModuleView';
 import AbdmPrescriptionPdfModal from './components/AbdmPrescriptionPdfModal';
+import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
 
 /**
  * AyuSwar AI — Root Application Orchestrator
@@ -44,6 +45,7 @@ export default function App() {
   const [isBenchmarkSuiteOpen, setIsBenchmarkSuiteOpen] = useState(false);
   const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
   const [isPrescriptionPdfOpen, setIsPrescriptionPdfOpen] = useState(false);
+  const [isAudioRxModalOpen, setIsAudioRxModalOpen] = useState(false);
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
   const [selectedModuleId, setSelectedModuleId] = useState('opd_ambient_scribe');
 
@@ -62,11 +64,11 @@ export default function App() {
       }
     } else if (modalKey === 'sanjivani') {
       setIsSanjivaniModalOpen(true);
-    } else if (modalKey === 'acoustic_lab') {
+    } else if (modalKey === 'acoustic_lab' || modalKey === 'acoustic') {
       setIsAcousticLabOpen(true);
-    } else if (modalKey === 'kaggle_hub' || modalKey === 'dataset') {
+    } else if (modalKey === 'kaggle_hub' || modalKey === 'dataset' || modalKey === 'indic_matrix' || modalKey === 'matrix') {
       setIsDatasetModalOpen(true);
-    } else if (modalKey === 'benchmark_suite') {
+    } else if (modalKey === 'benchmark_suite' || modalKey === 'benchmark') {
       setIsBenchmarkSuiteOpen(true);
     } else if (modalKey === 'prescription_pdf' || modalKey === 'pdf_rx') {
       setIsPrescriptionPdfOpen(true);
@@ -75,6 +77,16 @@ export default function App() {
         setActiveView('patient_portal');
       } else {
         setIsPatientAuthModalOpen(true);
+      }
+    } else if (modalKey === 'audiorx' || modalKey === 'audio_rx' || modalKey === 'whatsapp_rx') {
+      setIsAudioRxModalOpen(true);
+    } else if (modalKey === 'tech' || modalKey === 'architecture') {
+      setIsTechModalOpen(true);
+    } else if (modalKey === 'scanner' || modalKey === 'prescription_scanner') {
+      if (doctorProfile) {
+        setActiveView('doctor_portal');
+      } else {
+        setIsDoctorAuthModalOpen(true);
       }
     }
   };
@@ -428,6 +440,12 @@ export default function App() {
       <AbdmPrescriptionPdfModal
         isOpen={isPrescriptionPdfOpen}
         onClose={() => setIsPrescriptionPdfOpen(false)}
+      />
+
+      {/* Vernacular Spoken Audio-Rx Studio Modal */}
+      <WhatsAppAudioRxModal
+        isOpen={isAudioRxModalOpen}
+        onClose={() => setIsAudioRxModalOpen(false)}
       />
     </div>
   );

@@ -27,6 +27,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
+import DoctorAvatarVideoCall from './DoctorAvatarVideoCall';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -385,8 +386,9 @@ export default function SanjivaniEmergencyAssistant({
       position: 'absolute',
       bottom: '16px',
       right: '18px',
-      width: '460px',
-      height: '590px',
+      width: '470px',
+      height: '670px',
+      maxHeight: '88vh',
       background: '#07101E',
       border: '2px solid #DC2626',
       borderRadius: '16px',
@@ -436,164 +438,32 @@ export default function SanjivaniEmergencyAssistant({
         </button>
       </div>
 
-      {/* SECTION 1: LIVE CALL AUDIO, AUTO TIMER & CALL CONTROLS */}
+      {/* SECTION 1: LIVE 108 TELE-TRAUMA DOCTOR VIDEO STREAM */}
       <div style={{
         background: '#050B16',
         borderBottom: '1px solid #16243C',
-        padding: '10px 14px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
+        padding: '8px 10px',
         flexShrink: 0
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: callStatus === 'connected' ? '#10B981' : '#EF4444',
-              boxShadow: callStatus === 'connected' ? '0 0 8px #10B981' : '0 0 8px #EF4444'
-            }} />
-            <span style={{ fontSize: '11px', fontWeight: 900, color: callStatus === 'connected' ? '#10B981' : '#FCA5A5' }}>
-              {callStatus === 'connected' ? `LIVE VOICE STREAM (${formatElapsed(elapsedSec)})` : 'CALL ENDED'}
-            </span>
-          </div>
-
-          {/* Interactive Call Control Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            {callStatus === 'connected' ? (
-              <>
-                {/* MUTE / UNMUTE BUTTON */}
-                <button
-                  onClick={handleToggleMute}
-                  title={isAudioMuted ? "Unmute caller audio" : "Mute caller audio"}
-                  style={{
-                    background: isAudioMuted ? '#DC2626' : '#0B172E',
-                    border: '1px solid #1E2D48',
-                    color: '#FFF',
-                    borderRadius: '6px',
-                    padding: '3px 7px',
-                    fontSize: '9.5px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  {isAudioMuted ? <VolumeX size={11} /> : <Volume2 size={11} color="#38BDF8" />}
-                  <span>{isAudioMuted ? 'Muted' : 'Mute'}</span>
-                </button>
-
-                {/* MY MIC BUTTON (REAL HARDWARE MIC STREAM) */}
-                <button
-                  onClick={toggleSpeechRecognition}
-                  title="Speak into your actual computer microphone"
-                  style={{
-                    background: isMicListening ? '#DC2626' : '#0B172E',
-                    border: isMicListening ? '1px solid #EF4444' : '1px solid #1E2D48',
-                    color: '#FFF',
-                    borderRadius: '6px',
-                    padding: '3px 7px',
-                    fontSize: '9.5px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    boxShadow: isMicListening ? '0 0 10px rgba(220, 38, 38, 0.5)' : 'none'
-                  }}
-                >
-                  {isMicListening ? <MicOff size={11} /> : <Mic size={11} color="#00D2D3" />}
-                  <span>{isMicListening ? 'Listening...' : 'My Mic'}</span>
-                </button>
-
-                {/* END CALL BUTTON */}
-                <button
-                  onClick={handleEndCall}
-                  title="End 108 Emergency Call"
-                  style={{
-                    background: '#991B1B',
-                    border: 'none',
-                    color: '#FFF',
-                    borderRadius: '6px',
-                    padding: '3px 8px',
-                    fontSize: '9.5px',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  <PhoneOff size={10} />
-                  <span>End</span>
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={handleStartCall}
-                style={{
-                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                  border: 'none',
-                  color: '#FFF',
-                  borderRadius: '6px',
-                  padding: '4px 10px',
-                  fontSize: '10px',
-                  fontWeight: 900,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.4)'
-                }}
-              >
-                <Phone size={10} />
-                <span>Start Live Call (108)</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Dynamic Audio Waveform Animation & Real Speech Display */}
-        <div style={{
-          background: '#09152B',
-          border: '1px solid #162B4D',
-          borderRadius: '8px',
-          padding: '6px 10px',
-          fontSize: '10.5px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '3px'
-        }}>
-          {/* Animated Waveform Equalizer Bars */}
-          {callStatus === 'connected' && !isAudioMuted && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '14px', marginBottom: '2px' }}>
-              {[8, 14, 6, 16, 10, 18, 12, 16, 9, 14, 7, 15, 11, 8].map((h, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: '3px',
-                    height: `${isMicListening ? Math.min(14, h * 1.2) : h}px`,
-                    background: isMicListening ? '#10B981' : '#38BDF8',
-                    borderRadius: '2px',
-                    animation: 'pulse 1s infinite',
-                    animationDelay: `${i * 0.08}s`
-                  }}
-                />
-              ))}
-              <span style={{ fontSize: '8.5px', color: '#94A3B8', marginLeft: '6px' }}>
-                {isMicListening ? '🎤 Live Ingestion (Continuous)' : 'Telephony Cellular Ingestion'}
-              </span>
-            </div>
-          )}
-
-          <div style={{ fontWeight: 700, color: '#E2E8F0' }}>"{liveTranscript}"</div>
-          <div style={{ fontSize: '9px', color: '#94A3B8', fontStyle: 'italic' }}>
-            "{englishTranslation}"
-          </div>
-        </div>
+        <DoctorAvatarVideoCall
+          mode="emergency"
+          doctorName="Dr. Sanjivani — 108 Lead"
+          doctorRole="Critical ALS Tele-Trauma Consultant"
+          avatarUrl="/assets/sanjivani_doctor_avatar.jpg"
+          isSpeaking={callStatus === 'connected' && !isAudioMuted}
+          isListening={isMicListening}
+          liveSubtitle={liveTranscript}
+          englishTranslation={englishTranslation}
+          language="te-IN"
+          elapsedSeconds={elapsedSec}
+          isAudioMuted={isAudioMuted}
+          onToggleMute={handleToggleMute}
+          isMicActive={isMicListening}
+          onToggleMic={toggleSpeechRecognition}
+          onEndCall={handleEndCall}
+          patientName="Ambulance A-12 (EMT)"
+          emergencyMeta={{ cprBpm: 110, distress: distressIndex, unit: 'A-12' }}
+        />
       </div>
 
       {/* SECTION 2: AUTONOMOUS COPILOT ACTIONS & FIRST-AID GUIDANCE (FULLY FUNCTIONAL) */}

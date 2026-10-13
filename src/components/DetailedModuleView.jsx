@@ -23,7 +23,8 @@ import {
   Clock, 
   Download,
   Share2,
-  ExternalLink
+  ExternalLink,
+  Award
 } from 'lucide-react';
 
 /**
@@ -977,7 +978,7 @@ export default function DetailedModuleView({
       icon: Mic,
       totalPages: 3,
       interactiveActionLabel: 'Explore Indic Language Matrix',
-      interactiveModalKey: 'scribe',
+      interactiveModalKey: 'dataset',
       pages: [
         {
           pageTitle: 'Comprehensive Indic WER Performance Benchmark',
