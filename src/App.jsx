@@ -1,452 +1,233 @@
 import React, { useState } from 'react';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
 import HeroLanding from './components/HeroLanding';
+import DetailedModuleView from './components/DetailedModuleView';
 import DoctorPortal from './components/DoctorPortal';
 import ClinicalConsole from './components/ClinicalConsole';
 import PatientPortal from './components/PatientPortal';
-import TechSpecsView from './components/TechSpecsView';
-import ArchitectureModal from './components/ArchitectureModal';
+import FloatingAssistant from './components/FloatingAssistant';
+import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
-import NotificationDrawer from './components/NotificationDrawer';
-import FloatingAssistant from './components/FloatingAssistant';
-import DatasetExplorerModal from './components/DatasetExplorerModal';
-import AcousticBiomarkerLabModal from './components/AcousticBiomarkerLabModal';
-import ClinicalBenchmarkTestSuiteModal from './components/ClinicalBenchmarkTestSuiteModal';
-import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
-import DetailedModuleView from './components/DetailedModuleView';
-import AbdmPrescriptionPdfModal from './components/AbdmPrescriptionPdfModal';
-import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
 
-/**
- * AyuSwar AI — Root Application Orchestrator
- * Architecture Decision:
- * - Public Landing Page is a stunning full-width, edge-to-edge marketing showcase (no sidebar crowding!).
- * - Interactive elements on the landing page explain features with deep dedicated matter (no premature redirects).
- * - Workspaces require role-based authentication:
- *   • Doctor Portal: Verified ABDM Healthcare Professional Registry (HPR).
- *   • Patient Portal: Verified ABHA Citizen Health Account.
- *   • Acoustic AI Biomarker Lab: Live vocal disease diagnostic laboratory.
- *   • 24-Point Clinical Test Suite: Automated clinical assertion and benchmark verification harness.
- *   • Sanjivani-108: Autonomous Acoustic Distress Triage & Emergency Dispatch Agent.
- * - Multi-Doctor & Multi-Patient account switching supported with session state persistence.
- * - Floating Voice Assistant (5-state ambient AI assistant) mounted with real-time Indic voice capabilities.
- */
+// Dedicated Full-Page Routed Views
+import ArchitectureView from './views/ArchitectureView';
+import PrescriptionScannerView from './views/PrescriptionScannerView';
+import AudioRxStudioView from './views/AudioRxStudioView';
+import AcousticBiomarkerLabView from './views/AcousticBiomarkerLabView';
+import ClinicalBenchmarkView from './views/ClinicalBenchmarkView';
+import IndicLanguageMatrixView from './views/IndicLanguageMatrixView';
+import DatasetExplorerView from './views/DatasetExplorerView';
+import EmergencyTriageView from './views/EmergencyTriageView';
+import EmergencyHandoverView from './views/EmergencyHandoverView';
+import PrescriptionPreviewView from './views/PrescriptionPreviewView';
+import AssistantWorkspaceView from './views/AssistantWorkspaceView';
+import DoctorProfileSelectView from './views/DoctorProfileSelectView';
+import PatientProfileSelectView from './views/PatientProfileSelectView';
+
+import { useApp } from './context/AppContext';
+
 export default function App() {
-  const [activeView, setActiveView] = useState('landing');
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isTechModalOpen, setIsTechModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentDoctor, setCurrentDoctor, currentPatient, setCurrentPatient } = useApp();
+  const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
   const [isDoctorAuthModalOpen, setIsDoctorAuthModalOpen] = useState(false);
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
-  const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
-  const [isDatasetModalOpen, setIsDatasetModalOpen] = useState(false);
-  const [isAcousticLabOpen, setIsAcousticLabOpen] = useState(false);
-  const [isBenchmarkSuiteOpen, setIsBenchmarkSuiteOpen] = useState(false);
-  const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
-  const [isPrescriptionPdfOpen, setIsPrescriptionPdfOpen] = useState(false);
-  const [isAudioRxModalOpen, setIsAudioRxModalOpen] = useState(false);
-  const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(0);
-  const [selectedModuleId, setSelectedModuleId] = useState('opd_ambient_scribe');
 
-  const handleSelectModule = (modId) => {
-    setSelectedModuleId(modId);
-    setActiveView('module_detail');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleDoctorLoginSuccess = (docProfile) => {
+    setCurrentDoctor(docProfile);
+    setIsDoctorAuthModalOpen(false);
+    navigate('/doctor-portal');
+  };
+
+  const handlePatientLoginSuccess = (patientProfile) => {
+    setCurrentPatient(patientProfile);
+    setIsPatientAuthModalOpen(false);
+    navigate('/patient-portal');
   };
 
   const handleLaunchInteractiveModal = (modalKey) => {
-    if (modalKey === 'scribe' || modalKey === 'console') {
-      if (doctorProfile) {
-        setActiveView('console');
-      } else {
-        setIsDoctorAuthModalOpen(true);
-      }
-    } else if (modalKey === 'sanjivani') {
+    if (modalKey === 'sanjivani') {
       setIsSanjivaniModalOpen(true);
-    } else if (modalKey === 'acoustic_lab' || modalKey === 'acoustic') {
-      setIsAcousticLabOpen(true);
-    } else if (modalKey === 'kaggle_hub' || modalKey === 'dataset' || modalKey === 'indic_matrix' || modalKey === 'matrix') {
-      setIsDatasetModalOpen(true);
-    } else if (modalKey === 'benchmark_suite' || modalKey === 'benchmark') {
-      setIsBenchmarkSuiteOpen(true);
-    } else if (modalKey === 'prescription_pdf' || modalKey === 'pdf_rx') {
-      setIsPrescriptionPdfOpen(true);
-    } else if (modalKey === 'patient_portal') {
-      if (patientProfile) {
-        setActiveView('patient_portal');
-      } else {
-        setIsPatientAuthModalOpen(true);
-      }
-    } else if (modalKey === 'audiorx' || modalKey === 'audio_rx' || modalKey === 'whatsapp_rx') {
-      setIsAudioRxModalOpen(true);
+    } else if (modalKey === 'scanner') {
+      navigate('/scanner');
+    } else if (modalKey === 'acoustic' || modalKey === 'acoustic_lab') {
+      navigate('/acoustic-lab');
+    } else if (modalKey === 'language_matrix') {
+      navigate('/language-matrix');
+    } else if (modalKey === 'audiorx') {
+      navigate('/audio-rx');
     } else if (modalKey === 'tech' || modalKey === 'architecture') {
-      setIsTechModalOpen(true);
-    } else if (modalKey === 'scanner' || modalKey === 'prescription_scanner') {
-      if (doctorProfile) {
-        setActiveView('doctor_portal');
-      } else {
-        setIsDoctorAuthModalOpen(true);
-      }
+      navigate('/technology');
+    } else if (modalKey === 'benchmark' || modalKey === 'benchmark_suite') {
+      navigate('/benchmarks');
+    } else if (modalKey === 'dataset' || modalKey === 'kaggle_hub') {
+      navigate('/datasets');
+    } else if (modalKey === 'scribe' || modalKey === 'console') {
+      setIsDoctorAuthModalOpen(true);
     }
-  };
-
-  // Authenticated profiles (null by default until verified login)
-  const [doctorProfile, setDoctorProfile] = useState(null);
-  const [patientProfile, setPatientProfile] = useState(null);
-
-  // Shared Real-Time Appointments & OPD Queue (Syncs Patient Portal bookings to Doctor Portal queue)
-  const [appointmentsQueue, setAppointmentsQueue] = useState([
-    {
-      id: 'appt_101',
-      token: 'OPD-101',
-      patientName: 'Narayana Rao',
-      vernacular: 'నారాయణ రావు',
-      phone: '+91 98490 12345',
-      age: 58,
-      gender: 'Male',
-      language: 'Telugu (Rayalaseema)',
-      abhaId: '91-4521-8932-1049',
-      doctorName: 'Dr. Priya Sharma, MD',
-      specialty: 'Pulmonology & Critical Care',
-      date: 'Today',
-      time: '09:30 AM',
-      mode: 'In-Person OPD',
-      reason: 'Chest heaviness & Palpitations (గుండెల్లో దడ)',
-      triage: 'Urgent',
-      triageColor: '#D97706',
-      status: 'confirmed', // 'pending' | 'confirmed' | 'in_progress' | 'completed'
-      room: 'OPD Room 1',
-      domain: 'cardiometabolic'
-    },
-    {
-      id: 'appt_102',
-      token: 'OPD-102',
-      patientName: 'Aarav Kumar',
-      vernacular: 'आरव कुमार',
-      phone: '+91 99887 65432',
-      age: 4,
-      gender: 'Male',
-      language: 'Hindi (Awadhi)',
-      abhaId: '91-8821-4432-9012',
-      doctorName: 'Dr. Priya Sharma, MD',
-      specialty: 'Pulmonology & Critical Care',
-      date: 'Today',
-      time: '10:00 AM',
-      mode: 'In-Person OPD',
-      reason: 'Pediatric Subcostal Retraction & Nocturnal Cough (पसली चलना)',
-      triage: 'Critical',
-      triageColor: '#EF4444',
-      status: 'confirmed',
-      room: 'OPD Room 1',
-      domain: 'respiratory'
-    },
-    {
-      id: 'appt_103',
-      token: 'OPD-103',
-      patientName: 'Ananya Rao',
-      vernacular: 'అనన్య రావు',
-      phone: '+91 98480 22334',
-      age: 28,
-      gender: 'Female',
-      language: 'Telugu / English',
-      abhaId: '91-4521-8932-1049',
-      doctorName: 'Dr. Priya Sharma, MD',
-      specialty: 'Pulmonology & Critical Care',
-      date: 'Tue, May 13',
-      time: '10:15 AM',
-      mode: 'Video Call',
-      reason: 'Acute High-Grade Pyrexia & Dry Airway Wheeze',
-      triage: 'Moderate',
-      triageColor: '#3B82F6',
-      status: 'confirmed',
-      room: 'Tele-Room A',
-      domain: 'respiratory'
-    }
-  ]);
-
-  const handleBookAppointment = (newAppt) => {
-    const formattedAppt = {
-      id: `appt_${Date.now()}`,
-      token: `OPD-${100 + appointmentsQueue.length + 1}`,
-      patientName: newAppt.patientName || (patientProfile?.patientName || 'Ananya Rao'),
-      vernacular: newAppt.vernacular || (patientProfile?.vernacular || 'అనన్య రావు'),
-      phone: newAppt.phone || '+91 98480 22334',
-      age: newAppt.age || (patientProfile?.age || 28),
-      gender: newAppt.gender || (patientProfile?.gender || 'Female'),
-      language: newAppt.language || (patientProfile?.language || 'Telugu'),
-      abhaId: newAppt.abhaId || (patientProfile?.abhaId || '91-4521-8932-1049'),
-      doctorName: newAppt.doctorName || 'Dr. Priya Sharma, MD',
-      specialty: newAppt.specialty || 'Pulmonologist & Critical Care',
-      date: newAppt.date || 'Tomorrow',
-      time: newAppt.time || '10:00 AM',
-      mode: newAppt.mode || 'In-Person OPD',
-      reason: newAppt.reason || 'General Consultation & Health Assessment',
-      triage: newAppt.triage || 'Moderate',
-      triageColor: '#3B82F6',
-      status: 'pending', // Pending doctor acceptance
-      room: 'Queue Room 1',
-      domain: 'respiratory'
-    };
-    setAppointmentsQueue(prev => [formattedAppt, ...prev]);
-  };
-
-  const handleAcceptAppointment = (apptId) => {
-    setAppointmentsQueue(prev => prev.map(a => {
-      if (a.id === apptId) {
-        return {
-          ...a,
-          status: 'confirmed',
-          room: 'OPD Consultation Room 1'
-        };
-      }
-      return a;
-    }));
-  };
-
-  const handleDoctorLoginSuccess = (profile) => {
-    setDoctorProfile(profile);
-    setIsDoctorAuthModalOpen(false);
-    setActiveView('doctor_portal');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handlePatientLoginSuccess = (profile) => {
-    setPatientProfile(profile);
-    setIsPatientAuthModalOpen(false);
-    setActiveView('patient_portal');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLogoutDoctor = () => {
-    setDoctorProfile(null);
-    setActiveView('landing');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLogoutPatient = () => {
-    setPatientProfile(null);
-    setActiveView('landing');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLaunchEncounterFromDoctorQueue = (index) => {
-    setSelectedEncounterIndex(index);
-    setActiveView('console');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8FAFC' }}>
-      {/* Top Navigation Bar */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
+      {/* Accessible Enterprise Top Navbar */}
       <Navbar 
-        activeView={activeView} 
-        setActiveView={setActiveView} 
-        onSelectModule={handleSelectModule}
-        onOpenTechModal={() => setIsTechModalOpen(true)}
-        onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
-        onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
-        onOpenBenchmarkSuite={() => setIsBenchmarkSuiteOpen(true)}
-        onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
-        onOpenPrescriptionPdf={() => setIsPrescriptionPdfOpen(true)}
-        onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
-        onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
-        doctorProfile={doctorProfile}
-        patientProfile={patientProfile}
-        onLogoutDoctor={handleLogoutDoctor}
-        onLogoutPatient={handleLogoutPatient}
+        onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
+        onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
+        onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
       />
 
-      {/* Main View Container */}
-      {activeView === 'landing' && (
-        <main style={{ flex: 1 }}>
-          <HeroLanding 
-            onLaunchStudio={() => setIsDoctorAuthModalOpen(true)} 
-            onOpenTechModal={() => setIsTechModalOpen(true)}
-            onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
-            onOpenAcousticLab={() => setIsAcousticLabOpen(true)}
-            onOpenBenchmarkSuite={() => setIsBenchmarkSuiteOpen(true)}
-            onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
-            onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
-            onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
-            onSelectModule={handleSelectModule}
-          />
-        </main>
-      )}
-
-      {activeView === 'module_detail' && (
-        <main style={{ flex: 1, minHeight: 'calc(100vh - 68px)', background: '#F8FAFC' }}>
-          <DetailedModuleView
-            moduleId={selectedModuleId}
-            onBackToHome={() => {
-              setActiveView('landing');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onNavigateModule={handleSelectModule}
-            onLaunchInteractiveModal={handleLaunchInteractiveModal}
-          />
-        </main>
-      )}
-
-      {activeView === 'doctor_portal' && (
-        <main style={{ flex: 1 }}>
-          <DoctorPortal 
-            doctorProfile={doctorProfile || {
-              doctorName: 'Dr. Priya Sharma, MD',
-              specialty: 'Pulmonologist & Critical Care',
-              hprId: 'ABHA-HPR-8921-9942',
-              facility: 'Kurnool District Hospital (ABDM PHC #1402)'
-            }}
-            onSelectEncounterAndLaunch={handleLaunchEncounterFromDoctorQueue}
-            onOpenTechModal={() => setIsTechModalOpen(true)}
-            onOpenDatasetModal={() => setIsDatasetModalOpen(true)}
-            onLogoutDoctor={handleLogoutDoctor}
-            registeredPatients={patientProfile?.familyMembers || []}
-            appointmentsQueue={appointmentsQueue}
-            onAcceptAppointment={handleAcceptAppointment}
-          />
-        </main>
-      )}
-
-      {activeView === 'patient_portal' && (
-        <main style={{ flex: 1 }}>
-          <PatientPortal 
-            patientProfile={patientProfile || {
-              patientName: 'Ananya Rao',
-              age: 28,
-              gender: 'Female',
-              language: 'Telugu',
-              abhaId: '91-4521-8932-1049'
-            }}
-            onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
-            onLogoutPatient={handleLogoutPatient}
-            onSwitchPatient={(newPat) => setPatientProfile(newPat)}
-            appointmentsQueue={appointmentsQueue}
-            onBookAppointment={handleBookAppointment}
-          />
-        </main>
-      )}
-
-      {(activeView === 'console' || activeView === 'tech_specs') && (
-        <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 68px)' }}>
-          <Sidebar 
-            activeView={activeView} 
-            setActiveView={setActiveView} 
-            onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
-            unreadNotificationsCount={2}
-            doctorProfile={doctorProfile}
-            isCollapsed={isSidebarCollapsed}
-            setIsCollapsed={setIsSidebarCollapsed}
+      {/* Main Routed Content Workspace */}
+      <main style={{ flex: 1 }}>
+        <Routes>
+          {/* Public Home & Marketing */}
+          <Route 
+            path="/" 
+            element={
+              <HeroLanding 
+                onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
+                onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
+                onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
+                onLaunchStudio={() => setIsDoctorAuthModalOpen(true)}
+              />
+            } 
           />
 
-          <main style={{ flex: 1, overflowY: 'auto', background: '#F8FAFC' }}>
-            {activeView === 'console' && (
+          {/* Dedicated Solution & Resource Specifications */}
+          <Route 
+            path="/solutions" 
+            element={
+              <DetailedModuleView 
+                moduleId="opd_ambient_scribe" 
+                onLaunchInteractiveModal={handleLaunchInteractiveModal}
+              />
+            } 
+          />
+          <Route 
+            path="/solutions/:moduleId" 
+            element={
+              <DetailedModuleView 
+                onLaunchInteractiveModal={handleLaunchInteractiveModal}
+              />
+            } 
+          />
+
+          {/* Deep-Tech Architectural Blueprint */}
+          <Route path="/technology" element={<ArchitectureView />} />
+
+          {/* Interactive Medical Vision Scanner */}
+          <Route path="/scanner" element={<PrescriptionScannerView />} />
+
+          {/* Spoken Dosage & Karaoke Rx Studio */}
+          <Route path="/audio-rx" element={<AudioRxStudioView />} />
+
+          {/* Non-Diagnostic Acoustic Signal Processing Lab */}
+          <Route path="/acoustic-lab" element={<AcousticBiomarkerLabView />} />
+
+          {/* 24 Executed Unit & Contract Assertions */}
+          <Route path="/benchmarks" element={<ClinicalBenchmarkView />} />
+
+          {/* Indic Language Support & Dialect Matrix */}
+          <Route path="/language-matrix" element={<IndicLanguageMatrixView />} />
+
+          {/* Clinical Knowledge & Colloquial Lexicon Reference */}
+          <Route path="/datasets" element={<DatasetExplorerView />} />
+
+          {/* Simulated Emergency Distress Triage */}
+          <Route 
+            path="/emergency" 
+            element={
+              <EmergencyTriageView 
+                onOpenFullConsole={() => setIsSanjivaniModalOpen(true)}
+              />
+            } 
+          />
+          <Route 
+            path="/sanjivani" 
+            element={
+              <SanjivaniEmergencyModal 
+                isOpen={true} 
+                onClose={() => navigate('/')} 
+              />
+            } 
+          />
+          <Route path="/emergency/handover" element={<EmergencyHandoverView />} />
+
+          {/* ABDM FHIR R4 Prescription Preview */}
+          <Route path="/prescription/preview" element={<PrescriptionPreviewView />} />
+
+          {/* Dedicated Voice Assistant Workspace */}
+          <Route path="/assistant" element={<AssistantWorkspaceView />} />
+
+          {/* Demo Profile Selection */}
+          <Route path="/auth/doctor" element={<DoctorProfileSelectView />} />
+          <Route path="/auth/patient" element={<PatientProfileSelectView />} />
+
+          {/* Doctor & Patient Portals */}
+          <Route 
+            path="/doctor-portal" 
+            element={
+              <DoctorPortal 
+                doctorProfile={currentDoctor} 
+                onOpenConsultationSession={() => {}} 
+              />
+            } 
+          />
+          <Route 
+            path="/patient-portal" 
+            element={
+              <PatientPortal 
+                patientProfile={currentPatient} 
+              />
+            } 
+          />
+          <Route 
+            path="/clinical-console" 
+            element={
               <ClinicalConsole 
-                doctorProfile={doctorProfile}
-                initialEncounterIndex={selectedEncounterIndex}
+                doctorProfile={currentDoctor} 
               />
-            )}
+            } 
+          />
 
-            {activeView === 'tech_specs' && (
-              <TechSpecsView 
-                onLaunchConsole={() => {
-                  if (doctorProfile) {
-                    setActiveView('console');
-                  } else {
-                    setIsDoctorAuthModalOpen(true);
-                  }
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            )}
-          </main>
-        </div>
-      )}
+          {/* Fallback to Home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
 
-      {/* Ambient Floating AI Voice Assistant Widget (Hidden during full-screen emergency / lab modals to avoid occlusion) */}
-      {!isSanjivaniModalOpen && !isBenchmarkSuiteOpen && !isAcousticLabOpen && (
-        <FloatingAssistant 
-          activeView={activeView}
-          doctorProfile={doctorProfile}
-          patientProfile={patientProfile}
-          onOpenDoctorPortal={() => {
-            if (!doctorProfile) {
-              setIsDoctorAuthModalOpen(true);
-            } else {
-              setActiveView('doctor_portal');
-            }
-          }}
-          onOpenPatientPortal={() => {
-            if (!patientProfile) {
-              setIsPatientAuthModalOpen(true);
-            } else {
-              setActiveView('patient_portal');
-            }
-          }}
-        />
-      )}
-
-      {/* Real-Time Clinical Notification Drawer */}
-      <NotificationDrawer 
-        isOpen={isNotificationDrawerOpen}
-        onClose={() => setIsNotificationDrawerOpen(false)}
+      {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
+      <SanjivaniEmergencyModal 
+        isOpen={isSanjivaniModalOpen}
+        onClose={() => setIsSanjivaniModalOpen(false)}
       />
 
-      {/* Doctor Authentication Modal */}
-      <DoctorAuthModal 
+      {/* Clinician Authentication & OPD Login Modal */}
+      <DoctorAuthModal
         isOpen={isDoctorAuthModalOpen}
         onClose={() => setIsDoctorAuthModalOpen(false)}
         onLoginSuccess={handleDoctorLoginSuccess}
       />
 
-      {/* Patient Authentication Modal */}
-      <PatientAuthModal 
+      {/* Patient ABHA Citizen Login Modal */}
+      <PatientAuthModal
         isOpen={isPatientAuthModalOpen}
         onClose={() => setIsPatientAuthModalOpen(false)}
         onLoginSuccess={handlePatientLoginSuccess}
       />
 
-      {/* Architecture Telemetry Modal Fallback */}
-      <ArchitectureModal 
-        isOpen={isTechModalOpen}
-        onClose={() => setIsTechModalOpen(false)}
-      />
-
-      {/* Kaggle & IISc Coswara Multi-Modal Clinical Dataset Hub */}
-      <DatasetExplorerModal 
-        isOpen={isDatasetModalOpen}
-        onClose={() => setIsDatasetModalOpen(false)}
-      />
-
-      {/* Acoustic AI & Vocal Biomarker Diagnostic Laboratory Modal */}
-      <AcousticBiomarkerLabModal
-        isOpen={isAcousticLabOpen}
-        onClose={() => setIsAcousticLabOpen(false)}
-      />
-
-      {/* 24-Point Automated Clinical Test Suite & Benchmark Matrix Modal */}
-      <ClinicalBenchmarkTestSuiteModal
-        isOpen={isBenchmarkSuiteOpen}
-        onClose={() => setIsBenchmarkSuiteOpen(false)}
-      />
-
-      {/* Sanjivani-108 Autonomous Acoustic Distress Triage & Emergency Dispatch Agent Modal */}
-      <SanjivaniEmergencyModal
-        isOpen={isSanjivaniModalOpen}
-        onClose={() => setIsSanjivaniModalOpen(false)}
-      />
-
-      {/* Official ABDM FHIR Clinical PDF Prescription Export & Print Modal */}
-      <AbdmPrescriptionPdfModal
-        isOpen={isPrescriptionPdfOpen}
-        onClose={() => setIsPrescriptionPdfOpen(false)}
-      />
-
-      {/* Vernacular Spoken Audio-Rx Studio Modal */}
-      <WhatsAppAudioRxModal
-        isOpen={isAudioRxModalOpen}
-        onClose={() => setIsAudioRxModalOpen(false)}
-      />
+      {/* Floating Ambient Voice Assistant (Hidden during Sanjivani console to prevent duplicate assistant overlap) */}
+      {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
+        <FloatingAssistant 
+          activeView="landing"
+          doctorProfile={currentDoctor}
+          patientProfile={currentPatient}
+          onOpenDoctorPortal={() => setIsDoctorAuthModalOpen(true)}
+          onOpenPatientPortal={() => setIsPatientAuthModalOpen(true)}
+          onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
+        />
+      )}
     </div>
   );
 }

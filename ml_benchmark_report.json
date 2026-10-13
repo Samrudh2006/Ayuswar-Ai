@@ -1,9 +1,10 @@
 {
-  "model_name": "AyuSwar-Coswara-Clinical-ML-v3.4",
+  "model_name": "AyuSwar-Acoustic-Synthetic-Experiment",
+  "benchmark_type": "Synthetic Software Distribution Experiment",
+  "is_clinical_validation": false,
+  "limitations": "Evaluates synthetic Gaussian samples drawn from authored parameter distributions. Not a clinical trial or held-out dataset evaluation.",
   "dataset_sources": [
-    "IISc Bangalore Coswara Respiratory Dataset (12,400+ audio recordings)",
-    "Kaggle Clinical Disease-Symptom Matrix (4,920 patient profiles)",
-    "WHO ICD-10 2025 Clinical Modification"
+    "Authored statistical baseline reference profiles"
   ],
   "total_test_samples": 1400,
   "classes_evaluated": 7,

@@ -192,29 +192,22 @@ export async function fetchNearbyHospitalsAPI({
 
           return {
             id: `hosp_osm_${item.place_id || idx + 1}`,
-            hfrId: `IN-HFR-${Math.abs(Math.round(hospLat * 100))}-${Math.abs(Math.round(hospLng * 100))}-${idx + 101}`,
             name: cleanedName,
             officialName: cleanedName,
             shortName: shortName,
-            facilityType: isGovt ? 'Apex Government General Hospital' : 'Super Speciality Tertiary Hospital',
-            ownership: isGovt ? 'Government (DME / APVVP)' : 'Private (NABH Accredited)',
-            regulatoryBody: 'ABDM Health Facility Registry (HFR)',
+            facilityType: isGovt ? 'Government Hospital / Clinic' : 'Hospital / Medical Center',
+            ownership: isGovt ? 'Government Facility' : 'Private Facility',
             address: item.display_name || `${cleanedName}, Near Caller Landmark`,
-            phone: `+91 ${Math.floor(8000 + Math.random() * 1000)}-${Math.floor(200000 + Math.random() * 700000)}`,
-            cmo: isGovt ? 'Dr. K. Srinivas Rao, MS (Civil Surgeon)' : 'Dr. P. V. Ramanamurthy, MD (Emergency Head)',
+            emergencyContact: 'Emergency Services: 112 / 108',
             lat: hospLat,
             lng: hospLng,
             distanceKm: distKm,
             etaMinutes: etaMinutes,
-            traumaTier: idx === 0 ? 'Level-1 Dedicated Trauma Center' : idx === 1 ? 'Level-2 Dedicated Trauma Center' : 'Level-3 Primary Trauma Stabilization',
-            cathLab: idx % 2 === 0 ? '24x7 Active Cath Lab (Digital Subtraction Angiography)' : 'Primary Cardiac Care Unit',
-            icuBeds: Math.max(2, 8 - idx),
-            bedsAvailable: Math.max(4, 16 - idx * 2),
-            resuscitationBayAssigned: `Bay #0${(idx % 3) + 1} (${idx === 0 ? 'STEMI / Resus' : 'Trauma'})`,
-            lastVerifiedAt: `${15 + idx * 8} sec ago`,
-            matchReason: idx === 0
-              ? `Optimal regional candidate: Lowest road ETA (${etaMinutes}m) + Active Resuscitation Bay + ABDM HFR accredited`
-              : `Secondary emergency facility with ${Math.max(2, 8 - idx)} ICU beds and round-the-clock emergency access`
+            dataSource: 'OpenStreetMap Nominatim Public API',
+            isRealRetrievedPlace: true,
+            bedAvailability: 'Real-time bed availability: Not connected (Unknown)',
+            icuBeds: 'Not reported via public map API',
+            matchReason: `Geographically nearest facility by road (~${distKm} km, estimated drive ~${etaMinutes} mins)`
           };
         });
       }
@@ -223,7 +216,7 @@ export async function fetchNearbyHospitalsAPI({
     // Network fallback handled below
   }
 
-  // 2. If OSM returned fewer than 3 hospitals, supplement with Contextual Regional Presets
+  // 2. If OSM returned fewer than 3 hospitals, supplement with Contextual Regional Presets (Clearly marked as synthetic)
   if (rawList.length < 3) {
     const templates = getRegionalHospitalTemplates(geoAddress, lat, lng);
     const existingNames = new Set(rawList.map(h => h.name.toLowerCase()));
@@ -238,29 +231,22 @@ export async function fetchNearbyHospitalsAPI({
 
         rawList.push({
           id: `hosp_reg_${idx + 1}`,
-          hfrId: `IN-AP-HFR-${Math.abs(Math.round(lat * 100))}-${idx + 401}`,
           name: tpl.name,
           officialName: tpl.name,
           shortName: tpl.shortName,
-          facilityType: isGovt ? 'Apex Government General Hospital' : 'Super Speciality Tertiary Hospital',
+          facilityType: isGovt ? 'Government Hospital' : 'Tertiary Hospital',
           ownership: tpl.ownership,
-          regulatoryBody: 'ABDM Health Facility Registry (HFR)',
-          address: `${tpl.name}, Central Emergency Road, ${geoAddress || 'Local District'}, AP`,
-          phone: `+91 884-23${String(100 + idx).slice(-3)}108`,
-          cmo: isGovt ? 'Dr. C. Prabhakar Reddy, MS (Civil Surgeon)' : 'Dr. M. S. Ramakrishna, MD (Emergency Head)',
+          address: `${tpl.name}, ${geoAddress || 'Local District'} (Synthetic Sample Location)`,
+          emergencyContact: 'Emergency Services: 112 / 108',
           lat: hospLat,
           lng: hospLng,
           distanceKm: distKm,
           etaMinutes: etaMinutes,
-          traumaTier: tpl.trauma,
-          cathLab: idx % 2 === 0 ? '24x7 Active Cath Lab (Digital Subtraction Angiography)' : 'Primary Cardiac Care Unit',
-          icuBeds: Math.max(3, 7 - idx),
-          bedsAvailable: Math.max(5, 14 - idx * 2),
-          resuscitationBayAssigned: `Bay #0${(idx % 3) + 1} (${idx === 0 ? 'STEMI / Resus' : 'Trauma'})`,
-          lastVerifiedAt: `${12 + idx * 6} sec ago`,
-          matchReason: idx === 0 
-            ? `Top candidate: Fastest driving ETA (${etaMinutes}m) + Dedicated 24x7 Cath Lab + Pre-notified Resuscitation Bay`
-            : `Accredited regional center with ${Math.max(3, 7 - idx)} ICU beds and direct 108 ambulance bay access`
+          dataSource: 'Synthetic Demo Regional Template',
+          isRealRetrievedPlace: false,
+          bedAvailability: 'Synthetic template data (Simulation only)',
+          icuBeds: 'Simulation fixture',
+          matchReason: `Demonstration template candidate (~${distKm} km, estimated ~${etaMinutes}m transit)`
         });
       }
     });

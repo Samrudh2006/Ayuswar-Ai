@@ -755,13 +755,13 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
         patientData={{
           name: currentEncounter.patient.name,
           vernacularName: currentEncounter.language.includes('Telugu') ? 'నారాయణ రావు' : 'आरव कुमार',
-          phone: '+91 98490 12345',
-          cleanPhone: '919849012345',
+          phone: '+91 00000 00000 (Non-dialable Demo)',
+          cleanPhone: '0000000000',
           age: currentEncounter.patient.age,
           gender: currentEncounter.patient.gender,
-          abhaId: currentEncounter.patient.abhaId,
+          abhaId: 'DEMO-ABHA-FIXTURE',
           language: currentEncounter.language,
-          langCode: currentEncounter.langCode || 'te-IN'
+          langCode: currentEncounter.langCode || 'en-IN'
         }}
         doctorName={doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}
         initialLanguage={currentEncounter.langCode?.includes('hi') ? 'hi' : 'te'}
@@ -874,8 +874,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             {/* Prescription Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #008B8B', paddingBottom: '14px', marginBottom: '16px' }}>
               <div>
-                <h3 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 850 }}>AYUSWAR HEALTH CLINIC</h3>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>ABDM Government Certified Health Center #1402</div>
+                <h3 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 850 }}>AYUSWAR HEALTH CLINIC (DEMO)</h3>
+                <div style={{ fontSize: '11px', color: '#64748B' }}>Simulated PHC Demonstration Center #1402 • Synthetic Test Record</div>
               </div>
               <button onClick={() => setShowPrintModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>✕</button>
             </div>

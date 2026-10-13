@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ayuswar-ai.vercel.app/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://ayuswar-ai.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="te-IN" href="https://ayuswar-ai.vercel.app/?lang=te" />
+    <xhtml:link rel="alternate" hreflang="hi-IN" href="https://ayuswar-ai.vercel.app/?lang=hi" />
+    <xhtml:link rel="alternate" hreflang="ta-IN" href="https://ayuswar-ai.vercel.app/?lang=ta" />
+    <xhtml:link rel="alternate" hreflang="kn-IN" href="https://ayuswar-ai.vercel.app/?lang=kn" />
+    <xhtml:link rel="alternate" hreflang="mr-IN" href="https://ayuswar-ai.vercel.app/?lang=mr" />
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/#doctor-portal</loc>
-    <lastmod>2026-10-10</lastmod>
+    <loc>https://ayuswar-ai.vercel.app/demo</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/#patient-portal</loc>
-    <lastmod>2026-10-10</lastmod>
+    <loc>https://ayuswar-ai.vercel.app/scanner</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/#sanjivani-108</loc>
-    <lastmod>2026-10-10</lastmod>
+    <loc>https://ayuswar-ai.vercel.app/emergency</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/#acoustic-lab</loc>
-    <lastmod>2026-10-10</lastmod>
+    <loc>https://ayuswar-ai.vercel.app/biomarkers</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/datasets</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/analytics</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/training</loc>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

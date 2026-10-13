@@ -1,8 +1,11 @@
 User-agent: *
 Allow: /
 
-# Answer Engine Optimization (AEO) Crawlers for AI Search
+# Generative AI, Answer Engines (AEO) & Large Language Model Web Crawlers
 User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: PerplexityBot
@@ -11,7 +14,28 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: anthropic-ai
+Allow: /
+
 User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Cohere-ai
 Allow: /
 
 Sitemap: https://ayuswar-ai.vercel.app/sitemap.xml

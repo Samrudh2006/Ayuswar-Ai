@@ -359,7 +359,7 @@ class SanjivaniAudioSynthesizer {
 
 export const sanjivaniAudio = new SanjivaniAudioSynthesizer();
 
-// Evon Autonomous Emergency Tool Calling Simulation with realistic telemetry
+// Emergency Dispatch Simulation for workflow demonstration
 export function simulateEvonDispatchPipeline({
   coords,
   landmark,
@@ -367,68 +367,71 @@ export function simulateEvonDispatchPipeline({
   onToolStep,
   onComplete
 }) {
-  const ambulanceId = `ALS-108-DL-${Math.floor(1000 + Math.random() * 9000)}`;
-  const driverName = 'Rajesh Meena (Senior EMT)';
-  const hospitalName = triageData.triageLevel === 'RED' 
-    ? 'AIIMS Apex Trauma Center (Priority Red Bay 3)' 
-    : 'District Civil Hospital Emergency Ward';
+  const ambulanceId = `SIM-ALS-108-${Math.floor(1000 + Math.random() * 9000)}`;
+  const driverName = 'Simulation Crew (Demo EMT)';
+  const hospitalName = triageData?.triageLevel === 'RED' 
+    ? 'Regional Tertiary Hospital (Simulation Bay)' 
+    : 'District Hospital Emergency Ward (Simulation)';
 
   const tools = [
     {
       id: 'tool_1',
-      name: 'evon.tool.geo_triangulate_caller()',
-      desc: 'Triangulating GPS coordinates & resolving sub-meter telecom tower cell-ID...',
+      name: '[SIMULATION] Telephony Coordinate Triangulation',
+      desc: 'Simulating caller coordinates and landmark resolution...',
       durationMs: 700,
       output: {
-        gps: `${coords.latitude.toFixed(5)}° N, ${coords.longitude.toFixed(5)}° E`,
-        accuracy: `±${coords.accuracy}m`,
-        landmarkExtracted: landmark || 'Detected from live telephony'
+        gps: `${coords?.latitude?.toFixed(5) || 15.8281}° N, ${coords?.longitude?.toFixed(5) || 78.0373}° E`,
+        accuracy: `±${coords?.accuracy || 15}m (Simulated)`,
+        landmarkExtracted: landmark || 'Demonstration Landmark',
+        isSimulation: true
       }
     },
     {
       id: 'tool_2',
-      name: 'evon.tool.query_nearest_als_fleet()',
-      desc: 'Searching GIS network for Advanced Life Support (ALS) with active ventilator & defibrillator...',
+      name: '[SIMULATION] GIS Nearest Ambulance Search',
+      desc: 'Simulating nearest emergency vehicle selection...',
       durationMs: 900,
       output: {
         assignedVehicle: ambulanceId,
         driver: driverName,
-        currentLocation: 'Outer Ring Junction (1.8 km away)',
-        calculatedEtaSec: 280 // ~4.6 mins
+        currentLocation: 'Nearby Transit Corridor (Simulated 1.8 km away)',
+        calculatedEtaSec: 280, // ~4.6 mins
+        isSimulation: true
       }
     },
     {
       id: 'tool_3',
-      name: 'evon.tool.reserve_icu_trauma_bay()',
-      desc: `Direct HL7/FHIR handshake with ${hospitalName}...`,
+      name: '[SIMULATION] Hospital Emergency Bay Pre-Notification',
+      desc: `Simulating emergency triage transmission to ${hospitalName}...`,
       durationMs: 800,
       output: {
         facility: hospitalName,
-        triageCode: triageData.triageLevel,
-        bedAssigned: 'Critical Resuscitation Bay #02',
-        onDutyChief: 'Dr. V. Ramanathan (Emergency Med HOD)'
+        triageCode: triageData?.triageLevel || 'YELLOW',
+        bedAssigned: 'Simulated Emergency Resuscitation Bay #02',
+        note: 'SIMULATION ONLY — In a real emergency, emergency staff must be contacted via 112 / 108.',
+        isSimulation: true
       }
     },
     {
       id: 'tool_4',
-      name: 'evon.tool.stream_audio_briefing_to_paramedic()',
-      desc: 'Synthesizing 12-second Indic voice telemetry briefing for incoming paramedic tablet...',
+      name: '[SIMULATION] Paramedic Synthetic Audio Briefing',
+      desc: 'Simulating audio handover note for paramedic demonstration tablet...',
       durationMs: 850,
       output: {
-        audioStatus: 'Synthesized via Gnani Timbre & Streamed',
-        briefContent: `Alert: 58M suspected STEMI at ${landmark || 'GPS location'}. Pre-hospital CPR underway. Prepare Defibrillator & O2.`,
-        paramedicTabletAck: 'ACK RECEIVED (Status: In-Transit)'
+        audioStatus: 'Synthesized demonstration audio',
+        briefContent: `Simulation Alert: Suspected triage condition at ${landmark || 'GPS location'}. Standard first-aid guidance displayed on caller screen.`,
+        isSimulation: true
       }
     },
     {
       id: 'tool_5',
-      name: 'evon.tool.sms_whatsapp_live_gps_token()',
-      desc: 'Generating encrypted live tracking link & dispatch token for caller phone...',
+      name: '[SIMULATION] Demonstration Tracking Link Generator',
+      desc: 'Generating mock tracking interface token for prototype review...',
       durationMs: 650,
       output: {
-        dispatchId: `DISPATCH-108-${Date.now().toString().slice(-6)}`,
-        trackingUrl: `https://108.gov.in/track/${ambulanceId}`,
-        smsStatus: 'Delivered via National Emergency SMS Gateway'
+        dispatchId: `SIM-DISPATCH-${Date.now().toString().slice(-6)}`,
+        note: 'PROTOTYPE SIMULATION ONLY — No live ambulance has been dispatched. Call 112 / 108 for real medical emergency.',
+        isSimulation: true
       }
     }
   ];

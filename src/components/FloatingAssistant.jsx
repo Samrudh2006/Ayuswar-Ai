@@ -72,7 +72,8 @@ export default function FloatingAssistant({
   patientProfile = null,
   onNavigateTab = null,
   onOpenDoctorPortal = null,
-  onOpenPatientPortal = null
+  onOpenPatientPortal = null,
+  onOpenSanjivani = null
 }) {
   // Assistant states: 'collapsed' | 'expanded' | 'listening' | 'speaking' | 'ended'
   const [assistantState, setAssistantState] = useState('collapsed');
@@ -765,6 +766,29 @@ export default function FloatingAssistant({
                       >
                         <Heart size={12} color="#D97706" />
                         <span>👤 Patient</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (onOpenSanjivani) onOpenSanjivani();
+                        }}
+                        style={{
+                          flex: 1,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '5px',
+                          padding: '6px 10px',
+                          borderRadius: '16px',
+                          border: '1px solid #FCA5A5',
+                          background: '#FEF2F2',
+                          fontSize: '11px',
+                          fontWeight: 750,
+                          color: '#DC2626',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <Activity size={12} color="#DC2626" />
+                        <span>🚨 108</span>
                       </button>
                     </>
                   )}

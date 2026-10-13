@@ -799,6 +799,34 @@ export default function EmergencyMap({
             </div>
           </div>
 
+          {/* Continuous Lead-II ECG Rhythm Strip & SpO2 Plethysmograph */}
+          <div style={{ background: '#020617', borderRadius: '6px', border: '1px solid #0F2342', padding: '5px 7px', position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px', fontSize: '8px' }}>
+              <span style={{ color: '#10B981', fontWeight: 800 }}>● ECG LEAD-II (25 mm/s • 10 mm/mV)</span>
+              <span style={{ color: '#38BDF8', fontWeight: 700 }}>PLETH SpO2: {spO2}%</span>
+              <span style={{ color: '#64748B', fontFamily: 'monospace' }}>IoT CAN-BUS: ACTIVE</span>
+            </div>
+            <svg viewBox="0 0 280 34" style={{ width: '100%', height: '34px', overflow: 'hidden' }}>
+              <defs>
+                <pattern id="ecgMiniGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(16, 185, 129, 0.12)" strokeWidth="0.5" />
+                </pattern>
+              </defs>
+              <rect width="280" height="34" fill="url(#ecgMiniGrid)" />
+              <path
+                d="M 0,17 L 18,17 Q 23,13 28,17 L 36,17 L 40,21 L 44,3 L 48,31 L 52,17 L 60,17 Q 67,11 75,17 L 95,17 L 110,17 Q 115,13 120,17 L 128,17 L 132,21 L 136,3 L 140,31 L 144,17 L 152,17 Q 159,11 167,17 L 187,17 L 202,17 Q 207,13 212,17 L 220,17 L 224,21 L 228,3 L 232,31 L 236,17 L 244,17 Q 251,11 259,17 L 280,17"
+                fill="none"
+                stroke="#10B981"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  filter: 'drop-shadow(0 0 5px rgba(16, 185, 129, 0.9))'
+                }}
+              />
+            </svg>
+          </div>
+
           {/* Clinical Vital Signs Ticker */}
           <div style={{
             background: '#040B17',
@@ -812,7 +840,7 @@ export default function EmergencyMap({
             border: '1px solid #12213A'
           }}>
             <span>Blood Pressure: <strong style={{ color: '#F1F5F9' }}>136/88 mmHg</strong></span>
-            <span>Rhythm: <strong style={{ color: '#10B981' }}>Normal Sinus</strong></span>
+            <span>Rhythm: <strong style={{ color: '#10B981' }}>Normal Sinus (Lead II)</strong></span>
             <span>O2: <strong style={{ color: '#38BDF8' }}>Ventilator Active</strong></span>
           </div>
         </div>

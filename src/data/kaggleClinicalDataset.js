@@ -535,16 +535,22 @@ export const REGIONAL_COLLOQUIAL_DICTIONARY = {
  * Predicts the most probable conditions, ICD-10 codes, and Indian formulary prescription.
  */
 export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = null) {
-  const query = (inputText || '').toLowerCase();
+  // If input is an object (e.g. acoustic metrics), extract text if any
+  let query = '';
+  if (typeof inputText === 'string') {
+    query = inputText.trim().toLowerCase();
+  } else if (inputText && typeof inputText === 'object' && inputText.text) {
+    query = inputText.text.trim().toLowerCase();
+  }
   
-  if (!query && !acousticCoughSample) {
+  if (!query) {
     return {
-      topPrediction: CLINICAL_DISEASE_DATASET[0],
-      rankedPredictions: CLINICAL_DISEASE_DATASET.slice(0, 5),
-      confidenceScore: 0.94,
-      matchedColloquials: ['ఆయాసం', 'దగ్గు'],
-      coswaraRiskScore: 0.88,
-      suggestedPrescription: CLINICAL_DISEASE_DATASET[0].firstLineMedication
+      topPrediction: null,
+      rankedPredictions: [],
+      confidenceScore: 0,
+      matchedColloquials: [],
+      coswaraRiskScore: 0,
+      disclaimer: 'Educational reference lookup only. Does not constitute clinical diagnosis.'
     };
   }
 
@@ -591,15 +597,26 @@ export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = n
 
   scored.sort((a, b) => b.matchScore - a.matchScore);
 
-  const top = scored[0].matchScore > 0 ? scored[0] : CLINICAL_DISEASE_DATASET[0];
-  const confidence = Math.min(0.99, Math.max(0.72, 0.75 + (top.matchScore * 0.04)));
+  if (scored[0].matchScore <= 0) {
+    return {
+      topPrediction: null,
+      rankedPredictions: [],
+      confidenceScore: 0,
+      matchedColloquials: [],
+      coswaraRiskScore: 0,
+      disclaimer: 'No matching conditions found in reference dataset for the provided search query.'
+    };
+  }
+
+  const top = scored[0];
+  const lexicalMatchPct = Math.min(100, Math.round(top.matchScore * 5));
 
   return {
     topPrediction: top,
-    rankedPredictions: scored.slice(0, 6),
-    confidenceScore: Number(confidence.toFixed(2)),
-    matchedColloquials: top.matchedTokens.length > 0 ? top.matchedTokens : ['ఆయాసం', 'శ్వాసకోశ సమస్య'],
-    coswaraRiskScore: top.coswaraBiomarker.acousticRisk,
-    suggestedPrescription: top.firstLineMedication
+    rankedPredictions: scored.filter(s => s.matchScore > 0).slice(0, 5),
+    confidenceScore: lexicalMatchPct,
+    matchedColloquials: top.matchedTokens,
+    coswaraRiskScore: top.coswaraBiomarker?.acousticRisk || 0,
+    disclaimer: 'Reference dictionary match score. Not an autonomous clinical diagnosis. Must be reviewed by a licensed clinician.'
   };
 }

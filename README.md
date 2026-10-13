@@ -1,132 +1,116 @@
 # AyuSwar AI (ఆయుస్వర) 🩺🎙️
-### *Ambient Clinical Voice Operating System & Sanjivani-108 Emergency Dispatch for Bharat*
-**Built for the Great Indian AI Internship Challenge 2026 by Gnani.ai**
+### *Ambient Clinical Voice Scribe & Triage Prototype for Indian Languages*
+**Developed for the Great Indian AI Internship Challenge 2026 by Gnani.ai**
 
-[![GitHub Repository](https://img.shields.io/badge/GitHub-Samrudh2006%2FAyuswar--Ai-blue?logo=github)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://react.dev/)
-[![ABDM Compliant](https://img.shields.io/badge/ABDM-FHIR%20R4%20Ready-008B8B)](https://abdm.gov.in/)
-[![ICD-10](https://img.shields.io/badge/WHO-ICD--10%20%26%20SNOMED--CT-green)](https://icd.who.int/)
-[![License](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
+[![FHIR R4 Schema](https://img.shields.io/badge/Schema-HL7%20FHIR%20R4%20Draft-008B8B)](https://hl7.org/fhir/R4/)
+[![Status](https://img.shields.io/badge/Status-Engineering%20Prototype-amber.svg)](https://github.com/Samrudh2006/Ayuswar-Ai)
 
 ---
 
-## 🌟 Executive Overview
-India faces a dual healthcare crisis across rural Primary Health Centers (PHCs) and district hospitals:
-1. **Clinical Documentation Overload:** A single government doctor consults **60 to 100 patients** per shift, leaving zero time to type into computers or maintain electronic records.
-2. **Health Illiteracy:** Over **600 million citizens** cannot read complex medical jargon or handwritten paper prescriptions. Millions suffer preventable adverse drug events simply because they cannot understand when and how to take their medicines.
-3. **Emergency Golden-Hour Gap:** Critical emergencies (STEMI cardiac arrests, traumatic road accidents, severe respiratory distress) suffer from delayed triage and uncoordinated hospital handovers.
-
-**AyuSwar AI** solves this entire pipeline through an ambient voice-first operating system tailored for Bharat's multi-lingual diversity:
-* **Zero-Touch Ambient Scribe:** Passively listens to doctor-patient consultations in native regional dialects (Telugu, Hindi, Tenglish, Hinglish), transcribing code-mixed dialogues with dual-speaker diarization.
-* **Acoustic Biomarker Laboratory:** Powered by the **IISc Coswara Dataset (12,400+ audio samples)** and Kaggle clinical matrices, analyzing real-time cough spectral density, vocal tremor (F0 pitch), and respiratory distress indices.
-* **Synchronized Vernacular Audio-Rx:** Converts paper prescriptions into clear voice instructions in the patient's native dialect, paired with real-time **word-by-word visual karaoke highlighting** across color-coded pill schedules.
-* **🚨 Sanjivani-108 Autonomous Emergency Dispatch:** Real-time Mapbox GIS navigation, 110 BPM CPR audio metronome, Cath Lab pre-alerting, traffic police green corridor sirens, and auto-generated ABDM ePCR pre-arrival bed booking.
+> **⚠️ NON-DIAGNOSTIC PROTOTYPE NOTICE:**  
+> AyuSwar AI is an engineering demonstration of ambient speech recognition and clinical document drafting. It is **not** a certified medical device and does **not** provide autonomous medical diagnosis or clinical care plans. All emergency workflows (ambulance telemetry, bed reservation, traffic signal control) are **simulated demonstrations**; for real medical emergencies in India, dial **112** or **108**.
 
 ---
 
-## 🏛️ The 8-Layer Deep-Tech Architecture
+## 🌟 Overview & Implemented Capabilities
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                      AYUSWAR AI — THE 8-LAYER PRODUCTION MOAT                          │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-  1. 🎙️ Dual-Speaker Ambient Ingestion (16 kHz PCM stream with Speaker Diarization)
-  2. ⚡ Gnani.ai Prisma v2.5 Engine (Code-mixed Telugu, Hindi, Tenglish STT)
-  3. 🫁 Acoustic Respiratory Stethoscope (IISc Coswara Algorithm: Cough & Dyspnea DSP)
-  4. 🗺️ Vernacular Semantic Resolver (Colloquial Metaphors -> WHO ICD-10 & SNOMED-CT)
-  5. 👁️ OpenCV Medicine Blister Strip Scanner (Contour Detection & DDI Safety Guard)
-  6. 🔊 Gnani.ai Timbre v2.5 Vernacular Audio-Rx (Word-by-word Karaoke Pill Schedule)
-  7. 🏥 Official ABDM FHIR R4 Standard Export & Simulated WhatsApp Voice Dispatch
-  8. 🚨 Sanjivani-108 Autonomous Emergency Dispatch & Golden-Hour Pre-Arrival Handover
-```
+AyuSwar AI addresses clinical documentation overhead and patient prescription comprehension using voice-first web interfaces:
 
----
+1. **Ambient Consultation Scribing (Draft Note Generation)**
+   - Listens to spoken dialogues in English (default), Telugu, and Hindi.
+   - Extracts discussed symptoms, maps regional colloquial idioms (e.g., *"గుండెల్లో మంట"*, *"पसली चलना"*) to reference ICD-10 categories, and formats draft HL7 FHIR R4 JSON structures.
+   - **Doctor-in-the-Loop:** All draft outputs require explicit attending physician review, edit, and confirmation before export.
 
-## 🚀 Key Production Modules
+2. **Vernacular Spoken Audio-Rx Studio**
+   - Synthesizes spoken medication instructions in the patient's preferred language.
+   - Features synchronized, word-by-word visual karaoke highlighting across color-coded pill cards.
 
-### 1. 🩺 OPD Ambient Clinical Scribe
-* **Passive Consultation Listening:** Seamlessly captures doctor-patient dialogues without requiring push-to-talk.
-* **Code-Mixed Language Support:** Understands rural Telugu (*"ఆయాసం"*, *"గుండెల్లో దడ"*), Hindi (*"पसली चलना"*, *"सांस फूलना"*), and urban colloquialisms.
-* **Automated SOAP Notes:** Structures conversations into Subjective complaints, Objective vitals, Clinical Assessment (ICD-10 / SNOMED-CT), and Prescription Plan.
+3. **Blister Strip Scanner & Generic Price Comparator**
+   - Client-side camera and image OCR scanner identifying common medications.
+   - Cross-references the National Formulary of India (NFI) and Pradhan Mantri Jan Aushadhi Pariyojana (PMBJP) open price database to show cost-effective generic alternatives.
 
-### 2. 💊 Vernacular Audio-Rx with Visual Karaoke
-* **Illiteracy-First Design:** Converts complex dosages into audio notes in the patient's mother tongue.
-* **Color-Coded Capsules:** Visual pill cards (Teal Blue, Emerald Green, Crimson Red, Amber Yellow) matching physical blister packs.
-* **Word-by-Word Glowing Karaoke:** Highlights spoken words in sync with audio playback to reinforce comprehension.
-* **WhatsApp Audio Dispatch:** Sends the voice prescription directly to the patient's phone for family reference.
+4. **Non-Diagnostic Acoustic Signal Processing Lab**
+   - Experimental Digital Signal Processing (DSP) tool analyzing pitch (F0), spectral centroid, and audio energy flux via WebAudio FFT.
+   - Displays real-time oscilloscopes and spectrograms as experimental physical signals, not disease probabilities.
 
-### 3. 🚨 Sanjivani-108 Emergency Dispatch & Clinical Copilot
-* **3D Tactical Steel Medallion:** Prominent circular floating copilot with real-time glowing emergency pulse and active green radar beacon.
-* **Acoustic Panic Triage:** Live vocal biomarker detection (F0 pitch spikes, tremor analysis, tachypnea rate) to detect acute conditions like STEMI or respiratory failure.
-* **110 BPM CPR Metronome:** Real-time audible clicks, visual rhythm pulses, and compression counters following AHA guidelines.
-* **⚡ Pre-Alert Cath Lab:** Notifies the destination hospital's cardiology team and unlocks digital angiography bays prior to arrival.
-* **🚨 Traffic Police Green Corridor:** Preempts traffic signals between the caller's live location and the hospital.
-* **📋 ABDM ePCR Pre-Arrival Bed Handover Form:** Auto-fills clinical telemetry and reserves an ICU/Cath Lab bed before the ambulance arrives.
-* **Ambulance Telemetry & Driver Hotline:** Real-time simulation controls (`Pause/Play`, `1x`, `2x`, `5x`) and direct dialer to the EMT driver (+91 94401 22108).
+5. **Simulated Sanjivani-108 Emergency Protocol**
+   - Demonstrates emergency distress call triage logic and provides an audible **110 BPM CPR tempo metronome** adhering to resuscitation guidelines.
+   - Generates printable paramedic handover summaries marked with simulation watermarks.
 
-### 4. 🔬 Kaggle & IISc Coswara Clinical Knowledge Hub
-* **12,400+ Trained Samples:** Curated from the open IISc Bangalore Coswara respiratory database and Kaggle clinical disease matrices.
-* **Zero-Latency ML Predictor:** Input symptoms in colloquial Telugu, Hindi, or English to instantly receive top ICD-10 diagnoses, acoustic risk scores, and National Formulary medications.
-* **Peer-Reviewed Paper Repository:** Links directly to research foundations across NEJM, Lancet, and IISc publications.
-* **Colloquial Indic Dictionary:** Exhaustive ontology translating regional idioms to official medical terminology.
-
-### 5. 🏥 Comprehensive Doctor & Patient Portals
-* **Doctor Portal:** Consultation queues, live clinical dictation console, real-time drug-drug interaction checker, and verified e-prescriptions.
-* **Patient Portal:** Digital ABHA card generation, appointment management, family health records, and prescription audio playback.
+6. **24-Point Executable Assertion Test Suite**
+   - Unlike mock certificates, the test suite executes **24 real unit and contract assertions** measuring execution duration in milliseconds.
 
 ---
 
-## 🔒 Location & Multi-User Data Isolation
-* **Hardware GPS Isolation:** Each client device queries its own live GPS coordinates (`navigator.geolocation`).
-* **Dynamic Emergency Facilities:** Discovers nearby ABDM-accredited hospitals and dispatches ambulances within a **15–25 km radius of the caller's current location**.
-* **Zero Cross-User Data Leakage:** All session data (caller identity, notes, coordinates) remain strictly isolated to the user's local browser instance.
+## 🏛️ Routing Architecture & Design System
+
+AyuSwar features a dedicated route structure with persistent URLs and browser back/forward history:
+
+| Route | Workspace / View | Status |
+| :--- | :--- | :--- |
+| `/` | Hero Landing & Feature Showcase | Implemented |
+| `/solutions/:moduleId` | Detailed Module Specifications | Implemented |
+| `/technology` | 6-Layer Deep-Tech Architectural Blueprint | Implemented |
+| `/scanner` | Blister Strip OCR & PMBJP Price Comparator | Implemented |
+| `/audio-rx` | Vernacular Audio-Rx Spoken Schedule Studio | Implemented |
+| `/acoustic-lab` | Experimental DSP Acoustic Signal Lab | Implemented |
+| `/benchmarks` | 24 Executed Software Assertions | Implemented |
+| `/language-matrix` | Indic Language Support Matrix & Methodology | Implemented |
+| `/datasets` | Clinical Knowledge & Colloquial Lexicon Reference | Implemented |
+| `/emergency` | Simulated Distress Triage & 110 BPM CPR Metronome | Implemented |
+| `/emergency/handover` | Paramedic Handover Specimen (Simulation) | Implemented |
+| `/prescription/preview` | ABDM FHIR R4 Specimen Preview | Implemented |
+| `/assistant` | Dedicated Virtual Assistant Workspace | Implemented |
+| `/auth/doctor` | Clinician Demo Profile Selector | Implemented |
+| `/auth/patient` | Citizen Demo Profile Selector | Implemented |
+| `/doctor-portal` | OPD Physician Console & Queue | Implemented |
+| `/patient-portal` | Citizen Health Record Viewer | Implemented |
 
 ---
 
-## 🛠️ Technology Stack
+## 🔒 Security & Privacy Principles
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend Framework** | React 19, Vite 8 |
-| **Styling & Aesthetics** | Vanilla CSS, Design System Tokens, Glassmorphism, Custom Keyframe Animations |
-| **GIS & Mapping** | Mapbox GL, Nominatim OpenStreetMap Reverse Geocoding |
-| **Voice & Audio DSP** | Web Audio API (Metronome Synthesizer, Dual Tone Chimes), Web Speech API |
-| **Icons & Visuals** | Lucide React, Custom 3D Octane Rendered Medallions & Emblems |
-| **Clinical Standards** | WHO ICD-10, SNOMED-CT, ABDM FHIR R4, National Formulary of India (NFI) |
+- **No Client-Bundled Secrets:** Gnani API keys and credentials are not bundled into client-side code (`VITE_*`). Secure server proxy variables are specified in `.env.example`.
+- **Ephemeral Audio Ingestion:** In-browser WebAudio buffers process audio locally for visualization and transcription; no persistent audio recordings are stored on external servers.
+- **Fixture Isolation:** Demonstration profiles and synthetic clinical scenarios are isolated from live flows. Live mode starts empty; synthetic demo fixtures require an explicit opt-in with a persistent banner.
 
 ---
 
-## 📦 Getting Started
+## 🛠️ Getting Started
 
 ### Prerequisites
-* Node.js v18 or higher (tested on Node v20/v24)
-* npm v9 or higher
+- Node.js (v18+)
+- npm or yarn
 
-### Installation & Local Run
+### Installation & Run
+
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone https://github.com/Samrudh2006/Ayuswar-Ai.git
 cd Ayuswar-Ai
 
-# 2. Install dependencies
+# Install dependencies
 npm install
 
-# 3. Start the Vite development server
+# Start the Vite local development server
 npm run dev
 ```
 
-Visit **`http://localhost:5173/`** in your browser.
+### Running Verification Tests & Build
 
-### Production Build
 ```bash
-# Verify build bundle
+# Verify build
 npm run build
+
+# Run unit tests
+npm test
 ```
 
 ---
 
-## 👨‍💻 Author & Submission
-* **Developer:** [Samrudh](https://github.com/Samrudh2006)
-* **Repository:** [https://github.com/Samrudh2006/Ayuswar-Ai](https://github.com/Samrudh2006/Ayuswar-Ai)
-* **Challenge:** Great Indian AI Internship Challenge 2026 by **Gnani.ai**
+## 📄 License & Attribution
+
+- Built for the **Great Indian AI Internship Challenge 2026 by Gnani.ai**.
+- Licensed under the **MIT License**.

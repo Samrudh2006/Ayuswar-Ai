@@ -1,19 +1,20 @@
 /**
- * AyuSwar AI Brain Engine (aiBrainService.js)
- * High-Performance, Privacy-First Clinical Intelligence Engine
+ * AyuSwar AI — Conversational Assistant Service (aiBrainService.js)
  * 
- * Architecture:
- * 1. Open-Source & Free API Integration (Groq Llama-3-8B / Gemini Free Tier / HuggingFace BioMistral-7B / Local Ollama)
- * 2. Autonomous Indic Clinical Knowledge & NLP Engine (100% Offline Zero-API Fallback)
- * 3. Multilingual Intent Parser (Telugu, Hindi, English, Tenglish, Hinglish)
+ * Non-Negotiable Medical Safety Guarantees:
+ * - NO autonomous diagnosis or medication prescribing.
+ * - NO preset drug doses (e.g. paracetamol, pantoprazole, antibiotics).
+ * - Always reminds users that AI conversational drafts are not clinician-verified advice.
+ * - In emergency situations (chest pain, severe breathlessness, trauma), directs users
+ *   immediately to official emergency services (112 / 108).
  */
 
 export const AI_PROVIDERS = [
-  { id: 'local_offline', name: 'AyuSwar Indic Clinical NLP (Free & 100% Offline)', model: 'BioClinical-Indic-v2' },
+  { id: 'local_offline', name: 'Heuristic Rule-Based Demonstrator (Local Fallback)', model: 'Rule-Based-Indic-Demo' },
   { id: 'gemini_free', name: 'Google Gemini Free Tier (gemini-1.5-flash / 2.5-flash)', model: 'gemini-1.5-flash' },
   { id: 'groq_opensource', name: 'Groq Cloud (Llama-3-8B-Instant / Open Source)', model: 'llama-3.1-8b-instant' },
   { id: 'huggingface_biomistral', name: 'Hugging Face Inference (BioMistral-7B Medical)', model: 'BioMistral/BioMistral-7B' },
-  { id: 'ollama_local', name: 'Local Ollama (http://localhost:11434 / DeepSeek-R1 / MedLlama)', model: 'llama3:8b' }
+  { id: 'ollama_local', name: 'Local Ollama (http://localhost:11434 / MedLlama)', model: 'llama3:8b' }
 ];
 
 export function getAiConfig() {
@@ -39,15 +40,17 @@ export function saveAiConfig(provider, apiKey, customEndpoint = '') {
 }
 
 /**
- * Main query processor with autonomous fallback
+ * Main query processor with non-diagnostic fallback
  */
 export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {}) {
-  const cleanPrompt = prompt.trim();
-  if (!cleanPrompt) return "Please ask a question regarding symptoms, OPD tokens, doctor schedules, or prescriptions.";
+  const cleanPrompt = prompt?.trim();
+  if (!cleanPrompt) {
+    return "Please ask a question regarding hospital navigation, doctor appointment timings, or spoken prescription features.";
+  }
 
-  const { provider, apiKey, customEndpoint } = getAiConfig();
+  const { provider, apiKey } = getAiConfig();
 
-  // Try live API if configured
+  // Try live API if user configured their own key
   if (apiKey && provider !== 'local_offline') {
     try {
       if (provider === 'gemini_free') {
@@ -61,17 +64,14 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
         if (response) return response;
       }
     } catch (err) {
-      console.warn("API call encountered issue, falling back to Autonomous Indic Clinical NLP:", err);
+      console.warn("External API call encountered issue; using local demonstration response:", err);
     }
   }
 
-  // Autonomous Indic Clinical Knowledge Base (100% Reliable Offline Fallback)
-  return generateAutonomousClinicalResponse(cleanPrompt, role, context);
+  // Safe heuristic conversational demonstration
+  return generateSafeDemonstrationResponse(cleanPrompt, role, context);
 }
 
-/**
- * Google Gemini Free Tier API Call
- */
 async function callGeminiApi(prompt, apiKey, role, context) {
   const systemPrompt = getSystemPromptForRole(role, context);
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
@@ -83,13 +83,10 @@ async function callGeminiApi(prompt, apiKey, role, context) {
       contents: [
         {
           role: 'user',
-          parts: [{ text: `${systemPrompt}\n\nUser Query: ${prompt}` }]
+          parts: [{ text: `${systemPrompt}\n\nImportant: You are an assistive prototype. Do not prescribe specific drug doses or diagnose conditions autonomously. Always recommend clinician evaluation.\n\nUser Query: ${prompt}` }]
         }
       ],
-      generationConfig: {
-        temperature: 0.3,
-        maxOutputTokens: 350
-      }
+      generationConfig: { temperature: 0.3, maxOutputTokens: 350 }
     })
   });
 
@@ -99,9 +96,6 @@ async function callGeminiApi(prompt, apiKey, role, context) {
   return text ? text.trim() : null;
 }
 
-/**
- * Groq Open Source Llama-3 API Call (Free & Ultra Fast)
- */
 async function callGroqApi(prompt, apiKey, role, context) {
   const systemPrompt = getSystemPromptForRole(role, context);
   const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
@@ -115,11 +109,11 @@ async function callGroqApi(prompt, apiKey, role, context) {
     body: JSON.stringify({
       model: 'llama-3.1-8b-instant',
       messages: [
-        { role: 'system', content: systemPrompt },
+        { role: 'system', content: `${systemPrompt}\nDo not provide autonomous prescriptions or unverified diagnoses.` },
         { role: 'user', content: prompt }
       ],
       temperature: 0.3,
-      max_tokens: 300
+      max_tokens: 350
     })
   });
 
@@ -128,9 +122,6 @@ async function callGroqApi(prompt, apiKey, role, context) {
   return data?.choices?.[0]?.message?.content?.trim() || null;
 }
 
-/**
- * HuggingFace BioMistral Medical LLM
- */
 async function callHuggingFaceApi(prompt, apiKey, role, context) {
   const systemPrompt = getSystemPromptForRole(role, context);
   const endpoint = 'https://api-inference.huggingface.co/models/BioMistral/BioMistral-7B';
@@ -143,7 +134,7 @@ async function callHuggingFaceApi(prompt, apiKey, role, context) {
     },
     body: JSON.stringify({
       inputs: `<s>[INST] <<SYS>>\n${systemPrompt}\n<</SYS>>\n\n${prompt} [/INST]`,
-      parameters: { max_new_tokens: 250, temperature: 0.3 }
+      parameters: { max_new_tokens: 300, temperature: 0.3 }
     })
   });
 
@@ -159,85 +150,71 @@ async function callHuggingFaceApi(prompt, apiKey, role, context) {
 
 function getSystemPromptForRole(role, context) {
   if (role === 'doctor') {
-    return "You are AyuSwar Clinical Co-Pilot for attending physicians in Indian hospitals. Provide concise, evidence-based recommendations adhering to ICMR/GINA guidelines, WHO ICD-10 coding, and NFI drug safety. Avoid fluff.";
+    return "You are AyuSwar Clinical Co-Pilot draft assistant. Provide structured draft documentation notes adhering to standard medical terminology. All outputs require attending clinician review and signature.";
   }
   if (role === 'patient') {
-    return "You are AyuSwar Health Guide for citizens. Provide empathetic, practical, and culturally resonant health advice in simple English or Indian vernaculars (Telugu/Hindi). Always remind patients to consult Dr. Priya for severe symptoms.";
+    return "You are AyuSwar Virtual Assistant. Provide general wellness guidance and hospital navigation assistance. Do not diagnose diseases or prescribe drug dosages. Advise patients to consult a licensed doctor for medical care.";
   }
-  return "You are AyuSwar AI Hospital Receptionist for Kurnool District Hospital. Greet patients warmly in English or Telugu/Hindi, help assign OPD tokens, check doctor schedules (Dr. Priya Sharma MD, Pulmonology; Dr. Ananya Sharma MD, General Medicine), and guide citizens through hospital facilities.";
+  return "You are AyuSwar Hospital Front Desk Assistant. Guide citizens with clinic navigation, OPD registration steps, and general queries in English, Telugu, or Hindi.";
 }
 
 /**
- * Autonomous Indic Clinical Knowledge Base (Rule & Semantic Intent Matcher)
+ * Safe, Non-Diagnostic Local Heuristic Fallback
  */
-function generateAutonomousClinicalResponse(q, role, context) {
+function generateSafeDemonstrationResponse(q, role, context) {
   const query = q.toLowerCase();
 
-  // 1. EMERGENCY TRIAGE (Red Alert)
+  // 1. EMERGENCY TRIAGE SAFETY GUARD
   if (
     query.includes('chest pain') || query.includes('గుండె నొప్పి') || query.includes('हार्ट अटैक') ||
     query.includes('choking') || query.includes('cannot breathe') || query.includes('శ్వాస ఆడట్లేదు') ||
     query.includes('blood in vomit') || query.includes('unconscious')
   ) {
-    return "🚨 RED EMERGENCY ALERT: Severe symptoms detected. Please dial 108 Emergency Medical Services immediately or rush to the District Hospital Emergency Triage. If experiencing chest tightness, sit upright, stay calm, and avoid physical exertion.";
+    return "🚨 EMERGENCY MEDICAL NOTICE: Severe distress symptoms detected. Please immediately dial 112 or 108 Emergency Medical Services, or visit the nearest hospital emergency room. Do not rely on virtual assistant responses in acute life-threatening situations.";
   }
 
-  // 2. RECEPTIONIST SPECIFIC INTENTS
-  if (role === 'receptionist') {
-    if (query.includes('token') || query.includes('టోకెన్') || query.includes('number') || query.includes('book') || query.includes('slot')) {
-      return "🎟️ OPD Token Assigned: Token #14 with Dr. Ananya Sharma MD (General Medicine & Pulmonology). Current OPD queue has 3 patients ahead. Estimated wait time: ~8 minutes in Room 104.";
-    }
-    if (query.includes('doctor') || query.includes('డాక్టర్') || query.includes('priya') || query.includes('ananya') || query.includes('schedule') || query.includes('timing')) {
-      return "👨‍⚕️ Attending Physicians on Duty:\n• Dr. Ananya Sharma, MD (General Medicine) — Room 104 (OPD Active: 9:00 AM - 2:00 PM)\n• Dr. Priya Sharma, MD (Pulmonology & Critical Care) — Room 108 (Active Token #14)\nWould you like me to book your token?";
-    }
-    if (query.includes('abha') || query.includes('digital card') || query.includes('ఆయుష్మాన్') || query.includes('card')) {
-      return "💳 ABHA (Ayushman Bharat Health Account): You can link or create your 14-digit ABHA card right at our counter. It securely synchronizes your lab reports, X-rays, and e-prescriptions across all Indian government and private hospitals.";
-    }
-    if (query.includes('telugu') || query.includes('తెలుగు') || query.includes('మాట్లాడు') || query.includes('నమస్తే')) {
-      return "నమస్తే! ఆయుస్వర్ హాస్పిటల్ హెల్ప్‌డెస్క్‌కు స్వాగతం. మీకు ఓపీడీ టోకెన్ కేటాయించాలా? లేదా డాక్టర్ గారి సమయాలు తెలుసుకోవాలా? నేను మీకు సహాయం చేయగలను.";
-    }
-    if (query.includes('hindi') || query.includes('नमस्ते') || query.includes('हिंदी')) {
-      return "नमस्ते! आयुस्वर हॉस्पिटल हेल्पडेस्क में आपका स्वागत है। क्या आप ओपीडी टोकन बुक करना चाहते हैं या डॉक्टर का समय जानना चाहते हैं? मैं आपकी सहायता कर सकता हूँ।";
-    }
+  // 2. RECEPTION & CLINIC NAVIGATION
+  if (query.includes('token') || query.includes('టోకెన్') || query.includes('number') || query.includes('book') || query.includes('slot')) {
+    return "🎟️ OPD Appointment Assistance: You can schedule and manage appointment tokens through the Doctor and Patient workspaces. For official hospital tokens, please consult the registration desk with your ABHA ID.";
   }
 
-  // 3. RESPIRATORY & COUGH/ASTHMA
+  if (query.includes('doctor') || query.includes('డాక్టర్') || query.includes('schedule') || query.includes('timing')) {
+    return "👨‍⚕️ Attending Specialists (Sample Schedule):\n• General Medicine & Respiratory Clinic: 09:00 AM – 02:00 PM\n• Outpatient Consultations: Monday – Saturday\nPlease verify active duty timings with the clinic reception.";
+  }
+
+  if (query.includes('abha') || query.includes('digital card') || query.includes('ఆయుష్మాన్')) {
+    return "💳 ABHA (Ayushman Bharat Health Account): An ABHA ID enables digital linkage of health records across accredited facilities. In this demo, sample ABHA formats are displayed for illustration purposes only.";
+  }
+
+  // 3. RESPIRATORY SYMPTOMS
   if (query.includes('cough') || query.includes('దగ్గు') || query.includes('खांसी') || query.includes('asthma') || query.includes('ఆయాసం') || query.includes('wheez')) {
-    if (role === 'doctor') {
-      return "🫁 Clinical Assessment for Asthma/Cough:\n• ICD-10: J45.901 (Acute Asthma Exacerbation) or R05 (Cough)\n• GINA 2024 Step 2: Low-dose ICS-Formoterol (Budecort 200 mcg BD) + SABA (Asthalin 100 mcg SOS)\n• IISc Coswara Acoustic Signal: Expiratory wheeze detected at 1420 Hz. Recommend Peak Flow Spirometry.";
-    }
-    return "🫁 Cough & Breathing Advice: For persistent dry cough and nighttime wheezing: Drink warm water, take steam inhalation twice daily, and avoid cold beverages. If you use an inhaler (Budecort/Asthalin), rinse your mouth after use. Connect with Dr. Priya if breathlessness increases.";
+    return "🫁 General Respiratory Care Guidance:\n• For persistent cough or breathlessness, keep warm and avoid cold irritants.\n• Do not start, stop, or change prescribed inhalers without medical evaluation.\n• If breathing difficulty worsens, seek immediate evaluation at a medical clinic.";
   }
 
   // 4. FEVER & BODYACHE
-  if (query.includes('fever') || query.includes('జ్వరం') || query.includes('बुखार') || query.includes('temperature') || query.includes('headache') || query.includes('body pain')) {
-    if (role === 'doctor') {
-      return "🌡️ Febrile Protocol:\n• ICD-10: R50.9 (Fever, unspecified)\n• Order CBC & Dengue NS1/Malaria Smear if fever > 3 days.\n• Antipyretic: Paracetamol 650mg PO TDS (Max 3g/day). Monitor platelet count if petechiae present.";
-    }
-    return "🌡️ Fever & Cold Care: Take Paracetamol 650mg strictly after food if temperature exceeds 99.5°F. Stay well-hydrated with ORS, coconut water, or warm soups. Rest adequately. If fever persists past 3 days, get a CBC blood test done at Room 202.";
+  if (query.includes('fever') || query.includes('జ్వరం') || query.includes('बुखार') || query.includes('temperature') || query.includes('headache')) {
+    return "🌡️ Febrile Illness Supportive Care:\n• Stay well-hydrated with fluids, rest adequately, and monitor temperature.\n• Avoid unprescribed combination medications.\n• If fever exceeds 101°F or persists beyond 48–72 hours, consult a physician for clinical examination and lab tests.";
   }
 
-  // 5. DIABETES & HYPERTENSION (BP / Sugar)
+  // 5. CARDIOMETABOLIC / BP / SUGAR
   if (query.includes('sugar') || query.includes('diabetes') || query.includes('షుగర్') || query.includes('bp') || query.includes('blood pressure') || query.includes('బీపీ')) {
-    if (role === 'doctor') {
-      return "🩺 Cardiometabolic Guidance:\n• Type-2 DM (E11.9) + HTN (I10)\n• First-line: Metformin 500mg BD post meals + Telmisartan 40mg OD morning.\n• Renal Guard: Monitor eGFR and serum creatinine annually. Target HbA1c < 7.0%, BP < 130/80 mmHg.";
-    }
-    return "🩺 Sugar & BP Health Guidance: Keep taking your prescribed morning medications regularly after breakfast. Avoid excess table salt and sugary sweets. Take a 25-minute brisk walk daily. Target Fasting Blood Sugar is < 110 mg/dL and BP < 125/80 mmHg.";
+    return "🩺 Cardiometabolic Care Information:\n• Routine monitoring of blood pressure and blood glucose helps maintain chronic health stability.\n• Continue taking doctor-prescribed medications as scheduled.\n• Dosage adjustments must only be made by your treating clinician.";
   }
 
-  // 6. GASTRO & ACID REFLUX
-  if (query.includes('gas') || query.includes('acidity') || query.includes('కడుపు మంట') || query.includes('stomach') || query.includes('vomit') || query.includes('మోషన్స్')) {
-    return "💊 Gastric Care: Take Pantoprazole 40mg early in the morning on an empty stomach (30 mins before breakfast). Avoid spicy, deep-fried food and late-night heavy meals. Drink buttermilk and maintain hydration.";
+  // 6. GENERAL MEDICINES & SPOKEN RX
+  if (query.includes('medicine') || query.includes('tablet') || query.includes('pill') || query.includes('మందులు') || query.includes('దవా')) {
+    return "💊 Medication Guidance:\n• Always review your official doctor's printed prescription slip for exact timing and dosage.\n• You can use the Vernacular Audio-Rx Studio to listen to doctor-entered instructions in Telugu, Hindi, or English.";
   }
 
-  // 7. MEDICATIONS & PILL SCHEDULE
-  if (query.includes('medicine') || query.includes('tablet') || query.includes('pill') || query.includes('మందులు') || query.includes('दवा')) {
-    return "💊 Chronotherapy Pill Schedule:\n• Early Morning (Empty Stomach): Pantoprazole 40mg (Yellow tablet)\n• Morning (After Breakfast): Inhaler / Multivitamin\n• Night (After Dinner): Montelukast + Levocetirizine (Blue pill)\nAlways listen to your WhatsApp Spoken Audio Prescription for exact instructions!";
+  // VERNACULAR GREETINGS
+  if (query.includes('telugu') || query.includes('తెలుగు') || query.includes('నమస్తే')) {
+    return "నమస్తే! ఆయుస్వర్ సహాయక డెమోకు స్వాగతం. ఓపీడీ విభాగాలు, డాక్టర్ షెడ్యూల్స్ లేదా ప్రిస్క్రిప్షన్ ఆడియో గురించిన వివరాల కోసం అడగవచ్చు. (గమనిక: ఇది సహాయక డెమో మాత్రమే; వైద్య సలహా కోసం డాక్టర్‌ను సంప్రదించండి).";
   }
 
-  // 8. GENERAL SMART GREETING / DEFAULT
-  if (role === 'doctor') {
-    return `👩‍⚕️ Clinical Co-Pilot Analysis: Processed query "${q}". Patient vital signs and longitudinal records are normal. Adhering to standard NFI generic formulary and ICMR treatment protocols.`;
+  if (query.includes('hindi') || query.includes('नमस्ते') || query.includes('हिंदी')) {
+    return "नमस्ते! आयुस्वर वॉइस डेमो में आपका स्वागत है। आप ओपीडी समय, अस्पताल दिशा-निर्देश या बोलती पर्ची के बारे में पूछ सकते हैं। (चिकित्सा सलाह के लिए कृपया डॉक्टर से परामर्श लें)।";
   }
-  return `Namaste! I have processed your inquiry: "${q}". For personalized clinical evaluation, your assigned physician Dr. Priya Sharma MD is available in OPD Room 108. Stay healthy and drink warm fluids!`;
+
+  // DEFAULT INFORMATIONAL RESPONSE
+  return `Thank you for your inquiry: "${q}". AyuSwar is an open-source assistive voice demonstration. For personalized medical evaluation and prescription, please consult a qualified healthcare professional.`;
 }

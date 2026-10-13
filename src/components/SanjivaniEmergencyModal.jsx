@@ -405,13 +405,12 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     <div style={{
       position: 'fixed',
       inset: 0,
-      background: 'rgba(2, 6, 17, 0.96)',
-      backdropFilter: 'blur(16px)',
-      zIndex: 100,
+      background: '#050B14',
+      zIndex: 2500,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '8px'
+      padding: 0
     }}>
       {/* Toast Notification */}
       {toastNotification && (
@@ -419,7 +418,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
           position: 'absolute',
           top: '20px',
           right: '24px',
-          zIndex: 200,
+          zIndex: 2600,
           background: '#0F274E',
           border: '1.5px solid #38BDF8',
           borderRadius: '10px',
@@ -442,15 +441,15 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         </div>
       )}
 
-      {/* Main Console Container (Clean Edge-to-Edge Fit) */}
+      {/* Main Console Container (Full-Bleed Edge-to-Edge Fit) */}
       <div style={{
-        width: '100%',
-        maxWidth: '1520px',
-        height: '96vh',
+        width: '100vw',
+        maxWidth: '100vw',
+        height: '100vh',
         background: '#050B14',
-        borderRadius: '16px',
-        border: '1px solid #1E293B',
-        boxShadow: '0 25px 70px rgba(0,0,0,0.95)',
+        borderRadius: 0,
+        border: 'none',
+        boxShadow: 'none',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',

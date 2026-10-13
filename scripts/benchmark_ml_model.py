@@ -1,7 +1,11 @@
 """
-AyuSwar AI — Machine Learning Benchmark & Validation Harness
-Trained on IISc Coswara (12,400+ Audio Samples) & Kaggle Clinical Matrix (4,920 records)
-Calculates Accuracy, Precision, Recall, F1-Score, Specificity, and Confusion Matrix.
+AyuSwar AI — Synthetic Distribution Experiment (benchmark_ml_model.py)
+
+NOTICE: SYNTHETIC SOFTWARE DISTRIBUTION EXPERIMENT — NOT AN INDEPENDENT CLINICAL BENCHMARK.
+This script draws synthetic Gaussian samples from author-defined acoustic parameter profiles
+and evaluates Gaussian likelihood clustering against those same authored profiles.
+It does NOT represent a clinical trial, held-out evaluation on hospital patients,
+or an official IISc Bangalore / Kaggle validation benchmark.
 """
 
 import json
@@ -21,7 +25,7 @@ CATEGORIES = [
     "ENT & Upper Airway (Laryngitis)"
 ]
 
-# Baseline acoustic priors calibrated on IISc Coswara (12,400+ samples) and clinical matrix
+# Authored statistical reference distributions for synthetic experiment testing
 PROFILES = {
     0: {"f0": (145, 18), "jitter": (0.65, 0.15), "shimmer": (1.45, 0.30), "hnr": (21.5, 2.0)}, # Healthy Normal Baseline
     1: {"f0": (220, 22), "jitter": (2.85, 0.35), "shimmer": (4.90, 0.50), "hnr": (13.8, 1.1)}, # Asthma/COPD
@@ -122,11 +126,12 @@ def main():
     healthy_specificity = specificities[0]
 
     report = {
-        "model_name": "AyuSwar-Coswara-Clinical-ML-v3.4",
+        "model_name": "AyuSwar-Acoustic-Synthetic-Experiment",
+        "benchmark_type": "Synthetic Software Distribution Experiment",
+        "is_clinical_validation": False,
+        "limitations": "Evaluates synthetic Gaussian samples drawn from authored parameter distributions. Not a clinical trial or held-out dataset evaluation.",
         "dataset_sources": [
-            "IISc Bangalore Coswara Respiratory Dataset (12,400+ audio recordings)",
-            "Kaggle Clinical Disease-Symptom Matrix (4,920 patient profiles)",
-            "WHO ICD-10 2025 Clinical Modification"
+            "Authored statistical baseline reference profiles"
         ],
         "total_test_samples": TOTAL_SAMPLES,
         "classes_evaluated": len(CATEGORIES),

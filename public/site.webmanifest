@@ -1,7 +1,7 @@
 {
-  "name": "AyuSwar AI — Ambient Clinical Voice Intelligence for Bharat",
+  "name": "AyuSwar AI — Ambient Clinical Voice Prototype",
   "short_name": "AyuSwar AI",
-  "description": "Ambient Clinical Voice OS that listens, understands, and speaks in every Indian language. Built for ABDM and Sanjivani-108.",
+  "description": "Ambient Clinical Voice Scribe Prototype demonstrating multilingual Indian voice transcription, draft FHIR schemas, and simulated emergency triage.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",
