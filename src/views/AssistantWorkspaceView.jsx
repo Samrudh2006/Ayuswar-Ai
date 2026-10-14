@@ -17,6 +17,7 @@ import { useApp } from '../context/AppContext';
 import { askAyuSwarBrain, AI_PROVIDERS, getAiConfig, saveAiConfig } from '../services/aiBrainService';
 import { speechService } from '../services/indicSpeechService';
 import DoctorAvatarFace from '../components/DoctorAvatarFace';
+import AvatarAssistant from '../components/AvatarAssistant';
 
 export default function AssistantWorkspaceView() {
   const { selectedLanguage, setSelectedLanguage, speechProviderStatus } = useApp();
@@ -33,6 +34,7 @@ export default function AssistantWorkspaceView() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isListeningMic, setIsListeningMic] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [avatarView, setAvatarView] = useState('lifelike'); // 'lifelike' | 'telepresence'
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Settings
@@ -335,27 +337,68 @@ export default function AssistantWorkspaceView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ background: '#041322', borderRadius: '16px', border: '1.5px solid rgba(0,139,139,0.3)', overflow: 'hidden', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#00F5D4', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Virtual Avatar Assistant
-              </span>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => setAvatarView('lifelike')}
+                  style={{
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    background: avatarView === 'lifelike' ? '#00F5D4' : 'rgba(255,255,255,0.1)',
+                    color: avatarView === 'lifelike' ? '#041322' : '#94A3B8',
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  4-Frame Lifelike
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAvatarView('telepresence')}
+                  style={{
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    background: avatarView === 'telepresence' ? '#00F5D4' : 'rgba(255,255,255,0.1)',
+                    color: avatarView === 'telepresence' ? '#041322' : '#94A3B8',
+                    fontSize: '10.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Telepresence FX
+                </button>
+              </div>
               <span style={{ fontSize: '10px', color: '#94A3B8', background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
-                {isSpeaking ? 'Speaking' : isListeningMic ? 'Listening' : 'Idle'}
+                {isSpeaking ? 'Speaking' : isListeningMic ? 'Listening' : isProcessing ? 'Thinking' : 'Idle'}
               </span>
             </div>
 
-            <DoctorAvatarFace
-              doctorName={role === 'doctor' ? 'Dr. Priya Sharma, MD' : 'AyuSwar Assistant'}
-              isSpeaking={isSpeaking}
-              isListening={isListeningMic}
-              isEmergency={false}
-            />
+            {avatarView === 'lifelike' ? (
+              <div style={{ width: '100%', maxWidth: '300px', background: '#FFFFFF', borderRadius: '16px', padding: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+                <AvatarAssistant
+                  state={isSpeaking ? 'speaking' : isListeningMic ? 'listening' : isProcessing ? 'thinking' : 'idle'}
+                  caption={messages[messages.length - 1]?.text?.slice(0, 80) || 'How can I help you today?'}
+                  language={selectedLanguage}
+                />
+              </div>
+            ) : (
+              <DoctorAvatarFace
+                doctorName={role === 'doctor' ? 'Dr. Priya Sharma, MD' : 'AyuSwar Assistant'}
+                isSpeaking={isSpeaking}
+                isListening={isListeningMic}
+                isEmergency={false}
+              />
+            )}
 
             <div style={{ textAlign: 'center', marginTop: '12px' }}>
               <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF' }}>
                 {role === 'doctor' ? 'Dr. Priya Sharma (Co-Pilot)' : 'AyuSwar Hospital Guide'}
               </div>
               <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '2px' }}>
-                Synthesized Virtual Assistant Animation
+                AI assistant, not a doctor. Prototype demo.
               </div>
             </div>
           </div>

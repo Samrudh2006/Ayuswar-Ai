@@ -27,14 +27,26 @@ export const DOCTOR_PERSONAS = [
     id: 'priya',
     name: 'Dr. Priya Sharma, MD',
     role: 'Senior Clinical Attending · AI Teleconsult',
-    avatar: '/assets/homepage_assistant_avatar.jpg',
+    avatar: '/avatar/idle.png',
+    avatarFrames: {
+      idle: '/avatar/idle.png',
+      listening: '/avatar/listening.png',
+      blink: '/avatar/blink.png',
+      speaking: '/avatar/speaking.png'
+    },
     specialty: 'Internal Medicine & AI Diagnostics'
   },
   {
     id: 'ananya',
     name: 'Dr. Ananya Sharma, MD',
-    role: 'OPD Helpdesk & Indic Voice Triage',
-    avatar: '/assets/dr_ananya_avatar.jpg',
+    role: 'OPD Helpdesk & Indic Voice Triage Lead',
+    avatar: '/avatar/idle.png',
+    avatarFrames: {
+      idle: '/avatar/idle.png',
+      listening: '/avatar/listening.png',
+      blink: '/avatar/blink.png',
+      speaking: '/avatar/speaking.png'
+    },
     specialty: 'OPD Clinical Triage'
   },
   {
@@ -89,6 +101,7 @@ export default function DoctorAvatarVideoCall({
   const effectiveDoctorName = doctorName || activePersona.name;
   const effectiveDoctorRole = doctorRole || activePersona.role;
   const effectiveAvatarUrl = avatarUrl || activePersona.avatar;
+  const effectiveAvatarFrames = activePersona.avatarFrames || null;
 
   // Manage WebCam video stream for Patient PIP
   useEffect(() => {
@@ -221,6 +234,19 @@ export default function DoctorAvatarVideoCall({
             <ShieldCheck size={11} color={themeAccent} />
             <span>ABDM Encrypted</span>
           </div>
+
+          <span style={{
+            fontSize: '8.5px',
+            background: 'rgba(245, 158, 11, 0.2)',
+            color: '#FCD34D',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
+            padding: '2px 6px',
+            borderRadius: '4px',
+            fontWeight: 800,
+            letterSpacing: '0.02em'
+          }}>
+            PROTOTYPE DEMO
+          </span>
         </div>
 
         {/* Right: Persona Switcher & Cinema Expand */}
@@ -290,6 +316,7 @@ export default function DoctorAvatarVideoCall({
         {/* Realistic Animated Doctor Face Engine */}
         <DoctorAvatarFace
           avatarUrl={effectiveAvatarUrl}
+          avatarFrames={effectiveAvatarFrames}
           doctorName={effectiveDoctorName}
           isSpeaking={isSpeaking}
           isListening={isListening}
@@ -302,12 +329,12 @@ export default function DoctorAvatarVideoCall({
           bottom: '10px',
           left: '12px',
           zIndex: 10,
-          background: 'rgba(5, 15, 28, 0.85)',
+          background: 'rgba(5, 15, 28, 0.88)',
           padding: '6px 12px',
           borderRadius: '10px',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           backdropFilter: 'blur(8px)',
-          maxWidth: '240px'
+          maxWidth: '260px'
         }}>
           <div style={{
             fontSize: '12px',
@@ -322,6 +349,9 @@ export default function DoctorAvatarVideoCall({
           </div>
           <div style={{ fontSize: '9.5px', color: '#94A3B8', marginTop: '1px' }}>
             {effectiveDoctorRole}
+          </div>
+          <div style={{ fontSize: '8.5px', color: '#FCD34D', marginTop: '3px', fontWeight: 700 }}>
+            AI assistant, not a doctor. Prototype demo.
           </div>
         </div>
 

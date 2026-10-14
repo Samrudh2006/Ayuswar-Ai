@@ -25,6 +25,7 @@ import PrescriptionPreviewView from './views/PrescriptionPreviewView';
 import AssistantWorkspaceView from './views/AssistantWorkspaceView';
 import DoctorProfileSelectView from './views/DoctorProfileSelectView';
 import PatientProfileSelectView from './views/PatientProfileSelectView';
+import AvatarAssistantGalleryView from './views/AvatarAssistantGalleryView';
 
 import { useApp } from './context/AppContext';
 
@@ -160,6 +161,7 @@ export default function App() {
 
           {/* Dedicated Voice Assistant Workspace */}
           <Route path="/assistant" element={<AssistantWorkspaceView />} />
+          <Route path="/avatar" element={<AvatarAssistantGalleryView />} />
 
           {/* Demo Profile Selection */}
           <Route path="/auth/doctor" element={<DoctorProfileSelectView />} />

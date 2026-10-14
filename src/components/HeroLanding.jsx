@@ -114,8 +114,8 @@ export default function HeroLanding({
   const [circuitNodeIndex, setCircuitNodeIndex] = useState(0);
   const [isBusPulsing, setIsBusPulsing] = useState(true);
 
-  // 6 Deep-Tech Moats Medical AI Workbench State
-  const [activeWorkbenchMoat, setActiveWorkbenchMoat] = useState('spectrogram');
+  // 6 Deep-Tech Moats Medical AI Workbench State (Default: null - closed until clicked)
+  const [activeWorkbenchMoat, setActiveWorkbenchMoat] = useState(null);
   const [isAcousticPlaying, setIsAcousticPlaying] = useState(false);
   const [visionFilterBadge, setVisionFilterBadge] = useState('all');
   const [isFhirCopied, setIsFhirCopied] = useState(false);
@@ -155,7 +155,8 @@ export default function HeroLanding({
     hallucinationTested: false
   });
 
-  // Section 7: Academic Rigor & Schema Inspector State
+  // Section 6 & 7 Unified: Trust, Safety & Academic Standards State
+  const [trustDomainMode, setTrustDomainMode] = useState('governance'); // 'governance' | 'standards'
   const [academicStandardTab, setAcademicStandardTab] = useState('coswara');
   const [isAcademicPayloadCopied, setIsAcademicPayloadCopied] = useState(false);
 
@@ -334,6 +335,111 @@ export default function HeroLanding({
     }
   ];
 
+  const dialectData = {
+    te: {
+      id: 'te',
+      region: 'TELANGANA (HYDERABAD & RURAL PHC)',
+      nativeScript: 'ఈ మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి',
+      phonetic: 'Ee maathra udayam tiffin tharvaatha okati vesukovaali',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Ananya Voice (Telugu Indic)',
+      tokens: [
+        { word: 'ఈ', hint: 'This', trigger: 0 },
+        { word: 'ఆకుపచ్చ', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
+        { word: 'మాత్ర', hint: 'Tablet', trigger: 30 },
+        { word: 'ఉదయం', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'టిఫిన్ తర్వాత', hint: 'After breakfast', trigger: 60 },
+        { word: 'ఒకటి', hint: '1 Tablet', trigger: 75 },
+        { word: 'వేసుకోవాలి', hint: 'Take with water', trigger: 90 }
+      ]
+    },
+    hi: {
+      id: 'hi',
+      region: 'NORTH INDIA (UTTAR PRADESH & BIHAR)',
+      nativeScript: 'यह गोली सुबह नाश्ते के बाद पानी के साथ एक बार लेनी है',
+      phonetic: 'Yeh goli subah naashte ke baad paani ke saath ek baar leni hai',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Rajesh Voice (Hindi Indic)',
+      tokens: [
+        { word: 'यह', hint: 'This', trigger: 0 },
+        { word: 'हरी', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
+        { word: 'गोली', hint: 'Tablet', trigger: 30 },
+        { word: 'सुबह', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'नाश्ते के बाद', hint: 'After breakfast', trigger: 60 },
+        { word: 'एक गोली', hint: '1 Tablet', trigger: 75 },
+        { word: 'पानी से लें', hint: 'Take with water', trigger: 90 }
+      ]
+    },
+    ta: {
+      id: 'ta',
+      region: 'TAMIL NADU (CHENNAI & MADURAI)',
+      nativeScript: 'இந்த நீல நிற மாத்திரையை காலை உணவுக்குப் பிறகு எடுத்துக் கொள்ளுங்கள்',
+      phonetic: 'Indha neela nira maathiraiyai kaalai unavu-kku piragu eduthuk kollungal',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Karthi Voice (Tamil Indic)',
+      tokens: [
+        { word: 'இந்த', hint: 'This', trigger: 0 },
+        { word: 'நீல', hint: 'Blue (Foil)', trigger: 15, isPill: true, pillColor: '#2563EB' },
+        { word: 'மாத்திரை', hint: 'Tablet', trigger: 30 },
+        { word: 'காலை', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'உணவுக்குப் பின்', hint: 'After food', trigger: 60 },
+        { word: 'ஒரு மாத்திரை', hint: '1 Tablet', trigger: 75 },
+        { word: 'சாப்பிடவும்', hint: 'Take with water', trigger: 90 }
+      ]
+    },
+    kn: {
+      id: 'kn',
+      region: 'KARNATAKA (BENGALURU & RURAL)',
+      nativeScript: 'ಬೆಳಗಿನ ಉಪಾಹಾರದ ನಂತರ ಈ ಒಂದು ಮಾತ್ರೆಯನ್ನು ನೀರಿನೊಂದಿಗೆ ಸೇವಿಸಿ',
+      phonetic: 'Belagina upahaarada nanthara ee ondu maathreyannu neerinandhige sevisi',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Suresh Voice (Kannada Indic)',
+      tokens: [
+        { word: 'ಈ', hint: 'This', trigger: 0 },
+        { word: 'ಹಸಿರು', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
+        { word: 'ಮಾತ್ರೆ', hint: 'Tablet', trigger: 30 },
+        { word: 'ಬೆಳಿಗ್ಗೆ', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'ತಿಂಡಿ ನಂತರ', hint: 'After breakfast', trigger: 60 },
+        { word: 'ಒಂದು', hint: '1 Tablet', trigger: 75 },
+        { word: 'ಸೇವಿಸಿ', hint: 'Take with water', trigger: 90 }
+      ]
+    },
+    mr: {
+      id: 'mr',
+      region: 'MAHARASHTRA (PUNE & VIDARBHA)',
+      nativeScript: 'दररोज सकाळी नाश्त्यानंतर ही एक गोळी पाण्यासोबत घ्या',
+      phonetic: 'Darroj sakaali naashtyaanantar hee ek goli paanyaasobat ghyaa',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Sneha Voice (Marathi Indic)',
+      tokens: [
+        { word: 'ही', hint: 'This', trigger: 0 },
+        { word: 'हिरवी', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
+        { word: 'गोळी', hint: 'Tablet', trigger: 30 },
+        { word: 'सकाळी', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'नाश्त्यानंतर', hint: 'After breakfast', trigger: 60 },
+        { word: 'एक', hint: '1 Tablet', trigger: 75 },
+        { word: 'पाण्यासोबत घ्या', hint: 'Take with water', trigger: 90 }
+      ]
+    },
+    bn: {
+      id: 'bn',
+      region: 'WEST BENGAL (KOLKATA & SILIGURI)',
+      nativeScript: 'এই ট্যাবলেটটি সকালে জলখাবারের পরে জল দিয়ে একটি খাবেন',
+      phonetic: 'Ei tabletti shokale jol-khaabaarer pore jol diye ekti khaaben',
+      clinicalMeaning: 'Tab. Amoxicillin 500mg • 1 Tab OD Morning after breakfast with water',
+      speaker: 'Dr. Sourav Voice (Bengali Indic)',
+      tokens: [
+        { word: 'এই', hint: 'This', trigger: 0 },
+        { word: 'সবুজ', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
+        { word: 'ট্যাবলেট', hint: 'Tablet', trigger: 30 },
+        { word: 'সকালে', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'খাবারের পর', hint: 'After food', trigger: 60 },
+        { word: 'একটি', hint: '1 Tablet', trigger: 75 },
+        { word: 'জল দিয়ে খাবেন', hint: 'Take with water', trigger: 90 }
+      ]
+    }
+  };
+
   return (
     <div style={{ position: 'relative', overflow: 'hidden', background: '#F8FAFC' }}>
       {/* =========================================================================
@@ -379,116 +485,43 @@ export default function HeroLanding({
           top: 0,
           right: 0,
           bottom: 0,
-          width: '50%',
-          maxWidth: '740px',
-          minWidth: '500px',
+          width: '54%',
+          minWidth: '520px',
           height: '100%',
           display: 'flex',
-          alignItems: 'flex-end',
+          alignItems: 'stretch',
           justifyContent: 'flex-end',
           pointerEvents: 'none',
-          zIndex: 1
+          zIndex: 1,
+          overflow: 'hidden'
         }}>
           <div style={{ 
             position: 'relative', 
             width: '100%', 
-            maxWidth: '740px',
-            aspectRatio: '948 / 856', 
-            maxHeight: '660px',
-            display: 'flex', 
-            alignItems: 'flex-end', 
-            justifyContent: 'flex-end' 
+            height: '100%',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end'
           }}>
             <img 
-              src="/assets/ayuswar_doctor_hero_no_header.png" 
+              src="/assets/sections/sec1_hero.png" 
               alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
-                objectPosition: 'right bottom',
-                filter: 'contrast(1.02) saturate(1.02) drop-shadow(0 16px 36px rgba(10, 37, 64, 0.09))',
+                objectFit: 'cover',
+                objectPosition: 'right 20%',
+                filter: 'contrast(1.02) saturate(1.02)',
                 imageRendering: '-webkit-optimize-contrast',
                 userSelect: 'none',
-                display: 'block'
+                display: 'block',
+                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)'
               }}
               onError={(e) => {
-                e.target.src = '/assets/ayuswar_doctor_hero_ultra.png';
+                e.target.src = '/assets/ayuswar_doctor_hero_no_header.png';
               }}
             />
-
-            {/* Ultra-Sharp High-DPI ABDM Compliant Vector Badge Card (Sits directly on top of the image badge with exact pixel alignment) */}
-            <div 
-              onClick={() => setSelectedFeatureModalKey('abdm')}
-              style={{
-                position: 'absolute',
-                top: '73.8%',
-                left: '31.4%',
-                width: '49.0%',
-                height: '11.5%',
-                zIndex: 10,
-                cursor: 'pointer',
-                background: 'linear-gradient(135deg, #ffffff 0%, #F0FDFA 100%)',
-                border: '2px solid #00A896',
-                borderRadius: '16px',
-                padding: '0 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '11px',
-                boxShadow: '0 8px 24px rgba(0, 168, 150, 0.25), 0 2px 8px rgba(10, 37, 64, 0.10)',
-                transition: 'all 0.2s ease',
-                pointerEvents: 'auto',
-                boxSizing: 'border-box'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#00D2D3';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 210, 211, 0.35), 0 4px 12px rgba(10, 37, 64, 0.14)';
-                e.currentTarget.style.transform = 'scale(1.02)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#00A896';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 168, 150, 0.25), 0 2px 8px rgba(10, 37, 64, 0.10)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-              title="ABDM Compliant FHIR R4 Architecture - Click to inspect specs"
-            >
-              <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: 'rgba(0, 168, 150, 0.15)',
-                border: '1.5px solid rgba(0, 168, 150, 0.35)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#008B8B',
-                flexShrink: 0
-              }}>
-                <ShieldCheck size={20} strokeWidth={2.5} />
-              </div>
-              <div style={{ minWidth: 0, flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                  <span style={{ fontFamily: 'Outfit, sans-serif', fontSize: '14px', fontWeight: 850, color: '#0A2540', letterSpacing: '-0.2px', whiteSpace: 'nowrap' }}>
-                    ABDM Compliant
-                  </span>
-                  <span style={{
-                    background: 'linear-gradient(135deg, #008B8B, #00A896)',
-                    color: '#ffffff',
-                    fontSize: '10px',
-                    fontWeight: 800,
-                    padding: '2px 7px',
-                    borderRadius: '12px',
-                    letterSpacing: '0.4px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    FHIR R4
-                  </span>
-                </div>
-                <div style={{ fontSize: '10.5px', color: '#475569', fontWeight: 650, letterSpacing: '0.1px', marginTop: '2px', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                  Secured. Private. Trusted. Built for Bharat.
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -866,224 +899,163 @@ export default function HeroLanding({
             In primary health centers across rural India, doctors are overwhelmed by patient volume while citizens are locked out of their own medical records by language and literacy barriers.
           </p>
 
-          {/* Preset Buttons & Interactive Slider Control */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '18px' }}>
-            <button
-              onClick={() => setSplitSliderPercent(0)}
-              style={{
-                padding: '7px 16px',
-                borderRadius: '999px',
-                border: splitSliderPercent === 0 ? '1.5px solid #EF4444' : '1px solid #CBD5E1',
-                background: splitSliderPercent === 0 ? '#EF4444' : '#ffffff',
-                color: splitSliderPercent === 0 ? '#ffffff' : '#475569',
-                fontSize: '12px',
-                fontWeight: 750,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              ⚠️ 100% Status Quo (Keyboard Burnout)
-            </button>
-            <button
-              onClick={() => setSplitSliderPercent(50)}
-              style={{
-                padding: '7px 16px',
-                borderRadius: '999px',
-                border: splitSliderPercent === 50 ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
-                background: splitSliderPercent === 50 ? '#008B8B' : '#ffffff',
-                color: splitSliderPercent === 50 ? '#ffffff' : '#475569',
-                fontSize: '12px',
-                fontWeight: 750,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              ⚖️ 50 / 50 Clinical Split
-            </button>
-            <button
-              onClick={() => setSplitSliderPercent(100)}
-              style={{
-                padding: '7px 16px',
-                borderRadius: '999px',
-                border: splitSliderPercent === 100 ? '1.5px solid #10B981' : '1px solid #CBD5E1',
-                background: splitSliderPercent === 100 ? '#10B981' : '#ffffff',
-                color: splitSliderPercent === 100 ? '#ffffff' : '#475569',
-                fontSize: '12px',
-                fontWeight: 750,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              ✨ 100% AyuSwar Ambient Freedom
-            </button>
+
+        </div>
+
+        {/* Visual Comparison Card Featuring sec2_gap.png */}
+        <div style={{
+          position: 'relative',
+          maxWidth: '1240px',
+          margin: '0 auto 36px auto',
+          borderRadius: '24px',
+          overflow: 'hidden',
+          border: '2px solid #94A3B8',
+          boxShadow: '0 16px 40px rgba(10, 37, 64, 0.08)',
+          background: '#0F172A'
+        }}>
+          <img 
+            src="/assets/sections/sec2_gap.png"
+            alt="The Clinical Gap: Left Keyboard Burnout vs Right Warm Ambient Eye-Contact"
+            style={{
+              width: '100%',
+              height: 'auto',
+              maxHeight: '480px',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              display: 'block'
+            }}
+          />
+          {/* Left HTML Overlay Pill */}
+          <div style={{
+            position: 'absolute',
+            bottom: '18px',
+            left: '20px',
+            background: 'rgba(15, 23, 42, 0.88)',
+            backdropFilter: 'blur(8px)',
+            border: '1.5px solid rgba(239, 68, 68, 0.6)',
+            borderRadius: '14px',
+            padding: '8px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#FCA5A5',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            maxWidth: 'calc(50% - 30px)'
+          }}>
+            <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#EF4444' }} />
+            <div style={{ fontSize: '12px' }}>
+              <strong style={{ color: '#F87171' }}>TRADITIONAL OPD: </strong>
+              <span style={{ color: '#E2E8F0' }}>Keyboard Burnout • Patient Waiting • Zero Eye Contact</span>
+            </div>
           </div>
 
-          {/* Interactive Scrub Range Bar */}
-          <div style={{ maxWidth: '420px', margin: '14px auto 0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#EF4444' }}>Burnout (0%)</span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={splitSliderPercent}
-              onChange={(e) => setSplitSliderPercent(Number(e.target.value))}
-              style={{ flex: 1, accentColor: '#008B8B', cursor: 'ew-resize' }}
-            />
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#10B981' }}>Freedom (100%)</span>
+          {/* Right HTML Overlay Pill */}
+          <div style={{
+            position: 'absolute',
+            bottom: '18px',
+            right: '20px',
+            background: 'rgba(15, 23, 42, 0.88)',
+            backdropFilter: 'blur(8px)',
+            border: '1.5px solid rgba(16, 185, 129, 0.7)',
+            borderRadius: '14px',
+            padding: '8px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: '#6EE7B7',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            maxWidth: 'calc(50% - 30px)'
+          }}>
+            <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
+            <div style={{ fontSize: '12px' }}>
+              <strong style={{ color: '#34D399' }}>AYUSWAR AMBIENT: </strong>
+              <span style={{ color: '#E2E8F0' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
+            </div>
           </div>
         </div>
 
-        {/* Split Screen Container */}
+        {/* Option A: Sleek Key Metrics Strip Directly Under sec2_gap.png */}
         <div style={{
+          maxWidth: '1240px',
+          margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: splitSliderPercent === 0 ? '1fr' : splitSliderPercent === 100 ? '1fr' : `${Math.max(30, Math.min(70, splitSliderPercent))}% ${Math.max(30, Math.min(70, 100 - splitSliderPercent))}%`,
-          gap: '20px',
-          transition: 'all 0.25s ease'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '18px'
         }}>
-          {/* Left Panel: Status Quo Typing Burnout */}
-          {splitSliderPercent < 100 && (
-            <div style={{
-              background: 'linear-gradient(180deg, #FFF5F5 0%, #FFFFFF 100%)',
-              border: '2px solid #FECACA',
-              borderTop: '6px solid #EF4444',
-              borderRadius: '24px',
-              padding: '28px',
-              boxShadow: '0 8px 24px rgba(239, 68, 68, 0.08)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '20px'
-            }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#FEE2E2', color: '#B91C1C', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
-                    <AlertTriangle size={13} />
-                    <span>STATUS QUO: 80+ PATIENT PHC QUEUE</span>
-                  </div>
-                  <span style={{ fontSize: '12px', color: '#991B1B', fontWeight: 700 }}>Frantic Typing Mode</span>
-                </div>
-
-                <h3 style={{ fontSize: '22px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                  Manual Typing & Keyboard Burnout
-                </h3>
-                <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
-                  Clinicians are trapped entering ICD codes and drug dosages into desktop keyboards while anxious rural patients and families speak simultaneously in regional dialects.
-                </p>
-
-                {/* Metrics Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '18px' }}>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1px solid #FCA5A5' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#DC2626' }}>9.4 min</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Note Drafting Time</div>
-                    <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Hurried scribbling</div>
-                  </div>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1px solid #FCA5A5' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#DC2626' }}>24%</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Eye-Contact Index</div>
-                    <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Staring at monitor</div>
-                  </div>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1px solid #FCA5A5' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#DC2626' }}>42%</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Medication Errors</div>
-                    <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Patient illiteracy</div>
-                  </div>
-                </div>
+          {/* Left Metrics (Status Quo Burnout) */}
+          <div style={{
+            background: 'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)',
+            border: '1.5px solid #F87171',
+            borderRadius: '18px',
+            padding: '16px 20px',
+            boxShadow: '0 4px 16px rgba(239, 68, 68, 0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#EF4444' }} />
+              <span style={{ fontSize: '12px', fontWeight: 800, color: '#B91C1C', textTransform: 'uppercase' }}>Status Quo</span>
+            </div>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>9.4 min</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Typing Time</span>
               </div>
-
-              {/* Visual Frantic Keyboard Simulator Card */}
-              <div style={{
-                background: '#1E293B',
-                borderRadius: '16px',
-                padding: '16px',
-                color: '#E2E8F0',
-                border: '1px solid #334155'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#F87171', fontWeight: 750 }}>⌨️ Rushed Desktop EHR Entry (Keyboard Stress)</span>
-                  <span style={{ fontSize: '10px', color: '#94A3B8' }}>Typing Speed: 32 WPM</span>
-                </div>
-                <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#CBD5E1', background: '#0F172A', padding: '10px', borderRadius: '8px' }}>
-                  Dr: Pt c/o epigast pain x3d, wheez, dyspnea. Tab Pantop 40mg OD, Inh Salb 100mcg SOS. [PAPER SLIP TORN/LOST]
-                </div>
+              <div style={{ width: 1, height: 24, background: '#FECACA' }} />
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>24%</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
+              </div>
+              <div style={{ width: 1, height: 24, background: '#FECACA' }} />
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>42%</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Medication Errors</span>
               </div>
             </div>
-          )}
+          </div>
 
-          {/* Right Panel: AyuSwar Ambient Clinical Freedom */}
-          {splitSliderPercent > 0 && (
-            <div style={{
-              background: 'linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%)',
-              border: '2px solid #99F6E4',
-              borderTop: '6px solid #008B8B',
-              borderRadius: '24px',
-              padding: '28px',
-              boxShadow: '0 8px 24px rgba(0, 139, 139, 0.10)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              gap: '20px'
-            }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#CCFBF1', color: '#0F766E', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
-                    <Sparkles size={13} />
-                    <span>AYUSWAR OS: ZERO-TOUCH AMBIENT INTELLIGENCE</span>
-                  </div>
-                  <span style={{ fontSize: '12px', color: '#008B8B', fontWeight: 700 }}>Face-to-Face Clinical Freedom</span>
-                </div>
-
-                <h3 style={{ fontSize: '22px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                  Ambient Voice Scribing & Spoken Audio-Rx
-                </h3>
-                <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55 }}>
-                  Clinician maintains continuous eye-contact, speaking naturally in mixed Telugu, Hindi, or English. AyuSwar structures official FHIR notes and generates spoken patient audio.
-                </p>
-
-                {/* Metrics Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '18px' }}>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1.5px solid #2DD4BF' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#008B8B' }}>1.8 min</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Draft Review Time</div>
-                    <div style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>78% time saved</div>
-                  </div>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1.5px solid #2DD4BF' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#008B8B' }}>86%</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Eye-Contact Index</div>
-                    <div style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>Active listening</div>
-                  </div>
-                  <div style={{ background: '#ffffff', padding: '14px', borderRadius: '14px', border: '1.5px solid #2DD4BF' }}>
-                    <div style={{ fontSize: '26px', fontWeight: 900, color: '#008B8B' }}>93.4%</div>
-                    <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Clinician Acceptance</div>
-                    <div style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>Zero re-write</div>
-                  </div>
-                </div>
+          {/* Right Metrics (AyuSwar Ambient Freedom) */}
+          <div style={{
+            background: 'linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%)',
+            border: '1.5px solid #34D399',
+            borderRadius: '18px',
+            padding: '16px 20px',
+            boxShadow: '0 4px 16px rgba(16, 185, 129, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+              <span style={{ fontSize: '12px', fontWeight: 800, color: '#047857', textTransform: 'uppercase' }}>AyuSwar AI</span>
+            </div>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>1.8 min</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#047857', fontWeight: 700 }}>78% Saved</span>
               </div>
-
-              {/* Visual Ambient Microphone & Audio-Rx Stream Card */}
-              <div style={{
-                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-                borderRadius: '16px',
-                padding: '16px',
-                color: '#E2E8F0',
-                border: '1px solid #334155'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#2DD4BF', fontWeight: 750 }}>🎙️ Ambient Dual-Speaker Beamforming Active</span>
-                  <span style={{ fontSize: '10px', color: '#34D399', fontWeight: 700 }}>ABDM FHIR R4 Ready</span>
-                </div>
-                <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#5EEAD4', background: '#0F172A', padding: '10px', borderRadius: '8px' }}>
-                  Structured Note Generated | ICD-10 R06.2 Wheezing | Audio-Rx Telugu Dispatched to WhatsApp (+42% Adherence)
-                </div>
+              <div style={{ width: 1, height: 24, background: '#A7F3D0' }} />
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>86%</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
+              </div>
+              <div style={{ width: 1, height: 24, background: '#A7F3D0' }} />
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>93.4%</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Doctor Approval</span>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </section>
 
       {/* =========================================================================
           SECTION 3: HOW AYUSWAR WORKS — INTERACTIVE STEPPED PIPELINE
           ========================================================================= */}
-      <section style={{ background: '#F1F5F9', borderTop: '1.5px solid #E2E8F0', borderBottom: '1.5px solid #E2E8F0', padding: '48px 24px' }}>
+      <section style={{ background: '#F1F5F9', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 30px auto' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
@@ -1100,7 +1072,7 @@ export default function HeroLanding({
           {/* Glowing Horizontal Neural Data-Bus Circuit */}
           <div style={{
             background: 'linear-gradient(135deg, #0A192F 0%, #0F172A 100%)',
-            border: '2px solid #1E293B',
+            border: '2px solid #334155',
             borderRadius: '28px',
             padding: '32px 28px',
             boxShadow: '0 20px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
@@ -1140,137 +1112,92 @@ export default function HeroLanding({
               </div>
             </div>
 
-            {/* Glowing Horizontal Connecting Cable Trace */}
-            <div style={{ position: 'relative', margin: '20px 0 32px 0' }}>
-              {/* Backing Cable */}
+            {/* Visual Stepped Pipeline Banner Featuring sec3_pipeline.png */}
+            <div style={{
+              position: 'relative',
+              borderRadius: '20px',
+              overflow: 'hidden',
+              marginBottom: '28px',
+              border: '2px solid #2DD4BF',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
+              background: '#061325'
+            }}>
+              <img 
+                src="/assets/sections/sec3_pipeline.png"
+                alt="AyuSwar AI Stepped Pipeline: 16 kHz Waveform > 4 Stages > Prescription Card"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '340px',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  display: 'block'
+                }}
+              />
+              {/* HTML Step Labels Overlaid Along Banner */}
               <div style={{
                 position: 'absolute',
-                top: '50%',
-                left: '60px',
-                right: '60px',
-                height: '4px',
-                background: 'linear-gradient(90deg, #008B8B 0%, #2DD4BF 50%, #10B981 100%)',
-                boxShadow: '0 0 16px rgba(45, 212, 191, 0.7)',
-                transform: 'translateY(-50%)',
-                zIndex: 1
-              }} />
-
-              {/* 4 Physical Hardware & AI Nodes */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '18px',
-                position: 'relative',
-                zIndex: 2
+                bottom: '12px',
+                left: '16px',
+                right: '16px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: 'rgba(10, 25, 47, 0.92)',
+                backdropFilter: 'blur(10px)',
+                padding: '8px 14px',
+                borderRadius: '14px',
+                border: '1.5px solid rgba(45, 212, 191, 0.4)',
+                fontSize: '12px',
+                gap: '8px'
               }}>
+                <span style={{ color: '#2DD4BF', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2DD4BF', boxShadow: '0 0 8px #2DD4BF' }}></span>
+                  16 kHz DSP Waveform
+                </span>
                 {[
-                  {
-                    step: 'STAGE 01',
-                    title: 'Dual-Beam Ingestion',
-                    desc: '16 kHz PCM capture with directional acoustic isolation.',
-                    icon: Mic,
-                    badge: 'WebAudio Sensor'
-                  },
-                  {
-                    step: 'STAGE 02',
-                    title: 'Live Spectrogram DSP',
-                    desc: 'Kalman 50/120 Hz notch filter + Coswara biomarkers.',
-                    icon: Activity,
-                    badge: '13-dim MFCC'
-                  },
-                  {
-                    step: 'STAGE 03',
-                    title: 'Neural Semantic Chip',
-                    desc: 'Prisma v2.5 STT + WHO ICD-10 metaphor resolver.',
-                    icon: Cpu,
-                    badge: 'AS-400 Silicon'
-                  },
-                  {
-                    step: 'STAGE 04',
-                    title: 'Spoken Audio-Rx Karaoke',
-                    desc: 'Timbre v2.5 voice synthesis with glowing pill sync.',
-                    icon: Volume2,
-                    badge: 'Native Audio-Rx'
-                  }
-                ].map((node, i) => {
-                  const isSelected = circuitNodeIndex === i;
-                  const NodeIcon = node.icon;
+                  { id: 0, label: '🎙️ 1. Ambient Mic' },
+                  { id: 1, label: '🧠 2. Neural Diarization' },
+                  { id: 2, label: '📋 3. FHIR R4 Bundling' },
+                  { id: 3, label: '✅ 4. Doctor Verified' }
+                ].map((s) => {
+                  const isCur = circuitNodeIndex === s.id;
                   return (
-                    <div
-                      key={i}
-                      onClick={() => setCircuitNodeIndex(i)}
+                    <button
+                      key={s.id}
+                      onClick={() => setCircuitNodeIndex(s.id)}
                       style={{
-                        background: isSelected ? 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)' : 'rgba(15, 23, 42, 0.85)',
-                        border: isSelected ? '2px solid #2DD4BF' : '1.5px solid #334155',
-                        borderRadius: '20px',
-                        padding: '20px 18px',
                         cursor: 'pointer',
-                        transition: 'all 0.22s ease',
-                        boxShadow: isSelected ? '0 12px 30px rgba(45, 212, 191, 0.25), 0 0 0 1px #2DD4BF' : '0 6px 18px rgba(0,0,0,0.2)',
-                        transform: isSelected ? 'translateY(-4px)' : 'none',
-                        position: 'relative'
+                        padding: '6px 14px',
+                        borderRadius: '10px',
+                        border: isCur ? '1.5px solid #34D399' : '1px solid rgba(255,255,255,0.12)',
+                        background: isCur ? 'rgba(52, 211, 153, 0.18)' : 'rgba(15, 23, 42, 0.6)',
+                        color: isCur ? '#34D399' : '#CBD5E1',
+                        fontWeight: isCur ? 800 : 600,
+                        fontSize: '12px',
+                        transition: 'all 0.15s ease',
+                        boxShadow: isCur ? '0 0 12px rgba(52, 211, 153, 0.3)' : 'none'
                       }}
                     >
-                      {/* Node Header & Glowing Indicator */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, color: isSelected ? '#2DD4BF' : '#94A3B8', letterSpacing: '0.8px' }}>
-                          {node.step}
-                        </span>
-                        <span style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: isSelected ? '#2DD4BF' : '#475569',
-                          boxShadow: isSelected ? '0 0 10px #2DD4BF' : 'none'
-                        }} />
-                      </div>
-
-                      {/* Icon & Physical Housing */}
-                      <div style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '12px',
-                        background: isSelected ? 'rgba(45, 212, 191, 0.2)' : 'rgba(30, 41, 59, 0.8)',
-                        border: isSelected ? '1.5px solid #2DD4BF' : '1px solid #475569',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: isSelected ? '#2DD4BF' : '#94A3B8',
-                        marginBottom: '12px'
-                      }}>
-                        <NodeIcon size={22} />
-                      </div>
-
-                      <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#F8FAFC', marginBottom: '6px' }}>
-                        {node.title}
-                      </h4>
-                      <p style={{ fontSize: '12px', color: '#94A3B8', lineHeight: 1.45, margin: 0 }}>
-                        {node.desc}
-                      </p>
-
-                      <div style={{
-                        marginTop: '12px',
-                        fontSize: '10.5px',
-                        fontWeight: 750,
-                        color: isSelected ? '#5EEAD4' : '#64748B',
-                        padding: '3px 8px',
-                        borderRadius: '6px',
-                        background: isSelected ? 'rgba(45, 212, 191, 0.1)' : 'rgba(30, 41, 59, 0.6)',
-                        display: 'inline-block'
-                      }}>
-                        {node.badge}
-                      </div>
-                    </div>
+                      {s.label}
+                    </button>
                   );
                 })}
+                <span style={{ color: '#38BDF8', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  💊 Spoken Audio-Rx Card
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 8px #38BDF8' }}></span>
+                </span>
               </div>
             </div>
+
+
 
             {/* Bottom Docked Telemetry HUD for Selected Node */}
             <div style={{
               background: 'rgba(15, 23, 42, 0.95)',
               borderRadius: '18px',
-              border: '1.5px solid #334155',
+              border: '2px solid #475569',
               padding: '20px 24px',
               display: 'grid',
               gridTemplateColumns: '1fr 1fr auto',
@@ -1341,66 +1268,468 @@ export default function HeroLanding({
           </p>
         </div>
 
-        {/* 6 Deep-Tech Moats: Interactive Medical AI Workbench */}
+        {/* Bento Grid Architecture Showcase Featuring sec4_moats.png with Interactive Frame Hotspots */}
         <div style={{
+          position: 'relative',
           background: '#ffffff',
           borderRadius: '28px',
-          border: '1.5px solid #CBD5E1',
-          boxShadow: '0 12px 40px rgba(10, 37, 64, 0.07)',
-          overflow: 'hidden'
+          border: '2px solid #94A3B8',
+          padding: '24px',
+          marginBottom: '28px',
+          boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)'
         }}>
-          {/* Workbench Tab Navigation Bar */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Layers size={18} color="#008B8B" />
+              <span style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
+                Bento Architecture Matrix — Live Clinical Subsystems
+              </span>
+            </div>
+            <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#059669' : '#64748B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {activeWorkbenchMoat ? (
+                <>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
+                  Telemetry open below • Click tile again or Close button to hide
+                </>
+              ) : (
+                'Select any tile to inspect live telemetry below'
+              )}
+            </span>
+          </div>
+
+          {/* Native CSS Responsive Bento Grid (Zero misalignment, crisp, readable 13-14px typography) */}
           <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            background: '#F8FAFC',
-            borderBottom: '1.5px solid #E2E8F0',
-            padding: '10px 14px',
-            gap: '8px',
-            alignItems: 'center'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gap: '18px',
+            position: 'relative'
           }}>
             {[
-              { id: 'spectrogram', label: '1. Spectrogram HUD', icon: Activity, color: '#008B8B' },
-              { id: 'vision_scanner', label: '2. Blister Vision HUD', icon: Scan, color: '#D97706' },
-              { id: 'fhir_terminal', label: '3. FHIR JSON Terminal', icon: Terminal, color: '#0EA5E9' },
-              { id: 'metaphor_resolver', label: '4. Indic Metaphor', icon: Languages, color: '#8B5CF6' },
-              { id: 'diarization', label: '5. Diarization Studio', icon: Mic, color: '#10B981' },
-              { id: 'offline_edge', label: '6. Offline Edge OS', icon: Lock, color: '#EF4444' }
-            ].map((tab) => {
-              const isActive = activeWorkbenchMoat === tab.id;
-              const TabIcon = tab.icon;
+              {
+                id: 'spectrogram',
+                num: '1',
+                title: '1. Spectrogram HUD',
+                badge: '88.2% Sensitivity',
+                col: '#008B8B',
+                gradient: 'linear-gradient(135deg, rgba(0, 139, 139, 0.15) 0%, rgba(45, 212, 191, 0.15) 100%)',
+                icon: Activity,
+                rightBox: (
+                  <div style={{
+                    background: '#F8FAFC',
+                    borderRadius: '14px',
+                    border: '1.5px solid #E2E8F0',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        FFT Waterfall (0-8 kHz)
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', color: '#059669', fontWeight: 800, background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} className="animate-ping" />
+                        LIVE
+                      </span>
+                    </div>
+                    {/* Live Equalizer Bars */}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '38px', margin: '4px 0' }}>
+                      {[25, 38, 55, 92, 98, 70, 45, 82, 95, 62, 35, 20].map((h, i) => (
+                        <div 
+                          key={i} 
+                          style={{ 
+                            flex: 1, 
+                            height: `${h}%`, 
+                            background: i === 3 || i === 4 || i === 8 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #008B8B 100%)', 
+                            borderRadius: '2px' 
+                          }} 
+                        />
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', fontWeight: 750 }}>
+                      <span style={{ color: '#DC2626' }}>450 Hz Wheeze Peak</span>
+                      <span style={{ color: '#008B8B' }}>13-dim MFCC</span>
+                    </div>
+                  </div>
+                )
+              },
+              {
+                id: 'vision_scanner',
+                num: '2',
+                title: '2. Pill Scanner HUD',
+                badge: '100% NFI Match',
+                col: '#D97706',
+                gradient: 'linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%)',
+                icon: Scan,
+                rightBox: (
+                  <div style={{
+                    background: '#FDFBF7',
+                    borderRadius: '14px',
+                    border: '1.5px solid #FDE68A',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        OpenCV Blister OCR
+                      </span>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
+                        ✓ NFI Verified
+                      </span>
+                    </div>
+                    {/* Viewfinder Bounding Box */}
+                    <div style={{
+                      border: '1.5px dashed #D97706',
+                      borderRadius: '8px',
+                      padding: '6px 8px',
+                      background: 'rgba(217, 119, 6, 0.06)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: '12.5px', fontWeight: 850, color: '#92400E', fontFamily: 'monospace' }}>AMOXICILLIN 500mg</div>
+                      <div style={{ fontSize: '10px', color: '#B45309', marginTop: '2px' }}>Batch #AX-9021 • Exp 2028</div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#059669', fontWeight: 700 }}>
+                      PMBJP Jan Aushadhi Generic (₹18 vs ₹92)
+                    </div>
+                  </div>
+                )
+              },
+              {
+                id: 'fhir_terminal',
+                num: '3',
+                title: '3. FHIR Terminal',
+                badge: 'HL7 R4 Schema',
+                col: '#0EA5E9',
+                gradient: 'linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                icon: Terminal,
+                rightBox: (
+                  <div style={{
+                    background: '#0B1E33',
+                    borderRadius: '14px',
+                    border: '1.5px solid #1E3A5F',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        ABDM HL7 FHIR R4
+                      </span>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 6px #38BDF8' }} />
+                    </div>
+                    <pre style={{
+                      margin: 0,
+                      fontSize: '11px',
+                      fontFamily: 'monospace',
+                      color: '#7DD3FC',
+                      lineHeight: 1.35,
+                      overflow: 'hidden'
+                    }}>
+{`{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": ["Encounter", "Rx"]
+}`}
+                    </pre>
+                    <div style={{ fontSize: '11px', color: '#4ADE80', fontWeight: 750 }}>
+                      ✓ ABDM M1, M2, M3 Encrypted
+                    </div>
+                  </div>
+                )
+              },
+              {
+                id: 'metaphor_resolver',
+                num: '4',
+                title: '4. Indic Metaphor',
+                badge: '22 Dialects',
+                col: '#8B5CF6',
+                gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)',
+                icon: Languages,
+                rightBox: (
+                  <div style={{
+                    background: '#FAF5FF',
+                    borderRadius: '14px',
+                    border: '1.5px solid #E9D5FF',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Metaphor Crosswalk
+                      </span>
+                      <span style={{ fontSize: '10px', color: '#6D28D9', fontWeight: 800, background: '#EDE9FE', padding: '2px 6px', borderRadius: '4px' }}>
+                        TE ➔ WHO
+                      </span>
+                    </div>
+                    <div style={{ background: '#FFFFFF', padding: '6px 8px', borderRadius: '8px', border: '1px solid #DDD6FE' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#581C87' }}>"పీకల్లో పిల్లికూతలు"</div>
+                      <div style={{ fontSize: '11px', color: '#7E22CE', marginTop: '2px' }}>⬇ ICD-10: R06.2 (Wheezing)</div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 650 }}>
+                      SNOMED CT: 195967001 Concept
+                    </div>
+                  </div>
+                )
+              },
+              {
+                id: 'diarization',
+                num: '5',
+                title: '5. Diarization Studio',
+                badge: 'Dual-Speaker DSP',
+                col: '#10B981',
+                gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.15) 100%)',
+                icon: Mic,
+                rightBox: (
+                  <div style={{
+                    background: '#F0FDF4',
+                    borderRadius: '14px',
+                    border: '1.5px solid #BBF7D0',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Dual-Beam Acoustic DSP
+                      </span>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 6px', borderRadius: '4px' }}>
+                        180ms
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#0284C7', fontWeight: 700 }}>
+                        <span>👨‍⚕️ Dr:</span>
+                        <span style={{ flex: 1, height: '5px', background: '#38BDF8', borderRadius: '3px' }} />
+                        <span style={{ fontSize: '10px', color: '#64748B' }}>Ch 1</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#059669', fontWeight: 700 }}>
+                        <span>👵 Pt:</span>
+                        <span style={{ flex: 1, height: '5px', background: '#10B981', borderRadius: '3px' }} />
+                        <span style={{ fontSize: '10px', color: '#64748B' }}>Ch 2</span>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#065F46', fontWeight: 750 }}>
+                      Isolated Diarization in 72 dB Rural OPD
+                    </div>
+                  </div>
+                )
+              },
+              {
+                id: 'offline_edge',
+                num: '6',
+                title: '6. Offline Edge OS',
+                badge: 'Zero Cloud Dep',
+                col: '#EF4444',
+                gradient: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(248, 113, 113, 0.15) 100%)',
+                icon: Cpu,
+                rightBox: (
+                  <div style={{
+                    background: '#FEF2F2',
+                    borderRadius: '14px',
+                    border: '1.5px solid #FECACA',
+                    padding: '12px 14px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: '100%'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#DC2626', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Local WebAssembly OS
+                      </span>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#DC2626', background: '#FEE2E2', padding: '2px 6px', borderRadius: '4px' }}>
+                        OFFLINE
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '11.5px', color: '#334155', lineHeight: 1.5 }}>
+                      <div>💾 <strong>RAM Memory:</strong> 142 MB WebAudio</div>
+                      <div>☁️ <strong>Cloud Storage:</strong> 0 KB (Zero Persistence)</div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#059669', fontWeight: 750 }}>
+                      ✓ DPDP Sovereign Patient Privacy
+                    </div>
+                  </div>
+                )
+              }
+            ].map((tile) => {
+              const isSelected = activeWorkbenchMoat === tile.id;
+              const IconComp = tile.icon;
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveWorkbenchMoat(tab.id)}
+                <div 
+                  key={tile.id}
+                  onClick={() => setActiveWorkbenchMoat(prev => prev === tile.id ? null : tile.id)}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '7px',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    border: isActive ? `1.5px solid ${tab.color}` : '1px solid #E2E8F0',
-                    background: isActive ? '#ffffff' : '#F1F5F9',
-                    color: isActive ? tab.color : '#475569',
-                    fontSize: '12px',
-                    fontWeight: isActive ? 800 : 600,
                     cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    boxShadow: isActive ? '0 3px 10px rgba(0,0,0,0.06)' : 'none',
-                    transition: 'all 0.18s ease',
-                    flex: '1 1 auto',
-                    justifyContent: 'center'
+                    borderRadius: '22px',
+                    border: isSelected ? '2.5px solid #10B981' : '1.5px solid #CBD5E1',
+                    background: isSelected ? 'linear-gradient(145deg, #F0FDF4 0%, #FFFFFF 100%)' : '#FFFFFF',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    minHeight: '230px',
+                    transition: 'all 0.22s ease',
+                    boxShadow: isSelected 
+                      ? '0 12px 32px rgba(16, 185, 129, 0.22), 0 0 0 1px #10B981' 
+                      : '0 4px 18px rgba(10, 37, 64, 0.04)',
+                    transform: isSelected ? 'translateY(-2px)' : 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(10, 37, 64, 0.08)';
+                      e.currentTarget.style.borderColor = '#94A3B8';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isSelected) {
+                      e.currentTarget.style.boxShadow = '0 4px 18px rgba(10, 37, 64, 0.04)';
+                      e.currentTarget.style.borderColor = '#CBD5E1';
+                    }
                   }}
                 >
-                  <TabIcon size={14} color={isActive ? tab.color : '#64748B'} />
-                  <span>{tab.label}</span>
-                </button>
+                  {/* Top Body: Left 3D Icon Container + Right High-Fidelity UI Preview */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: '14px', alignItems: 'stretch', marginBottom: '14px' }}>
+                    {/* Left 3D-Styled Icon Plinth */}
+                    <div style={{
+                      background: tile.gradient,
+                      borderRadius: '16px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: `1.5px solid ${tile.col}30`,
+                      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 20px ${tile.col}18`
+                    }}>
+                      <div style={{
+                        width: '46px',
+                        height: '46px',
+                        borderRadius: '12px',
+                        background: '#FFFFFF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: tile.col,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
+                      }}>
+                        <IconComp size={24} />
+                      </div>
+                    </div>
+
+                    {/* Right Dedicated UI Telemetry Box */}
+                    <div style={{ minHeight: '125px' }}>
+                      {tile.rightBox}
+                    </div>
+                  </div>
+
+                  {/* Bottom Row: Title on Left, Badge on Right */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingTop: '12px',
+                    borderTop: isSelected ? '1px solid #BBF7D0' : '1px solid #F1F5F9'
+                  }}>
+                    <span style={{
+                      fontSize: '14px',
+                      fontWeight: 850,
+                      color: isSelected ? '#065F46' : '#0A2540',
+                      letterSpacing: '-0.2px'
+                    }}>
+                      {tile.title}
+                    </span>
+                    <span style={{
+                      fontSize: '11.5px',
+                      fontWeight: 800,
+                      color: isSelected ? '#047857' : tile.col,
+                      background: isSelected ? '#DCFCE7' : '#FFFFFF',
+                      padding: '3px 10px',
+                      borderRadius: '999px',
+                      border: isSelected ? '1.5px solid #10B981' : `1.5px solid ${tile.col}40`,
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                    }}>
+                      {tile.badge}
+                    </span>
+                  </div>
+                </div>
               );
             })}
           </div>
+        </div>
 
-          {/* Workbench Stage Container */}
-          <div style={{ padding: '32px' }}>
+        {/* 6 Deep-Tech Moats: Interactive Medical AI Workbench (Only shown when a tile is clicked) */}
+        {activeWorkbenchMoat && (
+          <div style={{
+            marginTop: '28px',
+            background: '#ffffff',
+            borderRadius: '28px',
+            border: '2px solid #94A3B8',
+            boxShadow: '0 16px 48px rgba(10, 37, 64, 0.08)',
+            overflow: 'hidden',
+            animation: 'fadeIn 0.25s ease-in-out'
+          }}>
+            {/* Workbench Top Bar with Dismiss Button */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '14px 28px',
+              background: '#F8FAFC',
+              borderBottom: '2px solid #CBD5E1'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
+                <span style={{ fontSize: '12px', fontWeight: 800, color: '#334155', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+                  Live Subsystem Telemetry HUD
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveWorkbenchMoat(null)}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1.5px solid #CBD5E1',
+                  borderRadius: '10px',
+                  padding: '6px 14px',
+                  fontSize: '12px',
+                  fontWeight: 750,
+                  color: '#475569',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#DC2626';
+                  e.currentTarget.style.borderColor = '#FCA5A5';
+                  e.currentTarget.style.background = '#FEF2F2';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.borderColor = '#CBD5E1';
+                  e.currentTarget.style.background = '#FFFFFF';
+                }}
+              >
+                <span>✕</span>
+                <span>Close Telemetry</span>
+              </button>
+            </div>
+
+            {/* Workbench Stage Container */}
+            <div style={{ padding: '32px' }}>
             {/* FORMAT 1: LIVE ACOUSTIC SPECTROGRAM HUD */}
             {activeWorkbenchMoat === 'spectrogram' && (
               <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
@@ -1920,12 +2249,13 @@ export default function HeroLanding({
             )}
           </div>
         </div>
+      )}
       </section>
 
       {/* =========================================================================
           SECTION 5: PAN-INDIA LINGUISTIC COVERAGE — INTERACTIVE DIALECT ATLAS & KARAOKE SCRUBBER
           ========================================================================= */}
-      <section style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0', padding: '48px 24px' }}>
+      <section style={{ background: '#F8FAFC', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           {/* Header */}
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 32px auto' }}>
@@ -1940,55 +2270,167 @@ export default function HeroLanding({
             </p>
           </div>
 
-          {/* Interactive Dialect Atlas Console */}
+          {/* Interactive Dialect Atlas Console: 2-Column Side-by-Side */}
           <div style={{
             background: '#ffffff',
             borderRadius: '28px',
-            border: '1.5px solid #CBD5E1',
+            border: '2px solid #94A3B8',
             boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
-            padding: '32px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px'
+            padding: '24px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))',
+            gap: '24px',
+            alignItems: 'start'
           }}>
-            {/* Language Selector Pills */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
-              {[
-                { id: 'te', name: 'Telugu', native: 'తెలుగు', region: 'Rayalaseema & Coastal', code: 'te-IN' },
-                { id: 'hi', name: 'Hindi', native: 'हिन्दी', region: 'UP, MP & Bihar', code: 'hi-IN' },
-                { id: 'ta', name: 'Tamil', native: 'தமிழ்', region: 'Tamil Nadu', code: 'ta-IN' },
-                { id: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ', region: 'North Karnataka', code: 'kn-IN' },
-                { id: 'mr', name: 'Marathi', native: 'मराठी', region: 'Vidarbha & Marathwada', code: 'mr-IN' },
-                { id: 'bn', name: 'Bengali', native: 'বাংলা', region: 'Rural Bengal', code: 'bn-IN' }
-              ].map((lang) => {
-                const isSelected = activeDialectId === lang.id;
-                return (
-                  <button
-                    key={lang.id}
-                    onClick={() => {
-                      setActiveDialectId(lang.id);
-                      setKaraokeProgress(30);
-                    }}
-                    style={{
-                      padding: '8px 18px',
-                      borderRadius: '12px',
-                      border: isSelected ? '2px solid #008B8B' : '1px solid #CBD5E1',
-                      background: isSelected ? 'linear-gradient(135deg, rgba(0,139,139,0.1) 0%, rgba(16,185,129,0.1) 100%)' : '#ffffff',
-                      color: isSelected ? '#008B8B' : '#475569',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontWeight: isSelected ? 800 : 600,
-                      boxShadow: isSelected ? '0 4px 12px rgba(0,139,139,0.15)' : 'none',
-                      transition: 'all 0.18s ease'
-                    }}
-                  >
-                    <span style={{ fontSize: '13px' }}>{lang.name}</span>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: isSelected ? '#008B8B' : '#94A3B8' }}>{lang.native}</span>
-                  </button>
-                );
-              })}
+            {/* Left Column: Interactive Regional Dialect Showcase (10/10 Clean Design, Zero Collision) */}
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '24px',
+              border: '2px solid #94A3B8',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minHeight: '440px',
+              boxShadow: '0 8px 24px rgba(10, 37, 64, 0.05)'
+            }}>
+              <div>
+                {/* Dialect Selector Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Languages size={18} color="#008B8B" />
+                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      Select Indic Dialect Stream
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '3px 8px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
+                    ✓ 22 Languages Supported
+                  </span>
+                </div>
+
+                {/* Dialect Selector Pills Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                  gap: '8px',
+                  marginBottom: '20px'
+                }}>
+                  {[
+                    { id: 'te', name: 'Telugu', native: 'తెలుగు (Telangana)', col: '#008B8B' },
+                    { id: 'hi', name: 'Hindi', native: 'हिन्दी (North India)', col: '#D97706' },
+                    { id: 'ta', name: 'Tamil', native: 'தமிழ் (Tamil Nadu)', col: '#059669' },
+                    { id: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ (Karnataka)', col: '#2563EB' },
+                    { id: 'mr', name: 'Marathi', native: 'मराठी (Maharashtra)', col: '#8B5CF6' },
+                    { id: 'bn', name: 'Bengali', native: 'বাংলা (West Bengal)', col: '#EC4899' }
+                  ].map((chip) => {
+                    const isSelected = activeDialectId === chip.id;
+                    return (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        onClick={() => { setActiveDialectId(chip.id); setKaraokeProgress(30); }}
+                        style={{
+                          padding: '9px 12px',
+                          borderRadius: '12px',
+                          border: isSelected ? `2px solid ${chip.col}` : '1.5px solid #CBD5E1',
+                          background: isSelected ? `${chip.col}14` : '#F8FAFC',
+                          color: isSelected ? chip.col : '#334155',
+                          fontWeight: isSelected ? 850 : 650,
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          transition: 'all 0.18s ease',
+                          boxShadow: isSelected ? `0 2px 8px ${chip.col}25` : 'none'
+                        }}
+                      >
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: chip.col }} />
+                        <span>{chip.native}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Active Dialect Highlighted Card (Zero Overlap, Crystal-Clear Typography) */}
+                <div style={{
+                  background: 'linear-gradient(145deg, #F0FDF4 0%, #FFFFFF 100%)',
+                  borderRadius: '18px',
+                  border: '2px solid #10B981',
+                  padding: '20px',
+                  boxShadow: '0 8px 24px rgba(16, 185, 129, 0.12)'
+                }}>
+                  {/* Region & Accuracy Bar */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 800, color: '#065F46', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      <span>📍</span>
+                      <span>{dialectData[activeDialectId]?.region || 'TELANGANA (HYDERABAD & RURAL PHC)'}</span>
+                    </div>
+                    <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#047857', background: '#DCFCE7', padding: '2px 8px', borderRadius: '4px', border: '1px solid #A7F3D0' }}>
+                      98.6% Indic ASR Accuracy
+                    </span>
+                  </div>
+
+                  {/* Native Script Phrase */}
+                  <div style={{
+                    fontSize: '20px',
+                    fontWeight: 900,
+                    color: '#0A2540',
+                    lineHeight: 1.45,
+                    marginBottom: '10px',
+                    letterSpacing: '-0.2px'
+                  }}>
+                    "{dialectData[activeDialectId]?.nativeScript}"
+                  </div>
+
+                  {/* Phonetic Pronunciation (English) */}
+                  <div style={{
+                    fontSize: '13px',
+                    color: '#475569',
+                    fontStyle: 'italic',
+                    marginBottom: '12px',
+                    background: 'rgba(255, 255, 255, 0.8)',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #E2E8F0'
+                  }}>
+                    🗣️ Phonetics: "{dialectData[activeDialectId]?.phonetic}"
+                  </div>
+
+                  {/* Clinical Translation Crosswalk */}
+                  <div style={{
+                    fontSize: '12.5px',
+                    color: '#065F46',
+                    fontWeight: 750,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: '#DCFCE7',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #A7F3D0'
+                  }}>
+                    <span>💊</span>
+                    <span>{dialectData[activeDialectId]?.clinicalMeaning}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Acoustic Telemetry Bar */}
+              <div style={{
+                marginTop: '16px',
+                paddingTop: '12px',
+                borderTop: '1px solid #E2E8F0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '11.5px',
+                color: '#64748B',
+                fontWeight: 650
+              }}>
+                <span>🎙️ Powered by Gnani.ai Prisma STT & Timbre TTS</span>
+                <span style={{ color: '#008B8B', fontWeight: 800 }}>⚡ Sub-180ms Latency</span>
+              </div>
             </div>
 
             {/* Karaoke Main Stage & Scrubber */}
@@ -1997,7 +2439,7 @@ export default function HeroLanding({
               borderRadius: '24px',
               padding: '28px',
               color: '#ffffff',
-              border: '1.5px solid #334155',
+              border: '2px solid #475569',
               boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
             }}>
               {/* Transport Bar */}
@@ -2155,31 +2597,7 @@ export default function HeroLanding({
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                {(activeDialectId === 'te' ? [
-                  { word: 'ఈ', hint: 'This', trigger: 0 },
-                  { word: 'ఆకుపచ్చ', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
-                  { word: 'మాత్ర', hint: 'Tablet', trigger: 30 },
-                  { word: 'ఉదయం', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
-                  { word: 'టిఫిన్ తర్వాత', hint: 'After breakfast', trigger: 60 },
-                  { word: 'ఒకటి', hint: '1 Tablet', trigger: 75 },
-                  { word: 'వేసుకోవాలి', hint: 'Take with water', trigger: 90 }
-                ] : activeDialectId === 'hi' ? [
-                  { word: 'यह', hint: 'This', trigger: 0 },
-                  { word: 'पीली', hint: 'Yellow (Foil)', trigger: 15, isPill: true, pillColor: '#F59E0B' },
-                  { word: 'दवा', hint: 'Medicine', trigger: 30 },
-                  { word: 'सुबह', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
-                  { word: 'नाश्ते के बाद', hint: 'After breakfast', trigger: 60 },
-                  { word: 'एक गोली', hint: '1 Pill', trigger: 75 },
-                  { word: 'पानी से लें', hint: 'Take with water', trigger: 90 }
-                ] : [
-                  { word: 'இந்த', hint: 'This', trigger: 0 },
-                  { word: 'பச்சை நிற', hint: 'Green Pill', trigger: 15, isPill: true, pillColor: '#10B981' },
-                  { word: 'மாத்திரை', hint: 'Tablet', trigger: 30 },
-                  { word: 'காலை', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
-                  { word: 'உணவுக்கு பின்', hint: 'After food', trigger: 60 },
-                  { word: 'ஒன்று', hint: '1 Pill', trigger: 75 },
-                  { word: 'சாப்பிடவும்', hint: 'Take', trigger: 90 }
-                ]).map((token, idx) => {
+                {(dialectData[activeDialectId]?.tokens || dialectData.te.tokens).map((token, idx) => {
                   const isHighlighted = karaokeProgress >= token.trigger && karaokeProgress < token.trigger + 22;
                   const isPast = karaokeProgress >= token.trigger + 22;
                   return (
@@ -2267,35 +2685,101 @@ export default function HeroLanding({
       </section>
 
       {/* =========================================================================
-          SECTION 6: TRUST, SAFETY & HUMAN-IN-THE-LOOP CLINICAL GOVERNANCE
+          SECTION 6: UNIFIED CLINICAL GOVERNANCE, PATIENT SAFETY & OPEN STANDARDS
           ========================================================================= */}
       <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '52px 24px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 32px auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 28px auto' }}>
           <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
-            CLINICAL GOVERNANCE & PATIENT SAFETY
+            CLINICAL GOVERNANCE & OPEN STANDARDS
           </div>
-          <h2 style={{ fontSize: '34px', color: '#0A2540', marginBottom: '10px', letterSpacing: '-0.02em' }}>
-            Engineered for Zero Harm: Doctor-in-the-Loop AI
+          <h2 style={{ fontSize: '34px', color: '#0A2540', marginBottom: '10px', letterSpacing: '-0.02em', fontWeight: 850 }}>
+            Engineered for Zero Harm: Doctor-in-the-Loop & Open Clinical Science
           </h2>
           <p style={{ fontSize: '15px', color: '#5A7184', lineHeight: 1.55 }}>
-            Healthcare AI demands uncompromised safety, sovereign data privacy, and strict human oversight. AyuSwar guarantees that every clinical decision remains 100% in physician control.
+            Healthcare AI demands uncompromised safety, sovereign data privacy, and peer-reviewed open benchmarks. Explore our live interactive safety sentinels and validated open schema standards below.
           </p>
+        </div>
+
+        {/* Master Domain Switcher: Governance vs Standards */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '28px'
+        }}>
+          <div style={{
+            display: 'inline-flex',
+            background: '#F1F5F9',
+            padding: '5px',
+            borderRadius: '16px',
+            border: '2px solid #94A3B8',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            maxWidth: '100%',
+            flexWrap: 'wrap',
+            gap: '6px'
+          }}>
+            <button
+              type="button"
+              onClick={() => setTrustDomainMode('governance')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 22px',
+                borderRadius: '12px',
+                border: 'none',
+                background: trustDomainMode === 'governance' ? '#008B8B' : 'transparent',
+                color: trustDomainMode === 'governance' ? '#FFFFFF' : '#475569',
+                fontSize: '13.5px',
+                fontWeight: trustDomainMode === 'governance' ? 800 : 650,
+                cursor: 'pointer',
+                boxShadow: trustDomainMode === 'governance' ? '0 4px 14px rgba(0,139,139,0.25)' : 'none',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <ShieldCheck size={17} />
+              <span>1. Doctor-in-the-Loop Governance (4 Safeguards)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setTrustDomainMode('standards')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 22px',
+                borderRadius: '12px',
+                border: 'none',
+                background: trustDomainMode === 'standards' ? '#008B8B' : 'transparent',
+                color: trustDomainMode === 'standards' ? '#FFFFFF' : '#475569',
+                fontSize: '13.5px',
+                fontWeight: trustDomainMode === 'standards' ? 800 : 650,
+                cursor: 'pointer',
+                boxShadow: trustDomainMode === 'standards' ? '0 4px 14px rgba(0,139,139,0.25)' : 'none',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <FileCheck size={17} />
+              <span>2. Academic Rigor & Open Standards (6 Benchmarks)</span>
+            </button>
+          </div>
         </div>
 
         {/* Interactive Zero-Harm Governance Sandbox Container */}
         <div style={{
           background: '#ffffff',
           borderRadius: '24px',
-          border: '1.5px solid #CBD5E1',
+          border: '2px solid #94A3B8',
           boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
           overflow: 'hidden'
         }}>
-          {/* 4 Guardrail Selector Tabs */}
-          <div style={{
+          {trustDomainMode === 'governance' ? (
+            <div>
+              {/* 4 Guardrail Selector Tabs */}
+              <div style={{
             display: 'flex',
             flexWrap: 'wrap',
             background: '#F8FAFC',
-            borderBottom: '1.5px solid #E2E8F0',
+            borderBottom: '2px solid #CBD5E1',
             padding: '10px 14px',
             gap: '8px'
           }}>
@@ -2420,13 +2904,42 @@ export default function HeroLanding({
                   </div>
                 </div>
               )}
+
+              {/* Native Responsive Verification Pipeline Ribbon (Zero Clutter, Zero Broken Badges) */}
+              <div style={{
+                marginTop: '20px',
+                background: '#F0FDF4',
+                border: '1.5px solid #86EFAC',
+                borderRadius: '14px',
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#065F46' }}>Chain of Custody:</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, color: '#047857', flexWrap: 'wrap' }}>
+                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🎙️ 1. Mic Ingest</span>
+                  <span>➔</span>
+                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🧠 2. AI Draft (Locked)</span>
+                  <span>➔</span>
+                  <span style={{ background: govSimAction.dscSigned ? '#DCFCE7' : '#FEF3C7', color: govSimAction.dscSigned ? '#065F46' : '#92400E', padding: '3px 8px', borderRadius: '6px', border: govSimAction.dscSigned ? '1px solid #86EFAC' : '1px solid #FCD34D' }}>
+                    {govSimAction.dscSigned ? '✓ 3. DSC Signed' : '⏳ 3. Needs Doctor DSC'}
+                  </span>
+                  <span>➔</span>
+                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🏥 4. ABDM M3</span>
+                </div>
+              </div>
             </div>
 
             {/* Right: Live Interactive Failure-Mode Simulator HUD */}
             <div style={{
               background: '#061B30',
               borderRadius: '18px',
-              border: '1.5px solid #1E3A5F',
+              border: '2px solid #2DD4BF',
               padding: '24px',
               color: '#ffffff',
               boxShadow: '0 8px 24px rgba(0,0,0,0.18)'
@@ -2633,33 +3146,9 @@ export default function HeroLanding({
             </div>
           </div>
         </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 7: BUILT ON OPEN STANDARDS & RESEARCH (STANDARDS & SCIENCE)
-          ========================================================================= */}
-      <section style={{ background: '#F1F5F9', borderTop: '1.5px solid #E2E8F0', borderBottom: '1.5px solid #E2E8F0', padding: '52px 24px' }}>
-        <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 32px auto' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
-              ACADEMIC RIGOR & INTEROPERABILITY
-            </div>
-            <h2 style={{ fontSize: '34px', color: '#0A2540', marginBottom: '10px', letterSpacing: '-0.02em' }}>
-              Built on Open Standards & Validated Research
-            </h2>
-            <p style={{ fontSize: '15px', color: '#5A7184', lineHeight: 1.55 }}>
-              AyuSwar AI builds on peer-reviewed clinical datasets, national digital health architectures, and proven speech models rather than unverified LLM generation.
-            </p>
-          </div>
-
-          {/* Interactive Standards Inspector Workbench */}
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            border: '1.5px solid #CBD5E1',
-            boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
-            overflow: 'hidden'
-          }}>
+      ) : (
+          /* ================= MODE B: ACADEMIC RIGOR & OPEN STANDARDS ================= */
+          <div>
             {/* Standards Tab Bar */}
             <div style={{
               display: 'flex',
@@ -2691,7 +3180,7 @@ export default function HeroLanding({
                       gap: '8px',
                       padding: '8px 14px',
                       borderRadius: '10px',
-                      border: isActive ? `1.5px solid ${tab.color}` : '1px solid #E2E8F0',
+                      border: isActive ? `1.5px solid ${tab.color}` : '1.5px solid #CBD5E1',
                       background: isActive ? '#ffffff' : '#F1F5F9',
                       color: isActive ? tab.color : '#475569',
                       fontSize: '12px',
@@ -2826,7 +3315,7 @@ export default function HeroLanding({
               <div style={{
                 background: '#061B30',
                 borderRadius: '16px',
-                border: '1.5px solid #1E3A5F',
+                border: '2px solid #2DD4BF',
                 padding: '20px',
                 fontFamily: 'monospace',
                 fontSize: '11.5px',
@@ -2964,14 +3453,15 @@ export default function HeroLanding({
               </div>
             </div>
           </div>
+        )}
         </div>
       </section>
 
       {/* =========================================================================
           SECTION 8: FREQUENTLY ASKED QUESTIONS (FAQ) ACCORDION
           ========================================================================= */}
-      <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '52px 24px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+      <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '52px 24px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
             FREQUENTLY ASKED QUESTIONS
           </div>
@@ -2980,228 +3470,125 @@ export default function HeroLanding({
           </h2>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {faqs.map((faq, idx) => {
-            const isExpanded = expandedFaqIndex === idx;
-            return (
-              <div
-                key={idx}
-                style={{
-                  background: '#ffffff',
-                  border: isExpanded ? '2px solid #008B8B' : '1.5px solid #CBD5E1',
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                  transition: 'all 200ms ease',
-                  boxShadow: isExpanded ? '0 8px 24px rgba(0, 139, 139, 0.12)' : '0 2px 8px rgba(10, 37, 64, 0.04)'
-                }}
-              >
-                <button
-                  onClick={() => setExpandedFaqIndex(isExpanded ? null : idx)}
-                  style={{
-                    width: '100%',
-                    padding: '18px 24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    background: 'none',
-                    border: 'none',
-                    textAlign: 'left',
-                    cursor: 'pointer',
-                    fontFamily: 'Outfit, sans-serif',
-                    fontSize: '16px',
-                    fontWeight: 750,
-                    color: isExpanded ? '#008B8B' : '#0A2540'
-                  }}
-                >
-                  <span>{faq.q}</span>
-                  {isExpanded ? <ChevronUp size={18} color="#008B8B" /> : <ChevronDown size={18} color="#64748B" />}
-                </button>
-                {isExpanded && (
-                  <div style={{
-                    padding: '0 24px 20px 24px',
-                    fontSize: '14px',
-                    lineHeight: 1.6,
-                    color: '#475569',
-                    borderTop: '1px solid #F1F5F9',
-                    paddingTop: '14px'
-                  }}>
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 9: GRAND FINALE MISSION CONTROL LAUNCHPAD (BEFORE FOOTER)
-          ========================================================================= */}
-      <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '0 24px 60px 24px' }}>
         <div style={{
-          background: 'linear-gradient(135deg, #0A2540 0%, #061B30 45%, #004D4D 100%)',
-          borderRadius: '28px',
-          padding: '52px 40px',
-          border: '2px solid #00D2D3',
-          boxShadow: '0 25px 60px rgba(0, 139, 139, 0.25)',
-          color: '#ffffff',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden'
+          display: 'grid',
+          gridTemplateColumns: 'minmax(320px, 420px) 1fr',
+          gap: '32px',
+          alignItems: 'start'
         }}>
-          {/* Telemetry Status Bar */}
+          {/* Left Column: Doctor Avatar Featuring sec8_faq.png */}
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '16px',
-            flexWrap: 'wrap',
-            marginBottom: '28px',
-            fontSize: '11.5px',
-            color: '#94A3B8',
-            fontWeight: 700
+            background: '#ffffff',
+            borderRadius: '24px',
+            border: '2px solid #94A3B8',
+            padding: '24px',
+            boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
+            position: 'sticky',
+            top: '20px'
           }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', padding: '4px 10px', borderRadius: '6px' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
-              WebAudio DSP 16 kHz: Active
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 210, 211, 0.15)', color: '#00D2D3', padding: '4px 10px', borderRadius: '6px' }}>
-              <Zap size={12} />
-              Edge Latency: &lt;180 ms
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(99, 102, 241, 0.15)', color: '#A5B4FC', padding: '4px 10px', borderRadius: '6px' }}>
-              <Languages size={12} />
-              Dialects: 22 Scheduled Indic
-            </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(245, 158, 11, 0.15)', color: '#FCD34D', padding: '4px 10px', borderRadius: '6px' }}>
-              <ShieldCheck size={12} />
-              DPDP 2023 & ABDM Verified
-            </span>
-          </div>
+            <div style={{ borderRadius: '18px', overflow: 'hidden', border: '1.5px solid #CBD5E1', marginBottom: '18px', background: '#E6FAF8' }}>
+              <img 
+                src="/assets/sections/sec8_faq.png"
+                alt="Dr. Ananya Waving Avatar with FAQ Question Bubble"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block'
+                }}
+              />
+            </div>
 
-          <div style={{ position: 'relative', zIndex: 2, maxWidth: '820px', margin: '0 auto' }}>
-            <h2 style={{
-              fontSize: '40px',
-              fontWeight: 900,
-              fontFamily: 'Outfit, sans-serif',
-              lineHeight: 1.15,
-              color: '#ffffff',
-              marginBottom: '16px',
-              letterSpacing: '-0.5px'
-            }}>
-              Healthcare Has Many Voices.<br />
-              <span style={{ color: '#00D2D3' }}>AyuSwar Understands Them.</span>
-            </h2>
-
-            <p style={{
-              fontSize: '16px',
-              color: '#94A3B8',
-              lineHeight: 1.6,
-              marginBottom: '32px',
-              maxWidth: '640px',
-              margin: '0 auto 32px auto'
-            }}>
-              Experience the future of clinical voice intelligence for Bharat. From 72 dB noisy rural OPD consultations to native WhatsApp spoken karaoke prescriptions in 22 languages.
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 139, 139, 0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '8px', fontSize: '11px', fontWeight: 800, marginBottom: '8px' }}>
+              <span>24/7 VIRTUAL CLINICAL SUPPORT</span>
+            </div>
+            <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', margin: '0 0 6px 0' }}>
+              Have Questions? We Have Answers.
+            </h3>
+            <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '18px' }}>
+              Explore how AyuSwar handles noisy 72 dB OPD halls, strictly adheres to DPDP Act 2023 RAM-only processing, and ensures 100% human doctor sign-off.
             </p>
 
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '16px',
-              flexWrap: 'wrap'
-            }}>
-              <button
-                onClick={onOpenDoctorAuthModal}
-                className="btn-primary"
-                style={{
-                  padding: '14px 32px',
-                  fontSize: '15px',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  boxShadow: '0 8px 25px rgba(0, 210, 211, 0.4)',
-                  cursor: 'pointer'
-                }}
-              >
-                <Stethoscope size={18} />
-                <span>Launch Live Doctor Studio</span>
-                <ArrowRight size={16} />
-              </button>
+            <button
+              onClick={() => onSelectModule && onSelectModule('assistant')}
+              style={{
+                width: '100%',
+                padding: '12px 18px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #008B8B 0%, #006666 100%)',
+                color: '#ffffff',
+                fontSize: '13.5px',
+                fontWeight: 750,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                boxShadow: '0 6px 20px rgba(0, 139, 139, 0.25)'
+              }}
+            >
+              <span>Ask Dr. Ananya Virtual Assistant</span>
+              <ArrowRight size={15} />
+            </button>
+          </div>
 
-              <button
-                onClick={onOpenPatientAuthModal}
-                className="btn-outline"
-                style={{
-                  padding: '14px 28px',
-                  fontSize: '15px',
-                  fontWeight: 750,
-                  color: '#ffffff',
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  cursor: 'pointer'
-                }}
-              >
-                <span>Open Citizen ABHA Seva</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setGoldenStoryScene(0);
-                  setIsGoldenStoryOpen(true);
-                }}
-                style={{
-                  background: 'rgba(0, 210, 211, 0.12)',
-                  border: '1.5px solid #00D2D3',
-                  borderRadius: '24px',
-                  color: '#00D2D3',
-                  padding: '14px 26px',
-                  fontSize: '14px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <span>⚡ 2-Min Live Clinical Walkthrough</span>
-              </button>
-            </div>
-
-            {/* Verification Badges */}
-            <div style={{
-              marginTop: '36px',
-              paddingTop: '24px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '28px',
-              flexWrap: 'wrap',
-              fontSize: '12px',
-              color: '#94A3B8'
-            }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={15} color="#00D2D3" />
-                100% Doctor-in-the-Loop
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={15} color="#00D2D3" />
-                ABDM M1, M2, M3 Compliant
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={15} color="#00D2D3" />
-                DPDP Act 2023 Compliant
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle2 size={15} color="#00D2D3" />
-                22 Indic Languages
-              </span>
-            </div>
+          {/* Right Column: Interactive FAQ Accordion */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {faqs.map((faq, idx) => {
+              const isExpanded = expandedFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    background: '#ffffff',
+                    border: isExpanded ? '2px solid #008B8B' : '1.5px solid #94A3B8',
+                    borderRadius: '14px',
+                    overflow: 'hidden',
+                    transition: 'all 200ms ease',
+                    boxShadow: isExpanded ? '0 8px 24px rgba(0, 139, 139, 0.12)' : '0 2px 8px rgba(10, 37, 64, 0.04)'
+                  }}
+                >
+                  <button
+                    onClick={() => setExpandedFaqIndex(isExpanded ? null : idx)}
+                    style={{
+                      width: '100%',
+                      padding: '18px 24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      fontFamily: 'Outfit, sans-serif',
+                      fontSize: '16px',
+                      fontWeight: 750,
+                      color: isExpanded ? '#008B8B' : '#0A2540'
+                    }}
+                  >
+                    <span>{faq.q}</span>
+                    {isExpanded ? <ChevronUp size={18} color="#008B8B" /> : <ChevronDown size={18} color="#64748B" />}
+                  </button>
+                  {isExpanded && (
+                    <div style={{
+                      padding: '0 24px 20px 24px',
+                      fontSize: '14px',
+                      lineHeight: 1.6,
+                      color: '#475569',
+                      borderTop: '1px solid #F1F5F9',
+                      paddingTop: '14px'
+                    }}>
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
+
+
 
       {/* =========================================================================
           ENTERPRISE FOOTER
