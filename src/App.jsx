@@ -22,10 +22,8 @@ import DatasetExplorerView from './views/DatasetExplorerView';
 import EmergencyTriageView from './views/EmergencyTriageView';
 import EmergencyHandoverView from './views/EmergencyHandoverView';
 import PrescriptionPreviewView from './views/PrescriptionPreviewView';
-import AssistantWorkspaceView from './views/AssistantWorkspaceView';
 import DoctorProfileSelectView from './views/DoctorProfileSelectView';
 import PatientProfileSelectView from './views/PatientProfileSelectView';
-import AvatarAssistantGalleryView from './views/AvatarAssistantGalleryView';
 
 import { useApp } from './context/AppContext';
 
@@ -159,11 +157,7 @@ export default function App() {
           {/* ABDM FHIR R4 Prescription Preview */}
           <Route path="/prescription/preview" element={<PrescriptionPreviewView />} />
 
-          {/* Dedicated Voice Assistant Workspace */}
-          <Route path="/assistant" element={<AssistantWorkspaceView />} />
-          <Route path="/avatar" element={<AvatarAssistantGalleryView />} />
-
-          {/* Demo Profile Selection */}
+          {/* Sandbox Profile Selection */}
           <Route path="/auth/doctor" element={<DoctorProfileSelectView />} />
           <Route path="/auth/patient" element={<PatientProfileSelectView />} />
 
@@ -198,6 +192,24 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
+      {/* Global Prototype Disclaimer Footer Banner */}
+      <footer style={{
+        background: '#0F172A',
+        color: '#E2E8F0',
+        borderTop: '1px solid #334155',
+        padding: '12px 20px',
+        textAlign: 'center',
+        fontSize: '12.5px',
+        fontWeight: 650,
+        zIndex: 30,
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }}></span>
+          <span>AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis.</span>
+        </div>
+      </footer>
 
       {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
       <SanjivaniEmergencyModal 

@@ -1,29 +1,26 @@
 /**
- * AyuSwar AI — Comprehensive Clinical Knowledge Graph & Kaggle/IISc Benchmark Dataset
+ * AyuSwar AI — Comprehensive Clinical Knowledge Graph & Reference Dataset
  * 
  * Includes:
- * 1. 50+ Exhaustive Disease Conditions mapped to WHO ICD-10, ABDM SNOMED CT, and IISc Coswara Acoustic Biomarkers.
+ * 1. 50+ Exhaustive Disease Conditions mapped to WHO ICD-10 and ABDM SNOMED CT.
  * 2. 100+ Indian National Formulary (INF) & Jan Aushadhi generic medications with visual color coding & Vernacular timings.
  * 3. 150+ Vernacular Indic Colloquial Symptom Mappings (Telugu, Hindi, Kannada, Tamil).
- * 4. IISc Coswara & Kaggle Respiratory Sound Database (12,400+ audio recording benchmark metrics).
- * 5. Dynamic ML Diagnostic Inference & Symptom Classifier.
+ * 4. Synthetic Acoustic Signal Reference Profiles for Educational Exploration.
+ * 5. Rule-Based Symptom Matcher & Colloquial Identifier.
  */
 
 export const KAGGLE_DATASET_METADATA = {
-  name: 'AyuSwar Indic-Clinical Multi-Modal Benchmark',
+  name: 'AyuSwar Indic-Clinical Reference Dictionary',
   sourceDatabases: [
-    'Kaggle Disease Symptom Prediction Matrix (4,920 records)',
-    'IISc Coswara Respiratory Acoustic Dataset (12,400+ crowd-sourced cough & breath samples)',
-    'WHO ICD-10 Clinical Modification (CM) 2025',
+    'Disease Symptom Knowledge Matrix',
+    'WHO ICD-10 Clinical Modification (CM)',
     'National Health Authority (NHA) ABDM SNOMED-CT India Extension',
     'Indian National Formulary (INF) & Jan Aushadhi Generic Drug Registry'
   ],
   totalConditions: 54,
   totalMedications: 108,
   totalVernacularTokens: 480,
-  coswaraSamplesTrained: 12400,
-  f1ScoreAccuracy: '98.4%',
-  acousticSensitivity: '96.8%'
+  datasetType: 'Synthetic Demonstration & Reference Taxonomy'
 };
 
 export const CLINICAL_DISEASE_DATASET = [
@@ -39,7 +36,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Wheezing', 'Shortness of breath', 'Chest tightness', 'Night cough', 'Difficulty speaking full sentences'],
     teluguColloquials: ['ఆయాసం', 'శ్వాస తీసుకోవడంలో ఇబ్బంది', 'పీకల్లో పిల్లికూతలు', 'రాత్రి వేళ ఆపకుండా దగ్గు'],
     hindiColloquials: ['सांस फूलना', 'छाती में जकड़न', 'घरघराहट', 'रात को तेज खांसी'],
-    coswaraBiomarker: { coughType: 'Dry Bronchospastic', acousticRisk: 0.88, wheezeFreqHz: 420, dyspneaScore: 'Grade 3' },
+    acousticBiomarker: { coughType: 'Dry Bronchospastic', acousticRisk: 0.88, wheezeFreqHz: 420, dyspneaScore: 'Grade 3' },
     firstLineMedication: {
       brand: 'Budesonide + Formoterol (Foracort 200 Rotacaps)',
       salt: 'Budesonide 200mcg + Formoterol Fumarate 6mcg',
@@ -60,7 +57,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Chronic productive cough', 'Progressive dyspnea', 'Morning sputum', 'Fatigue', 'Barrel chest'],
     teluguColloquials: ['ఎక్కువ రోజులుగా తెమడతో కూడిన దగ్గు', 'మెట్లు ఎక్కుతుంటే రొప్పు రావడం', 'ఉదయం తెమడ పడటం'],
     hindiColloquials: ['बलगम वाली खांसी', 'सीढ़ियां चढ़ने पर सांस फूलना', 'सुबह बलगम आना'],
-    coswaraBiomarker: { coughType: 'Productive Low-Frequency', acousticRisk: 0.82, wheezeFreqHz: 280, dyspneaScore: 'Grade 4' },
+    acousticBiomarker: { coughType: 'Productive Low-Frequency', acousticRisk: 0.82, wheezeFreqHz: 280, dyspneaScore: 'Grade 4' },
     firstLineMedication: {
       brand: 'Tiotropium Bromide (Tiova 18mcg Rotacap)',
       salt: 'Tiotropium 18mcg',
@@ -81,7 +78,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['High fever with chills', 'Rusty purulent sputum', 'Pleuritic chest pain', 'Tachypnea', 'Hypoxemia'],
     teluguColloquials: ['చలితో కూడిన విపరీతమైన జ్వరం', 'పసుపు/గోధుమ రంగు తెమడ', 'శ్వాస తీసుకున్నప్పుడు పక్కటెముకల్లో నొప్పి'],
     hindiColloquials: ['तेज बुखार और कंपकंपी', 'पीला बलगम', 'सांस लेने पर सीने में दर्द'],
-    coswaraBiomarker: { coughType: 'Wet Rales Crackling', acousticRisk: 0.94, wheezeFreqHz: 180, dyspneaScore: 'Grade 4' },
+    acousticBiomarker: { coughType: 'Wet Rales Crackling', acousticRisk: 0.94, wheezeFreqHz: 180, dyspneaScore: 'Grade 4' },
     firstLineMedication: {
       brand: 'Amoxicillin + Clavulanic Acid 625mg (Augmentin)',
       salt: 'Amoxicillin 500mg + Potassium Clavulanate 125mg',
@@ -102,7 +99,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Cough > 2 weeks', 'Hemoptysis (blood in sputum)', 'Evening low-grade pyrexia', 'Drenching night sweats', 'Weight loss'],
     teluguColloquials: ['రెండు వారాలకు పైగా దగ్గు', 'దగ్గినప్పుడు రక్తం పడటం', 'సాయంత్రం వేళ జ్వరం', 'రాత్రి ఒళ్లంతా చెమటలు', 'బరువు తగ్గడం'],
     hindiColloquials: ['दो हफ्ते से ज्यादा खांसी', 'खांसी में खून', 'शाम को हल्का बुखार', 'रात को पसीना', 'वजन घटना'],
-    coswaraBiomarker: { coughType: 'Cavernous Wet Persistent', acousticRisk: 0.96, wheezeFreqHz: 210, dyspneaScore: 'Grade 3' },
+    acousticBiomarker: { coughType: 'Cavernous Wet Persistent', acousticRisk: 0.96, wheezeFreqHz: 210, dyspneaScore: 'Grade 3' },
     firstLineMedication: {
       brand: '4-FDC (Rifampicin + Isoniazid + Pyrazinamide + Ethambutol)',
       salt: '4-Drug Fixed Dose Combination (DOTS Regimen)',
@@ -123,7 +120,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Sore throat', 'Rhinorrhea', 'Nasal congestion', 'Sneezing', 'Low-grade fever'],
     teluguColloquials: ['ముక్కు కారడం', 'గొంతు గరగర', 'తుమ్ములు', 'తలభారం'],
     hindiColloquials: ['नाक बहना', 'गले में दर्द', 'छींकें', 'सिर भारी होना'],
-    coswaraBiomarker: { coughType: 'Upper Pharyngeal Dry', acousticRisk: 0.28, wheezeFreqHz: 550, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'Upper Pharyngeal Dry', acousticRisk: 0.28, wheezeFreqHz: 550, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Paracetamol 650mg + Cetirizine 10mg',
       salt: 'Paracetamol 650mg, Cetirizine Hydrochloride 10mg',
@@ -146,7 +143,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Occipital morning headache', 'Dizziness', 'Palpitations', 'Epistaxis', 'Visual blurring'],
     teluguColloquials: ['తల వెనుక భాగంలో నొప్పి', 'కళ్లు తిరగడం', 'గుండెల్లో దడ', 'రక్తపోటు ఎక్కువవడం'],
     hindiColloquials: ['सिर के पीछे दर्द', 'चक्कर आना', 'घबराहट / धड़कन तेज होना'],
-    coswaraBiomarker: { coughType: 'None / Normal', acousticRisk: 0.15, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'None / Normal', acousticRisk: 0.15, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Telmisartan 40mg + Amlodipine 5mg (Telma-AM)',
       salt: 'Telmisartan 40mg + Amlodipine 5mg',
@@ -167,7 +164,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Polyuria', 'Polydipsia', 'Polyphagia', 'Paresthesia in feet (burning feet)', 'Delayed wound healing'],
     teluguColloquials: ['రాత్రి వేళల్లో మాటిమాటికి మూత్రానికి వెళ్లడం', 'అధిక దప్పిక', 'కాళ్లలో మంటలు/తిమ్మిర్లు'],
     hindiColloquials: ['बार-बार पेशाब आना', 'बहुत प्यास लगना', 'पैरों में जलन और सुन्नपन'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.22, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.22, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Metformin SR 500mg + Glimepiride 1mg (Glycomet-GP 1)',
       salt: 'Metformin Hydrochloride 500mg SR + Glimepiride 1mg',
@@ -188,7 +185,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Substernal chest pressure radiating to left arm/jaw', 'Exertional dyspnea', 'Diaphoresis', 'Relieved by rest/nitrates'],
     teluguColloquials: ['నడుస్తున్నప్పుడు గుండెపై బండ పెట్టినట్లు బరువు', 'ఎడమ చేతికి పాకే నొప్పి', 'చమటలు పట్టడం'],
     hindiColloquials: ['चलने पर सीने पर भारीपन', 'बाएं हाथ में खिंचाव वाला दर्द', 'पसीना छूटना'],
-    coswaraBiomarker: { coughType: 'Cardiogenic Short Breath', acousticRisk: 0.78, wheezeFreqHz: 310, dyspneaScore: 'Grade 3' },
+    acousticBiomarker: { coughType: 'Cardiogenic Short Breath', acousticRisk: 0.78, wheezeFreqHz: 310, dyspneaScore: 'Grade 3' },
     firstLineMedication: {
       brand: 'Atorvastatin 20mg + Ecosprin 75mg',
       salt: 'Atorvastatin 20mg + Enteric-Coated Aspirin 75mg',
@@ -209,7 +206,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Bilateral pedal edema', 'Orthopnea (cannot lie flat)', 'Paroxysmal nocturnal dyspnea', 'Jugular venous distension'],
     teluguColloquials: ['రెండు కాళ్లలో నీరు చేరి వాపులు రావడం', 'పడుకుంటే ఆయాసం ఎక్కువై లేచి కూర్చోవడం'],
     hindiColloquials: ['दोनों पैरों में सूजन', 'सीधे लेटने पर सांस रुकना'],
-    coswaraBiomarker: { coughType: 'Pink Frothy Cardiac Cough', acousticRisk: 0.91, wheezeFreqHz: 340, dyspneaScore: 'Grade 4' },
+    acousticBiomarker: { coughType: 'Pink Frothy Cardiac Cough', acousticRisk: 0.91, wheezeFreqHz: 340, dyspneaScore: 'Grade 4' },
     firstLineMedication: {
       brand: 'Torsemide 10mg + Spironolactone 50mg (Dytor-Plus 10)',
       salt: 'Torsemide 10mg + Spironolactone 50mg',
@@ -232,7 +229,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Heartburn', 'Sour acid regurgitation', 'Epigastric burning pain', 'Early satiety', 'Nausea'],
     teluguColloquials: ['గుండెల్లో మరియు గొంతులో మంట', 'పుల్లటి తేన్పులు', 'కడుపులో మంట/ఉబ్బరం'],
     hindiColloquials: ['सीने और गले में जलन', 'खट्टी डकारें', 'पेट में भारीपन व दर्द'],
-    coswaraBiomarker: { coughType: 'Acid Reflux Throat Clearing', acousticRisk: 0.35, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'Acid Reflux Throat Clearing', acousticRisk: 0.35, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Pantoprazole 40mg + Domperidone 30mg SR (Pan-D)',
       salt: 'Pantoprazole Sodium 40mg + Domperidone 30mg SR',
@@ -253,7 +250,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Watery diarrhea', 'Abdominal cramping', 'Vomiting', 'Dry mouth', 'Sunken eyes'],
     teluguColloquials: ['నీళ్ల విరేచనాలు', 'కడుపులో మెలిపెట్టినట్లు నొప్పి', 'వాంతులు', 'నీరసం'],
     hindiColloquials: ['पतले दस्त', 'पेट में मरोड़', 'उल्टियां और कमजोरी'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.12, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.12, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'WHO-ORS + Zinc Sulfate 20mg + Ofloxacin-Ornidazole',
       salt: 'Oral Rehydration Salts (WHO Formula) + Zinc 20mg',
@@ -274,7 +271,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Altered bowel habits', 'Relieved post defecation', 'Mucus in stool', 'Bloating'],
     teluguColloquials: ['కడుపు ఉబ్బరం', 'ఆహారం తినగానే టాయిలెట్‌కు వెళ్లాలనిపించడం', 'మలబద్ధకం లేదా విరేచనాలు'],
     hindiColloquials: ['पेट में गैस व भारीपन', 'खाना खाते ही शौच जाना', 'कब्ज या दस्त'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.08, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.08, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Mebeverine 135mg + Probiotics (Colospa)',
       salt: 'Mebeverine Hydrochloride 135mg',
@@ -297,7 +294,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Sudden high fever (104°F)', 'Retro-orbital pain (pain behind eyes)', 'Severe myalgia & arthralgia', 'Petechial rash', 'Thrombocytopenia'],
     teluguColloquials: ['కళ్ల వెనుక తీవ్రమైన నొప్పి', 'ఎముకలు విరిగినట్లు ఒళ్లు నొప్పులు', 'ప్లేట్‌లెట్స్ తగ్గడం'],
     hindiColloquials: ['आंखों के पीछे तेज दर्द', 'हड्डी तोड़ बदन दर्द', 'प्लेटलेट्स कम होना'],
-    coswaraBiomarker: { coughType: 'None / Mild Dry', acousticRisk: 0.42, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'None / Mild Dry', acousticRisk: 0.42, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Paracetamol 650mg + Carica Papaya Leaf Extract (Platmax)',
       salt: 'Paracetamol 650mg + Carica Papaya Leaf 1100mg',
@@ -318,7 +315,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Cold stage (rigors)', 'Hot stage (high fever)', 'Sweating stage', 'Splenomegaly', 'Anemia'],
     teluguColloquials: ['వణుకు పుట్టించే చలి జ్వరం', 'విపరీతంగా చెమటలు పోసి జ్వరం తగ్గడం', 'రోజు విడిచి రోజు జ్వరం రావడం'],
     hindiColloquials: ['कपकपाती ठंड के साथ तेज बुखार', 'पसीना आकर बुखार उतरना'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.38, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.38, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Artemether + Lumefantrine (Coartem 80/480mg)',
       salt: 'Artemether 80mg + Lumefantrine 480mg',
@@ -339,7 +336,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Step-ladder fever pattern', 'Rose spots on trunk', 'Relative bradycardia', 'Pea-soup diarrhea', 'Coated tongue'],
     teluguColloquials: ['రోజురోజుకు పెరుగుతూ వచ్చే తీవ్రమైన జ్వరం', 'నాలుకపై తెల్లటి పొర', 'కడుపులో నొప్పి'],
     hindiColloquials: ['सीढ़ी की तरह बढ़ता तेज बुखार', 'जीभ पर सफेद परत', 'पेट दर्द'],
-    coswaraBiomarker: { coughType: 'Mild Hacking Toxic Cough', acousticRisk: 0.52, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'Mild Hacking Toxic Cough', acousticRisk: 0.52, wheezeFreqHz: 0, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Cefixime 200mg + Azithromycin 500mg',
       salt: 'Cefixime Trihydrate 200mg + Azithromycin 500mg',
@@ -362,7 +359,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Unilateral throbbing headache', 'Photophobia', 'Phonophobia', 'Nausea/vomiting', 'Visual aura'],
     teluguColloquials: ['ఒకవైపు మాత్రమే వచ్చే తీవ్రమైన తలనొప్పి', 'వెలుతురు లేదా శబ్దం చూస్తే తల బద్దలవ్వడం', 'వాంతి వికారం'],
     hindiColloquials: ['आधे सिर में धड़कने वाला दर्द', 'रोशनी और आवाज से परेशानी', 'उल्टी जैसा लगना'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.05, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.05, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Naproxen 500mg + Domperidone 10mg + Rizatriptan',
       salt: 'Naproxen 500mg + Domperidone 10mg',
@@ -383,7 +380,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Joint crepitus', 'Morning stiffness < 30 mins', 'Pain on walking/stairs', 'Bony enlargement'],
     teluguColloquials: ['మోకాళ్లలో నడుస్తుంటే కరకర శబ్దం రావడం', 'మెట్లు ఎక్కేటప్పుడు తీవ్రమైన నొప్పి', 'మోకాళ్ల వాపు'],
     hindiColloquials: ['घुटनों में कटकट की आवाज', 'चलने और सीढ़ी चढ़ने में दर्द', 'घुटनों में सूजन'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.04, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.04, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Diacerein 50mg + Glucosamine 750mg + Paracetamol',
       salt: 'Diacerein 50mg + Glucosamine Sulfate 750mg',
@@ -404,7 +401,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Low back pain radiating down leg', 'Shooting electric shock sensation', 'Numbness in toes', 'Positive Straight Leg Raise (SLR)'],
     teluguColloquials: ['నడుము నుంచి కాలు కింది వరకు నరం లాగడం', 'కూర్చుని లేస్తే నడుము పట్టేయడం', 'పాదంలో తిమ్మిరి'],
     hindiColloquials: ['कमर से पैर के नीचे तक नस में तेज खिंचाव', 'पैर सुन्न होना'],
-    coswaraBiomarker: { coughType: 'Pain-Inhibited Cough', acousticRisk: 0.18, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'Pain-Inhibited Cough', acousticRisk: 0.18, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Pregabalin 75mg + Methylcobalamin 1500mcg (Pregastar-M)',
       salt: 'Pregabalin 75mg + Mecobalamin 1500mcg',
@@ -427,7 +424,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Pruritic wheals', 'Erythematous plaques', 'Dermatographism', 'Angioedema'],
     teluguColloquials: ['ఒళ్లంతా ఎర్రటి దద్దుర్లు రావడం', 'తీవ్రమైన దురద', 'పెదవులు లేదా కళ్ల వాపు'],
     hindiColloquials: ['शरीर पर लाल चकत्ते / पित्ती', 'बहुत तेज खुजली', 'होंठ या आंख में सूजन'],
-    coswaraBiomarker: { coughType: 'Allergic Barking Cough', acousticRisk: 0.31, wheezeFreqHz: 480, dyspneaScore: 'Grade 1' },
+    acousticBiomarker: { coughType: 'Allergic Barking Cough', acousticRisk: 0.31, wheezeFreqHz: 480, dyspneaScore: 'Grade 1' },
     firstLineMedication: {
       brand: 'Bilastine 20mg + Calamine Lotion Topical',
       salt: 'Bilastine 20mg (Non-Sedating Antihistamine)',
@@ -448,7 +445,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Annular erythematous scaly plaques', 'Active raised border', 'Severe pruritus exacerbated by sweat'],
     teluguColloquials: ['చర్మంపై గుండ్రటి తామర మచ్చలు', 'చెమట పట్టినప్పుడు విపరీతమైన దురద'],
     hindiColloquials: ['गोल लाल दाद के छल्ले', 'पसीने में खुजली बढ़ना'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.02, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.02, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Itraconazole 200mg + Luliconazole 1% Cream (Itral-200)',
       salt: 'Itraconazole 200mg + Luliconazole 1% w/w Topical',
@@ -471,7 +468,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Dysuria (burning micturition)', 'Frequency and urgency', 'Suprapubic pain', 'Cloudy malodorous urine'],
     teluguColloquials: ['మూత్రం పోస్తున్నప్పుడు తీవ్రమైన మంట', 'మాటిమాటికి మూత్రం రావడం', 'పొత్తికడుపులో నొప్పి'],
     hindiColloquials: ['पेशाब में बहुत जलन', 'बार-बार पेशाब की हाजत', 'पेड़ू में दर्द'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.11, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.11, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Nitrofurantoin SR 100mg + Citralka Syrup',
       salt: 'Nitrofurantoin Sustained Release 100mg + Disodium Hydrogen Citrate',
@@ -492,7 +489,7 @@ export const CLINICAL_DISEASE_DATASET = [
     symptoms: ['Severe colicky flank pain radiating to groin', 'Hematuria', 'Nausea/vomiting', 'Dysuria'],
     teluguColloquials: ['నడుము పక్క భాగంలో విపరీతమైన పోటు', 'నొప్పి గజ్జల్లోకి పాకడం', 'మూత్రంలో రక్తం'],
     hindiColloquials: ['कमर के एक तरफ असहनीय मरोड़दार दर्द', 'पेशाब में खून'],
-    coswaraBiomarker: { coughType: 'None', acousticRisk: 0.09, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
+    acousticBiomarker: { coughType: 'None', acousticRisk: 0.09, wheezeFreqHz: 0, dyspneaScore: 'Grade 0' },
     firstLineMedication: {
       brand: 'Tamsulosin 0.4mg + Drotaverine 80mg (Urimax-D)',
       salt: 'Tamsulosin Hydrochloride 0.4mg + Drotaverine 80mg',
@@ -531,8 +528,8 @@ export const REGIONAL_COLLOQUIAL_DICTIONARY = {
 };
 
 /**
- * Intelligent Client-Side ML Symptom Classifier & Coswara Acoustic Triage Engine
- * Predicts the most probable conditions, ICD-10 codes, and Indian formulary prescription.
+ * Intelligent Client-Side Symptom Matcher & Acoustic Feature Explorer
+ * Identifies probable conditions, ICD-10 codes, and Indian formulary reference.
  */
 export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = null) {
   // If input is an object (e.g. acoustic metrics), extract text if any
@@ -549,7 +546,7 @@ export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = n
       rankedPredictions: [],
       confidenceScore: 0,
       matchedColloquials: [],
-      coswaraRiskScore: 0,
+      acousticRiskScore: 0,
       disclaimer: 'Educational reference lookup only. Does not constitute clinical diagnosis.'
     };
   }
@@ -603,7 +600,7 @@ export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = n
       rankedPredictions: [],
       confidenceScore: 0,
       matchedColloquials: [],
-      coswaraRiskScore: 0,
+      acousticRiskScore: 0,
       disclaimer: 'No matching conditions found in reference dataset for the provided search query.'
     };
   }
@@ -616,7 +613,7 @@ export function predictClinicalDiagnosis(inputText = '', acousticCoughSample = n
     rankedPredictions: scored.filter(s => s.matchScore > 0).slice(0, 5),
     confidenceScore: lexicalMatchPct,
     matchedColloquials: top.matchedTokens,
-    coswaraRiskScore: top.coswaraBiomarker?.acousticRisk || 0,
+    acousticRiskScore: top.acousticBiomarker?.acousticRisk || 0,
     disclaimer: 'Reference dictionary match score. Not an autonomous clinical diagnosis. Must be reviewed by a licensed clinician.'
   };
 }

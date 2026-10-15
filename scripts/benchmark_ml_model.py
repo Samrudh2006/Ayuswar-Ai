@@ -5,7 +5,7 @@ NOTICE: SYNTHETIC SOFTWARE DISTRIBUTION EXPERIMENT — NOT AN INDEPENDENT CLINIC
 This script draws synthetic Gaussian samples from author-defined acoustic parameter profiles
 and evaluates Gaussian likelihood clustering against those same authored profiles.
 It does NOT represent a clinical trial, held-out evaluation on hospital patients,
-or an official IISc Bangalore / Kaggle validation benchmark.
+or an official academic / open-source validation benchmark.
 """
 
 import json

@@ -56,7 +56,7 @@ import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../data/indic
  * 3. AI Assistant (Dedicated clinical co-pilot, GINA/ICMR guidelines, DDI checker, differential diagnosis)
  * 4. Appointments (OPD queue master, live token display, waiting times, triage priority)
  * 5. Reports & Lab (X-Ray DICOM viewer, CBC, Spirometry PFT, 12-lead ECG, ABDM FHIR R4 export)
- * 6. Prescriptions (Active e-Rx, NFI formulary checker, OpenCV blister OCR scanner, Timbre spoken-Rx)
+ * 6. Prescriptions (Active e-Rx, NFI formulary checker, OpenCV blister OCR scanner, spoken Audio-Rx)
  * 7. Clinical Library (WHO ICD-10 taxonomy, colloquial Indic symptom resolver, clinical protocols)
  * 8. Settings (ABDM HPR credentials, hospital facility #1402, WebAudio mic VAD calibration)
  */
@@ -100,7 +100,7 @@ export default function DoctorPortal({
   const [printableRxData, setPrintableRxData] = useState(null);
 
   // Physician Settings State Suite
-  const [docScribeEngine, setDocScribeEngine] = useState('gnani_prisma');
+  const [docScribeEngine, setDocScribeEngine] = useState('browser_speech');
   const [docNoiseCancellation, setDocNoiseCancellation] = useState('crowded_opd');
   const [docAutoCoding, setDocAutoCoding] = useState(true);
   const [docDdiSentinel, setDocDdiSentinel] = useState(true);
@@ -2100,9 +2100,9 @@ export default function DoctorPortal({
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {[
-                    { id: 1, patient: 'Narayana Rao', vernacular: 'నారాయణ రావు', phone: '+91 98490 12345', abhaId: '91-4521-8932-1049', lang: 'te', med: 'Pantoprazole 40mg + Metformin 500mg', schedule: 'Morning (08:30 AM) + Post-dinner (08:30 PM)', status: 'Active • Timbre Telugu Synthesized' },
-                    { id: 2, patient: 'Aarav Kumar', vernacular: 'आरव कुमार', phone: '+91 99887 65432', abhaId: '91-8821-4432-9012', lang: 'hi', med: 'Budesonide Nebulization (0.5mg) + Salbutamol', schedule: 'BD (Morning 08:30 AM & Night 08:30 PM)', status: 'Active • Timbre Hindi Synthesized' },
-                    { id: 3, patient: 'Ananya Rao', vernacular: 'అనన్య రావు', phone: '+91 98480 22334', abhaId: '91-4521-8932-1049', lang: 'te', med: 'Montelukast 10mg + Levocetirizine', schedule: 'Night at bedtime (09:30 PM)', status: 'Active • Verified' }
+                    { id: 1, patient: 'Narayana Rao', vernacular: 'నారాయణ రావు', phone: '+91 98490 12345', abhaId: 'DEMO-4521-8932-1049', lang: 'te', med: 'Pantoprazole 40mg + Metformin 500mg', schedule: 'Morning (08:30 AM) + Post-dinner (08:30 PM)', status: 'Active • Telugu Audio-Rx (Browser speech)' },
+                    { id: 2, patient: 'Aarav Kumar', vernacular: 'आरव कुमार', phone: '+91 99887 65432', abhaId: 'DEMO-8821-4432-9012', lang: 'hi', med: 'Budesonide Nebulization (0.5mg) + Salbutamol', schedule: 'BD (Morning 08:30 AM & Night 08:30 PM)', status: 'Active • Hindi Audio-Rx (Browser speech)' },
+                    { id: 3, patient: 'Ananya Rao', vernacular: 'అనన్య రావు', phone: '+91 98480 22334', abhaId: 'DEMO-4521-8932-1049', lang: 'te', med: 'Montelukast 10mg + Levocetirizine', schedule: 'Night at bedtime (09:30 PM)', status: 'Active • Verified' }
                   ].map(rx => (
                     <div
                       key={rx.id}
@@ -2270,7 +2270,7 @@ export default function DoctorPortal({
                     </span>
                   </div>
                   <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
-                    Gnani.ai Prisma Indic Scribe Engine
+                    Browser speech (Web Speech API). Gnani voice integration: planned
                   </span>
                 </div>
 
@@ -2607,7 +2607,7 @@ export default function DoctorPortal({
                     Physician Credentials, AI Scribe Engine & ABDM Calibration
                   </h2>
                   <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
-                    Configure ambient acoustic ingestion, Gnani.ai Prisma v2.5 voice models, automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
+                    Configure ambient acoustic ingestion, Browser speech (Web Speech API). Gnani voice integration: planned, automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
                   </p>
                 </div>
 
@@ -2651,9 +2651,9 @@ export default function DoctorPortal({
                   doctor={{
                     doctorName: doctorName,
                     vernacular: 'డాక్టర్ ప్రియా శర్మ',
-                    hprId: 'dr.priya@hpr.abdm',
-                    abhaNumber: '91-6742-8921-9942',
-                    nmcRegNo: 'NMC-TS-2016-48291',
+                    hprId: 'DEMO-dr.priya@hpr.abdm',
+                    abhaNumber: 'DEMO-91-6742-8921-9942',
+                    nmcRegNo: 'DEMO-NMC-TS-2016-48291',
                     specialty: doctorSpecialty,
                     facility: doctorProfile?.facility || 'Kurnool District Hospital (HFR #1402)',
                     avatar: '/assets/dr_ananya_avatar.jpg'
@@ -2666,12 +2666,12 @@ export default function DoctorPortal({
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <ShieldCheck size={18} color="#008B8B" />
-                    <span>ABDM Healthcare Professional Registry (HPR)</span>
+                    <span>ABDM Healthcare Professional Registry (HPR) [DEMO]</span>
                   </h3>
                   <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.8 }}>
                     <div>Practitioner Name: <strong>{doctorName}</strong></div>
-                    <div>HPR Token ID: <code>ABHA-HPR-8921-9942-IN</code></div>
-                    <div>Medical Council: <strong>National Medical Commission (NMC) AP-67420</strong></div>
+                    <div>HPR Token ID: <code>DEMO-ABHA-HPR-8921-9942-IN</code></div>
+                    <div>Medical Council: <strong>DEMO National Medical Commission (NMC) AP-67420</strong></div>
                     <div>Facility: <strong>{doctorProfile?.facility || 'Kurnool District Hospital (HFR #1402)'}</strong></div>
                     <div>ABDM Milestones: <span style={{ color: '#059669', fontWeight: 750 }}>M1 (Registry) • M2 (HIP Record Provider) • M3 (HIU)</span></div>
                   </div>
@@ -2693,7 +2693,7 @@ export default function DoctorPortal({
                       onChange={e => setDocScribeEngine(e.target.value)}
                       style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', fontWeight: 650 }}
                     >
-                      <option value="gnani_prisma">Gnani.ai Prisma v2.5 (Sub-dialectal Indic Model)</option>
+                      <option value="browser_speech">Browser speech (Web Speech API). Gnani voice integration: planned</option>
                       <option value="google_medlm">Google MedLM Clinical Ambient (Bio-Clinical)</option>
                       <option value="whisper_indic">Whisper Large-v3 (Fine-tuned Telugu/Hindi)</option>
                     </select>

@@ -91,7 +91,7 @@ export default function PrescriptionPreviewView() {
       <div style={{ background: '#FFFBEB', border: '1.5px solid #FCD34D', borderRadius: '12px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <ShieldAlert size={18} color="#D97706" />
         <span style={{ fontSize: '12.5px', color: '#92400E', fontWeight: 750 }}>
-          DEMO SPECIMEN — NOT A VALID MEDICAL PRESCRIPTION — PROTOTYPE SOFTWARE PREVIEW ONLY
+          HL7 FHIR R4 SPECIMEN — CLINICIAN REVIEW REQUIRED — NOT A VALID PHARMACY DISPENSE PRESCRIPTION
         </span>
       </div>
 
@@ -190,7 +190,7 @@ export default function PrescriptionPreviewView() {
           <div style={{ textAlign: 'right' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '180px', marginBottom: '4px' }} />
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540' }}>{SAMPLE_RX.doctorName}</div>
-            <div style={{ fontSize: '11px', color: '#64748B' }}>Verified Physician Signature (Demo)</div>
+            <div style={{ fontSize: '11px', color: '#64748B' }}>Attending Physician Digital Signature (Sandbox Verification)</div>
           </div>
         </div>
       </div>

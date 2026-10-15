@@ -57,7 +57,7 @@ import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
  * 2. My Health (Official ABHA Digital Health Card, QR verification, longitudinal vitals graphs, chronic conditions)
  * 3. Appointments (Upcoming online/in-person visits, Book New Appointment wizard, past visit summary)
  * 4. Reports (Lab test results, X-rays, blood biochemistry, 1-Click "Hear Report in My Language" native audio)
- * 5. Medications (Smart Chronotherapy Pillbox: Early morning empty stomach, meals, bedtime with Timbre voiceover)
+ * 5. Medications (Smart Chronotherapy Pillbox: Early morning empty stomach, meals, bedtime with spoken voiceover)
  * 6. AI Assistant (Vernacular health assistant, symptoms advice, emergency 108/104 direct action banner)
  * 7. Health Goals (10k steps tracker, hydration glasses, medication adherence streak, sleep tracker)
  * 8. Settings (Native Indic dialect selector, ABHA family locker switcher, WhatsApp voice reminder preferences)
@@ -199,7 +199,7 @@ export default function PatientPortal({
   const [breathingCyclesCompleted, setBreathingCyclesCompleted] = useState(3);
 
   // --- Enhanced Settings Suite State ---
-  const [voiceTimbre, setVoiceTimbre] = useState('female_compassionate');
+  const [voicePersona, setVoicePersona] = useState('female_compassionate');
   const [speechTempo, setSpeechTempo] = useState('1.0x');
   const [autoPlayAudio, setAutoPlayAudio] = useState(false);
   
@@ -1731,7 +1731,7 @@ export default function PatientPortal({
                             Upload Diagnostic / Lab Report
                           </h3>
                           <div style={{ fontSize: '11px', color: '#E0F2FE', opacity: 0.9 }}>
-                            Automated AI OCR & Vernacular Timbre Voiceover
+                            Automated AI OCR & Vernacular Voiceover (Browser speech)
                           </div>
                         </div>
                       </div>
@@ -1931,7 +1931,7 @@ export default function PatientPortal({
                     Personalized Chronotherapy Medication Schedule
                   </h2>
                   <p style={{ fontSize: '13px', color: '#64748B' }}>
-                    Pill schedule tailored to meal context (Early Morning, Morning, Afternoon, Evening, Night) with Timbre voiceover.
+                    Pill schedule tailored to meal context (Early Morning, Morning, Afternoon, Evening, Night) with spoken voiceover (Browser speech).
                   </p>
                 </div>
 
@@ -3050,11 +3050,11 @@ export default function PatientPortal({
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '14px' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#0A2540', marginBottom: '6px' }}>
-                        Voice Timbre & Persona
+                        Voice Persona & Tone (Browser Speech)
                       </label>
                       <select
-                        value={voiceTimbre}
-                        onChange={e => setVoiceTimbre(e.target.value)}
+                        value={voicePersona}
+                        onChange={e => setVoicePersona(e.target.value)}
                         style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', fontWeight: 650 }}
                       >
                         <option value="female_compassionate">Dr. Priya (Empathetic Female)</option>

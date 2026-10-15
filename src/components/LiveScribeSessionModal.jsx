@@ -31,7 +31,7 @@ import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinica
  * Features:
  * 1. Dual-speaker diarization telemetry (Doctor in Cyan, Patient in Amber).
  * 2. Live WebAudio STFT spectrum & 16kHz PCM audio buffer simulation.
- * 3. Real-time Indic NLP extraction (ICD-10 ontology, Coswara acoustic biomarkers).
+ * 3. Real-time Indic NLP extraction (ICD-10 ontology, simulated acoustic signal features).
  * 4. Auto-generated e-Prescription with National Formulary of India (NFI) checker.
  * 5. 1-Click "Sign & Launch WhatsApp Spoken Audio-Rx".
  */
@@ -89,7 +89,7 @@ export default function LiveScribeSessionModal({
         { speaker: 'Doctor', lang: 'Hindi', text: 'पीली शीशी का सीरप सुबह 5ml और लाल शीशी का सिर्फ बुखार आने पर देना है।' }
       ],
       vitals: { bp: '95/62 mmHg', hr: '118 bpm', spo2: '94%', temp: '101.4°F', rbs: 'Normal' },
-      biomarkers: { coughIndex: '0.84 (High Paroxysmal)', dyspneaScore: 'Subcostal Retraction', wheezeDetection: 'Bilateral Polyphonic (IISc Coswara)' },
+      biomarkers: { coughIndex: '0.84 (High Paroxysmal)', dyspneaScore: 'Subcostal Retraction', wheezeDetection: 'Bilateral Polyphonic (Simulated DSP)' },
       icdMappings: [
         { colloquial: 'पसली चलना (Pasli Chalna)', clinical: 'Subcostal Retraction / Tachypnea', icd10: 'R06.02', snomed: '267036007' },
         { colloquial: 'सीटी जैसी आवाज (Wheeze)', clinical: 'Acute Bronchospasm', icd10: 'R06.2', snomed: '247410004' }
@@ -361,7 +361,7 @@ export default function LiveScribeSessionModal({
                 Dual-Speaker Diarization (16 kHz PCM)
               </div>
               <span style={{ fontSize: '11px', color: '#008B8B', fontWeight: 700 }}>
-                Gnani Prisma v2.5 STT
+                Browser speech (Web Speech API). Gnani voice integration: planned.
               </span>
             </div>
 
@@ -461,7 +461,7 @@ export default function LiveScribeSessionModal({
             <div style={{ background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                 <Activity size={14} color="#008B8B" />
-                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0A2540' }}>IISc Coswara Acoustic Biomarkers</span>
+                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0A2540' }}>Simulated Acoustic Signal Features</span>
               </div>
               <div style={{ fontSize: '11.5px', color: '#475569', lineHeight: 1.6 }}>
                 <div>• Cough Index: <strong>{encounterData.biomarkers.coughIndex}</strong></div>
@@ -548,7 +548,7 @@ export default function LiveScribeSessionModal({
             {/* Human-In-The-Loop Sign & WhatsApp Action */}
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ fontSize: '11px', color: '#64748B', lineHeight: 1.4 }}>
-                🔒 <strong>Doctor-in-the-loop:</strong> Reviewing and signing triggers Gnani Timbre v2.5 to clone Dr. Priya's voice note in {patientData.language || 'Telugu'} and dispatches directly to patient's WhatsApp.
+                🔒 <strong>Doctor-in-the-loop:</strong> Reviewing and signing generates a spoken prescription in {patientData.language || 'Telugu'} (Browser speech (Web Speech API). Gnani voice integration: planned) and prepares the WhatsApp message.
               </div>
 
               <button
@@ -613,7 +613,7 @@ export default function LiveScribeSessionModal({
                   onClick={() => {
                     const bundle = generateAbdmFhirR4Bundle(
                       patientData, 
-                      { doctorName, hprId: 'ABHA-HPR-8921-9942', specialty: 'Pulmonology & Critical Care' },
+                      { doctorName, hprId: 'DEMO-HPR-8921-9942', specialty: 'Pulmonology & Critical Care' },
                       encounterData.diagnosis,
                       encounterData.prescriptions
                     );

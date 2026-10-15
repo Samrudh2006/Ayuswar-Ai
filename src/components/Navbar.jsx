@@ -89,7 +89,6 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
   const isEmergencyActive = currentPath.startsWith('/emergency');
   const isDoctorActive = currentPath.startsWith('/doctor-portal') || currentPath === '/auth/doctor';
   const isPatientActive = currentPath.startsWith('/patient-portal') || currentPath === '/auth/patient';
-  const isAssistantActive = currentPath === '/assistant';
 
   const currentLangObj = SUPPORTED_LANGUAGES.find(l => l.code === selectedLanguage) || SUPPORTED_LANGUAGES[0];
 
@@ -619,23 +618,20 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
             </Link>
 
             <div style={{ fontWeight: 700, fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', marginTop: 4 }}>
-              Workspaces & Demo Tools
+              Clinical Workspaces & Profiles
             </div>
-            <Link to="/assistant" style={dropdownItemStyle(isAssistantActive)}>
-              Virtual Assistant Workspace
-            </Link>
             <Link to="/emergency" style={dropdownItemStyle(isEmergencyActive)}>
-              Emergency Triage (Simulation)
+              Emergency Triage & CPR Metronome
             </Link>
             <Link to="/auth/doctor" style={dropdownItemStyle(isDoctorActive)}>
-              Doctor Demo Profile Selection
+              OPD Clinician Console (Sandbox)
             </Link>
             <Link to="/auth/patient" style={dropdownItemStyle(isPatientActive)}>
-              Patient Demo Profile Selection
+              Citizen Health Record (Sandbox)
             </Link>
 
             <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Demo Data Mode:</span>
+              <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Clinical Simulation Data:</span>
               <button
                 onClick={() => toggleDemoMode()}
                 style={{

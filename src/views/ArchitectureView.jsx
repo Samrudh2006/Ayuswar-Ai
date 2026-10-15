@@ -47,7 +47,7 @@ export default function ArchitectureView() {
       num: 'Layer 5',
       title: 'Vernacular Spoken Audio-Rx & Delivery',
       icon: Volume2,
-      tech: 'Gnani.ai Indic Voice Proxy Interface • Web Speech Synthesis Fallback • WhatsApp wa.me Dispatch',
+      tech: 'Browser speech (Web Speech API). Gnani voice integration: planned • WhatsApp wa.me Dispatch',
       desc: 'Synthesizes empathetic, spoken audio dosage instructions in the patient’s exact regional mother tongue. Synchronizes color-coded pill schedule cards with glowing karaoke text for non-reading patients.'
     },
     {

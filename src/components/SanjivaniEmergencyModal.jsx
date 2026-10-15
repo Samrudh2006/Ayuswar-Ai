@@ -42,7 +42,7 @@ import {
 } from 'lucide-react';
 import EmergencyMap from './EmergencyMap';
 import SanjivaniEmergencyAssistant from './SanjivaniEmergencyAssistant';
-import SanjivaniHandoverModal from './SanjivaniHandoverModal';
+import SanjivaniTransferModal from './SanjivaniTransferModal';
 import { 
   fetchNearbyHospitalsAPI, 
   fetchRoadRouteGeoJSON,
@@ -1349,7 +1349,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         {/* ========================================================
             5. AUTO-FILLED ABDM PRE-ARRIVAL BED HANDOVER MODAL (ePCR)
             ======================================================== */}
-        <SanjivaniHandoverModal
+        <SanjivaniTransferModal
           isOpen={isHandoverModalOpen}
           onClose={() => setIsHandoverModalOpen(false)}
           hospital={selectedHospital}

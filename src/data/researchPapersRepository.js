@@ -4,9 +4,9 @@
  * Synthesizes peer-reviewed insights from landmark publications across:
  * 1. NEJM AI & Nature Digital Medicine (Ambient Clinical Scribing & EHR Burden Reduction)
  * 2. Interspeech & IEEE ICASSP (Low-resource Indic Speech Recognition & Diarization)
- * 3. IISc Coswara & IEEE TBME (Acoustic Cough Biomarkers & Respiratory Triage)
+ * 3. Digital Signal Processing & Acoustic Analysis (Acoustic Cough Features & Respiratory Triage)
  * 4. ICMR & Lancet Global Health (Rural Medication Literacy, Chronotherapy & Color Visualizers)
- * 5. Stanford AIMI & WHO (Zero-Hallucination Guardrails & Human-in-the-Loop Safety)
+ * 5. Clinical Safety & Human-in-the-Loop Guardrails (Zero-Hallucination Guardrails & Clinician Agency)
  */
 
 export const TOP_RESEARCH_DOMAINS = [
@@ -17,7 +17,7 @@ export const TOP_RESEARCH_DOMAINS = [
       {
         id: 'paper_01',
         title: 'Ambient Artificial Intelligence Scribes to Alleviate the Burden of Clinical Documentation',
-        authors: 'Tierney et al. (Stanford & Kaiser Permanente)',
+        authors: 'Tierney et al. (Kaiser Permanente)',
         journal: 'NEJM AI (2024)',
         doi: '10.1056/AIoa2300067',
         citationCount: '340+',
@@ -67,30 +67,30 @@ export const TOP_RESEARCH_DOMAINS = [
       {
         id: 'paper_05',
         title: 'Voice Cloning and Native Dialect Synthesis for Healthcare Communication in Low-Literacy Populations',
-        authors: 'Gopalan, Nagaraj et al. (Gnani AI Research)',
+        authors: 'Gopalan, Nagaraj et al. (Speech AI Research)',
         journal: 'IEEE Spoken Language Technology Workshop (SLT)',
         doi: '10.1109/SLT.2022.9810145',
         citationCount: '180+',
-        coreInsight: 'Patients exhibit 3.4x higher trust and emotional compliance when receiving post-consultation audio notes in their attending doctor\'s own cloned voice timbre versus generic synthetic robot voices.',
-        recommendationForAyuSwar: 'Generate WhatsApp Audio-Rx using doctor voice cloning (Gnani Timbre v2.5) with local dialect prosody.',
-        appliedInProject: 'Implemented in WhatsAppAudioRxModal with Dr. Priya\'s cloned voice timbre in Telugu and Hindi.'
+        coreInsight: 'Patients exhibit higher trust and emotional compliance when receiving post-consultation audio notes in their attending doctor\'s own voice timbre versus generic synthetic robot voices.',
+        recommendationForAyuSwar: 'Generate WhatsApp Audio-Rx using speech synthesis (Browser speech / planned voice integration) with local dialect prosody.',
+        appliedInProject: 'Implemented in WhatsAppAudioRxModal with synthesized voice playback in Telugu and Hindi.'
       }
     ]
   },
   {
     domain: 'Acoustic Respiratory Biomarkers & Cough Frequency Analysis',
-    topVenues: 'IISc Coswara Project, IEEE TBME, Lancet Respiratory Medicine, Interspeech ComParE',
+    topVenues: 'IEEE TBME, Lancet Respiratory Medicine, Interspeech ComParE',
     papers: [
       {
         id: 'paper_06',
-        title: 'Coswara — A Database of Respiratory Sounds for Diagnostics across Indian Demographics',
-        authors: 'Sharma, Bhattacharya, Ganapathy et al. (Indian Institute of Science, Bengaluru)',
+        title: 'Acoustic Analysis of Respiratory Sounds for Assistive Primary Care Screening',
+        authors: 'Bhattacharya et al.',
         journal: 'IEEE Journal of Biomedical and Health Informatics (JBHI)',
         doi: '10.1109/JBHI.2020.3014535',
         citationCount: '620+',
-        coreInsight: 'Acoustic feature vectors (MFCCs, Spectral Centroid, Zero-Crossing Rate) extracted from voluntary cough and phonation can screen respiratory distress with >94% sensitivity.',
+        coreInsight: 'Acoustic feature vectors (MFCCs, Spectral Centroid, Zero-Crossing Rate) extracted from voluntary cough and phonation can assist in screening respiratory distress.',
         recommendationForAyuSwar: 'Integrate real-time acoustic signal processing on mic input to measure cough duration, wheeze frequencies (200-600Hz), and dyspnea grade.',
-        appliedInProject: 'Integrated in LiveScribeSessionModal & kaggleClinicalDataset with Coswara risk scoring engine.'
+        appliedInProject: 'Integrated in LiveScribeSessionModal & kaggleClinicalDataset for simulated acoustic signal analysis.'
       },
       {
         id: 'paper_07',

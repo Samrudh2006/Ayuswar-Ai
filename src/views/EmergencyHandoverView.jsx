@@ -163,7 +163,7 @@ export default function EmergencyHandoverView() {
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '180px', marginBottom: '4px' }} />
-            <div style={{ fontSize: '11px', color: '#475569' }}>Lead Paramedic Signature (Demo)</div>
+            <div style={{ fontSize: '11px', color: '#475569' }}>Lead Paramedic Handover Signature (Simulated Protocol)</div>
           </div>
         </div>
       </div>

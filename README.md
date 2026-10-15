@@ -9,8 +9,9 @@
 
 ---
 
-> **⚠️ NON-DIAGNOSTIC PROTOTYPE NOTICE:**  
-> AyuSwar AI is an engineering demonstration of ambient speech recognition and clinical document drafting. It is **not** a certified medical device and does **not** provide autonomous medical diagnosis or clinical care plans. All emergency workflows (ambulance telemetry, bed reservation, traffic signal control) are **simulated demonstrations**; for real medical emergencies in India, dial **112** or **108**.
+> **⚠️ PROTOTYPE DEMO NOTICE:**  
+> **AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis.**  
+> It is an engineering demonstration of ambient speech recognition and clinical document drafting. It does **not** provide autonomous medical diagnosis or clinical care plans. All emergency workflows (ambulance telemetry, bed reservation, traffic signal control) are **simulated demonstrations**; for real medical emergencies in India, dial **112** or **108**.
 
 ---
 
@@ -39,8 +40,9 @@ AyuSwar AI addresses clinical documentation overhead and patient prescription co
    - Demonstrates emergency distress call triage logic and provides an audible **110 BPM CPR tempo metronome** adhering to resuscitation guidelines.
    - Generates printable paramedic handover summaries marked with simulation watermarks.
 
-6. **24-Point Executable Assertion Test Suite**
-   - Unlike mock certificates, the test suite executes **24 real unit and contract assertions** measuring execution duration in milliseconds.
+6. **Executable Assertion Test Suite (8 Automated CLI Tests + 24 In-Browser Assertions)**
+   - Automated CLI test suite (`npm test`) executes **8 contract and safety audit tests** validating dependency isolation, environment configuration, and banned claim prevention.
+   - In-browser interactive suite (`/benchmarks`) runs **24 client-side integration assertions** testing WebAudio, local storage isolation, and FHIR schema validation in milliseconds.
 
 ---
 
@@ -56,48 +58,41 @@ AyuSwar features a dedicated route structure with persistent URLs and browser ba
 | `/scanner` | Blister Strip OCR & PMBJP Price Comparator | Implemented |
 | `/audio-rx` | Vernacular Audio-Rx Spoken Schedule Studio | Implemented |
 | `/acoustic-lab` | Experimental DSP Acoustic Signal Lab | Implemented |
-| `/benchmarks` | 24 Executed Software Assertions | Implemented |
+| `/benchmarks` | In-Browser Interactive Assertions (24 Checks) | Implemented |
 | `/language-matrix` | Indic Language Support Matrix & Methodology | Implemented |
 | `/datasets` | Clinical Knowledge & Colloquial Lexicon Reference | Implemented |
 | `/emergency` | Simulated Distress Triage & 110 BPM CPR Metronome | Implemented |
 | `/emergency/handover` | Paramedic Handover Specimen (Simulation) | Implemented |
 | `/prescription/preview` | ABDM FHIR R4 Specimen Preview | Implemented |
-| `/assistant` | Dedicated Virtual Assistant Workspace | Implemented |
-| `/avatar` | Lifelike 4-Frame Avatar Assistant Gallery | Implemented |
-| `/auth/doctor` | Clinician Demo Profile Selector | Implemented |
-| `/auth/patient` | Citizen Demo Profile Selector | Implemented |
+| `/auth/doctor` | Clinician Sandbox Profile Selector | Implemented |
+| `/auth/patient` | Citizen Sandbox Profile Selector | Implemented |
 | `/doctor-portal` | OPD Physician Console & Queue | Implemented |
 | `/patient-portal` | Citizen Health Record Viewer | Implemented |
 
 ---
 
-## 🤖 Lifelike Conversational Avatar Assistant (`AvatarAssistant.jsx`)
+## 🏗️ Core Architectural Pillars & Functional Implementations
 
-The voice assistant interface includes a photorealistic doctor avatar (white coat + stethoscope) engineered for high visual fidelity and low device overhead:
+AyuSwar AI separates high-performance client-side browser execution from secure backend services:
 
-1. **4 Synchronized High-Resolution Frames (`public/avatar/*.png`):**
-   - `idle.png`: Attentive, calm resting posture with subtle breathing sway.
-   - `listening.png`: Attentive conversational posture with micro-movement.
-   - `blink.png`: Natural organic eye blink triggered every 3.2 to 5.8 seconds with random jitter (140ms closure).
-   - `speaking.png`: Phoneme-synced mouth opening dynamically toggled during speech.
+1. **Client-Side Speech Processing Pipeline:**
+   - Employs the native W3C Web Speech API for immediate, zero-latency transcription of spoken Hindi, Telugu, and Indian English without requiring cloud round-trips for basic scribing.
+   - Built with pluggable server-side reverse-proxy architecture (`/api/gnani`) ready for production Gnani neural voice API ingestion without client secret leakage.
 
-2. **Viseme & Audio Synchronization:**
-   - Mouth state dynamically reacts to speech synthesis events and syllable cadences (110–200ms alternating phases).
-   - Text fallback viseme simulation ensures natural speaking motion when raw audio streams are unavailable.
+2. **Deterministic Indic Colloquial-to-ICD10 Crosswalk:**
+   - Client-side medical taxonomy parser that maps regional visceral idioms (e.g., Telugu *"గుండెల్లో మంట"*, Hindi *"पसली चलना"*) directly to standardized WHO ICD-10 diagnostic codes and SNOMED CT terminology without hallucination.
 
-3. **Performance & Device Compatibility:**
-   - Ultra-lightweight: ~380 KB per compressed frame; loads instantaneously and delivers silky 60 FPS transitions without WebGL overhead or shader compilation delays.
-   - Strict `prefers-reduced-motion` compliance locks avatar to the static idle frame and disables swaying/blinking animations for motion-sensitive users.
+3. **ABDM-Conforming HL7 FHIR R4 Generation:**
+   - Translates structured consultation notes directly into valid HL7 FHIR R4 JSON schemas with explicit doctor-in-the-loop review and sign-off gates.
 
-4. **Vernacular Multilingual Speech & Captions:**
-   - Supports live captions and speech in **English (`en-IN`)**, **Telugu (`te-IN`)**, and **Hindi (`hi-IN`)**.
-   - Employs standard browser `speechSynthesis` with honest provider labeling (no unverified external API claims).
+4. **In-Browser WebAudio DSP Signal Analysis:**
+   - Real-time `AudioContext` and `AnalyserNode` fast Fourier transform (FFT) waterfall plotting physical acoustic energy flux between 0 Hz and 8 kHz directly from the device microphone.
 
-5. **Mandatory Safety Disclaimer:**
-   - Prominently displays: `"AI assistant, not a doctor. Prototype demo."` to preserve clinical transparency.
+5. **AHA-Compliant 110 BPM Resuscitation Metronome:**
+   - Real-time audible CPR metronome powered by Web Audio `OscillatorNode` adhering to American Heart Association / Indian Resuscitation Council guidelines for cardiac arrest pacing.
 
-6. **Interactive Gallery:**
-   - Explore all 4 synchronized states side-by-side or interactively at `/avatar`.
+6. **Jan Aushadhi PMBJP Price Arbitrage Calculator:**
+   - Instantaneous cross-referencing between branded formulations and the National Formulary of India (NFI) / PMBJP open dataset, computing direct generic savings.
 
 ---
 

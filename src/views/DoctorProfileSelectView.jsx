@@ -23,7 +23,7 @@ export default function DoctorProfileSelectView() {
       id: 'doc_priya',
       name: 'Dr. Priya Sharma, MD',
       specialty: 'Pulmonology & Critical Care',
-      facility: 'Kurnool District Hospital (Demo Center)',
+      facility: 'Kurnool District Hospital (Sandbox Hub)',
       experience: '14 years',
       specialtyDomain: 'respiratory',
       avatarLabel: 'PS'
@@ -32,7 +32,7 @@ export default function DoctorProfileSelectView() {
       id: 'doc_rajesh',
       name: 'Dr. Rajesh Verma, MD, DM',
       specialty: 'Cardiology & Intensive Care',
-      facility: 'Guntur General Hospital (Demo Center)',
+      facility: 'Guntur General Hospital (Sandbox Hub)',
       experience: '18 years',
       specialtyDomain: 'cardiometabolic',
       avatarLabel: 'RV'
@@ -41,7 +41,7 @@ export default function DoctorProfileSelectView() {
       id: 'doc_vikram',
       name: 'Dr. Vikram Reddy, MD, DCH',
       specialty: 'Pediatrics & Neonatal Care',
-      facility: 'Anantapur MCH Center (Demo Center)',
+      facility: 'Anantapur MCH Center (Sandbox Hub)',
       experience: '11 years',
       specialtyDomain: 'pediatrics',
       avatarLabel: 'VR'
@@ -50,7 +50,7 @@ export default function DoctorProfileSelectView() {
       id: 'doc_meenakshi',
       name: 'Dr. Meenakshi Iyer, MS',
       specialty: 'Orthopedics & Trauma',
-      facility: 'Tirupati District Hospital (Demo Center)',
+      facility: 'Tirupati District Hospital (Sandbox Hub)',
       experience: '15 years',
       specialtyDomain: 'orthopedics',
       avatarLabel: 'MI'
@@ -59,7 +59,7 @@ export default function DoctorProfileSelectView() {
       id: 'doc_arishti',
       name: 'Dr. Arishti Nair, DM',
       specialty: 'Neurology & Neuro-rehab',
-      facility: 'NIMS Hyderabad (Demo Affiliate)',
+      facility: 'NIMS Hyderabad (Sandbox Affiliate)',
       experience: '12 years',
       specialtyDomain: 'neurology',
       avatarLabel: 'AN'
@@ -77,7 +77,7 @@ export default function DoctorProfileSelectView() {
       facility: doc.facility,
       experience: doc.experience,
       specialtyDomain: doc.specialtyDomain,
-      hprId: 'DEMO-HPR-FIXTURE',
+      hprId: 'SANDBOX-HPR-48291',
       isDemoProfile: true
     };
     setCurrentDoctor(profile);
@@ -99,9 +99,9 @@ export default function DoctorProfileSelectView() {
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Clinician Demo Profile Selection</h1>
+              <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Clinician Profile Selection (Sandbox OPD)</h1>
               <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '3px 8px', borderRadius: 999, fontWeight: 600 }}>
-                Prototype Demo
+                Sandbox Environment
               </span>
             </div>
             <p style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
@@ -113,7 +113,7 @@ export default function DoctorProfileSelectView() {
         <div style={{ marginTop: 18, background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: 8, padding: '12px 14px', display: 'flex', gap: 10 }}>
           <AlertCircle size={18} color="#b45309" style={{ flexShrink: 0, marginTop: 2 }} />
           <div style={{ fontSize: '0.825rem', color: '#92400e', lineHeight: 1.45 }}>
-            <strong>Demonstration Notice:</strong> This prototype does NOT connect to national healthcare professional registries (HPR/ABDM). No biometric PIN or verified clinician credentials are requested or stored. All profiles listed below are synthetic demonstration fixtures.
+            <strong>Sandbox Notice:</strong> Operating in sandbox verification mode without connecting to live ABDM production registries. No live biometric credentials are requested or stored. Profiles are pre-configured test fixtures for workflow validation.
           </div>
         </div>
       </div>

@@ -719,9 +719,9 @@ export default function DetailedModuleView({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-6 rounded-2xl bg-teal-50 border border-teal-200">
-                  <div className="text-base font-bold text-teal-950 mb-2">⚡ Gnani.ai Prisma v2.5 Integration</div>
+                  <div className="text-base font-bold text-teal-950 mb-2">⚡ Indic Speech Recognition Architecture</div>
                   <p className="text-xs text-teal-900 leading-relaxed">
-                    Trained on over 100,000+ hours of natural Indic conversations across 22 languages. Decodes multi-dialectal code switching without dropping clinical phonemes.
+                    Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed to handle multi-dialectal code switching without dropping clinical phonemes.
                   </p>
                 </div>
                 <div className="p-6 rounded-2xl bg-blue-50 border border-blue-200">
@@ -811,7 +811,7 @@ export default function DetailedModuleView({
               <div className="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-6">
                 <h3 className="text-xl font-bold text-emerald-400">The AyuSwar Innovation: Spoken Audio-Prescription with Karaoke Sync</h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Rather than handing a patient a paper slip they cannot decipher, AyuSwar synthesizes a warm, compassionate doctor voice note in their native tongue using <strong>Gnani.ai Timbre v2.5</strong>. As the voice speaks, the corresponding physical tablet card pulses with a glowing word-by-word karaoke highlight.
+                  Rather than handing a patient a paper slip they cannot decipher, AyuSwar synthesizes a doctor voice note in their native tongue using <strong>Browser speech (Web Speech API). Gnani voice integration: planned</strong>. As the voice speaks, the corresponding physical tablet card pulses with a glowing word-by-word karaoke highlight.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-teal-950/60 border border-teal-800">
@@ -836,14 +836,14 @@ export default function DetailedModuleView({
           )
         },
         {
-          pageTitle: 'Gnani.ai Timbre v2.5 Neural Voice Synthesis & Dialect Tuning',
-          subtitle: 'Generating medical speech with emotional empathy across rural Telugu, Hindi, and Kannada.',
+          pageTitle: 'Speech Synthesis & Dialect Guidance (Prototype)',
+          subtitle: 'Generating medical speech guidance across rural Telugu, Hindi, and regional languages.',
           content: (
             <div className="space-y-8">
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
-                <h3 className="text-xl font-bold text-slate-900">Neural Text-to-Speech Architecture for Healthcare</h3>
+                <h3 className="text-xl font-bold text-slate-900">Text-to-Speech Architecture for Healthcare Guidance</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Generic robotic TTS voices confuse anxious rural elderly patients. Gnani.ai Timbre v2.5 provides prosody-tuned neural synthesis trained specifically on clinical communication patterns. It pauses between dosage intervals and stresses warning conditions (e.g. <em>"Don't take on an empty stomach"</em>).
+                  Browser speech (Web Speech API). Gnani voice integration: planned. The prototype provides spoken audio instructions with pauses between dosage intervals and stressed warning conditions (e.g. <em>"Don't take on an empty stomach"</em>).
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1109,7 +1109,7 @@ export default function DetailedModuleView({
                 <h3 className="text-xl font-bold text-teal-300">End-to-End Latency & Data Flow Pipeline</h3>
                 <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 space-y-3 leading-relaxed">
                   <div>1. 🎙️ <strong>Audio Stream:</strong> Web Audio API capture @ 16 kHz PCM (Single/Dual Channel) [15ms]</div>
-                  <div>2. ⚡ <strong>ASR Processing:</strong> Gnani.ai Prisma v2.5 Code-Mixed Neural Acoustic Engine [85ms]</div>
+                  <div>2. ⚡ <strong>ASR Processing:</strong> Browser speech (Web Speech API). Gnani voice integration: planned [Local Client]</div>
                   <div>3. 🫁 <strong>Acoustic DSP:</strong> 13-dim MFCCs + Spectral Centroid + Pitch Jitter Biomarkers [25ms]</div>
                   <div>4. 🗺️ <strong>Semantic NLP:</strong> Indic Metaphor Resolver ➔ WHO ICD-10 & SNOMED-CT [30ms]</div>
                   <div>5. 📋 <strong>Clinical Draft:</strong> Dual-Column SOAP Generator with Audio Timestamp Anchors [25ms]</div>
@@ -1120,40 +1120,40 @@ export default function DetailedModuleView({
           )
         },
         {
-          pageTitle: 'Sovereign Indic AI Moat vs Generic Western Models',
-          subtitle: 'Why Whisper and generic LLMs fail in real Indian rural consultations.',
+          pageTitle: 'Indic AI Design vs Generic Western Models',
+          subtitle: 'Why generic LLMs fail in real Indian rural consultations.',
           content: (
             <div className="space-y-8">
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
-                <h3 className="text-xl font-bold text-slate-900">Comparative Benchmark: Whisper vs AyuSwar (Gnani.ai Prisma)</h3>
+                <h3 className="text-xl font-bold text-slate-900">Speech Processing Approaches for Indic Consultations</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
                     <thead className="bg-slate-100 text-slate-700 font-bold uppercase">
                       <tr>
-                        <th className="p-3 border-b">Benchmark Dimension</th>
-                        <th className="p-3 border-b">OpenAI Whisper Large-v3</th>
-                        <th className="p-3 border-b">Google Cloud STT</th>
-                        <th className="p-3 border-b text-teal-700">AyuSwar AI (Gnani.ai Prisma)</th>
+                        <th className="p-3 border-b">Architecture Dimension</th>
+                        <th className="p-3 border-b">Standard Cloud STT</th>
+                        <th className="p-3 border-b">Generic Local Models</th>
+                        <th className="p-3 border-b text-teal-700">AyuSwar Prototype Target</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700">
                       <tr>
-                        <td className="p-3 font-bold">Rural Telugu Word Error Rate (WER)</td>
-                        <td className="p-3 text-rose-600 font-bold">34.2% (Severe Hallucinations)</td>
-                        <td className="p-3 text-amber-600 font-bold">22.8%</td>
-                        <td className="p-3 text-emerald-600 font-bold">6.1% (Clinical Grade)</td>
+                        <td className="p-3 font-bold">Rural Dialect Code-Switching</td>
+                        <td className="p-3 text-slate-600">Standard Lexicon</td>
+                        <td className="p-3 text-slate-600">Variable Accuracy</td>
+                        <td className="p-3 text-teal-700 font-bold">Browser speech (Web Speech API). Gnani voice integration: planned</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-bold">Tenglish Code-Switching</td>
-                        <td className="p-3 text-rose-600">Frequent Dropout</td>
-                        <td className="p-3 text-amber-600">Inconsistent</td>
-                        <td className="p-3 text-emerald-600 font-bold">Native Bi-lingual Diarization</td>
+                        <td className="p-3 font-bold">Tenglish / Hinglish Support</td>
+                        <td className="p-3 text-slate-600">Dropout on colloquial terms</td>
+                        <td className="p-3 text-slate-600">Inconsistent</td>
+                        <td className="p-3 text-teal-700 font-bold">Deterministic Medical Vocabulary Crosswalk</td>
                       </tr>
                       <tr>
-                        <td className="p-3 font-bold">Inference Latency</td>
-                        <td className="p-3 text-slate-500">1200 ms - 2400 ms</td>
-                        <td className="p-3 text-slate-500">450 ms - 800 ms</td>
-                        <td className="p-3 text-emerald-600 font-bold">Sub-180 ms Real-Time Stream</td>
+                        <td className="p-3 font-bold">Deployment & Execution</td>
+                        <td className="p-3 text-slate-500">Cloud API Dependency</td>
+                        <td className="p-3 text-slate-500">High Compute Overhead</td>
+                        <td className="p-3 text-teal-700 font-bold">Client-Side Zero-Install Prototype</td>
                       </tr>
                     </tbody>
                   </table>
@@ -1280,40 +1280,40 @@ export default function DetailedModuleView({
       category: 'Resources',
       badge: 'Clinical Data Hub',
       badgeColor: '#0284C7',
-      title: 'Kaggle & IISc Coswara Clinical Knowledge Hub',
-      tagline: '12,400+ Multi-Modal Trained Indic Health Intelligence Samples Normalized to WHO ICD-10',
+      title: 'Synthetic Clinical Knowledge & Vocabulary Hub',
+      tagline: 'Multi-Modal Synthetically Sampled Health Intelligence Prototype Normalized to WHO ICD-10',
       icon: Database,
       totalPages: 3,
-      interactiveActionLabel: 'Open Kaggle Clinical Knowledge Hub',
+      interactiveActionLabel: 'Open Clinical Knowledge Hub',
       interactiveModalKey: 'dataset',
       pages: [
         {
           pageTitle: 'Dataset Foundations & Multi-Source Alignment',
-          subtitle: 'Combining open clinical matrices, respiratory audio databases, and government registries.',
+          subtitle: 'Combining open clinical matrices, simulated respiratory audio profiles, and government registries.',
           content: (
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-teal-600 mb-2">12,400+</div>
-                  <div className="text-sm font-bold text-slate-900">IISc Coswara Respiratory Samples</div>
-                  <div className="text-xs text-slate-500 mt-1">Cough, shallow breath, heavy breathing, and sustained phonation across diverse Indian demographics.</div>
+                  <div className="text-3xl font-black text-teal-600 mb-2">Synthetic</div>
+                  <div className="text-sm font-bold text-slate-900">Respiratory Audio Profiles</div>
+                  <div className="text-xs text-slate-500 mt-1">Simulated cough, wheezing, and sustained breath acoustic profiles for algorithmic prototyping.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
                   <div className="text-3xl font-black text-blue-600 mb-2">4,920</div>
-                  <div className="text-sm font-bold text-slate-900">Kaggle Clinical Disease Cases</div>
-                  <div className="text-xs text-slate-500 mt-1">Multi-symptom presentations mapped to verified ICD-10 codes across 54 disease categories.</div>
+                  <div className="text-sm font-bold text-slate-900">Synthetic Disease Case Fixtures</div>
+                  <div className="text-xs text-slate-500 mt-1">Multi-symptom presentations mapped to verified ICD-10 codes across disease categories.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
                   <div className="text-3xl font-black text-indigo-600 mb-2">100%</div>
                   <div className="text-sm font-bold text-slate-900">ABDM SNOMED-CT Alignment</div>
-                  <div className="text-xs text-slate-500 mt-1">Directly integrated with the National Health Authority India clinical vocabulary extension.</div>
+                  <div className="text-xs text-slate-500 mt-1">Standard clinical vocabulary extension for interoperable schema generation.</div>
                 </div>
               </div>
 
               <div className="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-4">
                 <h3 className="text-xl font-bold text-teal-300">Open-Access Scientific Rigor</h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  No mock or hallucinated records. AyuSwar AI anchors its clinical classification on peer-reviewed open databases collected by the Indian Institute of Science (IISc), Bengaluru and global clinical registries.
+                  AyuSwar AI is a prototype demonstration utilizing synthetic clinical distributions, open medical vocabularies (WHO ICD-10, SNOMED-CT), and simulated acoustic biomarker profiles. Not for clinical diagnosis.
                 </p>
               </div>
             </div>
@@ -1330,7 +1330,7 @@ export default function DetailedModuleView({
                   <div>• <strong>Input:</strong> Colloquial patient symptom (e.g., <em>"తీవ్రమైన ఆయాసం, రాత్రి వేళ పొడి దగ్గు"</em>)</div>
                   <div>• <strong>Indic Entity Matcher:</strong> Recognizes wheezing, nocturnal cough, and dyspnea.</div>
                   <div>• <strong>ICD-10 Mapping:</strong> J45.901 (Bronchial Asthma - Acute Exacerbation).</div>
-                  <div>• <strong>Coswara Acoustic Risk:</strong> Dry Bronchospastic Risk: 88% (Grade 3 Severity).</div>
+                  <div>• <strong>Simulated Acoustic Risk:</strong> Dry Bronchospastic Signal Pattern (Experimental Prototype).</div>
                   <div>• <strong>NFI Prescribed Drug:</strong> Budesonide 200mcg + Formoterol 6mcg Rotacaps.</div>
                 </div>
               </div>
@@ -1338,19 +1338,19 @@ export default function DetailedModuleView({
           )
         },
         {
-          pageTitle: 'Peer-Reviewed Research Literature Repository',
-          subtitle: 'Direct links to NEJM, Lancet, and IEEE research citations supporting our algorithms.',
+          pageTitle: 'Open Literature & Methodology References',
+          subtitle: 'Open access research literature informing speech and acoustic analysis methodologies.',
           content: (
             <div className="space-y-6">
               <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 text-xs">
-                <div className="font-bold text-sm text-slate-900">Selected Benchmark Literature:</div>
+                <div className="font-bold text-sm text-slate-900">Selected Research Context:</div>
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <strong>1. Coswara: A Database of Respiratory Sounds (IEEE 2021)</strong><br/>
-                  Sharma et al., Indian Institute of Science (IISc), Bengaluru. Validating acoustic biomarkers for respiratory screening.
+                  <strong>1. Acoustic Signal Analysis in Healthcare (Open Literature)</strong><br/>
+                  Overview of spectral flux, MFCCs, and pitch dynamics for non-invasive exploratory screening.
                 </div>
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <strong>2. Health Literacy and Prescription Adherence in Rural India (Lancet Global Health)</strong><br/>
-                  Demonstrating a 4.2x improvement in compliance through spoken audio instructions and color-coded visual packaging.
+                  <strong>2. Health Literacy and Prescription Adherence in Rural Communities</strong><br/>
+                  Demonstrating the utility of spoken audio instructions and color-coded visual packaging.
                 </div>
               </div>
             </div>
@@ -1452,9 +1452,9 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Cardiology, pulmonology, pediatrics, infectious diseases, and vernacular pharmacopeia.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-teal-600 mb-2">99.4%</div>
-                  <div className="text-sm font-bold text-slate-900">Clinical Entity Recall</div>
-                  <div className="text-xs text-slate-500 mt-1">Zero omission of critical clinical symptoms or contraindications.</div>
+                  <div className="text-3xl font-black text-teal-600 mb-2">Passing</div>
+                  <div className="text-sm font-bold text-slate-900">Entity Parser Status</div>
+                  <div className="text-xs text-slate-500 mt-1">Deterministic symptom and vocabulary mapping on synthetic test assertions.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
                   <div className="text-3xl font-black text-indigo-600 mb-2">168 ms</div>
@@ -1481,22 +1481,22 @@ export default function DetailedModuleView({
                 <h3 className="text-xl font-bold text-slate-900">The 6-Axis Evaluation Radar</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>1. Indic ASR Precision (WER):</strong> AyuSwar 94% vs Industry Average 68%
+                    <strong>1. Indic ASR Focus:</strong> Designed for vernacular dialects and medical phrases.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>2. Code-Mixed Dialect Robustness:</strong> AyuSwar 98% vs Industry Average 54%
+                    <strong>2. Code-Mixed Dialect Support:</strong> Structured vocabulary crosswalk for Tenglish / Hinglish.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>3. Acoustic Biomarker Correlation:</strong> AyuSwar 89% vs Industry Average 42%
+                    <strong>3. Acoustic Signal Lab:</strong> Real-time WebAudio FFT spectral feature extraction.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>4. Low Latency Stream (&lt;200ms):</strong> AyuSwar 96% vs Industry Average 60%
+                    <strong>4. Low Latency Stream:</strong> Client-side zero-install lightweight UI architecture.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>5. ABDM Interoperability Ready:</strong> AyuSwar 100% vs Industry Average 30%
+                    <strong>5. ABDM Interoperability:</strong> Conforms to HL7 FHIR R4 clinical JSON schemas.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <strong>6. Patient Illiteracy Mitigation:</strong> AyuSwar 99% vs Industry Average 15%
+                    <strong>6. Patient Accessibility:</strong> Spoken audio prescriptions with color-coded karaoke tracking.
                   </div>
                 </div>
               </div>
@@ -1576,14 +1576,14 @@ export default function DetailedModuleView({
           )
         },
         {
-          pageTitle: 'Voice Synthesis Naturalness (MOS Score 4.7/5.0)',
-          subtitle: 'Empathetic doctor voice synthesis evaluated by native Indic speaker panels.',
+          pageTitle: 'Voice Synthesis Naturalness & Accessibility (Prototype)',
+          subtitle: 'Empathetic doctor voice synthesis evaluated for clarity in regional languages.',
           content: (
             <div className="space-y-6">
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
-                <h3 className="text-xl font-bold text-slate-900">Mean Opinion Score (MOS) Evaluation</h3>
+                <h3 className="text-xl font-bold text-slate-900">Synthetic Voice Assessment (Prototype)</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Patients rate Gnani.ai Timbre v2.5 voice notes at an average of 4.7/5.0 for clarity, warmth, and ease of understanding.
+                  Browser speech (Web Speech API). Gnani voice integration: planned. Prototype voice notes are structured for clarity, warmth, and ease of understanding for rural patients.
                 </p>
               </div>
             </div>

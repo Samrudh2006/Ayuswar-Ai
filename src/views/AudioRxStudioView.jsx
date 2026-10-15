@@ -361,7 +361,7 @@ export default function AudioRxStudioView() {
           <div style={{ background: '#F0FDF4', border: '1.5px solid #BBF7D0', borderRadius: '16px', padding: '22px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#166534', fontWeight: 800, fontSize: '14px', marginBottom: '8px' }}>
               <MessageSquare size={16} />
-              <span>Patient WhatsApp Audio-Rx Push (Demonstration)</span>
+              <span>Patient WhatsApp Audio-Rx Push (Sandbox Dispatch)</span>
             </div>
             <p style={{ fontSize: '12.5px', color: '#14532D', lineHeight: 1.5, marginBottom: '14px' }}>
               Simulates sending the patient their audio note link and medication timing schedule directly to their verified WhatsApp account.
@@ -406,7 +406,7 @@ export default function AudioRxStudioView() {
 
             {whatsAppToast && (
               <div style={{ marginTop: '10px', fontSize: '12px', color: '#15803D', fontWeight: 700 }}>
-                ✓ Demonstration dispatch simulated for {recipientPhone}. (No real external message sent in demo mode).
+                ✓ Dispatch simulated for {recipientPhone} (Sandbox testing environment).
               </div>
             )}
           </div>

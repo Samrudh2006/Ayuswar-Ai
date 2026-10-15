@@ -28,7 +28,7 @@ export default function PatientProfileSelectView() {
       primaryComplaint: 'ఆయాసం, పీకల్లో పిల్లికూతలు, రాత్రి వేళ తీవ్రమైన దగ్గు',
       prescriptionsCount: 3,
       assignedDoctor: 'Dr. Priya Sharma (Pulmonology)',
-      tag: 'Pulmonology Demo'
+      tag: 'Pulmonology Scenario'
     },
     {
       id: 'pat_saraswathi',
@@ -40,7 +40,7 @@ export default function PatientProfileSelectView() {
       primaryComplaint: 'పాదాల్లో తిమ్మిర్లు, నీరసం, రక్తపోటు హెచ్చుతగ్గులు',
       prescriptionsCount: 4,
       assignedDoctor: 'Dr. Rajesh Verma (Cardiometabolic)',
-      tag: 'Cardiometabolic Demo'
+      tag: 'Cardiometabolic Scenario'
     },
     {
       id: 'pat_chinna',
@@ -52,7 +52,7 @@ export default function PatientProfileSelectView() {
       primaryComplaint: 'శ్వాస తీసుకోవడంలో ఇబ్బంది, పక్కటెముకలు లోపలికి లాగడం (Chest Retraction)',
       prescriptionsCount: 2,
       assignedDoctor: 'Dr. Vikram Reddy (Pediatrics)',
-      tag: 'Pediatrics Demo'
+      tag: 'Pediatrics Scenario'
     },
     {
       id: 'pat_lakshmi',
@@ -64,7 +64,7 @@ export default function PatientProfileSelectView() {
       primaryComplaint: 'घुटनों में तेज दर्द, चलने में असमर्थ, सुबह जकड़न',
       prescriptionsCount: 2,
       assignedDoctor: 'Dr. Meenakshi Iyer (Orthopedics)',
-      tag: 'Orthopedics Demo'
+      tag: 'Orthopedics Scenario'
     }
   ];
 
@@ -72,7 +72,7 @@ export default function PatientProfileSelectView() {
     const profile = {
       ...pat,
       isDemoProfile: true,
-      demoAbhaId: 'DEMO-ABHA-FIXTURE',
+      demoAbhaId: 'SANDBOX-ABHA-9145',
       timestamp: new Date().toISOString()
     };
     setCurrentPatient(profile);
@@ -94,9 +94,9 @@ export default function PatientProfileSelectView() {
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Patient Demo Profile Selection</h1>
+              <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Citizen Health Record Selection (Sandbox)</h1>
               <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '3px 8px', borderRadius: 999, fontWeight: 600 }}>
-                Prototype Demo
+                Sandbox Environment
               </span>
             </div>
             <p style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
@@ -108,12 +108,12 @@ export default function PatientProfileSelectView() {
         <div style={{ marginTop: 18, background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: 8, padding: '12px 14px', display: 'flex', gap: 10 }}>
           <AlertCircle size={18} color="#b45309" style={{ flexShrink: 0, marginTop: 2 }} />
           <div style={{ fontSize: '0.825rem', color: '#92400e', lineHeight: 1.45 }}>
-            <strong>Demonstration Notice:</strong> No real government ABHA citizen credentials, Aadhaar tokens, or biometric inputs are handled by this system. All records below are synthetic scenario fixtures for testing accessibility and vernacular audio output.
+            <strong>Sandbox Notice:</strong> No live government ABHA citizen credentials, Aadhaar tokens, or biometric inputs are handled by this system. All records below are synthetic scenario fixtures for testing accessibility and vernacular audio output.
           </div>
         </div>
       </div>
 
-      <h2 style={{ fontSize: '1.125rem', color: '#1e293b', marginBottom: 14, fontWeight: 700 }}>Demo Patient Scenarios</h2>
+      <h2 style={{ fontSize: '1.125rem', color: '#1e293b', marginBottom: 14, fontWeight: 700 }}>Pre-Configured Patient Scenarios</h2>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
         {demoPatients.map((pat) => {

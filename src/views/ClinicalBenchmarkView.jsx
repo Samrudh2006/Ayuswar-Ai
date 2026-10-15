@@ -20,7 +20,7 @@ import { askAyuSwarBrain } from '../services/aiBrainService';
 
 export default function ClinicalBenchmarkView() {
   const { isDemoMode } = useApp();
-  const [activeTab, setActiveTab] = useState('clinical'); // 'clinical' | 'qa'
+  const [activeTab, setActiveTab] = useState('qa'); // 'qa' | 'clinical'
   const [testResults, setTestResults] = useState({});
   const [isRunningAll, setIsRunningAll] = useState(false);
   const [currentRunningId, setCurrentRunningId] = useState(null);
@@ -480,13 +480,13 @@ export default function ClinicalBenchmarkView() {
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <ShieldCheck size={15} />
-          <span>EVALUATED ACROSS RURAL PRIMARY HEALTH CENTERS & FIELD COHORTS</span>
+          <span>AUTOMATED INTEGRATION & CONTRACT AUDIT CENTER</span>
         </div>
         <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
-          Clinical Impact & Real-World Efficacy Command Center
+          Clinical Workflow Design & Verification Center
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '920px', lineHeight: 1.6 }}>
-          Observational field measurements from high-volume Indian outpatient clinics evaluating documentation time-motion metrics, clinician cognitive burnout, acoustic biomarker diagnostic concordance, and patient prescription comprehension.
+          Interactive integration test suite evaluating documentation workflow ergonomics, clinical vocabulary crosswalks, acoustic signal processing boundaries, and vernacular patient audio guidance in real time.
         </p>
 
         {/* Dual Mode Switcher Tabs */}
@@ -499,28 +499,6 @@ export default function ClinicalBenchmarkView() {
           borderRadius: '12px',
           maxWidth: 'fit-content'
         }}>
-          <button
-            onClick={() => setActiveTab('clinical')}
-            style={{
-              padding: '9px 18px',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'clinical' ? '#008B8B' : 'transparent',
-              color: activeTab === 'clinical' ? '#FFFFFF' : '#475569',
-              fontSize: '13px',
-              fontWeight: 800,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.15s ease',
-              boxShadow: activeTab === 'clinical' ? '0 2px 8px rgba(0,139,139,0.3)' : 'none'
-            }}
-          >
-            <Layers size={15} />
-            <span>Real-World Clinical Impact & Field Studies</span>
-          </button>
-
           <button
             onClick={() => setActiveTab('qa')}
             style={{
@@ -542,6 +520,28 @@ export default function ClinicalBenchmarkView() {
             <ShieldCheck size={15} />
             <span>Software Contract QA Suite (24 Test Cases)</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('clinical')}
+            style={{
+              padding: '9px 18px',
+              borderRadius: '9px',
+              border: 'none',
+              background: activeTab === 'clinical' ? '#008B8B' : 'transparent',
+              color: activeTab === 'clinical' ? '#FFFFFF' : '#475569',
+              fontSize: '13px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.15s ease',
+              boxShadow: activeTab === 'clinical' ? '0 2px 8px rgba(0,139,139,0.3)' : 'none'
+            }}
+          >
+            <Layers size={15} />
+            <span>Simulated Clinical Workflow Model</span>
+          </button>
         </div>
       </div>
 
@@ -553,34 +553,34 @@ export default function ClinicalBenchmarkView() {
           {/* Key Metric Highlights Band */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
             <div style={{ background: '#FFFFFF', border: '1.5px solid #CCFBF1', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(0,139,139,0.06)' }}>
-              <div style={{ fontSize: '11px', color: '#0F766E', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Documentation Time</div>
-              <div style={{ fontSize: '36px', fontWeight: 900, color: '#0F766E', margin: '6px 0 2px 0' }}>1.8 mins</div>
+              <div style={{ fontSize: '11px', color: '#0F766E', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Documentation Target</div>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#0F766E', margin: '6px 0 2px 0' }}>~1.8 mins</div>
               <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                Down from <strong>9.4 minutes</strong> baseline in rural PHCs (<strong>78% burden reduction</strong>).
+                Target documentation duration per patient encounter with automated voice-assisted note drafting.
               </div>
             </div>
 
             <div style={{ background: '#FFFFFF', border: '1.5px solid #E2E8F0', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
-              <div style={{ fontSize: '11px', color: '#0284C7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Clinician Eye Contact</div>
-              <div style={{ fontSize: '36px', fontWeight: 900, color: '#0284C7', margin: '6px 0 2px 0' }}>86%</div>
+              <div style={{ fontSize: '11px', color: '#0284C7', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Clinician Oversight</div>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#0284C7', margin: '6px 0 2px 0' }}>100%</div>
               <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                Increased from <strong>24%</strong> when clinicians were forced to type into keyboard desktop EHRs.
+                Strict doctor-in-the-loop requirement. All notes require physician verification and sign-off.
               </div>
             </div>
 
             <div style={{ background: '#FFFFFF', border: '1.5px solid #E2E8F0', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
-              <div style={{ fontSize: '11px', color: '#16A34A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Doctor Note Sign-Off Rate</div>
-              <div style={{ fontSize: '36px', fontWeight: 900, color: '#16A34A', margin: '6px 0 2px 0' }}>93.4%</div>
+              <div style={{ fontSize: '11px', color: '#16A34A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Vocabulary Alignment</div>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#16A34A', margin: '6px 0 2px 0' }}>WHO ICD-10</div>
               <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                Accepted by attending physician without structural rewriting. <strong>100% human-in-the-loop agency</strong>.
+                Direct normalization of vernacular Indic complaints to standard clinical diagnostic codes.
               </div>
             </div>
 
             <div style={{ background: '#FFFFFF', border: '1.5px solid #FDE68A', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(217,119,6,0.06)' }}>
-              <div style={{ fontSize: '11px', color: '#D97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Prescription Adherence</div>
-              <div style={{ fontSize: '36px', fontWeight: 900, color: '#D97706', margin: '6px 0 2px 0' }}>+42%</div>
+              <div style={{ fontSize: '11px', color: '#D97706', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Patient Guidance</div>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#D97706', margin: '6px 0 2px 0' }}>Vernacular</div>
               <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                Reduction in dosage confusion among illiterate geriatric patients via vernacular spoken Audio-Rx.
+                Multi-lingual spoken audio prescriptions with synchronized visual karaoke highlighting.
               </div>
             </div>
           </div>
@@ -590,10 +590,10 @@ export default function ClinicalBenchmarkView() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
               <div>
                 <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', margin: 0 }}>
-                  Primary Health Center (PHC) Time-Motion Observational Study
+                  Primary Health Center (PHC) Time-Motion Workflow Model (Simulation)
                 </h3>
                 <p style={{ fontSize: '13.5px', color: '#64748B', margin: '4px 0 0 0' }}>
-                  Conducted across 140+ rural patient encounters in Kurnool, Anantapur, and Warangal outpatient clinics.
+                  Simulated workflow comparison modeling conventional documentation vs ambient voice assistance.
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -643,14 +643,14 @@ export default function ClinicalBenchmarkView() {
                   <div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #F87171, #DC2626)', borderRadius: '9px' }} />
                 </div>
                 <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>
-                  Doctor spends 78% of the encounter typing codes into keyboard with back turned to the patient.
+                  Doctor spends majority of encounter typing into keyboard with back turned to the patient.
                 </div>
               </div>
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 800, marginBottom: '6px' }}>
                   <span style={{ color: '#008B8B' }}>With AyuSwar Ambient Clinical Voice OS</span>
-                  <span style={{ color: '#008B8B' }}>1.8 mins / patient (78% faster)</span>
+                  <span style={{ color: '#008B8B' }}>1.8 mins / patient (Target Workflow)</span>
                 </div>
                 <div style={{ width: '100%', height: '18px', background: '#E2E8F0', borderRadius: '9px', overflow: 'hidden' }}>
                   <div style={{ width: '19.1%', height: '100%', background: 'linear-gradient(90deg, #14B8A6, #008B8B)', borderRadius: '9px' }} />
@@ -665,10 +665,10 @@ export default function ClinicalBenchmarkView() {
           {/* Diagnostic & Acoustic Biomarker Concordance Table */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '28px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', marginBottom: '6px' }}>
-              Acoustic Biomarker Sensitivity & Specificity Matrix
+              Acoustic Biomarker Signal Analysis Parameters (Prototype)
             </h3>
             <p style={{ fontSize: '13.5px', color: '#64748B', marginBottom: '20px' }}>
-              Benchmarked on IISc Coswara & ICBHI respiratory datasets for non-diagnostic assistive screening.
+              Target frequency ranges and digital signal processing modalities for non-diagnostic exploratory screening.
             </p>
 
             <div style={{ overflowX: 'auto' }}>
@@ -677,45 +677,45 @@ export default function ClinicalBenchmarkView() {
                   <tr style={{ background: '#F1F5F9', borderBottom: '2px solid #CBD5E1' }}>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Clinical Category</th>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Signal Biomarker</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>Sensitivity</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>Specificity</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>Target Bandwidth</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>DSP Modality</th>
                     <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Clinical Safeguard</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Pulmonology / Asthma</td>
-                    <td style={{ padding: '12px 16px', color: '#475569' }}>Continuous musical wheeze (400-800 Hz)</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>88.2%</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>91.5%</td>
+                    <td style={{ padding: '12px 16px', color: '#475569' }}>Continuous musical wheeze</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>400-800 Hz</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Bandpass FFT Filter</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Flags spirometry PFT confirmation draft</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Infectious / COPD & Pneumonia</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Low-frequency rhonchi & moist rales</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>84.6%</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>89.2%</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>100-350 Hz</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Short-Time Spectral Flux</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Prompts Chest X-Ray & sputum requisition</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Pediatrics / Stridor & Croup</td>
-                    <td style={{ padding: '12px 16px', color: '#475569' }}>High spectral centroid (&gt;2500 Hz)</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>86.4%</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>94.1%</td>
+                    <td style={{ padding: '12px 16px', color: '#475569' }}>High spectral centroid</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>&gt;2500 Hz</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Centroid Peak Tracking</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Immediate upper airway obstruction advisory</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Neurology / Parkinson's Tremor</td>
-                    <td style={{ padding: '12px 16px', color: '#475569' }}>4-8 Hz sustained vowel phonatory tremor</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>82.1%</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>93.0%</td>
+                    <td style={{ padding: '12px 16px', color: '#475569' }}>Sustained vowel phonatory tremor</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>4-8 Hz</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Pitch Jitter Analysis</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Advises specialist motor examination</td>
                   </tr>
                   <tr>
                     <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Cardiology / Vocal Edema</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Fluid damping & fundamental pitch jitter</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>79.5%</td>
-                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#16A34A' }}>90.8%</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Fundamental F0</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Harmonics-to-Noise Ratio</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Recommends BNP / Echo evaluation</td>
                   </tr>
                 </tbody>

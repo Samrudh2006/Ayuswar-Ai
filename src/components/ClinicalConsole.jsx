@@ -33,8 +33,8 @@ import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 /**
  * ClinicalConsole Component
  * High-performance clinical telemetry workspace for ambient OPD encounters.
- * Integrates WebAudio FFT visualizers, dual-speaker diarization, IISc Coswara biomarkers,
- * colloquial-to-ICD10 ontology mapping, Timbre v2.5 karaoke speech, and ABDM FHIR R4 export.
+ * Integrates WebAudio FFT visualizers, dual-speaker diarization, simulated acoustic features,
+ * colloquial-to-ICD10 ontology mapping, vernacular karaoke speech, and ABDM FHIR R4 export.
  */
 export default function ClinicalConsole({ doctorProfile, initialEncounterIndex = 0 }) {
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(initialEncounterIndex);
@@ -304,7 +304,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                   Ambient Multi-Speaker Transcript
                 </h3>
                 <div style={{ fontSize: '11px', color: '#5A7184' }}>
-                  Powered by Gnani.ai Prisma v2.5 Code-Mixed STT Engine
+                  Browser speech (Web Speech API). Gnani voice integration: planned.
                 </div>
               </div>
 
@@ -400,12 +400,12 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             </div>
           </div>
 
-          {/* Card 3: Acoustic Respiratory Biomarkers HUD (IISc Coswara Algorithm) */}
+          {/* Card 3: Acoustic Respiratory Biomarkers HUD (DSP Signal Simulation) */}
           <div className="glass-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <Activity size={18} color="#D97706" />
               <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
-                Acoustic Respiratory Biomarkers (IISc Coswara Dataset DSP)
+                Acoustic Respiratory Biomarkers (Experimental DSP)
               </h3>
             </div>
 
@@ -493,7 +493,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             COLUMN 2: THE KILLER FEATURE — KARAOKE AUDIO-RX & VISION SCANNER
             ========================================================================= */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Card 5: Spoken Vernacular Audio-Rx (Timbre v2.5) with Word Karaoke */}
+          {/* Card 5: Spoken Vernacular Audio-Rx with Word Karaoke */}
           <div className="glass-panel" style={{
             padding: '24px',
             border: '2px solid rgba(0, 139, 139, 0.35)',
@@ -503,7 +503,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Volume2 size={22} color="#008B8B" />
                 <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#0A2540' }}>
-                  Spoken Vernacular Audio-Rx (Timbre v2.5)
+                  Spoken Vernacular Audio-Rx (Browser speech)
                 </h3>
               </div>
               <span style={{
@@ -747,7 +747,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       </div>
 
       {/* =========================================================================
-          VERNACULAR WHATSAPP AUDIO-RX MODAL (TIMBRE v2.5)
+          VERNACULAR WHATSAPP AUDIO-RX MODAL
           ========================================================================= */}
       <WhatsAppAudioRxModal 
         isOpen={showWhatsAppModal}

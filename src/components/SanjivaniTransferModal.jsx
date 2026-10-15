@@ -25,7 +25,7 @@ import { sanjivaniAudio } from '../services/sanjivaniEmergencyService';
  * Auto-filled from live call conversation, acoustic biomarker triage, and GPS telemetry.
  * Transmits structured HL7/FHIR payload to destination hospital emergency resuscitation bay.
  */
-export default function SanjivaniHandoverModal({
+export default function SanjivaniTransferModal({
   isOpen,
   onClose,
   hospital,

@@ -34,13 +34,13 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
     },
     'multilingual_transcription': {
       title: 'Indic Code-Mixed Transcription Engine',
-      badge: 'LAYER 2 • GNANI PRISMA v2.5',
+      badge: 'LAYER 2 • INDIC CODE-MIXED SPEECH',
       icon: Languages,
       color: '#008B8B',
       problem: 'Indian patients rarely speak pure English or textbook regional languages; they speak colloquial hybrids (Tenglish, Hinglish, Tanglish) blending native slang with English pharmaceutical terms.',
-      solution: 'Powered by Gnani.ai Prisma v2.5, trained on over 10+ Indic languages. It recognizes phoneme patterns unique to Indian accents and seamlessly transcribes code-switching sentences (e.g., "Doctor, BP tablets use chesaka dizziness vastondi") into clinically normalized text.',
-      scientificMetric: 'Word Error Rate (WER) < 6.2% on mixed rural dialects.',
-      techSpec: 'Gnani Prisma v2.5 ASR • Language auto-detection • Phonetic normalization'
+      solution: 'Browser speech (Web Speech API). Gnani voice integration: planned. Explores Indic code-switching and recognizes phoneme patterns to transcribe mixed sentences into normalized text.',
+      scientificMetric: 'Prototype speech interface testing code-mixed dialect patterns.',
+      techSpec: 'Browser Speech Recognition • Planned Indic neural ASR integration • Phonetic normalization'
     },
     'acoustic_biomarkers': {
       title: 'Acoustic Respiratory Biomarkers & Digital Stethoscope',
@@ -48,9 +48,9 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       icon: Activity,
       color: '#D97706',
       problem: 'Early signs of respiratory distress (pediatric stridor, asthmatic wheezing, COPD exacerbations) often go unquantified in rural clinics lacking spirometers or pulse oximeters.',
-      solution: 'Executes real-time digital signal processing (DSP) based on the IISc Bangalore Coswara and ICBHI research datasets. Calculates Short-Time Fourier Transform (STFT) spectral rolloff, spectral centroid, and 13-dim MFCCs directly from microphone audio to classify dry vs productive wet cough and measure breathlessness strain.',
-      scientificMetric: 'Coswara-aligned spectral centroid thresholding (>2.8 kHz for stridor).',
-      techSpec: 'SciPy / WebAudio FFT • Spectral Centroid & Rolloff • Vocal Jitter / Shimmer'
+      solution: 'Executes real-time digital signal processing (DSP) simulation. Calculates Short-Time Fourier Transform (STFT) spectral rolloff, spectral centroid, and frequency features from microphone audio for non-diagnostic educational demonstration.',
+      scientificMetric: 'Experimental spectral centroid calculation for acoustic signal visualization.',
+      techSpec: 'WebAudio FFT • Spectral Centroid & Rolloff • Signal Analysis'
     },
     'prescription_scanner': {
       title: 'OpenCV Blister Strip & Paper Rx Scanner',
@@ -59,18 +59,18 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       color: '#6366F1',
       problem: 'Patients frequently bring old crumpled medicine strips to the clinic. Doctors struggle to identify the exact generic compound, leading to accidental double-dosing.',
       solution: 'A computer vision pipeline utilizing OpenCV perspective transformation, Otsu adaptive thresholding, and OCR bounding-box detection to inspect blister strips and paper scripts. Cross-references extracted drug names against India’s National Formulary (NFI) to confirm active salts.',
-      scientificMetric: 'Recognizes 2,400+ Indian pharmaceutical blister packaging brands.',
+      scientificMetric: 'Recognizes common Indian pharmaceutical blister packaging brands.',
       techSpec: 'OpenCV Perspective Warp • Canny Edge Detector • NFI Salt Cross-indexing'
     },
     'spoken_audio_rx': {
       title: 'Vernacular Audio-Rx with Synchronized Karaoke',
-      badge: 'LAYER 6 • GNANI TIMBRE v2.5',
+      badge: 'LAYER 6 • VERNACULAR SPOKEN AUDIO-RX',
       icon: Volume2,
       color: '#10B981',
       problem: 'Over 600 million Indian citizens cannot read handwritten prescription slips or English dosage instructions, causing 45% of patients to discontinue life-saving therapies.',
-      solution: 'Powered by Gnani.ai Timbre v2.5, AyuSwar synthesizes natural, empathetic spoken prescriptions in the patient’s exact regional mother tongue. The companion audio player illuminates color-coded pill schedule cards (morning, afternoon, night) with word-by-word synchronized glowing karaoke text.',
-      scientificMetric: 'Increases medication regimen adherence by up to 74% in rural trials.',
-      techSpec: 'Gnani Timbre v2.5 Neural TTS • Word timestamp alignment • WhatsApp audio dispatch'
+      solution: 'Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes spoken prescriptions in the patient’s regional language. The companion audio player illuminates color-coded pill schedule cards (morning, afternoon, night) with synchronized glowing text.',
+      scientificMetric: 'Prototype interface designed to enhance medication schedule comprehension.',
+      techSpec: 'Browser SpeechSynthesis • Planned neural voice proxy • WhatsApp audio dispatch'
     },
     'cdss_safety': {
       title: 'Clinical Decision Support & DDI Contraindications',
@@ -89,7 +89,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       color: '#0EA5E9',
       problem: 'India’s Ayushman Bharat Digital Mission (ABDM) mandates structured digital health records, but manual data entry into EHR systems adds 5+ hours of documentation burden.',
       solution: 'Automatically serializes every ambient clinical consultation into an official ABDM FHIR R4 JSON document bundle including Patient, Condition (ICD-10-CM), Observation, and MedicationRequest resources, ready for immediate health facility registry synchronization.',
-      scientificMetric: '100% compliant with National Health Authority (NHA) ABDM M1/M2/M3 standards.',
+      scientificMetric: 'Conforms to National Health Authority (NHA) ABDM M1/M2/M3 JSON draft schemas.',
       techSpec: 'HL7 FHIR Release 4 • JSON-LD Schema • Cryptographic ABHA Token Exchange'
     },
     'clinical_studio_overview': {
@@ -98,9 +98,9 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       icon: Mic,
       color: '#008B8B',
       problem: 'Physicians in Indian government hospitals and rural PHCs consult 80-120 patients every day. Manual computer typing while diagnosing patients is impossible, resulting in zero longitudinal records.',
-      solution: 'The Live Clinical Studio operates invisibly in the background. It captures doctor-patient conversation via Gnani Prisma v2.5, performs 32-band real-time WebAudio FFT spectrogram analysis, runs automated SOAP note structuring, cross-checks drug contraindications, and creates native audio prescriptions.',
-      scientificMetric: 'Saves 6.2 minutes per patient consultation (over 3 hours saved per doctor daily).',
-      techSpec: 'Gnani Prisma v2.5 STT • Gnani Timbre v2.5 TTS • WebAudio FFT • ABDM FHIR R4'
+      solution: 'The Live Clinical Studio operates invisibly in the background. Browser speech (Web Speech API). Gnani voice integration: planned. Performs real-time WebAudio FFT spectrogram analysis, runs automated SOAP note structuring, cross-checks drug contraindications, and creates native audio prescriptions.',
+      scientificMetric: 'Prototype consultation workflow aiming to streamline clinical note drafting.',
+      techSpec: 'Browser Web Speech API • Planned Gnani voice integration • WebAudio FFT • ABDM FHIR R4'
     }
   };
 

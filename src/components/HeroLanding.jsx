@@ -46,7 +46,7 @@ import FeatureDetailModal from './FeatureDetailModal';
 /**
  * HeroLanding Component
  * Complete, world-class enterprise marketing site for AyuSwar AI.
- * Built with full-width modern layout, interactive language carousel with live Timbre voice playback,
+ * Built with full-width modern layout, interactive language carousel with live voice playback,
  * before-vs-after comparison toggles, 6-bento interactive deep-tech moats, and dedicated feature detail modals.
  */
 export default function HeroLanding({ 
@@ -157,7 +157,7 @@ export default function HeroLanding({
 
   // Section 6 & 7 Unified: Trust, Safety & Academic Standards State
   const [trustDomainMode, setTrustDomainMode] = useState('governance'); // 'governance' | 'standards'
-  const [academicStandardTab, setAcademicStandardTab] = useState('coswara');
+  const [academicStandardTab, setAcademicStandardTab] = useState('acoustic');
   const [isAcademicPayloadCopied, setIsAcademicPayloadCopied] = useState(false);
 
   // 2-Minute Executive Golden Loop Walkthrough State
@@ -173,10 +173,10 @@ export default function HeroLanding({
 
   const features = [
     { id: 0, title: 'Ambient Voice Listening', icon: Mic, desc: 'Dual-speaker ambient capture with speaker diarization in chaotic OPDs' },
-    { id: 1, title: 'Multilingual Transcription', icon: Languages, desc: 'Prisma v2.5 powered Indic code-mixed transcription (Telugu, Hindi, Tenglish)' },
+    { id: 1, title: 'Multilingual Transcription', icon: Languages, desc: 'Browser speech (Web Speech API). Gnani voice integration: planned. Indic transcription prototype (Telugu, Hindi, Tenglish)' },
     { id: 2, title: 'Acoustic Biomarkers', icon: Activity, desc: 'Real-time DSP extraction of wheeze, cough spectral index & respiratory strain' },
     { id: 3, title: 'Prescription Scanner', icon: Scan, desc: 'OpenCV computer vision scanning of physical medicine blister strips & paper Rx' },
-    { id: 4, title: 'Spoken Audio-Prescription', icon: Volume2, desc: 'Timbre v2.5 synthesis with word-by-word karaoke highlighting for illiterate patients' }
+    { id: 4, title: 'Spoken Audio-Prescription', icon: Volume2, desc: 'Browser speech (Web Speech API). Gnani voice integration: planned. Spoken synthesis with word-by-word karaoke' }
   ];
 
   const indicLanguages = [
@@ -315,11 +315,11 @@ export default function HeroLanding({
     },
     {
       q: 'Does it work with code-mixed speech (e.g., Telugu + English / Tenglish)?',
-      a: 'Yes. Indian clinical consultations rarely happen in pure textbook languages. Powered by Gnani.ai Prisma v2.5, AyuSwar is trained on over 100,000+ hours of natural Indian conversations, fluently decoding code-mixed Telugu, Hindi, Tamil, Kannada, and "Tenglish/Hinglish" where clinical terms (like "sugar", "BP", "inhaler", "fever") blend naturally with vernacular grammar.'
+      a: 'Yes. Indian clinical consultations rarely happen in pure textbook languages. AyuSwar prototype uses browser speech recognition with planned Indic voice integration, designed to decode code-mixed Telugu, Hindi, Tamil, Kannada, and "Tenglish/Hinglish" where clinical terms (like "sugar", "BP", "inhaler", "fever") blend naturally with vernacular grammar.'
     },
     {
       q: 'How does it handle noisy environments?',
-      a: 'AyuSwar features an adaptive WebAudio 16 kHz AudioWorklet dual-channel DSP front-end with 65 dB spectral noise subtraction. It actively filters out loud ceiling fan hums, corridor chatter, ambulance sirens, and adjacent desk murmur in chaotic 72 dB rural OPD waiting halls, maintaining speech recognition accuracy above 96%.'
+      a: 'AyuSwar features an adaptive WebAudio 16 kHz AudioWorklet dual-channel DSP front-end with spectral noise subtraction. It filters out ceiling fan hums, corridor chatter, and adjacent murmur in rural OPD waiting halls to assist speech capture.'
     },
     {
       q: 'How does the clinician verify AI-generated information?',
@@ -790,7 +790,7 @@ export default function HeroLanding({
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CheckCircle2 size={15} color="#008B8B" />
-                <span>99.4% Clinical Precision</span>
+                <span>Prototype Demo</span>
               </div>
             </div>
           </div>
@@ -842,8 +842,8 @@ export default function HeroLanding({
                 <Globe2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '28px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>50+</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Languages & Dialects</div>
+                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Indic Voices</div>
+                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
               </div>
             </div>
 
@@ -852,8 +852,8 @@ export default function HeroLanding({
                 <Building2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '28px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>10,000+</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Health Centers</div>
+                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Synthetic Data</div>
+                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
               </div>
             </div>
 
@@ -862,8 +862,8 @@ export default function HeroLanding({
                 <Users2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '28px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>1M+</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Doctor-Patient Interactions</div>
+                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Clinician Agency</div>
+                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
               </div>
             </div>
 
@@ -872,8 +872,8 @@ export default function HeroLanding({
                 <HeartPulse size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '22px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Better Outcomes</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Through Voice Intelligence</div>
+                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Assistive Prototype</div>
+                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
               </div>
             </div>
           </div>
@@ -1065,7 +1065,7 @@ export default function HeroLanding({
               From Ambient Doctor-Patient Spoken Words to Color-Coded Audio-Rx
             </h2>
             <p style={{ fontSize: '15px', color: '#5A7184', lineHeight: 1.55 }}>
-              A zero-touch voice engine powered by Gnani.ai Prisma & Timbre, operating synchronously in the background without altering clinical workflow.
+              A zero-touch voice engine with Browser speech (Web Speech API). Gnani voice integration: planned, operating synchronously in the background without altering clinical workflow.
             </p>
           </div>
 
@@ -1210,9 +1210,9 @@ export default function HeroLanding({
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 750, color: '#F1F5F9' }}>
                   {circuitNodeIndex === 0 && 'Dual cardioid spatial beamforming isolates doctor & patient voices in high-entropy 72 dB rural OPDs.'}
-                  {circuitNodeIndex === 1 && 'Adaptive Kalman filter strips 50/120 Hz mains hum while extracting IISc Coswara cough & wheeze biomarkers.'}
+                  {circuitNodeIndex === 1 && 'Adaptive Kalman filter strips 50/120 Hz mains hum while analyzing simulated cough & wheeze audio signals.'}
                   {circuitNodeIndex === 2 && 'Resolves code-mixed Telugu/Hindi visceral metaphors ("Gunde lo manta") to WHO ICD-10 & FHIR R4 standard.'}
-                  {circuitNodeIndex === 3 && 'Timbre v2.5 voice synthesis dispatches native spoken dosage audio to patient WhatsApp with glowing karaoke pill schedules.'}
+                  {circuitNodeIndex === 3 && 'Browser speech (Web Speech API). Gnani voice integration: planned. Dispatches spoken dosage audio with glowing karaoke pill schedules.'}
                 </div>
               </div>
 
@@ -1736,30 +1736,30 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
                     <Activity size={13} />
-                    <span>IISc COSWARA ACOUSTIC BIOMARKER ENGINE</span>
+                    <span>EXPERIMENTAL ACOUSTIC BIOMARKER ENGINE</span>
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
                     Real-Time FFT Spectrogram & Biomarker HUD
                   </h3>
                   <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                    Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluated on respiratory sound benchmarks: <strong>88.2% Sensitivity / 91.5% Specificity</strong> for asthmatic wheeze detection and <strong>86.4% Accuracy</strong> for pediatric stridor high-spectral centroid analysis.
+                    Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluates exploratory respiratory sound patterns: asthmatic wheeze harmonic analysis (400–650 Hz) and pediatric stridor high-spectral centroid tracking (&gt;2500 Hz). Synthetic prototype; not for clinical diagnosis.
                   </p>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
                     <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#008B8B' }}>88.2%</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Wheeze Sensitivity</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>400–650 Hz Harmonics</div>
+                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>13-Dim</div>
+                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>MFCC Feature Vector</div>
+                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Acoustic Coeffs</div>
                     </div>
                     <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#008B8B' }}>91.5%</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Wheeze Specificity</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Normal Breath Isolation</div>
+                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>400–650 Hz</div>
+                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Wheeze Bandwidth</div>
+                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Harmonic Centroid</div>
                     </div>
                     <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#008B8B' }}>86.4%</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Pediatric Stridor</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>&gt;2500 Hz Centroid</div>
+                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>&gt;2500 Hz</div>
+                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Stridor Detection</div>
+                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Spectral Flux</div>
                     </div>
                   </div>
 
@@ -2188,31 +2188,31 @@ export default function HeroLanding({
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
                   <Mic size={13} />
-                  <span>SPEAKER DIARIZATION TIMBRE V2.5</span>
+                  <span>SPEAKER SEPARATION PROTOTYPE</span>
                 </div>
                 <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
                   Dual-Speaker Acoustic Diarization in High-Entropy OPDs
                 </h3>
                 <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                  Isolates the attending physician’s clinical voice from patients and speaking family attendants using 512-dimensional voice timbre embeddings.
+                  Simulates separating the attending physician’s voice from background dialogue. Browser speech (Web Speech API). Gnani voice integration: planned.
                 </p>
                 <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '32px', fontWeight: 900, color: '#008B8B' }}>98.6%</div>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Doctor Speaker Separation</div>
-                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Attending d-vector</div>
+                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#008B8B' }}>Prototype</div>
+                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Speaker Separation</div>
+                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Simulated demonstration</div>
                   </div>
                   <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '32px', fontWeight: 900, color: '#10B981' }}>180 ms</div>
+                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#10B981' }}>Local DSP</div>
                     <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Diarization Latency</div>
                     <div style={{ fontSize: '11px', color: '#94A3B8' }}>Zero cloud trip</div>
                   </div>
                   <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '32px', fontWeight: 900, color: '#8B5CF6' }}>512-dim</div>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Timbre Embeddings</div>
-                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Local inference</div>
+                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#8B5CF6' }}>Planned</div>
+                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Acoustic Vectors</div>
+                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Web Speech API</div>
                   </div>
                 </div>
               </div>
@@ -2428,7 +2428,7 @@ export default function HeroLanding({
                 color: '#64748B',
                 fontWeight: 650
               }}>
-                <span>🎙️ Powered by Gnani.ai Prisma STT & Timbre TTS</span>
+                <span>🎙️ Browser speech (Web Speech API). Gnani voice integration: planned</span>
                 <span style={{ color: '#008B8B', fontWeight: 800 }}>⚡ Sub-180ms Latency</span>
               </div>
             </div>
@@ -2466,7 +2466,7 @@ export default function HeroLanding({
                   </button>
                   <div>
                     <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#2DD4BF', letterSpacing: '1px' }}>
-                      Gnani.ai Timbre v2.5 Spoken Audio-Rx
+                      Browser speech (Web Speech API). Gnani voice integration: planned
                     </div>
                     <div style={{ fontSize: '16px', fontWeight: 800, color: '#F8FAFC' }}>
                       {activeDialectId === 'te' && 'Telugu Spoken Schedule: Dr. Ananya Voice'}
@@ -3159,12 +3159,12 @@ export default function HeroLanding({
               gap: '8px'
             }}>
               {[
-                { id: 'coswara', label: '1. IISc Coswara DSP', badge: 'ACOUSTICS', color: '#008B8B' },
+                { id: 'acoustic', label: '1. Acoustic DSP (Prototype)', badge: 'ACOUSTICS', color: '#008B8B' },
                 { id: 'abdm', label: '2. ABDM HL7 FHIR R4', badge: 'NHA STANDARD', color: '#2563EB' },
                 { id: 'who', label: '3. WHO ICD-10 & SNOMED', badge: 'TAXONOMY', color: '#059669' },
                 { id: 'nfi', label: '4. NFI Pharmacopoeia', badge: 'DRUG SAFETY', color: '#D97706' },
-                { id: 'gnani_stt', label: '5. Gnani Prisma STT', badge: 'INDIC ASR', color: '#6366F1' },
-                { id: 'gnani_tts', label: '6. Gnani Timbre TTS', badge: 'AUDIO-RX', color: '#EC4899' }
+                { id: 'gnani_stt', label: '5. Browser Speech API', badge: 'SPEECH ASR', color: '#6366F1' },
+                { id: 'gnani_tts', label: '6. Spoken Audio-Rx', badge: 'AUDIO-RX', color: '#EC4899' }
               ].map((tab) => {
                 const isActive = academicStandardTab === tab.id;
                 return (
@@ -3202,19 +3202,19 @@ export default function HeroLanding({
             <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
               {/* Left Column: Standard Specifications & Institution */}
               <div>
-                {academicStandardTab === 'coswara' && (
+                {academicStandardTab === 'acoustic' && (
                   <div>
                     <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
-                      INDIAN INSTITUTE OF SCIENCE (IISc), BANGALORE
+                      EXPERIMENTAL BIO-ACOUSTIC SIMULATION
                     </span>
                     <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Coswara Respiratory Bio-Acoustic Dataset & DSP
+                      Respiratory Bio-Acoustic Signal Processing (Prototype)
                     </h3>
                     <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Calibrated on 12,400+ crowdsourced cough, wheeze, and shallow breath acoustic audio samples. Extracts 13-dimensional MFCC audio coefficients and short-time spectral flux for non-invasive respiratory screening.
+                      Extracts 13-dimensional MFCC audio coefficients and short-time spectral flux from simulated cough, wheeze, and shallow breath audio samples for non-invasive exploratory screening.
                     </p>
                     <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Sensitivity / Specificity:</strong> 88.2% / 91.5% for asthmatic wheezing<br />
+                      • <strong>Methodology:</strong> Multi-frequency spectral flux & MFCC feature extraction<br />
                       • <strong>Sampling Rate:</strong> 16 kHz, 24-bit PCM Linear Mono
                     </div>
                   </div>
@@ -3277,17 +3277,17 @@ export default function HeroLanding({
                 {academicStandardTab === 'gnani_stt' && (
                   <div>
                     <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(99,102,241,0.1)', color: '#6366F1', padding: '4px 10px', borderRadius: '6px' }}>
-                      GNANI.AI INDIC SPEECH TECHNOLOGIES
+                      INDIC SPEECH ARCHITECTURE
                     </span>
                     <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Prisma v2.5 Code-Mixed Indic ASR
+                      Browser Speech Recognition & Planned Indic ASR
                     </h3>
                     <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Trained on 100,000+ hours of natural Indian conversations. Fluent in sub-dialectal mixed speech (Telugu + English / Tenglish, Hindi + English / Hinglish) with rural accent invariance.
+                      Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
                     </p>
                     <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Acoustic Model:</strong> Sub-dialectal Indic Conformer-CTC<br />
-                      • <strong>Real-Time Factor (RTF):</strong> 0.12x on local edge acceleration
+                      • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
+                      • <strong>Planned Indic Integration:</strong> Gnani voice integration: planned
                     </div>
                   </div>
                 )}
@@ -3295,17 +3295,17 @@ export default function HeroLanding({
                 {academicStandardTab === 'gnani_tts' && (
                   <div>
                     <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(236,72,153,0.1)', color: '#EC4899', padding: '4px 10px', borderRadius: '6px' }}>
-                      GNANI.AI NEURAL SPEECH SYNTHESIS
+                      SPOKEN AUDIO-RX SYNTHESIS
                     </span>
                     <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Timbre v2.5 Spoken Audio-Rx Synthesis
+                      Spoken Audio-Rx Schedule Synthesis (Prototype)
                     </h3>
                     <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Produces calm, authoritative doctor-voice spoken prescription audio in 22 languages with millisecond-exact word timestamps for synchronized glowing karaoke pill tracking on WhatsApp.
+                      Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
                     </p>
                     <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Target Audience:</strong> Illiterate geriatric rural patients<br />
-                      • <strong>Adherence Gain:</strong> +42% reduction in medication administration errors
+                      • <strong>Engine:</strong> Browser SpeechSynthesis API<br />
+                      • <strong>Target Use:</strong> Accessible voice guidance for rural patients
                     </div>
                   </div>
                 )}
@@ -3353,9 +3353,9 @@ export default function HeroLanding({
                   </button>
                 </div>
 
-                {academicStandardTab === 'coswara' && (
+                {academicStandardTab === 'acoustic' && (
                   <pre style={{ margin: 0, color: '#A5F3FC' }}>
-{`// IISc Coswara Audio MFCC Feature Vector (13-dim)
+{`// Acoustic Audio MFCC Feature Vector (13-dim) Prototype Simulation
 {
   "sampleRate": 16000,
   "windowSizeMs": 25,
@@ -3366,8 +3366,8 @@ export default function HeroLanding({
     -0.95, 2.18, -0.42, 1.15, 0.32
   ],
   "spectralFlux": 0.0842,
-  "wheezeClassification": "Wheezing Detected",
-  "confidenceScore": 0.882
+  "wheezeClassification": "Wheezing Pattern Detected",
+  "confidenceScore": 0.88
 }`}
                   </pre>
                 )}
@@ -3424,29 +3424,24 @@ export default function HeroLanding({
 
                 {academicStandardTab === 'gnani_stt' && (
                   <pre style={{ margin: 0, color: '#C7D2FE' }}>
-{`// Prisma v2.5 Code-Mixed Token Output
+{`// Speech Recognition Output Schema (Prototype)
 {
-  "rawAudioStream": "16kHz_te_en_mixed_opd.wav",
+  "engine": "Web Speech API (Browser)",
+  "plannedIntegration": "Gnani Indic Voice Services",
   "transcription": "డాక్టర్ గారూ నాకు chest lo burning మరియు severe cough ఉంది",
-  "languageMix": { "te": "62%", "en": "38%" },
-  "wer": 0.086,
-  "speakerDiarization": { "speaker": "PATIENT_01", "role": "Lakshmi Devi" }
+  "language": "te-IN"
 }`}
                   </pre>
                 )}
 
                 {academicStandardTab === 'gnani_tts' && (
                   <pre style={{ margin: 0, color: '#FBCFE8' }}>
-{`// Timbre v2.5 Audio-Rx Speech Synthesis
+{`// Spoken Audio-Rx Output Schema (Prototype)
 {
+  "engine": "Web Speech API (Browser)",
   "synthesizedLanguage": "te-IN (Telugu)",
-  "targetVoice": "Dr. Voice Neutral Caring",
-  "karaokeTokenTimings": [
-    { "word": "ఈ మాత్రను", "startMs": 0, "endMs": 420 },
-    { "word": "రాత్రి పూట", "startMs": 450, "endMs": 860 },
-    { "word": "ఆహారం తర్వాత", "startMs": 900, "endMs": 1400 },
-    { "word": "తీసుకోండి", "startMs": 1450, "endMs": 1920 }
-  ]
+  "plannedIntegration": "Gnani Voice Services",
+  "dosageInstructions": "రాత్రి భోజనం తర్వాత ఒక మాత్ర వేసుకోండి"
 }`}
                   </pre>
                 )}
@@ -3637,7 +3632,7 @@ export default function HeroLanding({
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Standards & Science</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span>IISc Coswara Dataset</span>
+              <span>Open Acoustic Research</span>
               <span>ABDM FHIR R4 Schema</span>
               <span>WHO ICD-10 Taxonomy</span>
               <span>National Formulary (NFI)</span>
@@ -3647,8 +3642,8 @@ export default function HeroLanding({
           <div>
             <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Challenge Info</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span>Gnani.ai Prisma v2.5 (STT)</span>
-              <span>Gnani.ai Timbre v2.5 (TTS)</span>
+              <span>Browser speech (Web Speech API)</span>
+              <span>Gnani voice integration: planned</span>
               <span>Deadline: 10 Nov 2026</span>
               <span>Synthetic Safe Data Only</span>
             </div>
@@ -3780,7 +3775,7 @@ export default function HeroLanding({
               {[
                 { id: 0, label: '1. AI Reception', icon: '🎟️', sub: 'Token & ABHA' },
                 { id: 1, label: '2. Ambient Doctor', icon: '🎙️', sub: 'Noise Suppressed' },
-                { id: 2, label: '3. Prisma & FHIR', icon: '🧠', sub: 'ICD-10 & SOAP' },
+                { id: 2, label: '3. Clinical FHIR', icon: '🧠', sub: 'ICD-10 & SOAP' },
                 { id: 3, label: '4. Spoken Audio-Rx', icon: '📲', sub: 'WhatsApp Karaoke' }
               ].map((sc) => {
                 const isActive = goldenStoryScene === sc.id;
@@ -3840,8 +3835,8 @@ export default function HeroLanding({
                       <span style={{ fontSize: '13px', color: '#0A2540', fontWeight: 600 }}>"నమస్తే అనంయ గారు! మీకు డాక్టర్ ప్రియా శర్మ గారి దగ్గర టోకెన్ నంబర్ #14 కేటాయించబడింది. ప్రస్తుత నిరీక్షణ సమయం 8 నిమిషాలు."</span>
                     </div>
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      <span style={{ background: '#D97706', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 800 }}>Patient ABHA</span>
-                      <span style={{ fontSize: '13px', color: '#0A2540' }}>ABHA ID: <strong>91-4521-8932-1049</strong> • Linked with National Digital Health Mission.</span>
+                      <span style={{ background: '#D97706', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 800 }}>Patient ABHA (DEMO)</span>
+                      <span style={{ fontSize: '13px', color: '#0A2540' }}>DEMO ABHA ID: <strong>DEMO-91-4521-8932-1049</strong> • Synthetic demo identifier.</span>
                     </div>
                   </div>
                 </div>
@@ -3877,18 +3872,18 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>
-                      🧠 Scene 3: Prisma STT + CDSS Safety + Instant ABDM FHIR R4 JSON
+                      🧠 Scene 3: Speech Mapping + CDSS Safety + Instant ABDM FHIR R4 JSON
                     </div>
                     <span style={{ background: '#E0F2FE', color: '#0369A1', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
                       FHIR R4 Verified
                     </span>
                   </div>
                   <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    In real time, Gnani.ai Prisma maps colloquial Telugu symptoms to formal WHO ICD-10 (<strong style={{ color: '#008B8B' }}>J45.901 Acute Asthma</strong> & <strong style={{ color: '#008B8B' }}>R00.2 Palpitations</strong>), executes autonomous drug safety validation, and produces the official ABDM EHR JSON bundle.
+                    In real time, AyuSwar prototype maps colloquial Telugu symptoms to formal WHO ICD-10 (<strong style={{ color: '#008B8B' }}>J45.901 Acute Asthma</strong> & <strong style={{ color: '#008B8B' }}>R00.2 Palpitations</strong>), executes drug safety validation, and produces the ABDM EHR JSON bundle.
                   </p>
                   <div style={{ background: '#0A2540', borderRadius: '14px', padding: '16px', color: '#A5F3FC', fontFamily: 'monospace', fontSize: '11.5px', lineHeight: 1.5 }}>
                     <div>• Subjective: Dyspnea for 3 days, nocturnal cough, chest tightness</div>
-                    <div>• Objective: Bilateral expiratory wheezes (Coswara MFCC: 1420Hz), HR: 98 bpm</div>
+                    <div>• Objective: Bilateral expiratory wheezes (MFCC analysis: 1420Hz), HR: 98 bpm</div>
                     <div>• Assessment: Acute Asthma Exacerbation (WHO ICD-10: J45.901)</div>
                     <div>• Plan: Budecort 200 Inhaler 1 puff BD, Asthalin SOS, Montelukast 10mg OD</div>
                     <div>• Safety Check: CYP450 contraindications 0 flagged • ABDM Bundle #abdm-enc-1049 generated</div>
@@ -3922,7 +3917,7 @@ export default function HeroLanding({
                       style={{ width: '100%', justifyContent: 'center', fontSize: '13.5px', padding: '10px' }}
                     >
                       <Volume2 size={16} />
-                      <span>Play Live Timbre Spoken Voice Prescription</span>
+                      <span>Play Spoken Voice Prescription (Browser Speech)</span>
                     </button>
                   </div>
                 </div>

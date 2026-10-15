@@ -14,7 +14,7 @@ import {
 /**
  * NotificationDrawer Component
  * Senior-level real-time clinical telemetry slide-over drawer.
- * Displays streaming events from Gnani Prisma STT, DSP signal processors, and ABDM gateways.
+ * Displays streaming events from speech recognizer, DSP signal processors, and ABDM gateways.
  */
 export default function NotificationDrawer({ isOpen, onClose }) {
   const [filter, setFilter] = useState('all');
@@ -34,8 +34,8 @@ export default function NotificationDrawer({ isOpen, onClose }) {
       id: 2,
       category: 'voice',
       type: 'success',
-      title: 'Gnani Prisma v2.5 Code-Mixed Buffer Synchronized',
-      detail: 'Telugu-English multi-speaker diarization completed with 98.4% phonetic confidence.',
+      title: 'Speech Buffer Synchronized',
+      detail: 'Telugu-English multi-speaker diarization buffer synchronized. Browser speech (Web Speech API). Gnani voice integration: planned.',
       timestamp: '2 mins ago',
       icon: Volume2,
       color: '#008B8B'
@@ -55,7 +55,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
       category: 'abdm',
       type: 'info',
       title: 'ABDM FHIR R4 Bundle Synthesized',
-      detail: 'Encounter package cryptographically tagged to ABHA ID: 91-4521-8932-1049.',
+      detail: 'Encounter package tagged to DEMO ABHA ID: DEMO-91-4521-8932-1049.',
       timestamp: '12 mins ago',
       icon: CheckCircle2,
       color: '#3B82F6'
@@ -104,7 +104,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
                 Clinical Telemetry & Alerts
               </h3>
               <div style={{ fontSize: '11px', color: '#E0F2FE', opacity: 0.85 }}>
-                Real-time Gnani Voice & ABDM Pipeline Logs
+                Real-time Voice & ABDM Pipeline Logs
               </div>
             </div>
           </div>

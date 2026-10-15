@@ -23,7 +23,7 @@ import {
 
 /**
  * WhatsAppAudioRxModal Component
- * Implements Vernacular WhatsApp Audio-Rx powered by Gnani Timbre v2.5.
+ * Implements Vernacular WhatsApp Audio-Rx. Browser speech (Web Speech API). Gnani voice integration: planned.
  * Features:
  * 1. Live WhatsApp mobile frame with authentic chat UI & verified green badge.
  * 2. Playable Indic Voice Note with real Web Speech Synthesis in Telugu, Hindi, or English.
@@ -370,7 +370,7 @@ export default function WhatsAppAudioRxModal({
                   border: '1px solid rgba(255,255,255,0.3)',
                   letterSpacing: '0.5px'
                 }}>
-                  TIMBRE v2.5 AI
+                  BROWSER SPEECH
                 </span>
               </div>
               <p style={{ fontSize: '12.5px', color: '#CBD5E1', margin: '3px 0 0 0' }}>
@@ -946,7 +946,7 @@ export default function WhatsAppAudioRxModal({
                     `--- MEDICATIONS & COLOR CHRONOTHERAPY ---\n` +
                     `🟡 Morning: Pantoprazole 40mg (After Breakfast / 08:30 AM)\n` +
                     `🟣 Night: Metformin 500mg (After Dinner / 08:30 PM)\n\n` +
-                    `Verified by ABDM HPR #8921-9942`
+                    `Verified by DEMO ABDM HPR #8921-9942`
                   ], { type: 'text/plain;charset=utf-8' });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');

@@ -3,9 +3,9 @@
  * Autonomous Acoustic Distress Triage & Emergency Dispatch Engine
  * 
  * Powered by:
- * - Gnani Timbre: Acoustic Panic Biomarker DSP (F0 pitch spike, RMS energy, hyperventilation detection)
- * - Gnani Prisma: Indic SLM Emergency Clinical Reasoner (Triage Red/Yellow/Green, Landmark extraction)
- * - Gnani Evon: Dual-Agent Parallel Autonomous Orchestration (Agent A: First-Aid CPR / Agent B: Autonomous Dispatch)
+ * - Browser speech (Web Speech API). Gnani voice integration: planned.
+ * - Web Audio API (AnalyserNode, BiquadFilter, Oscillator CPR metronome, siren generator)
+ * - Triage Rules & Simulation Protocols
  * - Real Browser Hardware:
  *   • Web Audio API (AnalyserNode, BiquadFilter, Oscillator CPR metronome, siren generator)
  *   • Web Speech API (Continuous Indic Speech Recognition hi-IN, te-IN, ta-IN, en-IN)
@@ -102,7 +102,7 @@ export function extractLandmarksFromSpeech(transcript) {
   return null;
 }
 
-// Prisma Indic Clinical Triage Reasoner
+// Indic Clinical Triage Reasoner (Browser speech (Web Speech API). Gnani voice integration: planned.)
 export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 70) {
   const text = transcript.toLowerCase();
   

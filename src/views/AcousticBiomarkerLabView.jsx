@@ -208,7 +208,7 @@ export default function AcousticBiomarkerLabView() {
         <AlertCircle size={22} color="#D97706" style={{ marginTop: '2px', flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#92400E', marginBottom: '4px' }}>
-            NON-DIAGNOSTIC RESEARCH DEMONSTRATION NOTICE
+            PHYSICAL SIGNAL ANALYSIS NOTICE (RESEARCH & EDUCATIONAL USE)
           </div>
           <p style={{ fontSize: '12.5px', color: '#B45309', margin: 0, lineHeight: 1.5 }}>
             Acoustic features displayed are physical audio engineering metrics, NOT validated disease probabilities or clinical diagnoses. This software does not detect illnesses autonomously. Always seek licensed medical consultation.
