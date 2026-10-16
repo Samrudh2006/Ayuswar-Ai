@@ -11,7 +11,6 @@ import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
 import SeoHead from './components/SeoHead';
-import PortalRoleBar from './components/PortalRoleBar';
 
 // Dedicated Full-Page Routed Views
 import ArchitectureView from './views/ArchitectureView';
@@ -87,17 +86,6 @@ export default function App() {
         onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
         onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
       />
-
-      {/* Dynamic Persona & Role Switcher Bar for Dashboards */}
-      {(location.pathname.startsWith('/doctor-portal') || 
-        location.pathname.startsWith('/patient-portal') || 
-        location.pathname.startsWith('/clinical-console')) && (
-        <PortalRoleBar 
-          currentDoctorName={currentDoctor?.doctorName}
-          currentPatientName={currentPatient?.patientName}
-          onQuickSwitchEncounter={() => navigate('/clinical-console')}
-        />
-      )}
 
       {/* Main Routed Content Workspace */}
       <main style={{ flex: 1 }}>
