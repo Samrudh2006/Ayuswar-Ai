@@ -19,6 +19,7 @@ import {
   simulateEvonDispatchPipeline 
 } from '../services/sanjivaniEmergencyService';
 import { speechService } from '../services/indicSpeechService';
+import SanjivaniAnimatedFlowchart from '../components/SanjivaniAnimatedFlowchart';
 
 export default function EmergencyTriageView({ onOpenFullConsole }) {
   const { selectedLanguage } = useApp();
@@ -352,6 +353,9 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               </div>
             )}
           </div>
+
+          {/* Live Multi-Stage Animated Flowchart with [SIMULATION] badge */}
+          <SanjivaniAnimatedFlowchart />
 
           {/* Dispatch Pipeline Simulator */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
