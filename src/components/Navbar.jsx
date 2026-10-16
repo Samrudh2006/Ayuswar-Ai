@@ -21,6 +21,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { useApp, SUPPORTED_LANGUAGES } from '../context/AppContext';
+import AyuSwarLogoReveal from './AyuSwarLogoReveal';
 
 export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatientAuth }) {
   const location = useLocation();
@@ -201,45 +202,17 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
           justifyContent: 'space-between',
           gap: 16
         }}>
-          {/* Brand Logo & Title */}
+          {/* Brand Logo & Title with SVG Line-Draw Reveal */}
           <Link 
             to="/" 
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: 10, 
               textDecoration: 'none',
               flexShrink: 0
             }}
           >
-            <div style={{
-              width: 38,
-              height: 38,
-              borderRadius: '50%',
-              overflow: 'hidden',
-              background: '#0f172a',
-              border: '2px solid #0e7490',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <img 
-                src="/assets/ayuswar_master_emblem.png" 
-                alt="AyuSwar AI Emblem" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
-                <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.3px' }}>
-                  Ayu<span style={{ color: '#0e7490' }}>Swar</span>
-                </span>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#d97706' }}>AI</span>
-              </div>
-              <div style={{ fontSize: '0.675rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: -2 }}>
-                Voice Medical Scribe Demo
-              </div>
-            </div>
+            <AyuSwarLogoReveal variant="navbar" showText={true} />
           </Link>
 
           {/* Desktop Navigation Links */}
