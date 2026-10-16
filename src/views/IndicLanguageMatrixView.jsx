@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Mic, Globe, CheckCircle2, AlertCircle, ArrowLeft, Volume2, Shield } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import IndicLanguageMatrixBanner from '../components/IndicLanguageMatrixBanner';
 
 export default function IndicLanguageMatrixView() {
   const { selectedLanguage, setSelectedLanguage, speechProviderStatus } = useApp();
@@ -118,6 +119,9 @@ export default function IndicLanguageMatrixView() {
           </p>
         </div>
       </div>
+
+      {/* Variable Font Morph & Regional Dialect Map Banner */}
+      <IndicLanguageMatrixBanner />
 
       {/* Language Matrix Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
