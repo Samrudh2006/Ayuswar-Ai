@@ -1,0 +1,61 @@
+# AyuSwar AI: Comprehensive System & Clinical Knowledge Specification
+
+> **Regulatory & Clinical Safety Watermark**: AyuSwar AI is a research and engineering prototype evaluated on synthetic datasets. It is not an approved medical device, is not certified for independent diagnostic use, and does not replace the clinical judgment of a licensed healthcare practitioner. All emergency dispatches, CPR prompts, and ambulance routing features are educational simulations. In real health emergencies across India, dial 112 or 108 immediately.
+
+## 1. System Overview
+
+AyuSwar AI addresses the severe doctor-patient documentation bottleneck in India's primary healthcare infrastructure. With primary health center (PHC) clinicians often consulting over 100 patients daily, manual data entry into electronic health records leads to high physician burnout and low record fidelity.
+
+AyuSwar AI provides:
+1. **Ambient Vernacular Speech Recognition**: Listens to natural doctor-patient consultations in Telugu, Hindi, and Indian English.
+2. **Draft Clinical Documentation**: Generates draft SOAP (Subjective, Objective, Assessment, Plan) records requiring physician review and sign-off.
+3. **Deterministic Ontology Normalization**: Bridges rural colloquial health idioms with international standards (WHO ICD-10 and SNOMED CT).
+4. **Patient-Centric Spoken Audio-Rx**: Delivers vernacular spoken dosage instructions via WhatsApp with synchronized visual highlights.
+5. **Computer Vision Medicine Scanning**: Synthetically scans medication blister packaging to cross-reference active molecules and suggest affordable Jan Aushadhi generic alternatives.
+6. **Simulated Emergency Triage Protocol**: Demonstrates voice-activated distress categorization, bystander CPR pacing, and ambulance telemetry handovers.
+
+## 2. Technical Architecture & Data Governance
+
+### 2.1 Ephemeral RAM Audio Processing (DPDP Act 2023)
+- Under the Digital Personal Data Protection (DPDP) Act 2023, patient biometric voice prints constitute sensitive personal data.
+- AyuSwar AI processes microphone streams inside volatile RAM buffers.
+- Once the text transcription and structured draft note are extracted, audio buffers are actively purged.
+- No raw audio is recorded, permanently stored, or transmitted to foreign cloud repositories.
+
+### 2.2 Edge & Offline Capability
+- Designed to run on local clinic mini-PCs or tablets using quantized models (ONNX Runtime / WebAssembly).
+- Full functionality persists even during intermittent rural power and broadband outages.
+
+### 2.3 Deterministic Colloquial Crosswalk (Zero-Hallucination Mapping)
+Unlike generative LLMs that risk hallucinating clinical codes, AyuSwar AI enforces a deterministic rule-based lexicon:
+- **Telugu "పీకల్లో పిల్లికూతలు" (Pikallo Pillikoothalu)** -> Wheezing (SNOMED CT: 195967001 | ICD-10: R06.2)
+- **Telugu "ఆయాసం" (Aayaasam)** -> Dyspnea / Shortness of Breath (SNOMED CT: 267036007 | ICD-10: R06.0)
+- **Telugu "ఎదలో మంట" (Edalo Manta)** -> Heartburn / Dyspepsia (SNOMED CT: 16331000 | ICD-10: K30)
+- **Telugu "తల దిమ్ముగా ఉంది" (Tala Dimmuga Undi)** -> Heaviness in Head / Cephalea (SNOMED CT: 25064002 | ICD-10: R51)
+- **Telugu "కీళ్ళ నొప్పులు" (Keella Noppulu)** -> Arthralgia / Joint Pain (SNOMED CT: 57676002 | ICD-10: M25.5)
+- **Telugu "గుండె దడ" (Gunde Dada)** -> Palpitations (SNOMED CT: 80313002 | ICD-10: R00.2)
+- **Hindi "पसली चलना" (Pasli Chalna)** -> Rapid Shallow Breathing / Tachypnea (SNOMED CT: 271823003 | ICD-10: R06.0)
+- **Hindi "छाती में जकड़न" (Chhati Mein Jakdan)** -> Chest Tightness (SNOMED CT: 29857009 | ICD-10: R07.89)
+
+### 2.4 Open Health Standards
+- **HL7 FHIR R4 JSON**: Serializes consultations into standardized Bundle, Composition, Patient, Practitioner, Condition, and MedicationRequest resources.
+- **Ayushman Bharat Digital Mission (ABDM)**: Conforms to Milestone 1, 2, and 3 sandbox schema structures for seamless National Health Authority integration.
+
+## 3. Verified Contract Assertions
+AyuSwar AI maintains an automated benchmark suite of 24 contract tests verifying:
+- Isolation of patient audio to volatile memory.
+- Strict non-diagnostic disclaimer watermarking on all AI outputs.
+- Elimination of autonomous prescription dispatch without clinician authorization.
+- Resilient operation in local browser sandbox environments.
+
+## 4. Key Links & Endpoints
+- Homepage: https://ayuswar-ai.vercel.app/
+- Clinical Architecture: https://ayuswar-ai.vercel.app/technology
+- Medicine Scanner: https://ayuswar-ai.vercel.app/scanner
+- Spoken Audio-Rx: https://ayuswar-ai.vercel.app/audio-rx
+- Acoustic Biomarker Lab: https://ayuswar-ai.vercel.app/acoustic-lab
+- Dialect Matrix: https://ayuswar-ai.vercel.app/language-matrix
+- Benchmarks: https://ayuswar-ai.vercel.app/benchmarks
+- Synthetic Datasets: https://ayuswar-ai.vercel.app/datasets
+- Emergency Triage Simulation: https://ayuswar-ai.vercel.app/emergency
+- Machine-Readable Sitemap: https://ayuswar-ai.vercel.app/sitemap.xml

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
@@ -11,11 +11,16 @@
     <meta name="keywords" content="AyuSwar AI, Clinical Voice Scribe, Ambient Clinical Intelligence, Telugu Medical Voice AI, Hindi Clinical ASR, ABDM FHIR R4 Schema, Primary Health Center AI, Rural Health Scribe Bharat, Non-Diagnostic Biomarker Screening, Sanjivani 108 Simulated Triage, Jan Aushadhi Generic Substitution, Kurnool PHC AI, Rayalaseema Health Tech, DPDP Act 2023 Ephemeral Voice" />
     <meta name="author" content="AyuSwar AI Engineering Consortium" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="rating" content="general" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="format-detection" content="telephone=no" />
     <link rel="canonical" href="https://ayuswar-ai.vercel.app/" />
 
     <!-- Geo & Local SEO Meta Tags (Andhra Pradesh, Telangana & Pan-India) -->
-    <meta name="geo.region" content="IN-AP" />
-    <meta name="geo.placename" content="Kurnool, Andhra Pradesh, India" />
+    <meta name="geo.region" content="IN-AP;IN-TG" />
+    <meta name="geo.placename" content="Kurnool, Andhra Pradesh, India; Hyderabad, Telangana, India" />
     <meta name="geo.position" content="15.8281;78.0373" />
     <meta name="ICBM" content="15.8281, 78.0373" />
     <meta name="coverage" content="Worldwide" />
@@ -29,12 +34,21 @@
     <link rel="alternate" hreflang="ta-IN" href="https://ayuswar-ai.vercel.app/?lang=ta" />
     <link rel="alternate" hreflang="kn-IN" href="https://ayuswar-ai.vercel.app/?lang=kn" />
     <link rel="alternate" hreflang="mr-IN" href="https://ayuswar-ai.vercel.app/?lang=mr" />
+    <link rel="alternate" hreflang="bn-IN" href="https://ayuswar-ai.vercel.app/?lang=bn" />
     <link rel="alternate" hreflang="x-default" href="https://ayuswar-ai.vercel.app/" />
 
-    <!-- Favicons and Web App Manifest -->
-    <link rel="icon" type="image/png" href="/assets/ayuswar_master_emblem.png" />
-    <link rel="apple-touch-icon" href="/assets/ayuswar_master_emblem.png" />
+    <!-- LLM Context & Generative Engine Meta Reference -->
+    <link rel="alternate" type="text/plain" href="https://ayuswar-ai.vercel.app/llms.txt" title="LLM Context Specification" />
+
+    <!-- Favicons, Apple Touch, and Web App Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/ayuswar_master_emblem.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/assets/ayuswar_master_emblem.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="application-name" content="AyuSwar AI" />
+    <meta name="apple-mobile-web-app-title" content="AyuSwar AI" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#020617" />
     <meta name="color-scheme" content="light dark" />
 
@@ -45,9 +59,11 @@
     <meta property="og:title" content="AyuSwar AI — Ambient Clinical Voice Scribe & Triage Prototype" />
     <meta property="og:description" content="AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis. Ambient clinical voice assistant exploring vernacular transcription in Telugu, Hindi, and English with draft ABDM FHIR R4 JSON structures." />
     <meta property="og:image" content="https://ayuswar-ai.vercel.app/assets/ayuswar_master_emblem.png" />
+    <meta property="og:image:secure_url" content="https://ayuswar-ai.vercel.app/assets/ayuswar_master_emblem.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="AyuSwar AI Master Clinical Emblem" />
+    <meta property="og:image:alt" content="AyuSwar AI Master Clinical Voice Intelligence Emblem" />
     <meta property="og:locale" content="en_IN" />
     <meta property="og:locale:alternate" content="te_IN" />
     <meta property="og:locale:alternate" content="hi_IN" />
@@ -55,16 +71,18 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@AyuSwarAI" />
+    <meta name="twitter:creator" content="@AyuSwarAI" />
     <meta name="twitter:title" content="AyuSwar AI — Ambient Clinical Voice Scribe Prototype" />
     <meta name="twitter:description" content="AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis. Prototype ambient clinical voice scribe demonstrating vernacular transcription." />
     <meta name="twitter:image" content="https://ayuswar-ai.vercel.app/assets/ayuswar_master_emblem.png" />
+    <meta name="twitter:image:alt" content="AyuSwar AI Indic Healthcare Technology" />
 
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Schema.org Knowledge Graph: SoftwareApplication, MedicalWebPage, MedicalOrganization, FAQPage -->
+    <!-- Schema.org Knowledge Graph: SoftwareApplication, MedicalWebPage, MedicalOrganization, BreadcrumbList, FAQPage -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -80,6 +98,11 @@
           "description": "Prototype ambient clinical voice assistant demonstrating vernacular transcription in Telugu, Hindi, and English with draft ABDM FHIR JSON structures for physician review and simulated 108 emergency triage.",
           "softwareVersion": "2.5.0-prototype",
           "inLanguage": ["en-IN", "te-IN", "hi-IN", "ta-IN", "kn-IN", "mr-IN", "bn-IN"],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
           "featureList": [
             "Ambient Vernacular OPD Scribing Demo (Telugu, Hindi, English)",
             "Draft ABDM FHIR R4 JSON Formatting for Attending Clinician Review",
@@ -107,6 +130,80 @@
             { "@type": "Thing", "name": "HL7 FHIR R4 Clinical Data Standard" },
             { "@type": "Thing", "name": "Indic Speech Recognition and Diarization" },
             { "@type": "Thing", "name": "Digital Personal Data Protection Act 2023 (DPDP)" }
+          ],
+          "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": [
+              ".aeo-speakable-summary",
+              ".aeo-direct-definition",
+              ".aeo-faq-answer"
+            ]
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://ayuswar-ai.vercel.app/#breadcrumbs",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://ayuswar-ai.vercel.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Clinical Solutions",
+              "item": "https://ayuswar-ai.vercel.app/solutions"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Technology Blueprint",
+              "item": "https://ayuswar-ai.vercel.app/technology"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Medicine Scanner",
+              "item": "https://ayuswar-ai.vercel.app/scanner"
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "Spoken Audio-Rx",
+              "item": "https://ayuswar-ai.vercel.app/audio-rx"
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "name": "Acoustic Biomarker Lab",
+              "item": "https://ayuswar-ai.vercel.app/acoustic-lab"
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "name": "Indic Language Matrix",
+              "item": "https://ayuswar-ai.vercel.app/language-matrix"
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "name": "Clinical Benchmarks",
+              "item": "https://ayuswar-ai.vercel.app/benchmarks"
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "name": "Synthetic Datasets",
+              "item": "https://ayuswar-ai.vercel.app/datasets"
+            },
+            {
+              "@type": "ListItem",
+              "position": 10,
+              "name": "Emergency Triage",
+              "item": "https://ayuswar-ai.vercel.app/emergency"
+            }
           ]
         },
         {
@@ -122,8 +219,10 @@
           ],
           "address": {
             "@type": "PostalAddress",
+            "streetAddress": "Rayalaseema Health Tech Innovation Corridor",
             "addressLocality": "Kurnool",
             "addressRegion": "Andhra Pradesh",
+            "postalCode": "518002",
             "addressCountry": "IN"
           }
         },
@@ -205,6 +304,22 @@
                 "@type": "Answer",
                 "text": "Yes. AyuSwar AI is architected with an Offline Edge OS prototype that runs quantized speech models and rule-based crosswalks locally on clinic hardware, ensuring operational continuity in rural and remote health centers."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "Which regional dialects of Telugu does AyuSwar AI support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AyuSwar AI supports the four major Telugu regional dialect clusters: Rayalaseema (Kurnool, Anantapur, Kadapa, Chittoor), Telangana (Hyderabad, Warangal, Karimnagar), Coastal Andhra (Krishna, Guntur, Godavari), and Uttarandhra (Visakhapatnam, Srikakulam)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does AyuSwar AI support Jan Aushadhi generic substitution?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The Computer Vision Medicine Scanner reads active pharmaceutical ingredients from medicine blister strips and queries the Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) formulary to suggest equivalent, affordable generic substitutes."
+              }
             }
           ]
         }
@@ -213,6 +328,41 @@
     </script>
   </head>
   <body>
+    <!-- Accessibility & Crawler Semantic Content (AEO / GEO / SEO SSR Fallback) -->
+    <noscript>
+      <div style="padding: 24px; font-family: sans-serif; background: #020617; color: #F8FAFC;">
+        <h1>AyuSwar AI — Ambient Clinical Voice Scribe & Triage Prototype</h1>
+        <p class="aeo-speakable-summary">
+          AyuSwar AI is a clinical voice technology prototype for Indian healthcare. Evaluated on synthetic data. Not a medical device. Not for diagnosis.
+        </p>
+        <section>
+          <h2>Key Capabilities</h2>
+          <ul>
+            <li>Ambient multi-lingual outpatient scribing in Telugu, Hindi, and Indian English.</li>
+            <li>Draft ABDM HL7 FHIR R4 JSON clinical documentation for physician review.</li>
+            <li>Deterministic clinical idiom crosswalk mapping rural vernacular phrases to WHO ICD-10 and SNOMED CT.</li>
+            <li>Spoken Audio-Rx karaoke dosage cards for illiterate patient adherence.</li>
+            <li>Simulated 108 emergency triage demonstration with CPR audio metronome.</li>
+          </ul>
+        </section>
+        <nav aria-label="Site Navigation">
+          <h2>Platform Modules</h2>
+          <ul>
+            <li><a href="/solutions">Clinical Solutions & Modules</a></li>
+            <li><a href="/technology">Deep-Tech Architecture Blueprint</a></li>
+            <li><a href="/scanner">Computer Vision Medicine Scanner Demo</a></li>
+            <li><a href="/audio-rx">Spoken Audio-Rx Studio</a></li>
+            <li><a href="/acoustic-lab">Non-Diagnostic Acoustic Signal Processing Lab</a></li>
+            <li><a href="/language-matrix">Indic Language & Dialect Matrix</a></li>
+            <li><a href="/benchmarks">Clinical Contract Benchmarks</a></li>
+            <li><a href="/datasets">Synthetic Clinical Datasets</a></li>
+            <li><a href="/emergency">Simulated 108 Emergency Distress Triage</a></li>
+          </ul>
+        </nav>
+      </div>
+    </noscript>
+
+    <!-- Interactive Client SPA Root -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

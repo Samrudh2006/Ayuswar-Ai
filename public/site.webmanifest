@@ -1,21 +1,64 @@
 {
+  "id": "ayuswar-ai-app",
   "name": "AyuSwar AI — Ambient Clinical Voice Prototype",
   "short_name": "AyuSwar AI",
-  "description": "Ambient Clinical Voice Scribe Prototype demonstrating multilingual Indian voice transcription, draft FHIR schemas, and simulated emergency triage.",
+  "description": "Ambient Clinical Voice Scribe Prototype exploring multilingual Indian voice transcription, draft ABDM FHIR R4 schemas, and simulated emergency triage.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
+  "lang": "en-IN",
+  "dir": "ltr",
   "background_color": "#020617",
   "theme_color": "#0284C7",
+  "categories": [
+    "health",
+    "medical",
+    "productivity"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/assets/ayuswar_master_emblem.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/assets/ayuswar_master_emblem.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sanjivani 108 Emergency Triage",
+      "short_name": "108 Emergency",
+      "description": "Simulated emergency distress protocol and CPR metronome",
+      "url": "/emergency",
+      "icons": [{ "src": "/assets/ayuswar_master_emblem.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Medicine Scanner",
+      "short_name": "Rx Scanner",
+      "description": "Blister pack OCR and Jan Aushadhi generic substitution",
+      "url": "/scanner",
+      "icons": [{ "src": "/assets/ayuswar_master_emblem.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Spoken Audio-Rx",
+      "short_name": "Audio-Rx",
+      "description": "Vernacular spoken dosage cards with synchronized karaoke highlights",
+      "url": "/audio-rx",
+      "icons": [{ "src": "/assets/ayuswar_master_emblem.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Acoustic Biomarker Lab",
+      "short_name": "Acoustic Lab",
+      "description": "Non-diagnostic vocal DSP and frequency analyzer",
+      "url": "/acoustic-lab",
+      "icons": [{ "src": "/assets/ayuswar_master_emblem.png", "sizes": "192x192" }]
     }
   ]
 }

@@ -1,41 +1,58 @@
+# AyuSwar AI — Robots.txt for Search Engines, Answer Engines (AEO), and Generative AI (GEO)
+
 User-agent: *
 Allow: /
 
-# Generative AI, Answer Engines (AEO) & Large Language Model Web Crawlers
+# OpenAI / ChatGPT
 User-agent: GPTBot
 Allow: /
-
 User-agent: ChatGPT-User
 Allow: /
 
+# Perplexity AI Answer Engine
 User-agent: PerplexityBot
 Allow: /
 
+# Anthropic Claude & Research Agents
 User-agent: ClaudeBot
 Allow: /
-
+User-agent: Claude-Web
+Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+# Google & Gemini SGE
+User-agent: Googlebot
+Allow: /
 User-agent: Google-Extended
 Allow: /
 
-User-agent: Googlebot
-Allow: /
-
+# Microsoft Bing & Copilot
 User-agent: Bingbot
 Allow: /
 
+# Apple & Siri Intelligence
 User-agent: Applebot
 Allow: /
-
 User-agent: Applebot-Extended
 Allow: /
 
+# Meta / Facebook AI
+User-agent: FacebookBot
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Cohere, Common Crawl & Other AI Crawlers
 User-agent: CCBot
 Allow: /
-
 User-agent: Cohere-ai
 Allow: /
+User-agent: Diffbot
+Allow: /
+User-agent: Bytespider
+Allow: /
 
+# Machine-Readable Maps & AI Documentation
 Sitemap: https://ayuswar-ai.vercel.app/sitemap.xml
+# LLM Knowledge Documentation: https://ayuswar-ai.vercel.app/llms.txt

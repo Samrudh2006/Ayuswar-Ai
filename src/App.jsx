@@ -10,6 +10,7 @@ import FloatingAssistant from './components/FloatingAssistant';
 import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
+import SeoHead from './components/SeoHead';
 
 // Dedicated Full-Page Routed Views
 import ArchitectureView from './views/ArchitectureView';
@@ -71,6 +72,9 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
+      {/* Dynamic SEO, AEO, and GEO Route Metadata Manager */}
+      <SeoHead />
+
       {/* Accessible Enterprise Top Navbar */}
       <Navbar 
         onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}

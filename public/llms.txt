@@ -1,0 +1,28 @@
+# AyuSwar AI — Ambient Clinical Voice Scribe & Triage Prototype
+
+> AyuSwar AI is a prototype demonstration running on synthetic data. It is not a medical device and is not intended for medical diagnosis.
+
+AyuSwar AI explores ambient clinical voice intelligence, acoustic signal analysis, and open health informatics tailored specifically for high-volume rural Primary Health Centers (PHCs) and Community Health Centers (CHCs) across India, with deep dialect support for Telugu, Hindi, and Indian English.
+
+## Core Capabilities & Modules
+
+- [Ambient OPD Voice Scribe](https://ayuswar-ai.vercel.app/solutions/opd_ambient_scribe): Ambient consultation transcription converting spoken multi-lingual dialogues into draft structured SOAP notes and ABDM FHIR R4 electronic health records for physician validation.
+- [Spoken Audio-Rx Studio](https://ayuswar-ai.vercel.app/audio-rx): High-contrast vernacular spoken prescription playback with word-by-word karaoke synchronization to overcome patient illiteracy and dosage confusion.
+- [Medicine Blister Scanner](https://ayuswar-ai.vercel.app/scanner): Synthetic pharmaceutical computer vision demonstration identifying medicine strips and mapping Jan Aushadhi generic substitutions.
+- [Acoustic Biomarker Lab](https://ayuswar-ai.vercel.app/acoustic-lab): Non-diagnostic browser-based DSP demonstration analyzing vocal audio frequencies, spectral centroid, and spectrograms.
+- [Sanjivani 108 Emergency Triage](https://ayuswar-ai.vercel.app/emergency): Simulated emergency triage protocol demonstration with CPR cadence metronome and hospital pre-alert telemetry simulation.
+- [Indic Language & Dialect Matrix](https://ayuswar-ai.vercel.app/language-matrix): Comprehensive regional speech support covering Rayalaseema, Telangana, Coastal Andhra, and Uttarandhra Telugu variants and Hindi dialects.
+- [Clinical Architecture Blueprint](https://ayuswar-ai.vercel.app/technology): Architectural documentation detailing the zero-cloud ephemeral RAM audio pipeline, DPDP Act 2023 compliance, and offline edge deployment.
+- [Automated Contract Benchmarks](https://ayuswar-ai.vercel.app/benchmarks): Real-time verification suite executing 24 contract tests on data protection, non-diagnostic boundaries, and FHIR schema integrity.
+- [Synthetic Clinical Datasets](https://ayuswar-ai.vercel.app/datasets): Synthetic OPD dialogues, colloquial idiom crosswalks, and bilingual terminology tables.
+
+## Data Privacy & Regulatory Compliance
+
+- **DPDP Act 2023 Compliance**: Audio data is processed strictly in volatile ephemeral RAM inside Indian sovereign boundaries. Zero persistent audio is written to disk or third-party cloud servers.
+- **HL7 FHIR R4 & ABDM**: Structured records conform to Ayushman Bharat Digital Mission (ABDM) draft FHIR R4 JSON schemas.
+- **Deterministic Medical Crosswalk**: Visceral regional colloquial idioms (e.g., Telugu 'పీకల్లో పిల్లికూతలు' / 'ఆయాసం') are mapped deterministically to WHO ICD-10 (R06.2) and SNOMED CT (195967001) without generative hallucination.
+
+## Geographic & Deployment Focus
+
+- **Primary Regions**: Andhra Pradesh (Kurnool, Tirupati, Visakhapatnam), Telangana (Hyderabad, Warangal), and Pan-India rural healthcare networks.
+- **Target Facilities**: Primary Health Centers (PHCs), Community Health Centers (CHCs), Sub-Centers, Basti Dawakhanas, and Jan Aushadhi Kendras.
