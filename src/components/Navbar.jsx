@@ -258,6 +258,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                 <div style={dropdownMenuStyle} role="menu">
                   <Link 
                     to="/solutions/opd_ambient_scribe" 
+                    onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}
                     role="menuitem"
                   >
@@ -270,6 +271,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
                   <Link 
                     to="/scanner" 
+                    onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/scanner')}
                     role="menuitem"
                   >
@@ -282,6 +284,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
                   <Link 
                     to="/audio-rx" 
+                    onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/audio-rx')}
                     role="menuitem"
                   >
@@ -294,6 +297,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
                   <Link 
                     to="/acoustic-lab" 
+                    onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/acoustic-lab')}
                     role="menuitem"
                   >
@@ -306,6 +310,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
                   <Link 
                     to="/emergency" 
+                    onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/emergency')}
                     role="menuitem"
                   >
@@ -361,6 +366,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                 <div style={dropdownMenuStyle} role="menu">
                   <Link 
                     to="/language-matrix" 
+                    onClick={() => setResourcesOpen(false)}
                     style={dropdownItemStyle(currentPath === '/language-matrix')}
                     role="menuitem"
                   >
@@ -373,6 +379,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
                   <Link 
                     to="/datasets" 
+                    onClick={() => setResourcesOpen(false)}
                     style={dropdownItemStyle(currentPath === '/datasets')}
                     role="menuitem"
                   >

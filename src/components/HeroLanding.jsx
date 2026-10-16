@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Mic, 
   Languages, 
@@ -61,6 +62,7 @@ export default function HeroLanding({
   onOpenPatientAuthModal,
   onSelectModule
 }) {
+  const navigate = useNavigate();
   const [activeFeature, setActiveFeature] = useState(0);
   const [selectedFeatureModalKey, setSelectedFeatureModalKey] = useState(null);
 
@@ -1798,19 +1800,23 @@ export default function HeroLanding({
                       <span>{isAcousticPlaying ? 'Stop Auscultation' : 'Simulate Wheeze Audio Stream'}</span>
                     </button>
                     <button
-                      onClick={() => setSelectedFeatureModalKey('acoustic_biomarkers')}
+                      onClick={() => {
+                        if (onOpenAcousticLab) onOpenAcousticLab();
+                        else navigate('/acoustic-lab');
+                      }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        background: '#F1F5F9',
-                        color: '#0A2540',
-                        border: '1.5px solid #CBD5E1',
+                        background: '#008B8B',
+                        color: '#FFFFFF',
+                        border: 'none',
                         padding: '10px 18px',
                         borderRadius: '12px',
                         fontSize: '13px',
                         fontWeight: 700,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)'
                       }}
                     >
                       <span>🔬 Launch Full Biomarker Lab</span>

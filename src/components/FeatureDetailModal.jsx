@@ -10,8 +10,10 @@ import {
   Cpu, 
   FileCheck, 
   BookOpen, 
+  ArrowRight,
   X 
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * FeatureDetailModal Component
@@ -19,6 +21,7 @@ import {
  * directly on the landing page without prematurely redirecting users to the internal workspace.
  */
 export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin }) {
+  const navigate = useNavigate();
   if (!featureKey) return null;
 
   const featureDetails = {
@@ -224,6 +227,45 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
             Secure access required to run live consultation sessions.
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {featureKey === 'acoustic_biomarkers' && (
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate('/acoustic-lab');
+                }}
+                className="btn-primary"
+                style={{ fontSize: '13px', padding: '9px 18px', background: '#008B8B', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <span>🔬 Launch Live Acoustic Lab</span>
+                <ArrowRight size={14} />
+              </button>
+            )}
+            {featureKey === 'prescription_scanner' && (
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate('/scanner');
+                }}
+                className="btn-primary"
+                style={{ fontSize: '13px', padding: '9px 18px', background: '#6366F1', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <span>📷 Open Blister Scanner</span>
+                <ArrowRight size={14} />
+              </button>
+            )}
+            {featureKey === 'spoken_audio_rx' && (
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate('/audio-rx');
+                }}
+                className="btn-primary"
+                style={{ fontSize: '13px', padding: '9px 18px', background: '#10B981', display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <span>🔊 Open Audio-Rx Studio</span>
+                <ArrowRight size={14} />
+              </button>
+            )}
             {onLaunchLogin && (
               <button
                 onClick={() => {

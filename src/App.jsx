@@ -90,6 +90,10 @@ export default function App() {
                 onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
                 onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
                 onLaunchStudio={() => setIsDoctorAuthModalOpen(true)}
+                onOpenAcousticLab={() => navigate('/acoustic-lab')}
+                onOpenTechModal={() => navigate('/technology')}
+                onOpenDatasetModal={() => navigate('/datasets')}
+                onOpenBenchmarkSuite={() => navigate('/benchmarks')}
               />
             } 
           />
