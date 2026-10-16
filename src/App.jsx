@@ -259,8 +259,8 @@ export default function App() {
         onLoginSuccess={handlePatientLoginSuccess}
       />
 
-      {/* Floating Ambient Voice Assistant (Hidden during dedicated portals and Sanjivani console) */}
-      {!isDedicatedPortal && !isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
+      {/* Floating Ambient Voice Assistant (Always active across portals, hidden only during Sanjivani modal) */}
+      {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
         <FloatingAssistant 
           activeView="landing"
           doctorProfile={currentDoctor}

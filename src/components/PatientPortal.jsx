@@ -451,13 +451,17 @@ export default function PatientPortal({
           ========================================================================= */}
       <aside style={{
         width: '240px',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
         background: '#ffffff',
         borderRight: '1px solid #E2E8F0',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '24px 16px',
-        flexShrink: 0
+        padding: '20px 16px',
+        flexShrink: 0,
+        overflowY: 'auto'
       }}>
         <div>
           {/* Logo */}

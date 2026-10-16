@@ -507,13 +507,17 @@ export default function DoctorPortal({
           ========================================================================= */}
       <aside style={{
         width: '240px',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
         background: '#ffffff',
         borderRight: '1px solid #E2E8F0',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '24px 16px',
-        flexShrink: 0
+        padding: '20px 16px',
+        flexShrink: 0,
+        overflowY: 'auto'
       }}>
         <div>
           {/* Brand Logo */}
@@ -1133,7 +1137,7 @@ export default function DoctorPortal({
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {recentReports.map(rep => (
+                    {recentReports.slice(0, 2).map(rep => (
                       <div
                         key={rep.id}
                         style={{
