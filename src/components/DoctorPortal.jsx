@@ -56,7 +56,7 @@ import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../data/indic
  * 3. AI Assistant (Dedicated clinical co-pilot, GINA/ICMR guidelines, DDI checker, differential diagnosis)
  * 4. Appointments (OPD queue master, live token display, waiting times, triage priority)
  * 5. Reports & Lab (X-Ray DICOM viewer, CBC, Spirometry PFT, 12-lead ECG, ABDM FHIR R4 export)
- * 6. Prescriptions (Active e-Rx, NFI formulary checker, OpenCV blister OCR scanner, spoken Audio-Rx)
+ * 6. Prescriptions (Active e-Rx, NFI formulary checker, Tesseract blister OCR scanner, spoken Audio-Rx)
  * 7. Clinical Library (WHO ICD-10 taxonomy, colloquial Indic symptom resolver, clinical protocols)
  * 8. Settings (ABDM HPR credentials, hospital facility #1402, WebAudio mic VAD calibration)
  */
@@ -2017,7 +2017,7 @@ export default function DoctorPortal({
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px' }}>
                       <span style={{ fontSize: '10.5px', color: '#64748B' }}>
-                        OpenCV + Tesseract Indic VAD Model
+                        Canvas 2D + Tesseract OCR Model
                       </span>
                       <button
                         onClick={() => triggerOcrScan(ocrSampleIdx)}

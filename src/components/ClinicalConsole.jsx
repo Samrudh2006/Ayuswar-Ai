@@ -55,7 +55,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const [micVolume, setMicVolume] = useState(20);
   const micIntervalRef = useRef(null);
 
-  // OpenCV Strip Scanner Simulation
+  // Tesseract Strip Scanner Integration
   const [showVisionScanner, setShowVisionScanner] = useState(false);
   const [scannedStripStatus, setScannedStripStatus] = useState(null);
   
@@ -669,13 +669,13 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             </div>
           </div>
 
-          {/* Card 6: OpenCV Blister Strip Scanner & Safety Guard */}
+          {/* Card 6: Tesseract Blister Strip Scanner & Safety Guard */}
           <div className="glass-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Camera size={18} color="#D97706" />
                 <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
-                  OpenCV Blister Strip Scanner
+                  Tesseract Blister Strip Scanner
                 </h3>
               </div>
               <button

@@ -53,14 +53,14 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       techSpec: 'WebAudio FFT • Spectral Centroid & Rolloff • Signal Analysis'
     },
     'prescription_scanner': {
-      title: 'OpenCV Blister Strip & Paper Rx Scanner',
-      badge: 'LAYER 4 • COMPUTER VISION',
+      title: 'Tesseract Blister Strip & Paper Rx Scanner',
+      badge: 'LAYER 4 • OPTICAL CHARACTER RECOGNITION',
       icon: Scan,
       color: '#6366F1',
       problem: 'Patients frequently bring old crumpled medicine strips to the clinic. Doctors struggle to identify the exact generic compound, leading to accidental double-dosing.',
-      solution: 'A computer vision pipeline utilizing OpenCV perspective transformation, Otsu adaptive thresholding, and OCR bounding-box detection to inspect blister strips and paper scripts. Cross-references extracted drug names against India’s National Formulary (NFI) to confirm active salts.',
+      solution: 'An in-browser optical recognition pipeline utilizing Tesseract.js WebAssembly and HTML5 Canvas frame analysis to inspect blister strips and paper scripts. Cross-references extracted drug names against India’s National Formulary (NFI) to confirm active salts and Jan Aushadhi generic availability.',
       scientificMetric: 'Recognizes common Indian pharmaceutical blister packaging brands.',
-      techSpec: 'OpenCV Perspective Warp • Canny Edge Detector • NFI Salt Cross-indexing'
+      techSpec: 'Tesseract.js WASM • HTML5 Canvas 2D • NFI Salt Cross-indexing'
     },
     'spoken_audio_rx': {
       title: 'Vernacular Audio-Rx with Synchronized Karaoke',

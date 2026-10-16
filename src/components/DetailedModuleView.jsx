@@ -896,8 +896,8 @@ export default function DetailedModuleView({
       category: 'Solutions',
       badge: 'Vision AI & Safety',
       badgeColor: '#D97706',
-      title: 'OpenCV Medicine Blister Strip OCR & DDI Sentinel',
-      tagline: 'Computer Vision Pill Contour Segmentation with National Formulary DDI Safety Sentinel',
+      title: 'Tesseract Medicine Blister Strip OCR & DDI Sentinel',
+      tagline: 'Optical Character Recognition with National Formulary DDI Safety Sentinel',
       icon: Eye,
       totalPages: 3,
       interactiveActionLabel: 'Launch Blister Strip Scanner',
@@ -905,13 +905,13 @@ export default function DetailedModuleView({
       pages: [
         {
           pageTitle: 'Blister Pack Detection & Pharmacological Entity Matching',
-          subtitle: 'Real-time OpenCV edge detection, contour bounding, and generic salt verification.',
+          subtitle: 'Real-time Tesseract optical character recognition, contour bounding, and generic salt verification.',
           content: (
             <div className="space-y-8">
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
-                <h3 className="text-xl font-bold text-slate-900">Computer Vision Inspection Pipeline</h3>
+                <h3 className="text-xl font-bold text-slate-900">Optical Character Inspection Pipeline</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Patients often bring crinkled, half-empty blister packs to the clinic with illegible brand text. AyuSwar uses an OpenCV-powered pipeline to detect the blister strip contours, extract embossed batch markings, and resolve generic chemical salts against the National Formulary of India (NFI).
+                  Patients often bring crinkled, half-empty blister packs to the clinic with illegible brand text. AyuSwar uses a Tesseract-powered optical pipeline to inspect the blister strip, extract embossed batch markings, and resolve generic chemical salts against the National Formulary of India (NFI).
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
