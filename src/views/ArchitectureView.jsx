@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -18,6 +18,10 @@ import PipelineTerminal from '../components/PipelineTerminal';
  * Centered around the full-width rough.js Hand-Drawn Whiteboard Explainer.
  */
 export default function ArchitectureView() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   const INTEROP_STANDARDS = [
     {
       title: 'Acoustic Signal DSP',

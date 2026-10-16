@@ -10,7 +10,7 @@ import { Terminal, Play, Pause, RotateCcw, CheckCircle2, Shield } from 'lucide-r
 export default function PipelineTerminal() {
   const [isRunning, setIsRunning] = useState(true);
   const [activeLineIndex, setActiveLineIndex] = useState(0);
-  const terminalEndRef = useRef(null);
+  const terminalLogsRef = useRef(null);
 
   const PIPELINE_LOGS = [
     { type: 'init', tag: '[INIT]', text: 'W3C AudioContext initialized (sampleRate: 16000Hz, channels: 1 PCM)', color: '#38BDF8' },
@@ -43,8 +43,8 @@ export default function PipelineTerminal() {
   }, [isRunning]);
 
   useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (terminalLogsRef.current) {
+      terminalLogsRef.current.scrollTop = terminalLogsRef.current.scrollHeight;
     }
   }, [activeLineIndex]);
 
@@ -130,7 +130,9 @@ export default function PipelineTerminal() {
       </div>
 
       {/* Terminal Content Stream */}
-      <div style={{
+      <div 
+        ref={terminalLogsRef}
+        style={{
         padding: '20px',
         maxHeight: '280px',
         minHeight: '220px',
@@ -173,7 +175,6 @@ export default function PipelineTerminal() {
             animation: 'termBlink 1s infinite'
           }} />
         </div>
-        <div ref={terminalEndRef} />
       </div>
 
       {/* Terminal Footer Bar */}
