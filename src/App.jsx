@@ -75,20 +75,27 @@ export default function App() {
     }
   };
 
+  const isDedicatedPortal = 
+    location.pathname.startsWith('/doctor-portal') || 
+    location.pathname.startsWith('/patient-portal') || 
+    location.pathname.startsWith('/clinical-console');
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
       {/* Dynamic SEO, AEO, and GEO Route Metadata Manager */}
       <SeoHead />
 
-      {/* Accessible Enterprise Top Navbar */}
-      <Navbar 
-        onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
-        onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
-        onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
-      />
+      {/* Accessible Enterprise Top Navbar (Only on public website routes) */}
+      {!isDedicatedPortal && (
+        <Navbar 
+          onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
+          onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
+          onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
+        />
+      )}
 
       {/* Main Routed Content Workspace */}
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}>
         <Routes>
           {/* Public Home & Marketing */}
           <Route 
@@ -212,23 +219,25 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* Global Prototype Disclaimer Footer Banner */}
-      <footer style={{
-        background: '#0F172A',
-        color: '#E2E8F0',
-        borderTop: '1px solid #334155',
-        padding: '12px 20px',
-        textAlign: 'center',
-        fontSize: '12.5px',
-        fontWeight: 650,
-        zIndex: 30,
-        position: 'relative'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }}></span>
-          <span>AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis.</span>
-        </div>
-      </footer>
+      {/* Global Prototype Disclaimer Footer Banner (Only on public showcase routes) */}
+      {!isDedicatedPortal && (
+        <footer style={{
+          background: '#0F172A',
+          color: '#E2E8F0',
+          borderTop: '1px solid #334155',
+          padding: '12px 20px',
+          textAlign: 'center',
+          fontSize: '12.5px',
+          fontWeight: 650,
+          zIndex: 30,
+          position: 'relative'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }}></span>
+            <span>AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis.</span>
+          </div>
+        </footer>
+      )}
 
       {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
       <SanjivaniEmergencyModal 
@@ -250,8 +259,8 @@ export default function App() {
         onLoginSuccess={handlePatientLoginSuccess}
       />
 
-      {/* Floating Ambient Voice Assistant (Hidden during Sanjivani console to prevent duplicate assistant overlap) */}
-      {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
+      {/* Floating Ambient Voice Assistant (Hidden during dedicated portals and Sanjivani console) */}
+      {!isDedicatedPortal && !isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
         <FloatingAssistant 
           activeView="landing"
           doctorProfile={currentDoctor}

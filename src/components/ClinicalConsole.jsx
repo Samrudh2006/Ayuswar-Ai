@@ -152,7 +152,37 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   }, []);
 
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '24px 24px 80px 24px' }}>
+    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 80px 24px' }}>
+      {/* Top Clinical Navigation Bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <button
+          onClick={() => window.location.href = '/doctor-portal'}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 14px',
+            borderRadius: '8px',
+            background: '#ffffff',
+            border: '1px solid #CBD5E1',
+            color: '#334155',
+            fontSize: '13px',
+            fontWeight: 650,
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#F1F5F9'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+        >
+          ← Return to Doctor OPD
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: '#64748B', fontWeight: 600 }}>
+          <span>Ambient Clinical Telemetry Console</span>
+          <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }}></span>
+          <span style={{ color: '#059669', fontWeight: 700 }}>DPDP Act Ephemeral Mode</span>
+        </div>
+      </div>
       {/* =========================================================================
           TOP PATIENT CLINICAL BANNER & VITALS TICKER
           ========================================================================= */}

@@ -461,7 +461,11 @@ export default function PatientPortal({
       }}>
         <div>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', marginBottom: '32px' }}>
+          <div 
+            onClick={() => window.location.href = '/'}
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', marginBottom: '32px', cursor: 'pointer' }}
+            title="AyuSwar AI — Return to Website"
+          >
             <div style={{
               width: '48px',
               height: '48px',
