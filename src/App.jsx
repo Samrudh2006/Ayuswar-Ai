@@ -32,7 +32,12 @@ import { useApp } from './context/AppContext';
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentDoctor, setCurrentDoctor, currentPatient, setCurrentPatient } = useApp();
+  const { 
+    doctorProfile: currentDoctor, 
+    setDoctorProfile: setCurrentDoctor, 
+    patientProfile: currentPatient, 
+    setPatientProfile: setCurrentPatient 
+  } = useApp();
   const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
   const [isDoctorAuthModalOpen, setIsDoctorAuthModalOpen] = useState(false);
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
