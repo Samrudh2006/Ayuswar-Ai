@@ -42,6 +42,7 @@ import {
   Eye
 } from 'lucide-react';
 import FeatureDetailModal from './FeatureDetailModal';
+import MeshGradientBackground from './MeshGradientBackground';
 
 /**
  * HeroLanding Component
@@ -454,6 +455,9 @@ export default function HeroLanding({
         padding: 0,
         borderBottom: '1px solid rgba(0, 139, 139, 0.12)'
       }}>
+        {/* High-Performance Canvas Mesh Gradient (IntersectionObserver + Reduced-Motion aware) */}
+        <MeshGradientBackground opacity={0.55} />
+
         {/* Subtle Ambient High-Tech Atmospheric Accents */}
         <div style={{
           position: 'absolute',
@@ -561,29 +565,30 @@ export default function HeroLanding({
               VOICE AI FOR BHARAT
             </div>
 
-            {/* Giant Title: Every Voice. Better Care. with Kinetic Typography */}
+            {/* Giant Title: Voice-First Health Screening for India with Kinetic Typography */}
             <h1 className="hero-kinetic-title" style={{
               fontFamily: 'Outfit, sans-serif',
-              fontSize: '64px',
-              lineHeight: 1.08,
+              fontSize: '58px',
+              lineHeight: 1.1,
               fontWeight: 850,
               color: '#061A2D',
               letterSpacing: '-0.035em',
               textWrap: 'balance',
               marginBottom: '18px'
             }}>
-              <span className="kinetic-word" style={{ animationDelay: '0.1s' }}>Every </span>
-              <span className="kinetic-word" style={{ animationDelay: '0.24s' }}>Voice.</span>
+              <span className="kinetic-word" style={{ animationDelay: '0.08s' }}>Voice-First </span>
+              <span className="kinetic-word" style={{ animationDelay: '0.2s' }}>Health </span>
+              <span className="kinetic-word" style={{ animationDelay: '0.32s' }}>Screening </span>
               <br />
               <span className="kinetic-word" style={{ 
                 color: '#008B8B',
                 background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                animationDelay: '0.42s',
+                animationDelay: '0.45s',
                 display: 'inline-block'
               }}>
-                Better Care.
+                for India.
               </span>
             </h1>
 
@@ -4026,17 +4031,34 @@ export default function HeroLanding({
           animation: kineticWordUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        .solution-micro-card {
+          position: relative;
+          overflow: hidden;
+        }
         .solution-micro-card:hover .solution-icon-circle {
-          transform: scale(1.1) rotate(4deg);
-          box-shadow: 0 4px 14px rgba(0, 139, 139, 0.25);
+          transform: scale(1.12) translateY(-2px);
+          box-shadow: 0 6px 18px rgba(0, 139, 139, 0.32);
         }
         .solution-micro-card:hover .solution-micro-icon {
-          animation: microIconPulse 0.5s ease;
+          animation: microIconPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .solution-micro-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at center, rgba(0, 139, 139, 0.12) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+        }
+        .solution-micro-card:hover::after {
+          opacity: 1;
         }
         @keyframes microIconPulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.15); }
-          100% { transform: scale(1); }
+          0% { transform: scale(1) rotate(0deg); }
+          40% { transform: scale(1.22) rotate(6deg); }
+          75% { transform: scale(0.95) rotate(-3deg); }
+          100% { transform: scale(1) rotate(0deg); }
         }
 
         @media (prefers-reduced-motion: reduce) {
