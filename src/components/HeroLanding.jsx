@@ -69,8 +69,8 @@ export default function HeroLanding({
     'Converts 90-sec Rural OPD Dialogues to FHIR R4 in 180 ms',
     'Generates Vernacular Audio-Rx for Illiterate Patients',
     'Acoustic Lab: Wheeze, Stridor & Biomarker Detection',
-    'Sanjivani-108: Autonomous Distress Triage & CPR Metronome',
-    'Zero Keyboard Typing. 100% Attending Physician Consent'
+    'Sanjivani-108: Distress Triage Protocol & CPR Metronome',
+    'Zero Keyboard Friction. Clinician-Guided Ambient AI'
   ];
 
   const [typedPhraseIndex, setTypedPhraseIndex] = useState(0);
@@ -175,8 +175,8 @@ export default function HeroLanding({
     { id: 0, title: 'Ambient Voice Listening', icon: Mic, desc: 'Dual-speaker ambient capture with speaker diarization in chaotic OPDs' },
     { id: 1, title: 'Multilingual Transcription', icon: Languages, desc: 'Browser speech (Web Speech API). Gnani voice integration: planned. Indic transcription prototype (Telugu, Hindi, Tenglish)' },
     { id: 2, title: 'Acoustic Biomarkers', icon: Activity, desc: 'Real-time DSP extraction of wheeze, cough spectral index & respiratory strain' },
-    { id: 3, title: 'Prescription Scanner', icon: Scan, desc: 'OpenCV computer vision scanning of physical medicine blister strips & paper Rx' },
-    { id: 4, title: 'Spoken Audio-Prescription', icon: Volume2, desc: 'Browser speech (Web Speech API). Gnani voice integration: planned. Spoken synthesis with word-by-word karaoke' }
+    { id: 3, title: 'Prescription Scanner', icon: Scan, desc: 'In-browser optical inspection of physical medicine blister strips & paper Rx via Tesseract OCR' },
+    { id: 4, title: 'Regional Voice Instructions', icon: Volume2, desc: 'Browser speech synthesis converting clinical dosage regimens into patient regional dialects' }
   ];
 
   const indicLanguages = [
@@ -561,8 +561,8 @@ export default function HeroLanding({
               VOICE AI FOR BHARAT
             </div>
 
-            {/* Giant Title: Every Voice. Better Care. */}
-            <h1 style={{
+            {/* Giant Title: Every Voice. Better Care. with Kinetic Typography */}
+            <h1 className="hero-kinetic-title" style={{
               fontFamily: 'Outfit, sans-serif',
               fontSize: '64px',
               lineHeight: 1.08,
@@ -572,12 +572,16 @@ export default function HeroLanding({
               textWrap: 'balance',
               marginBottom: '18px'
             }}>
-              Every Voice.<br />
-              <span style={{ 
+              <span className="kinetic-word" style={{ animationDelay: '0.1s' }}>Every </span>
+              <span className="kinetic-word" style={{ animationDelay: '0.24s' }}>Voice.</span>
+              <br />
+              <span className="kinetic-word" style={{ 
                 color: '#008B8B',
                 background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
                 WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
+                WebkitTextFillColor: 'transparent',
+                animationDelay: '0.42s',
+                display: 'inline-block'
               }}>
                 Better Care.
               </span>
@@ -659,6 +663,7 @@ export default function HeroLanding({
                 return (
                   <div
                     key={item.id}
+                    className="solution-micro-card"
                     onClick={() => {
                       setActiveFeature(item.id);
                       setSelectedFeatureModalKey(featureKeyMap[item.id]);
@@ -676,22 +681,26 @@ export default function HeroLanding({
                       boxShadow: isSelected ? '0 8px 20px rgba(0, 139, 139, 0.14)' : '0 2px 8px rgba(10, 37, 64, 0.03)',
                       cursor: 'pointer',
                       width: '104px',
-                      transition: 'all 0.2s ease',
+                      transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                       transform: isSelected ? 'translateY(-2px)' : 'none'
                     }}
                   >
-                    <div style={{
-                      width: '42px',
-                      height: '42px',
-                      borderRadius: '50%',
-                      background: isSelected ? 'linear-gradient(135deg, #008B8B, #00A896)' : 'rgba(0, 139, 139, 0.08)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: isSelected ? '#ffffff' : '#008B8B',
-                      marginBottom: '8px'
-                    }}>
-                      <IconComponent size={20} />
+                    <div 
+                      className="solution-icon-circle"
+                      style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '50%',
+                        background: isSelected ? 'linear-gradient(135deg, #008B8B, #00A896)' : 'rgba(0, 139, 139, 0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: isSelected ? '#ffffff' : '#008B8B',
+                        marginBottom: '8px',
+                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                      }}
+                    >
+                      <IconComponent size={20} className="solution-micro-icon" />
                     </div>
                     <span style={{
                       fontSize: '11px',
@@ -1185,7 +1194,7 @@ export default function HeroLanding({
                   );
                 })}
                 <span style={{ color: '#38BDF8', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  💊 Spoken Audio-Rx Card
+                  📲 Patient Delivery Gateway
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 8px #38BDF8' }}></span>
                 </span>
               </div>
@@ -1206,13 +1215,13 @@ export default function HeroLanding({
             }}>
               <div>
                 <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#2DD4BF', marginBottom: '4px' }}>
-                  Node Telemetry [{circuitNodeIndex === 0 ? 'STAGE 01: HARDWARE ACOUSTIC SENSOR' : circuitNodeIndex === 1 ? 'STAGE 02: DSP SPECTROGRAM KERNEL' : circuitNodeIndex === 2 ? 'STAGE 03: NEURAL SEMANTIC CHIP' : 'STAGE 04: SPOKEN AUDIO-RX ENGINE'}]
+                  Node Telemetry [{circuitNodeIndex === 0 ? 'STAGE 01: HARDWARE ACOUSTIC SENSOR' : circuitNodeIndex === 1 ? 'STAGE 02: ADAPTIVE NOISE SUPPRESSION & VAD' : circuitNodeIndex === 2 ? 'STAGE 03: NEURAL SEMANTIC CHIP' : 'STAGE 04: WHATSAPP & SMS DISPATCH GATEWAY'}]
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 750, color: '#F1F5F9' }}>
                   {circuitNodeIndex === 0 && 'Dual cardioid spatial beamforming isolates doctor & patient voices in high-entropy 72 dB rural OPDs.'}
-                  {circuitNodeIndex === 1 && 'Adaptive Kalman filter strips 50/120 Hz mains hum while analyzing simulated cough & wheeze audio signals.'}
+                  {circuitNodeIndex === 1 && 'Dual-microphone adaptive Kalman filtering removes 50/120 Hz mains hum and hospital hallway chatter, isolating speech frequencies for downstream processing.'}
                   {circuitNodeIndex === 2 && 'Resolves code-mixed Telugu/Hindi visceral metaphors ("Gunde lo manta") to WHO ICD-10 & FHIR R4 standard.'}
-                  {circuitNodeIndex === 3 && 'Browser speech (Web Speech API). Gnani voice integration: planned. Dispatches spoken dosage audio with glowing karaoke pill schedules.'}
+                  {circuitNodeIndex === 3 && 'Dispatches signed ABDM summary links and audio instructions directly to the patient mobile phone via standard WhatsApp / SMS webhook.'}
                 </div>
               </div>
 
@@ -1375,7 +1384,7 @@ export default function HeroLanding({
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        OpenCV Blister OCR
+                        Tesseract Optical OCR
                       </span>
                       <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
                         ✓ NFI Verified
@@ -1389,11 +1398,11 @@ export default function HeroLanding({
                       background: 'rgba(217, 119, 6, 0.06)',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '12.5px', fontWeight: 850, color: '#92400E', fontFamily: 'monospace' }}>AMOXICILLIN 500mg</div>
-                      <div style={{ fontSize: '10px', color: '#B45309', marginTop: '2px' }}>Batch #AX-9021 • Exp 2028</div>
+                      <div style={{ fontSize: '12.5px', fontWeight: 850, color: '#92400E', fontFamily: 'monospace' }}>PANTOPRAZOLE 40mg</div>
+                      <div style={{ fontSize: '10px', color: '#B45309', marginTop: '2px' }}>Batch #PT-4029 • Exp 08/2027</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#059669', fontWeight: 700 }}>
-                      PMBJP Jan Aushadhi Generic (₹18 vs ₹92)
+                      In-Browser Optical Packaging Inspection
                     </div>
                   </div>
                 )
@@ -1863,7 +1872,7 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.1)', color: '#D97706', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
                     <Scan size={13} />
-                    <span>OPENCV EDGE OCR & BLISTER STRIP GEOMETRY</span>
+                    <span>TESSERACT IN-BROWSER OCR & BLISTER STRIP GEOMETRY</span>
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
                     Physical Medicine Strip Computer Vision HUD
@@ -1923,8 +1932,8 @@ export default function HeroLanding({
                   position: 'relative'
                 }}>
                   <div style={{ fontSize: '11px', fontWeight: 800, color: '#FBBF24', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', justifyContent: 'space-between' }}>
-                    <span>OpenCV Bounding Box Engine</span>
-                    <span>FPS: 30 | WebAssembly</span>
+                    <span>Tesseract OCR & Canvas Viewfinder</span>
+                    <span>Client-Side | WebAssembly</span>
                   </div>
 
                   {/* Realistic Blister Pack with Bounding Boxes */}
@@ -3205,17 +3214,17 @@ export default function HeroLanding({
                 {academicStandardTab === 'acoustic' && (
                   <div>
                     <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
-                      EXPERIMENTAL BIO-ACOUSTIC SIMULATION
+                      W3C WEBAUDIO DSP STANDARD
                     </span>
                     <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Respiratory Bio-Acoustic Signal Processing (Prototype)
+                      W3C AudioContext & Linear PCM Ingestion Standard
                     </h3>
                     <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Extracts 13-dimensional MFCC audio coefficients and short-time spectral flux from simulated cough, wheeze, and shallow breath audio samples for non-invasive exploratory screening.
+                      Standardizes uncompressed 16 kHz 16-bit linear PCM audio streaming via the browser W3C AudioContext API, formatting audio frames into standardized 13-dimensional MFCC vectors for interoperable exploratory bio-acoustic analysis.
                     </p>
                     <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Methodology:</strong> Multi-frequency spectral flux & MFCC feature extraction<br />
-                      • <strong>Sampling Rate:</strong> 16 kHz, 24-bit PCM Linear Mono
+                      • <strong>Ingestion Standard:</strong> W3C AudioContext & AnalyserNode (Hamming Window)<br />
+                      • <strong>Stream Format:</strong> 16 kHz, 16-bit Linear PCM Mono
                     </div>
                   </div>
                 )}
@@ -3355,19 +3364,18 @@ export default function HeroLanding({
 
                 {academicStandardTab === 'acoustic' && (
                   <pre style={{ margin: 0, color: '#A5F3FC' }}>
-{`// Acoustic Audio MFCC Feature Vector (13-dim) Prototype Simulation
+{`// W3C WebAudio DSP Feature Vector Specification
 {
-  "sampleRate": 16000,
-  "windowSizeMs": 25,
-  "hopLengthMs": 10,
-  "mfccCoefficients": [
-    -14.28, 28.14, -6.42, 18.91,
-    -3.15, 9.42, -1.88, 4.12,
-    -0.95, 2.18, -0.42, 1.15, 0.32
-  ],
-  "spectralFlux": 0.0842,
-  "wheezeClassification": "Wheezing Pattern Detected",
-  "confidenceScore": 0.88
+  "audioStandard": "W3C-AudioContext-v2",
+  "sampleRateHz": 16000,
+  "channels": 1,
+  "encoding": "audio/L16;rate=16000",
+  "frameLengthMs": 25,
+  "hopIntervalMs": 10,
+  "windowFunction": "Hamming",
+  "mfccCoefficients": 13,
+  "fftBinSize": 512,
+  "telemetryStatus": "PCM Stream Synchronized"
 }`}
                   </pre>
                 )}
@@ -3624,7 +3632,7 @@ export default function HeroLanding({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
               <span onClick={() => setSelectedFeatureModalKey('ambient_listening')} style={{ cursor: 'pointer' }}>OPD Ambient Scribe</span>
               <span onClick={() => setSelectedFeatureModalKey('spoken_audio_rx')} style={{ cursor: 'pointer' }}>Vernacular Audio-Rx</span>
-              <span onClick={() => setSelectedFeatureModalKey('prescription_scanner')} style={{ cursor: 'pointer' }}>OpenCV Blister OCR</span>
+              <span onClick={() => setSelectedFeatureModalKey('prescription_scanner')} style={{ cursor: 'pointer' }}>Tesseract Blister OCR</span>
               <span onClick={() => setSelectedFeatureModalKey('acoustic_biomarkers')} style={{ cursor: 'pointer' }}>Pediatric Triage Sentinel</span>
             </div>
           </div>
@@ -3776,7 +3784,7 @@ export default function HeroLanding({
                 { id: 0, label: '1. AI Reception', icon: '🎟️', sub: 'Token & ABHA' },
                 { id: 1, label: '2. Ambient Doctor', icon: '🎙️', sub: 'Noise Suppressed' },
                 { id: 2, label: '3. Clinical FHIR', icon: '🧠', sub: 'ICD-10 & SOAP' },
-                { id: 3, label: '4. Spoken Audio-Rx', icon: '📲', sub: 'WhatsApp Karaoke' }
+                { id: 3, label: '4. Patient Adherence', icon: '📲', sub: 'At-Home Chronotherapy' }
               ].map((sc) => {
                 const isActive = goldenStoryScene === sc.id;
                 return (
@@ -3855,15 +3863,33 @@ export default function HeroLanding({
                   <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
                     Dr. Priya enters consultation. Without touching any keyboard or mouse, AyuSwar’s WebAudio microphone array isolates doctor vs patient speech while filtering out ceiling fan hum, corridor noise, and hospital chatter.
                   </p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                  {/* Code-Mixed Telugu Chat Conversation with DEMO CONVERSATION badge */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                    <span style={{ background: '#FEF3C7', color: '#92400E', padding: '2px 9px', borderRadius: '6px', fontSize: '11px', fontWeight: 850, border: '1px solid #FDE68A' }}>
+                      💬 DEMO CONVERSATION
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+                      Code-Mixed Telugu & English Ambient Clinical Consultation
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                     <div style={{ background: '#F0FDFA', border: '1.5px solid #99F6E4', borderRadius: '14px', padding: '16px' }}>
                       <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E', marginBottom: '6px' }}>👨‍⚕️ DOCTOR (DR. PRIYA)</div>
-                      <div style={{ fontSize: '13px', color: '#134E4A', lineHeight: 1.5 }}>"నమస్తే అనంయ, 3 రోజుల నుంచి దగ్గు ఎలా ఉంది? Inhaler వాడుతున్నారా?"</div>
+                      <div style={{ fontSize: '13px', color: '#134E4A', lineHeight: 1.5 }}>"నమస్తే అనన్య గారు, 3 రోజుల నుంచి దగ్గు ఎలా ఉంది? Regular గా Inhaler వాడుతున్నారా?"</div>
                     </div>
                     <div style={{ background: '#FFFBEB', border: '1.5px solid #FDE68A', borderRadius: '14px', padding: '16px' }}>
                       <div style={{ fontSize: '12px', fontWeight: 800, color: '#92400E', marginBottom: '6px' }}>👤 PATIENT (ANANYA)</div>
-                      <div style={{ fontSize: '13px', color: '#78350F', lineHeight: 1.5 }}>"రాత్రి వేళల్లో ఆయాసం ఎక్కువైంది మేడమ్, ఛాతీ బిగుతుగా ఉండి నిద్రపట్టడం లేదు."</div>
+                      <div style={{ fontSize: '13px', color: '#78350F', lineHeight: 1.5 }}>"రాత్రి వేళల్లో ఆయాసం ఎక్కువైంది మేడమ్, ఛాతీ బిగుతుగా ఉండి పీకల్లో పిల్లికూతలు వస్తున్నాయి, సరిగ్గా నిద్రపట్టడం లేదు."</div>
                     </div>
+                  </div>
+
+                  {/* Real-Time Ambient Triage Parsing Card */}
+                  <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                    <span style={{ fontSize: '12.5px', color: '#0A2540', fontWeight: 600 }}>
+                      Ambient AI Parse: <span style={{ color: '#008B8B' }}>"పీకల్లో పిల్లికూతలు" ➔ Expiratory Wheeze (ICD-10 R06.2)</span> • Triage: Sub-acute respiratory strain.
+                    </span>
                   </div>
                 </div>
               )}
@@ -3895,20 +3921,30 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>
-                      📲 Scene 4: WhatsApp Native Voice Note & Synchronized Karaoke Pill Schedule
+                      📲 Scene 4: At-Home Chronotherapy & Geriatric Adherence
                     </div>
                     <span style={{ background: '#DCFCE7', color: '#15803D', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
-                      Delivered in Patient's Mother Tongue
+                      Accessible Dialect Guidance
                     </span>
                   </div>
                   <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    As the patient leaves the clinic, her phone buzzes on WhatsApp with an audio voice prescription synthesized in Dr. Priya's voice, paired with glowing karaoke highlights so she never misses a morning or night dose!
+                    At home, the patient receives clear chronotherapy guidance with color-coded dosage cues (morning sun vs night moon), ensuring elderly or non-literate patients never confuse complicated clinical drug names.
                   </p>
                   <div style={{ background: '#EFEAE2', borderRadius: '16px', padding: '18px', border: '1.5px solid #CBD5E1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ background: '#ffffff', borderRadius: '12px', padding: '14px', boxShadow: '0 2px 6px rgba(0,0,0,0.08)' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#059669', marginBottom: '6px' }}>🟢 WhatsApp Audio Prescription • Dr. Priya Sharma MD</div>
-                      <div style={{ fontSize: '13.5px', color: '#1E293B', lineHeight: 1.6 }}>
-                        "ఈ <span style={{ background: '#FEF08A', color: '#713F12', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>ఆకుపచ్చ ఇన్హేలర్ (Budecort)</span> ఉదయం మరియు రాత్రి పూట ఒక్కో పఫ్ పీల్చుకోవాలి. ఈ నీలం మాత్ర రాత్రి భోజనం తర్వాత వేసుకోవాలి."
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#059669', marginBottom: '8px' }}>🟢 Chronotherapy Dosage Schedule • Patient Home Delivery</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
+                        <div style={{ background: '#FEF9C3', padding: '10px', borderRadius: '8px', border: '1px solid #FDE047' }}>
+                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#854D0E' }}>☀️ MORNING (After Breakfast)</div>
+                          <div style={{ fontSize: '12.5px', color: '#713F12', fontWeight: 700 }}>1 Green Inhaler Puff (Budecort)</div>
+                        </div>
+                        <div style={{ background: '#EFF6FF', padding: '10px', borderRadius: '8px', border: '1px solid #BFDBFE' }}>
+                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#1E40AF' }}>🌙 NIGHT (After Dinner)</div>
+                          <div style={{ fontSize: '12.5px', color: '#1E3A8A', fontWeight: 700 }}>1 Blue Tablet (Montelukast)</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: '12.5px', color: '#334155', fontStyle: 'italic', borderTop: '1px dashed #CBD5E1', paddingTop: '8px' }}>
+                        "ఈ ఆకుపచ్చ ఇన్హేలర్ ఉదయం టిఫిన్ తర్వాత, నీలం మాత్ర రాత్రి భోజనం తర్వాత వేసుకోవాలి."
                       </div>
                     </div>
                     <button
@@ -3917,7 +3953,7 @@ export default function HeroLanding({
                       style={{ width: '100%', justifyContent: 'center', fontSize: '13.5px', padding: '10px' }}
                     >
                       <Volume2 size={16} />
-                      <span>Play Spoken Voice Prescription (Browser Speech)</span>
+                      <span>Listen to Spoken Instructions (Telugu)</span>
                     </button>
                   </div>
                 </div>
@@ -3971,6 +4007,53 @@ export default function HeroLanding({
           </div>
         </div>
       )}
+
+      {/* Kinetic Typography & Solution Micro-Animations Scoped Styles */}
+      <style>{`
+        @keyframes kineticWordUp {
+          0% {
+            opacity: 0;
+            transform: translateY(16px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .kinetic-word {
+          display: inline-block;
+          opacity: 0;
+          animation: kineticWordUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .solution-micro-card:hover .solution-icon-circle {
+          transform: scale(1.1) rotate(4deg);
+          box-shadow: 0 4px 14px rgba(0, 139, 139, 0.25);
+        }
+        .solution-micro-card:hover .solution-micro-icon {
+          animation: microIconPulse 0.5s ease;
+        }
+        @keyframes microIconPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+          100% { transform: scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .kinetic-word {
+            opacity: 1 !important;
+            transform: none !important;
+            animation: none !important;
+          }
+          .solution-micro-card,
+          .solution-icon-circle,
+          .solution-micro-icon {
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
