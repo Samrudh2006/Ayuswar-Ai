@@ -35,6 +35,7 @@ import {
   User,
   Stethoscope
 } from 'lucide-react';
+import SolutionUiTourModal from './SolutionUiTourModal';
 
 /**
  * OpdDualSpeakerStudio
@@ -631,6 +632,7 @@ export default function DetailedModuleView({
   const effectiveModuleId = routeModuleId || propModuleId || 'opd_ambient_scribe';
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isTourModalOpen, setIsTourModalOpen] = useState(false);
 
   // Scroll to top when module or page changes
   useEffect(() => {
@@ -1758,6 +1760,27 @@ export default function DetailedModuleView({
                 <span>{currentModule.interactiveActionLabel}</span>
               </button>
             )}
+
+            <button
+              onClick={() => setIsTourModalOpen(true)}
+              style={{
+                padding: '9px 16px',
+                background: '#0F172A',
+                color: '#FFFFFF',
+                fontWeight: 750,
+                fontSize: '12px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <Sparkles size={14} color="#2DD4BF" />
+              <span>Interactive UI Tour</span>
+            </button>
           </div>
         </div>
       </div>
@@ -1984,6 +2007,12 @@ export default function DetailedModuleView({
           </div>
         </div>
       </div>
+
+      {/* Interactive Guided UI Cursor Tour Modal */}
+      <SolutionUiTourModal 
+        isOpen={isTourModalOpen} 
+        onClose={() => setIsTourModalOpen(false)} 
+      />
     </div>
   );
 }
