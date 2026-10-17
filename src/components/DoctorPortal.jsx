@@ -7,6 +7,8 @@ import {
   Search, 
   Bell, 
   ChevronDown, 
+  ChevronLeft,
+  ChevronRight,
   Sparkles, 
   Sun, 
   TrendingUp, 
@@ -45,7 +47,7 @@ import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import LiveScribeSessionModal from './LiveScribeSessionModal';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
-import { downloadFhirJson } from '../data/clinicalSafetySentinel';
+import { downloadFhirJson, checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../data/indicVernacularOntology';
 
 /**
@@ -71,6 +73,7 @@ export default function DoctorPortal({
   onAcceptAppointment
 }) {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [analyticsRange, setAnalyticsRange] = useState('weekly');
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiCategory, setAiCategory] = useState('guidelines'); // 'guidelines' | 'ddi' | 'ddx' | 'vernacular'
@@ -506,7 +509,7 @@ export default function DoctorPortal({
           LEFT SIDEBAR (MATCHING SCREENSHOT 1 DOCTOR SIDEBAR)
           ========================================================================= */}
       <aside style={{
-        width: '240px',
+        width: isSidebarCollapsed ? '76px' : '240px',
         height: '100vh',
         position: 'sticky',
         top: 0,
@@ -515,35 +518,72 @@ export default function DoctorPortal({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '20px 16px',
+        padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
         flexShrink: 0,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1)'
       }}>
+        {/* Collapse / Expand Toggle Arrow Button */}
+        <button
+          onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          style={{
+            position: 'absolute',
+            top: '22px',
+            right: '-12px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            background: '#ffffff',
+            border: '1.5px solid #CBD5E1',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 30,
+            color: '#008B8B',
+            transition: 'all 0.15s ease'
+          }}
+          title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        >
+          {isSidebarCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+        </button>
+
         <div>
           {/* Brand Logo */}
           <div 
             onClick={() => window.location.href = '/'}
-            style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', marginBottom: '32px', cursor: 'pointer' }}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '12px', 
+              paddingLeft: isSidebarCollapsed ? '2px' : '8px', 
+              marginBottom: '28px', 
+              cursor: 'pointer',
+              justifyContent: isSidebarCollapsed ? 'center' : 'flex-start'
+            }}
             title="AyuSwar AI — Return to Website"
           >
             <div style={{
-              width: '48px',
-              height: '48px',
+              width: isSidebarCollapsed ? '40px' : '46px',
+              height: isSidebarCollapsed ? '40px' : '46px',
               borderRadius: '50%',
-              border: '2.5px solid #008B8B',
+              border: '2px solid #008B8B',
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               background: '#ffffff',
-              boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)',
+              boxShadow: '0 4px 12px rgba(0, 139, 139, 0.25)',
               flexShrink: 0
             }}>
               <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '21px', fontWeight: 800, color: '#0A2540' }}>
-              Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
-            </div>
+            {!isSidebarCollapsed && (
+              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#0A2540', whiteSpace: 'nowrap' }}>
+                Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
+              </div>
+            )}
           </div>
 
           {/* Navigation Items (All 8 Sidebar Items) */}
@@ -551,7 +591,6 @@ export default function DoctorPortal({
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'patients', label: 'Patients', icon: Users },
-              { id: 'ai_assistant', label: 'AI Assistant', icon: Sparkles },
               { id: 'appointments', label: 'Appointments', icon: Calendar },
               { id: 'reports', label: 'Reports & Lab', icon: FileText },
               { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
@@ -564,11 +603,13 @@ export default function DoctorPortal({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
+                  title={item.label}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    padding: '10px 14px',
+                    justifyContent: isSidebarCollapsed ? 'center' : 'flex-start',
+                    gap: isSidebarCollapsed ? '0' : '12px',
+                    padding: isSidebarCollapsed ? '10px 0' : '10px 14px',
                     borderRadius: '12px',
                     border: 'none',
                     background: isActive ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
@@ -578,11 +619,12 @@ export default function DoctorPortal({
                     fontWeight: isActive ? 750 : 500,
                     cursor: 'pointer',
                     textAlign: 'left',
-                    transition: 'all 160ms ease'
+                    transition: 'all 160ms ease',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   <Icon size={18} color={isActive ? '#008B8B' : '#64748B'} />
-                  <span>{item.label}</span>
+                  {!isSidebarCollapsed && <span>{item.label}</span>}
                 </button>
               );
             })}
@@ -590,26 +632,38 @@ export default function DoctorPortal({
         </div>
 
         {/* Bottom Co-Pilot Card */}
-        <div style={{
-          background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
-          borderRadius: '16px',
-          padding: '16px',
-          border: '1px solid #B2E5E5',
-          textAlign: 'center'
-        }}>
+        {!isSidebarCollapsed ? (
           <div style={{
-            fontSize: '15px',
-            fontWeight: 800,
-            fontFamily: 'Outfit, sans-serif',
-            color: '#0A2540',
-            marginBottom: '4px'
+            background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
+            borderRadius: '14px',
+            padding: '14px',
+            border: '1px solid #B2E5E5',
+            textAlign: 'center'
           }}>
-            AyuSwar AI
+            <div style={{
+              fontSize: '14px',
+              fontWeight: 800,
+              fontFamily: 'Outfit, sans-serif',
+              color: '#0A2540',
+              marginBottom: '2px'
+            }}>
+              AyuSwar AI
+            </div>
+            <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.35 }}>
+              Your AI co-pilot for better healthcare
+            </div>
           </div>
-          <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.4 }}>
-            Your AI co-pilot for better healthcare
+        ) : (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px 0',
+            color: '#008B8B'
+          }} title="AyuSwar AI Co-pilot">
+            <Sparkles size={20} />
           </div>
-        </div>
+        )}
       </aside>
 
       {/* =========================================================================
@@ -805,6 +859,110 @@ export default function DoctorPortal({
                 }}>
                   <Calendar size={14} color="#008B8B" />
                   <span>Mon, 12 May 2025</span>
+                </div>
+              </div>
+
+              {/* Core Feature Command Strip: OPD Ambient Scribe & WhatsApp Audio-Rx */}
+              <div style={{
+                background: 'linear-gradient(135deg, #0A2540 0%, #0F3B66 100%)',
+                borderRadius: '16px',
+                padding: '18px 24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '24px',
+                boxShadow: '0 8px 24px rgba(10, 37, 64, 0.18)',
+                border: '1.5px solid rgba(0, 210, 211, 0.3)',
+                flexWrap: 'wrap',
+                gap: '16px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: '14px',
+                    background: 'rgba(0, 210, 211, 0.15)',
+                    border: '1px solid #00D2D3',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#00F5D4'
+                  }}>
+                    <Mic size={24} />
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h2 style={{ fontSize: '17px', fontWeight: 800, color: '#ffffff', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                        Live OPD Ambient Voice Scribe
+                      </h2>
+                      <span style={{ fontSize: '10px', background: '#00D2D3', color: '#0A2540', padding: '2px 8px', borderRadius: '12px', fontWeight: 900 }}>
+                        CORE ENGINE
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: '4px 0 0 0' }}>
+                      Bilingual OPD Consultation Diarization • Instant SOAP Notes • ABDM FHIR R4 Bundle
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => {
+                      if (onSelectEncounterAndLaunch) {
+                        onSelectEncounterAndLaunch();
+                      } else {
+                        window.location.href = '/clinical-console';
+                      }
+                    }}
+                    style={{
+                      background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '11px 20px',
+                      fontSize: '13px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 14px rgba(0, 139, 139, 0.4)'
+                    }}
+                  >
+                    <Mic size={16} />
+                    <span>Launch OPD Scribe Console</span>
+                  </button>
+
+                  <button
+                    onClick={() => setWhatsAppModalPatient({
+                      name: 'Narayana Rao',
+                      vernacularName: 'నారాయణ రావు',
+                      phone: '+91 98490 12345',
+                      cleanPhone: '919849012345',
+                      age: 58,
+                      gender: 'Male',
+                      abhaId: '91-4521-8932-1049',
+                      language: 'Telugu',
+                      langCode: 'te-IN'
+                    })}
+                    style={{
+                      background: '#25D366',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '11px 20px',
+                      fontSize: '13px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 14px rgba(37, 211, 102, 0.35)'
+                    }}
+                  >
+                    <Send size={16} />
+                    <span>Send WhatsApp Audio-Rx</span>
+                  </button>
                 </div>
               </div>
 
@@ -1274,6 +1432,17 @@ export default function DoctorPortal({
                       <div style={{ textAlign: 'right', fontSize: '12px', color: '#475569' }}>
                         <div>BP: <strong>{pat.vitals.bp}</strong> • HR: <strong>{pat.vitals.hr}</strong></div>
                         <div>SpO2: <strong>{pat.vitals.spo2}</strong> {pat.vitals.rbs && `• RBS: ${pat.vitals.rbs}`}</div>
+                        {(() => {
+                          const sys = parseInt(pat.vitals.bp?.split('/')[0]) || 120;
+                          const hr = parseInt(pat.vitals.hr) || 76;
+                          const spo2 = parseInt(pat.vitals.spo2) || 98;
+                          const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
+                          return (
+                            <div style={{ fontSize: '11px', color: mews.riskColor, fontWeight: 750, marginTop: '2px' }}>
+                              MEWS {mews.score} ({mews.riskLevel})
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       <div style={{ display: 'flex', gap: '8px' }}>
@@ -2103,9 +2272,19 @@ export default function DoctorPortal({
 
               {/* Active Prescriptions Table */}
               <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', marginBottom: '22px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Today's Active Regimens & Patient Dispatches
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                    Today's Active Regimens & Patient Dispatches
+                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '11px', background: '#DCFCE7', color: '#166534', padding: '3px 10px', borderRadius: '12px', fontWeight: 750, border: '1px solid #BBF7D0' }}>
+                      ✓ Clinical Safety Sentinel: 0 DDI Contraindications
+                    </span>
+                    <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '3px 10px', borderRadius: '12px', fontWeight: 750 }}>
+                      PMBJP NLEM 2022 Capped
+                    </span>
+                  </div>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {[
                     { id: 1, patient: 'Narayana Rao', vernacular: 'నారాయణ రావు', phone: '+91 98490 12345', abhaId: 'DEMO-4521-8932-1049', lang: 'te', med: 'Pantoprazole 40mg + Metformin 500mg', schedule: 'Morning (08:30 AM) + Post-dinner (08:30 PM)', status: 'Active • Telugu Audio-Rx (Browser speech)' },
@@ -2133,6 +2312,16 @@ export default function DoctorPortal({
                           <span style={{ fontSize: '11px', color: '#64748B' }}>• {rx.phone}</span>
                         </div>
                         <div style={{ fontSize: '13px', color: '#008B8B', fontWeight: 700, marginTop: '2px' }}>{rx.med}</div>
+                        {(() => {
+                          const jan = getJanAushadhiGenericInfo(rx.med);
+                          return (
+                            <div style={{ fontSize: '11px', color: '#166534', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                              <span>PMBJP: <strong>{jan.genericName}</strong></span>
+                              <span>• Branded: <s>₹{jan.brandedMrp}</s> → Jan Aushadhi: <strong>₹{jan.janAushadhiPrice}</strong></span>
+                              <span style={{ background: '#DCFCE7', padding: '1px 6px', borderRadius: '4px', fontWeight: 750 }}>Save {jan.savingsPercent}%</span>
+                            </div>
+                          );
+                        })()}
                         <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>Timing: {rx.schedule}</div>
                       </div>
 

@@ -49,9 +49,50 @@ export function AppProvider({ children }) {
     }
   }, [isDemoMode]);
 
-  // Authenticated demo profiles (null by default in live mode)
-  const [doctorProfile, setDoctorProfile] = useState(null);
-  const [patientProfile, setPatientProfile] = useState(null);
+  // Authenticated demo profiles (null by default in live mode, preserved during tab navigation)
+  const [doctorProfile, setDoctorProfileState] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('ayuswar_doctor_profile');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const setDoctorProfile = useCallback((profile) => {
+    setDoctorProfileState(profile);
+    try {
+      if (profile) {
+        sessionStorage.setItem('ayuswar_doctor_profile', JSON.stringify(profile));
+      } else {
+        sessionStorage.removeItem('ayuswar_doctor_profile');
+      }
+    } catch (e) {
+      console.warn('Could not persist doctor profile:', e);
+    }
+  }, []);
+
+  const [patientProfile, setPatientProfileState] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('ayuswar_patient_profile');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const setPatientProfile = useCallback((profile) => {
+    setPatientProfileState(profile);
+    try {
+      if (profile) {
+        sessionStorage.setItem('ayuswar_patient_profile', JSON.stringify(profile));
+      } else {
+        sessionStorage.removeItem('ayuswar_patient_profile');
+      }
+    } catch (e) {
+      console.warn('Could not persist patient profile:', e);
+    }
+  }, []);
 
   // Active ASR/TTS Speech Provider Status
   const [speechProviderStatus, setSpeechProviderStatus] = useState({

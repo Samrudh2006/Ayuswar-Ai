@@ -10,6 +10,7 @@ import FloatingAssistant from './components/FloatingAssistant';
 import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
+import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
 import SeoHead from './components/SeoHead';
 
 // Dedicated Full-Page Routed Views
@@ -23,8 +24,7 @@ import DatasetExplorerView from './views/DatasetExplorerView';
 import EmergencyTriageView from './views/EmergencyTriageView';
 import EmergencyHandoverView from './views/EmergencyHandoverView';
 import PrescriptionPreviewView from './views/PrescriptionPreviewView';
-import DoctorProfileSelectView from './views/DoctorProfileSelectView';
-import PatientProfileSelectView from './views/PatientProfileSelectView';
+
 
 import { useApp } from './context/AppContext';
 
@@ -40,6 +40,7 @@ export default function App() {
   const [isSanjivaniModalOpen, setIsSanjivaniModalOpen] = useState(false);
   const [isDoctorAuthModalOpen, setIsDoctorAuthModalOpen] = useState(false);
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
+  const [isWhatsAppAudioRxModalOpen, setIsWhatsAppAudioRxModalOpen] = useState(false);
 
   const handleDoctorLoginSuccess = (docProfile) => {
     setCurrentDoctor(docProfile);
@@ -177,40 +178,64 @@ export default function App() {
           {/* ABDM FHIR R4 Prescription Preview */}
           <Route path="/prescription/preview" element={<PrescriptionPreviewView />} />
 
-          {/* Sandbox Profile Selection */}
-          <Route path="/auth/doctor" element={<DoctorProfileSelectView />} />
-          <Route path="/auth/patient" element={<PatientProfileSelectView />} />
+          {/* Legacy Sandbox Routes Redirect to Home */}
+          <Route path="/auth/doctor" element={<Navigate to="/" replace />} />
+          <Route path="/auth/patient" element={<Navigate to="/" replace />} />
 
-          {/* Doctor & Patient Portals */}
+          {/* Doctor & Patient Portals (Strict Authentication Required - No bypass) */}
           <Route 
             path="/doctor-portal" 
             element={
-              <DoctorPortal 
-                doctorProfile={currentDoctor} 
-                onSelectEncounterAndLaunch={() => navigate('/clinical-console')}
-                onOpenTechModal={() => navigate('/technology')}
-                onOpenDatasetModal={() => navigate('/datasets')}
-                onLogoutDoctor={() => navigate('/auth/doctor')}
-              />
+              currentDoctor ? (
+                <DoctorPortal 
+                  doctorProfile={currentDoctor} 
+                  onSelectEncounterAndLaunch={() => navigate('/clinical-console')}
+                  onOpenTechModal={() => navigate('/technology')}
+                  onOpenDatasetModal={() => navigate('/datasets')}
+                  onLogoutDoctor={() => {
+                    setCurrentDoctor(null);
+                    navigate('/');
+                  }}
+                />
+              ) : (
+                <Navigate to="/" replace />
+              )
             } 
           />
           <Route 
             path="/patient-portal" 
             element={
-              <PatientPortal 
-                patientProfile={currentPatient} 
-                onOpenDoctorAuthModal={() => navigate('/doctor-portal')}
-                onLogoutPatient={() => navigate('/auth/patient')}
-                onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
-              />
+              currentPatient ? (
+                <PatientPortal 
+                  patientProfile={currentPatient} 
+                  onOpenDoctorAuthModal={() => {
+                    if (currentDoctor) {
+                      navigate('/doctor-portal');
+                    } else {
+                      setIsDoctorAuthModalOpen(true);
+                    }
+                  }}
+                  onLogoutPatient={() => {
+                    setCurrentPatient(null);
+                    navigate('/');
+                  }}
+                  onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
+                />
+              ) : (
+                <Navigate to="/" replace />
+              )
             } 
           />
           <Route 
             path="/clinical-console" 
             element={
-              <ClinicalConsole 
-                doctorProfile={currentDoctor} 
-              />
+              currentDoctor ? (
+                <ClinicalConsole 
+                  doctorProfile={currentDoctor} 
+                />
+              ) : (
+                <Navigate to="/" replace />
+              )
             } 
           />
 
@@ -259,17 +284,47 @@ export default function App() {
         onLoginSuccess={handlePatientLoginSuccess}
       />
 
-      {/* Floating Ambient Voice Assistant (Always active across portals, hidden only during Sanjivani modal) */}
+      {/* Floating Ambient Voice Assistant (Role-aware across landing, doctor, and patient portals) */}
       {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
         <FloatingAssistant 
-          activeView="landing"
+          activeView={
+            location.pathname.startsWith('/doctor-portal') 
+              ? 'doctor_portal' 
+              : (location.pathname.startsWith('/patient-portal') 
+                ? 'patient_portal' 
+                : (location.pathname.startsWith('/clinical-console') ? 'console' : 'landing'))
+          }
           doctorProfile={currentDoctor}
-          patientProfile={currentPatient}
-          onOpenDoctorPortal={() => setIsDoctorAuthModalOpen(true)}
-          onOpenPatientPortal={() => setIsPatientAuthModalOpen(true)}
           onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
+          onOpenClinicalConsole={() => {
+            if (currentDoctor) {
+              navigate('/clinical-console');
+            } else {
+              setIsDoctorAuthModalOpen(true);
+            }
+          }}
+          onOpenWhatsAppRx={() => setIsWhatsAppAudioRxModalOpen(true)}
         />
       )}
+
+      {/* Universal WhatsApp Vernacular Spoken Audio-Rx Modal */}
+      <WhatsAppAudioRxModal 
+        isOpen={isWhatsAppAudioRxModalOpen}
+        onClose={() => setIsWhatsAppAudioRxModalOpen(false)}
+        patientData={{
+          name: currentPatient?.patientName || 'Narayana Rao',
+          vernacularName: 'నారాయణ రావు',
+          phone: '+91 98490 12345',
+          cleanPhone: '919849012345',
+          age: currentPatient?.age || 58,
+          gender: currentPatient?.gender || 'Male',
+          abhaId: currentPatient?.abhaId || '91-4521-8932-1049',
+          language: currentPatient?.language || 'Telugu',
+          langCode: 'te-IN'
+        }}
+        doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+        initialLanguage="te"
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Play, 
   Pause, 
@@ -37,6 +38,7 @@ import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
  * colloquial-to-ICD10 ontology mapping, vernacular karaoke speech, and ABDM FHIR R4 export.
  */
 export default function ClinicalConsole({ doctorProfile, initialEncounterIndex = 0 }) {
+  const navigate = useNavigate();
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(initialEncounterIndex);
   const currentEncounter = CLINICAL_ENCOUNTERS[selectedEncounterIndex];
 
@@ -128,17 +130,122 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
     }
   };
 
-  // Toggle Live Microphone
-  const toggleLiveMic = () => {
+  // Real Physical Microphone & WebAudio FFT Analyser
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const mediaStreamRef = useRef(null);
+  const speechRecognitionRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const [liveTranscriptionText, setLiveTranscriptionText] = useState('');
+  const [micStatusMsg, setMicStatusMsg] = useState('');
+  const [customTurns, setCustomTurns] = useState([]);
+
+  // Toggle Live Physical Microphone & Continuous Speech Recognition
+  const toggleLiveMic = async () => {
     if (isLiveMicActive) {
+      // Cleanly stop all streams and audio contexts
       setIsLiveMicActive(false);
+      setMicStatusMsg('');
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       if (micIntervalRef.current) clearInterval(micIntervalRef.current);
-      setMicVolume(20);
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(t => t.stop());
+        mediaStreamRef.current = null;
+      }
+      if (audioContextRef.current) {
+        try { audioContextRef.current.close(); } catch {}
+        audioContextRef.current = null;
+      }
+      if (speechRecognitionRef.current) {
+        try { speechRecognitionRef.current.stop(); } catch {}
+        speechRecognitionRef.current = null;
+      }
+      setMicVolume(0);
     } else {
-      setIsLiveMicActive(true);
-      micIntervalRef.current = setInterval(() => {
-        setMicVolume(Math.floor(30 + Math.random() * 60));
-      }, 100);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+
+        // 1. Real WebAudio FFT Frequency Analysis
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioCtxClass();
+        audioContextRef.current = audioCtx;
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+        analyserRef.current = analyser;
+        const source = audioCtx.createMediaStreamSource(stream);
+        source.connect(analyser);
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const updateRealVolume = () => {
+          if (!analyserRef.current) return;
+          analyserRef.current.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          const avg = sum / dataArray.length;
+          const realDb = Math.min(100, Math.round((avg / 128) * 100));
+          setMicVolume(realDb);
+          animationFrameRef.current = requestAnimationFrame(updateRealVolume);
+        };
+        updateRealVolume();
+        setIsLiveMicActive(true);
+        setMicStatusMsg('Physical Microphone Active — Speak to Scribe Note');
+
+        // 2. Real Continuous Web Speech Recognition
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRec) {
+          const rec = new SpeechRec();
+          rec.continuous = true;
+          rec.interimResults = true;
+          rec.lang = currentEncounter.langCode || 'en-IN';
+
+          rec.onresult = (e) => {
+            let interim = '';
+            let finalStr = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const transcript = e.results[i][0].transcript;
+              if (e.results[i].isFinal) {
+                finalStr += transcript + ' ';
+              } else {
+                interim += transcript;
+              }
+            }
+            if (finalStr.trim()) {
+              setCustomTurns(prev => [
+                ...prev,
+                {
+                  speaker: 'Doctor (Physical Mic)',
+                  text: finalStr.trim(),
+                  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                }
+              ]);
+              setLiveTranscriptionText('');
+            } else if (interim.trim()) {
+              setLiveTranscriptionText(interim.trim());
+            }
+          };
+
+          rec.onerror = (err) => {
+            console.warn('Speech recognition warning:', err.error);
+          };
+
+          rec.onend = () => {
+            if (mediaStreamRef.current && speechRecognitionRef.current) {
+              try { speechRecognitionRef.current.start(); } catch {}
+            }
+          };
+
+          speechRecognitionRef.current = rec;
+          try { rec.start(); } catch {}
+        }
+      } catch (err) {
+        console.warn('Physical microphone access error, using client audio generator:', err);
+        setMicStatusMsg('Hardware mic permission not granted. Running local audio frequency simulator.');
+        setIsLiveMicActive(true);
+        micIntervalRef.current = setInterval(() => {
+          setMicVolume(Math.floor(25 + Math.sin(Date.now() * 0.003) * 20));
+        }, 150);
+      }
     }
   };
 
@@ -147,6 +254,16 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
       if (dialogueTimerRef.current) clearInterval(dialogueTimerRef.current);
       if (micIntervalRef.current) clearInterval(micIntervalRef.current);
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(t => t.stop());
+      }
+      if (audioContextRef.current) {
+        try { audioContextRef.current.close(); } catch {}
+      }
+      if (speechRecognitionRef.current) {
+        try { speechRecognitionRef.current.stop(); } catch {}
+      }
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     };
   }, []);
@@ -156,7 +273,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       {/* Top Clinical Navigation Bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
         <button
-          onClick={() => window.location.href = '/doctor-portal'}
+          onClick={() => navigate('/doctor-portal')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -349,7 +466,10 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minHeight: '180px' }}>
-              {currentEncounter.dialogue.slice(0, visibleDialogueCount).map((turn, i) => {
+              {[
+                ...currentEncounter.dialogue.slice(0, visibleDialogueCount),
+                ...customTurns
+              ].map((turn, i) => {
                 const isDoc = turn.speaker.includes('Doctor');
                 return (
                   <div
@@ -373,6 +493,30 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                   </div>
                 );
               })}
+
+              {liveTranscriptionText && (
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  background: 'rgba(0, 139, 139, 0.08)',
+                  border: '1.5px dashed #008B8B',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  animation: 'pulse 1.5s infinite'
+                }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
+                  <div style={{ fontSize: '13.5px', color: '#008B8B', fontWeight: 650 }}>
+                    Listening: "{liveTranscriptionText}..."
+                  </div>
+                </div>
+              )}
+
+              {micStatusMsg && (
+                <div style={{ fontSize: '11px', color: '#64748B', fontStyle: 'italic', padding: '2px 4px' }}>
+                  ℹ️ {micStatusMsg}
+                </div>
+              )}
             </div>
           </div>
 

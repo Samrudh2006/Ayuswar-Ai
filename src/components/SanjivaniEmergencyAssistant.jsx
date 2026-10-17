@@ -27,7 +27,6 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
-import DoctorAvatarVideoCall from './DoctorAvatarVideoCall';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -438,32 +437,151 @@ export default function SanjivaniEmergencyAssistant({
         </button>
       </div>
 
-      {/* SECTION 1: LIVE 108 TELE-TRAUMA DOCTOR VIDEO STREAM */}
+      {/* SECTION 1: LIVE 108 TELE-TRAUMA ACOUSTIC DISPATCH & AUDIO STREAM (NO AVATAR) */}
       <div style={{
-        background: '#050B16',
-        borderBottom: '1px solid #16243C',
-        padding: '8px 10px',
+        background: 'linear-gradient(135deg, #0A1120 0%, #111D33 100%)',
+        borderBottom: '1px solid #1E293B',
+        padding: '14px 18px',
         flexShrink: 0
       }}>
-        <DoctorAvatarVideoCall
-          mode="emergency"
-          doctorName="Dr. Sanjivani — 108 Lead"
-          doctorRole="Critical ALS Tele-Trauma Consultant"
-          avatarUrl="/assets/sanjivani_doctor_avatar.jpg"
-          isSpeaking={callStatus === 'connected' && !isAudioMuted}
-          isListening={isMicListening}
-          liveSubtitle={liveTranscript}
-          englishTranslation={englishTranslation}
-          language="te-IN"
-          elapsedSeconds={elapsedSec}
-          isAudioMuted={isAudioMuted}
-          onToggleMute={handleToggleMute}
-          isMicActive={isMicListening}
-          onToggleMic={toggleSpeechRecognition}
-          onEndCall={handleEndCall}
-          patientName="Ambulance A-12 (EMT)"
-          emergencyMeta={{ cprBpm: 110, distress: distressIndex, unit: 'A-12' }}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1.5px solid #EF4444',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#EF4444',
+              boxShadow: '0 0 16px rgba(239, 68, 68, 0.35)'
+            }}>
+              <Activity size={20} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 850, color: '#FFFFFF', fontFamily: 'Outfit, sans-serif' }}>
+                  108 ALS Acoustic Telemetry
+                </span>
+                <span style={{
+                  fontSize: '9.5px',
+                  background: '#EF4444',
+                  color: '#FFFFFF',
+                  padding: '2px 8px',
+                  borderRadius: '10px',
+                  fontWeight: 900,
+                  letterSpacing: '0.05em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FFFFFF' }}></span>
+                  LIVE TELE-TRAUMA
+                </span>
+              </div>
+              <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '2px' }}>
+                Dr. Sanjivani (ALS Consultant) • Ambulance A-12 Dispatch Lead
+              </div>
+            </div>
+          </div>
+
+          {/* Call Controls & Timer */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{
+              background: '#0F172A',
+              border: '1px solid #334155',
+              padding: '5px 12px',
+              borderRadius: '20px',
+              color: '#38BDF8',
+              fontSize: '12.5px',
+              fontFamily: 'monospace',
+              fontWeight: 800
+            }}>
+              ⏱️ {String(Math.floor(elapsedSec / 60)).padStart(2, '0')}:{String(elapsedSec % 60).padStart(2, '0')}
+            </div>
+
+            <button
+              onClick={toggleSpeechRecognition}
+              style={{
+                background: isMicListening ? '#EF4444' : '#1E293B',
+                color: '#FFFFFF',
+                border: isMicListening ? 'none' : '1px solid #475569',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: isMicListening ? '0 0 12px rgba(239, 68, 68, 0.5)' : 'none'
+              }}
+              title={isMicListening ? "Microphone Active (Listening)" : "Unmute Microphone"}
+            >
+              {isMicListening ? <Mic size={16} /> : <MicOff size={16} />}
+            </button>
+
+            <button
+              onClick={handleToggleMute}
+              style={{
+                background: isAudioMuted ? '#EF4444' : '#1E293B',
+                color: '#FFFFFF',
+                border: isAudioMuted ? 'none' : '1px solid #475569',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              title={isAudioMuted ? "Speaker Muted" : "Mute Speaker"}
+            >
+              {isAudioMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+            </button>
+
+            <button
+              onClick={handleEndCall}
+              style={{
+                background: '#EF4444',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '20px',
+                padding: '6px 14px',
+                fontSize: '11.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <PhoneOff size={13} />
+              <span>End Call</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Live Subtitle Transcript Banner */}
+        <div style={{
+          background: '#090D16',
+          border: '1px solid #1E293B',
+          borderRadius: '8px',
+          padding: '8px 12px',
+          fontSize: '12px',
+          color: '#E2E8F0',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <span style={{ fontSize: '9.5px', background: '#334155', color: '#94A3B8', padding: '2px 5px', borderRadius: '4px', fontWeight: 800, textTransform: 'uppercase' }}>
+            Live Diarization
+          </span>
+          <span style={{ fontStyle: 'italic', color: liveTranscript ? '#38BDF8' : '#64748B' }}>
+            {liveTranscript || 'Listening to emergency paramedic and triage audio stream...'}
+          </span>
+        </div>
       </div>
 
       {/* SECTION 2: AUTONOMOUS COPILOT ACTIONS & FIRST-AID GUIDANCE (FULLY FUNCTIONAL) */}

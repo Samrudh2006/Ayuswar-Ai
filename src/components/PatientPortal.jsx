@@ -24,6 +24,8 @@ import {
   ShieldCheck, 
   CheckCircle2, 
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   UserCheck,
   Languages,
   QrCode,
@@ -49,6 +51,7 @@ import {
 import { askAyuSwarBrain } from '../services/aiBrainService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 
 /**
  * PatientPortal Component — Complete Enterprise Citizen Healthcare Operating System
@@ -71,6 +74,7 @@ export default function PatientPortal({
   onBookAppointment
 }) {
   const [activeTab, setActiveTab] = useState('home');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [showWhatsAppRxModal, setShowWhatsAppRxModal] = useState(false);
   
   // Book Consultation Modal State
@@ -447,10 +451,10 @@ export default function PatientPortal({
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
       {/* =========================================================================
-          LEFT SIDEBAR (MATCHING SCREENSHOT 1 PATIENT SIDEBAR)
+          LEFT SIDEBAR (MATCHING SCREENSHOT 1 PATIENT SIDEBAR WITH COLLAPSIBLE ARROW)
           ========================================================================= */}
       <aside style={{
-        width: '240px',
+        width: isSidebarCollapsed ? '76px' : '240px',
         height: '100vh',
         position: 'sticky',
         top: 0,
@@ -459,20 +463,55 @@ export default function PatientPortal({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: '20px 16px',
+        padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
         flexShrink: 0,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1)'
       }}>
+        {/* Collapse / Expand Toggle Arrow Button */}
+        <button
+          onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          style={{
+            position: 'absolute',
+            top: '22px',
+            right: '-12px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            background: '#ffffff',
+            border: '1.5px solid #CBD5E1',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            zIndex: 30,
+            color: '#008B8B',
+            transition: 'all 0.15s ease'
+          }}
+          title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        >
+          {isSidebarCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+        </button>
+
         <div>
           {/* Logo */}
           <div 
             onClick={() => window.location.href = '/'}
-            style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', marginBottom: '32px', cursor: 'pointer' }}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '12px', 
+              paddingLeft: isSidebarCollapsed ? '2px' : '8px', 
+              marginBottom: '32px', 
+              cursor: 'pointer',
+              justifyContent: isSidebarCollapsed ? 'center' : 'flex-start'
+            }}
             title="AyuSwar AI — Return to Website"
           >
             <div style={{
-              width: '48px',
-              height: '48px',
+              width: isSidebarCollapsed ? '40px' : '48px',
+              height: isSidebarCollapsed ? '40px' : '48px',
               borderRadius: '50%',
               border: '2.5px solid #008B8B',
               overflow: 'hidden',
@@ -485,9 +524,11 @@ export default function PatientPortal({
             }}>
               <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '21px', fontWeight: 800, color: '#0A2540' }}>
-              Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
-            </div>
+            {!isSidebarCollapsed && (
+              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '21px', fontWeight: 800, color: '#0A2540', whiteSpace: 'nowrap' }}>
+                Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
+              </div>
+            )}
           </div>
 
           {/* Navigation Items (All 8 Patient Sidebar Items) */}
@@ -498,7 +539,6 @@ export default function PatientPortal({
               { id: 'appointments', label: 'Appointments', icon: Calendar },
               { id: 'reports', label: 'Reports', icon: FileText },
               { id: 'medications', label: 'Medications', icon: Pill },
-              { id: 'ai_assistant', label: 'AI Assistant', icon: Sparkles },
               { id: 'health_goals', label: 'Health Goals', icon: Target },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(item => {
@@ -508,11 +548,13 @@ export default function PatientPortal({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
+                  title={item.label}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    padding: '10px 14px',
+                    justifyContent: isSidebarCollapsed ? 'center' : 'flex-start',
+                    gap: isSidebarCollapsed ? '0' : '12px',
+                    padding: isSidebarCollapsed ? '10px 0' : '10px 14px',
                     borderRadius: '12px',
                     border: 'none',
                     background: isActive ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
@@ -526,7 +568,7 @@ export default function PatientPortal({
                   }}
                 >
                   <Icon size={18} color={isActive ? '#008B8B' : '#64748B'} />
-                  <span>{item.label}</span>
+                  {!isSidebarCollapsed && <span>{item.label}</span>}
                 </button>
               );
             })}
@@ -534,26 +576,40 @@ export default function PatientPortal({
         </div>
 
         {/* Bottom Health Card */}
-        <div style={{
-          background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
-          borderRadius: '16px',
-          padding: '16px',
-          border: '1px solid #B2E5E5',
-          textAlign: 'center'
-        }}>
+        {isSidebarCollapsed ? (
+          <div 
+            style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              padding: '12px 0', 
+              borderTop: '1px solid #E2E8F0' 
+            }}
+            title="AyuSwar Health Companion"
+          >
+            <Heart size={20} color="#008B8B" />
+          </div>
+        ) : (
           <div style={{
-            fontSize: '14.5px',
-            fontWeight: 800,
-            fontFamily: 'Outfit, sans-serif',
-            color: '#0A2540',
-            marginBottom: '4px'
+            background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
+            borderRadius: '16px',
+            padding: '16px',
+            border: '1px solid #B2E5E5',
+            textAlign: 'center'
           }}>
-            Your health matters
+            <div style={{
+              fontSize: '14.5px',
+              fontWeight: 800,
+              fontFamily: 'Outfit, sans-serif',
+              color: '#0A2540',
+              marginBottom: '4px'
+            }}>
+              Your health matters
+            </div>
+            <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.4 }}>
+              AyuSwar is here for you, always.
+            </div>
           </div>
-          <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.4 }}>
-            AyuSwar is here for you, always.
-          </div>
-        </div>
+        )}
       </aside>
 
       {/* =========================================================================
@@ -812,15 +868,15 @@ export default function PatientPortal({
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('ai_assistant')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #E2E8F0', cursor: 'pointer', textAlign: 'center' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.08)', color: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
-                    <Sparkles size={20} />
+                <div onClick={() => setActiveTab('my_health')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #E2E8F0', cursor: 'pointer', textAlign: 'center' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 139, 139, 0.08)', color: '#008B8B', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                    <Heart size={20} />
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>
-                    Ask AyuSwar
+                    My Health
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>
-                    Get health answers
+                    ABHA Card & Vitals
                   </div>
                 </div>
 
@@ -910,10 +966,20 @@ export default function PatientPortal({
 
                   {/* Health Overview (Vitals) */}
                   <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                        Health Overview
-                      </h3>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                          Health Overview
+                        </h3>
+                        {(() => {
+                          const mews = calculateMewsScore({ bpSystolic: bpSystolic || 118, hr: restingPulse || 72, spo2: 98 });
+                          return (
+                            <span style={{ fontSize: '11px', background: mews.riskBg, color: mews.riskColor, padding: '2px 8px', borderRadius: '10px', fontWeight: 800, border: `1px solid ${mews.riskColor}33` }}>
+                              MEWS {mews.score}: {mews.riskLevel}
+                            </span>
+                          );
+                        })()}
+                      </div>
                       <span onClick={() => setActiveTab('my_health')} style={{ fontSize: '12px', fontWeight: 700, color: '#008B8B', cursor: 'pointer' }}>View Details →</span>
                     </div>
 
@@ -1112,7 +1178,7 @@ export default function PatientPortal({
                       <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>Better Health Together</h4>
                       <div style={{ fontSize: '11px', color: '#006D6D', margin: '2px 0 10px 0' }}>Ask. Learn. Stay Healthy.</div>
                       <button
-                        onClick={() => setActiveTab('ai_assistant')}
+                        onClick={() => setActiveTab('my_health')}
                         style={{
                           background: '#0A2540',
                           color: '#ffffff',
@@ -1124,7 +1190,7 @@ export default function PatientPortal({
                           cursor: 'pointer'
                         }}
                       >
-                        Chat with AyuSwar
+                        View Health Records
                       </button>
                     </div>
 
@@ -2210,10 +2276,45 @@ export default function PatientPortal({
                 </div>
               )}
 
+              {/* DDI Safety Sentinel Status Banner */}
+              {(() => {
+                const ddiAlerts = checkDrugInteractions(chronotherapySchedule.map(s => s.medicine));
+                return (
+                  <div style={{
+                    background: ddiAlerts.length > 0 ? '#FEF2F2' : '#F0FDF4',
+                    border: ddiAlerts.length > 0 ? '1.5px solid #FCA5A5' : '1.5px solid #BBF7D0',
+                    borderRadius: '12px',
+                    padding: '12px 18px',
+                    marginBottom: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '10px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <ShieldCheck size={18} color={ddiAlerts.length > 0 ? '#DC2626' : '#15803D'} />
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 750, color: ddiAlerts.length > 0 ? '#991B1B' : '#166534' }}>
+                          {ddiAlerts.length > 0 ? `Clinical Sentinel Alert: ${ddiAlerts.length} Potential Drug-Drug Interaction Detected` : 'Clinical Safety Sentinel: All Active Prescriptions Safe'}
+                        </div>
+                        <div style={{ fontSize: '11px', color: ddiAlerts.length > 0 ? '#B91C1C' : '#15803D' }}>
+                          {ddiAlerts.length > 0 ? (selectedLanguage === 'Telugu' ? ddiAlerts[0].alertTelugu : ddiAlerts[0].alertHindi) : 'Cross-checked against WHO & ICMR Standard Treatment Guidelines (STG) 2025. Zero contraindications.'}
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '10.5px', background: ddiAlerts.length > 0 ? '#FEE2E2' : '#DCFCE7', color: ddiAlerts.length > 0 ? '#991B1B' : '#15803D', padding: '3px 10px', borderRadius: '12px', fontWeight: 800 }}>
+                      {ddiAlerts.length > 0 ? 'Review Needed' : 'STG 2025 Compliant'}
+                    </span>
+                  </div>
+                );
+              })()}
+
               {/* Slot Cards List */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {chronotherapySchedule.map(slot => {
                   const isChecked = dailyPillChecked[slot.id];
+                  const janInfo = getJanAushadhiGenericInfo(slot.medicine);
                   return (
                     <div
                       key={slot.id}
@@ -2263,6 +2364,22 @@ export default function PatientPortal({
                           </div>
                           <div style={{ fontSize: '12px', color: '#64748B' }}>
                             Purpose: {slot.purpose}
+                          </div>
+
+                          {/* Jan Aushadhi Generic & Savings Data */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '11px', background: '#DCFCE7', color: '#166534', padding: '2px 8px', borderRadius: '6px', fontWeight: 750, border: '1px solid #BBF7D0' }}>
+                              Jan Aushadhi Generic: {janInfo.genericName}
+                            </span>
+                            <span style={{ fontSize: '11px', color: '#475569' }}>
+                              Branded MRP: <s style={{ color: '#94A3B8' }}>₹{janInfo.brandedMrp}</s> → Jan Aushadhi: <strong style={{ color: '#0D9488' }}>₹{janInfo.janAushadhiPrice}</strong>
+                            </span>
+                            <span style={{ fontSize: '10.5px', background: '#FEF3C7', color: '#92400E', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>
+                              Save {janInfo.savingsPercent}%
+                            </span>
+                            <span style={{ fontSize: '10px', background: '#F1F5F9', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 650 }}>
+                              {janInfo.nlemCeiling}
+                            </span>
                           </div>
 
                           <div style={{ fontSize: '12px', color: '#006D6D', marginTop: '6px', fontStyle: 'italic' }}>
