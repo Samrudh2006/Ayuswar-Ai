@@ -291,7 +291,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         }));
         stepIndex++;
       } else {
-        clearInterval(interval);
+        stepIndex = 0; // Continuous live transit patrol along road network
       }
     }, intervalMs);
 

@@ -137,14 +137,18 @@ function extractCityOrDistrict(addressText = '') {
 function getRegionalHospitalTemplates(locality, lat, lng) {
   const loc = (locality || '').toLowerCase();
   
-  if (loc.includes('kakinada') || loc.includes('annavaram') || loc.includes('east godavari') || loc.includes('tuni') || loc.includes('pithapuram')) {
+  if (loc.includes('kakinada') || loc.includes('annavaram') || loc.includes('east godavari') || loc.includes('tuni') || loc.includes('pithapuram') || loc.includes('sankhavaram')) {
     return [
-      { name: 'Kakinada Government General Hospital (GGH Apex)', shortName: 'GGH Kakinada', ownership: 'Government (DME AP)', trauma: 'Level-1 Regional Trauma Center', dLat: 0.0095, dLng: 0.0075 },
-      { name: 'Apollo Super Speciality Hospital Kakinada', shortName: 'Apollo Kakinada', ownership: 'Private (NABH)', trauma: 'Level-2 Dedicated Trauma Center', dLat: -0.0062, dLng: 0.0048 },
-      { name: 'Tuni Area Government Hospital (APVVP)', shortName: 'Tuni Area Hosp', ownership: 'Government (APVVP)', trauma: 'Level-2 Trauma Unit', dLat: 0.0142, dLng: -0.0082 },
-      { name: 'Inodaya Multi Speciality Hospital', shortName: 'Inodaya Kakinada', ownership: 'Private (NABH)', trauma: 'Level-2 Acute Care', dLat: -0.0118, dLng: -0.0055 },
-      { name: 'Pithapuram Community Health Center (CHC)', shortName: 'Pithapuram CHC', ownership: 'Government (APVVP)', trauma: 'Level-3 Primary Trauma', dLat: 0.0052, dLng: 0.0135 },
-      { name: 'Surya Cardiac & Emergency Center', shortName: 'Surya Emergency', ownership: 'Private', trauma: 'Level-3 Cardiac Center', dLat: -0.0145, dLng: 0.0092 }
+      { name: 'Primary Health Center (PHC) Annavaram', shortName: 'PHC Annavaram', ownership: 'Government (HMFW AP)', trauma: 'Level-3 Primary Trauma Stabilization', dLat: 0.0025, dLng: 0.0018 },
+      { name: 'Community Health Center (CHC) Sankhavaram', shortName: 'CHC Sankhavaram', ownership: 'Government (APVVP)', trauma: 'Level-3 Rural Emergency Unit', dLat: -0.0110, dLng: -0.0092 },
+      { name: 'Tuni Area Government Hospital (APVVP)', shortName: 'Tuni Area Hosp', ownership: 'Government (APVVP)', trauma: 'Level-2 24x7 Government Trauma Unit', dLat: 0.0142, dLng: 0.0185 },
+      { name: 'Annapurna Multi-Speciality Hospital Tuni', shortName: 'Annapurna Tuni', ownership: 'Private (NABH)', trauma: 'Level-2 Emergency & Acute Care', dLat: 0.0135, dLng: 0.0178 },
+      { name: 'Sri Krishna Orthopaedic & Trauma Hospital', shortName: 'Sri Krishna Hosp', ownership: 'Private', trauma: 'Level-2 Dedicated Trauma Unit', dLat: 0.0128, dLng: 0.0165 },
+      { name: 'Surya Emergency & Critical Care Center', shortName: 'Surya Emergency', ownership: 'Private', trauma: 'Level-2 Cardiac Stabilization', dLat: -0.0145, dLng: -0.0092 },
+      { name: 'Pithapuram Area Hospital (APVVP)', shortName: 'Pithapuram Hosp', ownership: 'Government (APVVP)', trauma: 'Level-2 Government Area Hospital', dLat: -0.0210, dLng: 0.0135 },
+      { name: 'Inodaya Multi Speciality Hospital Kakinada', shortName: 'Inodaya Kakinada', ownership: 'Private (NABH)', trauma: 'Level-1 Comprehensive NABH Trauma', dLat: -0.0385, dLng: 0.0155 },
+      { name: 'Apollo Super Speciality Hospital Kakinada', shortName: 'Apollo Kakinada', ownership: 'Private (NABH)', trauma: 'Level-1 Tertiary Trauma & Cath Lab', dLat: -0.0410, dLng: 0.0148 },
+      { name: 'Kakinada Government General Hospital (GGH Apex)', shortName: 'GGH Kakinada', ownership: 'Government (DME AP)', trauma: 'Level-1 State Apex Trauma Center', dLat: -0.0435, dLng: 0.0175 }
     ];
   }
 

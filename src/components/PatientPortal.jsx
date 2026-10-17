@@ -465,10 +465,11 @@ export default function PatientPortal({
         justifyContent: 'space-between',
         padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
         flexShrink: 0,
-        overflowY: 'auto',
+        overflow: 'visible',
+        zIndex: 40,
         transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1)'
       }}>
-        {/* Collapse / Expand Toggle Arrow Button */}
+        {/* Collapse / Expand Toggle Arrow Button (Fixed & Never Clipped) */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           style={{
@@ -480,12 +481,12 @@ export default function PatientPortal({
             borderRadius: '50%',
             background: '#ffffff',
             border: '1.5px solid #CBD5E1',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            zIndex: 30,
+            zIndex: 60,
             color: '#008B8B',
             transition: 'all 0.15s ease'
           }}
@@ -494,7 +495,7 @@ export default function PatientPortal({
           {isSidebarCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
         </button>
 
-        <div>
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {/* Logo */}
           <div 
             onClick={() => window.location.href = '/'}
@@ -627,38 +628,57 @@ export default function PatientPortal({
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          gap: '16px'
+          gap: '12px'
         }}>
-          <div 
+          <button 
             onClick={() => setActiveTab('settings')}
             style={{ 
               cursor: 'pointer',
-              padding: '6px',
-              borderRadius: '8px',
-              background: activeTab === 'settings' ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
+              width: '38px',
+              height: '38px',
+              borderRadius: '10px',
+              border: activeTab === 'settings' ? '1.5px solid #008B8B' : '1px solid #E2E8F0',
+              background: activeTab === 'settings' ? 'rgba(0, 139, 139, 0.1)' : '#F8FAFC',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'all 150ms ease'
+              transition: 'all 150ms ease',
+              padding: 0
             }} 
             title="Citizen Settings & ABHA Locker Preferences"
           >
-            <Settings size={20} color={activeTab === 'settings' ? '#008B8B' : '#64748B'} />
-          </div>
+            <Settings size={18} color={activeTab === 'settings' ? '#008B8B' : '#64748B'} />
+          </button>
 
-          <div style={{ position: 'relative', cursor: 'pointer' }} title="1 New Lab Report Alert">
-            <Bell size={20} color="#64748B" />
+          <button 
+            style={{ 
+              position: 'relative', 
+              cursor: 'pointer',
+              width: '38px',
+              height: '38px',
+              borderRadius: '10px',
+              border: '1px solid #E2E8F0',
+              background: '#F8FAFC',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 150ms ease',
+              padding: 0
+            }} 
+            title="1 New Lab Report Alert"
+          >
+            <Bell size={18} color="#64748B" />
             <span style={{
               position: 'absolute',
-              top: '-2px',
-              right: '-2px',
+              top: '7px',
+              right: '7px',
               width: '8px',
               height: '8px',
               borderRadius: '50%',
               background: '#EF4444',
               border: '1.5px solid #ffffff'
             }}></span>
-          </div>
+          </button>
 
           {/* Profile Trigger */}
           <div 
