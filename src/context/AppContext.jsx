@@ -49,13 +49,29 @@ export function AppProvider({ children }) {
     }
   }, [isDemoMode]);
 
-  // Authenticated demo profiles (null by default in live mode, preserved during tab navigation)
+  const DEFAULT_DOCTOR = {
+    doctorName: 'Dr. Priya Sharma, MD',
+    hprId: '91-8842-1923-4410',
+    specialty: 'Pulmonology & Critical Care',
+    hospital: 'Kurnool District Hospital (ABDM PHC #1402)'
+  };
+
+  const DEFAULT_PATIENT = {
+    patientName: 'Ramesh Patel',
+    abhaId: '91-4521-8820-9102',
+    age: 48,
+    gender: 'Male',
+    bloodGroup: 'B+',
+    conditions: ['Bronchial Asthma', 'Mild Dyspnea']
+  };
+
+  // Authenticated profiles (default demo profiles loaded for seamless clinical review)
   const [doctorProfile, setDoctorProfileState] = useState(() => {
     try {
       const saved = sessionStorage.getItem('ayuswar_doctor_profile');
-      return saved ? JSON.parse(saved) : null;
+      return saved ? JSON.parse(saved) : DEFAULT_DOCTOR;
     } catch {
-      return null;
+      return DEFAULT_DOCTOR;
     }
   });
 
@@ -75,9 +91,9 @@ export function AppProvider({ children }) {
   const [patientProfile, setPatientProfileState] = useState(() => {
     try {
       const saved = sessionStorage.getItem('ayuswar_patient_profile');
-      return saved ? JSON.parse(saved) : null;
+      return saved ? JSON.parse(saved) : DEFAULT_PATIENT;
     } catch {
-      return null;
+      return DEFAULT_PATIENT;
     }
   });
 

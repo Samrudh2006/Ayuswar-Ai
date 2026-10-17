@@ -496,16 +496,19 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               </span>
             </div>
 
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: '#0B172E',
-              border: '1px solid #1C2D4A',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              fontSize: '10px'
-            }}>
+            <div 
+              className="sanjivani-incident-badge"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#0B172E',
+                border: '1px solid #1C2D4A',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '10px'
+              }}
+            >
               <span style={{ color: '#38BDF8', fontWeight: 800 }}>INCIDENT #108-AP-8902</span>
               <span style={{ color: '#475569' }}>•</span>
               <span style={{ color: '#10B981', fontWeight: 700 }}>AMBULANCE FEED ●</span>
@@ -693,6 +696,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
             </button>
 
             <button
+              className="sanjivani-audit-btn"
               onClick={() => setShowAuditTrail(!showAuditTrail)}
               style={{
                 background: showAuditTrail ? '#0284C7' : '#0B172E',
@@ -866,18 +870,24 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         {/* ========================================================
             2. MAIN OPERATIONAL WORKSPACE (FULL HEIGHT MAP + DECISION PANEL)
             ======================================================== */}
-        <div style={{
-          flex: 1,
-          display: 'grid',
-          gridTemplateColumns: '1.9fr 1.1fr',
-          minHeight: 0,
-          overflow: 'hidden',
-          position: 'relative'
-        }}>
+        <div 
+          className="sanjivani-main-grid"
+          style={{
+            flex: 1,
+            display: 'grid',
+            gridTemplateColumns: '1.9fr 1.1fr',
+            minHeight: 0,
+            overflow: 'hidden',
+            position: 'relative'
+          }}
+        >
           {/* --------------------------------------------------------
               LEFT: DOMINANT MAPBOX HIGH-CONTRAST EMS NAVIGATION MAP (63%)
               -------------------------------------------------------- */}
-          <div style={{ position: 'relative', width: '100%', height: '100%', borderRight: '1px solid #16243C' }}>
+          <div 
+            className="sanjivani-map-panel"
+            style={{ position: 'relative', width: '100%', height: '100%', borderRight: '1px solid #16243C' }}
+          >
             <EmergencyMap
               callerCoords={callerCoords}
               hospitals={hospitalsList}
@@ -934,15 +944,18 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
           {/* --------------------------------------------------------
               RIGHT: DECISION, DISPATCH & ABDM HFR PANEL (37%)
               -------------------------------------------------------- */}
-          <div style={{
-            background: '#060D1A',
-            display: 'flex',
-            flexDirection: 'column',
-            overflowY: 'auto',
-            padding: '14px',
-            gap: '12px',
-            minHeight: 0
-          }}>
+          <div 
+            className="sanjivani-decision-panel"
+            style={{
+              background: '#060D1A',
+              display: 'flex',
+              flexDirection: 'column',
+              overflowY: 'auto',
+              padding: '14px',
+              gap: '12px',
+              minHeight: 0
+            }}
+          >
             {/* CARD 1: ACTION WORKFLOW (TWO-STATE: BEFORE / AFTER DISPATCH) */}
             <div style={{
               background: '#09152C',

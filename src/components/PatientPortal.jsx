@@ -37,6 +37,7 @@ import {
   LogOut,
   Plus,
   X,
+  Menu,
   FileCheck,
   UploadCloud,
   Droplets,
@@ -74,7 +75,8 @@ export default function PatientPortal({
   onBookAppointment
 }) {
   const [activeTab, setActiveTab] = useState('home');
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [showWhatsAppRxModal, setShowWhatsAppRxModal] = useState(false);
   
   // Book Consultation Modal State
@@ -450,27 +452,71 @@ export default function PatientPortal({
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
+      {/* Mobile Drawer Overlay Backdrop */}
+      {mobileDrawerOpen && (
+        <div
+          className="mobile-drawer-backdrop"
+          onClick={() => setMobileDrawerOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.55)',
+            backdropFilter: 'blur(3px)',
+            zIndex: 95
+          }}
+        />
+      )}
+
       {/* =========================================================================
           LEFT SIDEBAR (MATCHING SCREENSHOT 1 PATIENT SIDEBAR WITH COLLAPSIBLE ARROW)
           ========================================================================= */}
-      <aside style={{
-        width: isSidebarCollapsed ? '76px' : '240px',
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        background: '#ffffff',
-        borderRight: '1px solid #E2E8F0',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
-        flexShrink: 0,
-        overflow: 'visible',
-        zIndex: 40,
-        transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1)'
-      }}>
+      <aside 
+        className={`patient-portal-aside ${mobileDrawerOpen ? 'mobile-open' : ''}`}
+        style={{
+          width: isSidebarCollapsed ? '76px' : '240px',
+          height: '100vh',
+          position: 'sticky',
+          top: 0,
+          background: '#ffffff',
+          borderRight: '1px solid #E2E8F0',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
+          flexShrink: 0,
+          overflow: 'visible',
+          zIndex: 96,
+          transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1), left 250ms ease-in-out'
+        }}
+      >
+        {/* Mobile Close X Button */}
+        <button
+          className="portal-mobile-close-btn"
+          onClick={() => setMobileDrawerOpen(false)}
+          style={{
+            display: 'none',
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: '#F1F5F9',
+            border: 'none',
+            borderRadius: '50%',
+            width: '28px',
+            height: '28px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#64748B',
+            zIndex: 70
+          }}
+          aria-label="Close menu"
+        >
+          <X size={16} />
+        </button>
+
         {/* Collapse / Expand Toggle Arrow Button (Fixed & Never Clipped) */}
         <button
+          className="portal-desktop-collapse-btn"
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           style={{
             position: 'absolute',
@@ -548,7 +594,10 @@ export default function PatientPortal({
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setMobileDrawerOpen(false);
+                  }}
                   title={item.label}
                   style={{
                     display: 'flex',
@@ -616,22 +665,53 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      <div className="patient-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         {/* Top Header */}
         <header style={{
           background: '#ffffff',
-          padding: '14px 28px',
+          padding: '12px clamp(12px, 2vw, 28px)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
           borderBottom: '1px solid #E2E8F0',
           position: 'sticky',
           top: 0,
           zIndex: 50,
           gap: '12px'
         }}>
-          <button 
-            onClick={() => setActiveTab('settings')}
+          {/* Left: Mobile 3-Lines Hamburger Button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              type="button"
+              className="portal-mobile-menu-btn"
+              onClick={() => setMobileDrawerOpen(true)}
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '8px',
+                border: '1.5px solid #CBD5E1',
+                background: '#F8FAFC',
+                color: '#008B8B',
+                cursor: 'pointer',
+                flexShrink: 0
+              }}
+              title="Open Citizen Navigation Menu"
+              aria-label="Open navigation menu"
+            >
+              <Menu size={20} />
+            </button>
+            <span className="patient-portal-title" style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+              Citizen Health Dashboard
+            </span>
+          </div>
+
+          {/* Right Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button 
+              onClick={() => setActiveTab('settings')}
             style={{ 
               cursor: 'pointer',
               width: '38px',
@@ -821,7 +901,8 @@ export default function PatientPortal({
             <LogOut size={13} />
             <span>Logout</span>
           </button>
-        </header>
+        </div>
+      </header>
 
         {/* Content Body */}
         <div style={{ padding: '24px 28px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
@@ -3830,6 +3911,77 @@ export default function PatientPortal({
         doctorName={assignedDoctor.doctorName}
         initialLanguage={selectedLanguage === 'Telugu' ? 'te' : 'hi'}
       />
+
+      {/* Native Mobile Bottom Navigation Bar (Visible only on mobile < 768px) */}
+      <nav 
+        className="portal-mobile-bottom-nav"
+        style={{
+          display: 'none',
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '62px',
+          background: '#ffffff',
+          borderTop: '1px solid #E2E8F0',
+          boxShadow: '0 -4px 16px rgba(15, 23, 42, 0.08)',
+          zIndex: 80,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          padding: '0 8px',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+        }}
+        aria-label="Mobile Navigation"
+      >
+        {[
+          { id: 'home', label: 'Home', icon: Home },
+          { id: 'my_health', label: 'My Health', icon: Heart },
+          { id: 'appointments', label: 'Appts', icon: Calendar },
+          { id: 'medications', label: 'Meds', icon: Pill },
+          { id: 'settings', label: 'Settings', icon: Settings }
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '3px',
+                background: 'transparent',
+                border: 'none',
+                color: isActive ? '#008B8B' : '#64748B',
+                cursor: 'pointer',
+                padding: '6px 0',
+                transition: 'all 0.15s ease',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              <div style={{
+                position: 'relative',
+                padding: '2px 14px',
+                borderRadius: '16px',
+                background: isActive ? 'rgba(0, 139, 139, 0.12)' : 'transparent',
+                transition: 'all 0.15s ease'
+              }}>
+                <Icon size={19} color={isActive ? '#008B8B' : '#64748B'} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              <span style={{
+                fontSize: '10px',
+                fontWeight: isActive ? 800 : 500,
+                letterSpacing: '-0.1px'
+              }}>
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }

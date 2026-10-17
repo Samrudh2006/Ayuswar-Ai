@@ -40,7 +40,9 @@ import {
   PhoneCall,
   UserCheck,
   Check,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 import { askAyuSwarBrain } from '../services/aiBrainService';
 import AbhaDigitalCard from './AbhaDigitalCard';
@@ -73,7 +75,8 @@ export default function DoctorPortal({
   onAcceptAppointment
 }) {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [analyticsRange, setAnalyticsRange] = useState('weekly');
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiCategory, setAiCategory] = useState('guidelines'); // 'guidelines' | 'ddi' | 'ddx' | 'vernacular'
@@ -505,27 +508,71 @@ export default function DoctorPortal({
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
+      {/* Mobile Drawer Overlay Backdrop */}
+      {mobileDrawerOpen && (
+        <div
+          className="mobile-drawer-backdrop"
+          onClick={() => setMobileDrawerOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.55)',
+            backdropFilter: 'blur(3px)',
+            zIndex: 95
+          }}
+        />
+      )}
+
       {/* =========================================================================
           LEFT SIDEBAR (MATCHING SCREENSHOT 1 DOCTOR SIDEBAR)
           ========================================================================= */}
-      <aside style={{
-        width: isSidebarCollapsed ? '76px' : '240px',
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-        background: '#ffffff',
-        borderRight: '1px solid #E2E8F0',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
-        flexShrink: 0,
-        overflow: 'visible',
-        zIndex: 40,
-        transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1)'
-      }}>
+      <aside 
+        className={`doctor-portal-aside ${mobileDrawerOpen ? 'mobile-open' : ''}`}
+        style={{
+          width: isSidebarCollapsed ? '76px' : '240px',
+          height: '100vh',
+          position: 'sticky',
+          top: 0,
+          background: '#ffffff',
+          borderRight: '1px solid #E2E8F0',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
+          flexShrink: 0,
+          overflow: 'visible',
+          zIndex: 96,
+          transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1), left 250ms ease-in-out'
+        }}
+      >
+        {/* Mobile Close X Button */}
+        <button
+          className="portal-mobile-close-btn"
+          onClick={() => setMobileDrawerOpen(false)}
+          style={{
+            display: 'none',
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: '#F1F5F9',
+            border: 'none',
+            borderRadius: '50%',
+            width: '28px',
+            height: '28px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#64748B',
+            zIndex: 70
+          }}
+          aria-label="Close menu"
+        >
+          <X size={16} />
+        </button>
+
         {/* Collapse / Expand Toggle Arrow Button (Fixed & Never Clipped) */}
         <button
+          className="portal-desktop-collapse-btn"
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           style={{
             position: 'absolute',
@@ -603,7 +650,10 @@ export default function DoctorPortal({
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setMobileDrawerOpen(false);
+                  }}
                   title={item.label}
                   style={{
                     display: 'flex',
@@ -670,21 +720,46 @@ export default function DoctorPortal({
       {/* =========================================================================
           MAIN PHYSICIAN OPERATING CANVAS
           ========================================================================= */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         {/* Top Header */}
         <header style={{
           background: '#ffffff',
-          padding: '14px 28px',
+          padding: '12px clamp(12px, 2vw, 28px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottom: '1px solid #E2E8F0',
           position: 'sticky',
           top: 0,
-          zIndex: 50
+          zIndex: 50,
+          gap: '12px'
         }}>
-          {/* Universal Search Bar */}
-          <div style={{ position: 'relative', width: '380px' }}>
+          {/* Left: Universal Search Bar with Mobile Menu Button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
+            <button
+              type="button"
+              className="portal-mobile-menu-btn"
+              onClick={() => setMobileDrawerOpen(true)}
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '8px',
+                border: '1.5px solid #CBD5E1',
+                background: '#F8FAFC',
+                color: '#008B8B',
+                cursor: 'pointer',
+                flexShrink: 0
+              }}
+              title="Open Doctor Navigation Menu"
+              aria-label="Open navigation menu"
+            >
+              <Menu size={20} />
+            </button>
+
+            <div className="doctor-search-box" style={{ position: 'relative', width: '380px', maxWidth: '100%' }}>
             <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '14px', top: '12px' }} />
             <input 
               type="text"
@@ -703,6 +778,7 @@ export default function DoctorPortal({
               }}
             />
           </div>
+        </div>
 
           {/* Profile, Switcher, Settings & Logout */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
@@ -4001,6 +4077,77 @@ export default function DoctorPortal({
         doctorName={doctorName}
         initialLanguage={whatsAppModalPatient?.langCode?.includes('hi') ? 'hi' : 'te'}
       />
+
+      {/* Native Mobile Bottom Navigation Bar (Visible only on mobile < 768px) */}
+      <nav 
+        className="portal-mobile-bottom-nav"
+        style={{
+          display: 'none',
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '62px',
+          background: '#ffffff',
+          borderTop: '1px solid #E2E8F0',
+          boxShadow: '0 -4px 16px rgba(15, 23, 42, 0.08)',
+          zIndex: 80,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          padding: '0 8px',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+        }}
+        aria-label="Mobile Navigation"
+      >
+        {[
+          { id: 'dashboard', label: 'Dashboard', icon: Home },
+          { id: 'patients', label: 'Patients', icon: Users },
+          { id: 'prescriptions', label: 'Rx Meds', icon: Pill },
+          { id: 'reports', label: 'Labs', icon: FileText },
+          { id: 'settings', label: 'Settings', icon: Settings }
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '3px',
+                background: 'transparent',
+                border: 'none',
+                color: isActive ? '#008B8B' : '#64748B',
+                cursor: 'pointer',
+                padding: '6px 0',
+                transition: 'all 0.15s ease',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              <div style={{
+                position: 'relative',
+                padding: '2px 14px',
+                borderRadius: '16px',
+                background: isActive ? 'rgba(0, 139, 139, 0.12)' : 'transparent',
+                transition: 'all 0.15s ease'
+              }}>
+                <Icon size={19} color={isActive ? '#008B8B' : '#64748B'} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              <span style={{
+                fontSize: '10px',
+                fontWeight: isActive ? 800 : 500,
+                letterSpacing: '-0.1px'
+              }}>
+                {tab.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }

@@ -406,7 +406,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                padding: '7px 14px',
+                padding: '6px 12px',
                 borderRadius: 8,
                 background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)',
                 color: '#ffffff',
@@ -430,11 +430,12 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
               <PhoneCall size={14} style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
-              <span>🚨 Sanjivani-108</span>
+              <span className="sanjivani-btn-desktop">🚨 Sanjivani-108</span>
+              <span className="sanjivani-btn-mobile" style={{ display: 'none' }}>🚨 108</span>
             </button>
 
             {/* Shared Language Selector */}
-            <div ref={langRef} style={{ position: 'relative' }}>
+            <div ref={langRef} className="desktop-lang-picker" style={{ position: 'relative' }}>
               <button
                 type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -480,9 +481,10 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
               )}
             </div>
 
-            {/* Doctor Login Quick Action */}
+            {/* Doctor Login Quick Action (Visible on desktop/tablet, inside drawer on mobile) */}
             <button
               type="button"
+              className="desktop-auth-pill"
               onClick={onOpenDoctorAuth ? onOpenDoctorAuth : () => navigate('/auth/doctor')}
               style={{
                 display: 'inline-flex',
@@ -505,9 +507,10 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
               <span>Doctor</span>
             </button>
 
-            {/* Patient Login Quick Action */}
+            {/* Patient Login Quick Action (Visible on desktop/tablet, inside drawer on mobile) */}
             <button
               type="button"
+              className="desktop-auth-pill"
               onClick={onOpenPatientAuth ? onOpenPatientAuth : () => navigate('/auth/patient')}
               style={{
                 display: 'inline-flex',

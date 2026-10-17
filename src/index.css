@@ -493,7 +493,7 @@ h1, h2, h3, h4, h5, h6 {
 .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
 .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
 
-/* Responsive Media Queries for 320px, 390px, 768px, 1280px */
+/* Responsive Media Queries for 320px, 390px, 768px, 960px, 1280px */
 @media (max-width: 960px) {
   .desktop-nav {
     display: none !important;
@@ -503,7 +503,62 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@media (max-width: 900px) {
+  /* Sanjivani-108 Masterclass Console mobile responsive stack */
+  .sanjivani-main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sanjivani-map-panel {
+    height: 380px !important;
+    min-height: 340px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    border-right: none !important;
+    border-bottom: 1px solid #16243C !important;
+  }
+  .sanjivani-decision-panel {
+    width: 100% !important;
+    flex: 1 !important;
+    overflow-y: visible !important;
+    min-height: 520px !important;
+  }
+}
+
 @media (max-width: 768px) {
+  .desktop-auth-pill {
+    display: none !important;
+  }
+  .doctor-portal-aside, .patient-portal-aside {
+    position: fixed !important;
+    top: 0 !important;
+    left: -300px !important;
+    width: 270px !important;
+    height: 100vh !important;
+    z-index: 100 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35) !important;
+    transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  .doctor-portal-aside.mobile-open, .patient-portal-aside.mobile-open {
+    left: 0 !important;
+  }
+  .mobile-drawer-backdrop {
+    display: block !important;
+  }
+  .portal-mobile-menu-btn {
+    display: flex !important;
+  }
+  .portal-mobile-close-btn {
+    display: flex !important;
+  }
+  .portal-desktop-collapse-btn {
+    display: none !important;
+  }
+  .patient-portal-title {
+    display: none !important;
+  }
   .grid-cols-2, .grid-cols-3, .grid-cols-4 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
@@ -513,6 +568,33 @@ h1, h2, h3, h4, h5, h6 {
   .px-6 {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+  }
+  .portal-mobile-bottom-nav {
+    display: flex !important;
+  }
+  .doctor-portal-main-canvas, .patient-portal-main-canvas {
+    padding-bottom: 74px !important;
+  }
+  .portal-header-search {
+    width: 180px !important;
+  }
+  .doctor-search-box {
+    width: 180px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .portal-mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .sanjivani-incident-badge {
+    display: none !important;
+  }
+  .sanjivani-audit-btn {
+    display: none !important;
   }
 }
 
@@ -525,6 +607,15 @@ h1, h2, h3, h4, h5, h6 {
   }
   h2 {
     font-size: 1.25rem !important;
+  }
+  .sanjivani-btn-desktop {
+    display: none !important;
+  }
+  .sanjivani-btn-mobile {
+    display: inline !important;
+  }
+  .desktop-lang-picker {
+    display: none !important;
   }
 }
 
