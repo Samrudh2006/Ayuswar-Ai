@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
  * 3. Elevated typography to bold 1.35rem with crisp amber-gold AI pill badge and 
  *    emerald acoustic pulse wave, ensuring 100% legibility at standard 100% desktop scale.
  */
-export default function AyuSwarLogoReveal({ 
+export default function AyuSwarLogoReveal({
   variant = 'navbar', // 'navbar' | 'hero' | 'standalone'
   showText = true,
   onComplete
@@ -39,7 +39,7 @@ export default function AyuSwarLogoReveal({
   }
 
   return (
-    <div 
+    <div
       onMouseEnter={handleReplay}
       style={{
         display: 'inline-flex',
@@ -67,9 +67,9 @@ export default function AyuSwarLogoReveal({
         transition: 'transform 0.25s ease, box-shadow 0.25s ease'
       }}>
         {/* Emblem Image cleanly zoomed by 1.18x to clip out square gray background */}
-        <img 
-          src="/assets/ayuswar_master_emblem.png" 
-          alt="AyuSwar AI Emblem" 
+        <img
+          src="/assets/ayuswar_master_emblem.png"
+          alt="AyuSwar AI Emblem"
           style={{
             width: '100%',
             height: '100%',
@@ -77,7 +77,7 @@ export default function AyuSwarLogoReveal({
             transform: 'scale(1.18)',
             display: 'block',
             filter: 'contrast(1.1) brightness(1.05)'
-          }} 
+          }}
         />
       </div>
 
@@ -85,14 +85,14 @@ export default function AyuSwarLogoReveal({
       {showText && (
         <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ 
-              fontSize: '1.35rem', 
-              fontWeight: 800, 
-              color: '#0F172A', 
-              letterSpacing: '-0.4px', 
-              display: 'flex', 
-              alignItems: 'baseline', 
-              gap: '1px' 
+            <span style={{
+              fontSize: '1.35rem',
+              fontWeight: 800,
+              color: '#0F172A',
+              letterSpacing: '-0.4px',
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '1px'
             }}>
               Ayu<span style={{ color: '#008B8B' }}>Swar</span>
             </span>
@@ -113,9 +113,9 @@ export default function AyuSwarLogoReveal({
 
             {/* Smooth Emerald Acoustic Waveform Indicator */}
             <div style={{ width: '38px', height: '16px', display: 'flex', alignItems: 'center' }}>
-              <svg 
+              <svg
                 key={animationKey}
-                viewBox="0 0 38 16" 
+                viewBox="0 0 38 16"
                 style={{ width: '100%', height: '100%', overflow: 'visible' }}
               >
                 <path
@@ -134,14 +134,14 @@ export default function AyuSwarLogoReveal({
               </svg>
             </div>
           </div>
-          
-          <div style={{ 
-            fontSize: '0.68rem', 
-            fontWeight: 700, 
-            color: '#64748B', 
-            textTransform: 'uppercase', 
-            letterSpacing: '0.8px', 
-            marginTop: '2px' 
+
+          <div style={{
+            fontSize: '0.68rem',
+            fontWeight: 700,
+            color: '#64748B',
+            textTransform: 'uppercase',
+            letterSpacing: '0.8px',
+            marginTop: '2px'
           }}>
             Clinical Voice OS
           </div>

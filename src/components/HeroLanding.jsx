@@ -1,32 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Mic, 
-  Languages, 
-  Activity, 
-  Scan, 
-  Volume2, 
-  ArrowRight, 
-  Play, 
+import {
+  Mic,
+  Languages,
+  Activity,
+  Scan,
+  Volume2,
+  ArrowRight,
+  Play,
   Pause,
-  ShieldCheck, 
-  Globe2, 
-  Building2, 
-  Users2, 
-  HeartPulse, 
-  Sparkles, 
-  FileCheck, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Cpu, 
-  Layers, 
-  ChevronDown, 
-  ChevronUp, 
-  ChevronLeft, 
-  ChevronRight, 
-  Lock, 
-  Stethoscope, 
-  Smartphone, 
+  ShieldCheck,
+  Globe2,
+  Building2,
+  Users2,
+  HeartPulse,
+  Sparkles,
+  FileCheck,
+  CheckCircle2,
+  AlertTriangle,
+  Cpu,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  Lock,
+  Stethoscope,
+  Smartphone,
   FileText,
   Pill,
   Radio,
@@ -51,9 +51,9 @@ import MeshGradientBackground from './MeshGradientBackground';
  * Built with full-width modern layout, interactive language carousel with live voice playback,
  * before-vs-after comparison toggles, 6-bento interactive deep-tech moats, and dedicated feature detail modals.
  */
-export default function HeroLanding({ 
-  onLaunchStudio, 
-  onOpenTechModal, 
+export default function HeroLanding({
+  onLaunchStudio,
+  onOpenTechModal,
   onOpenDatasetModal,
   onOpenAcousticLab,
   onOpenBenchmarkSuite,
@@ -108,7 +108,7 @@ export default function HeroLanding({
     return () => clearTimeout(timer);
   }, [typedText, isTypingDeleting, typedPhraseIndex]);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
-  
+
   // Before vs After Toggle & Interactive Split-Screen Slider
   const [comparisonMode, setComparisonMode] = useState('after'); // 'before' | 'after'
   const [splitSliderPercent, setSplitSliderPercent] = useState(50);
@@ -183,95 +183,95 @@ export default function HeroLanding({
   ];
 
   const indicLanguages = [
-    { 
-      id: 'te', 
-      name: 'Telugu', 
-      native: 'తెలుగు', 
-      region: 'South', 
+    {
+      id: 'te',
+      name: 'Telugu',
+      native: 'తెలుగు',
+      region: 'South',
       state: 'Andhra Pradesh & Telangana',
-      sample: 'ఈ ఆకుపచ్చ మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి', 
-      langCode: 'te-IN' 
+      sample: 'ఈ ఆకుపచ్చ మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి',
+      langCode: 'te-IN'
     },
-    { 
-      id: 'hi', 
-      name: 'Hindi', 
-      native: 'हिन्दी', 
-      region: 'North', 
+    {
+      id: 'hi',
+      name: 'Hindi',
+      native: 'हिन्दी',
+      region: 'North',
       state: 'Uttar Pradesh, MP, Bihar, Delhi',
-      sample: 'यह पीला सिरप रोज सुबह नाश्ते के बाद 5ml देना है', 
-      langCode: 'hi-IN' 
+      sample: 'यह पीला सिरप रोज सुबह नाश्ते के बाद 5ml देना है',
+      langCode: 'hi-IN'
     },
-    { 
-      id: 'ta', 
-      name: 'Tamil', 
-      native: 'தமிழ்', 
-      region: 'South', 
+    {
+      id: 'ta',
+      name: 'Tamil',
+      native: 'தமிழ்',
+      region: 'South',
       state: 'Tamil Nadu & Puducherry',
-      sample: 'இந்த நீல நிற மாத்திரையை இரவு உணவிற்குப் பிறகு உட்கொள்ளுங்கள்', 
-      langCode: 'ta-IN' 
+      sample: 'இந்த நீல நிற மாத்திரையை இரவு உணவிற்குப் பிறகு உட்கொள்ளுங்கள்',
+      langCode: 'ta-IN'
     },
-    { 
-      id: 'kn', 
-      name: 'Kannada', 
-      native: 'ಕನ್ನಡ', 
-      region: 'South', 
+    {
+      id: 'kn',
+      name: 'Kannada',
+      native: 'ಕನ್ನಡ',
+      region: 'South',
       state: 'Karnataka',
-      sample: 'ಈ ಹಸಿರು ಮಾತ್ರೆಗಳನ್ನು ಬೆಳಗಿನ ಉಪಾಹಾರದ ನಂತರ ಸೇವಿಸಿ', 
-      langCode: 'kn-IN' 
+      sample: 'ಈ ಹಸಿರು ಮಾತ್ರೆಗಳನ್ನು ಬೆಳಗಿನ ಉಪಾಹಾರದ ನಂತರ ಸೇವಿಸಿ',
+      langCode: 'kn-IN'
     },
-    { 
-      id: 'mr', 
-      name: 'Marathi', 
-      native: 'मराठी', 
-      region: 'West', 
+    {
+      id: 'mr',
+      name: 'Marathi',
+      native: 'मराठी',
+      region: 'West',
       state: 'Maharashtra',
-      sample: 'हे औषध दररोज रात्री जेवणानंतर एक गोळी घ्या', 
-      langCode: 'mr-IN' 
+      sample: 'हे औषध दररोज रात्री जेवणानंतर एक गोळी घ्या',
+      langCode: 'mr-IN'
     },
-    { 
-      id: 'bn', 
-      name: 'Bengali', 
-      native: 'বাংলা', 
-      region: 'East', 
+    {
+      id: 'bn',
+      name: 'Bengali',
+      native: 'বাংলা',
+      region: 'East',
       state: 'West Bengal & Tripura',
-      sample: 'এই নীল ট্যাবলেটটি রাতে খাওয়ার পরে জল দিয়ে খাবেন', 
-      langCode: 'bn-IN' 
+      sample: 'এই নীল ট্যাবলেটটি রাতে খাওয়ার পরে জল দিয়ে খাবেন',
+      langCode: 'bn-IN'
     },
-    { 
-      id: 'gu', 
-      name: 'Gujarati', 
-      native: 'ગુજરાતી', 
-      region: 'West', 
+    {
+      id: 'gu',
+      name: 'Gujarati',
+      native: 'ગુજરાતી',
+      region: 'West',
       state: 'Gujarat',
-      sample: 'આ પીળી દવા સવારે નાસ્તા પછી એક ચમચી લેવી', 
-      langCode: 'gu-IN' 
+      sample: 'આ પીળી દવા સવારે નાસ્તા પછી એક ચમચી લેવી',
+      langCode: 'gu-IN'
     },
-    { 
-      id: 'ml', 
-      name: 'Malayalam', 
-      native: 'മലയാളം', 
-      region: 'South', 
+    {
+      id: 'ml',
+      name: 'Malayalam',
+      native: 'മലയാളം',
+      region: 'South',
       state: 'Kerala',
-      sample: 'ഈ മരുന്ന് രാത്രി ഭക്ഷണത്തിന് ശേഷം ഒരു ഗുളിക കഴിക്കുക', 
-      langCode: 'ml-IN' 
+      sample: 'ഈ മരുന്ന് രാത്രി ഭക്ഷണത്തിന് ശേഷം ഒരു ഗുളിക കഴിക്കുക',
+      langCode: 'ml-IN'
     },
-    { 
-      id: 'pa', 
-      name: 'Punjabi', 
-      native: 'ਪੰਜਾਬੀ', 
-      region: 'North', 
+    {
+      id: 'pa',
+      name: 'Punjabi',
+      native: 'ਪੰਜਾਬੀ',
+      region: 'North',
       state: 'Punjab & Chandigarh',
-      sample: 'ਇਹ ਦਵਾਈ ਰੋਜ਼ਾਨਾ ਸਵੇਰੇ ਰੋਟੀ ਖਾਣ ਤੋਂ ਬਾਅਦ ਲਵੋ', 
-      langCode: 'pa-IN' 
+      sample: 'ਇਹ ਦਵਾਈ ਰੋਜ਼ਾਨਾ ਸਵੇਰੇ ਰੋਟੀ ਖਾਣ ਤੋਂ ਬਾਅਦ ਲਵੋ',
+      langCode: 'pa-IN'
     },
-    { 
-      id: 'or', 
-      name: 'Odia', 
-      native: 'ଓଡ଼ିଆ', 
-      region: 'East', 
+    {
+      id: 'or',
+      name: 'Odia',
+      native: 'ଓଡ଼ିଆ',
+      region: 'East',
       state: 'Odisha',
-      sample: 'ଏହି ଔଷଧ ସକାଳେ ଜଳଖିଆ ଖାଇବା ପରେ ଗୋଟିଏ ନିଅନ୍ତୁ', 
-      langCode: 'or-IN' 
+      sample: 'ଏହି ଔଷଧ ସକାଳେ ଜଳଖିଆ ଖାଇବା ପରେ ଗୋଟିଏ ନିଅନ୍ତୁ',
+      langCode: 'or-IN'
     }
   ];
 
@@ -303,8 +303,8 @@ export default function HeroLanding({
     }
   };
 
-  const filteredLanguages = selectedLanguageRegion === 'all' 
-    ? indicLanguages 
+  const filteredLanguages = selectedLanguageRegion === 'all'
+    ? indicLanguages
     : indicLanguages.filter(l => l.region.toLowerCase() === selectedLanguageRegion.toLowerCase());
 
   const faqs = [
@@ -501,16 +501,16 @@ export default function HeroLanding({
           zIndex: 1,
           overflow: 'hidden'
         }}>
-          <div style={{ 
-            position: 'relative', 
-            width: '100%', 
+          <div style={{
+            position: 'relative',
+            width: '100%',
             height: '100%',
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'flex-end'
           }}>
-            <img 
-              src="/assets/sections/sec1_hero.png" 
+            <img
+              src="/assets/sections/sec1_hero.png"
               alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
               style={{
                 width: '100%',
@@ -582,7 +582,7 @@ export default function HeroLanding({
               <span className="kinetic-word" style={{ animationDelay: '0.2s' }}>Health </span>
               <span className="kinetic-word" style={{ animationDelay: '0.32s' }}>Screening </span>
               <br />
-              <span className="kinetic-word" style={{ 
+              <span className="kinetic-word" style={{
                 color: '#008B8B',
                 background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
                 WebkitBackgroundClip: 'text',
@@ -692,7 +692,7 @@ export default function HeroLanding({
                       transform: isSelected ? 'translateY(-2px)' : 'none'
                     }}
                   >
-                    <div 
+                    <div
                       className="solution-icon-circle"
                       style={{
                         width: '42px',
@@ -724,7 +724,7 @@ export default function HeroLanding({
 
             {/* CTAs */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
-              <button 
+              <button
                 onClick={() => setIsGoldenStoryOpen(true)}
                 style={{
                   background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
@@ -755,7 +755,7 @@ export default function HeroLanding({
                 <span>⚡ 2-Min Live Clinical Walkthrough</span>
               </button>
 
-              <button 
+              <button
                 onClick={() => onOpenAcousticLab && onOpenAcousticLab()}
                 style={{
                   background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
@@ -929,7 +929,7 @@ export default function HeroLanding({
           boxShadow: '0 16px 40px rgba(10, 37, 64, 0.08)',
           background: '#0F172A'
         }}>
-          <img 
+          <img
             src="/assets/sections/sec2_gap.png"
             alt="The Clinical Gap: Left Keyboard Burnout vs Right Warm Ambient Eye-Contact"
             style={{
@@ -1138,7 +1138,7 @@ export default function HeroLanding({
               boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
               background: '#061325'
             }}>
-              <img 
+              <img
                 src="/assets/sections/sec3_pipeline.png"
                 alt="AyuSwar AI Stepped Pipeline: 16 kHz Waveform > 4 Stages > Prescription Card"
                 style={{
@@ -1352,14 +1352,14 @@ export default function HeroLanding({
                     {/* Live Equalizer Bars */}
                     <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '38px', margin: '4px 0' }}>
                       {[25, 38, 55, 92, 98, 70, 45, 82, 95, 62, 35, 20].map((h, i) => (
-                        <div 
-                          key={i} 
-                          style={{ 
-                            flex: 1, 
-                            height: `${h}%`, 
-                            background: i === 3 || i === 4 || i === 8 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #008B8B 100%)', 
-                            borderRadius: '2px' 
-                          }} 
+                        <div
+                          key={i}
+                          style={{
+                            flex: 1,
+                            height: `${h}%`,
+                            background: i === 3 || i === 4 || i === 8 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #008B8B 100%)',
+                            borderRadius: '2px'
+                          }}
                         />
                       ))}
                     </div>
@@ -1448,7 +1448,7 @@ export default function HeroLanding({
                       lineHeight: 1.35,
                       overflow: 'hidden'
                     }}>
-{`{
+                      {`{
   "resourceType": "Bundle",
   "type": "transaction",
   "entry": ["Encounter", "Rx"]
@@ -1583,7 +1583,7 @@ export default function HeroLanding({
               const isSelected = activeWorkbenchMoat === tile.id;
               const IconComp = tile.icon;
               return (
-                <div 
+                <div
                   key={tile.id}
                   onClick={() => setActiveWorkbenchMoat(prev => prev === tile.id ? null : tile.id)}
                   style={{
@@ -1597,8 +1597,8 @@ export default function HeroLanding({
                     justifyContent: 'space-between',
                     minHeight: '230px',
                     transition: 'all 0.22s ease',
-                    boxShadow: isSelected 
-                      ? '0 12px 32px rgba(16, 185, 129, 0.22), 0 0 0 1px #10B981' 
+                    boxShadow: isSelected
+                      ? '0 12px 32px rgba(16, 185, 129, 0.22), 0 0 0 1px #10B981'
                       : '0 4px 18px rgba(10, 37, 64, 0.04)',
                     transform: isSelected ? 'translateY(-2px)' : 'none'
                   }}
@@ -1746,377 +1746,377 @@ export default function HeroLanding({
 
             {/* Workbench Stage Container */}
             <div style={{ padding: '32px' }}>
-            {/* FORMAT 1: LIVE ACOUSTIC SPECTROGRAM HUD */}
-            {activeWorkbenchMoat === 'spectrogram' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
-                <div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                    <Activity size={13} />
-                    <span>EXPERIMENTAL ACOUSTIC BIOMARKER ENGINE</span>
-                  </div>
-                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                    Real-Time FFT Spectrogram & Biomarker HUD
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                    Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluates exploratory respiratory sound patterns: asthmatic wheeze harmonic analysis (400–650 Hz) and pediatric stridor high-spectral centroid tracking (&gt;2500 Hz). Synthetic prototype; not for clinical diagnosis.
-                  </p>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>13-Dim</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>MFCC Feature Vector</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Acoustic Coeffs</div>
+              {/* FORMAT 1: LIVE ACOUSTIC SPECTROGRAM HUD */}
+              {activeWorkbenchMoat === 'spectrogram' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                      <Activity size={13} />
+                      <span>EXPERIMENTAL ACOUSTIC BIOMARKER ENGINE</span>
                     </div>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>400–650 Hz</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Wheeze Bandwidth</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Harmonic Centroid</div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                      Real-Time FFT Spectrogram & Biomarker HUD
+                    </h3>
+                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                      Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluates exploratory respiratory sound patterns: asthmatic wheeze harmonic analysis (400–650 Hz) and pediatric stridor high-spectral centroid tracking (&gt;2500 Hz). Synthetic prototype; not for clinical diagnosis.
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>13-Dim</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>MFCC Feature Vector</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Acoustic Coeffs</div>
+                      </div>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>400–650 Hz</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Wheeze Bandwidth</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Harmonic Centroid</div>
+                      </div>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>&gt;2500 Hz</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Stridor Detection</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Spectral Flux</div>
+                      </div>
                     </div>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#008B8B' }}>&gt;2500 Hz</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Stridor Detection</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Spectral Flux</div>
-                    </div>
-                  </div>
 
-                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <button
-                      onClick={() => setIsAcousticPlaying(!isAcousticPlaying)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: isAcousticPlaying ? '#EF4444' : '#008B8B',
-                        color: '#ffffff',
-                        border: 'none',
-                        padding: '10px 20px',
-                        borderRadius: '12px',
-                        fontSize: '13px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {isAcousticPlaying ? <Pause size={15} /> : <Play size={15} />}
-                      <span>{isAcousticPlaying ? 'Stop Auscultation' : 'Simulate Wheeze Audio Stream'}</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (onOpenAcousticLab) onOpenAcousticLab();
-                        else navigate('/acoustic-lab');
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: '#008B8B',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        padding: '10px 18px',
-                        borderRadius: '12px',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)'
-                      }}
-                    >
-                      <span>🔬 Launch Full Biomarker Lab</span>
-                      <ArrowUpRight size={14} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Simulated Spectrogram HUD Visualizer */}
-                <div style={{
-                  background: 'linear-gradient(135deg, #0A192F 0%, #0F172A 100%)',
-                  borderRadius: '20px',
-                  border: '1.5px solid #1E293B',
-                  padding: '24px',
-                  boxShadow: '0 12px 30px rgba(0,0,0,0.25)'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#2DD4BF', textTransform: 'uppercase' }}>
-                      FFT Waterfall Display (0–8,000 Hz)
-                    </span>
-                    <span style={{ fontSize: '10px', color: '#94A3B8', fontFamily: 'monospace' }}>16-bit PCM Linear</span>
-                  </div>
-
-                  {/* Equalizer Frequency Bars */}
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '140px', padding: '12px 0', borderBottom: '1px solid #334155' }}>
-                    {[35, 45, 60, 85, 95, 78, 65, 50, 40, 70, 90, 80, 55, 30, 25, 40, 60, 50, 35, 20].map((h, idx) => {
-                      const dynamicH = isAcousticPlaying ? Math.min(100, Math.max(15, (h + Math.sin(idx + Date.now()/200) * 20))) : h;
-                      return (
-                        <div
-                          key={idx}
-                          style={{
-                            flex: 1,
-                            height: `${dynamicH}%`,
-                            background: idx >= 3 && idx <= 5 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #008B8B 100%)',
-                            borderRadius: '3px',
-                            transition: 'height 0.15s ease'
-                          }}
-                        />
-                      );
-                    })}
-                  </div>
-
-                  {/* Auscultation Frequency Legend */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '10px', color: '#94A3B8' }}>
-                    <span>100 Hz (Vesicular)</span>
-                    <span style={{ color: '#F87171', fontWeight: 700 }}>450 Hz (Wheeze Peak)</span>
-                    <span>2.8 kHz (Stridor)</span>
-                    <span>8 kHz</span>
-                  </div>
-
-                  <div style={{ marginTop: '16px', background: 'rgba(30, 41, 59, 0.7)', padding: '10px 12px', borderRadius: '10px', border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '11.5px', color: '#E2E8F0', fontWeight: 700 }}>Biomarker Classification:</span>
-                    <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#FCA5A5', border: '1px solid #EF4444' }}>
-                      Exp Wheeze Detected (88.2% Conf)
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* FORMAT 2: COMPUTER VISION BLISTER STRIP HUD */}
-            {activeWorkbenchMoat === 'vision_scanner' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
-                <div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.1)', color: '#D97706', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                    <Scan size={13} />
-                    <span>TESSERACT IN-BROWSER OCR & BLISTER STRIP GEOMETRY</span>
-                  </div>
-                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                    Physical Medicine Strip Computer Vision HUD
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                    Converts physical medicine foil strips into verified digital medication entries using perspective transform, contrast thresholding, and OCR bounding boxes. Automatically flags expired medicines and drug-drug interactions.
-                  </p>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>98.4%</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>OCR Drug Matching</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>ICMR Drug Index</div>
-                    </div>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>100%</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Expiry Verification</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero Expired Pills</div>
-                    </div>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>CYP450</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Interaction Sentinel</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Liver/Kidney Alerts</div>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => setIsAcousticPlaying(!isAcousticPlaying)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: isAcousticPlaying ? '#EF4444' : '#008B8B',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '10px 20px',
+                          borderRadius: '12px',
+                          fontSize: '13px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {isAcousticPlaying ? <Pause size={15} /> : <Play size={15} />}
+                        <span>{isAcousticPlaying ? 'Stop Auscultation' : 'Simulate Wheeze Audio Stream'}</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (onOpenAcousticLab) onOpenAcousticLab();
+                          else navigate('/acoustic-lab');
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: '#008B8B',
+                          color: '#FFFFFF',
+                          border: 'none',
+                          padding: '10px 18px',
+                          borderRadius: '12px',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)'
+                        }}
+                      >
+                        <span>🔬 Launch Full Biomarker Lab</span>
+                        <ArrowUpRight size={14} />
+                      </button>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <button
-                      onClick={() => setSelectedFeatureModalKey('prescription_scanner')}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: '#D97706',
-                        color: '#ffffff',
-                        border: 'none',
-                        padding: '10px 20px',
-                        borderRadius: '12px',
-                        fontSize: '13px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <Scan size={15} />
-                      <span>Launch Blister Strip Scanner</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Computer Vision Simulated Strip Scanner */}
-                <div style={{
-                  background: '#1E293B',
-                  borderRadius: '20px',
-                  border: '1.5px solid #334155',
-                  padding: '24px',
-                  boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
-                  position: 'relative'
-                }}>
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#FBBF24', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Tesseract OCR & Canvas Viewfinder</span>
-                    <span>Client-Side | WebAssembly</span>
-                  </div>
-
-                  {/* Realistic Blister Pack with Bounding Boxes */}
+                  {/* Simulated Spectrogram HUD Visualizer */}
                   <div style={{
-                    background: 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)',
-                    borderRadius: '16px',
-                    padding: '20px',
-                    position: 'relative',
-                    border: '2px dashed #475569',
-                    boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.2)'
+                    background: 'linear-gradient(135deg, #0A192F 0%, #0F172A 100%)',
+                    borderRadius: '20px',
+                    border: '1.5px solid #1E293B',
+                    padding: '24px',
+                    boxShadow: '0 12px 30px rgba(0,0,0,0.25)'
                   }}>
-                    {/* Bounding Box 1: Drug Name */}
-                    <div style={{
-                      border: '2px solid #008B8B',
-                      background: 'rgba(0,139,139,0.2)',
-                      padding: '6px 10px',
-                      borderRadius: '8px',
-                      marginBottom: '10px',
-                      position: 'relative'
-                    }}>
-                      <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#008B8B', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
-                        DRUG_NAME (98.4%)
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#2DD4BF', textTransform: 'uppercase' }}>
+                        FFT Waterfall Display (0–8,000 Hz)
                       </span>
-                      <div style={{ fontSize: '15px', fontWeight: 900, color: '#0F172A', fontFamily: 'monospace' }}>
-                        METFORMIN HYDROCHLORIDE 500mg
+                      <span style={{ fontSize: '10px', color: '#94A3B8', fontFamily: 'monospace' }}>16-bit PCM Linear</span>
+                    </div>
+
+                    {/* Equalizer Frequency Bars */}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '140px', padding: '12px 0', borderBottom: '1px solid #334155' }}>
+                      {[35, 45, 60, 85, 95, 78, 65, 50, 40, 70, 90, 80, 55, 30, 25, 40, 60, 50, 35, 20].map((h, idx) => {
+                        const dynamicH = isAcousticPlaying ? Math.min(100, Math.max(15, (h + Math.sin(idx + Date.now() / 200) * 20))) : h;
+                        return (
+                          <div
+                            key={idx}
+                            style={{
+                              flex: 1,
+                              height: `${dynamicH}%`,
+                              background: idx >= 3 && idx <= 5 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #008B8B 100%)',
+                              borderRadius: '3px',
+                              transition: 'height 0.15s ease'
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Auscultation Frequency Legend */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '10px', color: '#94A3B8' }}>
+                      <span>100 Hz (Vesicular)</span>
+                      <span style={{ color: '#F87171', fontWeight: 700 }}>450 Hz (Wheeze Peak)</span>
+                      <span>2.8 kHz (Stridor)</span>
+                      <span>8 kHz</span>
+                    </div>
+
+                    <div style={{ marginTop: '16px', background: 'rgba(30, 41, 59, 0.7)', padding: '10px 12px', borderRadius: '10px', border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11.5px', color: '#E2E8F0', fontWeight: 700 }}>Biomarker Classification:</span>
+                      <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#FCA5A5', border: '1px solid #EF4444' }}>
+                        Exp Wheeze Detected (88.2% Conf)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* FORMAT 2: COMPUTER VISION BLISTER STRIP HUD */}
+              {activeWorkbenchMoat === 'vision_scanner' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.1)', color: '#D97706', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                      <Scan size={13} />
+                      <span>TESSERACT IN-BROWSER OCR & BLISTER STRIP GEOMETRY</span>
+                    </div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                      Physical Medicine Strip Computer Vision HUD
+                    </h3>
+                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                      Converts physical medicine foil strips into verified digital medication entries using perspective transform, contrast thresholding, and OCR bounding boxes. Automatically flags expired medicines and drug-drug interactions.
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>98.4%</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>OCR Drug Matching</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>ICMR Drug Index</div>
+                      </div>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>100%</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Expiry Verification</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero Expired Pills</div>
+                      </div>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>CYP450</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Interaction Sentinel</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Liver/Kidney Alerts</div>
                       </div>
                     </div>
 
-                    {/* Bounding Box 2: Expiry & Batch */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button
+                        onClick={() => setSelectedFeatureModalKey('prescription_scanner')}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: '#D97706',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '10px 20px',
+                          borderRadius: '12px',
+                          fontSize: '13px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <Scan size={15} />
+                        <span>Launch Blister Strip Scanner</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Computer Vision Simulated Strip Scanner */}
+                  <div style={{
+                    background: '#1E293B',
+                    borderRadius: '20px',
+                    border: '1.5px solid #334155',
+                    padding: '24px',
+                    boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+                    position: 'relative'
+                  }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#FBBF24', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Tesseract OCR & Canvas Viewfinder</span>
+                      <span>Client-Side | WebAssembly</span>
+                    </div>
+
+                    {/* Realistic Blister Pack with Bounding Boxes */}
+                    <div style={{
+                      background: 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)',
+                      borderRadius: '16px',
+                      padding: '20px',
+                      position: 'relative',
+                      border: '2px dashed #475569',
+                      boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.2)'
+                    }}>
+                      {/* Bounding Box 1: Drug Name */}
                       <div style={{
-                        border: '2px solid #10B981',
-                        background: 'rgba(16,185,129,0.2)',
+                        border: '2px solid #008B8B',
+                        background: 'rgba(0,139,139,0.2)',
                         padding: '6px 10px',
                         borderRadius: '8px',
+                        marginBottom: '10px',
                         position: 'relative'
                       }}>
-                        <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#10B981', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
-                          EXPIRY (VALID)
+                        <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#008B8B', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
+                          DRUG_NAME (98.4%)
                         </span>
-                        <div style={{ fontSize: '13px', fontWeight: 800, color: '#064E3B', fontFamily: 'monospace' }}>
-                          EXP: 08/2027
+                        <div style={{ fontSize: '15px', fontWeight: 900, color: '#0F172A', fontFamily: 'monospace' }}>
+                          METFORMIN HYDROCHLORIDE 500mg
                         </div>
                       </div>
 
-                      <div style={{
-                        border: '2px solid #3B82F6',
-                        background: 'rgba(59,130,246,0.2)',
-                        padding: '6px 10px',
-                        borderRadius: '8px',
-                        position: 'relative'
-                      }}>
-                        <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#3B82F6', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
-                          BATCH (VERIFIED)
-                        </span>
-                        <div style={{ fontSize: '13px', fontWeight: 800, color: '#1E3A8A', fontFamily: 'monospace' }}>
-                          B.No: BNT-44091
+                      {/* Bounding Box 2: Expiry & Batch */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                        <div style={{
+                          border: '2px solid #10B981',
+                          background: 'rgba(16,185,129,0.2)',
+                          padding: '6px 10px',
+                          borderRadius: '8px',
+                          position: 'relative'
+                        }}>
+                          <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#10B981', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
+                            EXPIRY (VALID)
+                          </span>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#064E3B', fontFamily: 'monospace' }}>
+                            EXP: 08/2027
+                          </div>
+                        </div>
+
+                        <div style={{
+                          border: '2px solid #3B82F6',
+                          background: 'rgba(59,130,246,0.2)',
+                          padding: '6px 10px',
+                          borderRadius: '8px',
+                          position: 'relative'
+                        }}>
+                          <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#3B82F6', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
+                            BATCH (VERIFIED)
+                          </span>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#1E3A8A', fontFamily: 'monospace' }}>
+                            B.No: BNT-44091
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div style={{ marginTop: '16px', background: '#0F172A', padding: '10px 14px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>✓ Verified against Pharmacopeia CDSCO Database</span>
-                    <span style={{ fontSize: '10px', color: '#94A3B8' }}>0 Contraindications</span>
+                    <div style={{ marginTop: '16px', background: '#0F172A', padding: '10px 14px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>✓ Verified against Pharmacopeia CDSCO Database</span>
+                      <span style={{ fontSize: '10px', color: '#94A3B8' }}>0 Contraindications</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* FORMAT 3: ABDM FHIR R4 JSON TERMINAL */}
-            {activeWorkbenchMoat === 'fhir_terminal' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
-                <div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(14, 165, 233, 0.1)', color: '#0EA5E9', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                    <Terminal size={13} />
-                    <span>AYUSHMAN BHARAT DIGITAL MISSION (ABDM) COMPLIANCE</span>
-                  </div>
-                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                    Official ABDM FHIR R4 JSON Terminal
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                    Instantly compiles structured clinical encounters into standard HL7 FHIR R4 bundles. Pre-linked to the patient's Ayushman Bharat Health Account (ABHA ID) with mandatory attending clinician cryptographic sign-off.
-                  </p>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>ABHA Linked</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>14-digit National Health ID</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>QR Code summary ready</div>
+              {/* FORMAT 3: ABDM FHIR R4 JSON TERMINAL */}
+              {activeWorkbenchMoat === 'fhir_terminal' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(14, 165, 233, 0.1)', color: '#0EA5E9', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                      <Terminal size={13} />
+                      <span>AYUSHMAN BHARAT DIGITAL MISSION (ABDM) COMPLIANCE</span>
                     </div>
-                    <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>SHA-256</div>
-                      <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Physician Sign-Off Hash</div>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero autonomous commit</div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                      Official ABDM FHIR R4 JSON Terminal
+                    </h3>
+                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                      Instantly compiles structured clinical encounters into standard HL7 FHIR R4 bundles. Pre-linked to the patient's Ayushman Bharat Health Account (ABHA ID) with mandatory attending clinician cryptographic sign-off.
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>ABHA Linked</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>14-digit National Health ID</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>QR Code summary ready</div>
+                      </div>
+                      <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>SHA-256</div>
+                        <div style={{ fontSize: '11px', fontWeight: 750, color: '#0A2540' }}>Physician Sign-Off Hash</div>
+                        <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero autonomous commit</div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button
+                        onClick={() => setSelectedFeatureModalKey('abdm_fhir')}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: '#0EA5E9',
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '10px 18px',
+                          borderRadius: '12px',
+                          fontSize: '13px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <span>Inspect FHIR Blueprint Specs</span>
+                        <ArrowUpRight size={14} />
+                      </button>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <button
-                      onClick={() => setSelectedFeatureModalKey('abdm_fhir')}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        background: '#0EA5E9',
-                        color: '#ffffff',
-                        border: 'none',
-                        padding: '10px 18px',
-                        borderRadius: '12px',
-                        fontSize: '13px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <span>Inspect FHIR Blueprint Specs</span>
-                      <ArrowUpRight size={14} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Dark JSON Terminal */}
-                <div style={{
-                  background: '#0F172A',
-                  borderRadius: '20px',
-                  border: '1.5px solid #334155',
-                  padding: '20px',
-                  boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
-                  fontFamily: 'monospace',
-                  fontSize: '11.5px',
-                  color: '#CBD5E1',
-                  maxHeight: '340px',
-                  overflowY: 'auto'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '10px', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
-                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
-                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
+                  {/* Dark JSON Terminal */}
+                  <div style={{
+                    background: '#0F172A',
+                    borderRadius: '20px',
+                    border: '1.5px solid #334155',
+                    padding: '20px',
+                    boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
+                    fontFamily: 'monospace',
+                    fontSize: '11.5px',
+                    color: '#CBD5E1',
+                    maxHeight: '340px',
+                    overflowY: 'auto'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '10px', marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
+                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
+                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
+                      </div>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard?.writeText(JSON.stringify({
+                            resourceType: "Bundle",
+                            type: "document",
+                            identifier: "ABHA-IN-91-8849-0129",
+                            condition: "ICD-10 R06.2 - Wheezing",
+                            practitioner: "Dr. Priya Sharma, MBBS, Reg: TS-48910"
+                          }, null, 2));
+                          setIsFhirCopied(true);
+                          setTimeout(() => setIsFhirCopied(false), 2000);
+                        }}
+                        style={{
+                          background: 'rgba(255,255,255,0.1)',
+                          border: 'none',
+                          color: '#94A3B8',
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '10px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        {isFhirCopied ? <Check size={12} color="#34D399" /> : <Copy size={12} />}
+                        <span>{isFhirCopied ? 'Copied!' : 'Copy FHIR JSON'}</span>
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard?.writeText(JSON.stringify({
-                          resourceType: "Bundle",
-                          type: "document",
-                          identifier: "ABHA-IN-91-8849-0129",
-                          condition: "ICD-10 R06.2 - Wheezing",
-                          practitioner: "Dr. Priya Sharma, MBBS, Reg: TS-48910"
-                        }, null, 2));
-                        setIsFhirCopied(true);
-                        setTimeout(() => setIsFhirCopied(false), 2000);
-                      }}
-                      style={{
-                        background: 'rgba(255,255,255,0.1)',
-                        border: 'none',
-                        color: '#94A3B8',
-                        padding: '4px 10px',
-                        borderRadius: '6px',
-                        fontSize: '10px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}
-                    >
-                      {isFhirCopied ? <Check size={12} color="#34D399" /> : <Copy size={12} />}
-                      <span>{isFhirCopied ? 'Copied!' : 'Copy FHIR JSON'}</span>
-                    </button>
-                  </div>
 
-                  <pre style={{ margin: 0, lineHeight: 1.45, color: '#38BDF8' }}>
-{`{
+                    <pre style={{ margin: 0, lineHeight: 1.45, color: '#38BDF8' }}>
+                      {`{
   "resourceType": "Bundle",
   "id": "ayuswar-encounter-8849",
   "type": "document",
@@ -2149,127 +2149,127 @@ export default function HeroLanding({
     }
   ]
 }`}
-                  </pre>
+                    </pre>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* FORMAT 4: INDIC METAPHOR RESOLVER */}
-            {activeWorkbenchMoat === 'metaphor_resolver' && (
-              <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(139, 92, 246, 0.1)', color: '#8B5CF6', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                  <Languages size={13} />
-                  <span>CULTURAL IDIOM RESOLUTION ENGINE</span>
-                </div>
-                <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                  Vernacular Visceral Metaphor Decoder
-                </h3>
-                <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                  Western LLMs translate colloquial Indic idioms literally, misinterpreting acute clinical complaints. AyuSwar maps cultural metaphors into validated WHO ICD-10 standard codes.
-                </p>
+              {/* FORMAT 4: INDIC METAPHOR RESOLVER */}
+              {activeWorkbenchMoat === 'metaphor_resolver' && (
+                <div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(139, 92, 246, 0.1)', color: '#8B5CF6', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                    <Languages size={13} />
+                    <span>CULTURAL IDIOM RESOLUTION ENGINE</span>
+                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                    Vernacular Visceral Metaphor Decoder
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    Western LLMs translate colloquial Indic idioms literally, misinterpreting acute clinical complaints. AyuSwar maps cultural metaphors into validated WHO ICD-10 standard codes.
+                  </p>
 
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                    <thead>
-                      <tr style={{ background: '#F1F5F9', color: '#0A2540', textAlign: 'left' }}>
-                        <th style={{ padding: '12px 14px', borderRadius: '10px 0 0 10px' }}>Patient Spoken Idiom</th>
-                        <th style={{ padding: '12px 14px' }}>Literal Translation (Fails)</th>
-                        <th style={{ padding: '12px 14px' }}>AyuSwar Indic Semantic Mapping</th>
-                        <th style={{ padding: '12px 14px', borderRadius: '0 10px 10px 0' }}>Standard WHO ICD-10</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>గుండెల్లో బండ పెట్టినట్లు బరువు (Telugu)</td>
-                        <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Heavy rock placed on chest"</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Constricting retrosternal chest pressure</td>
-                        <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEE2E2', color: '#DC2626', fontWeight: 750 }}>ICD-10 I20.9 (Angina)</span></td>
-                      </tr>
-                      <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>छाती में आग लग रही है (Hindi)</td>
-                        <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Fire is burning inside chest"</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Severe epigastric burning pyrosis</td>
-                        <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#DBEAFE', color: '#1E40AF', fontWeight: 750 }}>ICD-10 K21.9 (GERD)</span></td>
-                      </tr>
-                      <tr>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>ఊపిరి అందక రొప్పుతున్నాడు (Telugu)</td>
-                        <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Breath not reaching, panting"</td>
-                        <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Acute dyspnea / Respiratory distress</td>
-                        <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEF3C7', color: '#B45309', fontWeight: 750 }}>ICD-10 R06.0 (Dyspnea)</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <thead>
+                        <tr style={{ background: '#F1F5F9', color: '#0A2540', textAlign: 'left' }}>
+                          <th style={{ padding: '12px 14px', borderRadius: '10px 0 0 10px' }}>Patient Spoken Idiom</th>
+                          <th style={{ padding: '12px 14px' }}>Literal Translation (Fails)</th>
+                          <th style={{ padding: '12px 14px' }}>AyuSwar Indic Semantic Mapping</th>
+                          <th style={{ padding: '12px 14px', borderRadius: '0 10px 10px 0' }}>Standard WHO ICD-10</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>గుండెల్లో బండ పెట్టినట్లు బరువు (Telugu)</td>
+                          <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Heavy rock placed on chest"</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Constricting retrosternal chest pressure</td>
+                          <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEE2E2', color: '#DC2626', fontWeight: 750 }}>ICD-10 I20.9 (Angina)</span></td>
+                        </tr>
+                        <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>छाती में आग लग रही है (Hindi)</td>
+                          <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Fire is burning inside chest"</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Severe epigastric burning pyrosis</td>
+                          <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#DBEAFE', color: '#1E40AF', fontWeight: 750 }}>ICD-10 K21.9 (GERD)</span></td>
+                        </tr>
+                        <tr>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>ఊపిరి అందక రొప్పుతున్నాడు (Telugu)</td>
+                          <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Breath not reaching, panting"</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0A2540' }}>Acute dyspnea / Respiratory distress</td>
+                          <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEF3C7', color: '#B45309', fontWeight: 750 }}>ICD-10 R06.0 (Dyspnea)</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* FORMAT 5: DUAL-SPEAKER DIARIZATION */}
-            {activeWorkbenchMoat === 'diarization' && (
-              <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                  <Mic size={13} />
-                  <span>SPEAKER SEPARATION PROTOTYPE</span>
+              {/* FORMAT 5: DUAL-SPEAKER DIARIZATION */}
+              {activeWorkbenchMoat === 'diarization' && (
+                <div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                    <Mic size={13} />
+                    <span>SPEAKER SEPARATION PROTOTYPE</span>
+                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                    Dual-Speaker Acoustic Diarization in High-Entropy OPDs
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    Simulates separating the attending physician’s voice from background dialogue. Browser speech (Web Speech API). Gnani voice integration: planned.
+                  </p>
+                  <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '24px', fontWeight: 900, color: '#008B8B' }}>Prototype</div>
+                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Speaker Separation</div>
+                      <div style={{ fontSize: '11px', color: '#94A3B8' }}>Simulated demonstration</div>
+                    </div>
+                    <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '24px', fontWeight: 900, color: '#10B981' }}>Local DSP</div>
+                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Diarization Latency</div>
+                      <div style={{ fontSize: '11px', color: '#94A3B8' }}>Zero cloud trip</div>
+                    </div>
+                    <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '24px', fontWeight: 900, color: '#8B5CF6' }}>Planned</div>
+                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Acoustic Vectors</div>
+                      <div style={{ fontSize: '11px', color: '#94A3B8' }}>Web Speech API</div>
+                    </div>
+                  </div>
                 </div>
-                <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                  Dual-Speaker Acoustic Diarization in High-Entropy OPDs
-                </h3>
-                <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                  Simulates separating the attending physician’s voice from background dialogue. Browser speech (Web Speech API). Gnani voice integration: planned.
-                </p>
-                <div style={{ background: '#F8FAFC', padding: '24px', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#008B8B' }}>Prototype</div>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Speaker Separation</div>
-                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Simulated demonstration</div>
-                  </div>
-                  <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#10B981' }}>Local DSP</div>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Diarization Latency</div>
-                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Zero cloud trip</div>
-                  </div>
-                  <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#8B5CF6' }}>Planned</div>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0A2540' }}>Acoustic Vectors</div>
-                    <div style={{ fontSize: '11px', color: '#94A3B8' }}>Web Speech API</div>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
 
-            {/* FORMAT 6: OFFLINE EDGE OS SYNC */}
-            {activeWorkbenchMoat === 'offline_edge' && (
-              <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                  <Lock size={13} />
-                  <span>RURAL RESILIENCE ENGINE</span>
+              {/* FORMAT 6: OFFLINE EDGE OS SYNC */}
+              {activeWorkbenchMoat === 'offline_edge' && (
+                <div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                    <Lock size={13} />
+                    <span>RURAL RESILIENCE ENGINE</span>
+                  </div>
+                  <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+                    Disconnected Edge OS with Cryptographic Sync Queue
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    When rural internet cuts out, AyuSwar continues transcribing, structuring, and generating spoken audio locally on edge memory. Encrypted records sync automatically when connectivity restores.
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                    <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>100% Local Processing</div>
+                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
+                    </div>
+                    <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>AES-GCM-256 Storage</div>
+                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
+                    </div>
+                    <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>Conflict-Free Re-Sync</div>
+                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
+                    </div>
+                  </div>
                 </div>
-                <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
-                  Disconnected Edge OS with Cryptographic Sync Queue
-                </h3>
-                <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
-                  When rural internet cuts out, AyuSwar continues transcribing, structuring, and generating spoken audio locally on edge memory. Encrypted records sync automatically when connectivity restores.
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                  <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>100% Local Processing</div>
-                    <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
-                  </div>
-                  <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>AES-GCM-256 Storage</div>
-                    <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
-                  </div>
-                  <div style={{ background: '#F8FAFC', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>Conflict-Free Re-Sync</div>
-                    <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </section>
 
       {/* =========================================================================
@@ -2509,23 +2509,23 @@ export default function HeroLanding({
               </div>
 
               {/* Realistic High-Fidelity Acoustic Speech Waveform */}
-              <div 
+              <div
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const clickX = e.clientX - rect.left;
                   const pct = Math.min(100, Math.max(0, (clickX / rect.width) * 100));
                   setKaraokeProgress(pct);
                 }}
-                style={{ 
-                  position: 'relative', 
-                  height: '68px', 
-                  padding: '8px 4px', 
-                  marginBottom: '16px', 
-                  background: 'rgba(2, 6, 23, 0.6)', 
-                  borderRadius: '14px', 
+                style={{
+                  position: 'relative',
+                  height: '68px',
+                  padding: '8px 4px',
+                  marginBottom: '16px',
+                  background: 'rgba(2, 6, 23, 0.6)',
+                  borderRadius: '14px',
                   border: '1px solid #1E293B',
-                  display: 'flex', 
-                  alignItems: 'center', 
+                  display: 'flex',
+                  alignItems: 'center',
                   cursor: 'pointer',
                   overflow: 'hidden'
                 }}
@@ -2536,11 +2536,11 @@ export default function HeroLanding({
                 {/* Mirrored High-Density Acoustic Speech Formant Bars (72 Bars) */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', height: '100%', gap: '2px', position: 'relative', zIndex: 1 }}>
                   {[
-                    14, 22, 38, 54, 72, 88, 96, 78, 50, 26, 16, 20, 
-                    42, 68, 85, 98, 82, 60, 34, 18, 12, 28, 48, 76, 
-                    92, 100, 84, 58, 30, 16, 22, 44, 70, 90, 80, 52, 
-                    28, 14, 18, 36, 62, 88, 94, 76, 48, 26, 16, 32, 
-                    56, 82, 96, 86, 64, 38, 20, 14, 24, 46, 74, 92, 
+                    14, 22, 38, 54, 72, 88, 96, 78, 50, 26, 16, 20,
+                    42, 68, 85, 98, 82, 60, 34, 18, 12, 28, 48, 76,
+                    92, 100, 84, 58, 30, 16, 22, 44, 70, 90, 80, 52,
+                    28, 14, 18, 36, 62, 88, 94, 76, 48, 26, 16, 32,
+                    56, 82, 96, 86, 64, 38, 20, 14, 24, 46, 74, 92,
                     84, 56, 32, 18, 26, 48, 70, 86, 72, 44, 22, 14
                   ].map((h, i) => {
                     const barProgress = (i / 72) * 100;
@@ -2548,7 +2548,7 @@ export default function HeroLanding({
                     // Realistic organic human speech formant wobble when playing
                     const speechWobble = isKaraokePlaying ? Math.sin(i * 0.45 + Date.now() / 140) * 16 : 0;
                     const dynamicHeight = Math.min(100, Math.max(12, h + speechWobble));
-                    
+
                     return (
                       <div
                         key={i}
@@ -2556,8 +2556,8 @@ export default function HeroLanding({
                           flex: 1,
                           height: `${dynamicHeight}%`,
                           borderRadius: '3px',
-                          background: isPassed 
-                            ? 'linear-gradient(180deg, #38BDF8 0%, #008B8B 50%, #10B981 100%)' 
+                          background: isPassed
+                            ? 'linear-gradient(180deg, #38BDF8 0%, #008B8B 50%, #10B981 100%)'
                             : 'linear-gradient(180deg, #334155 0%, #1E293B 100%)',
                           boxShadow: isPassed ? '0 0 6px rgba(45,212,191,0.6)' : 'none',
                           transition: 'height 0.12s ease',
@@ -2627,16 +2627,16 @@ export default function HeroLanding({
                         position: 'relative',
                         padding: '10px 16px',
                         borderRadius: '12px',
-                        background: isHighlighted 
-                          ? 'linear-gradient(135deg, #008B8B 0%, #10B981 100%)' 
-                          : isPast 
-                          ? 'rgba(45, 212, 191, 0.15)' 
-                          : 'rgba(30, 41, 59, 0.6)',
-                        border: isHighlighted 
-                          ? '2px solid #5EEAD4' 
-                          : isPast 
-                          ? '1px solid #008B8B' 
-                          : '1px solid #334155',
+                        background: isHighlighted
+                          ? 'linear-gradient(135deg, #008B8B 0%, #10B981 100%)'
+                          : isPast
+                            ? 'rgba(45, 212, 191, 0.15)'
+                            : 'rgba(30, 41, 59, 0.6)',
+                        border: isHighlighted
+                          ? '2px solid #5EEAD4'
+                          : isPast
+                            ? '1px solid #008B8B'
+                            : '1px solid #334155',
                         boxShadow: isHighlighted ? '0 0 20px rgba(45, 212, 191, 0.6)' : 'none',
                         transform: isHighlighted ? 'scale(1.08)' : 'none',
                         transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -2796,586 +2796,586 @@ export default function HeroLanding({
             <div>
               {/* 4 Guardrail Selector Tabs */}
               <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            background: '#F8FAFC',
-            borderBottom: '2px solid #CBD5E1',
-            padding: '10px 14px',
-            gap: '8px'
-          }}>
-            {[
-              { id: 'human_agency', label: '1. 100% Human Agency (DSC Sign-Off)', icon: Stethoscope, color: '#008B8B', tag: 'PHYSICIAN CONSENT' },
-              { id: 'dpdp_ephemeral', label: '2. DPDP Act 2023 (Ephemeral Ingestion)', icon: Lock, color: '#059669', tag: 'DATA PRIVACY' },
-              { id: 'zero_hallucination', label: '3. Zero Hallucination (Audio Anchors)', icon: ShieldCheck, color: '#2563EB', tag: 'EVIDENCE ANCHOR' },
-              { id: 'uncertainty_sentinel', label: '4. Uncertainty Sentinel (Noise Fallback)', icon: AlertTriangle, color: '#D97706', tag: 'FAIL-SAFE' }
-            ].map((tab) => {
-              const isActive = governanceTab === tab.id;
-              const TabIcon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setGovernanceTab(tab.id);
-                    setGovSimAction({
-                      dscSigned: false,
-                      dscAlert: null,
-                      audioPurged: false,
-                      noiseDb: tab.id === 'uncertainty_sentinel' ? 76 : 52,
-                      hallucinationTested: false
-                    });
-                  }}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '10px 16px',
-                    borderRadius: '12px',
-                    border: isActive ? `1.5px solid ${tab.color}` : '1px solid #E2E8F0',
-                    background: isActive ? '#ffffff' : '#F1F5F9',
-                    color: isActive ? tab.color : '#475569',
-                    fontSize: '12.5px',
-                    fontWeight: isActive ? 800 : 650,
-                    cursor: 'pointer',
-                    boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
-                    transition: 'all 0.18s ease',
-                    flex: '1 1 auto',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <TabIcon size={15} color={isActive ? tab.color : '#64748B'} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Interactive Simulation Stage */}
-          <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
-            {/* Left: Guardrail Clinical Description */}
-            <div>
-              {governanceTab === 'human_agency' && (
-                <div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
-                    NHA & NMC CLINICAL GOVERNANCE DIRECTIVE
-                  </span>
-                  <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
-                    Doctor-in-the-Loop Final Sign-Off
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    The AI strictly functions as an ambient scribe. Under Indian Medical Council Regulations, no medical record, diagnostic ICD-10 code, or prescription may enter the patient's record without explicit human physician cryptographic authorization.
-                  </p>
-                  <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                    <div>🔒 <strong>Cryptographic Protocol:</strong> Class-3 Digital Signature Certificate (DSC) or Aadhaar OTP eSign</div>
-                    <div style={{ marginTop: '4px' }}>🛡️ <strong>Safeguard Enforcement:</strong> Zero autonomous writes to ABDM Health Data Repository (M3)</div>
-                  </div>
-                </div>
-              )}
-
-              {governanceTab === 'dpdp_ephemeral' && (
-                <div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(5,150,105,0.1)', color: '#059669', padding: '4px 10px', borderRadius: '6px' }}>
-                    DIGITAL PERSONAL DATA PROTECTION (DPDP) ACT 2023
-                  </span>
-                  <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
-                    Sovereign Ephemeral Audio Ingestion
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    Rural patient voice consultations are processed strictly ephemerally in RAM. Raw audio waveforms are streamed through low-resource phonetic encoders and immediately purged from memory upon SOAP tokenization.
-                  </p>
-                  <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                    <div>🇮🇳 <strong>Data Sovereignty:</strong> 100% processed within Indian territorial boundaries</div>
-                    <div style={{ marginTop: '4px' }}>🗑️ <strong>Zero Cloud Audio Retention:</strong> 0 KB persistent audio recordings stored on disk</div>
-                  </div>
-                </div>
-              )}
-
-              {governanceTab === 'zero_hallucination' && (
-                <div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(37,99,235,0.1)', color: '#2563EB', padding: '4px 10px', borderRadius: '6px' }}>
-                    PHONETIC GROUNDING PROTOCOL
-                  </span>
-                  <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
-                    Evidence-Linked Audio Anchors
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    Every extracted clinical entity (vital signs, complaints, symptoms) is tethered to exact millisecond acoustic timestamps. If a drug, dosage, or condition was not explicitly spoken during the visit, the generative layer is cryptographically barred from adding it.
-                  </p>
-                  <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                    <div>⏱️ <strong>Timestamp Precision:</strong> Millisecond phonetic alignment against audio stream</div>
-                    <div style={{ marginTop: '4px' }}>🚫 <strong>Hallucination Defense:</strong> Unanchored entities automatically flagged in crimson</div>
-                  </div>
-                </div>
-              )}
-
-              {governanceTab === 'uncertainty_sentinel' && (
-                <div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(217,119,6,0.1)', color: '#D97706', padding: '4px 10px', borderRadius: '6px' }}>
-                    ACOUSTIC SNR FAIL-SAFE
-                  </span>
-                  <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
-                    Ambiguity & Noise Sentinel Fallback
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
-                    Rural PHCs frequently exceed 72 dB due to high-speed ceiling fans and overcrowded corridors. If speech confidence drops below 85% or background noise breaches threshold, the system immediately locks autonomous drafting and triggers amber clinician re-confirmation.
-                  </p>
-                  <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                    <div>⚠️ <strong>Acoustic Ceiling:</strong> Real-time Kalman SNR watchdog at 72 dB</div>
-                    <div style={{ marginTop: '4px' }}>🛡️ <strong>Sentinel Behavior:</strong> Amber lock forces attending physician manual dictate</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Native Responsive Verification Pipeline Ribbon (Zero Clutter, Zero Broken Badges) */}
-              <div style={{
-                marginTop: '20px',
-                background: '#F0FDF4',
-                border: '1.5px solid #86EFAC',
-                borderRadius: '14px',
-                padding: '12px 16px',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
                 flexWrap: 'wrap',
+                background: '#F8FAFC',
+                borderBottom: '2px solid #CBD5E1',
+                padding: '10px 14px',
                 gap: '8px'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#065F46' }}>Chain of Custody:</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, color: '#047857', flexWrap: 'wrap' }}>
-                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🎙️ 1. Mic Ingest</span>
-                  <span>➔</span>
-                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🧠 2. AI Draft (Locked)</span>
-                  <span>➔</span>
-                  <span style={{ background: govSimAction.dscSigned ? '#DCFCE7' : '#FEF3C7', color: govSimAction.dscSigned ? '#065F46' : '#92400E', padding: '3px 8px', borderRadius: '6px', border: govSimAction.dscSigned ? '1px solid #86EFAC' : '1px solid #FCD34D' }}>
-                    {govSimAction.dscSigned ? '✓ 3. DSC Signed' : '⏳ 3. Needs Doctor DSC'}
-                  </span>
-                  <span>➔</span>
-                  <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🏥 4. ABDM M3</span>
-                </div>
+                {[
+                  { id: 'human_agency', label: '1. 100% Human Agency (DSC Sign-Off)', icon: Stethoscope, color: '#008B8B', tag: 'PHYSICIAN CONSENT' },
+                  { id: 'dpdp_ephemeral', label: '2. DPDP Act 2023 (Ephemeral Ingestion)', icon: Lock, color: '#059669', tag: 'DATA PRIVACY' },
+                  { id: 'zero_hallucination', label: '3. Zero Hallucination (Audio Anchors)', icon: ShieldCheck, color: '#2563EB', tag: 'EVIDENCE ANCHOR' },
+                  { id: 'uncertainty_sentinel', label: '4. Uncertainty Sentinel (Noise Fallback)', icon: AlertTriangle, color: '#D97706', tag: 'FAIL-SAFE' }
+                ].map((tab) => {
+                  const isActive = governanceTab === tab.id;
+                  const TabIcon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setGovernanceTab(tab.id);
+                        setGovSimAction({
+                          dscSigned: false,
+                          dscAlert: null,
+                          audioPurged: false,
+                          noiseDb: tab.id === 'uncertainty_sentinel' ? 76 : 52,
+                          hallucinationTested: false
+                        });
+                      }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 16px',
+                        borderRadius: '12px',
+                        border: isActive ? `1.5px solid ${tab.color}` : '1px solid #E2E8F0',
+                        background: isActive ? '#ffffff' : '#F1F5F9',
+                        color: isActive ? tab.color : '#475569',
+                        fontSize: '12.5px',
+                        fontWeight: isActive ? 800 : 650,
+                        cursor: 'pointer',
+                        boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+                        transition: 'all 0.18s ease',
+                        flex: '1 1 auto',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <TabIcon size={15} color={isActive ? tab.color : '#64748B'} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
               </div>
-            </div>
 
-            {/* Right: Live Interactive Failure-Mode Simulator HUD */}
-            <div style={{
-              background: '#061B30',
-              borderRadius: '18px',
-              border: '2px solid #2DD4BF',
-              padding: '24px',
-              color: '#ffffff',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.18)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #1E3A5F', pb: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 800, color: '#00D2D3' }}>
-                  <Terminal size={14} />
-                  <span>SAFETY SENTINEL SIMULATOR HUD</span>
-                </div>
-                <span style={{ fontSize: '10.5px', background: 'rgba(0,210,211,0.15)', color: '#00D2D3', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
-                  LIVE INTERLOCK
-                </span>
-              </div>
-
-              {/* SIMULATION 1: HUMAN AGENCY */}
-              {governanceTab === 'human_agency' && (
-                <div style={{ fontSize: '13px', lineHeight: 1.5 }}>
-                  <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
-                    <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Generated Draft Status:</div>
-                    <div style={{ color: govSimAction.dscSigned ? '#10B981' : '#F59E0B', fontWeight: 800, fontSize: '14px', marginTop: '2px' }}>
-                      {govSimAction.dscSigned ? '✓ CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : '⏳ AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
-                    </div>
-                    <div style={{ fontSize: '12px', color: '#CBD5E1', marginTop: '6px' }}>
-                      Patient: Lakshmi Devi (54/F) | Encounter: Bronchial Asthma (J45.901)
-                    </div>
-                  </div>
-
-                  {govSimAction.dscAlert && (
-                    <div style={{
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      marginBottom: '14px',
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      background: govSimAction.dscAlert.type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                      border: govSimAction.dscAlert.type === 'error' ? '1px solid #EF4444' : '1px solid #10B981',
-                      color: govSimAction.dscAlert.type === 'error' ? '#FCA5A5' : '#6EE7B7'
-                    }}>
-                      {govSimAction.dscAlert.text}
+              {/* Interactive Simulation Stage */}
+              <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
+                {/* Left: Guardrail Clinical Description */}
+                <div>
+                  {governanceTab === 'human_agency' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
+                        NHA & NMC CLINICAL GOVERNANCE DIRECTIVE
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
+                        Doctor-in-the-Loop Final Sign-Off
+                      </h3>
+                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                        The AI strictly functions as an ambient scribe. Under Indian Medical Council Regulations, no medical record, diagnostic ICD-10 code, or prescription may enter the patient's record without explicit human physician cryptographic authorization.
+                      </p>
+                      <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                        <div>🔒 <strong>Cryptographic Protocol:</strong> Class-3 Digital Signature Certificate (DSC) or Aadhaar OTP eSign</div>
+                        <div style={{ marginTop: '4px' }}>🛡️ <strong>Safeguard Enforcement:</strong> Zero autonomous writes to ABDM Health Data Repository (M3)</div>
+                      </div>
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    <button
-                      onClick={() => setGovSimAction(prev => ({
-                        ...prev,
-                        dscSigned: false,
-                        dscAlert: { type: 'error', text: '🚫 [ABDM INTERLOCK] Autonomous write blocked! Attending Physician Class-3 DSC token missing.' }
-                      }))}
-                      style={{
-                        flex: 1,
-                        padding: '10px 14px',
-                        background: 'rgba(239, 68, 68, 0.15)',
-                        border: '1px solid #EF4444',
-                        color: '#FCA5A5',
-                        borderRadius: '8px',
-                        fontSize: '12px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Simulate Autonomous Push
-                    </button>
-                    <button
-                      onClick={() => setGovSimAction(prev => ({
-                        ...prev,
-                        dscSigned: true,
-                        dscAlert: { type: 'success', text: '✓ [SIGNED BY DR. PRIYA SHARMA] DSC SHA-256 Verified. Committed to ABDM Encounter #ABDM-PHC-8921.' }
-                      }))}
-                      style={{
-                        flex: 1,
-                        padding: '10px 14px',
-                        background: '#008B8B',
-                        border: 'none',
-                        color: '#ffffff',
-                        borderRadius: '8px',
-                        fontSize: '12px',
-                        fontWeight: 750,
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Sign with Physician DSC ✍️
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* SIMULATION 2: DPDP ACT EPHEMERAL INGESTION */}
-              {governanceTab === 'dpdp_ephemeral' && (
-                <div style={{ fontSize: '13px' }}>
-                  <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>RAM Audio Buffer:</span>
-                      <span style={{ fontSize: '11px', color: govSimAction.audioPurged ? '#10B981' : '#00D2D3', fontWeight: 800 }}>
-                        {govSimAction.audioPurged ? '0 KB (PURGED)' : '420 KB (TRANSIENT IN-MEMORY)'}
+                  {governanceTab === 'dpdp_ephemeral' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(5,150,105,0.1)', color: '#059669', padding: '4px 10px', borderRadius: '6px' }}>
+                        DIGITAL PERSONAL DATA PROTECTION (DPDP) ACT 2023
                       </span>
-                    </div>
-                    <div style={{ marginTop: '8px', height: '6px', background: '#1E3A5F', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ width: govSimAction.audioPurged ? '0%' : '65%', height: '100%', background: govSimAction.audioPurged ? '#10B981' : '#00D2D3', transition: 'all 0.3s ease' }} />
-                    </div>
-                    <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '8px' }}>
-                      Disk Write Lock: <strong>LOCKED (NO AUDIO SAVED TO DISK)</strong> • Encryption: <strong>AES-256 GCM</strong>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => setGovSimAction(prev => ({ ...prev, audioPurged: !prev.audioPurged }))}
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      background: govSimAction.audioPurged ? '#059669' : 'rgba(5, 150, 105, 0.2)',
-                      border: '1px solid #10B981',
-                      color: govSimAction.audioPurged ? '#fff' : '#6EE7B7',
-                      borderRadius: '8px',
-                      fontSize: '12px',
-                      fontWeight: 750,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {govSimAction.audioPurged ? '✓ Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : '🗑️ Trigger Ephemeral Session Purge'}
-                  </button>
-                </div>
-              )}
-
-              {/* SIMULATION 3: ZERO HALLUCINATION AUDIO ANCHORS */}
-              {governanceTab === 'zero_hallucination' && (
-                <div style={{ fontSize: '13px' }}>
-                  <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
-                    <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Acoustic Buffer Cross-Check:</div>
-                    <div style={{ fontSize: '12.5px', color: '#CBD5E1', marginTop: '6px' }}>
-                      [00:14.220] <span style={{ color: '#00D2D3' }}>"పీకల్లో పిల్లికూతలు"</span> → Mapped to ICD-10 <strong>R06.2 (Wheeze)</strong>
-                    </div>
-                    {govSimAction.hallucinationTested && (
-                      <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #EF4444', borderRadius: '6px', fontSize: '11.5px', color: '#FCA5A5' }}>
-                        🚫 <strong>HALLUCINATION BLOCKED:</strong> Synthetic Entity <em>"IV Hydrocortisone 100mg"</em> had 0 acoustic evidence anchors in stream. Excluded from SOAP note.
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
+                        Sovereign Ephemeral Audio Ingestion
+                      </h3>
+                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                        Rural patient voice consultations are processed strictly ephemerally in RAM. Raw audio waveforms are streamed through low-resource phonetic encoders and immediately purged from memory upon SOAP tokenization.
+                      </p>
+                      <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                        <div>🇮🇳 <strong>Data Sovereignty:</strong> 100% processed within Indian territorial boundaries</div>
+                        <div style={{ marginTop: '4px' }}>🗑️ <strong>Zero Cloud Audio Retention:</strong> 0 KB persistent audio recordings stored on disk</div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
-                  <button
-                    onClick={() => setGovSimAction(prev => ({ ...prev, hallucinationTested: !prev.hallucinationTested }))}
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      background: govSimAction.hallucinationTested ? 'rgba(37, 99, 235, 0.3)' : '#2563EB',
-                      border: 'none',
-                      color: '#ffffff',
-                      borderRadius: '8px',
-                      fontSize: '12px',
-                      fontWeight: 750,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {govSimAction.hallucinationTested ? '✓ Audit Complete: Unanchored Entity Blocked (Reset)' : '🧪 Attempt Unanchored Entity Injection'}
-                  </button>
-                </div>
-              )}
-
-              {/* SIMULATION 4: UNCERTAINTY NOISE SENTINEL */}
-              {governanceTab === 'uncertainty_sentinel' && (
-                <div style={{ fontSize: '13px' }}>
-                  <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Corridor Noise Level:</span>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: govSimAction.noiseDb > 72 ? '#F59E0B' : '#10B981' }}>
-                        {govSimAction.noiseDb} dB {govSimAction.noiseDb > 72 ? '(OVER 72 dB THRESHOLD)' : '(NORMAL OPD)'}
+                  {governanceTab === 'zero_hallucination' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(37,99,235,0.1)', color: '#2563EB', padding: '4px 10px', borderRadius: '6px' }}>
+                        PHONETIC GROUNDING PROTOCOL
                       </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
+                        Evidence-Linked Audio Anchors
+                      </h3>
+                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                        Every extracted clinical entity (vital signs, complaints, symptoms) is tethered to exact millisecond acoustic timestamps. If a drug, dosage, or condition was not explicitly spoken during the visit, the generative layer is cryptographically barred from adding it.
+                      </p>
+                      <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                        <div>⏱️ <strong>Timestamp Precision:</strong> Millisecond phonetic alignment against audio stream</div>
+                        <div style={{ marginTop: '4px' }}>🚫 <strong>Hallucination Defense:</strong> Unanchored entities automatically flagged in crimson</div>
+                      </div>
                     </div>
+                  )}
 
-                    <div style={{ marginTop: '8px' }}>
-                      <input
-                        type="range"
-                        min="40"
-                        max="85"
-                        value={govSimAction.noiseDb}
-                        onChange={(e) => setGovSimAction(prev => ({ ...prev, noiseDb: Number(e.target.value) }))}
-                        style={{ width: '100%', accentColor: govSimAction.noiseDb > 72 ? '#F59E0B' : '#008B8B' }}
-                      />
+                  {governanceTab === 'uncertainty_sentinel' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(217,119,6,0.1)', color: '#D97706', padding: '4px 10px', borderRadius: '6px' }}>
+                        ACOUSTIC SNR FAIL-SAFE
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 8px 0' }}>
+                        Ambiguity & Noise Sentinel Fallback
+                      </h3>
+                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                        Rural PHCs frequently exceed 72 dB due to high-speed ceiling fans and overcrowded corridors. If speech confidence drops below 85% or background noise breaches threshold, the system immediately locks autonomous drafting and triggers amber clinician re-confirmation.
+                      </p>
+                      <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                        <div>⚠️ <strong>Acoustic Ceiling:</strong> Real-time Kalman SNR watchdog at 72 dB</div>
+                        <div style={{ marginTop: '4px' }}>🛡️ <strong>Sentinel Behavior:</strong> Amber lock forces attending physician manual dictate</div>
+                      </div>
                     </div>
+                  )}
 
-                    <div style={{ marginTop: '8px', padding: '8px', borderRadius: '6px', fontSize: '11.5px', background: govSimAction.noiseDb > 72 ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16, 185, 129, 0.2)', color: govSimAction.noiseDb > 72 ? '#FCD34D' : '#6EE7B7', border: govSimAction.noiseDb > 72 ? '1px solid #F59E0B' : '1px solid #10B981' }}>
-                      {govSimAction.noiseDb > 72 
-                        ? '⚠️ AMBER FAIL-SAFE ACTIVE: Background acoustic entropy too high. Automated drafting locked; mandatory physician verbal confirmation required.' 
-                        : '✓ AUDIO SNR OK: Clean dual-speaker audio. Passive transcription operating at 98.6% confidence.'}
+                  {/* Native Responsive Verification Pipeline Ribbon (Zero Clutter, Zero Broken Badges) */}
+                  <div style={{
+                    marginTop: '20px',
+                    background: '#F0FDF4',
+                    border: '1.5px solid #86EFAC',
+                    borderRadius: '14px',
+                    padding: '12px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '8px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#065F46' }}>Chain of Custody:</span>
                     </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={() => setGovSimAction(prev => ({ ...prev, noiseDb: 50 }))}
-                      style={{ flex: 1, padding: '8px', background: '#1E3A5F', border: 'none', color: '#fff', borderRadius: '6px', fontSize: '11.5px', cursor: 'pointer' }}
-                    >
-                      Set Quiet Exam (50 dB)
-                    </button>
-                    <button
-                      onClick={() => setGovSimAction(prev => ({ ...prev, noiseDb: 78 }))}
-                      style={{ flex: 1, padding: '8px', background: 'rgba(245, 158, 11, 0.3)', border: '1px solid #F59E0B', color: '#FCD34D', borderRadius: '6px', fontSize: '11.5px', cursor: 'pointer' }}
-                    >
-                      Set Chaotic PHC (78 dB)
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, color: '#047857', flexWrap: 'wrap' }}>
+                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🎙️ 1. Mic Ingest</span>
+                      <span>➔</span>
+                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🧠 2. AI Draft (Locked)</span>
+                      <span>➔</span>
+                      <span style={{ background: govSimAction.dscSigned ? '#DCFCE7' : '#FEF3C7', color: govSimAction.dscSigned ? '#065F46' : '#92400E', padding: '3px 8px', borderRadius: '6px', border: govSimAction.dscSigned ? '1px solid #86EFAC' : '1px solid #FCD34D' }}>
+                        {govSimAction.dscSigned ? '✓ 3. DSC Signed' : '⏳ 3. Needs Doctor DSC'}
+                      </span>
+                      <span>➔</span>
+                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🏥 4. ABDM M3</span>
+                    </div>
                   </div>
                 </div>
-              )}
+
+                {/* Right: Live Interactive Failure-Mode Simulator HUD */}
+                <div style={{
+                  background: '#061B30',
+                  borderRadius: '18px',
+                  border: '2px solid #2DD4BF',
+                  padding: '24px',
+                  color: '#ffffff',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.18)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #1E3A5F', pb: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 800, color: '#00D2D3' }}>
+                      <Terminal size={14} />
+                      <span>SAFETY SENTINEL SIMULATOR HUD</span>
+                    </div>
+                    <span style={{ fontSize: '10.5px', background: 'rgba(0,210,211,0.15)', color: '#00D2D3', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+                      LIVE INTERLOCK
+                    </span>
+                  </div>
+
+                  {/* SIMULATION 1: HUMAN AGENCY */}
+                  {governanceTab === 'human_agency' && (
+                    <div style={{ fontSize: '13px', lineHeight: 1.5 }}>
+                      <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
+                        <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Generated Draft Status:</div>
+                        <div style={{ color: govSimAction.dscSigned ? '#10B981' : '#F59E0B', fontWeight: 800, fontSize: '14px', marginTop: '2px' }}>
+                          {govSimAction.dscSigned ? '✓ CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : '⏳ AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#CBD5E1', marginTop: '6px' }}>
+                          Patient: Lakshmi Devi (54/F) | Encounter: Bronchial Asthma (J45.901)
+                        </div>
+                      </div>
+
+                      {govSimAction.dscAlert && (
+                        <div style={{
+                          padding: '10px 12px',
+                          borderRadius: '8px',
+                          marginBottom: '14px',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          background: govSimAction.dscAlert.type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                          border: govSimAction.dscAlert.type === 'error' ? '1px solid #EF4444' : '1px solid #10B981',
+                          color: govSimAction.dscAlert.type === 'error' ? '#FCA5A5' : '#6EE7B7'
+                        }}>
+                          {govSimAction.dscAlert.text}
+                        </div>
+                      )}
+
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          onClick={() => setGovSimAction(prev => ({
+                            ...prev,
+                            dscSigned: false,
+                            dscAlert: { type: 'error', text: '🚫 [ABDM INTERLOCK] Autonomous write blocked! Attending Physician Class-3 DSC token missing.' }
+                          }))}
+                          style={{
+                            flex: 1,
+                            padding: '10px 14px',
+                            background: 'rgba(239, 68, 68, 0.15)',
+                            border: '1px solid #EF4444',
+                            color: '#FCA5A5',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: 750,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Simulate Autonomous Push
+                        </button>
+                        <button
+                          onClick={() => setGovSimAction(prev => ({
+                            ...prev,
+                            dscSigned: true,
+                            dscAlert: { type: 'success', text: '✓ [SIGNED BY DR. PRIYA SHARMA] DSC SHA-256 Verified. Committed to ABDM Encounter #ABDM-PHC-8921.' }
+                          }))}
+                          style={{
+                            flex: 1,
+                            padding: '10px 14px',
+                            background: '#008B8B',
+                            border: 'none',
+                            color: '#ffffff',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: 750,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Sign with Physician DSC ✍️
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SIMULATION 2: DPDP ACT EPHEMERAL INGESTION */}
+                  {governanceTab === 'dpdp_ephemeral' && (
+                    <div style={{ fontSize: '13px' }}>
+                      <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>RAM Audio Buffer:</span>
+                          <span style={{ fontSize: '11px', color: govSimAction.audioPurged ? '#10B981' : '#00D2D3', fontWeight: 800 }}>
+                            {govSimAction.audioPurged ? '0 KB (PURGED)' : '420 KB (TRANSIENT IN-MEMORY)'}
+                          </span>
+                        </div>
+                        <div style={{ marginTop: '8px', height: '6px', background: '#1E3A5F', borderRadius: '3px', overflow: 'hidden' }}>
+                          <div style={{ width: govSimAction.audioPurged ? '0%' : '65%', height: '100%', background: govSimAction.audioPurged ? '#10B981' : '#00D2D3', transition: 'all 0.3s ease' }} />
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '8px' }}>
+                          Disk Write Lock: <strong>LOCKED (NO AUDIO SAVED TO DISK)</strong> • Encryption: <strong>AES-256 GCM</strong>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setGovSimAction(prev => ({ ...prev, audioPurged: !prev.audioPurged }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px 14px',
+                          background: govSimAction.audioPurged ? '#059669' : 'rgba(5, 150, 105, 0.2)',
+                          border: '1px solid #10B981',
+                          color: govSimAction.audioPurged ? '#fff' : '#6EE7B7',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {govSimAction.audioPurged ? '✓ Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : '🗑️ Trigger Ephemeral Session Purge'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* SIMULATION 3: ZERO HALLUCINATION AUDIO ANCHORS */}
+                  {governanceTab === 'zero_hallucination' && (
+                    <div style={{ fontSize: '13px' }}>
+                      <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
+                        <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Acoustic Buffer Cross-Check:</div>
+                        <div style={{ fontSize: '12.5px', color: '#CBD5E1', marginTop: '6px' }}>
+                          [00:14.220] <span style={{ color: '#00D2D3' }}>"పీకల్లో పిల్లికూతలు"</span> → Mapped to ICD-10 <strong>R06.2 (Wheeze)</strong>
+                        </div>
+                        {govSimAction.hallucinationTested && (
+                          <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #EF4444', borderRadius: '6px', fontSize: '11.5px', color: '#FCA5A5' }}>
+                            🚫 <strong>HALLUCINATION BLOCKED:</strong> Synthetic Entity <em>"IV Hydrocortisone 100mg"</em> had 0 acoustic evidence anchors in stream. Excluded from SOAP note.
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => setGovSimAction(prev => ({ ...prev, hallucinationTested: !prev.hallucinationTested }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px 14px',
+                          background: govSimAction.hallucinationTested ? 'rgba(37, 99, 235, 0.3)' : '#2563EB',
+                          border: 'none',
+                          color: '#ffffff',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {govSimAction.hallucinationTested ? '✓ Audit Complete: Unanchored Entity Blocked (Reset)' : '🧪 Attempt Unanchored Entity Injection'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* SIMULATION 4: UNCERTAINTY NOISE SENTINEL */}
+                  {governanceTab === 'uncertainty_sentinel' && (
+                    <div style={{ fontSize: '13px' }}>
+                      <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Corridor Noise Level:</span>
+                          <span style={{ fontSize: '13px', fontWeight: 800, color: govSimAction.noiseDb > 72 ? '#F59E0B' : '#10B981' }}>
+                            {govSimAction.noiseDb} dB {govSimAction.noiseDb > 72 ? '(OVER 72 dB THRESHOLD)' : '(NORMAL OPD)'}
+                          </span>
+                        </div>
+
+                        <div style={{ marginTop: '8px' }}>
+                          <input
+                            type="range"
+                            min="40"
+                            max="85"
+                            value={govSimAction.noiseDb}
+                            onChange={(e) => setGovSimAction(prev => ({ ...prev, noiseDb: Number(e.target.value) }))}
+                            style={{ width: '100%', accentColor: govSimAction.noiseDb > 72 ? '#F59E0B' : '#008B8B' }}
+                          />
+                        </div>
+
+                        <div style={{ marginTop: '8px', padding: '8px', borderRadius: '6px', fontSize: '11.5px', background: govSimAction.noiseDb > 72 ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16, 185, 129, 0.2)', color: govSimAction.noiseDb > 72 ? '#FCD34D' : '#6EE7B7', border: govSimAction.noiseDb > 72 ? '1px solid #F59E0B' : '1px solid #10B981' }}>
+                          {govSimAction.noiseDb > 72
+                            ? '⚠️ AMBER FAIL-SAFE ACTIVE: Background acoustic entropy too high. Automated drafting locked; mandatory physician verbal confirmation required.'
+                            : '✓ AUDIO SNR OK: Clean dual-speaker audio. Passive transcription operating at 98.6% confidence.'}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => setGovSimAction(prev => ({ ...prev, noiseDb: 50 }))}
+                          style={{ flex: 1, padding: '8px', background: '#1E3A5F', border: 'none', color: '#fff', borderRadius: '6px', fontSize: '11.5px', cursor: 'pointer' }}
+                        >
+                          Set Quiet Exam (50 dB)
+                        </button>
+                        <button
+                          onClick={() => setGovSimAction(prev => ({ ...prev, noiseDb: 78 }))}
+                          style={{ flex: 1, padding: '8px', background: 'rgba(245, 158, 11, 0.3)', border: '1px solid #F59E0B', color: '#FCD34D', borderRadius: '6px', fontSize: '11.5px', cursor: 'pointer' }}
+                        >
+                          Set Chaotic PHC (78 dB)
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      ) : (
-          /* ================= MODE B: ACADEMIC RIGOR & OPEN STANDARDS ================= */
-          <div>
-            {/* Standards Tab Bar */}
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              background: '#F8FAFC',
-              borderBottom: '1.5px solid #E2E8F0',
-              padding: '10px 14px',
-              gap: '8px'
-            }}>
-              {[
-                { id: 'acoustic', label: '1. Acoustic DSP (Prototype)', badge: 'ACOUSTICS', color: '#008B8B' },
-                { id: 'abdm', label: '2. ABDM HL7 FHIR R4', badge: 'NHA STANDARD', color: '#2563EB' },
-                { id: 'who', label: '3. WHO ICD-10 & SNOMED', badge: 'TAXONOMY', color: '#059669' },
-                { id: 'nfi', label: '4. NFI Pharmacopoeia', badge: 'DRUG SAFETY', color: '#D97706' },
-                { id: 'gnani_stt', label: '5. Browser Speech API', badge: 'SPEECH ASR', color: '#6366F1' },
-                { id: 'gnani_tts', label: '6. Spoken Audio-Rx', badge: 'AUDIO-RX', color: '#EC4899' }
-              ].map((tab) => {
-                const isActive = academicStandardTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => {
-                      setAcademicStandardTab(tab.id);
-                      setIsAcademicPayloadCopied(false);
-                    }}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '8px 14px',
-                      borderRadius: '10px',
-                      border: isActive ? `1.5px solid ${tab.color}` : '1.5px solid #CBD5E1',
-                      background: isActive ? '#ffffff' : '#F1F5F9',
-                      color: isActive ? tab.color : '#475569',
-                      fontSize: '12px',
-                      fontWeight: isActive ? 800 : 600,
-                      cursor: 'pointer',
-                      boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
-                      transition: 'all 0.18s ease',
-                      flex: '1 1 auto',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Standard Detail & Real Payload Terminal */}
-            <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
-              {/* Left Column: Standard Specifications & Institution */}
-              <div>
-                {academicStandardTab === 'acoustic' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
-                      W3C WEBAUDIO DSP STANDARD
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      W3C AudioContext & Linear PCM Ingestion Standard
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Standardizes uncompressed 16 kHz 16-bit linear PCM audio streaming via the browser W3C AudioContext API, formatting audio frames into standardized 13-dimensional MFCC vectors for interoperable exploratory bio-acoustic analysis.
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Ingestion Standard:</strong> W3C AudioContext & AnalyserNode (Hamming Window)<br />
-                      • <strong>Stream Format:</strong> 16 kHz, 16-bit Linear PCM Mono
-                    </div>
-                  </div>
-                )}
-
-                {academicStandardTab === 'abdm' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(37,99,235,0.1)', color: '#2563EB', padding: '4px 10px', borderRadius: '6px' }}>
-                      NATIONAL HEALTH AUTHORITY (NHA), MoHFW
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      ABDM HL7 FHIR R4 Clinical Bundling
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Conforms to Ayushman Bharat Digital Mission (ABDM) Milestone 1, 2, and 3 architectures. Encapsulates consultation notes, vitals, ICD-10 diagnostic codes, and medication instructions into compliant FHIR JSON schemas.
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Resource Bundle:</strong> Encounter + Condition + MedicationRequest<br />
-                      • <strong>Gateway Standard:</strong> National Health Data Consent Manager (ABHA)
-                    </div>
-                  </div>
-                )}
-
-                {academicStandardTab === 'who' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(5,150,105,0.1)', color: '#059669', padding: '4px 10px', borderRadius: '6px' }}>
-                      WORLD HEALTH ORGANIZATION & SNOMED INTERNATIONAL
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      WHO ICD-10 & SNOMED CT Ontology Resolver
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Maps visceral Indian colloquial phrases (e.g., Telugu <em>"పీకల్లో పిల్లికూతలు"</em> or Hindi <em>"पसली चलना"</em>) directly to standardized international diagnostic codes (ICD-10 R06.2 / SNOMED 195967001).
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Ontology Coverage:</strong> 70,000+ WHO ICD-10 Clinical Modification concepts<br />
-                      • <strong>Zero Hallucination:</strong> Deterministic phrase-to-concept dictionary crosswalk
-                    </div>
-                  </div>
-                )}
-
-                {academicStandardTab === 'nfi' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(217,119,6,0.1)', color: '#D97706', padding: '4px 10px', borderRadius: '6px' }}>
-                      INDIAN PHARMACOPOEIA COMMISSION (IPC)
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      National Formulary of India (NFI) & Jan Aushadhi
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Integrates official NFI drug tables to cross-reference drug contraindications and map expensive brand-name medications to affordable Pradhan Mantri Jan Aushadhi generic equivalents with color-coded dosage timing.
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Generic Savings:</strong> 50% to 80% patient out-of-pocket savings<br />
-                      • <strong>Safety Check:</strong> Real-time drug-drug contraindication interlock
-                    </div>
-                  </div>
-                )}
-
-                {academicStandardTab === 'gnani_stt' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(99,102,241,0.1)', color: '#6366F1', padding: '4px 10px', borderRadius: '6px' }}>
-                      INDIC SPEECH ARCHITECTURE
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Browser Speech Recognition & Planned Indic ASR
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
-                      • <strong>Planned Indic Integration:</strong> Gnani voice integration: planned
-                    </div>
-                  </div>
-                )}
-
-                {academicStandardTab === 'gnani_tts' && (
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(236,72,153,0.1)', color: '#EC4899', padding: '4px 10px', borderRadius: '6px' }}>
-                      SPOKEN AUDIO-RX SYNTHESIS
-                    </span>
-                    <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
-                      Spoken Audio-Rx Schedule Synthesis (Prototype)
-                    </h3>
-                    <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                      Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
-                    </p>
-                    <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                      • <strong>Engine:</strong> Browser SpeechSynthesis API<br />
-                      • <strong>Target Use:</strong> Accessible voice guidance for rural patients
-                    </div>
-                  </div>
-                )}
+          ) : (
+            /* ================= MODE B: ACADEMIC RIGOR & OPEN STANDARDS ================= */
+            <div>
+              {/* Standards Tab Bar */}
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                background: '#F8FAFC',
+                borderBottom: '1.5px solid #E2E8F0',
+                padding: '10px 14px',
+                gap: '8px'
+              }}>
+                {[
+                  { id: 'acoustic', label: '1. Acoustic DSP (Prototype)', badge: 'ACOUSTICS', color: '#008B8B' },
+                  { id: 'abdm', label: '2. ABDM HL7 FHIR R4', badge: 'NHA STANDARD', color: '#2563EB' },
+                  { id: 'who', label: '3. WHO ICD-10 & SNOMED', badge: 'TAXONOMY', color: '#059669' },
+                  { id: 'nfi', label: '4. NFI Pharmacopoeia', badge: 'DRUG SAFETY', color: '#D97706' },
+                  { id: 'gnani_stt', label: '5. Browser Speech API', badge: 'SPEECH ASR', color: '#6366F1' },
+                  { id: 'gnani_tts', label: '6. Spoken Audio-Rx', badge: 'AUDIO-RX', color: '#EC4899' }
+                ].map((tab) => {
+                  const isActive = academicStandardTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setAcademicStandardTab(tab.id);
+                        setIsAcademicPayloadCopied(false);
+                      }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 14px',
+                        borderRadius: '10px',
+                        border: isActive ? `1.5px solid ${tab.color}` : '1.5px solid #CBD5E1',
+                        background: isActive ? '#ffffff' : '#F1F5F9',
+                        color: isActive ? tab.color : '#475569',
+                        fontSize: '12px',
+                        fontWeight: isActive ? 800 : 600,
+                        cursor: 'pointer',
+                        boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
+                        transition: 'all 0.18s ease',
+                        flex: '1 1 auto',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Right Column: Live Code / Payload Terminal */}
-              <div style={{
-                background: '#061B30',
-                borderRadius: '16px',
-                border: '2px solid #2DD4BF',
-                padding: '20px',
-                fontFamily: 'monospace',
-                fontSize: '11.5px',
-                color: '#E2E8F0',
-                maxHeight: '290px',
-                overflowY: 'auto'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid #1E3A5F', paddingBottom: '8px' }}>
-                  <span style={{ color: '#00D2D3', fontWeight: 800 }}>LIVE STANDARD PAYLOAD / SCHEMA</span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        academicStandardTab === 'abdm' 
-                          ? '{"resourceType":"Bundle","type":"document","entry":[{"resourceType":"Condition","code":{"coding":[{"system":"http://hl7.org/fhir/sid/icd-10","code":"J45.901"}]}}]}'
-                          : '{"standard":"WHO-ICD-10","phrase":"పీకల్లో పిల్లికూతలు","concept":"R06.2"}'
-                      );
-                      setIsAcademicPayloadCopied(true);
-                      setTimeout(() => setIsAcademicPayloadCopied(false), 2000);
-                    }}
-                    style={{
-                      background: 'rgba(0,210,211,0.15)',
-                      border: '1px solid #00D2D3',
-                      color: '#00D2D3',
-                      padding: '3px 8px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '10.5px',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    {isAcademicPayloadCopied ? <Check size={12} /> : <Copy size={12} />}
-                    <span>{isAcademicPayloadCopied ? 'Copied' : 'Copy'}</span>
-                  </button>
+              {/* Standard Detail & Real Payload Terminal */}
+              <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
+                {/* Left Column: Standard Specifications & Institution */}
+                <div>
+                  {academicStandardTab === 'acoustic' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '4px 10px', borderRadius: '6px' }}>
+                        W3C WEBAUDIO DSP STANDARD
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        W3C AudioContext & Linear PCM Ingestion Standard
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Standardizes uncompressed 16 kHz 16-bit linear PCM audio streaming via the browser W3C AudioContext API, formatting audio frames into standardized 13-dimensional MFCC vectors for interoperable exploratory bio-acoustic analysis.
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Ingestion Standard:</strong> W3C AudioContext & AnalyserNode (Hamming Window)<br />
+                        • <strong>Stream Format:</strong> 16 kHz, 16-bit Linear PCM Mono
+                      </div>
+                    </div>
+                  )}
+
+                  {academicStandardTab === 'abdm' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(37,99,235,0.1)', color: '#2563EB', padding: '4px 10px', borderRadius: '6px' }}>
+                        NATIONAL HEALTH AUTHORITY (NHA), MoHFW
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        ABDM HL7 FHIR R4 Clinical Bundling
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Conforms to Ayushman Bharat Digital Mission (ABDM) Milestone 1, 2, and 3 architectures. Encapsulates consultation notes, vitals, ICD-10 diagnostic codes, and medication instructions into compliant FHIR JSON schemas.
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Resource Bundle:</strong> Encounter + Condition + MedicationRequest<br />
+                        • <strong>Gateway Standard:</strong> National Health Data Consent Manager (ABHA)
+                      </div>
+                    </div>
+                  )}
+
+                  {academicStandardTab === 'who' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(5,150,105,0.1)', color: '#059669', padding: '4px 10px', borderRadius: '6px' }}>
+                        WORLD HEALTH ORGANIZATION & SNOMED INTERNATIONAL
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        WHO ICD-10 & SNOMED CT Ontology Resolver
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Maps visceral Indian colloquial phrases (e.g., Telugu <em>"పీకల్లో పిల్లికూతలు"</em> or Hindi <em>"पसली चलना"</em>) directly to standardized international diagnostic codes (ICD-10 R06.2 / SNOMED 195967001).
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Ontology Coverage:</strong> 70,000+ WHO ICD-10 Clinical Modification concepts<br />
+                        • <strong>Zero Hallucination:</strong> Deterministic phrase-to-concept dictionary crosswalk
+                      </div>
+                    </div>
+                  )}
+
+                  {academicStandardTab === 'nfi' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(217,119,6,0.1)', color: '#D97706', padding: '4px 10px', borderRadius: '6px' }}>
+                        INDIAN PHARMACOPOEIA COMMISSION (IPC)
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        National Formulary of India (NFI) & Jan Aushadhi
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Integrates official NFI drug tables to cross-reference drug contraindications and map expensive brand-name medications to affordable Pradhan Mantri Jan Aushadhi generic equivalents with color-coded dosage timing.
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Generic Savings:</strong> 50% to 80% patient out-of-pocket savings<br />
+                        • <strong>Safety Check:</strong> Real-time drug-drug contraindication interlock
+                      </div>
+                    </div>
+                  )}
+
+                  {academicStandardTab === 'gnani_stt' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(99,102,241,0.1)', color: '#6366F1', padding: '4px 10px', borderRadius: '6px' }}>
+                        INDIC SPEECH ARCHITECTURE
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        Browser Speech Recognition & Planned Indic ASR
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
+                        • <strong>Planned Indic Integration:</strong> Gnani voice integration: planned
+                      </div>
+                    </div>
+                  )}
+
+                  {academicStandardTab === 'gnani_tts' && (
+                    <div>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(236,72,153,0.1)', color: '#EC4899', padding: '4px 10px', borderRadius: '6px' }}>
+                        SPOKEN AUDIO-RX SYNTHESIS
+                      </span>
+                      <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#0A2540', margin: '10px 0 6px 0' }}>
+                        Spoken Audio-Rx Schedule Synthesis (Prototype)
+                      </h3>
+                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                        Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
+                      </p>
+                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                        • <strong>Engine:</strong> Browser SpeechSynthesis API<br />
+                        • <strong>Target Use:</strong> Accessible voice guidance for rural patients
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {academicStandardTab === 'acoustic' && (
-                  <pre style={{ margin: 0, color: '#A5F3FC' }}>
-{`// W3C WebAudio DSP Feature Vector Specification
+                {/* Right Column: Live Code / Payload Terminal */}
+                <div style={{
+                  background: '#061B30',
+                  borderRadius: '16px',
+                  border: '2px solid #2DD4BF',
+                  padding: '20px',
+                  fontFamily: 'monospace',
+                  fontSize: '11.5px',
+                  color: '#E2E8F0',
+                  maxHeight: '290px',
+                  overflowY: 'auto'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid #1E3A5F', paddingBottom: '8px' }}>
+                    <span style={{ color: '#00D2D3', fontWeight: 800 }}>LIVE STANDARD PAYLOAD / SCHEMA</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          academicStandardTab === 'abdm'
+                            ? '{"resourceType":"Bundle","type":"document","entry":[{"resourceType":"Condition","code":{"coding":[{"system":"http://hl7.org/fhir/sid/icd-10","code":"J45.901"}]}}]}'
+                            : '{"standard":"WHO-ICD-10","phrase":"పీకల్లో పిల్లికూతలు","concept":"R06.2"}'
+                        );
+                        setIsAcademicPayloadCopied(true);
+                        setTimeout(() => setIsAcademicPayloadCopied(false), 2000);
+                      }}
+                      style={{
+                        background: 'rgba(0,210,211,0.15)',
+                        border: '1px solid #00D2D3',
+                        color: '#00D2D3',
+                        padding: '3px 8px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '10.5px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      {isAcademicPayloadCopied ? <Check size={12} /> : <Copy size={12} />}
+                      <span>{isAcademicPayloadCopied ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+
+                  {academicStandardTab === 'acoustic' && (
+                    <pre style={{ margin: 0, color: '#A5F3FC' }}>
+                      {`// W3C WebAudio DSP Feature Vector Specification
 {
   "audioStandard": "W3C-AudioContext-v2",
   "sampleRateHz": 16000,
@@ -3388,12 +3388,12 @@ export default function HeroLanding({
   "fftBinSize": 512,
   "telemetryStatus": "PCM Stream Synchronized"
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
 
-                {academicStandardTab === 'abdm' && (
-                  <pre style={{ margin: 0, color: '#93C5FD' }}>
-{`// ABDM HL7 FHIR R4 Clinical Resource
+                  {academicStandardTab === 'abdm' && (
+                    <pre style={{ margin: 0, color: '#93C5FD' }}>
+                      {`// ABDM HL7 FHIR R4 Clinical Resource
 {
   "resourceType": "Condition",
   "clinicalStatus": { "coding": [{ "code": "active" }] },
@@ -3408,12 +3408,12 @@ export default function HeroLanding({
   "subject": { "reference": "Patient/ABHA-IN-9821" },
   "recorder": { "display": "Dr. Priya Sharma, MD (DSC Verified)" }
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
 
-                {academicStandardTab === 'who' && (
-                  <pre style={{ margin: 0, color: '#86EFAC' }}>
-{`// Vernacular Colloquial to ICD-10 Resolution
+                  {academicStandardTab === 'who' && (
+                    <pre style={{ margin: 0, color: '#86EFAC' }}>
+                      {`// Vernacular Colloquial to ICD-10 Resolution
 {
   "vernacularInput": "పీకల్లో పిల్లికూతలు (Pikallo Pillikutalu)",
   "language": "Telugu (Rayalaseema Dialect)",
@@ -3422,12 +3422,12 @@ export default function HeroLanding({
   "snomedCt": { "conceptId": "195967001", "term": "Wheeze" },
   "confidenceMethod": "Deterministic Canonical Ontology Crosswalk"
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
 
-                {academicStandardTab === 'nfi' && (
-                  <pre style={{ margin: 0, color: '#FDE68A' }}>
-{`// National Formulary of India (NFI) Mapping
+                  {academicStandardTab === 'nfi' && (
+                    <pre style={{ margin: 0, color: '#FDE68A' }}>
+                      {`// National Formulary of India (NFI) Mapping
 {
   "prescribedMolecule": "Montelukast 10mg + Levocetirizine 5mg",
   "janAushadhiEquivalent": "PMBJP-GEN-1042",
@@ -3438,36 +3438,36 @@ export default function HeroLanding({
   },
   "contraindications": "None detected with current patient profile"
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
 
-                {academicStandardTab === 'gnani_stt' && (
-                  <pre style={{ margin: 0, color: '#C7D2FE' }}>
-{`// Speech Recognition Output Schema (Prototype)
+                  {academicStandardTab === 'gnani_stt' && (
+                    <pre style={{ margin: 0, color: '#C7D2FE' }}>
+                      {`// Speech Recognition Output Schema (Prototype)
 {
   "engine": "Web Speech API (Browser)",
   "plannedIntegration": "Gnani Indic Voice Services",
   "transcription": "డాక్టర్ గారూ నాకు chest lo burning మరియు severe cough ఉంది",
   "language": "te-IN"
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
 
-                {academicStandardTab === 'gnani_tts' && (
-                  <pre style={{ margin: 0, color: '#FBCFE8' }}>
-{`// Spoken Audio-Rx Output Schema (Prototype)
+                  {academicStandardTab === 'gnani_tts' && (
+                    <pre style={{ margin: 0, color: '#FBCFE8' }}>
+                      {`// Spoken Audio-Rx Output Schema (Prototype)
 {
   "engine": "Web Speech API (Browser)",
   "synthesizedLanguage": "te-IN (Telugu)",
   "plannedIntegration": "Gnani Voice Services",
   "dosageInstructions": "రాత్రి భోజనం తర్వాత ఒక మాత్ర వేసుకోండి"
 }`}
-                  </pre>
-                )}
+                    </pre>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
         </div>
       </section>
 
@@ -3501,7 +3501,7 @@ export default function HeroLanding({
             top: '20px'
           }}>
             <div style={{ borderRadius: '18px', overflow: 'hidden', border: '1.5px solid #CBD5E1', marginBottom: '18px', background: '#E6FAF8' }}>
-              <img 
+              <img
                 src="/assets/sections/sec8_faq.png"
                 alt="Dr. Ananya Waving Avatar with FAQ Question Bubble"
                 style={{
@@ -3692,7 +3692,7 @@ export default function HeroLanding({
       </footer>
 
       {/* Feature Architecture & Detail Modal (In-depth separate matter, no sudden redirect!) */}
-      <FeatureDetailModal 
+      <FeatureDetailModal
         featureKey={selectedFeatureModalKey}
         onClose={() => setSelectedFeatureModalKey(null)}
         onLaunchLogin={() => {
@@ -3760,7 +3760,7 @@ export default function HeroLanding({
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => {
                   setIsGoldenStoryOpen(false);
                   if ('speechSynthesis' in window) window.speechSynthesis.cancel();

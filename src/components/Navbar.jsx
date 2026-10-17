@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  ChevronDown, 
-  Languages, 
-  Activity, 
-  AlertTriangle, 
-  Menu, 
-  X, 
-  Stethoscope, 
-  Users, 
-  PhoneCall, 
+import {
+  ChevronDown,
+  Languages,
+  Activity,
+  AlertTriangle,
+  Menu,
+  X,
+  Stethoscope,
+  Users,
+  PhoneCall,
   Sparkles,
   Bot,
   ExternalLink,
@@ -26,10 +26,10 @@ import AyuSwarLogoReveal from './AyuSwarLogoReveal';
 export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatientAuth }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { 
-    selectedLanguage, 
-    setSelectedLanguage, 
-    isDemoMode, 
+  const {
+    selectedLanguage,
+    setSelectedLanguage,
+    isDemoMode,
     toggleDemoMode,
     currentDoctor,
     currentPatient
@@ -203,11 +203,11 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
           gap: 16
         }}>
           {/* Brand Logo & Title with SVG Line-Draw Reveal */}
-          <Link 
-            to="/" 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
+          <Link
+            to="/"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
               textDecoration: 'none',
               flexShrink: 0
             }}
@@ -216,18 +216,18 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav 
+          <nav
             className="desktop-nav"
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
               gap: 4,
               flexWrap: 'wrap'
             }}
             aria-label="Main Navigation"
           >
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               style={navItemStyle(currentPath === '/')}
               aria-current={currentPath === '/' ? 'page' : undefined}
             >
@@ -256,8 +256,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
               {solutionsOpen && (
                 <div style={dropdownMenuStyle} role="menu">
-                  <Link 
-                    to="/solutions/opd_ambient_scribe" 
+                  <Link
+                    to="/solutions/opd_ambient_scribe"
                     onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}
                     role="menuitem"
@@ -269,8 +269,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                     </div>
                   </Link>
 
-                  <Link 
-                    to="/scanner" 
+                  <Link
+                    to="/scanner"
                     onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/scanner')}
                     role="menuitem"
@@ -282,8 +282,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                     </div>
                   </Link>
 
-                  <Link 
-                    to="/audio-rx" 
+                  <Link
+                    to="/audio-rx"
                     onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/audio-rx')}
                     role="menuitem"
@@ -295,8 +295,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                     </div>
                   </Link>
 
-                  <Link 
-                    to="/acoustic-lab" 
+                  <Link
+                    to="/acoustic-lab"
                     onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/acoustic-lab')}
                     role="menuitem"
@@ -308,8 +308,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                     </div>
                   </Link>
 
-                  <Link 
-                    to="/emergency" 
+                  <Link
+                    to="/emergency"
                     onClick={() => setSolutionsOpen(false)}
                     style={dropdownItemStyle(currentPath === '/emergency')}
                     role="menuitem"
@@ -325,8 +325,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
             </div>
 
             {/* Technology */}
-            <Link 
-              to="/technology" 
+            <Link
+              to="/technology"
               style={navItemStyle(isTechActive)}
               aria-current={isTechActive ? 'page' : undefined}
             >
@@ -334,8 +334,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
             </Link>
 
             {/* Clinical Impact / Benchmarks */}
-            <Link 
-              to="/benchmarks" 
+            <Link
+              to="/benchmarks"
               style={navItemStyle(isImpactActive)}
               aria-current={isImpactActive ? 'page' : undefined}
             >
@@ -364,8 +364,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
               {resourcesOpen && (
                 <div style={dropdownMenuStyle} role="menu">
-                  <Link 
-                    to="/language-matrix" 
+                  <Link
+                    to="/language-matrix"
                     onClick={() => setResourcesOpen(false)}
                     style={dropdownItemStyle(currentPath === '/language-matrix')}
                     role="menuitem"
@@ -377,8 +377,8 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
                     </div>
                   </Link>
 
-                  <Link 
-                    to="/datasets" 
+                  <Link
+                    to="/datasets"
                     onClick={() => setResourcesOpen(false)}
                     style={dropdownItemStyle(currentPath === '/datasets')}
                     role="menuitem"
@@ -557,7 +557,7 @@ export default function Navbar({ onOpenSanjivani, onOpenDoctorAuth, onOpenPatien
 
         {/* Mobile Slide-down Drawer */}
         {mobileMenuOpen && (
-          <div 
+          <div
             style={{
               padding: '16px 20px',
               background: '#ffffff',
