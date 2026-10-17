@@ -81,8 +81,8 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   const [callerPhone, setCallerPhone] = useState('+91 98490 22334');
   const [callerName, setCallerName] = useState('Rao G. (Live Citizen)');
   const [isEditingPhone, setIsEditingPhone] = useState(false);
-  const [callerCoords, setCallerCoords] = useState({ lat: 17.2789, lng: 82.4012 });
-  const [geoAddress, setGeoAddress] = useState('Annavaram Urban, Sankhavaram, Kakinada, Andhra Pradesh');
+  const [callerCoords, setCallerCoords] = useState({ lat: 17.6913, lng: 83.0040 });
+  const [geoAddress, setGeoAddress] = useState('Anakapalle, Andhra Pradesh, India');
 
   // Mapbox Geocoding Search State
   const [searchQuery, setSearchQuery] = useState('');
@@ -218,6 +218,10 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         if (!selectedHospital || !res.hospitals.find((h) => h.id === selectedHospital.id)) {
           setSelectedHospital(res.recommendedHospital);
         }
+      } else {
+        setHospitalsList([]);
+        setRecommendedHospital(null);
+        setSelectedHospital(null);
       }
     } catch (err) {
       console.warn('Error loading hospitals:', err);
@@ -643,6 +647,9 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                         setCallerName(c.name);
                         setCallerPhone(c.phone);
                         setShowCallerPicker(false);
+                        if (c.name.includes('GPS')) {
+                          handleDetectLiveGPS();
+                        }
                       }}
                       style={{
                         padding: '8px 10px',

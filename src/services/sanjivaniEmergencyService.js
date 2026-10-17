@@ -47,13 +47,74 @@ export async function reverseGeocodeGPS(lat, lon) {
   };
 }
 
-// Request real browser geolocation with high accuracy
+// Request real browser geolocation with high accuracy, falling back to real IP geolocation
 export function requestRealDeviceLocation() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
+    // Helper to fetch real location via IP if GPS is blocked or unavailable
+    const fetchIpLocation = async () => {
+      try {
+        const res = await fetch('https://freeipapi.com/api/json', {
+          headers: { 'Accept': 'application/json' },
+          signal: AbortSignal.timeout(4500)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.latitude && data.longitude) {
+            return {
+              latitude: Number(data.latitude),
+              longitude: Number(data.longitude),
+              accuracy: 2500, // City level accuracy
+              city: data.cityName || 'Local Area',
+              region: data.regionName || 'Andhra Pradesh',
+              isIpGeo: true,
+              timestamp: Date.now()
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Primary IP geo unavailable, trying secondary:', e.message);
+      }
+
+      try {
+        const res = await fetch('https://ipapi.co/json/', {
+          headers: { 'Accept': 'application/json' },
+          signal: AbortSignal.timeout(4500)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.latitude && data.longitude) {
+            return {
+              latitude: Number(data.latitude),
+              longitude: Number(data.longitude),
+              accuracy: 3000,
+              city: data.city || 'Local Area',
+              region: data.region || 'Andhra Pradesh',
+              isIpGeo: true,
+              timestamp: Date.now()
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Secondary IP geo unavailable:', e.message);
+      }
+
+      // Safe default if offline completely
+      return {
+        latitude: 17.6913,
+        longitude: 83.0040,
+        accuracy: 5000,
+        city: 'Anakapalle',
+        region: 'Andhra Pradesh',
+        isFallback: true,
+        timestamp: Date.now()
+      };
+    };
+
     if (!navigator.geolocation) {
-      reject(new Error('Geolocation API not supported in this browser'));
+      fetchIpLocation().then(resolve);
       return;
     }
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         resolve({
@@ -61,23 +122,18 @@ export function requestRealDeviceLocation() {
           longitude: pos.coords.longitude,
           accuracy: Math.round(pos.coords.accuracy || 15),
           altitude: pos.coords.altitude,
+          isHardwareGps: true,
           timestamp: pos.timestamp
         });
       },
-      (err) => {
-        // Fallback default coordinates (e.g. AIIMS Delhi trauma hub) if user denies permission
-        console.warn('Geolocation permission denied or timed out:', err.message);
-        resolve({
-          latitude: 28.5672,
-          longitude: 77.2100,
-          accuracy: 50,
-          isFallback: true,
-          errorMsg: err.message
-        });
+      async (err) => {
+        console.warn('Hardware GNSS unavailable, querying live network location:', err.message);
+        const ipLoc = await fetchIpLocation();
+        resolve(ipLoc);
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 6000,
         maximumAge: 0
       }
     );
