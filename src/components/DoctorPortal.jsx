@@ -506,6 +506,8 @@ export default function DoctorPortal({
     }, 1200);
   };
 
+  const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
       {/* Mobile Drawer Overlay Backdrop */}
@@ -529,7 +531,7 @@ export default function DoctorPortal({
       <aside 
         className={`doctor-portal-aside ${mobileDrawerOpen ? 'mobile-open' : ''}`}
         style={{
-          width: isSidebarCollapsed ? '76px' : '240px',
+          width: isCollapsedView ? '76px' : '240px',
           height: '100vh',
           position: 'sticky',
           top: 0,
@@ -538,7 +540,7 @@ export default function DoctorPortal({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          padding: isSidebarCollapsed ? '20px 10px' : '20px 16px',
+          padding: isCollapsedView ? '20px 10px' : '20px 16px',
           flexShrink: 0,
           overflow: 'visible',
           zIndex: 96,
@@ -605,16 +607,16 @@ export default function DoctorPortal({
               display: 'flex', 
               alignItems: 'center', 
               gap: '12px', 
-              paddingLeft: isSidebarCollapsed ? '2px' : '8px', 
+              paddingLeft: isCollapsedView ? '2px' : '8px', 
               marginBottom: '28px', 
               cursor: 'pointer',
-              justifyContent: isSidebarCollapsed ? 'center' : 'flex-start'
+              justifyContent: isCollapsedView ? 'center' : 'flex-start'
             }}
             title="AyuSwar AI — Return to Website"
           >
             <div style={{
-              width: isSidebarCollapsed ? '40px' : '46px',
-              height: isSidebarCollapsed ? '40px' : '46px',
+              width: isCollapsedView ? '40px' : '46px',
+              height: isCollapsedView ? '40px' : '46px',
               borderRadius: '50%',
               border: '2px solid #008B8B',
               overflow: 'hidden',
@@ -627,7 +629,7 @@ export default function DoctorPortal({
             }}>
               <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            {!isSidebarCollapsed && (
+            {!isCollapsedView && (
               <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#0A2540', whiteSpace: 'nowrap' }}>
                 Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
               </div>
@@ -658,9 +660,9 @@ export default function DoctorPortal({
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: isSidebarCollapsed ? 'center' : 'flex-start',
-                    gap: isSidebarCollapsed ? '0' : '12px',
-                    padding: isSidebarCollapsed ? '10px 0' : '10px 14px',
+                    justifyContent: isCollapsedView ? 'center' : 'flex-start',
+                    gap: isCollapsedView ? '0' : '12px',
+                    padding: isCollapsedView ? '10px 0' : '10px 14px',
                     borderRadius: '12px',
                     border: 'none',
                     background: isActive ? 'rgba(0, 139, 139, 0.1)' : 'transparent',
@@ -675,7 +677,7 @@ export default function DoctorPortal({
                   }}
                 >
                   <Icon size={18} color={isActive ? '#008B8B' : '#64748B'} />
-                  {!isSidebarCollapsed && <span>{item.label}</span>}
+                  {!isCollapsedView && <span>{item.label}</span>}
                 </button>
               );
             })}
@@ -683,7 +685,7 @@ export default function DoctorPortal({
         </div>
 
         {/* Bottom Co-Pilot Card */}
-        {!isSidebarCollapsed ? (
+        {!isCollapsedView ? (
           <div style={{
             background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
             borderRadius: '14px',

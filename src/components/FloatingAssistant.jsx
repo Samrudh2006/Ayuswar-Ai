@@ -309,18 +309,22 @@ export default function FloatingAssistant({
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '24px',
-      right: '26px',
-      zIndex: 1200,
-      fontFamily: 'Outfit, sans-serif'
-    }}>
+    <div 
+      className="floating-assistant-container"
+      style={{
+        position: 'fixed',
+        bottom: '24px',
+        right: '26px',
+        zIndex: 1200,
+        fontFamily: 'Outfit, sans-serif'
+      }}
+    >
       {/* =========================================================================
-          STATE 1: COLLAPSED STATE (FLOATING PILL BUTTON)
+          STATE 1: COLLAPSED STATE (FLOATING PILL BUTTON / MOBILE CIRCULAR FAB)
           ========================================================================= */}
       {assistantState === 'collapsed' && (
         <div 
+          className="floating-assistant-pill"
           onClick={() => setAssistantState('expanded')}
           style={{
             display: 'flex',
@@ -343,7 +347,7 @@ export default function FloatingAssistant({
           <AyuSwarOrbLogo size={32} glow={true} />
 
           {/* Assistant Label */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="floating-assistant-label" style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{
               fontSize: '14px',
               fontWeight: 800,
@@ -374,17 +378,20 @@ export default function FloatingAssistant({
           </div>
 
           {/* Mic Button Circle */}
-          <div style={{
-            width: '34px',
-            height: '34px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 2px 8px rgba(0, 139, 139, 0.35)'
-          }}>
+          <div 
+            className="floating-assistant-mic"
+            style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0, 139, 139, 0.35)'
+            }}
+          >
             <Mic size={17} />
           </div>
         </div>
