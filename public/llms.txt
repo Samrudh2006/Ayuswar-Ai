@@ -14,7 +14,7 @@ AyuSwar AI explores ambient clinical voice intelligence, acoustic signal analysi
 - [Indic Language & Dialect Matrix](https://ayuswar-ai.vercel.app/language-matrix): Comprehensive regional speech support covering Rayalaseema, Telangana, Coastal Andhra, and Uttarandhra Telugu variants and Hindi dialects.
 - [Clinical Architecture Blueprint](https://ayuswar-ai.vercel.app/technology): Architectural documentation detailing the zero-cloud ephemeral RAM audio pipeline, DPDP Act 2023 compliance, and offline edge deployment.
 - [Automated Contract Benchmarks](https://ayuswar-ai.vercel.app/benchmarks): Real-time verification suite executing 24 contract tests on data protection, non-diagnostic boundaries, and FHIR schema integrity.
-- [Synthetic Clinical Datasets](https://ayuswar-ai.vercel.app/datasets): Synthetic OPD dialogues, colloquial idiom crosswalks, and bilingual terminology tables.
+- [Synthetic Clinical Datasets](https://ayuswar-ai.vercel.app/datasets): Synthetic OPD dialogues, colloquial idiom crosswalks, and bilingual terminology tables grounded in IndiaAI AIKosh (aikosh.indiaai.gov.in) and PMBJP open schemas.
 
 ## Data Privacy & Regulatory Compliance
 

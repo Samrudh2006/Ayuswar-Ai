@@ -43,6 +43,13 @@ export default function ArchitectureView() {
       desc: 'Open standard composition for patient encounter records, digital signature ready for ABDM exchange.',
       icon: Database,
       color: '#7C3AED'
+    },
+    {
+      title: 'National Data Repository',
+      tag: 'IndiaAI AIKosh (MeitY)',
+      desc: 'Sovereign Indic speech benchmarks and PMBJP Janaushadhi open dataset schemas (aikosh.indiaai.gov.in).',
+      icon: ShieldCheck,
+      color: '#D97706'
     }
   ];
 

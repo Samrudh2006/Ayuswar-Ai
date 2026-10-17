@@ -112,9 +112,12 @@ export default function DatasetExplorerView() {
               <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '3px 8px', borderRadius: 999, fontWeight: 600 }}>
                 Reference Schema
               </span>
+              <span style={{ fontSize: '0.75rem', background: '#fef3c7', color: '#92400e', padding: '3px 8px', borderRadius: 999, fontWeight: 600, border: '1px solid #fde68a' }}>
+                IndiaAI AIKosh Repository (aikosh.indiaai.gov.in)
+              </span>
             </div>
             <p style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
-              Curated ICD-10 clinical taxonomies, rural colloquial health phrases, and reference literature. Note: This dictionary provides ontology mapping for voice transcripts and does not constitute autonomous diagnostic software.
+              Curated from IndiaAI AIKosh (National Data & AI Repository, MeitY), PMBJP Janaushadhi, WHO ICD-10, and ABDM SNOMED-CT clinical ontologies. Note: This dictionary provides ontology mapping for voice transcripts and does not constitute autonomous diagnostic software.
             </p>
           </div>
         </div>

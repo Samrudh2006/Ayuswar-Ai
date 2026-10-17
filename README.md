@@ -94,6 +94,9 @@ AyuSwar AI separates high-performance client-side browser execution from secure 
 6. **Jan Aushadhi PMBJP Price Arbitrage Calculator:**
    - Instantaneous cross-referencing between branded formulations and the National Formulary of India (NFI) / PMBJP open dataset, computing direct generic savings.
 
+7. **IndiaAI AIKosh National Data Repository Grounding:**
+   - Schemas and clinical speech ontologies are aligned with IndiaAI AIKosh (`aikosh.indiaai.gov.in`, MeitY, Government of India), referencing Indic speech benchmarks, Bhashini dialect tokens, and NLEM 2022 ceiling rates.
+
 ---
 
 ## 🔒 Security & Privacy Principles

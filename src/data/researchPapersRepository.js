@@ -148,5 +148,31 @@ export const TOP_RESEARCH_DOMAINS = [
         appliedInProject: 'Implemented in PatientPortal, DoctorPortal, and AbhaDigitalCard.'
       }
     ]
+  },
+  {
+    domain: 'National AI Repository & Sovereign Indic Health Corpora (IndiaAI AIKosh)',
+    topVenues: 'IndiaAI Mission, MeitY, AIKosh Repository (aikosh.indiaai.gov.in), Digital India Bhashini',
+    papers: [
+      {
+        id: 'paper_aikosh_01',
+        title: 'IndiaAI National AI and Data Repository (AIKosh): Catalyzing Sovereign Datasets for Healthcare',
+        authors: 'Ministry of Electronics and Information Technology (MeitY), Government of India',
+        journal: 'IndiaAI National Repository (aikosh.indiaai.gov.in) (2024)',
+        citationCount: 'National Standard',
+        coreInsight: 'Public datasets across multilingual speech (IndicST/IndicASR), clinical terminology, and national drug formularies are democratized to accelerate high-impact Indic AI solutions.',
+        recommendationForAyuSwar: 'Align clinical entity recognition, generic substitution (PMBJP), and speech-to-text tokenizers with IndiaAI AIKosh open repository standards.',
+        appliedInProject: 'Integrated into DatasetExplorerView, PMBJP Formulary engine, and Architecture Pipeline.'
+      },
+      {
+        id: 'paper_aikosh_02',
+        title: 'Project Bhashini & Indic Speech Corpora: Multilingual Speech Technology for Public Service Delivery',
+        authors: 'Digital India Bhashini Division (MeitY)',
+        journal: 'National Language Translation Mission (NLTM) Report',
+        citationCount: 'National Benchmark',
+        coreInsight: 'Regional dialect variations in rural India require phoneme-grounded acoustic models and regional colloquial lexicons rather than standardized metropolitan accents.',
+        recommendationForAyuSwar: 'Ground vernacular symptoms (e.g., Rayalaseema Telugu "పీకల్లో పిల్లికూతలు") with standardized ICD-10 mappings to bridge the dialect gap.',
+        appliedInProject: 'Embedded in REGIONAL_COLLOQUIAL_DICTIONARY and live transcription matching.'
+      }
+    ]
   }
 ];

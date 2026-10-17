@@ -10,17 +10,21 @@
  */
 
 export const KAGGLE_DATASET_METADATA = {
-  name: 'AyuSwar Indic-Clinical Reference Dictionary',
+  name: 'AyuSwar Indic-Clinical Reference Dictionary & IndiaAI AIKosh Corpus',
+  portalUrl: 'https://aikosh.indiaai.gov.in/home',
+  repository: 'IndiaAI National AI and Data Repository (MeitY, Government of India)',
   sourceDatabases: [
-    'Disease Symptom Knowledge Matrix',
+    'IndiaAI AIKosh National AI & Data Repository (aikosh.indiaai.gov.in)',
+    'Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) Generic Formulary',
+    'Disease Symptom Knowledge Matrix & ICMR Clinical Guidelines',
     'WHO ICD-10 Clinical Modification (CM)',
     'National Health Authority (NHA) ABDM SNOMED-CT India Extension',
-    'Indian National Formulary (INF) & Jan Aushadhi Generic Drug Registry'
+    'National List of Essential Medicines (NLEM 2022 Ceiling Rates)'
   ],
   totalConditions: 54,
   totalMedications: 108,
   totalVernacularTokens: 480,
-  datasetType: 'Synthetic Demonstration & Reference Taxonomy'
+  datasetType: 'Indic Sovereign Clinical & Speech Lexicon Taxonomy'
 };
 
 export const CLINICAL_DISEASE_DATASET = [
