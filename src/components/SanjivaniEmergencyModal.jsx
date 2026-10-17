@@ -380,12 +380,18 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   // Dispatch Action Trigger: Automatically Opens the Pre-Arrival Bed Handover Form (The WOW feature)
   const handleOpenDispatchWorkflow = (hospital = selectedHospital) => {
     if (!hospital) return;
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try { navigator.vibrate(20); } catch {}
+    }
     setSelectedHospital(hospital);
     setIsHandoverModalOpen(true);
   };
 
   // Callback when Handshake Form is confirmed & transmitted
   const handleConfirmHandshake = (generatedToken) => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try { navigator.vibrate([30, 40, 50]); } catch {}
+    }
     setPanToken(generatedToken);
     setDispatchState(2);
     setHospitalAlertSecondsAgo(2);

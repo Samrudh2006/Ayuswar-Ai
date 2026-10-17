@@ -4113,7 +4113,12 @@ export default function DoctorPortal({
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                  try { navigator.vibrate(12); } catch {}
+                }
+                setActiveTab(tab.id);
+              }}
               style={{
                 flex: 1,
                 display: 'flex',

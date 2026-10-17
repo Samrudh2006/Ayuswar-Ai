@@ -278,14 +278,27 @@ export default function WhatsAppAudioRxModal({
     const rawClean = sanitizePhone(phoneNumber);
     const finalPhone = rawClean.length === 10 ? `91${rawClean}` : rawClean;
     const encodedText = encodeURIComponent(currentRx.whatsappSummary);
-    const waUrl = `https://wa.me/${finalPhone}?text=${encodedText}`;
     
+    // On mobile devices, https://api.whatsapp.com/send directly opens native WhatsApp app
+    const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
+    const waUrl = isMobileDevice
+      ? `https://api.whatsapp.com/send?phone=${finalPhone}&text=${encodedText}`
+      : `https://wa.me/${finalPhone}?text=${encodedText}`;
+    
+    // Tactile haptic feedback on mobile tap
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try { navigator.vibrate(18); } catch {}
+    }
+
     // Open in new tab/window for WhatsApp Web or mobile app
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Simulate Live Dispatch with interactive pipeline
   const handleSimulateDispatch = () => {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try { navigator.vibrate(22); } catch {}
+    }
     setIsSendingWhatsApp(true);
     setDeliveryStatus('sending');
 
@@ -306,32 +319,38 @@ export default function WhatsAppAudioRxModal({
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(6, 22, 38, 0.85)',
-      backdropFilter: 'blur(10px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 99999,
-      padding: '20px',
-      animation: 'fadeIn 0.25s ease-out'
-    }}>
-      <div style={{
-        background: '#ffffff',
-        width: '100%',
-        maxWidth: '1080px',
-        maxHeight: '92vh',
-        borderRadius: '24px',
-        overflow: 'hidden',
-        boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.2)',
+    <div 
+      className="modal-overlay whatsapp-modal-overlay"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(6, 22, 38, 0.85)',
+        backdropFilter: 'blur(10px)',
         display: 'flex',
-        flexDirection: 'column'
-      }}>
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 99999,
+        padding: '20px',
+        animation: 'fadeIn 0.25s ease-out'
+      }}
+    >
+      <div 
+        className="modal-content whatsapp-modal-container"
+        style={{
+          background: '#ffffff',
+          width: '100%',
+          maxWidth: '1080px',
+          maxHeight: '92vh',
+          borderRadius: '24px',
+          overflow: 'hidden',
+          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.2)',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         {/* Modal Top Header */}
         <div style={{
           background: 'linear-gradient(135deg, #0A2540 0%, #0F3B3B 50%, #008B8B 100%)',
@@ -400,13 +419,16 @@ export default function WhatsAppAudioRxModal({
         </div>
 
         {/* Modal Main Body (2 Columns: Left Controls & Karaoke, Right Realistic WhatsApp Frame) */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1.15fr 1fr',
-          flex: 1,
-          overflowY: 'auto',
-          background: '#F8FAFC'
-        }}>
+        <div 
+          className="whatsapp-modal-body-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1.15fr 1fr',
+            flex: 1,
+            overflowY: 'auto',
+            background: '#F8FAFC'
+          }}
+        >
           {/* LEFT COLUMN: Controls, Language, Karaoke Spoken Rx, Visual Schedule */}
           <div style={{ padding: '26px', borderRight: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
