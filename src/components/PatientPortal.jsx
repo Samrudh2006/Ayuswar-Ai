@@ -132,6 +132,12 @@ export default function PatientPortal({
   const [isUploadReportModalOpen, setIsUploadReportModalOpen] = useState(false);
   const [isAddMedicationModalOpen, setIsAddMedicationModalOpen] = useState(false);
   const [showPrintRxModal, setShowPrintRxModal] = useState(false);
+  const [plannedNotice, setPlannedNotice] = useState(null);
+
+  const showPlannedNotice = (featureName) => {
+    setPlannedNotice(featureName);
+    setTimeout(() => setPlannedNotice(null), 3500);
+  };
 
   // Chronotherapy Timing & Spoken Voice Prescription State
   const [selectedLanguage, setSelectedLanguage] = useState(patientProfile?.language || 'Telugu');
@@ -1438,12 +1444,15 @@ export default function PatientPortal({
               --------------------------------------------------------------------- */}
           {activeTab === 'appointments' && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
-                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                    Consultation Appointments
-                  </h2>
-                  <p style={{ fontSize: '13px', color: '#64748B' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                      Consultation Appointments
+                    </h2>
+                    <SampleDataChip />
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
                     Schedule follow-ups with Dr. Priya Sharma or district hospital specialists.
                   </p>
                 </div>
@@ -1716,100 +1725,273 @@ export default function PatientPortal({
                 </div>
               )}
 
-              {/* Appointments List */}
-              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Scheduled Sessions & Active OPD Queue
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {(appointmentsQueue.length > 0 ? appointmentsQueue : [
-                    {
-                      id: 'demo_1',
-                      token: 'OPD-103',
-                      doctorName: assignedDoctor.doctorName,
-                      specialty: assignedDoctor.specialty,
-                      date: 'Tue, May 13',
-                      time: '10:15 AM',
-                      mode: 'Video Call',
-                      reason: patientProfile?.condition || 'Clinical Follow-up & Assessment',
-                      status: 'confirmed'
-                    }
-                  ]).map((appt, idx) => {
-                    const isPending = appt.status === 'pending';
-                    return (
-                      <div
-                        key={appt.id || idx}
-                        style={{
-                          padding: '16px 20px',
-                          borderRadius: '14px',
-                          background: isPending ? '#FFFBEB' : '#F8FAFC',
-                          border: isPending ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          flexWrap: 'wrap',
-                          gap: '14px'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                          <div style={{
-                            background: isPending ? '#FEF3C7' : 'rgba(0, 139, 139, 0.1)',
-                            color: isPending ? '#D97706' : '#008B8B',
-                            padding: '8px 12px',
-                            borderRadius: '10px',
-                            textAlign: 'center',
-                            fontWeight: 800,
-                            fontSize: '12px'
-                          }}>
-                            {appt.date || 'Today'}<br />
-                            <span style={{ fontSize: '13px' }}>{appt.time || '10:00 AM'}</span>
-                          </div>
-                          <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>{appt.doctorName}</span>
-                              <span style={{
-                                fontSize: '10.5px',
-                                fontWeight: 800,
-                                background: isPending ? '#FEF3C7' : 'rgba(16, 185, 129, 0.1)',
-                                color: isPending ? '#D97706' : '#059669',
-                                padding: '2px 8px',
-                                borderRadius: '6px'
-                              }}>
-                                {isPending ? 'PENDING DOCTOR ACCEPTANCE' : 'CONFIRMED • READY'}
-                              </span>
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#64748B' }}>
-                              {appt.specialty} • {appt.mode || 'In-Person OPD'} • Token #{appt.token || 'OPD-103'}
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#008B8B', marginTop: '2px', fontWeight: 650 }}>
-                              Reason: {appt.reason}
-                            </div>
+              {/* Upcoming and Past Appointments from Shared Demo Dataset */}
+              {(() => {
+                const patientAppts = DEMO_APPOINTMENTS.filter(a => a.patientId === activeDemoPatient.id);
+                const allAppts = patientAppts.length > 0 ? patientAppts : DEMO_APPOINTMENTS;
+                
+                const upcomingAppts = allAppts
+                  .filter(a => a.status === 'Upcoming' || a.offsetDays >= 0)
+                  .sort((a, b) => a.offsetDays - b.offsetDays);
+                
+                const pastAppts = allAppts
+                  .filter(a => a.status === 'Completed' || a.offsetDays < 0)
+                  .sort((a, b) => b.offsetDays - a.offsetDays);
+
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    
+                    {/* Upcoming Appointments Card */}
+                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                            Upcoming Consultations
+                          </h3>
+                          <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                            Runtime-relative scheduled visits with your care team
                           </div>
                         </div>
+                        <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 139, 139, 0.1)', color: '#008B8B', padding: '3px 10px', borderRadius: '12px' }}>
+                          {upcomingAppts.length} Scheduled
+                        </span>
+                      </div>
 
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                      {upcomingAppts.length === 0 ? (
+                        <div style={{ padding: '24px', textAlign: 'center', background: '#F8FAFC', borderRadius: '12px', border: '1px dashed #CBD5E1' }}>
+                          <p style={{ fontSize: '13px', color: '#64748B', margin: '0 0 10px 0' }}>No upcoming appointments scheduled.</p>
                           <button
-                            onClick={() => alert(`Connecting with ${appt.doctorName} for session #${appt.token}...`)}
-                            style={{
-                              background: isPending ? '#94A3B8' : '#008B8B',
-                              color: '#ffffff',
-                              border: 'none',
-                              borderRadius: '8px',
-                              padding: '8px 16px',
-                              fontSize: '12.5px',
-                              fontWeight: 750,
-                              cursor: isPending ? 'not-allowed' : 'pointer'
-                            }}
-                            disabled={isPending}
+                            onClick={() => setIsBookConsultationModalOpen(true)}
+                            style={{ background: '#008B8B', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', fontWeight: 750, cursor: 'pointer' }}
                           >
-                            {isPending ? 'Awaiting Doctor' : 'Join Consultation'}
+                            + Request Follow-up
                           </button>
                         </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                          {upcomingAppts.map((appt) => {
+                            const isToday = appt.offsetDays === 0;
+                            const isTeleconsult = appt.isTeleconsult || appt.type === 'Teleconsult';
+
+                            return (
+                              <div
+                                key={appt.id}
+                                style={{
+                                  padding: '16px 20px',
+                                  borderRadius: '14px',
+                                  background: isToday ? '#FFFBEB' : '#F8FAFC',
+                                  border: isToday ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between',
+                                  flexWrap: 'wrap',
+                                  gap: '14px'
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '220px', flex: 1 }}>
+                                  <div style={{
+                                    background: isToday ? '#FEF3C7' : 'rgba(0, 139, 139, 0.1)',
+                                    color: isToday ? '#D97706' : '#008B8B',
+                                    padding: '8px 12px',
+                                    borderRadius: '10px',
+                                    textAlign: 'center',
+                                    fontWeight: 800,
+                                    fontSize: '12px',
+                                    flexShrink: 0
+                                  }}>
+                                    {formatDemoDate(appt.offsetDays)}<br />
+                                    <span style={{ fontSize: '11px', fontWeight: 650 }}>{appt.time}</span>
+                                    <div style={{ fontSize: '10px', marginTop: '2px', opacity: 0.85 }}>({getRelativeDaysLabel(appt.offsetDays)})</div>
+                                  </div>
+
+                                  <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                      <span style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>{appt.doctorName}</span>
+                                      {isTeleconsult ? (
+                                        <span style={{ fontSize: '10px', background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
+                                          📹 Teleconsult
+                                        </span>
+                                      ) : (
+                                        <span style={{ fontSize: '10px', background: '#F0FDF4', color: '#166534', border: '1px solid #BBF7D0', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
+                                          🏥 In-Person OPD
+                                        </span>
+                                      )}
+                                      <span style={{ fontSize: '10px', background: '#F1F5F9', color: '#475569', padding: '1px 6px', borderRadius: '6px', fontFamily: 'monospace' }}>
+                                        {appt.id}
+                                      </span>
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                                      {appt.specialty || 'General Medicine'} • {appt.facility || 'District Hospital OPD'}
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#008B8B', marginTop: '2px', fontWeight: 650 }}>
+                                      Reason: {appt.reason || 'Routine follow-up'}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                  {isTeleconsult ? (
+                                    <button
+                                      onClick={() => showPlannedNotice('Teleconsultation video room integration is a planned feature.')}
+                                      style={{
+                                        background: '#008B8B',
+                                        color: '#ffffff',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        padding: '8px 14px',
+                                        fontSize: '12px',
+                                        fontWeight: 750,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        minHeight: '44px'
+                                      }}
+                                    >
+                                      <span>Join Call</span>
+                                      <span style={{ fontSize: '9px', background: 'rgba(255,255,255,0.25)', padding: '1px 5px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>
+                                    </button>
+                                  ) : (
+                                    <a
+                                      href="https://www.google.com/maps/search/?api=1&query=District+Hospital+OPD+Kurnool"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{
+                                        background: '#F8FAFC',
+                                        color: '#0A2540',
+                                        border: '1px solid #CBD5E1',
+                                        borderRadius: '8px',
+                                        padding: '8px 14px',
+                                        fontSize: '12px',
+                                        fontWeight: 750,
+                                        textDecoration: 'none',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        minHeight: '44px',
+                                        boxSizing: 'border-box'
+                                      }}
+                                    >
+                                      Get Directions ↗
+                                    </a>
+                                  )}
+
+                                  <button
+                                    onClick={() => showPlannedNotice('Appointment rescheduling is a planned feature.')}
+                                    style={{
+                                      background: '#ffffff',
+                                      color: '#64748B',
+                                      border: '1px solid #E2E8F0',
+                                      borderRadius: '8px',
+                                      padding: '8px 12px',
+                                      fontSize: '12px',
+                                      fontWeight: 750,
+                                      cursor: 'pointer',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: '4px',
+                                      minHeight: '44px'
+                                    }}
+                                  >
+                                    <span>Reschedule</span>
+                                    <span style={{ fontSize: '9px', background: '#F1F5F9', color: '#64748B', padding: '1px 5px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Past Completed Visits Card */}
+                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                            Past Completed Visits & Summaries
+                          </h3>
+                          <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                            Historical encounters logged in your demo health record
+                          </div>
+                        </div>
+                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#F1F5F9', color: '#475569', padding: '3px 10px', borderRadius: '12px' }}>
+                          {pastAppts.length} Completed
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
+
+                      {pastAppts.length === 0 ? (
+                        <div style={{ padding: '20px', textAlign: 'center', background: '#F8FAFC', borderRadius: '12px', color: '#64748B', fontSize: '13px' }}>
+                          No past consultation records on file.
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          {pastAppts.map((past) => (
+                            <div
+                              key={past.id}
+                              style={{
+                                padding: '14px 18px',
+                                borderRadius: '12px',
+                                background: '#F8FAFC',
+                                border: '1px solid #E2E8F0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                gap: '12px'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{
+                                  background: '#E2E8F0',
+                                  color: '#334155',
+                                  padding: '6px 10px',
+                                  borderRadius: '8px',
+                                  textAlign: 'center',
+                                  fontSize: '11px',
+                                  fontWeight: 750,
+                                  minWidth: '80px'
+                                }}>
+                                  {formatDemoDate(past.offsetDays)}
+                                </div>
+                                <div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>{past.doctorName}</span>
+                                    <span style={{ fontSize: '10px', background: '#ECFDF5', color: '#065F46', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
+                                      COMPLETED
+                                    </span>
+                                  </div>
+                                  <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+                                    {past.type} • Reason: {past.reason || 'Clinical consultation'}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <button
+                                onClick={() => setActiveTab('reports')}
+                                style={{
+                                  background: 'rgba(0, 139, 139, 0.1)',
+                                  color: '#008B8B',
+                                  border: '1px solid rgba(0, 139, 139, 0.25)',
+                                  borderRadius: '8px',
+                                  padding: '8px 14px',
+                                  fontSize: '11.5px',
+                                  fontWeight: 750,
+                                  cursor: 'pointer',
+                                  minHeight: '44px'
+                                }}
+                              >
+                                View Diagnostic Reports →
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -4052,6 +4234,31 @@ export default function PatientPortal({
           );
         })}
       </nav>
+
+      {/* Planned Notice Toast */}
+      {plannedNotice && (
+        <div style={{
+          position: 'fixed',
+          bottom: '80px',
+          right: '24px',
+          zIndex: 2000,
+          background: '#0A2540',
+          color: '#ffffff',
+          padding: '12px 20px',
+          borderRadius: '12px',
+          boxShadow: '0 8px 24px rgba(10,37,64,0.35)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          fontSize: '13px',
+          fontWeight: 700,
+          border: '1px solid rgba(0,210,211,0.3)',
+          maxWidth: '90vw'
+        }}>
+          <span style={{ fontSize: '10px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>
+          <span>{plannedNotice}</span>
+        </div>
+      )}
     </div>
   );
 }
