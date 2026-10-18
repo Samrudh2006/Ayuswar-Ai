@@ -1283,7 +1283,7 @@ export default function FloatingAssistant({
               }}>
                 {selectedProvider === 'gnani_evon_30b' ? (
                   <>
-                    🧠 <strong>Gnani Evon (30B-A3B) Server Route:</strong> Official Gnani foundation model (<code>gnani/gnani-evon-v3.3-30B-A3B</code>) queried via server endpoint <code>/api/evon/chat</code>. Hybrid Mamba+MoE architecture (30B total, ~3.5B active/token) with 128k context and native Indic vocabulary.
+                    🧠 <strong>Gnani Evon 30B [PLANNED ARCHITECTURE / SERVER PROXY]:</strong> Official Gnani foundation model (<code>gnani/gnani-evon-v3.3-30B-A3B</code>). Server route <code>/api/evon/chat</code> is architected. Pending host deployment with <code>EVON_BASE_URL</code>, system defaults to Rule-based FALLBACK (Not Evon).
                   </>
                 ) : selectedProvider === 'local_offline' ? (
                   <>

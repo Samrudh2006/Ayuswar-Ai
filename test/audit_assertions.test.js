@@ -88,7 +88,8 @@ const bannedChecks = [
   { label: 'Rule 12: Unverified academic partner M', regex: new RegExp(['\\b', 'M', 'ayo\\b'].join(''), 'i') },
   { label: 'Rule 13: Unverified academic partner S', regex: new RegExp(['\\b', 'Stan', 'ford\\b'].join(''), 'i') },
   { label: 'Rule 14: Unverified academic partner I', regex: new RegExp(['\\b', 'II', 'Sc\\b'].join(''), 'i') },
-  { label: 'Rule 15: Unverified academic partner N', regex: new RegExp(['\\b', 'N', 'IH\\b'].join(''), 'i') }
+  { label: 'Rule 15: Unverified academic partner N', regex: new RegExp(['\\b', 'N', 'IH\\b'].join(''), 'i') },
+  { label: 'Rule 16: Unmeasured token savings or language tax claim', regex: new RegExp(['58%', '|', '50[–\\-]65%', '|', 'language\\s*tax', '|', 'token\\s*savings'].join(''), 'i') }
 ];
 
 const filesToAudit = [
@@ -107,9 +108,9 @@ for (const filePath of filesToAudit) {
 }
 
 assert.strictEqual(violations.length, 0, `Banned claims detected:\n${violations.join('\n')}`);
-console.log('✓ Test 8 Passed: Zero banned claims or unverified metrics found across src/ and README.md.');
+console.log('✓ Test 8 Passed: Zero banned claims, 58% token claims, or unverified metrics found across src/ and README.md.');
 
-// Test 9: Gnani Evon Integrity — No simulated/mocked replies presented as Evon output
+// Test 9: [Static Code Contract] Gnani Evon Integrity — No simulated/mocked replies presented as Evon output
 const evonServicePath = resolve('src/services/gnaniEvonService.js');
 const evonServiceSrc = readFileSync(evonServicePath, 'utf8');
 assert.ok(!evonServiceSrc.includes('executeLocalEvonReasoning'), 'gnaniEvonService must NOT contain executeLocalEvonReasoning or hardcoded LLM replies');
@@ -117,15 +118,15 @@ assert.ok(!evonServiceSrc.includes('localStorage.getItem(\'ayuswar_hf_token\')')
 assert.ok(!evonServiceSrc.includes('VITE_HF_TOKEN'), 'gnaniEvonService must NOT read VITE_HF_TOKEN');
 assert.ok(evonServiceSrc.includes('/api/evon/chat'), 'gnaniEvonService must query Evon exclusively via /api/evon/chat');
 assert.ok(evonServiceSrc.includes('/api/evon/status'), 'gnaniEvonService must query status via /api/evon/status');
-console.log('✓ Test 9 Passed: gnaniEvonService contains zero hardcoded/mocked Evon replies and uses server routes only.');
+console.log('✓ Test 9 Passed: [Static Code Contract] gnaniEvonService contains zero hardcoded/mocked Evon replies and uses server routes only.');
 
-// Test 10: Callers Integrity — Emergency triage never embeds fake evonReasoning in deterministic rules
+// Test 10: [Static Code Contract] Callers Integrity — Emergency triage never embeds fake evonReasoning in deterministic rules
 const emergencyTriageSrc = readFileSync(resolve('src/services/sanjivaniEmergencyService.js'), 'utf8');
 assert.ok(!emergencyTriageSrc.includes('evonReasoning: {'), 'sanjivaniEmergencyService must not attach fake evonReasoning to deterministic triage');
 assert.ok(emergencyTriageSrc.includes('DETERMINISTIC_SAFETY_RULE'), 'sanjivaniEmergencyService must stamp triageMethod as DETERMINISTIC_SAFETY_RULE');
-console.log('✓ Test 10 Passed: Emergency RED triage runs purely on deterministic safety rules without fake Evon attribution.');
+console.log('✓ Test 10 Passed: [Static Code Contract] Emergency RED triage runs purely on deterministic safety rules without fake Evon attribution.');
 
-// Test 11: Server Routes exist for Vercel and dev middleware
+// Test 11: [Static Code Contract] Server Routes exist for Vercel and dev middleware
 assert.ok(existsSync(resolve('api/evon/status.js')), 'api/evon/status.js must exist for server-side status checks');
 assert.ok(existsSync(resolve('api/evon/chat.js')), 'api/evon/chat.js must exist for server-side completions proxy');
 const viteConfigSrc = readFileSync(resolve('vite.config.js'), 'utf8');
@@ -133,40 +134,43 @@ assert.ok(viteConfigSrc.includes('/api/evon/status'), 'vite.config.js must confi
 assert.ok(viteConfigSrc.includes('/api/evon/chat'), 'vite.config.js must configure dev middleware for /api/evon/chat');
 assert.ok(viteConfigSrc.includes('EVON_BASE_URL'), 'vite.config.js must read EVON_BASE_URL');
 assert.ok(viteConfigSrc.includes('EVON_API_KEY'), 'vite.config.js must read EVON_API_KEY');
-console.log('✓ Test 11 Passed: Server-side Evon routes and dev proxy middleware properly configured.');
+console.log('✓ Test 11 Passed: [Static Code Contract] Server-side Evon routes and dev proxy middleware properly configured.');
 
-// Test 12: Frontend keys isolation — No EVON_API_KEY or VITE_EVON_* in client code
+// Test 12: [Static Code Contract] Frontend keys isolation — No EVON_API_KEY or VITE_EVON_* in client code
 for (const filePath of filesToAudit) {
   const content = readFileSync(filePath, 'utf8');
   assert.ok(!content.includes('VITE_EVON_API_KEY'), `Client file ${filePath} must never reference VITE_EVON_API_KEY`);
   assert.ok(!content.includes('VITE_HF_TOKEN'), `Client file ${filePath} must never reference VITE_HF_TOKEN`);
   assert.ok(!content.includes('localStorage.setItem(\'ayuswar_hf_token\''), `Client file ${filePath} must not store HF token`);
 }
-console.log('✓ Test 12 Passed: Client-side codebase verified completely free of frontend Evon keys or tokens.');
+console.log('✓ Test 12 Passed: [Static Code Contract] Client-side codebase verified completely free of frontend Evon keys or tokens.');
 
-// Test 13: Evon Parameter Specification — Must be 30B total (~3.5B active/token), never 32B total
+// Test 13: [Static Code Contract] Evon Parameter Specification — Must be 30B total (~3.5B active/token), never 32B total
 assert.ok(evonServiceSrc.includes('30B total, ~3.5B active/token'), 'gnaniEvonService must specify 30B total, ~3.5B active/token');
 assert.ok(!evonServiceSrc.includes('32B total'), 'gnaniEvonService must NOT specify 32B total');
 for (const filePath of filesToAudit) {
   const content = readFileSync(filePath, 'utf8');
   assert.ok(!content.includes('32B total'), `File ${filePath} must not specify 32B total`);
 }
-console.log('✓ Test 13 Passed: Evon model specification verified as 30B total (~3.5B active/token) with zero 32B claims.');
+console.log('✓ Test 13 Passed: [Static Code Contract] Evon model specification verified as 30B total (~3.5B active/token) with zero 32B claims.');
 
-// Test 14: Token Savings Integrity — No unmeasured hardcoded calculateIndicTokenSavings or language tax estimates
+// Test 14: [Static Code Contract] Token Savings Integrity — No unmeasured hardcoded calculateIndicTokenSavings or language tax estimates
 assert.ok(!evonServiceSrc.includes('calculateIndicTokenSavings'), 'calculateIndicTokenSavings must be completely removed');
 for (const filePath of filesToAudit) {
   const content = readFileSync(filePath, 'utf8');
   assert.ok(!content.includes('calculateIndicTokenSavings'), `File ${filePath} must not contain calculateIndicTokenSavings`);
 }
-console.log('✓ Test 14 Passed: Zero unmeasured hardcoded tokenizer calculations across codebase.');
+console.log('✓ Test 14 Passed: [Static Code Contract] Zero unmeasured hardcoded tokenizer calculations across codebase.');
 
-// Test 15: Honest Fallback Labeling — When offline, explicitly labels Rule-based FALLBACK (Not Evon) with zero fake <reasoning>
+// Test 15: [Static Code Contract] Honest Fallback Labeling — When offline, explicitly labels Rule-based FALLBACK (Not Evon) with zero fake <reasoning>
 assert.ok(evonServiceSrc.includes("'Rule-based FALLBACK (Not Evon)'"), 'gnaniEvonService must label fallback as Rule-based FALLBACK (Not Evon)');
 assert.ok(!evonServiceSrc.includes('thoughtTrace: `[FALLBACK]'), 'Fallback states must not populate fake thoughtTrace');
-console.log('✓ Test 15 Passed: Honest fallback labeling enforced with zero simulated <reasoning> traces.');
+console.log('✓ Test 15 Passed: [Static Code Contract] Honest fallback labeling enforced with zero simulated <reasoning> traces.');
 
-console.log('====================================================');
-console.log('ALL 15 AUDIT ASSERTION TESTS PASSED SUCCESSFULLY! 🎉');
-console.log('====================================================');
+console.log('======================================================================');
+console.log('ALL 15 STATIC CODE CONTRACT & INTEGRITY TESTS PASSED! 🎉');
+console.log('NOTE: These 15 tests verify architectural isolation and zero-mock code');
+console.log('integrity. They do NOT evaluate or claim live LLM model inference.');
+console.log('======================================================================');
+
 

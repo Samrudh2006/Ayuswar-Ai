@@ -79,11 +79,11 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           width: '7px',
           height: '7px',
           borderRadius: '50%',
-          background: isLive ? '#10B981' : '#EF4444',
+          background: isLive ? '#10B981' : '#F59E0B',
           boxShadow: isLive ? '0 0 6px #10B981' : 'none',
           display: 'inline-block'
         }} />
-        <span>{isLive ? '● EVON 30B: LIVE' : '○ EVON: OFFLINE — Rule-based Fallback Active (Not Evon)'}</span>
+        <span>{isLive ? '● EVON 30B: LIVE' : '○ EVON 30B: PLANNED / FALLBACK ACTIVE (Not Evon)'}</span>
         {isChecking && <RefreshCw size={10} style={{ animation: 'spin 1s linear infinite' }} />}
       </div>
     );
@@ -125,11 +125,11 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
                 background: isLive ? '#10B981' : '#F59E0B',
                 color: isLive ? '#FFFFFF' : '#0A2540'
               }}>
-                {isLive ? 'LIVE (200 OK)' : 'Rule-based FALLBACK (Not Evon)'}
+                {isLive ? 'LIVE (200 OK)' : 'PLANNED / FALLBACK ACTIVE (Not Evon)'}
               </span>
             </div>
             <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-              {isLive ? statusData.model : 'Evon unavailable on server — using Rule-based FALLBACK (Not Evon)'}
+              {isLive ? statusData.model : 'Evon host unconfigured — Rule-based FALLBACK (Not Evon) active'}
             </div>
           </div>
         </div>

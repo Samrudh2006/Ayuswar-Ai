@@ -14,10 +14,10 @@ import { queryEvonServer, EVON_MODEL_METADATA } from './gnaniEvonService';
 export const AI_PROVIDERS = [
   { 
     id: 'gnani_evon_30b', 
-    name: 'Gnani Evon (30B-A3B Sovereign Indic Reasoning / Server Route)', 
+    name: 'Gnani Evon 30B [PLANNED ARCHITECTURE / SERVER PROXY]', 
     model: 'gnani/gnani-evon-v3.3-30B-A3B',
-    badge: 'Gnani.ai Official',
-    description: '30B Mamba+MoE Indic foundation model routed via server-side /api/evon/chat with EVON_BASE_URL.'
+    badge: 'Planned / Fallback Active',
+    description: 'Pre-architected server-side route (/api/evon/chat). Awaiting deployed EVON_BASE_URL host; currently operates on deterministic Rule-based FALLBACK (Not Evon).'
   },
   { id: 'local_offline', name: 'Heuristic Rule-Based Demonstrator (Local Fallback)', model: 'Rule-Based-Indic-Demo' },
   { id: 'gemini_free', name: 'Google Gemini Free Tier (gemini-1.5-flash / 2.5-flash)', model: 'gemini-1.5-flash' },
