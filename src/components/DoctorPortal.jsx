@@ -864,9 +864,6 @@ export default function DoctorPortal({
               <div style={{ textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{doctorName}</span>
-                  <span style={{ fontSize: '9px', background: '#DCFCE7', color: '#166534', padding: '1px 6px', borderRadius: '4px', fontWeight: 800 }}>
-                    NMC VERIFIED
-                  </span>
                 </div>
                 <div style={{ fontSize: '11px', color: '#008B8B', fontWeight: 650 }}>
                   {doctorSpecialty} • {doctorProfile?.facility || 'Kurnool District Hospital'}
@@ -935,10 +932,10 @@ export default function DoctorPortal({
                   </div>
                   <div>
                     <h1 style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                      Good Morning, Dr. Priya
+                      Good Morning, {doctorName ? doctorName.split(',')[0] : 'Doctor'}
                     </h1>
                     <p style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>
-                      Here's what's happening with your patiwar today.
+                      Here's what's happening with your patients today.
                     </p>
                   </div>
                 </div>
@@ -956,7 +953,7 @@ export default function DoctorPortal({
                   color: '#475569'
                 }}>
                   <Calendar size={14} color="#008B8B" />
-                  <span>Mon, 12 May 2025</span>
+                  <span>{new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
                 </div>
               </div>
 
@@ -1079,10 +1076,7 @@ export default function DoctorPortal({
                     <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>Total Patients</div>
                   </div>
                   <div style={{ fontSize: '28px', fontWeight: 850, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>48</div>
-                  <div style={{ fontSize: '11.5px', color: '#10B981', fontWeight: 650, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <TrendingUp size={13} />
-                    <span>↑ 12% vs. last week</span>
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Registered in local registry</div>
                 </div>
 
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
@@ -1093,10 +1087,7 @@ export default function DoctorPortal({
                     <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>Today's Appointments</div>
                   </div>
                   <div style={{ fontSize: '28px', fontWeight: 850, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>12</div>
-                  <div style={{ fontSize: '11.5px', color: '#10B981', fontWeight: 650, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <TrendingUp size={13} />
-                    <span>↑ 2% vs. yesterday</span>
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Active queue tokens</div>
                 </div>
 
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
@@ -1107,10 +1098,7 @@ export default function DoctorPortal({
                     <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>AI Consultations</div>
                   </div>
                   <div style={{ fontSize: '28px', fontWeight: 850, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>8</div>
-                  <div style={{ fontSize: '11.5px', color: '#10B981', fontWeight: 650, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <TrendingUp size={13} />
-                    <span>↑ 32% vs. last week</span>
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Scribe encounters completed</div>
                 </div>
 
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
@@ -1121,10 +1109,7 @@ export default function DoctorPortal({
                     <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 600 }}>Pending Reports</div>
                   </div>
                   <div style={{ fontSize: '28px', fontWeight: 850, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>5</div>
-                  <div style={{ fontSize: '11.5px', color: '#EF4444', fontWeight: 650, marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <TrendingDown size={13} />
-                    <span>↓ 40% vs. last week</span>
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Awaiting physician review</div>
                 </div>
               </div>
 
@@ -2209,7 +2194,7 @@ export default function DoctorPortal({
                   </div>
 
                   <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '3px 10px', borderRadius: '12px', fontWeight: 700 }}>
-                    99.2% Character Accuracy
+                    Sample OCR Preset
                   </span>
                 </div>
 

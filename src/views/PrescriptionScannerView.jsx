@@ -391,7 +391,7 @@ export default function PrescriptionScannerView() {
           </div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.1)', color: '#059669', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 750 }}>
             <ShieldCheck size={14} />
-            <span>DPDP Act 2023 Compliant • 100% Client-Side Processing</span>
+            <span>Designed for client-side OCR processing</span>
           </div>
         </div>
         <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
@@ -823,7 +823,7 @@ export default function PrescriptionScannerView() {
                   {currentSample.savingsPct}
                 </div>
                 <div style={{ fontSize: '10px', fontWeight: 750, color: '#065F46' }}>
-                  Cost Savings
+                  Cost Savings (sample data)
                 </div>
               </div>
             </div>

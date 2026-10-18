@@ -192,11 +192,43 @@ export default function App() {
           {/* ABDM FHIR R4 Prescription Preview */}
           <Route path="/prescription/preview" element={<PrescriptionPreviewView />} />
 
-          {/* Legacy Sandbox Routes Redirect to Home */}
-          <Route path="/auth/doctor" element={<Navigate to="/" replace />} />
-          <Route path="/auth/patient" element={<Navigate to="/" replace />} />
+          {/* Dedicated Auth Routes */}
+          <Route 
+            path="/auth/doctor" 
+            element={
+              currentDoctor ? (
+                <Navigate to="/doctor-portal" replace />
+              ) : (
+                <DoctorAuthModal 
+                  isOpen={true} 
+                  onClose={() => navigate('/')} 
+                  onLoginSuccess={(doc) => {
+                    handleDoctorLoginSuccess(doc);
+                    navigate('/doctor-portal');
+                  }} 
+                />
+              )
+            } 
+          />
+          <Route 
+            path="/auth/patient" 
+            element={
+              currentPatient ? (
+                <Navigate to="/patient-portal" replace />
+              ) : (
+                <PatientAuthModal 
+                  isOpen={true} 
+                  onClose={() => navigate('/')} 
+                  onLoginSuccess={(pat) => {
+                    handlePatientLoginSuccess(pat);
+                    navigate('/patient-portal');
+                  }} 
+                />
+              )
+            } 
+          />
 
-          {/* Doctor & Patient Portals (Strict Authentication Required - No bypass) */}
+          {/* Doctor & Patient Portals (Strict Authentication Required - Redirect to auth) */}
           <Route 
             path="/doctor-portal" 
             element={
@@ -212,7 +244,7 @@ export default function App() {
                   }}
                 />
               ) : (
-                <Navigate to="/" replace />
+                <Navigate to="/auth/doctor" replace />
               )
             } 
           />
@@ -236,7 +268,7 @@ export default function App() {
                   onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
                 />
               ) : (
-                <Navigate to="/" replace />
+                <Navigate to="/auth/patient" replace />
               )
             } 
           />
@@ -248,7 +280,7 @@ export default function App() {
                   doctorProfile={currentDoctor} 
                 />
               ) : (
-                <Navigate to="/" replace />
+                <Navigate to="/auth/doctor" replace />
               )
             } 
           />

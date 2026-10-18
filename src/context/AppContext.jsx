@@ -157,10 +157,16 @@ export function AppProvider({ children }) {
     setSelectedLanguage,
     isDemoMode,
     toggleDemoMode,
+    // Canonical doctor state + aliases for backwards-compatibility
     doctorProfile,
     setDoctorProfile,
+    currentDoctor: doctorProfile,
+    setCurrentDoctor: setDoctorProfile,
+    // Canonical patient state + aliases for backwards-compatibility
     patientProfile,
     setPatientProfile,
+    currentPatient: patientProfile,
+    setCurrentPatient: setPatientProfile,
     speechProviderStatus,
     setSpeechProviderStatus,
     appointmentsQueue,

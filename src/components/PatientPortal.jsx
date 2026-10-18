@@ -97,7 +97,7 @@ export default function PatientPortal({
     },
     {
       sender: 'ai',
-      text: 'Hello Ananya! For mild cough and throat irritation: Drink warm water with honey, avoid refrigerated drinks, and use saline gargles twice daily. If you develop high fever or shortness of breath, connect with Dr. Priya immediately.'
+      text: 'Hello! For mild cough and throat irritation: Drink warm water with honey, avoid refrigerated drinks, and use saline gargles twice daily. If you develop high fever or shortness of breath, connect with Dr. Priya immediately.'
     }
   ]);
 
@@ -258,7 +258,7 @@ export default function PatientPortal({
     return () => clearInterval(interval);
   }, [isBreathingActive]);
 
-  const patientName = patientProfile?.patientName || 'Ananya Rao';
+  const patientName = patientProfile?.patientName || 'Ramesh Patel';
   const abhaId = patientProfile?.abhaId || '91-4521-8932-1049';
 
   // Dynamic Reactive Diagnostic Reports List
@@ -2658,30 +2658,31 @@ export default function PatientPortal({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                     <span style={{ 
-                      background: 'rgba(0, 139, 139, 0.3)', 
+                      background: 'rgba(0, 139, 139, 0.45)', 
                       padding: '4px 10px', 
                       borderRadius: '20px', 
                       fontSize: '11px', 
                       fontWeight: 800, 
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
-                      border: '1px solid rgba(255,255,255,0.2)' 
+                      color: '#FFFFFF',
+                      border: '1px solid rgba(255,255,255,0.3)' 
                     }}>
-                      ABDM Chronotherapy & Wellness Care Plan
+                      ABDM Chronotherapy & Wellness Care Plan (PLANNED)
                     </span>
                     <span style={{ fontSize: '12px', color: '#93C5FD' }}>• Supervised by {assignedDoctor.doctorName}</span>
                   </div>
-                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0' }}>
+                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0', color: '#FFFFFF' }}>
                     Daily Health Goals & Longitudinal Wellness Streaks
                   </h2>
                   <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
-                    Clinically calibrated biometric targets for <strong>{patientProfile?.condition || 'Asthma & Chronic Care'}</strong>. Real-time synchronisation with ABDM Personal Health Records (PHR).
+                    Clinically calibrated biometric targets for <strong>{patientProfile?.condition || 'Asthma & Chronic Care'}</strong>. Real-time synchronisation with ABDM Personal Health Records (PHR: PLANNED).
                   </p>
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.15)' }}>
-                    <div style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 650 }}>Daily Compliance</div>
+                    <div style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 650 }}>Daily Compliance <span style={{ fontSize: '9px', opacity: 0.8 }}>(sample)</span></div>
                     <div style={{ fontSize: '22px', fontWeight: 850, color: '#34D399' }}>94%</div>
                   </div>
                   <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.15)' }}>
@@ -3462,7 +3463,7 @@ export default function PatientPortal({
                   <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0', marginBottom: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                       <span style={{ fontSize: '12px', color: '#64748B' }}>ABHA Number Status:</span>
-                      <span style={{ fontSize: '11px', background: '#ECFDF5', color: '#059669', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>Tier-1 Verified</span>
+                      <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#475569', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>ABHA integration: PLANNED</span>
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540', fontFamily: 'monospace' }}>
                       {abhaId}

@@ -515,11 +515,11 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                 fontSize: '10px'
               }}
             >
-              <span style={{ color: '#38BDF8', fontWeight: 800 }}>INCIDENT #108-AP-8902</span>
+              <span style={{ color: '#38BDF8', fontWeight: 800 }}>INCIDENT #108-AP-8902 (SIMULATION)</span>
               <span style={{ color: '#475569' }}>•</span>
-              <span style={{ color: '#10B981', fontWeight: 700 }}>AMBULANCE FEED ●</span>
+              <span style={{ color: '#10B981', fontWeight: 700 }}>AMBULANCE FEED (SIMULATION) ●</span>
               <span style={{ color: '#475569' }}>•</span>
-              <span style={{ color: '#38BDF8', fontWeight: 700 }}>ABDM HFR INTEGRATED</span>
+              <span style={{ color: '#38BDF8', fontWeight: 700 }}>ABDM HFR: PLANNED</span>
             </div>
           </div>
 

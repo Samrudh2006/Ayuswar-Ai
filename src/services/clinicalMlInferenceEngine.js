@@ -146,9 +146,22 @@ export function analyzeAcousticSignals(metrics = {}, options = {}) {
   // Sort by similarity
   clusterComparisons.sort((a, b) => b.similarityScore - a.similarityScore);
 
+  // Calculate honest Pitch Register strictly derived from measured F0
+  let pitchRegister = 'Mid Register (165–260 Hz)';
+  let pitchBand = 'mid';
+  if (f0 < 165) {
+    pitchRegister = 'Low Register (< 165 Hz)';
+    pitchBand = 'low';
+  } else if (f0 > 260) {
+    pitchRegister = 'High Register (> 260 Hz)';
+    pitchBand = 'high';
+  }
+
   return {
     isDiagnostic: false,
-    disclaimer: 'NON-DIAGNOSTIC EXPERIMENTAL DSP METRICS: Physical audio features extracted for acoustic research. Does not constitute clinical evaluation or disease diagnosis.',
+    disclaimer: 'Research signal viewer, not for diagnosis. Synthetic test signals only.',
+    pitchRegister,
+    pitchBand,
     measuredMetrics: {
       pitchF0: f0,
       jitterPct: jitter,

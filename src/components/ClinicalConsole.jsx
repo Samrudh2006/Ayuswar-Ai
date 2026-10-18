@@ -297,7 +297,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: '#64748B', fontWeight: 600 }}>
           <span>Ambient Clinical Telemetry Console</span>
           <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }}></span>
-          <span style={{ color: '#059669', fontWeight: 700 }}>DPDP Act Ephemeral Mode</span>
+          <span style={{ color: '#059669', fontWeight: 700 }}>Client Ephemeral Mode (SIMULATION)</span>
         </div>
       </div>
       {/* =========================================================================
@@ -567,9 +567,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               justifyContent: 'space-between',
               fontSize: '11.5px'
             }}>
-              <span style={{ color: '#94A3B8' }}>Phonetic Code-Switching Ratio:</span>
+              <span style={{ color: '#94A3B8' }}>Phonetic Code-Switching Ratio (sample model):</span>
               <span style={{ color: '#00D2D3', fontWeight: 750 }}>
-                62% {currentEncounter.langCode.startsWith('te') ? 'Telugu' : 'Hindi'} + 28% Clinical English + 10% Colloquial
+                {currentEncounter.langCode.startsWith('te') ? 'Telugu' : 'Hindi'} + Clinical English + Colloquial (sample data)
               </span>
             </div>
           </div>

@@ -1276,7 +1276,7 @@ export default function WhatsAppAudioRxModal({
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldCheck size={16} color="#059669" />
-            <span>DPDP Act 2023 Compliant • ABDM M2/M3 Milestone Health Information Exchange</span>
+            <span>Designed for client-side processing • ABDM M2/M3 Milestone Architecture (PLANNED)</span>
           </div>
 
           <button

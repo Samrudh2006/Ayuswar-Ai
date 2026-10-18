@@ -157,6 +157,85 @@ export default function AcousticBiomarkerLabView() {
       setIsPlayingSound(true);
       setActiveSoundName(file.name);
 
+      // Compute physical DSP metrics via voicing-gated autocorrelation
+      const channelData = audioBuffer.getChannelData(0);
+      const sampleRate = audioBuffer.sampleRate;
+      const frameSize = 2048;
+      const hopSize = 1024;
+      const numFrames = Math.min(60, Math.floor((channelData.length - frameSize) / hopSize));
+      const pitchEstimates = [];
+      const hnrEstimates = [];
+      let totalCentroid = 0;
+      let validFrames = 0;
+
+      const minLag = Math.floor(sampleRate / 380); // 380 Hz upper voice pitch limit
+      const maxLag = Math.floor(sampleRate / 80);  // 80 Hz lower voice pitch limit
+
+      for (let i = 0; i < numFrames; i++) {
+        const start = i * hopSize;
+        const frame = channelData.subarray(start, start + frameSize);
+        
+        let r0 = 0;
+        for (let j = 0; j < frameSize; j++) r0 += frame[j] * frame[j];
+        if (r0 < 0.005) continue; // silence / noise gate
+
+        let maxCorr = -1;
+        let bestLag = 0;
+        for (let lag = minLag; lag < maxLag; lag++) {
+          let corr = 0;
+          for (let j = 0; j < frameSize - lag; j += 2) {
+            corr += frame[j] * frame[j + lag];
+          }
+          if (corr > maxCorr) {
+            maxCorr = corr;
+            bestLag = lag;
+          }
+        }
+
+        if (bestLag > 0 && r0 > 0) {
+          const normCorr = (maxCorr * 2) / r0;
+          // Harmonicity & Voicing gate: require autocorrelation clarity > 0.45
+          if (normCorr > 0.45) {
+            const f0Candidate = Math.round(sampleRate / bestLag);
+            if (f0Candidate >= 80 && f0Candidate <= 380) {
+              pitchEstimates.push(f0Candidate);
+              const safeNorm = Math.min(0.98, Math.max(0.05, normCorr));
+              const hnr = 10 * Math.log10(safeNorm / (1.0001 - safeNorm));
+              hnrEstimates.push(hnr);
+            }
+          }
+        }
+
+        let num = 0, den = 0;
+        for (let j = 0; j < frameSize; j++) {
+          const mag = Math.abs(frame[j]);
+          num += j * mag;
+          den += mag;
+        }
+        if (den > 0) {
+          totalCentroid += ((num / den) * (sampleRate / 2)) / frameSize;
+          validFrames++;
+        }
+      }
+
+      const calculatedF0 = pitchEstimates.length > 0
+        ? Math.round(pitchEstimates.sort((a,b)=>a-b)[Math.floor(pitchEstimates.length / 2)])
+        : 145;
+      const calculatedHnr = hnrEstimates.length > 0
+        ? Number((hnrEstimates.reduce((a,b)=>a+b, 0) / hnrEstimates.length).toFixed(1))
+        : 18.5;
+      const calculatedCentroid = validFrames > 0
+        ? Math.round(totalCentroid / validFrames)
+        : 1250;
+
+      const fileMetrics = {
+        pitchF0: calculatedF0,
+        hnrDb: calculatedHnr,
+        spectralCentroid: calculatedCentroid
+      };
+      setDspMetrics(fileMetrics);
+      setAnalysisResult(analyzeAcousticSignals(fileMetrics));
+
       source.onended = () => {
         setIsPlayingSound(false);
         setActiveSoundName(null);
@@ -474,13 +553,13 @@ export default function AcousticBiomarkerLabView() {
       <div style={{ marginBottom: '28px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <Activity size={14} />
-          <span>INTERACTIVE VOCAL & RESPIRATORY ACOUSTIC DSP LAB</span>
+          <span>INTERACTIVE VOCAL & RESPIRATORY ACOUSTIC SIGNAL LAB</span>
         </div>
         <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
-          Vocal Biomarker & Acoustic Disease Diagnostic Lab
+          Vocal Biomarker & Acoustic Signal Lab
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6 }}>
-          Real-time physical digital signal processing (DSP) and statistical cluster proximity engine. Analyze lung breath sounds, cough bursts, vocal tremor perturbations, and frequency harmonics.
+          Explores acoustic signal patterns in recorded audio. Research signal viewer, not for diagnosis. Real-time physical digital signal processing (DSP) and statistical cluster proximity engine.
         </p>
       </div>
 
@@ -489,10 +568,10 @@ export default function AcousticBiomarkerLabView() {
         <AlertCircle size={22} color="#D97706" style={{ marginTop: '2px', flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#92400E', marginBottom: '4px' }}>
-            PHYSICAL SIGNAL ANALYSIS NOTICE (RESEARCH & CLINICAL BENCHMARK PROTOCOL)
+            PHYSICAL SIGNAL OBSERVATIONS NOTICE (RESEARCH & BENCHMARK PROTOCOL)
           </div>
           <p style={{ fontSize: '12.5px', color: '#B45309', margin: 0, lineHeight: 1.5 }}>
-            Acoustic features displayed are physical audio engineering metrics (fundamental frequency F0, jitter, shimmer, HNR, and spectral centroid), NOT definitive clinical diagnoses. This software is an investigational decision-support tool.
+            Explores acoustic signal patterns in recorded audio. Research signal viewer, not for diagnosis. Synthetic test signals only. Acoustic features displayed are physical audio engineering metrics (fundamental frequency F0, HNR, and spectral centroid).
           </p>
         </div>
       </div>
@@ -671,9 +750,9 @@ export default function AcousticBiomarkerLabView() {
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94A3B8', marginTop: 4 }}>
-              <span>100 Hz (Male Vocal Bass)</span>
-              <span>420 Hz (Airway Wheeze)</span>
-              <span>2000 Hz (High Stridor)</span>
+              <span>100 Hz (Low Bass Pitch)</span>
+              <span>440 Hz (Standard Concert Pitch A4)</span>
+              <span>2000 Hz (High Frequency Audio)</span>
             </div>
           </div>
 
@@ -688,16 +767,18 @@ export default function AcousticBiomarkerLabView() {
                 <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>{dspMetrics.pitchF0} Hz</div>
               </div>
               <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Vocal Jitter (Period Perturbation)</span>
-                <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>{dspMetrics.jitterPct}%</div>
-              </div>
-              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Vocal Shimmer (Amplitude Perturbation)</span>
-                <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>{dspMetrics.shimmerPct}%</div>
+                <span style={{ fontSize: '11px', color: '#64748B' }}>Pitch Register (Measured F0)</span>
+                <div style={{ fontSize: '16px', fontWeight: 850, color: '#008B8B' }}>
+                  {dspMetrics.pitchF0 < 165 ? 'Low Register' : dspMetrics.pitchF0 > 260 ? 'High Register' : 'Mid Register'}
+                </div>
               </div>
               <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <span style={{ fontSize: '11px', color: '#64748B' }}>Harmonics-to-Noise Ratio (HNR)</span>
                 <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>{dspMetrics.hnrDb} dB</div>
+              </div>
+              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                <span style={{ fontSize: '11px', color: '#64748B' }}>Spectral Centroid</span>
+                <div style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540' }}>{dspMetrics.spectralCentroid || 1200} Hz</div>
               </div>
             </div>
           </div>
@@ -705,15 +786,15 @@ export default function AcousticBiomarkerLabView() {
           {/* Auditory Clinical Reference Presets */}
           <div>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.04em' }}>
-              Listen & Analyze Respiratory Audio Signatures:
+              Synthetic Reference Tone Signatures (SIMULATION):
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
               {[
-                { key: 'normal_phonation', label: 'Healthy Baseline', icon: '🟢', sub: '135Hz Harmonically Stable' },
-                { key: 'asthma_wheeze', label: 'Airway Wheeze', icon: '🔴', sub: '420Hz Whistling Resonance' },
-                { key: 'pediatric_stridor', label: 'Pediatric Stridor', icon: '⚠️', sub: '880Hz High Obstruction' },
-                { key: 'pneumonia_rales', label: 'Adventitious Rales', icon: '🟠', sub: 'Crackling Audio Bursts' },
-                { key: 'neurological_tremor', label: 'Micro-Tremor', icon: '🟣', sub: '5.5Hz Vocal Flutter' }
+                { key: 'normal_phonation', label: '135 Hz Baseline Tone', icon: '🟢', sub: '135Hz Harmonic Tone (Synthetic)' },
+                { key: 'asthma_wheeze', label: '440 Hz Whistle Tone', icon: '🔵', sub: '440Hz Resonant Audio (Synthetic)' },
+                { key: 'pediatric_stridor', label: '880 Hz High Pitch Tone', icon: '⚠️', sub: '880Hz Audio Tone (Synthetic)' },
+                { key: 'pneumonia_rales', label: 'Adventitious Burst', icon: '🟠', sub: 'Audio Burst Pattern (Synthetic)' },
+                { key: 'neurological_tremor', label: '5.5 Hz Modulated Tone', icon: '🟣', sub: '5.5Hz Modulated Tone (Synthetic)' }
               ].map(item => (
                 <button
                   key={item.key}
@@ -748,18 +829,18 @@ export default function AcousticBiomarkerLabView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
-              Statistical Acoustic Cluster Proximity
+              Measured Pitch Register & Reference Signal Proximity
             </div>
             
             <div style={{ background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: 12, padding: '16px', marginBottom: 20 }}>
               <div style={{ fontSize: '11px', fontWeight: 800, color: '#0D9488', textTransform: 'uppercase', marginBottom: 4 }}>
-                Primary Acoustic Profile Resemblance:
+                Pitch Register:
               </div>
               <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#0F766E', margin: '0 0 6px 0' }}>
-                {analysisResult.topAcousticMatch.label}
+                {dspMetrics.pitchF0 < 165 ? 'Low Register (< 165 Hz)' : dspMetrics.pitchF0 > 260 ? 'High Register (> 260 Hz)' : 'Mid Register (165–260 Hz)'}
               </h3>
               <p style={{ fontSize: '13px', color: '#115E59', margin: 0, lineHeight: 1.5 }}>
-                {analysisResult.topAcousticMatch.description}
+                Derived strictly from measured fundamental frequency ({dspMetrics.pitchF0} Hz). Research signal viewer, not for diagnosis. Synthetic test signals only.
               </p>
             </div>
 
@@ -769,7 +850,7 @@ export default function AcousticBiomarkerLabView() {
                 <div key={match.key}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '4px' }}>
                     <span style={{ fontWeight: 750, color: '#0A2540' }}>{match.label}</span>
-                    <span style={{ color: '#64748B', fontFamily: 'monospace' }}>Similarity: {match.similarityScore}/100</span>
+                    <span style={{ color: '#64748B', fontFamily: 'monospace' }}>Proximity: {match.similarityScore}/100</span>
                   </div>
                   <div style={{ height: '8px', background: '#F1F5F9', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{
@@ -781,7 +862,7 @@ export default function AcousticBiomarkerLabView() {
                     }} />
                   </div>
                   <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '2px' }}>
-                    Domain: {match.category}
+                    synthetic reference signal, not a medical assessment
                   </div>
                 </div>
               ))}

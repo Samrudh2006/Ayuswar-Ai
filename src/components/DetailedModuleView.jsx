@@ -268,21 +268,21 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           marginTop: '14px'
         }}>
           <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
-            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Signal-to-Noise Ratio (SNR)</div>
+            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Signal-to-Noise Profile (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#34D399' : '#F87171' }}>
-              {filterMode === 'kalman' ? '+31.4 dB (Clean Voice)' : '+4.8 dB (High Jitter)'}
+              {filterMode === 'kalman' ? 'Noise-Subtracted Voice' : 'Raw Ambient Voice'}
             </div>
           </div>
           <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
-            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Diarization Separation</div>
+            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Diarization Separation (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#38BDF8' : '#FBBF24' }}>
-              {filterMode === 'kalman' ? '98.6% Confidence (Dual d-vector)' : '74.2% (Overlap Risk)'}
+              {filterMode === 'kalman' ? 'Dual Speaker Channel' : 'Overlap Detection'}
             </div>
           </div>
           <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
-            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Inference Latency</div>
+            <div style={{ fontSize: '11px', color: '#94A3B8' }}>Audio Pipeline (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: '#A78BFA' }}>
-              180 ms (Local Edge WebAudio)
+              Client WebAudio Pipeline (unmeasured)
             </div>
           </div>
         </div>
@@ -794,19 +794,19 @@ export default function DetailedModuleView({
             <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-rose-600 mb-2">42%</div>
-                  <div className="text-sm font-bold text-slate-900">Prescription Misunderstanding</div>
-                  <div className="text-xs text-slate-500 mt-1">Rural patients routinely confuse morning vs night medications or swallow inhaler rotacaps instead of inhaling.</div>
+                  <div className="text-xl font-black text-rose-600 mb-2">Prescription Barriers</div>
+                  <div className="text-sm font-bold text-slate-900">Medication Misunderstanding</div>
+                  <div className="text-xs text-slate-500 mt-1">Rural patients routinely confuse morning vs night medications or struggle with complex inhalation instructions.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-indigo-600 mb-2">600M+</div>
-                  <div className="text-sm font-bold text-slate-900">Functional Illiteracy in English</div>
-                  <div className="text-xs text-slate-500 mt-1">Over half of India's population cannot read English drug labels or illegible physician handwriting.</div>
+                  <div className="text-xl font-black text-indigo-600 mb-2">Language Diversity</div>
+                  <div className="text-sm font-bold text-slate-900">Vernacular Literacy Gap</div>
+                  <div className="text-xs text-slate-500 mt-1">Millions of patients in Bharat navigate medical care in vernacular languages rather than English prescription labels.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-emerald-600 mb-2">99.2%</div>
-                  <div className="text-sm font-bold text-slate-900">Audio-Rx Compliance Retention</div>
-                  <div className="text-xs text-slate-500 mt-1">Patients listening to native spoken dosage instructions show near-total medication adherence.</div>
+                  <div className="text-xl font-black text-emerald-600 mb-2">Audio-Rx Prototype</div>
+                  <div className="text-sm font-bold text-slate-900">Spoken Adherence Support</div>
+                  <div className="text-xs text-slate-500 mt-1">Spoken vernacular voice notes assist patients with clear, accessible dosage guidance in their native tongue.</div>
                 </div>
               </div>
 
@@ -1096,7 +1096,7 @@ export default function DetailedModuleView({
       badge: 'High-Level Design',
       badgeColor: '#008B8B',
       title: 'Technology & High-Level Design (HLD)',
-      tagline: 'Deep Dive into the 8-Layer Sovereign Clinical Voice Stack & Sub-180ms Latency Pipeline',
+      tagline: 'Deep Dive into the 8-Layer Sovereign Clinical Voice Stack & Client Speech Processing Architecture',
       icon: Layers,
       totalPages: 3,
       interactiveActionLabel: 'Inspect Technical Architecture Blueprint',
@@ -1367,7 +1367,7 @@ export default function DetailedModuleView({
       category: 'Resources',
       badge: 'Digital Stethoscope',
       badgeColor: '#0284C7',
-      title: 'Acoustic AI & Vocal Biomarker Diagnostic Lab',
+      title: 'Acoustic AI & Vocal Biomarker Signal Lab',
       tagline: 'Real-Time Digital Signal Processing for Respiratory Strain, Stridor, and Vocal Tremors',
       icon: Activity,
       totalPages: 3,
@@ -1387,11 +1387,11 @@ export default function DetailedModuleView({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs">
                     <strong className="text-teal-400">Fundamental Pitch (F0) & Tremor:</strong><br/>
-                    Detects micro-tremors and panic pitch spikes indicative of acute distress or cardiac shock.
+                    Detects micro-tremors and pitch perturbations for acoustic signal research.
                   </div>
                   <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs">
                     <strong className="text-teal-400">Spectral Centroid & Energy Flux:</strong><br/>
-                    Differentiates wet bronchitic coughs from dry asthmatic wheezes and pediatric stridor.
+                    Explores frequency distribution and resonance across cough and breath audio.
                   </div>
                 </div>
               </div>

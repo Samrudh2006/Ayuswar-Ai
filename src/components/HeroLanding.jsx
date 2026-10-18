@@ -528,6 +528,21 @@ export default function HeroLanding({
                 e.target.src = '/assets/ayuswar_doctor_hero_no_header.png';
               }}
             />
+            <div style={{
+              position: 'absolute',
+              bottom: '12px',
+              right: '16px',
+              background: 'rgba(10, 37, 64, 0.75)',
+              backdropFilter: 'blur(4px)',
+              padding: '3px 8px',
+              borderRadius: '6px',
+              fontSize: '10px',
+              color: '#94A3B8',
+              letterSpacing: '0.3px',
+              border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              Illustrative image / simulation
+            </div>
           </div>
         </div>
 
@@ -772,15 +787,15 @@ export default function HeroLanding({
                   boxShadow: '0 4px 16px rgba(0, 210, 211, 0.25)',
                   transition: 'all 160ms ease'
                 }}
-                title="Launch Vocal Biomarker & Acoustic Disease Diagnostic Lab"
+                title="Launch Vocal Biomarker & Acoustic Signal Lab"
               >
                 <span style={{ fontSize: '15px' }}>🎙️</span>
                 <span>Vocal Biomarker AI Lab</span>
-                <span style={{ fontSize: '10px', background: '#00D2D3', color: '#0A2540', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>NEW</span>
+                <span style={{ fontSize: '10px', background: '#00D2D3', color: '#0A2540', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>DEMO</span>
               </button>
             </div>
 
-            {/* Clinical Trust & Speed Badges (Eliminates dead whitespace & adds clinical weight) */}
+            {/* Clinical Trust & Speed Badges */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -794,15 +809,15 @@ export default function HeroLanding({
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Globe2 size={15} color="#008B8B" />
-                <span>22+ Indic Languages</span>
+                <span>Languages via browser speech (varies by device)</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Cpu size={15} color="#008B8B" />
-                <span>Sub-180ms Latency</span>
+                <span>Edge Speech Processing (Browser ASR)</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <ShieldCheck size={15} color="#008B8B" />
-                <span>ABDM FHIR R4 Ready</span>
+                <span>ABDM FHIR: PLANNED</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CheckCircle2 size={15} color="#008B8B" />
@@ -895,7 +910,7 @@ export default function HeroLanding({
           </div>
 
           <div style={{ textAlign: 'center', fontSize: '13.5px', fontWeight: 600, color: '#CBD5E1', letterSpacing: '0.4px' }}>
-            Trusted by Doctors. Loved by Patients. <span style={{ color: '#00D2D3', fontWeight: 700 }}>Built for Bharat.</span>
+            Voice-First Clinical Scribe & CDSS for Bharat. <span style={{ color: '#00D2D3', fontWeight: 700 }}>(Prototype Demo)</span>
           </div>
         </div>
       </div>
@@ -1521,7 +1536,7 @@ export default function HeroLanding({
                         Dual-Beam Acoustic DSP
                       </span>
                       <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 6px', borderRadius: '4px' }}>
-                        180ms
+                        ~180ms (sample data)
                       </span>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -2449,7 +2464,7 @@ export default function HeroLanding({
                 fontWeight: 650
               }}>
                 <span>🎙️ Browser speech (Web Speech API). Gnani voice integration: planned</span>
-                <span style={{ color: '#008B8B', fontWeight: 800 }}>⚡ Sub-180ms Latency</span>
+                <span style={{ color: '#008B8B', fontWeight: 800 }}>⚡ Browser Client Speech</span>
               </div>
             </div>
 

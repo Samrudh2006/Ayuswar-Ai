@@ -553,11 +553,11 @@ export default function EmergencyMap({
         }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#FFFFFF' }}>
-            ● TELEMETRY STREAM
+            ● TELEMETRY STREAM (SIMULATION)
           </span>
           <span style={{ color: '#334155' }}>|</span>
           <span style={{ fontSize: '10.5px', color: '#94A3B8' }}>
-            GNSS RTK ±0.4m
+            GNSS Telemetry (SIMULATION)
           </span>
         </div>
 
@@ -576,7 +576,7 @@ export default function EmergencyMap({
           fontWeight: 800
         }}>
           <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px #34D399' }} />
-          <span>SMART GREEN CORRIDOR: {trafficOverrideCount} SIGNALS PREEMPTED</span>
+          <span>GREEN CORRIDOR (SIMULATION): {trafficOverrideCount} SIGNALS PREEMPTED</span>
         </div>
       </div>
 

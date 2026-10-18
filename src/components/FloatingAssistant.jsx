@@ -1268,7 +1268,7 @@ export default function FloatingAssistant({
               }}>
                 {selectedProvider === 'local_offline' ? (
                   <>
-                    ✅ <strong>100% Free & Offline Mode Active:</strong> Uses AyuSwar's autonomous Indic Clinical Ontology & Triage Rule Engine. No API keys or internet connection required.
+                    ✅ <strong>Autonomous Local Indic Engine Active (SIMULATION):</strong> Uses AyuSwar's built-in Indic Clinical Ontology & Triage Rule Engine. No external API keys required.
                   </>
                 ) : (
                   <>
