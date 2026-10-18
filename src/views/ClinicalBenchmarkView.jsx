@@ -19,7 +19,6 @@ import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/c
 import { askAyuSwarBrain } from '../services/aiBrainService';
 import { analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
 import { 
-  calculateIndicTokenSavings, 
   reasonEmergencyTriageWithEvon, 
   reasonClinicalNoteWithEvon, 
   checkEvonStatus,
@@ -380,22 +379,26 @@ export default function ClinicalBenchmarkView() {
     {
       id: 'TC-EVON-01',
       domain: 'Gnani Evon 30B',
-      title: 'Evon 30B Indic Tokenizer Efficiency Benchmark',
-      desc: 'Asserts that Gnani Evon native Indic tokenizer reduces Telugu token count by >= 45% vs standard Western byte-fallback models.',
+      title: 'Official Gnani Model Card Specification Contract',
+      desc: 'Asserts official Gnani Hugging Face model metadata: gnani/gnani-evon-v3.3-30B-A3B, Mamba+MoE hybrid (30B total, ~3.5B active/token), 128K context, 11 native Indic languages.',
       run: async () => {
-        const teluguEmergencyText = 'నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు';
-        const metrics = calculateIndicTokenSavings(teluguEmergencyText, 'te');
-        if (!metrics || metrics.savedPct < 45) {
-          throw new Error(`Expected >= 45% language tax reduction, got ${metrics?.savedPct}%`);
+        if (EVON_MODEL_METADATA.modelId !== 'gnani/gnani-evon-v3.3-30B-A3B') {
+          throw new Error(`Unexpected modelId: ${EVON_MODEL_METADATA.modelId}`);
         }
-        return `Gnani Evon Tokenizer: ${metrics.evonTokens} tokens vs ~${metrics.westernTokens} Western tokens (${metrics.savedPct}% language tax reduction, ${metrics.languageTaxMultiplier} compression).`;
+        if (!EVON_MODEL_METADATA.architecture.includes('30B total, ~3.5B active/token')) {
+          throw new Error(`Architecture must specify 30B total, ~3.5B active/token. Got: ${EVON_MODEL_METADATA.architecture}`);
+        }
+        if (EVON_MODEL_METADATA.supportedLanguages.length < 11) {
+          throw new Error(`Expected at least 11 supported languages, got ${EVON_MODEL_METADATA.supportedLanguages.length}`);
+        }
+        return `Verified Model Card: ${EVON_MODEL_METADATA.displayName} (${EVON_MODEL_METADATA.architecture}, ${EVON_MODEL_METADATA.contextLength}, ${EVON_MODEL_METADATA.supportedLanguages.length} languages).`;
       }
     },
     {
       id: 'TC-EVON-02',
       domain: 'Gnani Evon 30B',
-      title: 'Deterministic Emergency RED Triage & Evon Non-Blocking Safety',
-      desc: 'Asserts that critical cardiac symptoms trigger immediate 0ms RED triage via deterministic safety rules, never waiting on or blocked by Evon.',
+      title: 'Deterministic Emergency RED Triage (0ms Rule-Based Execution)',
+      desc: 'Asserts that critical emergency symptoms trigger immediate deterministic rule-based RED triage in 0ms without depending on LLM response.',
       run: async () => {
         const transcript = 'నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు';
         // 1. Immediate synchronous deterministic rule triage
@@ -407,13 +410,16 @@ export default function ClinicalBenchmarkView() {
           throw new Error(`Expected triageMethod to be DETERMINISTIC_SAFETY_RULE, got ${triage.triageMethod}`);
         }
 
-        // 2. Advisory Evon reasoning query: must either return live Evon or honest FALLBACK
+        // 2. Advisory Evon reasoning query: must either return live Evon or honest Rule-based FALLBACK (Not Evon)
         const adv = await reasonEmergencyTriageWithEvon(transcript, { language: 'te' });
         if (adv.isEvonLive) {
-          return `Deterministic RED triage verified. Evon 30B LIVE advisory CoT received (${adv.modelId}).`;
+          return `Deterministic RED triage verified (0ms). Live Evon 30B advisory CoT received (${adv.modelId}).`;
         } else {
-          if (!adv.isFallback || !adv.source.includes('FALLBACK')) {
-            throw new Error('Evon unavailable state must be explicitly labelled FALLBACK, never masked.');
+          if (!adv.isFallback || !adv.source?.includes('Rule-based FALLBACK (Not Evon)')) {
+            throw new Error('Offline state must be explicitly labelled Rule-based FALLBACK (Not Evon).');
+          }
+          if (adv.thoughtTrace) {
+            throw new Error('Fallback mode must NEVER generate simulated <reasoning> traces.');
           }
           return `Deterministic RED triage verified (0ms rule-based). Evon status honestly reported: ${adv.status} (${adv.source}).`;
         }
@@ -422,7 +428,7 @@ export default function ClinicalBenchmarkView() {
     {
       id: 'TC-EVON-03',
       domain: 'Gnani Evon 30B',
-      title: 'Server-Side Status Contract & Verified Live Status Integrity',
+      title: 'Server-Side Status Probe Contract (/api/evon/status)',
       desc: 'Asserts that /api/evon/status endpoint is checked for real HTTP 200 responses and prevents mock LIVE chip spoofing.',
       run: async () => {
         const status = await checkEvonStatus();
@@ -439,7 +445,7 @@ export default function ClinicalBenchmarkView() {
       id: 'TC-EVON-04',
       domain: 'Gnani Evon 30B',
       title: 'Outpatient SOAP Note Honest Fallback & Zero-Mock Assertion',
-      desc: 'Asserts that clinical note extraction queries server route and never presents hardcoded mock replies as Evon output.',
+      desc: 'Asserts that clinical note extraction queries server route and never presents hardcoded mock replies or fake reasoning as Evon output.',
       run: async () => {
         const dialogue = 'డాక్టర్: గుండెల్లో దడ ఎలా ఉంది? రోగి: మెట్లు ఎక్కితే ఆయాసంగా ఉంది డాక్టర్.';
         const res = await reasonClinicalNoteWithEvon(dialogue, { name: 'Demo Patient', language: 'te' });
@@ -447,13 +453,16 @@ export default function ClinicalBenchmarkView() {
           if (!res.finalAnswer) throw new Error('Live Evon returned empty response.');
           return `Live Evon 30B Clinical Note generated via server route.`;
         } else {
-          if (!res.isFallback || !res.source?.includes('FALLBACK')) {
-            throw new Error('Unavailable Evon must be explicitly labelled as FALLBACK, never as Evon.');
+          if (!res.isFallback || !res.source?.includes('Rule-based FALLBACK (Not Evon)')) {
+            throw new Error('Unavailable Evon must be explicitly labelled as Rule-based FALLBACK (Not Evon).');
           }
           if (res.modelId) {
             throw new Error('Fallback response must not claim Evon modelId.');
           }
-          return `Honest Fallback verified: ${res.source}. No mock text presented as Evon.`;
+          if (res.thoughtTrace) {
+            throw new Error('Fallback response must not contain simulated <reasoning> thought trace.');
+          }
+          return `Honest Fallback verified: ${res.source}. No mock text or fake reasoning presented as Evon.`;
         }
       }
     }

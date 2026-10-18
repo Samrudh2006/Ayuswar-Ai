@@ -59,7 +59,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
         onClick={fetchStatus}
         title={isLive 
           ? `Evon 30B LIVE · Latency: ${statusData.latencyMs}ms · Last Success: ${formatLastSuccess(statusData.lastSuccessTime)}` 
-          : `Evon Unavailable · ${statusData.reason || 'Server env vars unset'} · Click to re-check`
+          : `Evon Offline · Rule-based Fallback Active (Not Evon) · ${statusData.reason || 'Server env vars unset'} · Click to re-check`
         }
         style={{
           display: 'inline-flex',
@@ -83,7 +83,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           boxShadow: isLive ? '0 0 6px #10B981' : 'none',
           display: 'inline-block'
         }} />
-        <span>{isLive ? 'EVON 30B: LIVE' : 'EVON: UNAVAILABLE'}</span>
+        <span>{isLive ? '● EVON 30B: LIVE' : '○ EVON: OFFLINE — Rule-based Fallback Active (Not Evon)'}</span>
         {isChecking && <RefreshCw size={10} style={{ animation: 'spin 1s linear infinite' }} />}
       </div>
     );
@@ -125,11 +125,11 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
                 background: isLive ? '#10B981' : '#F59E0B',
                 color: isLive ? '#FFFFFF' : '#0A2540'
               }}>
-                {isLive ? 'LIVE (200 OK)' : 'FALLBACK ACTIVE'}
+                {isLive ? 'LIVE (200 OK)' : 'Rule-based FALLBACK (Not Evon)'}
               </span>
             </div>
             <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-              {isLive ? statusData.model : 'Evon unavailable — using deterministic safety rules'}
+              {isLive ? statusData.model : 'Evon unavailable on server — using Rule-based FALLBACK (Not Evon)'}
             </div>
           </div>
         </div>

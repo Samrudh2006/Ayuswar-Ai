@@ -1,20 +1,20 @@
 /**
- * AyuSwar AI — Gnani Evon (30B-A3B) Sovereign Indic Reasoning Service
+ * AyuSwar AI — Gnani Evon (30B-A3B) Indic Reasoning Service
  * (src/services/gnaniEvonService.js)
  * 
  * Official Model Reference:
  * - Hugging Face: gnani/gnani-evon-v3.3-30B-A3B
- * - Architecture: Hybrid Mamba + Mixture-of-Experts (MoE) (32B total, ~3.5B active/token)
+ * - Architecture: Hybrid Mamba + Mixture-of-Experts (MoE) (30B total, ~3.5B active/token)
  * - Context Window: 128K tokens
  * - Native Languages: 11 (Telugu, Hindi, Bengali, Tamil, Marathi, Gujarati, Kannada, Malayalam, Odia, Punjabi, English)
- * - Sovereign Indic Tokenizer: 50–65% Indic token efficiency vs Western LLMs.
+ * - Native Indic Vocabulary: Optimized for Indian languages and scripts.
  * 
  * Strict Integrity & Clinical Safety Guarantees:
  * 1. Zero Simulated Evon Output: No hardcoded, mocked, or regex-based replies presented as Evon output.
  * 2. Server-Side Routing Only: Calls Evon exclusively via /api/evon/* server routes backed by
  *    EVON_BASE_URL and EVON_API_KEY. Secret keys are NEVER stored in browser storage or frontend code.
  * 3. Honest Fallback Labeling: If Evon is unreachable or unset, returns an explicit UNAVAILABLE state
- *    and falls back to deterministic rule-based logic clearly labelled FALLBACK, NEVER labelled Evon.
+ *    and falls back to deterministic rule-based logic clearly labelled 'Rule-based FALLBACK (Not Evon)'.
  * 4. Real Status Verification: Live status requires an authentic HTTP 200 response from /api/evon/status.
  * 5. Deterministic Emergency Triage: Emergency RED rules (chest pain, sweating, breathlessness, stridor,
  *    severe trauma) run synchronously via rule-based safety logic and NEVER wait on or get overridden by an LLM.
@@ -25,7 +25,7 @@ export const EVON_MODEL_METADATA = {
   modelId: 'gnani/gnani-evon-v3.3-30B-A3B',
   organization: 'Gnani.ai',
   displayName: 'Gnani Evon v3.3-30B-A3B',
-  architecture: 'Mamba + MoE Hybrid (32B total, ~3.5B active/token)',
+  architecture: 'Mamba + MoE Hybrid (30B total, ~3.5B active/token)',
   contextLength: '128K tokens',
   supportedLanguages: [
     { code: 'te', name: 'Telugu (తెలుగు)', nativeScript: true },
@@ -41,7 +41,7 @@ export const EVON_MODEL_METADATA = {
     { code: 'en', name: 'Indian English', nativeScript: false }
   ],
   features: [
-    'Sovereign Indic Native Tokenizer (50-65% token efficiency vs Llama-3/Mistral)',
+    'Native Indic Vocabulary optimized for 11 Indian languages',
     '128K Long Context for Longitudinal Patient EHR Dossiers',
     'Clinical Chain-of-Thought (<reasoning>) Triage Synthesis',
     'OpenAI-compatible server-side route (/chat/completions) backed by EVON_BASE_URL'
@@ -89,48 +89,6 @@ export async function checkEvonStatus() {
       reason: `Network error connecting to status route: ${err.message}`
     };
   }
-}
-
-/**
- * Calculates Token Efficiency and "Language Tax" savings of Gnani's Indic Tokenizer
- * compared to Western LLM tokenizers (e.g. LLaMA-3 / Mistral byte-fallback).
- * Strictly a mathematical tokenizer benchmark, clearly distinguished from live inference.
- */
-export function calculateIndicTokenSavings(text = '', language = 'te') {
-  if (!text || typeof text !== 'string') {
-    return { evonTokens: 0, westernTokens: 0, savedPct: 0, languageTaxMultiplier: '1.0x' };
-  }
-
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  const wordCount = words.length;
-  const isIndicScript = /[\u0900-\u0D7F]/.test(text);
-
-  let evonTokens = 0;
-  let westernTokens = 0;
-
-  if (isIndicScript) {
-    evonTokens = Math.max(1, Math.round(wordCount * 1.25));
-    westernTokens = Math.max(1, Math.round(wordCount * 3.10));
-  } else {
-    evonTokens = Math.max(1, Math.round(wordCount * 1.3));
-    westernTokens = Math.max(1, Math.round(wordCount * 1.35));
-  }
-
-  const savedTokens = Math.max(0, westernTokens - evonTokens);
-  const savedPct = westernTokens > 0 ? Math.round((savedTokens / westernTokens) * 100) : 0;
-  const languageTaxMultiplier = evonTokens > 0 ? (westernTokens / evonTokens).toFixed(1) : '1.0';
-
-  return {
-    wordCount,
-    evonTokens,
-    westernTokens,
-    savedTokens,
-    savedPct,
-    languageTaxMultiplier: `${languageTaxMultiplier}x`,
-    summary: isIndicScript
-      ? `Gnani Evon uses ${evonTokens} tokens vs ~${westernTokens} tokens in standard Western models (${savedPct}% language tax reduction)`
-      : `English text evaluated at ${evonTokens} tokens.`
-  };
 }
 
 /**
@@ -197,13 +155,11 @@ export function parseEvonReasoningOutput(rawText, model = EVON_MODEL_METADATA.mo
  * CRITICAL SAFETY NOTE:
  * Emergency triage RED rules run synchronously in 0ms via sanjivaniEmergencyService.js.
  * This LLM call is strictly non-blocking advisory analysis. If Evon is unavailable or fails,
- * it returns a clearly labelled FALLBACK response, NEVER masquerading as Evon output.
+ * it returns a clearly labelled Rule-based FALLBACK (Not Evon), NEVER masquerading as Evon output.
  */
 export async function reasonEmergencyTriageWithEvon(transcript, patientContext = {}) {
-  const tokenMetrics = calculateIndicTokenSavings(transcript, patientContext.language || 'te');
-
   const systemInstruction = 
-    `You are Gnani Evon (v3.3-30B-A3B), a sovereign Indic clinical reasoning foundation model. ` +
+    `You are Gnani Evon (v3.3-30B-A3B), an Indic clinical reasoning foundation model. ` +
     `Analyze emergency medical notes or voice transcript. ` +
     `Format with an explicit <reasoning> block showing step-by-step chain-of-thought, ` +
     `identifying Indic linguistic idioms (Telugu/Hindi), red flags, and suspected ICD-10 categories. ` +
@@ -218,36 +174,32 @@ export async function reasonEmergencyTriageWithEvon(transcript, patientContext =
 
     return {
       ...reasoningResult,
-      tokenMetrics,
       modelName: EVON_MODEL_METADATA.displayName,
       modelId: EVON_MODEL_METADATA.modelId
     };
   } catch (err) {
-    // Honest Fallback: clearly labelled FALLBACK, NEVER labelled Evon
+    // Honest Fallback: clearly labelled 'Rule-based FALLBACK (Not Evon)'
     return {
       isEvonLive: false,
       isFallback: true,
-      source: 'FALLBACK: DETERMINISTIC RULE-BASED SAFETY PROTOCOL',
+      source: 'Rule-based FALLBACK (Not Evon)',
       status: 'UNAVAILABLE',
       error: err.message,
-      tokenMetrics,
       modelName: null,
       modelId: null,
-      thoughtTrace: `[FALLBACK] Evon unavailable (${err.message}). Evaluated strictly using deterministic clinical rules.`,
-      finalAnswer: `[FALLBACK] Deterministic Rule-Based Triage Active. Evon reasoning engine is currently unreachable on server.`
+      thoughtTrace: null,
+      finalAnswer: `[Rule-based FALLBACK (Not Evon)] Deterministic safety protocol active. Evon reasoning engine is offline or unconfigured on server.`
     };
   }
 }
 
 /**
  * Higher-Level: Clinical SOAP Note Scribe with Evon 30B
- * If Evon is unavailable, returns honest FALLBACK state.
+ * If Evon is unavailable, returns honest Rule-based FALLBACK (Not Evon) state.
  */
 export async function reasonClinicalNoteWithEvon(transcriptOrNotes, patient = {}) {
-  const tokenMetrics = calculateIndicTokenSavings(transcriptOrNotes, patient.language || 'te');
-
   const systemInstruction = 
-    `You are Gnani Evon (v3.3-30B-A3B), a sovereign Indic clinical scribe foundation model. ` +
+    `You are Gnani Evon (v3.3-30B-A3B), an Indic clinical scribe foundation model. ` +
     `Synthesize a structured clinical SOAP note (Subjective, Objective, Assessment, Plan) ` +
     `and provide a spoken prescription script in the patient's native Indian language (Telugu/Hindi). ` +
     `Do not prescribe unverified drug dosages. Prototype guidance only.`;
@@ -261,30 +213,28 @@ export async function reasonClinicalNoteWithEvon(transcriptOrNotes, patient = {}
 
     return {
       ...reasoningResult,
-      tokenMetrics,
       modelName: EVON_MODEL_METADATA.displayName,
       modelId: EVON_MODEL_METADATA.modelId
     };
   } catch (err) {
-    // Honest Fallback: clearly labelled FALLBACK, NEVER labelled Evon
+    // Honest Fallback: clearly labelled 'Rule-based FALLBACK (Not Evon)'
     return {
       isEvonLive: false,
       isFallback: true,
-      source: 'FALLBACK: PRE-CONFIGURED CLINICAL ENCOUNTER TEMPLATE',
+      source: 'Rule-based FALLBACK (Not Evon)',
       status: 'UNAVAILABLE',
       error: err.message,
-      tokenMetrics,
       modelName: null,
       modelId: null,
-      thoughtTrace: `[FALLBACK] Evon 30B unavailable (${err.message}). Displaying standard clinical template.`,
-      finalAnswer: `[FALLBACK CLINICAL TEMPLATE]\nSubjective: Patient reported symptoms documented.\nObjective: Outpatient vitals recorded.\nAssessment: Clinical review required.\nPlan: Attending physician review and routine follow-up.`
+      thoughtTrace: null,
+      finalAnswer: `[Rule-based FALLBACK (Not Evon)] Clinical Encounter Template\nSubjective: Patient reported symptoms documented.\nObjective: Outpatient vitals recorded.\nAssessment: Clinical review required.\nPlan: Attending physician review and routine follow-up.`
     };
   }
 }
 
 /**
  * Higher-Level: Acoustic Biomarker Correlation with Evon 30B
- * If Evon is unavailable, returns honest FALLBACK state.
+ * If Evon is unavailable, returns honest Rule-based FALLBACK (Not Evon) state.
  */
 export async function reasonAcousticBiomarkerWithEvon(dspMetrics = {}, symptoms = '') {
   const prompt = 
@@ -308,15 +258,15 @@ export async function reasonAcousticBiomarkerWithEvon(dspMetrics = {}, symptoms 
       modelName: EVON_MODEL_METADATA.displayName
     };
   } catch (err) {
-    // Honest Fallback: clearly labelled FALLBACK, NEVER labelled Evon
+    // Honest Fallback: clearly labelled 'Rule-based FALLBACK (Not Evon)'
     return {
       isEvonLive: false,
       isFallback: true,
-      source: 'FALLBACK: DETERMINISTIC ACOUSTIC SIGNAL CORRELATION',
+      source: 'Rule-based FALLBACK (Not Evon)',
       status: 'UNAVAILABLE',
       error: err.message,
-      thoughtTrace: `[FALLBACK] Evon acoustic reasoner unavailable (${err.message}). DSP features evaluated using deterministic signal thresholds.`,
-      finalAnswer: `[FALLBACK ACOUSTIC OBSERVATION]\nPhysical DSP signal reflects fundamental frequency F0: ${dspMetrics.pitchF0 || 140} Hz with HNR: ${dspMetrics.hnrDb || 20} dB. Non-diagnostic audio engineering observation.`
+      thoughtTrace: null,
+      finalAnswer: `[Rule-based FALLBACK (Not Evon)] Physical DSP signal reflects fundamental frequency F0: ${dspMetrics.pitchF0 || 140} Hz with HNR: ${dspMetrics.hnrDb || 20} dB. Non-diagnostic audio engineering observation.`
     };
   }
 }

@@ -760,13 +760,13 @@ export default function LiveScribeSessionModal({
                       border: `1px solid ${evonReasoning.isEvonLive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`, 
                       fontWeight: 800 
                     }}>
-                      {evonReasoning.isEvonLive ? 'LIVE GNANI MODEL' : 'FALLBACK (NON-LLM)'}
+                      {evonReasoning.isEvonLive ? 'LIVE GNANI EVON 30B' : 'Rule-based FALLBACK (Not Evon)'}
                     </span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>
                     {evonReasoning.isEvonLive 
-                      ? 'Live Sovereign Indic Clinical Reasoning (via /api/evon/chat)' 
-                      : `Evon unavailable (${evonReasoning.error || 'Server env vars unset'}) — displaying standard clinical template`}
+                      ? 'Live Indic Clinical Reasoning (via /api/evon/chat)' 
+                      : `Rule-based FALLBACK (Not Evon) — standard clinical encounter template (${evonReasoning.error || 'Evon offline'})`}
                   </div>
                 </div>
               </div>
@@ -792,29 +792,8 @@ export default function LiveScribeSessionModal({
 
             {/* Drawer Content */}
             <div style={{ padding: '20px 22px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Token Efficiency Banner */}
-              {evonReasoning.tokenMetrics && (
-                <div style={{
-                  background: 'rgba(0, 245, 212, 0.08)',
-                  border: '1px solid rgba(0, 245, 212, 0.3)',
-                  borderRadius: '12px',
-                  padding: '12px 16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  fontSize: '12px'
-                }}>
-                  <span style={{ color: '#00F5D4', fontWeight: 800 }}>
-                    ⚡ Indic Token Efficiency:
-                  </span>
-                  <span style={{ color: '#E2E8F0' }}>
-                    <strong>{evonReasoning.tokenMetrics.evonTokens} Evon tokens</strong> vs ~{evonReasoning.tokenMetrics.westernTokens} Western tokens (<strong>{evonReasoning.tokenMetrics.savedPct}% language tax reduction</strong>)
-                  </span>
-                </div>
-              )}
-
-              {/* Chain-of-Thought Reasoning */}
-              {evonReasoning.thoughtTrace && (
+              {/* Chain-of-Thought Reasoning (Only for authentic live Evon) */}
+              {evonReasoning.isEvonLive && evonReasoning.thoughtTrace && (
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', marginBottom: '6px', letterSpacing: '0.5px' }}>
                     Clinical Chain-of-Thought (&lt;reasoning&gt; trace):

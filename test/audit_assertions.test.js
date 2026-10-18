@@ -144,6 +144,29 @@ for (const filePath of filesToAudit) {
 }
 console.log('✓ Test 12 Passed: Client-side codebase verified completely free of frontend Evon keys or tokens.');
 
+// Test 13: Evon Parameter Specification — Must be 30B total (~3.5B active/token), never 32B total
+assert.ok(evonServiceSrc.includes('30B total, ~3.5B active/token'), 'gnaniEvonService must specify 30B total, ~3.5B active/token');
+assert.ok(!evonServiceSrc.includes('32B total'), 'gnaniEvonService must NOT specify 32B total');
+for (const filePath of filesToAudit) {
+  const content = readFileSync(filePath, 'utf8');
+  assert.ok(!content.includes('32B total'), `File ${filePath} must not specify 32B total`);
+}
+console.log('✓ Test 13 Passed: Evon model specification verified as 30B total (~3.5B active/token) with zero 32B claims.');
+
+// Test 14: Token Savings Integrity — No unmeasured hardcoded calculateIndicTokenSavings or language tax estimates
+assert.ok(!evonServiceSrc.includes('calculateIndicTokenSavings'), 'calculateIndicTokenSavings must be completely removed');
+for (const filePath of filesToAudit) {
+  const content = readFileSync(filePath, 'utf8');
+  assert.ok(!content.includes('calculateIndicTokenSavings'), `File ${filePath} must not contain calculateIndicTokenSavings`);
+}
+console.log('✓ Test 14 Passed: Zero unmeasured hardcoded tokenizer calculations across codebase.');
+
+// Test 15: Honest Fallback Labeling — When offline, explicitly labels Rule-based FALLBACK (Not Evon) with zero fake <reasoning>
+assert.ok(evonServiceSrc.includes("'Rule-based FALLBACK (Not Evon)'"), 'gnaniEvonService must label fallback as Rule-based FALLBACK (Not Evon)');
+assert.ok(!evonServiceSrc.includes('thoughtTrace: `[FALLBACK]'), 'Fallback states must not populate fake thoughtTrace');
+console.log('✓ Test 15 Passed: Honest fallback labeling enforced with zero simulated <reasoning> traces.');
+
 console.log('====================================================');
-console.log('ALL 12 AUDIT ASSERTION TESTS PASSED SUCCESSFULLY! 🎉');
+console.log('ALL 15 AUDIT ASSERTION TESTS PASSED SUCCESSFULLY! 🎉');
 console.log('====================================================');
+

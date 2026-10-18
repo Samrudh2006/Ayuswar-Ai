@@ -959,7 +959,7 @@ export default function AcousticBiomarkerLabView() {
                     color: '#92400E'
                   }}>
                     <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
-                      🛡️ [FALLBACK: PHYSICAL SIGNAL DSP CORRELATION]
+                      🛡️ [Rule-based FALLBACK (Not Evon)]
                     </div>
                     <div>
                       Evon server route unavailable ({evonAcousticResult.error || 'Server env vars unset'}). 
@@ -968,7 +968,7 @@ export default function AcousticBiomarkerLabView() {
                   </div>
                 ) : (
                   <>
-                    {evonAcousticResult.thoughtTrace && (
+                    {evonAcousticResult.isEvonLive && evonAcousticResult.thoughtTrace && (
                       <div style={{
                         background: 'rgba(0, 0, 0, 0.4)',
                         border: '1px solid rgba(255, 255, 255, 0.08)',

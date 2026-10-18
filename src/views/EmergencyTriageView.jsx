@@ -383,27 +383,6 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <EvonStatusChip showDetails={true} />
 
-              {/* Indic Tokenizer Efficiency Analysis (Mathematical Metric) */}
-              {triageResult.tokenMetrics && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'rgba(0, 245, 212, 0.08)',
-                  border: '1px solid rgba(0, 245, 212, 0.25)',
-                  borderRadius: '8px',
-                  padding: '8px 12px',
-                  fontSize: '11.5px'
-                }}>
-                  <span style={{ color: '#008B8B', fontWeight: 750 }}>
-                    ⚡ Indic Tokenizer Analysis:
-                  </span>
-                  <span style={{ color: '#1E293B' }}>
-                    <strong>{triageResult.tokenMetrics.evonTokens} Evon akshara tokens</strong> vs ~{triageResult.tokenMetrics.westernTokens} byte-fragmented tokens ({triageResult.tokenMetrics.savedPct}% language tax reduction)
-                  </span>
-                </div>
-              )}
-
               {/* Asynchronous Evon Advisory CoT or Honest Fallback */}
               {isLoadingEvon && (
                 <div style={{ padding: '10px 14px', background: '#F1F5F9', borderRadius: '8px', fontSize: '11px', color: '#475569' }}>
@@ -478,11 +457,11 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   color: '#92400E'
                 }}>
                   <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
-                    🛡️ [FALLBACK: DETERMINISTIC RULE-BASED SAFETY PROTOCOL]
+                    🛡️ [Rule-based FALLBACK (Not Evon)]
                   </div>
                   <div>
                     Evon server route unavailable ({evonAdvisory.error || 'EVON_BASE_URL / EVON_API_KEY unset'}). 
-                    Immediate life-safety triage remains 100% active via deterministic clinical rules with 0ms delay.
+                    Immediate life-safety triage remains active via deterministic clinical rules with 0ms delay.
                   </div>
                 </div>
               )}

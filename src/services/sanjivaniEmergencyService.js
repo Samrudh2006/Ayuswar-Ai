@@ -12,7 +12,7 @@
  *   • W3C Geolocation API (Real GPS coordinates + reverse geocoding via OpenStreetMap Nominatim)
  */
 
-import { calculateIndicTokenSavings, EVON_MODEL_METADATA } from './gnaniEvonService';
+import { EVON_MODEL_METADATA } from './gnaniEvonService';
 
 // Reverse geocode real GPS coordinates to human-readable Indian street address
 export async function reverseGeocodeGPS(lat, lon) {
@@ -176,8 +176,6 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
   const isTrauma = /accident|crash|lorry|car|bike|vandi|blood|khoon|raktham|fracture|haddi|trapped|sir phat|రక్తం|గాయం/i.test(text);
   const isAnaphylaxisOrStroke = /paralysis|bol nahi pa|face drop|slur|lakwa|soojan|throat choke|allerg|పక్షవాతం/i.test(text);
 
-  const tokenSavings = calculateIndicTokenSavings(transcript, 'te');
-
   if (isCardiac) {
     return {
       triageLevel: 'RED',
@@ -188,7 +186,6 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
       priorityProtocol: 'Adult Resuscitation & High-Acuity ALS Dispatch',
       triageMethod: 'DETERMINISTIC_SAFETY_RULE',
       isEmergencyOverride: true,
-      tokenMetrics: tokenSavings,
       firstAidKey: 'cpr_cardiac',
       firstAidInstructions: [
         'Place patient flat on back on a hard, flat floor.',
@@ -214,7 +211,6 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
       priorityProtocol: 'Pediatric ALS Ambulance with Portable Nebulizer & High-Flow O2',
       triageMethod: 'DETERMINISTIC_SAFETY_RULE',
       isEmergencyOverride: true,
-      tokenMetrics: tokenSavings,
       firstAidKey: 'pediatric_airway',
       firstAidInstructions: [
         'Keep child in an upright, comforting position. Do NOT force them to lie flat.',
@@ -240,7 +236,6 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
       priorityProtocol: 'ALS Trauma Rescue with Hydraulic Cutters, Cervical Collar & Tourniquet Kit',
       triageMethod: 'DETERMINISTIC_SAFETY_RULE',
       isEmergencyOverride: true,
-      tokenMetrics: tokenSavings,
       firstAidKey: 'trauma_hemorrhage',
       firstAidInstructions: [
         'Apply firm, continuous direct pressure on any active bleeding site using clean cloth.',
@@ -266,7 +261,6 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
     priorityProtocol: '108 Basic Life Support (BLS) Ambulance Dispatch',
     triageMethod: 'DETERMINISTIC_SAFETY_RULE',
     isEmergencyOverride: false,
-    tokenMetrics: tokenSavings,
     firstAidKey: 'general_stabilize',
     firstAidInstructions: [
       'Keep patient resting comfortably in recovery position.',
