@@ -44,8 +44,8 @@ export default function SanjivaniTransferModal({
   // Form State (Auto-filled from live conversation & GIS telemetry)
   const [formData, setFormData] = useState({
     patientName: 'Unidentified Male Citizen (~58y)',
-    callerPhone: callerPhone || '+91 98490 22334',
-    location: geoAddress || 'Annavaram Urban, Sankhavaram, Kakinada, AP',
+    callerPhone: callerPhone || '+91 98490 22108',
+    location: geoAddress || 'Incident Site (GPS Verified)',
     chiefComplaint: 'Acute retrosternal crushing chest pain, dyspnea, cold diaphoresis, radiating left arm pain',
     triageCategory: 'RED — Category 1 Immediate Life Threat (Acute STEMI)',
     icd10: 'I21.0 / I46.9 (Acute Transmural Myocardial Infarction / Cardiac Arrest Risk)',

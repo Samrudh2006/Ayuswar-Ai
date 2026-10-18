@@ -15,13 +15,24 @@ import {
   Cpu,
   Sparkles,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  RefreshCw,
+  Navigation,
+  Building2,
+  Search,
+  Check
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { 
   analyzeEmergencyClinicalTriage, 
-  simulateEvonDispatchPipeline 
+  simulateEvonDispatchPipeline,
+  requestRealDeviceLocation,
+  reverseGeocodeGPS
 } from '../services/sanjivaniEmergencyService';
+import { 
+  fetchNearbyHospitalsAPI, 
+  searchLocationUniversal 
+} from '../services/emergencyHospitalBackend.js';
 import { reasonEmergencyTriageWithEvon } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
 import SanjivaniAnimatedFlowchart from '../components/SanjivaniAnimatedFlowchart';
@@ -41,6 +52,19 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const [cprMetronomeActive, setCprMetronomeActive] = useState(false);
   const [showEvonTrace, setShowEvonTrace] = useState(true);
 
+  // Live Geo-Locational Telemetry & Dynamic Hospital Discovery
+  const [userCoords, setUserCoords] = useState({ latitude: 17.6913, longitude: 83.0040, accuracy: 15 });
+  const [detectedLocationName, setDetectedLocationName] = useState('Resolving device GPS / IP location...');
+  const [isLocating, setIsLocating] = useState(false);
+  const [nearbyHospitals, setNearbyHospitals] = useState([]);
+  const [recommendedHospital, setRecommendedHospital] = useState(null);
+  const [selectedHospital, setSelectedHospital] = useState(null);
+  const [isLoadingHospitals, setIsLoadingHospitals] = useState(false);
+  const [hospitalFilter, setHospitalFilter] = useState('ALL');
+  const [searchLocationQuery, setSearchLocationQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+
   const cprIntervalRef = useRef(null);
 
   useEffect(() => {
@@ -48,6 +72,79 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
       if (cprIntervalRef.current) clearInterval(cprIntervalRef.current);
     };
   }, []);
+
+  const detectLiveLocation = async () => {
+    setIsLocating(true);
+    try {
+      const loc = await requestRealDeviceLocation();
+      setUserCoords({ latitude: loc.latitude, longitude: loc.longitude, accuracy: loc.accuracy || 15 });
+      const addr = await reverseGeocodeGPS(loc.latitude, loc.longitude);
+      const locName = addr.displayName || (loc.city ? `${loc.city}, ${loc.region}` : `${loc.latitude.toFixed(4)}°N, ${loc.longitude.toFixed(4)}°E`);
+      setDetectedLocationName(locName);
+      loadHospitalsForCoords(loc.latitude, loc.longitude, locName, hospitalFilter);
+    } catch (err) {
+      console.warn('Geolocation detection error:', err);
+    } finally {
+      setIsLocating(false);
+    }
+  };
+
+  const loadHospitalsForCoords = async (lat, lng, locName, filter = hospitalFilter) => {
+    setIsLoadingHospitals(true);
+    try {
+      const res = await fetchNearbyHospitalsAPI({
+        lat,
+        lng,
+        geoAddress: locName,
+        filterOption: filter
+      });
+      if (res.success && res.hospitals.length > 0) {
+        setNearbyHospitals(res.hospitals);
+        setRecommendedHospital(res.recommendedHospital);
+        if (!selectedHospital || !res.hospitals.find(h => h.id === selectedHospital.id)) {
+          setSelectedHospital(res.recommendedHospital || res.hospitals[0]);
+        }
+      }
+    } catch (err) {
+      console.warn('Error fetching nearby hospitals:', err);
+    } finally {
+      setIsLoadingHospitals(false);
+    }
+  };
+
+  useEffect(() => {
+    detectLiveLocation();
+  }, []);
+
+  const handleFilterChange = (filter) => {
+    setHospitalFilter(filter);
+    loadHospitalsForCoords(userCoords.latitude, userCoords.longitude, detectedLocationName, filter);
+  };
+
+  const handleLocationSearch = async (query) => {
+    setSearchLocationQuery(query);
+    if (!query || query.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    setIsSearchingLocation(true);
+    try {
+      const results = await searchLocationUniversal(query);
+      setSearchResults(results || []);
+    } catch (err) {
+      console.warn('Location search error:', err);
+    } finally {
+      setIsSearchingLocation(false);
+    }
+  };
+
+  const handleSelectSearchResult = (item) => {
+    setUserCoords({ latitude: item.lat, longitude: item.lng, accuracy: 25 });
+    setDetectedLocationName(item.placeName);
+    setSearchLocationQuery('');
+    setSearchResults([]);
+    loadHospitalsForCoords(item.lat, item.lng, item.placeName, hospitalFilter);
+  };
 
   const handleTriageAnalyze = async (textToUse) => {
     const text = textToUse || inputText;
@@ -72,14 +169,45 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     }
   };
 
+  const handleToggleVoiceRecording = () => {
+    if (isRecording) {
+      speechService.stopLiveRecognition();
+      setIsRecording(false);
+      handleTriageAnalyze(inputText);
+    } else {
+      setIsRecording(true);
+      const targetLang = selectedLanguage === 'te' ? 'te-IN' : (selectedLanguage === 'hi' ? 'hi-IN' : 'en-IN');
+      speechService.startLiveRecognition({
+        langCode: targetLang,
+        onResult: ({ transcript, isFinal }) => {
+          if (transcript) {
+            setInputText(transcript);
+            if (isFinal) {
+              handleTriageAnalyze(transcript);
+            }
+          }
+        },
+        onError: (err) => {
+          console.warn('Live voice recognition notice:', err);
+          setIsRecording(false);
+        },
+        onStatusChange: ({ isListening }) => {
+          setIsRecording(isListening);
+        }
+      });
+    }
+  };
+
   const handleStartDispatchSimulation = () => {
     setIsSimulatingDispatch(true);
     setDispatchComplete(false);
     setDispatchSteps([]);
 
+    const assignedHosp = selectedHospital || recommendedHospital;
     simulateEvonDispatchPipeline({
-      coords: { latitude: 15.8281, longitude: 78.0373, accuracy: 12 },
-      landmark: 'Near District Hospital Junction, Kurnool',
+      coords: { latitude: userCoords.latitude, longitude: userCoords.longitude, accuracy: userCoords.accuracy || 15 },
+      landmark: detectedLocationName,
+      hospitalName: assignedHosp ? `${assignedHosp.name} (${assignedHosp.resuscitationBayAssigned || 'Emergency Bay'})` : undefined,
       triageData: triageResult,
       onToolStep: (step) => {
         setDispatchSteps(prev => [...prev, step]);
@@ -260,6 +388,33 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 {scen.label}
               </button>
             ))}
+          </div>
+
+          {/* Live Microphone Voice Recognition */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748B' }}>
+              Vernacular Speech Input:
+            </span>
+            <button
+              onClick={handleToggleVoiceRecording}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: '20px',
+                border: 'none',
+                background: isRecording ? '#DC2626' : 'rgba(0, 139, 139, 0.1)',
+                color: isRecording ? '#FFFFFF' : '#008B8B',
+                fontSize: '12px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <Mic size={14} style={{ animation: isRecording ? 'pulse 0.6s infinite' : 'none' }} />
+              <span>{isRecording ? 'Listening (Speak Now)...' : '🎙️ Speak Live (Mic Active)'}</span>
+            </button>
           </div>
 
           <textarea
@@ -511,6 +666,288 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             )}
           </div>
         </div>
+      </div>
+
+      {/* 🏥 Real-Time Geographically-Verified Nearby Hospitals & Trauma Bays */}
+      <div style={{ marginTop: '36px', background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '28px', boxShadow: '0 4px 20px rgba(10,37,64,0.04)' }}>
+        {/* Section Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#008B8B', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', marginBottom: '6px' }}>
+              <Building2 size={15} />
+              <span>ABDM Health Facility Registry (HFR) & GIS Health Bridge</span>
+            </div>
+            <h2 style={{ fontSize: '22px', fontWeight: 850, color: '#0A2540', margin: '0 0 6px 0' }}>
+              Verified Nearby Emergency Facilities & Trauma Bays
+            </h2>
+            <p style={{ fontSize: '13.5px', color: '#64748B', margin: 0 }}>
+              Dynamically retrieved and clinical-capability matched to caller location with real-time road ETA & resuscitation bed availability.
+            </p>
+          </div>
+
+          <button
+            onClick={detectLiveLocation}
+            disabled={isLocating}
+            style={{
+              padding: '10px 16px',
+              borderRadius: '10px',
+              border: '1px solid #CBD5E1',
+              background: '#F8FAFC',
+              color: '#0A2540',
+              fontSize: '12.5px',
+              fontWeight: 750,
+              cursor: isLocating ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <RefreshCw size={14} className={isLocating ? 'spin' : ''} />
+            <span>{isLocating ? 'Detecting Live GPS...' : 'Refresh My GPS Location'}</span>
+          </button>
+        </div>
+
+        {/* Location & Search Bar */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: '1 1 320px' }}>
+            <MapPin size={18} color="#DC2626" style={{ flexShrink: 0 }} />
+            <div style={{ fontSize: '13px', color: '#0A2540', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span style={{ color: '#64748B', fontWeight: 600 }}>Active Location: </span>
+              {detectedLocationName}
+              <span style={{ marginLeft: '8px', fontSize: '11px', color: '#94A3B8', fontFamily: 'monospace' }}>
+                ({userCoords.latitude.toFixed(4)}°N, {userCoords.longitude.toFixed(4)}°E)
+              </span>
+            </div>
+          </div>
+
+          {/* Autocomplete / Search input */}
+          <div style={{ position: 'relative', flex: '1 1 280px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', background: '#FFFFFF', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '0 10px' }}>
+              <Search size={14} color="#94A3B8" />
+              <input
+                type="text"
+                placeholder="Search town, village, or pincode..."
+                value={searchLocationQuery}
+                onChange={(e) => handleLocationSearch(e.target.value)}
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  padding: '8px 10px',
+                  fontSize: '12.5px',
+                  color: '#0A2540'
+                }}
+              />
+            </div>
+
+            {/* Dropdown search results */}
+            {searchResults.length > 0 && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                background: '#FFFFFF',
+                border: '1px solid #CBD5E1',
+                borderRadius: '8px',
+                marginTop: '4px',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                zIndex: 40,
+                maxHeight: '220px',
+                overflowY: 'auto'
+              }}>
+                {searchResults.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleSelectSearchResult(item)}
+                    style={{
+                      padding: '10px 14px',
+                      fontSize: '12.5px',
+                      color: '#0A2540',
+                      cursor: 'pointer',
+                      borderBottom: '1px solid #F1F5F9'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#F8FAFC'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = '#FFFFFF'}
+                  >
+                    <div style={{ fontWeight: 700 }}>{item.text}</div>
+                    <div style={{ fontSize: '11px', color: '#64748B' }}>{item.placeName}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Filter Chips */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+          {[
+            { id: 'ALL', label: 'All Emergency Hubs' },
+            { id: 'FASTEST_ETA', label: '⚡ Fastest Road ETA' },
+            { id: 'BEST_TRAUMA', label: '🩸 Level-1 & 2 Trauma' },
+            { id: 'CATH_LAB', label: '🫀 24x7 Cath Lab (PCI)' },
+            { id: 'GOVT_DME', label: '🏛️ Government Apex (DME / APVVP)' },
+            { id: 'HIGH_AVAILABILITY', label: '🛏️ High Bed Availability' }
+          ].map((flt) => (
+            <button
+              key={flt.id}
+              onClick={() => handleFilterChange(flt.id)}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '20px',
+                border: '1px solid',
+                borderColor: hospitalFilter === flt.id ? '#008B8B' : '#E2E8F0',
+                background: hospitalFilter === flt.id ? 'rgba(0, 139, 139, 0.08)' : '#FFFFFF',
+                color: hospitalFilter === flt.id ? '#008B8B' : '#64748B',
+                fontSize: '12px',
+                fontWeight: 750,
+                cursor: 'pointer'
+              }}
+            >
+              {flt.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Hospital Cards List */}
+        {isLoadingHospitals ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#64748B', fontSize: '13px' }}>
+            <Activity size={24} style={{ margin: '0 auto 10px', animation: 'pulse 1s infinite' }} />
+            <div>Querying ABDM Health Registry & live road network geometry...</div>
+          </div>
+        ) : nearbyHospitals.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '36px', color: '#94A3B8', fontSize: '13px' }}>
+            No facilities found matching filter. Try selecting "All Emergency Hubs" or searching another location.
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+            {nearbyHospitals.map((hosp, idx) => {
+              const isSelected = selectedHospital?.id === hosp.id;
+              const isRecommended = recommendedHospital?.id === hosp.id;
+              return (
+                <div
+                  key={hosp.id || idx}
+                  style={{
+                    background: isSelected ? '#F0FDFA' : '#FFFFFF',
+                    border: isSelected ? '2px solid #008B8B' : '1px solid #E2E8F0',
+                    borderRadius: '14px',
+                    padding: '18px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '14px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div>
+                    {/* Top Row: Badges */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {isRecommended && (
+                          <span style={{ background: '#008B8B', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px', fontSize: '10.5px', fontWeight: 800 }}>
+                            ★ OPTIMAL CLINICAL MATCH
+                          </span>
+                        )}
+                        <span style={{
+                          background: hosp.ownership?.toLowerCase().includes('government') ? '#EFF6FF' : '#F8FAFC',
+                          color: hosp.ownership?.toLowerCase().includes('government') ? '#1D4ED8' : '#475569',
+                          border: '1px solid #E2E8F0',
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                          fontSize: '10.5px',
+                          fontWeight: 750
+                        }}>
+                          {hosp.ownership}
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '14px', fontWeight: 850, color: '#DC2626' }}>
+                          ~{hosp.etaMinutes} min
+                        </span>
+                        <div style={{ fontSize: '11px', color: '#64748B' }}>
+                          {hosp.distanceKm} km drive
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Facility Name & Address */}
+                    <h3 style={{ fontSize: '15px', fontWeight: 850, color: '#0A2540', margin: '0 0 6px 0', lineHeight: 1.35 }}>
+                      {hosp.name}
+                    </h3>
+                    <p style={{ fontSize: '11.5px', color: '#64748B', margin: '0 0 10px 0', lineHeight: 1.4 }}>
+                      {hosp.address}
+                    </p>
+
+                    {/* Clinical Capabilities Tags */}
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                      <span style={{ background: '#FEF2F2', color: '#991B1B', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700 }}>
+                        {hosp.traumaTier}
+                      </span>
+                      {hosp.cathLab && (
+                        <span style={{ background: '#F0FDF4', color: '#166534', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700 }}>
+                          {hosp.cathLab}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Live Bed & Bay Assignment */}
+                    <div style={{ background: '#F8FAFC', borderRadius: '8px', padding: '8px 12px', fontSize: '11.5px', color: '#334155', display: 'flex', justifyContent: 'space-between' }}>
+                      <span>🛏️ {hosp.bedAvailability || `${hosp.bedsAvailable} Beds`}</span>
+                      <span style={{ fontWeight: 750, color: '#008B8B' }}>{hosp.resuscitationBayAssigned}</span>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <button
+                      onClick={() => setSelectedHospital(hosp)}
+                      style={{
+                        flex: 1,
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: isSelected ? '#008B8B' : '#0A2540',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      {isSelected ? <Check size={14} /> : null}
+                      <span>{isSelected ? 'Pre-Alert Destination Selected' : 'Select for Pre-Alert'}</span>
+                    </button>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${hosp.lat},${hosp.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: '8px',
+                        border: '1px solid #CBD5E1',
+                        background: '#FFFFFF',
+                        color: '#0A2540',
+                        fontSize: '11.5px',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                      title="Open Route Navigation"
+                    >
+                      <Navigation size={13} color="#008B8B" />
+                      <span>Directions</span>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

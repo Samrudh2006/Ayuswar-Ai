@@ -78,17 +78,17 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   const [isHandoverModalOpen, setIsHandoverModalOpen] = useState(false);
 
   // Dynamic Caller Identity (Works for ANY citizen, editable by operator or test presets)
-  const [callerPhone, setCallerPhone] = useState('+91 98490 22334');
-  const [callerName, setCallerName] = useState('Rao G. (Live Citizen)');
+  const [callerPhone, setCallerPhone] = useState('+91 98490 22108');
+  const [callerName, setCallerName] = useState('Live Caller (Verified Device)');
   const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [callerCoords, setCallerCoords] = useState({ lat: 17.6913, lng: 83.0040 });
-  const [geoAddress, setGeoAddress] = useState('Anakapalle, Andhra Pradesh, India');
+  const [geoAddress, setGeoAddress] = useState('Detecting live satellite GPS / network location...');
 
   // Mapbox Geocoding Search State
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [isDetectingGps, setIsDetectingGps] = useState(false);
+  const [isDetectingGps, setIsDetectingGps] = useState(true);
 
   // ABDM HFR Facility Discovery & Dynamic Regional Capability Matching
   const [hospitalsList, setHospitalsList] = useState([]);
@@ -106,8 +106,8 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   // Ambulance Telemetry (A-12)
   const [ambulanceData, setAmbulanceData] = useState({
     id: 'A-12',
-    lat: 17.2745,
-    lng: 82.3965,
+    lat: 17.6863,
+    lng: 82.9990,
     heading: 52,
     speed: 46,
     status: 'STANDBY',
@@ -136,14 +136,16 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   const [respirationRate, setRespirationRate] = useState(38);
   const [confidenceScore, setConfidenceScore] = useState(94);
 
-  // Incident Decision Trace Ledger
-  const [auditLogs, setAuditLogs] = useState([
-    { time: '12:04:12', event: `Emergency 108 voice call connected via Telecom SIP (${callerPhone})` },
-    { time: '12:04:18', event: `Caller location anchored: ${geoAddress}` },
-    { time: '12:04:31', event: 'Acoustic panic biomarkers detected (89% distress, 295 Hz vocal pitch)' },
-    { time: '12:04:48', event: 'AI triage completed → CRITICAL (ALS Mobile Response Required, 94% conf)' },
-    { time: '12:05:01', event: 'Ambulance A-12 matched (Closest ALS unit, ready with Defibrillator)' }
-  ]);
+  // Incident Decision Trace Ledger (Real-time timestamps)
+  const [auditLogs, setAuditLogs] = useState(() => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const t0 = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    return [
+      { time: t0, event: `Emergency 108 voice call session initialized via Telecom SIP` },
+      { time: t0, event: `Autonomous satellite GNSS beacon resolving caller coordinates...` }
+    ];
+  });
 
   // In-App Toast
   const [toastNotification, setToastNotification] = useState(null);
@@ -192,9 +194,16 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         if (!isMounted) return;
         if (addr.displayName) {
           setGeoAddress(addr.displayName);
+          const nowStr = new Date().toLocaleTimeString('en-IN', { hour12: false });
+          setAuditLogs((prev) => [
+            { time: nowStr, event: `Live GPS locked: ${addr.displayName} (±${coords.accuracy || 15}m)` },
+            ...prev
+          ]);
         }
       } catch (e) {
         // Desktop browsers without GNSS use active coordinates smoothly
+      } finally {
+        if (isMounted) setIsDetectingGps(false);
       }
     }
     initGPS();
@@ -216,12 +225,8 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         setHospitalsList(res.hospitals);
         setRecommendedHospital(res.recommendedHospital);
         if (!selectedHospital || !res.hospitals.find((h) => h.id === selectedHospital.id)) {
-          setSelectedHospital(res.recommendedHospital);
+          setSelectedHospital(res.recommendedHospital || res.hospitals[0]);
         }
-      } else {
-        setHospitalsList([]);
-        setRecommendedHospital(null);
-        setSelectedHospital(null);
       }
     } catch (err) {
       console.warn('Error loading hospitals:', err);

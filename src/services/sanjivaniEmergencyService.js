@@ -431,19 +431,19 @@ class SanjivaniAudioSynthesizer {
 
 export const sanjivaniAudio = new SanjivaniAudioSynthesizer();
 
-// Emergency Dispatch Simulation for workflow demonstration
 export function simulateEvonDispatchPipeline({
   coords,
   landmark,
+  hospitalName: customHospitalName,
   triageData,
   onToolStep,
   onComplete
 }) {
   const ambulanceId = `SIM-ALS-108-${Math.floor(1000 + Math.random() * 9000)}`;
   const driverName = 'Simulation Crew (Demo EMT)';
-  const hospitalName = triageData?.triageLevel === 'RED' 
+  const hospitalName = customHospitalName || (triageData?.triageLevel === 'RED' 
     ? 'Regional Tertiary Hospital (Simulation Bay)' 
-    : 'District Hospital Emergency Ward (Simulation)';
+    : 'District Hospital Emergency Ward (Simulation)');
 
   const tools = [
     {
