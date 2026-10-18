@@ -9,15 +9,15 @@
  *   immediately to official emergency services (112 / 108).
  */
 
-import { queryEvonInference, EVON_MODEL_METADATA } from './gnaniEvonService';
+import { queryEvonServer, EVON_MODEL_METADATA } from './gnaniEvonService';
 
 export const AI_PROVIDERS = [
   { 
     id: 'gnani_evon_30b', 
-    name: 'Gnani Evon (30B-A3B Sovereign Indic Reasoning / Hugging Face)', 
+    name: 'Gnani Evon (30B-A3B Sovereign Indic Reasoning / Server Route)', 
     model: 'gnani/gnani-evon-v3.3-30B-A3B',
     badge: 'Gnani.ai Official',
-    description: '30B Mamba+MoE Indic foundation model on Hugging Face with 128k context and native Indic tokenizer.'
+    description: '30B Mamba+MoE Indic foundation model routed via server-side /api/evon/chat with EVON_BASE_URL.'
   },
   { id: 'local_offline', name: 'Heuristic Rule-Based Demonstrator (Local Fallback)', model: 'Rule-Based-Indic-Demo' },
   { id: 'gemini_free', name: 'Google Gemini Free Tier (gemini-1.5-flash / 2.5-flash)', model: 'gemini-1.5-flash' },
@@ -29,7 +29,7 @@ export const AI_PROVIDERS = [
 export function getAiConfig() {
   try {
     const provider = localStorage.getItem('ayuswar_ai_provider') || 'gnani_evon_30b';
-    const apiKey = localStorage.getItem('ayuswar_api_key') || localStorage.getItem('ayuswar_hf_token') || '';
+    const apiKey = localStorage.getItem('ayuswar_api_key') || '';
     const customEndpoint = localStorage.getItem('ayuswar_custom_endpoint') || '';
     return { provider, apiKey, customEndpoint };
   } catch {
@@ -41,9 +41,6 @@ export function saveAiConfig(provider, apiKey, customEndpoint = '') {
   try {
     localStorage.setItem('ayuswar_ai_provider', provider);
     localStorage.setItem('ayuswar_api_key', apiKey.trim());
-    if (provider === 'gnani_evon_30b') {
-      localStorage.setItem('ayuswar_hf_token', apiKey.trim());
-    }
     localStorage.setItem('ayuswar_custom_endpoint', customEndpoint.trim());
     return true;
   } catch {
@@ -62,13 +59,15 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   const { provider, apiKey } = getAiConfig();
 
-  // 1. Gnani Evon 30B Sovereign Indic Reasoning
+  // 1. Gnani Evon 30B Sovereign Indic Reasoning (Secure Server-Side Route)
   if (provider === 'gnani_evon_30b') {
     try {
       const response = await callGnaniEvonApi(cleanPrompt, role, context);
       if (response) return response;
     } catch (err) {
-      console.warn("Gnani Evon API encountered issue, using safe demonstration response:", err);
+      console.warn("Gnani Evon server route unreachable; using honest fallback guidance:", err.message);
+      const fallback = generateSafeDemonstrationResponse(cleanPrompt, role, context);
+      return `🛡️ [FALLBACK: DETERMINISTIC GUIDANCE (Evon Unavailable)]\n\n${fallback}`;
     }
   }
 
@@ -96,11 +95,10 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
 async function callGnaniEvonApi(prompt, role, context) {
   const systemPrompt = getSystemPromptForRole(role, context);
-  const taskType = role === 'doctor' ? 'soap_scribe' : (role === 'patient' ? 'symptom_triage' : 'general_guidance');
-  const result = await queryEvonInference(prompt, systemPrompt, { task: taskType, maxTokens: 400 });
+  const result = await queryEvonServer(prompt, systemPrompt, { maxTokens: 400 });
   if (result && result.finalAnswer) {
     if (result.thoughtTrace) {
-      return `🧠 [Gnani Evon 30B Reasoning: ${result.thoughtTrace.slice(0, 120)}...]\n\n${result.finalAnswer}`;
+      return `🧠 [Gnani Evon 30B Live Reasoning: ${result.thoughtTrace.slice(0, 140)}...]\n\n${result.finalAnswer}`;
     }
     return result.finalAnswer;
   }

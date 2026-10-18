@@ -28,7 +28,7 @@ import {
   Cpu
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
-import { queryEvonInference, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import { queryEvonServer, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -291,15 +291,15 @@ export default function SanjivaniEmergencyAssistant({
         `Respond with concise, authoritative life-safety protocol guidance. ` +
         `Reference active telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'} with ${selectedHospital?.bedsAvailable || 8} beds.`;
 
-      const evonResult = await queryEvonInference(q, systemInstruction, { task: 'emergency_copilot', maxTokens: 300 });
+      const evonResult = await queryEvonServer(q, systemInstruction, { maxTokens: 300 });
 
       let reasoningTrace = evonResult.thoughtTrace ? `\n\n<reasoning>\n${evonResult.thoughtTrace}\n</reasoning>` : '';
       let replyText = (evonResult.finalAnswer || evonResult.raw || 'Field Protocol: Keep patient resting with open airway.').trim();
 
-      addCopilotEvent('ai', '🧠 Gnani Evon 30B Clinical Reasoning', `${replyText}${reasoningTrace}`);
+      addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', `${replyText}${reasoningTrace}`);
     } catch (err) {
-      console.warn('Evon copilot reasoning fallback:', err);
-      addCopilotEvent('ai', '🤖 Copilot Clinical Protocol', `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`);
+      console.warn('Evon server route unavailable; engaging deterministic safety protocol:', err.message);
+      addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`);
     }
   };
 

@@ -22,14 +22,18 @@ import {
   analyzeEmergencyClinicalTriage, 
   simulateEvonDispatchPipeline 
 } from '../services/sanjivaniEmergencyService';
+import { reasonEmergencyTriageWithEvon } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
 import SanjivaniAnimatedFlowchart from '../components/SanjivaniAnimatedFlowchart';
+import EvonStatusChip from '../components/EvonStatusChip';
 
 export default function EmergencyTriageView({ onOpenFullConsole }) {
   const { selectedLanguage } = useApp();
 
   const [inputText, setInputText] = useState('నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు');
   const [triageResult, setTriageResult] = useState(() => analyzeEmergencyClinicalTriage(inputText));
+  const [evonAdvisory, setEvonAdvisory] = useState(null);
+  const [isLoadingEvon, setIsLoadingEvon] = useState(false);
   const [isSimulatingDispatch, setIsSimulatingDispatch] = useState(false);
   const [dispatchSteps, setDispatchSteps] = useState([]);
   const [dispatchComplete, setDispatchComplete] = useState(false);
@@ -45,10 +49,27 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     };
   }, []);
 
-  const handleTriageAnalyze = (textToUse) => {
+  const handleTriageAnalyze = async (textToUse) => {
     const text = textToUse || inputText;
+    // Step 1: Immediate, non-blocking 100% deterministic rule-based triage (0ms delay)
     const result = analyzeEmergencyClinicalTriage(text);
     setTriageResult(result);
+
+    // Step 2: Asynchronous advisory Evon reasoning query (server-side route only)
+    setIsLoadingEvon(true);
+    try {
+      const adv = await reasonEmergencyTriageWithEvon(text, { language: 'te' });
+      setEvonAdvisory(adv);
+    } catch (err) {
+      setEvonAdvisory({
+        isEvonLive: false,
+        isFallback: true,
+        source: 'FALLBACK: DETERMINISTIC RULE-BASED SAFETY PROTOCOL',
+        error: err.message
+      });
+    } finally {
+      setIsLoadingEvon(false);
+    }
   };
 
   const handleStartDispatchSimulation = () => {
@@ -358,105 +379,114 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               </div>
             )}
 
-            {/* Gnani Evon 30B Sovereign Indic Clinical Reasoner Block */}
-            {triageResult.evonReasoning && (
-              <div style={{
-                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-                borderRadius: '12px',
-                border: '1px solid #334155',
-                padding: '16px',
-                color: '#F8FAFC'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{
-                      width: '26px',
-                      height: '26px',
-                      borderRadius: '6px',
-                      background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#0A2540'
-                    }}>
-                      <Cpu size={15} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>Gnani Evon (30B-A3B)</span>
-                        <span style={{ fontSize: '9px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
-                          GNANI SOVEREIGN MODEL
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
-                        Mamba+MoE Indic Clinical Reasoner · Hugging Face
-                      </div>
-                    </div>
-                  </div>
+            {/* Evon 30B Live Status Verification & Sovereign Reasoning */}
+            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <EvonStatusChip showDetails={true} />
 
-                  <button
-                    onClick={() => setShowEvonTrace(!showEvonTrace)}
-                    style={{
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      borderRadius: '6px',
-                      color: '#E2E8F0',
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    <span>{showEvonTrace ? 'Hide CoT' : 'View CoT'}</span>
-                    {showEvonTrace ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  </button>
+              {/* Indic Tokenizer Efficiency Analysis (Mathematical Metric) */}
+              {triageResult.tokenMetrics && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: 'rgba(0, 245, 212, 0.08)',
+                  border: '1px solid rgba(0, 245, 212, 0.25)',
+                  borderRadius: '8px',
+                  padding: '8px 12px',
+                  fontSize: '11.5px'
+                }}>
+                  <span style={{ color: '#008B8B', fontWeight: 750 }}>
+                    ⚡ Indic Tokenizer Analysis:
+                  </span>
+                  <span style={{ color: '#1E293B' }}>
+                    <strong>{triageResult.tokenMetrics.evonTokens} Evon akshara tokens</strong> vs ~{triageResult.tokenMetrics.westernTokens} byte-fragmented tokens ({triageResult.tokenMetrics.savedPct}% language tax reduction)
+                  </span>
                 </div>
+              )}
 
-                {/* Token Efficiency Metric */}
-                {triageResult.evonReasoning.tokenMetrics && (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    background: 'rgba(0, 245, 212, 0.08)',
-                    border: '1px solid rgba(0, 245, 212, 0.25)',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    fontSize: '11.5px',
-                    marginBottom: '10px'
-                  }}>
-                    <span style={{ color: '#00F5D4', fontWeight: 750 }}>
-                      ⚡ Indic Token Efficiency:
-                    </span>
-                    <span style={{ color: '#E2E8F0' }}>
-                      <strong>{triageResult.evonReasoning.tokenMetrics.evonTokens} Evon tokens</strong> vs ~{triageResult.evonReasoning.tokenMetrics.westernTokens} LLaMA tokens ({triageResult.evonReasoning.tokenMetrics.savedPct}% language tax reduction)
-                    </span>
-                  </div>
-                )}
+              {/* Asynchronous Evon Advisory CoT or Honest Fallback */}
+              {isLoadingEvon && (
+                <div style={{ padding: '10px 14px', background: '#F1F5F9', borderRadius: '8px', fontSize: '11px', color: '#475569' }}>
+                  ⏳ Querying server-side Evon reasoning route (/api/evon/chat)...
+                </div>
+              )}
 
-                {/* Collapsible Chain-of-Thought Trace */}
-                {showEvonTrace && (
-                  <div style={{
-                    background: 'rgba(0, 0, 0, 0.35)',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    padding: '10px 12px',
-                    fontFamily: 'monospace',
-                    fontSize: '11px',
-                    color: '#CBD5E1',
-                    lineHeight: '1.55',
-                    whiteSpace: 'pre-line'
-                  }}>
-                    <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}>
-                      Auditable Clinical Chain-of-Thought (&lt;reasoning&gt; trace):
+              {evonAdvisory && evonAdvisory.isEvonLive && (
+                <div style={{
+                  background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                  borderRadius: '12px',
+                  border: '1px solid #10B981',
+                  padding: '16px',
+                  color: '#F8FAFC'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 800, color: '#10B981', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <CheckCircle2 size={14} />
+                      <span>LIVE GNANI EVON 30B ADVISORY REASONING</span>
                     </div>
-                    {triageResult.evonReasoning.thoughtTrace}
+                    <button
+                      onClick={() => setShowEvonTrace(!showEvonTrace)}
+                      style={{
+                        background: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: '6px',
+                        color: '#E2E8F0',
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      <span>{showEvonTrace ? 'Hide CoT' : 'View CoT'}</span>
+                      {showEvonTrace ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                    </button>
                   </div>
-                )}
-              </div>
-            )}
+                  {showEvonTrace && evonAdvisory.thoughtTrace && (
+                    <div style={{
+                      background: 'rgba(0, 0, 0, 0.4)',
+                      borderRadius: '8px',
+                      padding: '10px 12px',
+                      fontFamily: 'monospace',
+                      fontSize: '11px',
+                      color: '#CBD5E1',
+                      lineHeight: '1.55',
+                      whiteSpace: 'pre-line'
+                    }}>
+                      <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '4px', fontSize: '10px' }}>
+                        LIVE EVON CHAIN-OF-THOUGHT (&lt;reasoning&gt;):
+                      </div>
+                      {evonAdvisory.thoughtTrace}
+                    </div>
+                  )}
+                  {evonAdvisory.finalAnswer && (
+                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#E2E8F0', lineHeight: 1.5 }}>
+                      {evonAdvisory.finalAnswer}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {evonAdvisory && evonAdvisory.isFallback && (
+                <div style={{
+                  background: '#FFFBEB',
+                  border: '1px solid #FCD34D',
+                  borderRadius: '10px',
+                  padding: '12px 14px',
+                  fontSize: '11.5px',
+                  color: '#92400E'
+                }}>
+                  <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
+                    🛡️ [FALLBACK: DETERMINISTIC RULE-BASED SAFETY PROTOCOL]
+                  </div>
+                  <div>
+                    Evon server route unavailable ({evonAdvisory.error || 'EVON_BASE_URL / EVON_API_KEY unset'}). 
+                    Immediate life-safety triage remains 100% active via deterministic clinical rules with 0ms delay.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Live Multi-Stage Animated Flowchart with [SIMULATION] badge */}

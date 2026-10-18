@@ -24,6 +24,7 @@ import {
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import EvonStatusChip from './EvonStatusChip';
 
 /**
  * LiveScribeSessionModal Component
@@ -324,29 +325,32 @@ export default function LiveScribeSessionModal({
               </button>
             </div>
 
-            {/* Gnani Evon 30B SOAP Reasoner Action */}
-            <button
-              onClick={handleRunEvonReasoning}
-              disabled={isReasoningWithEvon}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 14px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-                border: '1px solid #00F5D4',
-                color: '#00F5D4',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                boxShadow: '0 0 12px rgba(0,245,212,0.25)'
-              }}
-              title="Run Gnani Evon 30B Sovereign Indic Clinical SOAP reasoning on conversation"
-            >
-              <Cpu size={13} />
-              <span>{isReasoningWithEvon ? 'Evon Reasoning...' : '🧠 Evon 30B SOAP'}</span>
-            </button>
+            {/* Gnani Evon 30B SOAP Reasoner Action & Verified Status Chip */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                onClick={handleRunEvonReasoning}
+                disabled={isReasoningWithEvon}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 14px',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                  border: '1px solid #00F5D4',
+                  color: '#00F5D4',
+                  fontSize: '11.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 0 12px rgba(0,245,212,0.25)'
+                }}
+                title="Run Gnani Evon 30B Sovereign Indic Clinical SOAP reasoning via secure server route"
+              >
+                <Cpu size={13} />
+                <span>{isReasoningWithEvon ? 'Evon Reasoning...' : '🧠 Evon 30B SOAP'}</span>
+              </button>
+              <EvonStatusChip compact={true} />
+            </div>
 
             <button
               onClick={() => setIsRecording(!isRecording)}
@@ -746,13 +750,23 @@ export default function LiveScribeSessionModal({
                 </div>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>Gnani Evon (30B-A3B) Clinical Scribe</span>
-                    <span style={{ fontSize: '9.5px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
-                      MAMBA+MOE HYBRID
+                    <span>{evonReasoning.isEvonLive ? 'Gnani Evon (30B-A3B) Clinical Scribe' : '[FALLBACK] Clinical Encounter Template'}</span>
+                    <span style={{ 
+                      fontSize: '9.5px', 
+                      background: evonReasoning.isEvonLive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)', 
+                      color: evonReasoning.isEvonLive ? '#10B981' : '#FCD34D', 
+                      padding: '2px 8px', 
+                      borderRadius: '6px', 
+                      border: `1px solid ${evonReasoning.isEvonLive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`, 
+                      fontWeight: 800 
+                    }}>
+                      {evonReasoning.isEvonLive ? 'LIVE GNANI MODEL' : 'FALLBACK (NON-LLM)'}
                     </span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>
-                    Sovereign Indic Clinical Reasoning Foundation Model
+                    {evonReasoning.isEvonLive 
+                      ? 'Live Sovereign Indic Clinical Reasoning (via /api/evon/chat)' 
+                      : `Evon unavailable (${evonReasoning.error || 'Server env vars unset'}) — displaying standard clinical template`}
                   </div>
                 </div>
               </div>

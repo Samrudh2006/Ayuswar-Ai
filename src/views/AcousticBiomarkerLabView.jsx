@@ -24,6 +24,7 @@ import { useApp } from '../context/AppContext';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
 import { speechService } from '../services/indicSpeechService';
 import { reasonAcousticBiomarkerWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import EvonStatusChip from '../components/EvonStatusChip';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
@@ -894,7 +895,7 @@ export default function AcousticBiomarkerLabView() {
             color: '#F8FAFC',
             boxShadow: '0 8px 24px rgba(0, 245, 212, 0.12)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{
                   width: '32px',
@@ -916,67 +917,91 @@ export default function AcousticBiomarkerLabView() {
                     </span>
                   </div>
                   <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
-                    Mixture-of-Experts Sovereign Indic Voice Physics Synthesis
+                    Mixture-of-Experts Sovereign Indic Voice Physics Synthesis (/api/evon/chat)
                   </div>
                 </div>
               </div>
 
-              <button
-                onClick={handleRunEvonAcousticReasoning}
-                disabled={isEvonAcousticReasoning}
-                style={{
-                  background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
-                  border: 'none',
-                  borderRadius: '8px',
-                  color: '#0A2540',
-                  padding: '7px 14px',
-                  fontSize: '11.5px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <Sparkles size={13} />
-                <span>{isEvonAcousticReasoning ? 'Synthesizing...' : 'Synthesize Evon 30B'}</span>
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <EvonStatusChip compact={true} />
+                <button
+                  onClick={handleRunEvonAcousticReasoning}
+                  disabled={isEvonAcousticReasoning}
+                  style={{
+                    background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    color: '#0A2540',
+                    padding: '7px 14px',
+                    fontSize: '11.5px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Sparkles size={13} />
+                  <span>{isEvonAcousticReasoning ? 'Synthesizing...' : 'Synthesize Evon 30B'}</span>
+                </button>
+              </div>
             </div>
 
             {evonAcousticResult ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
-                {evonAcousticResult.thoughtTrace && (
+                {evonAcousticResult.isFallback ? (
                   <div style={{
-                    background: 'rgba(0, 0, 0, 0.4)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '8px',
-                    padding: '10px 12px',
-                    fontFamily: 'monospace',
-                    fontSize: '11px',
-                    color: '#93C5FD',
-                    lineHeight: '1.5'
+                    background: '#FFFBEB',
+                    border: '1px solid #FCD34D',
+                    borderRadius: '10px',
+                    padding: '12px 14px',
+                    fontSize: '11.5px',
+                    color: '#92400E'
                   }}>
-                    <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '2px', fontSize: '9.5px', textTransform: 'uppercase' }}>
-                      &lt;reasoning&gt; Acoustic Chain-of-Thought:
+                    <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
+                      🛡️ [FALLBACK: PHYSICAL SIGNAL DSP CORRELATION]
                     </div>
-                    {evonAcousticResult.thoughtTrace}
+                    <div>
+                      Evon server route unavailable ({evonAcousticResult.error || 'Server env vars unset'}). 
+                      Showing deterministic physical acoustic observations without LLM inference.
+                    </div>
                   </div>
+                ) : (
+                  <>
+                    {evonAcousticResult.thoughtTrace && (
+                      <div style={{
+                        background: 'rgba(0, 0, 0, 0.4)',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        borderRadius: '8px',
+                        padding: '10px 12px',
+                        fontFamily: 'monospace',
+                        fontSize: '11px',
+                        color: '#93C5FD',
+                        lineHeight: '1.5'
+                      }}>
+                        <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '2px', fontSize: '9.5px', textTransform: 'uppercase' }}>
+                          LIVE EVON &lt;reasoning&gt; Acoustic Chain-of-Thought:
+                        </div>
+                        {evonAcousticResult.thoughtTrace}
+                      </div>
+                    )}
+                    <div style={{
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '10px',
+                      padding: '12px 14px',
+                      fontSize: '12px',
+                      color: '#E2E8F0',
+                      lineHeight: '1.55'
+                    }}>
+                      {evonAcousticResult.finalAnswer}
+                    </div>
+                  </>
                 )}
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '10px',
-                  padding: '12px 14px',
-                  fontSize: '12px',
-                  color: '#E2E8F0',
-                  lineHeight: '1.55'
-                }}>
-                  {evonAcousticResult.finalAnswer}
-                </div>
               </div>
             ) : (
               <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '6px', lineHeight: '1.5' }}>
-                Tap "Synthesize Evon 30B" to run Gnani's 30B parameter Mamba+MoE reasoning model across current physical metrics (F0: {dspMetrics.pitchF0}Hz, Jitter: {dspMetrics.jitterPct}%, Shimmer: {dspMetrics.shimmerPct}%, HNR: {dspMetrics.hnrDb}dB).
+                Tap "Synthesize Evon 30B" to query the server-side Evon endpoint across current physical metrics (F0: {dspMetrics.pitchF0}Hz, Jitter: {dspMetrics.jitterPct}%, Shimmer: {dspMetrics.shimmerPct}%, HNR: {dspMetrics.hnrDb}dB).
               </div>
             )}
           </div>

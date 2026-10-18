@@ -109,6 +109,41 @@ for (const filePath of filesToAudit) {
 assert.strictEqual(violations.length, 0, `Banned claims detected:\n${violations.join('\n')}`);
 console.log('✓ Test 8 Passed: Zero banned claims or unverified metrics found across src/ and README.md.');
 
+// Test 9: Gnani Evon Integrity — No simulated/mocked replies presented as Evon output
+const evonServicePath = resolve('src/services/gnaniEvonService.js');
+const evonServiceSrc = readFileSync(evonServicePath, 'utf8');
+assert.ok(!evonServiceSrc.includes('executeLocalEvonReasoning'), 'gnaniEvonService must NOT contain executeLocalEvonReasoning or hardcoded LLM replies');
+assert.ok(!evonServiceSrc.includes('localStorage.getItem(\'ayuswar_hf_token\')'), 'gnaniEvonService must NOT store or retrieve tokens in localStorage');
+assert.ok(!evonServiceSrc.includes('VITE_HF_TOKEN'), 'gnaniEvonService must NOT read VITE_HF_TOKEN');
+assert.ok(evonServiceSrc.includes('/api/evon/chat'), 'gnaniEvonService must query Evon exclusively via /api/evon/chat');
+assert.ok(evonServiceSrc.includes('/api/evon/status'), 'gnaniEvonService must query status via /api/evon/status');
+console.log('✓ Test 9 Passed: gnaniEvonService contains zero hardcoded/mocked Evon replies and uses server routes only.');
+
+// Test 10: Callers Integrity — Emergency triage never embeds fake evonReasoning in deterministic rules
+const emergencyTriageSrc = readFileSync(resolve('src/services/sanjivaniEmergencyService.js'), 'utf8');
+assert.ok(!emergencyTriageSrc.includes('evonReasoning: {'), 'sanjivaniEmergencyService must not attach fake evonReasoning to deterministic triage');
+assert.ok(emergencyTriageSrc.includes('DETERMINISTIC_SAFETY_RULE'), 'sanjivaniEmergencyService must stamp triageMethod as DETERMINISTIC_SAFETY_RULE');
+console.log('✓ Test 10 Passed: Emergency RED triage runs purely on deterministic safety rules without fake Evon attribution.');
+
+// Test 11: Server Routes exist for Vercel and dev middleware
+assert.ok(existsSync(resolve('api/evon/status.js')), 'api/evon/status.js must exist for server-side status checks');
+assert.ok(existsSync(resolve('api/evon/chat.js')), 'api/evon/chat.js must exist for server-side completions proxy');
+const viteConfigSrc = readFileSync(resolve('vite.config.js'), 'utf8');
+assert.ok(viteConfigSrc.includes('/api/evon/status'), 'vite.config.js must configure dev middleware for /api/evon/status');
+assert.ok(viteConfigSrc.includes('/api/evon/chat'), 'vite.config.js must configure dev middleware for /api/evon/chat');
+assert.ok(viteConfigSrc.includes('EVON_BASE_URL'), 'vite.config.js must read EVON_BASE_URL');
+assert.ok(viteConfigSrc.includes('EVON_API_KEY'), 'vite.config.js must read EVON_API_KEY');
+console.log('✓ Test 11 Passed: Server-side Evon routes and dev proxy middleware properly configured.');
+
+// Test 12: Frontend keys isolation — No EVON_API_KEY or VITE_EVON_* in client code
+for (const filePath of filesToAudit) {
+  const content = readFileSync(filePath, 'utf8');
+  assert.ok(!content.includes('VITE_EVON_API_KEY'), `Client file ${filePath} must never reference VITE_EVON_API_KEY`);
+  assert.ok(!content.includes('VITE_HF_TOKEN'), `Client file ${filePath} must never reference VITE_HF_TOKEN`);
+  assert.ok(!content.includes('localStorage.setItem(\'ayuswar_hf_token\''), `Client file ${filePath} must not store HF token`);
+}
+console.log('✓ Test 12 Passed: Client-side codebase verified completely free of frontend Evon keys or tokens.');
+
 console.log('====================================================');
-console.log('ALL 8 AUDIT ASSERTION TESTS PASSED SUCCESSFULLY! 🎉');
+console.log('ALL 12 AUDIT ASSERTION TESTS PASSED SUCCESSFULLY! 🎉');
 console.log('====================================================');

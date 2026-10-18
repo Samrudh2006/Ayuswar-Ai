@@ -17,10 +17,12 @@ import { speechService, INDIC_LANGUAGES } from '../services/indicSpeechService';
 import { CLINICAL_DISEASE_DATASET, REGIONAL_COLLOQUIAL_DICTIONARY, predictClinicalDiagnosis } from '../data/kaggleClinicalDataset';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
 import { askAyuSwarBrain } from '../services/aiBrainService';
+import { analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
 import { 
   calculateIndicTokenSavings, 
   reasonEmergencyTriageWithEvon, 
   reasonClinicalNoteWithEvon, 
+  checkEvonStatus,
   EVON_MODEL_METADATA 
 } from '../services/gnaniEvonService';
 
@@ -392,49 +394,67 @@ export default function ClinicalBenchmarkView() {
     {
       id: 'TC-EVON-02',
       domain: 'Gnani Evon 30B',
-      title: 'Evon 30B Telugu Acute Coronary STEMI Triage Reasoning',
-      desc: 'Asserts that Evon 30B classifies Telugu cardiac distress as RED triage, assigns ICD-10 I21.9, and produces an auditable <reasoning> CoT.',
+      title: 'Deterministic Emergency RED Triage & Evon Non-Blocking Safety',
+      desc: 'Asserts that critical cardiac symptoms trigger immediate 0ms RED triage via deterministic safety rules, never waiting on or blocked by Evon.',
       run: async () => {
         const transcript = 'నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు';
-        const res = await reasonEmergencyTriageWithEvon(transcript, { language: 'te' });
-        if (res.triageLevel !== 'RED') {
-          throw new Error(`Expected RED triage level, got ${res.triageLevel}`);
+        // 1. Immediate synchronous deterministic rule triage
+        const triage = analyzeEmergencyClinicalTriage(transcript);
+        if (triage.triageLevel !== 'RED') {
+          throw new Error(`Expected immediate RED triage, got ${triage.triageLevel}`);
         }
-        if (!res.thoughtTrace || res.thoughtTrace.length < 20) {
-          throw new Error('Missing auditable clinical <reasoning> Chain-of-Thought trace.');
+        if (triage.triageMethod !== 'DETERMINISTIC_SAFETY_RULE') {
+          throw new Error(`Expected triageMethod to be DETERMINISTIC_SAFETY_RULE, got ${triage.triageMethod}`);
         }
-        return `Evon 30B Triage: ${res.triageLevel} (${res.suspectedCondition}) with valid CoT trace.`;
+
+        // 2. Advisory Evon reasoning query: must either return live Evon or honest FALLBACK
+        const adv = await reasonEmergencyTriageWithEvon(transcript, { language: 'te' });
+        if (adv.isEvonLive) {
+          return `Deterministic RED triage verified. Evon 30B LIVE advisory CoT received (${adv.modelId}).`;
+        } else {
+          if (!adv.isFallback || !adv.source.includes('FALLBACK')) {
+            throw new Error('Evon unavailable state must be explicitly labelled FALLBACK, never masked.');
+          }
+          return `Deterministic RED triage verified (0ms rule-based). Evon status honestly reported: ${adv.status} (${adv.source}).`;
+        }
       }
     },
     {
       id: 'TC-EVON-03',
       domain: 'Gnani Evon 30B',
-      title: 'Evon 30B Hindi Pediatric Airway Stridor Triage Reasoning',
-      desc: 'Asserts that Evon 30B identifies pediatric respiratory distress in Hindi, assigns RED category, and generates upright positioning guidance.',
+      title: 'Server-Side Status Contract & Verified Live Status Integrity',
+      desc: 'Asserts that /api/evon/status endpoint is checked for real HTTP 200 responses and prevents mock LIVE chip spoofing.',
       run: async () => {
-        const transcript = 'बच्चे की सांस फूल रही है, पसली चल रही है और होंठ नीले पड़ रहे हैं';
-        const res = await reasonEmergencyTriageWithEvon(transcript, { language: 'hi' });
-        if (res.triageLevel !== 'RED') {
-          throw new Error(`Expected RED pediatric triage, got ${res.triageLevel}`);
+        const status = await checkEvonStatus();
+        if (!status || typeof status.status !== 'string') {
+          throw new Error('Invalid status contract returned from checkEvonStatus().');
         }
-        return `Evon 30B Pediatric Triage: ${res.triageLevel} (${res.suspectedCondition}).`;
+        if (status.status !== 'LIVE' && status.status !== 'UNAVAILABLE') {
+          throw new Error(`Expected status to be LIVE or UNAVAILABLE, got ${status.status}`);
+        }
+        return `Server Status Contract verified: ${status.status} (Model: ${status.model}, Available: ${status.available}).`;
       }
     },
     {
       id: 'TC-EVON-04',
       domain: 'Gnani Evon 30B',
-      title: 'Evon 30B Outpatient SOAP Note & Vernacular Rx Extraction',
-      desc: 'Asserts that Evon 30B extracts clinical SOAP notes and native spoken Telugu prescription from consultation dialogue.',
+      title: 'Outpatient SOAP Note Honest Fallback & Zero-Mock Assertion',
+      desc: 'Asserts that clinical note extraction queries server route and never presents hardcoded mock replies as Evon output.',
       run: async () => {
         const dialogue = 'డాక్టర్: గుండెల్లో దడ ఎలా ఉంది? రోగి: మెట్లు ఎక్కితే ఆయాసంగా ఉంది డాక్టర్.';
         const res = await reasonClinicalNoteWithEvon(dialogue, { name: 'Demo Patient', language: 'te' });
-        if (!res.finalAnswer || !res.finalAnswer.includes('SOAP')) {
-          throw new Error('Evon did not return structured SOAP format.');
+        if (res.isEvonLive) {
+          if (!res.finalAnswer) throw new Error('Live Evon returned empty response.');
+          return `Live Evon 30B Clinical Note generated via server route.`;
+        } else {
+          if (!res.isFallback || !res.source?.includes('FALLBACK')) {
+            throw new Error('Unavailable Evon must be explicitly labelled as FALLBACK, never as Evon.');
+          }
+          if (res.modelId) {
+            throw new Error('Fallback response must not claim Evon modelId.');
+          }
+          return `Honest Fallback verified: ${res.source}. No mock text presented as Evon.`;
         }
-        if (!res.vernacularSummary?.te) {
-          throw new Error('Evon did not return vernacular Telugu summary.');
-        }
-        return `Evon 30B SOAP: Extracted structured clinical notes + Telugu spoken Rx draft.`;
       }
     }
   ];
