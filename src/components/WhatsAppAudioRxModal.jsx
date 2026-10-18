@@ -268,10 +268,18 @@ export default function WhatsAppAudioRxModal({
   };
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        stopAudio();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       stopAudio();
     };
-  }, [selectedLanguage]);
+  }, [selectedLanguage, onClose]);
 
   // Actual Redirect to WhatsApp
   const handleRedirectToWhatsApp = () => {
@@ -321,6 +329,12 @@ export default function WhatsAppAudioRxModal({
   return (
     <div 
       className="modal-overlay whatsapp-modal-overlay"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          stopAudio();
+          onClose();
+        }
+      }}
       style={{
         position: 'fixed',
         top: 0,

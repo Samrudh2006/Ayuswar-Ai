@@ -99,6 +99,24 @@ export default function DoctorPortal({
     setTimeout(() => setPlannedToast(null), 3500);
   };
 
+  // Canonical Shared WhatsApp Audio-Rx Modal Handler
+  const handleOpenAudioRxModal = (p) => {
+    const raw = p || patientsList[0] || DEMO_PATIENTS[0];
+    const rawPhone = raw.phone || '+91-9XXX-XXX-001';
+    setWhatsAppModalPatient({
+      id: raw.id || 'DEMO-P001',
+      name: raw.name || raw.patient || 'Lakshmi Amma (fictional)',
+      vernacularName: raw.vernacular || raw.vernacularName || 'లక్ష్మి అమ్మ',
+      phone: rawPhone,
+      cleanPhone: (rawPhone || '919000000001').replace(/[^0-9]/g, ''),
+      age: raw.age || 58,
+      gender: raw.genderLabel || (raw.gender === 'F' ? 'Female' : 'Male'),
+      abhaId: raw.abhaId || 'DEMO-91-4521-8932-1049',
+      language: raw.language || (raw.lang === 'hi' ? 'Hindi' : 'Telugu'),
+      langCode: (raw.lang === 'hi' || raw.langCode?.includes('hi')) ? 'hi-IN' : 'te-IN'
+    });
+  };
+
   // Indic Clinical Ontology State Suite
   const [ontologySearchTerm, setOntologySearchTerm] = useState('');
   const [ontologyLangFilter, setOntologyLangFilter] = useState('all');
@@ -1001,17 +1019,10 @@ export default function DoctorPortal({
                   </button>
 
                   <button
-                    onClick={() => setWhatsAppModalPatient({
-                      name: 'Narayana Rao',
-                      vernacularName: 'నారాయణ రావు',
-                      phone: '+91 98490 12345',
-                      cleanPhone: '919849012345',
-                      age: 58,
-                      gender: 'Male',
-                      abhaId: '91-4521-8932-1049',
-                      language: 'Telugu',
-                      langCode: 'te-IN'
-                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenAudioRxModal(patientsList[0]);
+                    }}
                     style={{
                       background: '#25D366',
                       color: '#ffffff',
@@ -2543,14 +2554,10 @@ export default function DoctorPortal({
                         </button>
 
                         <button
-                          onClick={() => setWhatsAppModalPatient({
-                            name: rx.patient,
-                            vernacularName: rx.vernacular,
-                            phone: rx.phone,
-                            abhaId: rx.abhaId,
-                            language: rx.lang === 'hi' ? 'Hindi' : 'Telugu',
-                            langCode: rx.lang === 'hi' ? 'hi-IN' : 'te-IN'
-                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenAudioRxModal(rx);
+                          }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -3769,17 +3776,7 @@ export default function DoctorPortal({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setWhatsAppModalPatient({
-                            name: selectedPatientModal.name,
-                            vernacularName: selectedPatientModal.vernacular,
-                            phone: selectedPatientModal.phone || '+91-9XXX-XXX-001',
-                            cleanPhone: (selectedPatientModal.phone || '919000000001').replace(/[^0-9]/g, ''),
-                            age: selectedPatientModal.age,
-                            gender: selectedPatientModal.gender,
-                            abhaId: selectedPatientModal.abhaId,
-                            language: selectedPatientModal.language,
-                            langCode: selectedPatientModal.langCode || 'te'
-                          });
+                          handleOpenAudioRxModal(selectedPatientModal);
                         }}
                         style={{
                           background: '#25D366',
