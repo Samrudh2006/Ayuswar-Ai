@@ -51,6 +51,7 @@ import LiveScribeSessionModal from './LiveScribeSessionModal';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../data/indicVernacularOntology';
+import { DEMO_PATIENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 
 /**
  * DoctorPortal Component — Complete Enterprise Physician Operating System
@@ -91,6 +92,12 @@ export default function DoctorPortal({
   const [dicomInvert, setDicomInvert] = useState(false);
   const [dicomContrast, setDicomContrast] = useState(100);
   const [fhirToast, setFhirToast] = useState(null);
+  const [plannedToast, setPlannedToast] = useState(null);
+
+  const showPlannedNotice = (featureName = 'This feature') => {
+    setPlannedToast(`${featureName}: PLANNED in upcoming release.`);
+    setTimeout(() => setPlannedToast(null), 3500);
+  };
 
   // Indic Clinical Ontology State Suite
   const [ontologySearchTerm, setOntologySearchTerm] = useState('');
@@ -130,117 +137,55 @@ export default function DoctorPortal({
     doctorSpecialty.toLowerCase().includes('diabet') ||
     doctorSpecialty.toLowerCase().includes('heart');
 
-  // OPD Registry with domain tags
-  const patientsList = [
-    {
-      id: 0,
-      token: 'OPD-101',
-      name: 'Narayana Rao',
-      vernacular: 'నారాయణ రావు',
-      age: 58,
-      gender: 'Male',
-      language: 'Telugu (Rayalaseema)',
-      abhaId: '91-4521-8932-1049',
-      chiefComplaint: 'Chest heaviness & Palpitations (గుండెల్లో దడ)',
-      triage: 'Urgent',
-      triageColor: '#D97706',
-      vitals: { bp: '140/90', hr: '88 bpm', spo2: '96%', rbs: '168 mg/dL' },
-      history: 'Known Type-2 Diabetes (7 yrs), Mild Hypertension. Smoker (quit 2 yrs ago).',
-      allergies: 'Sulfa Drugs',
-      encounterIndex: 0,
-      domain: 'cardiometabolic'
-    },
-    {
-      id: 1,
-      token: 'OPD-102',
-      name: 'Aarav Kumar',
-      vernacular: 'आरव कुमार',
-      age: 4,
-      gender: 'Male',
-      language: 'Hindi (Awadhi / UP)',
-      abhaId: '91-8821-4432-9012',
-      chiefComplaint: 'Pediatric Subcostal Retraction & Nocturnal Cough (पसली चलना)',
-      triage: 'Critical',
-      triageColor: '#EF4444',
-      vitals: { bp: '95/62', hr: '124 bpm', spo2: '94%', temp: '101.4°F' },
-      history: 'Recurrent wheezing since age 2. Mother reports persistent cough waking him at night.',
-      allergies: 'None documented',
-      encounterIndex: 1,
-      domain: 'respiratory'
-    },
-    {
-      id: 2,
-      token: 'OPD-103',
-      name: 'Ananya Rao',
-      vernacular: 'అనన్య రావు',
-      age: 28,
-      gender: 'Female',
-      language: 'Telugu / English',
-      abhaId: '91-4521-8932-1049',
-      chiefComplaint: 'Acute High-Grade Pyrexia & Dry Airway Wheeze',
-      triage: 'Moderate',
-      triageColor: '#3B82F6',
-      vitals: { bp: '115/76', hr: '72 bpm', spo2: '99%', temp: '102.1°F' },
-      history: 'Seasonal allergic rhinitis & bronchial sensitivity.',
-      allergies: 'Penicillin (mild rash)',
-      encounterIndex: 1,
-      domain: 'respiratory'
-    },
-    {
-      id: 3,
-      token: 'OPD-104',
-      name: 'Rohit Kumar',
-      vernacular: 'रोहित कुमार',
-      age: 42,
-      gender: 'Male',
-      language: 'Hindi',
-      abhaId: '91-2391-0943-7721',
-      chiefComplaint: 'Asthma Follow-up & Exercise Dyspnea',
-      triage: 'Stable',
-      triageColor: '#10B981',
-      vitals: { bp: '122/80', hr: '78 bpm', spo2: '98%', rbs: '104 mg/dL' },
-      history: 'Extrinsic bronchial asthma. Uses Budesonide inhaler.',
-      allergies: 'Aspirin (Bronchospasm)',
-      encounterIndex: 0,
-      domain: 'respiratory'
-    },
-    {
-      id: 4,
-      token: 'OPD-105',
-      name: 'Suresh Babu',
-      vernacular: 'సురేష్ బాబు',
-      age: 56,
-      gender: 'Male',
-      language: 'Telugu',
-      abhaId: '91-5542-8812-3301',
-      chiefComplaint: 'Type-2 Diabetes HbA1c Review & Dyslipidemia',
-      triage: 'Stable',
-      triageColor: '#10B981',
-      vitals: { bp: '134/84', hr: '74 bpm', spo2: '98%', rbs: '142 mg/dL' },
-      history: 'Type-2 Diabetes (11 yrs). On Metformin & Statin.',
-      allergies: 'No known allergies',
-      encounterIndex: 2,
-      domain: 'cardiometabolic'
-    },
-    {
-      id: 5,
-      token: 'OPD-106',
-      name: 'Meera Nair',
-      vernacular: 'മീര നായർ',
-      age: 34,
-      gender: 'Female',
-      language: 'Malayalam / English',
-      abhaId: '91-6632-1923-4411',
-      chiefComplaint: 'Post-viral productive cough & wheezing',
-      triage: 'Moderate',
-      triageColor: '#3B82F6',
-      vitals: { bp: '118/74', hr: '82 bpm', spo2: '97%', temp: '99.1°F' },
-      history: 'Mild allergic bronchitis. Non-smoker.',
-      allergies: 'No known allergies',
-      encounterIndex: 0,
-      domain: 'respiratory'
-    }
-  ];
+  // Shared Fictional OPD Registry from DEMO_PATIENTS
+  const patientsList = DEMO_PATIENTS.map((dp, idx) => {
+    // Triage mapping for visual cues
+    const triageLevel = idx === 1 ? 'Critical' : (idx === 0 || idx === 3 ? 'Urgent' : (idx === 2 || idx === 5 ? 'Moderate' : 'Stable'));
+    const triageColor = triageLevel === 'Critical' ? '#EF4444' : (triageLevel === 'Urgent' ? '#D97706' : (triageLevel === 'Moderate' ? '#3B82F6' : '#10B981'));
+    const latestVitals = dp.vitalsHistory && dp.vitalsHistory.length > 0 ? dp.vitalsHistory[0] : { bp: '120/80 mmHg', pulse: '76 bpm', spo2: '98%' };
+    const latestComplaint = dp.encounters && dp.encounters.length > 0 ? dp.encounters[0].complaint : dp.primaryCondition;
+    
+    // Domain categorization based on primary conditions
+    const condStr = (dp.conditions || []).join(' ').toLowerCase();
+    const domain = condStr.includes('asthma') || condStr.includes('copd') || condStr.includes('rhinitis') 
+      ? 'respiratory' 
+      : (condStr.includes('diabet') || condStr.includes('hypertens') ? 'cardiometabolic' : 'general');
+
+    return {
+      id: dp.id,
+      token: `OPD-${101 + idx}`,
+      name: dp.name,
+      vernacular: dp.name.split(' ')[0],
+      age: dp.age,
+      gender: dp.genderLabel || (dp.gender === 'F' ? 'Female' : 'Male'),
+      language: dp.language,
+      langCode: dp.langCode,
+      phone: dp.phone,
+      village: dp.village,
+      abhaId: dp.abhaId,
+      chiefComplaint: latestComplaint,
+      conditions: dp.conditions || [],
+      primaryCondition: dp.primaryCondition,
+      triage: triageLevel,
+      triageColor: triageColor,
+      vitals: {
+        bp: latestVitals.bp?.replace(' mmHg', '') || '120/80',
+        hr: latestVitals.pulse || '76 bpm',
+        spo2: latestVitals.spo2 || '98%',
+        weight: latestVitals.weight || '64 kg'
+      },
+      history: `${dp.conditions?.join(', ')}. Living in ${dp.village}.`,
+      allergies: (dp.allergies || []).join(', ') || 'No known allergies',
+      encounterIndex: idx % 3,
+      domain: domain,
+      lastVisitOffset: dp.lastVisitOffset,
+      nextVisitOffset: dp.nextVisitOffset,
+      encounters: dp.encounters || [],
+      prescriptions: dp.prescriptions || [],
+      reports: dp.reports || [],
+      vitalsHistory: dp.vitalsHistory || []
+    };
+  });
 
   const formattedRegistered = (registeredPatients || []).map((rp, idx) => ({
     id: `reg_${idx}`,
@@ -250,14 +195,24 @@ export default function DoctorPortal({
     age: rp.age || 40,
     gender: rp.gender || 'Female',
     language: rp.language || 'Telugu',
-    abhaId: rp.abhaId,
+    phone: rp.phone || '+91-9XXX-XXX-099',
+    village: rp.village || 'Primary Health Centre',
+    abhaId: rp.abhaId || `DEMO-ABHA-91-${2000 + idx}`,
     chiefComplaint: `${rp.condition || 'Consultation'} (${rp.relation || 'Registered Citizen'})`,
+    conditions: [rp.condition || 'General OPD Consultation'],
+    primaryCondition: rp.condition || 'Consultation',
     triage: 'Moderate',
     triageColor: '#3B82F6',
-    vitals: rp.vitals || { bp: '120/80', hr: '76 bpm', spo2: '98%' },
+    vitals: rp.vitals || { bp: '120/80', hr: '76 bpm', spo2: '98%', weight: '65 kg' },
     history: `Registered via Family Health Locker. Condition: ${rp.condition}`,
     allergies: 'None documented',
     encounterIndex: 0,
+    lastVisitOffset: -2,
+    nextVisitOffset: 5,
+    encounters: [],
+    prescriptions: [],
+    reports: [],
+    vitalsHistory: [],
     domain: rp.domain || (rp.condition?.toLowerCase().includes('diabet') || rp.condition?.toLowerCase().includes('hypertens') ? 'cardiometabolic' : (rp.condition?.toLowerCase().includes('asthma') ? 'respiratory' : 'general'))
   }));
 
@@ -356,11 +311,28 @@ export default function DoctorPortal({
   };
 
   const filteredPatients = domainPatients.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(patientSearchTerm.toLowerCase()) ||
-                          p.token.toLowerCase().includes(patientSearchTerm.toLowerCase()) ||
-                          p.chiefComplaint.toLowerCase().includes(patientSearchTerm.toLowerCase());
-    const matchesTriage = patientTriageFilter === 'all' || p.triage.toLowerCase() === patientTriageFilter.toLowerCase();
-    return matchesSearch && matchesTriage;
+    const term = patientSearchTerm.trim().toLowerCase();
+    const matchesSearch = !term || 
+                          p.name.toLowerCase().includes(term) ||
+                          String(p.id).toLowerCase().includes(term) ||
+                          p.token.toLowerCase().includes(term) ||
+                          p.chiefComplaint.toLowerCase().includes(term) ||
+                          (p.conditions && p.conditions.some(c => c.toLowerCase().includes(term)));
+    
+    let matchesChip = true;
+    if (patientTriageFilter === 'this_week') {
+      matchesChip = typeof p.lastVisitOffset === 'number' && Math.abs(p.lastVisitOffset) <= 7;
+    } else if (patientTriageFilter === 'has_upcoming') {
+      matchesChip = typeof p.nextVisitOffset === 'number' && p.nextVisitOffset >= 0 && p.nextVisitOffset <= 10;
+    } else if (patientTriageFilter === 'critical') {
+      matchesChip = p.triage.toLowerCase() === 'critical';
+    } else if (patientTriageFilter === 'urgent') {
+      matchesChip = p.triage.toLowerCase() === 'urgent' || p.triage.toLowerCase() === 'critical';
+    } else if (patientTriageFilter !== 'all') {
+      matchesChip = p.triage.toLowerCase() === patientTriageFilter.toLowerCase();
+    }
+    
+    return matchesSearch && matchesChip;
   });
 
   const filteredReports = recentReports.filter(rep => {
@@ -1427,42 +1399,99 @@ export default function DoctorPortal({
               --------------------------------------------------------------------- */}
           {activeTab === 'patients' && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '14px' }}>
                 <div>
-                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                    Outpatient Registry & EHR Records
-                  </h2>
-                  <p style={{ fontSize: '13px', color: '#64748B' }}>
-                    Manage patients, inspect ABHA digital health cards, and trigger ambient voice documentation.
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                      Outpatient Registry & EHR Records
+                    </h2>
+                    <SampleDataChip />
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
+                    Shared fictional cohort across districts with longitudinal EHR, vitals history, and Audio-Rx.
                   </p>
                 </div>
 
-                {/* Filter Tabs */}
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  {['all', 'critical', 'urgent', 'moderate', 'stable'].map(tf => (
-                    <button
-                      key={tf}
-                      onClick={() => setPatientTriageFilter(tf)}
+                {/* Search and Filters Bar */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ position: 'relative', width: '240px' }}>
+                    <Search size={14} color="#64748B" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                    <input
+                      type="text"
+                      placeholder="Search name, DEMO- ID, complaint..."
+                      value={patientSearchTerm}
+                      onChange={(e) => setPatientSearchTerm(e.target.value)}
                       style={{
-                        padding: '6px 14px',
+                        width: '100%',
+                        padding: '8px 12px 8px 34px',
                         borderRadius: '20px',
-                        border: 'none',
-                        background: patientTriageFilter === tf ? '#0A2540' : '#E2E8F0',
-                        color: patientTriageFilter === tf ? '#ffffff' : '#475569',
-                        fontSize: '12px',
-                        fontWeight: 700,
-                        textTransform: 'capitalize',
-                        cursor: 'pointer'
+                        border: '1.5px solid #CBD5E1',
+                        fontSize: '12.5px',
+                        outline: 'none',
+                        background: '#ffffff',
+                        boxSizing: 'border-box'
                       }}
-                    >
-                      {tf}
-                    </button>
-                  ))}
+                    />
+                  </div>
+
+                  {/* Filter Chips */}
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    {[
+                      { key: 'all', label: 'All' },
+                      { key: 'this_week', label: 'New This Week' },
+                      { key: 'has_upcoming', label: 'Has Upcoming Visit' },
+                      { key: 'urgent', label: 'High Priority' }
+                    ].map(chip => (
+                      <button
+                        key={chip.key}
+                        onClick={() => setPatientTriageFilter(chip.key)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          border: 'none',
+                          background: patientTriageFilter === chip.key ? '#0A2540' : '#E2E8F0',
+                          color: patientTriageFilter === chip.key ? '#ffffff' : '#475569',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Patient Table Grid */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {filteredPatients.length === 0 ? (
+                  <div style={{
+                    padding: '36px',
+                    textAlign: 'center',
+                    background: '#ffffff',
+                    borderRadius: '16px',
+                    border: '1px solid #E2E8F0',
+                    color: '#64748B'
+                  }}>
+                    <p style={{ margin: 0, fontWeight: 700 }}>No demo patients found matching "{patientSearchTerm}".</p>
+                    <button
+                      onClick={() => { setPatientSearchTerm(''); setPatientTriageFilter('all'); }}
+                      style={{
+                        marginTop: '12px',
+                        padding: '6px 14px',
+                        borderRadius: '8px',
+                        border: '1px solid #CBD5E1',
+                        background: '#F8FAFC',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        fontWeight: 700
+                      }}
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                ) : null}
                 {filteredPatients.map(pat => (
                   <div
                     key={pat.id}
@@ -3538,8 +3567,7 @@ export default function DoctorPortal({
         </div>
       )}
 
-
-      {/* Patient Detail Modal */}
+      {/* Patient Detail Modal (Full Longitudinal EHR & Shared Demo Dataset) */}
       {selectedPatientModal && (
         <div className="modal-overlay" style={{
           position: 'fixed',
@@ -3551,37 +3579,200 @@ export default function DoctorPortal({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(10, 37, 64, 0.5)'
+          background: 'rgba(10, 37, 64, 0.65)',
+          backdropFilter: 'blur(4px)',
+          padding: '16px'
         }}>
-          <div style={{ background: '#ffffff', width: '560px', borderRadius: '16px', padding: '24px', boxShadow: '0 20px 50px rgba(0,0,0,0.2)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+          <div style={{
+            background: '#ffffff',
+            width: '680px',
+            maxWidth: '96vw',
+            maxHeight: '90vh',
+            borderRadius: '20px',
+            padding: '24px',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.28)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '14px', borderBottom: '1px solid #E2E8F0', paddingBottom: '12px' }}>
               <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540' }}>{selectedPatientModal.name} ({selectedPatientModal.vernacular})</h3>
-                <div style={{ fontSize: '12px', color: '#64748B' }}>Token: <strong>{selectedPatientModal.token}</strong> • ABHA: <code>{selectedPatientModal.abhaId}</code></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                    {selectedPatientModal.name}
+                  </h3>
+                  <SampleDataChip />
+                </div>
+                <div style={{ fontSize: '12.5px', color: '#64748B', marginTop: '4px' }}>
+                  ID: <code style={{ fontWeight: 800, color: '#008B8B' }}>{selectedPatientModal.id}</code> • Token: <strong>{selectedPatientModal.token}</strong> • {selectedPatientModal.age} y • {selectedPatientModal.gender} • {selectedPatientModal.language}
+                </div>
+                <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                  Health ID: <code>{selectedPatientModal.abhaId}</code> • {selectedPatientModal.village}
+                </div>
               </div>
-              <button onClick={() => setSelectedPatientModal(null)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>✕</button>
+              <button 
+                onClick={() => setSelectedPatientModal(null)} 
+                style={{ 
+                  background: '#F1F5F9', 
+                  border: 'none', 
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '50%', 
+                  fontSize: '16px', 
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#475569'
+                }}
+              >
+                ✕
+              </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: '#F8FAFC', padding: '12px', borderRadius: '10px', marginBottom: '14px', textAlign: 'center', fontSize: '12px' }}>
-              <div>BP<br /><strong>{selectedPatientModal.vitals.bp}</strong></div>
-              <div>HR<br /><strong>{selectedPatientModal.vitals.hr}</strong></div>
-              <div>SpO2<br /><strong>{selectedPatientModal.vitals.spo2}</strong></div>
-              <div>Triage<br /><strong style={{ color: selectedPatientModal.triageColor }}>{selectedPatientModal.triage}</strong></div>
+            {/* Scrollable Body */}
+            <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {/* Vitals Summary Card */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: '#F8FAFC', padding: '12px', borderRadius: '12px', textAlign: 'center', fontSize: '12px', border: '1px solid #E2E8F0' }}>
+                <div><span style={{ color: '#64748B' }}>BP</span><br /><strong style={{ fontSize: '14px', color: '#0A2540' }}>{selectedPatientModal.vitals.bp}</strong></div>
+                <div><span style={{ color: '#64748B' }}>Pulse</span><br /><strong style={{ fontSize: '14px', color: '#0A2540' }}>{selectedPatientModal.vitals.hr}</strong></div>
+                <div><span style={{ color: '#64748B' }}>SpO2</span><br /><strong style={{ fontSize: '14px', color: '#0A2540' }}>{selectedPatientModal.vitals.spo2}</strong></div>
+                <div><span style={{ color: '#64748B' }}>Weight</span><br /><strong style={{ fontSize: '14px', color: '#0A2540' }}>{selectedPatientModal.vitals.weight || '64 kg'}</strong></div>
+              </div>
+
+              {/* Conditions List */}
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '12px 14px' }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '6px' }}>
+                  Active Clinical Conditions
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {(selectedPatientModal.conditions || [selectedPatientModal.primaryCondition]).map((cond, i) => (
+                    <span key={i} style={{ background: 'rgba(0, 139, 139, 0.1)', color: '#008B8B', border: '1px solid rgba(0, 139, 139, 0.3)', borderRadius: '12px', padding: '3px 10px', fontSize: '11.5px', fontWeight: 700 }}>
+                      {cond}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Encounter Timeline (Most Recent First) */}
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase' }}>
+                    Past Encounters Timeline
+                  </div>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>Most recent first</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {(selectedPatientModal.encounters && selectedPatientModal.encounters.length > 0 ? selectedPatientModal.encounters : [
+                    { id: 'DEMO-ENC-01', offsetDays: -3, complaint: selectedPatientModal.chiefComplaint, doctorNote: 'Evaluated patient. Adjusted lifestyle and dosage. Advised regular follow-up.' }
+                  ]).map((enc, idx) => (
+                    <div key={enc.id || idx} style={{ background: '#F8FAFC', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid #008B8B', fontSize: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', color: '#008B8B', fontWeight: 750, marginBottom: '3px' }}>
+                        <span>{formatDemoDate(enc.offsetDays || 0)} ({getRelativeDaysLabel(enc.offsetDays || 0)})</span>
+                        <span style={{ fontSize: '10px', color: '#64748B' }}>{enc.id}</span>
+                      </div>
+                      <div style={{ color: '#0A2540', fontWeight: 650 }}>{enc.complaint}</div>
+                      <div style={{ color: '#475569', marginTop: '2px', fontStyle: 'italic' }}>Note: {enc.doctorNote}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Prescriptions with Audio-Rx Play Action */}
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase' }}>
+                    Active Prescriptions & Spoken Audio-Rx
+                  </div>
+                  <span style={{ fontSize: '10px', color: '#64748B' }}>Demo data - not medical advice</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {(selectedPatientModal.prescriptions && selectedPatientModal.prescriptions.length > 0 ? selectedPatientModal.prescriptions : [
+                    { id: 'DEMO-RX-01', drugName: 'Metformin Hydrochloride', dosage: '500 mg', frequency: '1 tab BD after meals (as prescribed)' }
+                  ]).map((rx, idx) => (
+                    <div key={rx.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#F8FAFC', padding: '10px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', gap: '10px' }}>
+                      <div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540' }}>{rx.drugName} • {rx.dosage}</div>
+                        <div style={{ fontSize: '11.5px', color: '#64748B' }}>{rx.frequency}</div>
+                        {rx.instructionsVernacular && (
+                          <div style={{ fontSize: '11px', color: '#008B8B', marginTop: '2px' }}>{rx.instructionsVernacular}</div>
+                        )}
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setWhatsAppModalPatient({
+                            name: selectedPatientModal.name,
+                            vernacularName: selectedPatientModal.vernacular,
+                            phone: selectedPatientModal.phone || '+91-9XXX-XXX-001',
+                            cleanPhone: (selectedPatientModal.phone || '919000000001').replace(/[^0-9]/g, ''),
+                            age: selectedPatientModal.age,
+                            gender: selectedPatientModal.gender,
+                            abhaId: selectedPatientModal.abhaId,
+                            language: selectedPatientModal.language,
+                            langCode: selectedPatientModal.langCode || 'te'
+                          });
+                        }}
+                        style={{
+                          background: '#25D366',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '6px 12px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          flexShrink: 0
+                        }}
+                      >
+                        <Volume2 size={13} />
+                        <span>Play Audio-Rx</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Lab Reports with Status Chips */}
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  Laboratory & Diagnostic Reports
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {(selectedPatientModal.reports && selectedPatientModal.reports.length > 0 ? selectedPatientModal.reports : [
+                    { id: 'DEMO-LAB-01', title: 'Routine Metabolic Profile', result: 'All parameters normal', status: 'REVIEWED' }
+                  ]).map((rep, idx) => (
+                    <div key={rep.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', background: '#F8FAFC', borderRadius: '6px', fontSize: '12px' }}>
+                      <div>
+                        <strong>{rep.title}</strong>: {rep.result}
+                      </div>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: 800,
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        background: rep.status === 'REVIEWED' ? '#DCFCE7' : '#FEF3C7',
+                        color: rep.status === 'REVIEWED' ? '#15803D' : '#B45309'
+                      }}>
+                        {rep.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Allergies Notice */}
+              <div style={{ fontSize: '12px', color: '#DC2626', background: 'rgba(239, 68, 68, 0.08)', padding: '10px 12px', borderRadius: '8px' }}>
+                <strong>Allergy Sentinel:</strong> {selectedPatientModal.allergies}
+              </div>
             </div>
 
-            <div style={{ fontSize: '13px', color: '#1E293B', lineHeight: 1.5, marginBottom: '10px' }}>
-              <strong>Chief Complaint:</strong> {selectedPatientModal.chiefComplaint}
-            </div>
-
-            <div style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, marginBottom: '10px' }}>
-              <strong>Medical History:</strong> {selectedPatientModal.history}
-            </div>
-
-            <div style={{ fontSize: '12.5px', color: '#DC2626', background: 'rgba(239, 68, 68, 0.08)', padding: '10px', borderRadius: '8px', marginBottom: '16px' }}>
-              <strong>Allergy Sentinel:</strong> {selectedPatientModal.allergies}
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
+            {/* Modal Footer Actions */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #E2E8F0', flexWrap: 'wrap' }}>
               <button 
                 onClick={() => {
                   const pat = selectedPatientModal;
@@ -3589,14 +3780,35 @@ export default function DoctorPortal({
                   setActiveScribeSessionPatient(pat);
                 }}
                 className="btn-primary"
-                style={{ flex: 1, padding: '10px', fontSize: '13px' }}
+                style={{ flex: 1, minWidth: '180px', padding: '10px', fontSize: '12.5px', fontWeight: 750 }}
               >
                 Launch Ambient Voice Scribe
               </button>
+
+              <button 
+                onClick={() => showPlannedNotice('Start New Clinical Encounter')}
+                style={{
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  border: '1px solid #CBD5E1',
+                  background: '#F8FAFC',
+                  color: '#475569',
+                  fontSize: '12px',
+                  fontWeight: 750,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <span>Start New Encounter</span>
+                <span style={{ fontSize: '9px', background: '#E2E8F0', color: '#475569', padding: '2px 6px', borderRadius: '8px', fontWeight: 800 }}>PLANNED</span>
+              </button>
+
               <button 
                 onClick={() => setSelectedPatientModal(null)}
                 className="btn-outline"
-                style={{ padding: '10px 18px', fontSize: '13px' }}
+                style={{ padding: '10px 18px', fontSize: '12.5px' }}
               >
                 Close
               </button>
