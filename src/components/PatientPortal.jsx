@@ -1111,9 +1111,9 @@ export default function PatientPortal({
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {[
-                        { title: 'Chest X-Ray Report', date: '10 May 2025', icon: '🩻' },
-                        { title: 'Blood Test Report', date: '9 May 2025', icon: '🩸' },
-                        { title: 'Lung Function Test', date: '8 May 2025', icon: '🫁' }
+                        { title: 'Chest X-Ray Report', date: formatDemoDate(-3), icon: '🩻' },
+                        { title: 'Blood Test Report', date: formatDemoDate(-5), icon: '🩸' },
+                        { title: 'Lung Function Test', date: formatDemoDate(-7), icon: '🫁' }
                       ].map((rep, idx) => (
                         <div key={idx} style={{
                           display: 'flex',
@@ -4114,7 +4114,7 @@ export default function PatientPortal({
                     <span style={{ fontSize: '7px', color: '#94A3B8' }}>SCAN TO VERIFY</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
-                    ABDM Health Record Token: <strong>HRT-2025-9942</strong><br />
+                    ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
                     Encrypted with SHA-256 digital certificate.
                   </div>
                 </div>

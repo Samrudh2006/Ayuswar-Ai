@@ -4298,7 +4298,7 @@ export default function DoctorPortal({
                     <span style={{ fontSize: '7px', color: '#94A3B8' }}>SCAN TO VERIFY</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
-                    ABDM Health Record Token: <strong>HRT-2025-9942</strong><br />
+                    ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
                     Encrypted with SHA-256 digital certificate.
                   </div>
                 </div>
