@@ -210,13 +210,13 @@ export default function AbhaDigitalCard({
             </div>
             <div>
               <div style={{ fontSize: '15.5px', fontWeight: 850, letterSpacing: '-0.2px', color: '#ffffff' }}>
-                {isDoctorMode ? 'ABDM Healthcare Professional Registry' : 'Ayushman Bharat'}
+                {isDoctorMode ? 'Physician Health ID (Demo)' : 'Health ID (Demo)'}
               </div>
               <div style={{ fontSize: '11px', color: '#A5F3FC', fontWeight: 600 }}>
-                {isDoctorMode ? 'National Medical Commission • Govt. of India' : 'Digital Health Account'}
+                {isDoctorMode ? 'AyuSwar AI Clinician Demonstration Record' : 'AyuSwar AI Health Demonstration Record'}
               </div>
               <div style={{ fontSize: '9px', color: '#94A3B8' }}>
-                {isDoctorMode ? 'Ministry of Health & Family Welfare' : 'National Health Authority • Govt. of India'}
+                Sample data • Non-production prototype
               </div>
             </div>
           </div>
@@ -226,18 +226,18 @@ export default function AbhaDigitalCard({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            background: 'rgba(16, 185, 129, 0.22)',
-            border: '1px solid #10B981',
+            background: 'rgba(0, 210, 211, 0.18)',
+            border: '1px solid #00D2D3',
             borderRadius: '20px',
             padding: '4px 10px',
             fontSize: '10px',
             fontWeight: 800,
-            color: '#34D399',
+            color: '#A5F3FC',
             letterSpacing: '0.6px',
             textTransform: 'uppercase'
           }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 6px #34D399' }}></span>
-            <span>{isDoctorMode ? 'VERIFIED • NMC MD' : 'ACTIVE • VERIFIED'}</span>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#5EEAD4', boxShadow: '0 0 6px #5EEAD4' }}></span>
+            <span>{isDoctorMode ? 'DEMO • CLINICIAN RECORD' : 'DEMO • PATIENT RECORD'}</span>
           </div>
         </div>
 
@@ -454,16 +454,15 @@ export default function AbhaDigitalCard({
 
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#ffffff' }}>
-                    Ayushman Bharat
+                    Health Profile (Demo)
                   </div>
                   <div style={{ fontSize: '10px', color: '#67E8F9' }}>
-                    Digital Health Account
+                    Fictional Sample Record
                   </div>
                 </div>
 
-                {/* National Emblem Badge */}
-                <div style={{ fontSize: '16px', opacity: 0.9 }}>
-                  🏛️
+                <div style={{ fontSize: '12px', background: 'rgba(255,255,255,0.15)', padding: '2px 8px', borderRadius: '10px', color: '#E0F2FE', fontWeight: 700 }}>
+                  DEMO
                 </div>
               </div>
 

@@ -53,6 +53,7 @@ import { askAyuSwarBrain } from '../services/aiBrainService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
+import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 
 /**
  * PatientPortal Component — Complete Enterprise Citizen Healthcare Operating System
@@ -101,50 +102,25 @@ export default function PatientPortal({
     }
   ]);
 
-  // Multi-patient profiles available for switching
-  const availablePatients = [
-    {
-      patientName: 'Ananya Rao',
-      age: 28,
-      gender: 'Female',
-      language: 'Telugu',
-      abhaId: '91-4521-8932-1049',
-      condition: 'Asthma & Seasonal Allergy',
-      facility: 'Kurnool District Hospital'
-    },
-    {
-      patientName: 'Narayana Rao',
-      age: 58,
-      gender: 'Male',
-      language: 'Telugu',
-      abhaId: '91-8842-1920-5511',
-      condition: 'Type-2 Diabetes & Hypertension',
-      facility: 'Anantapur Community Health Centre'
-    },
-    {
-      patientName: 'Sunita Devi',
-      age: 42,
-      gender: 'Female',
-      language: 'Hindi',
-      abhaId: '91-3310-9082-4123',
-      condition: 'Post-Viral Bronchial Sensitivity',
-      facility: 'Warangal Rural PHC #09'
-    },
-    {
-      patientName: 'Aarav Kumar',
-      age: 8,
-      gender: 'Male',
-      language: 'Telugu / English',
-      abhaId: '91-7712-4409-6632',
-      condition: 'Pediatric Wheeze & Bronchospasm',
-      facility: 'Hyderabad Pediatric Center'
-    }
-  ];
+  // Multi-patient profiles available for switching - sourced directly from shared DEMO_PATIENTS
+  const availablePatients = DEMO_PATIENTS.map(dp => ({
+    patientName: dp.name,
+    age: dp.age,
+    gender: dp.genderLabel || (dp.gender === 'F' ? 'Female' : 'Male'),
+    language: dp.language,
+    abhaId: dp.abhaId,
+    condition: dp.primaryCondition,
+    facility: `${dp.village} Health Centre`,
+    phone: dp.phone,
+    vitalsHistory: dp.vitalsHistory,
+    reports: dp.reports,
+    prescriptions: dp.prescriptions
+  }));
 
   const assignedDoctor = patientProfile?.assignedDoctor || {
     doctorName: 'Dr. Priya Sharma, MD',
     specialty: 'Pulmonologist & Critical Care',
-    facility: 'Kurnool District Hospital'
+    facility: 'District Hospital OPD'
   };
 
   const familyListToDisplay = (patientProfile?.familyMembers && patientProfile.familyMembers.length > 0)
@@ -258,15 +234,16 @@ export default function PatientPortal({
     return () => clearInterval(interval);
   }, [isBreathingActive]);
 
-  const patientName = patientProfile?.patientName || 'Ramesh Patel';
-  const abhaId = patientProfile?.abhaId || '91-4521-8932-1049';
+  const patientName = patientProfile?.patientName || patientProfile?.name || DEMO_PATIENTS[0].name;
+  const abhaId = patientProfile?.abhaId || DEMO_PATIENTS[0].abhaId;
+  const activeDemoPatient = DEMO_PATIENTS.find(p => p.name === patientName || p.id === patientProfile?.id || p.abhaId === abhaId) || DEMO_PATIENTS[0];
 
-  // Dynamic Reactive Diagnostic Reports List
+  // Dynamic Reactive Diagnostic Reports List (Relative dates)
   const [reportsList, setReportsList] = useState(patientProfile?.reportsList || [
     {
       id: 1,
       title: 'Chest X-Ray Report',
-      date: '10 May 2025',
+      date: formatDemoDate(-3),
       icon: '🩻',
       doctor: assignedDoctor.doctorName,
       summary: 'Clear lung fields with no pneumonia or fluid buildup. Mild airway sensitivity.',
@@ -276,7 +253,7 @@ export default function PatientPortal({
     {
       id: 2,
       title: 'Complete Blood Count (CBC)',
-      date: '9 May 2025',
+      date: formatDemoDate(-4),
       icon: '🩸',
       doctor: 'Dr. Priya Sharma',
       summary: 'Hemoglobin: 12.4 g/dL (Good). White blood cells slightly raised indicating resolving seasonal cold.',
@@ -286,7 +263,7 @@ export default function PatientPortal({
     {
       id: 3,
       title: 'Pulmonary Spirometry Test',
-      date: '8 May 2025',
+      date: formatDemoDate(-7),
       icon: '𫁁',
       doctor: 'Dr. Priya Sharma',
       summary: 'Airway volume is 86% of predicted value, showing excellent response to your morning inhaler.',
@@ -298,7 +275,7 @@ export default function PatientPortal({
   // Upload Report Form State
   const [newReportTitle, setNewReportTitle] = useState('HbA1c & Fasting Blood Glucose');
   const [newReportDoctor, setNewReportDoctor] = useState('Dr. Priya Sharma');
-  const [newReportDate, setNewReportDate] = useState('11 May 2025');
+  const [newReportDate, setNewReportDate] = useState(formatDemoDate(0));
   const [newReportSummary, setNewReportSummary] = useState('HbA1c: 6.4% (Good Control). Fasting Blood Sugar: 104 mg/dL. Renal function intact.');
   const [newReportTelugu, setNewReportTelugu] = useState('మీ రక్తంలో చక్కెర స్థాయిలు అదుపులో ఉన్నాయి. హెచ్‌బీఏ1సి 6.4 శాతం ఉంది.');
   const [newReportHindi, setNewReportHindi] = useState('आपके खून में शुगर का स्तर नियंत्रण में है। दवाएं ठीक से काम कर रही हैं।');
@@ -824,7 +801,7 @@ export default function PatientPortal({
                     {patientName}
                   </div>
                   <div style={{ fontSize: '11px', color: '#008B8B', fontWeight: 650 }}>
-                    ABHA: {abhaId} • ABDM Verified Citizen
+                    Health ID: {abhaId} • Demo Profile
                   </div>
                 </div>
 
@@ -1314,58 +1291,143 @@ export default function PatientPortal({
           )}
 
           {/* ---------------------------------------------------------------------
-              TAB 2: MY HEALTH (OFFICIAL ABHA CARD & VITALS HISTORY)
+              TAB 2: MY HEALTH (HEALTH ID CARD & VITALS HISTORY)
               --------------------------------------------------------------------- */}
           {activeTab === 'my_health' && (
             <div>
               <div style={{ marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
-                  My Health Profile & ABHA Digital Card
-                </h2>
-                <p style={{ fontSize: '13px', color: '#64748B' }}>
-                  Official National Health Authority Ayushman Bharat Digital Mission (ABDM) record.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                    My Health Profile & Health ID Card
+                  </h2>
+                  <SampleDataChip />
+                </div>
+                <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
+                  Fictional patient health identifier and self-entered historical vitals.
                 </p>
               </div>
 
-              {/* Authentic ABHA Digital Smart Card + Mobile Dossier Inspector */}
-              <div style={{ marginBottom: '26px', maxWidth: '620px' }}>
-                <AbhaDigitalCard 
-                  patient={{
-                    patientName: patientName,
-                    vernacular: patientProfile?.vernacular || (patientName === 'Narayana Rao' ? 'నారాయణ రావు' : 'అనన్య రావు'),
-                    abhaAddress: `${patientName.toLowerCase().split(' ')[0]}@abdm`,
-                    abhaId: abhaId,
-                    dob: patientProfile?.dob || '14-08-1996',
-                    gender: patientProfile?.gender || 'Female',
-                    bloodGroup: patientProfile?.bloodGroup || 'O+ve',
-                    avatar: patientProfile?.avatar || '/assets/dr_ananya_avatar.jpg'
-                  }} 
-                />
+              {/* Honest Health ID (demo) Card */}
+              <div style={{ marginBottom: '24px', maxWidth: '580px' }}>
+                <div style={{
+                  background: 'linear-gradient(135deg, #0A2540 0%, #0F3B3B 55%, #006666 100%)',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  color: '#ffffff',
+                  boxShadow: '0 12px 32px rgba(10, 37, 64, 0.22)',
+                  border: '1.5px solid rgba(0, 210, 211, 0.3)',
+                  position: 'relative'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '16px', fontWeight: 850, letterSpacing: '-0.2px' }}>Health ID (demo)</span>
+                        <SampleDataChip style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.3)' }} />
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#A5F3FC', marginTop: '2px' }}>
+                        AyuSwar AI Fictional Health Demonstration Record
+                      </div>
+                    </div>
+                    <div style={{
+                      fontSize: '10px',
+                      fontWeight: 800,
+                      background: 'rgba(255,255,255,0.12)',
+                      border: '1px solid rgba(255,255,255,0.25)',
+                      borderRadius: '12px',
+                      padding: '3px 9px',
+                      color: '#E0F2FE'
+                    }}>
+                      DEMO ONLY
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '18px' }}>
+                    <div style={{
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #00D2D3 0%, #008B8B 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '30px',
+                      flexShrink: 0
+                    }}>
+                      {activeDemoPatient?.avatar || '👤'}
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '18px', fontWeight: 900, color: '#ffffff' }}>
+                        {activeDemoPatient?.name || patientName}
+                      </div>
+                      <div style={{ fontSize: '12.5px', color: '#93C5FD', marginTop: '2px' }}>
+                        Age: {activeDemoPatient?.age || 58} y • Gender: {activeDemoPatient?.genderLabel || 'Female'} • Blood: {activeDemoPatient?.bloodGroup || 'B+'}
+                      </div>
+                      <div style={{ fontSize: '15px', fontWeight: 800, fontFamily: 'monospace', color: '#5EEAD4', marginTop: '4px' }}>
+                        {activeDemoPatient?.abhaId || abhaId}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ABDM Planned Line */}
+                  <div style={{
+                    fontSize: '11px',
+                    color: '#CBD5E1',
+                    background: 'rgba(0,0,0,0.25)',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: '1px dashed rgba(255,255,255,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '6px'
+                  }}>
+                    <span>ABDM / ABHA official government network linking: <strong>PLANNED</strong></span>
+                    <span style={{ fontSize: '10px', color: '#94A3B8' }}>Non-production demonstration</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Vitals Tracker */}
+              {/* Vitals Tracker (Self-entered Demo Values) */}
               <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
-                  Longitudinal Vitals Tracker
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                  <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '12px', color: '#64748B' }}>Blood Pressure (30 Day Trend)</div>
-                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', margin: '6px 0' }}>116 / 78 mmHg</div>
-                    <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>Optimal Range (JNC-8)</span>
-                  </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+                    Longitudinal Vitals Tracker
+                  </h3>
+                  <span style={{ fontSize: '11px', color: '#64748B', background: '#F1F5F9', padding: '4px 10px', borderRadius: '10px', fontWeight: 700 }}>
+                    Self-entered demo values - not measured by this app.
+                  </span>
+                </div>
+                <p style={{ fontSize: '12px', color: '#64748B', marginBottom: '16px' }}>
+                  Historical patient recordings from community health worker visits. Computed from logged record entries.
+                </p>
 
-                  <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '12px', color: '#64748B' }}>Fasting Blood Sugar (RBS)</div>
-                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', margin: '6px 0' }}>94 mg/dL</div>
-                    <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>Normal Fasting Range</span>
-                  </div>
+                {/* Vitals History Table / Cards */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '18px' }}>
+                  {(activeDemoPatient?.vitalsHistory || [
+                    { offsetDays: 0, bp: '132/84 mmHg', pulse: '76 bpm', weight: '63 kg', spo2: '98%' },
+                    { offsetDays: -14, bp: '138/88 mmHg', pulse: '78 bpm', weight: '63.5 kg', spo2: '97%' }
+                  ]).map((v, i) => (
+                    <div key={i} style={{ background: '#F8FAFC', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '11px', color: '#008B8B', fontWeight: 800, marginBottom: '6px' }}>
+                        {formatDemoDate(v.offsetDays || 0)} ({getRelativeDaysLabel(v.offsetDays || 0)})
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#0A2540', marginBottom: '3px' }}>
+                        BP: <strong>{v.bp}</strong>
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#475569', marginBottom: '3px' }}>
+                        Pulse: <strong>{v.pulse}</strong> • SpO2: <strong>{v.spo2}</strong>
+                      </div>
+                      <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                        Weight: <strong>{v.weight}</strong>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                  <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '12px', color: '#64748B' }}>Resting Heart Rate</div>
-                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', margin: '6px 0' }}>72 bpm</div>
-                    <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>Normal Sinus Rhythm</span>
-                  </div>
+                <div style={{ fontSize: '11px', color: '#94A3B8', fontStyle: 'italic' }}>
+                  Note: Health parameters reflect demo simulation data. Always seek professional physician evaluation for clinical readings.
                 </div>
               </div>
             </div>
@@ -1814,11 +1876,11 @@ export default function PatientPortal({
                           <span style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>{rep.title}</span>
                           {rep.isNew && (
                             <span style={{ fontSize: '10px', background: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
-                              ✨ AI Verified
+                              ✨ REVIEWED
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#64748B' }}>Completed on {rep.date} • Verified by {rep.doctor || 'Dr. Priya Sharma'}</div>
+                        <div style={{ fontSize: '12px', color: '#64748B' }}>Completed on {rep.date} • Reviewed by {rep.doctor || 'Dr. Priya Sharma'}</div>
                         <div style={{ fontSize: '12.5px', color: '#1E293B', marginTop: '4px', maxWidth: '540px' }}>{rep.summary}</div>
                       </div>
                     </div>
@@ -2675,19 +2737,19 @@ export default function PatientPortal({
                   <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0', color: '#FFFFFF' }}>
                     Daily Health Goals & Longitudinal Wellness Streaks
                   </h2>
-                  <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
-                    Clinically calibrated biometric targets for <strong>{patientProfile?.condition || 'Asthma & Chronic Care'}</strong>. Real-time synchronisation with ABDM Personal Health Records (PHR: PLANNED).
+                  <p style={{ fontSize: '13px', color: '#F1F5F9', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
+                    Self-marked daily wellness progress and manual habit tracking for <strong>{activeDemoPatient?.primaryCondition || patientProfile?.condition || 'Asthma & Chronic Care'}</strong>. Self-entered records; no automatic sensor tracking.
                   </p>
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.15)' }}>
-                    <div style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 650 }}>Daily Compliance <span style={{ fontSize: '9px', opacity: 0.8 }}>(sample)</span></div>
+                  <div style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
+                    <div style={{ fontSize: '11px', color: '#F8FAFC', fontWeight: 700 }}>Daily Compliance <span style={{ fontSize: '9px', opacity: 0.9 }}>(sample)</span></div>
                     <div style={{ fontSize: '22px', fontWeight: 850, color: '#34D399' }}>94%</div>
                   </div>
-                  <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.15)' }}>
-                    <div style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 650 }}>Active Streak</div>
-                    <div style={{ fontSize: '22px', fontWeight: 850, color: '#FBBF24' }}>{adherenceStreak} Days 🔥</div>
+                  <div style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)', padding: '12px 18px', borderRadius: '14px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.3)' }}>
+                    <div style={{ fontSize: '11px', color: '#F8FAFC', fontWeight: 700 }}>Active Streak</div>
+                    <div style={{ fontSize: '22px', fontWeight: 850, color: '#FDE047' }}>{adherenceStreak} Days 🔥</div>
                   </div>
                 </div>
               </div>
@@ -3886,7 +3948,7 @@ export default function PatientPortal({
                   }}>
                     <div style={{ fontSize: '10px', color: '#008B8B', fontWeight: 800 }}>CLASS-3 DIGITAL SIGNATURE (DSC)</div>
                     <div style={{ fontSize: '12.5px', fontWeight: 900, color: '#0A2540' }}>{assignedDoctor.doctorName}</div>
-                    <div style={{ fontSize: '10px', color: '#64748B' }}>MCI Verified Attending Doctor</div>
+                    <div style={{ fontSize: '10px', color: '#64748B' }}>Attending Physician (Demo)</div>
                   </div>
                   <div style={{ fontSize: '10px', color: '#94A3B8' }}>Generated via AyuSwar Ambient Clinical AI</div>
                 </div>

@@ -1964,7 +1964,6 @@ export default function DoctorPortal({
                     );
                   })}
                 </div>
-                </div>
               </div>
             </div>
           )}
