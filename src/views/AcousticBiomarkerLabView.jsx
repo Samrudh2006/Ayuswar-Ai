@@ -17,11 +17,13 @@ import {
   BarChart2,
   Key,
   CheckCircle2,
-  FileAudio
+  FileAudio,
+  Cpu
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
 import { speechService } from '../services/indicSpeechService';
+import { reasonAcousticBiomarkerWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
@@ -51,6 +53,20 @@ export default function AcousticBiomarkerLabView() {
     spectralCentroid: 1200
   });
   const [analysisResult, setAnalysisResult] = useState(() => analyzeAcousticSignals(dspMetrics));
+  const [evonAcousticResult, setEvonAcousticResult] = useState(null);
+  const [isEvonAcousticReasoning, setIsEvonAcousticReasoning] = useState(false);
+
+  const handleRunEvonAcousticReasoning = async () => {
+    setIsEvonAcousticReasoning(true);
+    try {
+      const res = await reasonAcousticBiomarkerWithEvon(dspMetrics, 'Patient phonation test');
+      setEvonAcousticResult(res);
+    } catch (err) {
+      console.warn('Evon acoustic reasoning error:', err);
+    } finally {
+      setIsEvonAcousticReasoning(false);
+    }
+  };
 
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -867,6 +883,102 @@ export default function AcousticBiomarkerLabView() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Gnani Evon (30B-A3B) Acoustic-Clinical Correlation Reasoner */}
+          <div style={{
+            background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+            borderRadius: '16px',
+            border: '1.5px solid #00F5D4',
+            padding: '20px',
+            color: '#F8FAFC',
+            boxShadow: '0 8px 24px rgba(0, 245, 212, 0.12)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#0A2540'
+                }}>
+                  <Cpu size={18} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Gnani Evon (30B-A3B)</span>
+                    <span style={{ fontSize: '9px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
+                      ACOUSTIC-CLINICAL REASONER
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
+                    Mixture-of-Experts Sovereign Indic Voice Physics Synthesis
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleRunEvonAcousticReasoning}
+                disabled={isEvonAcousticReasoning}
+                style={{
+                  background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#0A2540',
+                  padding: '7px 14px',
+                  fontSize: '11.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <Sparkles size={13} />
+                <span>{isEvonAcousticReasoning ? 'Synthesizing...' : 'Synthesize Evon 30B'}</span>
+              </button>
+            </div>
+
+            {evonAcousticResult ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
+                {evonAcousticResult.thoughtTrace && (
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.4)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '8px',
+                    padding: '10px 12px',
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    color: '#93C5FD',
+                    lineHeight: '1.5'
+                  }}>
+                    <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '2px', fontSize: '9.5px', textTransform: 'uppercase' }}>
+                      &lt;reasoning&gt; Acoustic Chain-of-Thought:
+                    </div>
+                    {evonAcousticResult.thoughtTrace}
+                  </div>
+                )}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '10px',
+                  padding: '12px 14px',
+                  fontSize: '12px',
+                  color: '#E2E8F0',
+                  lineHeight: '1.55'
+                }}>
+                  {evonAcousticResult.finalAnswer}
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '6px', lineHeight: '1.5' }}>
+                Tap "Synthesize Evon 30B" to run Gnani's 30B parameter Mamba+MoE reasoning model across current physical metrics (F0: {dspMetrics.pitchF0}Hz, Jitter: {dspMetrics.jitterPct}%, Shimmer: {dspMetrics.shimmerPct}%, HNR: {dspMetrics.hnrDb}dB).
+              </div>
+            )}
           </div>
 
           <div style={{ background: '#F8FAFC', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '18px', fontSize: '12px', color: '#475569', lineHeight: 1.6 }}>

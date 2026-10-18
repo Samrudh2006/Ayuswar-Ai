@@ -9,7 +9,16 @@
  *   immediately to official emergency services (112 / 108).
  */
 
+import { queryEvonInference, EVON_MODEL_METADATA } from './gnaniEvonService';
+
 export const AI_PROVIDERS = [
+  { 
+    id: 'gnani_evon_30b', 
+    name: 'Gnani Evon (30B-A3B Sovereign Indic Reasoning / Hugging Face)', 
+    model: 'gnani/gnani-evon-v3.3-30B-A3B',
+    badge: 'Gnani.ai Official',
+    description: '30B Mamba+MoE Indic foundation model on Hugging Face with 128k context and native Indic tokenizer.'
+  },
   { id: 'local_offline', name: 'Heuristic Rule-Based Demonstrator (Local Fallback)', model: 'Rule-Based-Indic-Demo' },
   { id: 'gemini_free', name: 'Google Gemini Free Tier (gemini-1.5-flash / 2.5-flash)', model: 'gemini-1.5-flash' },
   { id: 'groq_opensource', name: 'Groq Cloud (Llama-3-8B-Instant / Open Source)', model: 'llama-3.1-8b-instant' },
@@ -19,12 +28,12 @@ export const AI_PROVIDERS = [
 
 export function getAiConfig() {
   try {
-    const provider = localStorage.getItem('ayuswar_ai_provider') || 'local_offline';
-    const apiKey = localStorage.getItem('ayuswar_api_key') || '';
+    const provider = localStorage.getItem('ayuswar_ai_provider') || 'gnani_evon_30b';
+    const apiKey = localStorage.getItem('ayuswar_api_key') || localStorage.getItem('ayuswar_hf_token') || '';
     const customEndpoint = localStorage.getItem('ayuswar_custom_endpoint') || '';
     return { provider, apiKey, customEndpoint };
   } catch {
-    return { provider: 'local_offline', apiKey: '', customEndpoint: '' };
+    return { provider: 'gnani_evon_30b', apiKey: '', customEndpoint: '' };
   }
 }
 
@@ -32,6 +41,9 @@ export function saveAiConfig(provider, apiKey, customEndpoint = '') {
   try {
     localStorage.setItem('ayuswar_ai_provider', provider);
     localStorage.setItem('ayuswar_api_key', apiKey.trim());
+    if (provider === 'gnani_evon_30b') {
+      localStorage.setItem('ayuswar_hf_token', apiKey.trim());
+    }
     localStorage.setItem('ayuswar_custom_endpoint', customEndpoint.trim());
     return true;
   } catch {
@@ -50,8 +62,18 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   const { provider, apiKey } = getAiConfig();
 
-  // Try live API if user configured their own key
-  if (apiKey && provider !== 'local_offline') {
+  // 1. Gnani Evon 30B Sovereign Indic Reasoning
+  if (provider === 'gnani_evon_30b') {
+    try {
+      const response = await callGnaniEvonApi(cleanPrompt, role, context);
+      if (response) return response;
+    } catch (err) {
+      console.warn("Gnani Evon API encountered issue, using safe demonstration response:", err);
+    }
+  }
+
+  // 2. Other configured API providers if key is supplied
+  if (apiKey && provider !== 'local_offline' && provider !== 'gnani_evon_30b') {
     try {
       if (provider === 'gemini_free') {
         const response = await callGeminiApi(cleanPrompt, apiKey, role, context);
@@ -70,6 +92,19 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   // Safe heuristic conversational demonstration
   return generateSafeDemonstrationResponse(cleanPrompt, role, context);
+}
+
+async function callGnaniEvonApi(prompt, role, context) {
+  const systemPrompt = getSystemPromptForRole(role, context);
+  const taskType = role === 'doctor' ? 'soap_scribe' : (role === 'patient' ? 'symptom_triage' : 'general_guidance');
+  const result = await queryEvonInference(prompt, systemPrompt, { task: taskType, maxTokens: 400 });
+  if (result && result.finalAnswer) {
+    if (result.thoughtTrace) {
+      return `🧠 [Gnani Evon 30B Reasoning: ${result.thoughtTrace.slice(0, 120)}...]\n\n${result.finalAnswer}`;
+    }
+    return result.finalAnswer;
+  }
+  return null;
 }
 
 async function callGeminiApi(prompt, apiKey, role, context) {

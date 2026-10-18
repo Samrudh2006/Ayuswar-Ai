@@ -17,6 +17,12 @@ import { speechService, INDIC_LANGUAGES } from '../services/indicSpeechService';
 import { CLINICAL_DISEASE_DATASET, REGIONAL_COLLOQUIAL_DICTIONARY, predictClinicalDiagnosis } from '../data/kaggleClinicalDataset';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
 import { askAyuSwarBrain } from '../services/aiBrainService';
+import { 
+  calculateIndicTokenSavings, 
+  reasonEmergencyTriageWithEvon, 
+  reasonClinicalNoteWithEvon, 
+  EVON_MODEL_METADATA 
+} from '../services/gnaniEvonService';
 
 export default function ClinicalBenchmarkView() {
   const { isDemoMode } = useApp();
@@ -365,6 +371,70 @@ export default function ClinicalBenchmarkView() {
           throw new Error(`isDemoMode state is not a boolean: ${typeof isDemoMode}`);
         }
         return `isDemoMode state flag is valid boolean (${isDemoMode}).`;
+      }
+    },
+
+    // DOMAIN 6: Gnani Evon 30B Sovereign Indic Reasoning Foundation Model
+    {
+      id: 'TC-EVON-01',
+      domain: 'Gnani Evon 30B',
+      title: 'Evon 30B Indic Tokenizer Efficiency Benchmark',
+      desc: 'Asserts that Gnani Evon native Indic tokenizer reduces Telugu token count by >= 45% vs standard Western byte-fallback models.',
+      run: async () => {
+        const teluguEmergencyText = 'నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు';
+        const metrics = calculateIndicTokenSavings(teluguEmergencyText, 'te');
+        if (!metrics || metrics.savedPct < 45) {
+          throw new Error(`Expected >= 45% language tax reduction, got ${metrics?.savedPct}%`);
+        }
+        return `Gnani Evon Tokenizer: ${metrics.evonTokens} tokens vs ~${metrics.westernTokens} Western tokens (${metrics.savedPct}% language tax reduction, ${metrics.languageTaxMultiplier} compression).`;
+      }
+    },
+    {
+      id: 'TC-EVON-02',
+      domain: 'Gnani Evon 30B',
+      title: 'Evon 30B Telugu Acute Coronary STEMI Triage Reasoning',
+      desc: 'Asserts that Evon 30B classifies Telugu cardiac distress as RED triage, assigns ICD-10 I21.9, and produces an auditable <reasoning> CoT.',
+      run: async () => {
+        const transcript = 'నాకు తీవ్రమైన గుండె నొప్పిగా ఉంది, చెమటలు పడుతున్నాయి, శ్వాస ఆడటం లేదు';
+        const res = await reasonEmergencyTriageWithEvon(transcript, { language: 'te' });
+        if (res.triageLevel !== 'RED') {
+          throw new Error(`Expected RED triage level, got ${res.triageLevel}`);
+        }
+        if (!res.thoughtTrace || res.thoughtTrace.length < 20) {
+          throw new Error('Missing auditable clinical <reasoning> Chain-of-Thought trace.');
+        }
+        return `Evon 30B Triage: ${res.triageLevel} (${res.suspectedCondition}) with valid CoT trace.`;
+      }
+    },
+    {
+      id: 'TC-EVON-03',
+      domain: 'Gnani Evon 30B',
+      title: 'Evon 30B Hindi Pediatric Airway Stridor Triage Reasoning',
+      desc: 'Asserts that Evon 30B identifies pediatric respiratory distress in Hindi, assigns RED category, and generates upright positioning guidance.',
+      run: async () => {
+        const transcript = 'बच्चे की सांस फूल रही है, पसली चल रही है और होंठ नीले पड़ रहे हैं';
+        const res = await reasonEmergencyTriageWithEvon(transcript, { language: 'hi' });
+        if (res.triageLevel !== 'RED') {
+          throw new Error(`Expected RED pediatric triage, got ${res.triageLevel}`);
+        }
+        return `Evon 30B Pediatric Triage: ${res.triageLevel} (${res.suspectedCondition}).`;
+      }
+    },
+    {
+      id: 'TC-EVON-04',
+      domain: 'Gnani Evon 30B',
+      title: 'Evon 30B Outpatient SOAP Note & Vernacular Rx Extraction',
+      desc: 'Asserts that Evon 30B extracts clinical SOAP notes and native spoken Telugu prescription from consultation dialogue.',
+      run: async () => {
+        const dialogue = 'డాక్టర్: గుండెల్లో దడ ఎలా ఉంది? రోగి: మెట్లు ఎక్కితే ఆయాసంగా ఉంది డాక్టర్.';
+        const res = await reasonClinicalNoteWithEvon(dialogue, { name: 'Demo Patient', language: 'te' });
+        if (!res.finalAnswer || !res.finalAnswer.includes('SOAP')) {
+          throw new Error('Evon did not return structured SOAP format.');
+        }
+        if (!res.vernacularSummary?.te) {
+          throw new Error('Evon did not return vernacular Telugu summary.');
+        }
+        return `Evon 30B SOAP: Extracted structured clinical notes + Telugu spoken Rx draft.`;
       }
     }
   ];

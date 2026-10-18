@@ -24,9 +24,11 @@ import {
   PhoneCall,
   Play,
   Pause,
-  RotateCcw
+  RotateCcw,
+  Cpu
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
+import { queryEvonInference, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -274,8 +276,8 @@ export default function SanjivaniEmergencyAssistant({
     );
   };
 
-  // 10. INTERACTIVE USER PROMPT IN CHAT (Pluggable for external AI backend)
-  const handleSendMessage = (e) => {
+  // 10. INTERACTIVE USER PROMPT IN CHAT (Powered by Gnani Evon 30B Sovereign Model)
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputQuestion.trim()) return;
 
@@ -283,22 +285,22 @@ export default function SanjivaniEmergencyAssistant({
     setInputQuestion('');
     addCopilotEvent('user', '💬 Operator Query', q);
 
-    // Dynamic, clinical response generation based on active telemetry
-    setTimeout(() => {
-      let reply = `Field Protocol: Keep patient resting comfortably with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`;
-      const lq = q.toLowerCase();
-      if (lq.includes('cpr') || lq.includes('compress') || lq.includes('heart')) {
-        reply = 'AHA 2026 Guidelines: Center of chest, 2-inch depth, 110 beats/min rate. Follow the 110 BPM Metronome button above. Do not pause compressions.';
-      } else if (lq.includes('driver') || lq.includes('eta') || lq.includes('ambulance') || lq.includes('where')) {
-        reply = `Ambulance A-12 (Driver: Rajesh Meena, Tel: +91 94401 22108) is running code-3 sirens at 46 km/h. Estimated arrival in ${selectedHospital?.etaMinutes || 3} mins.`;
-      } else if (lq.includes('hospital') || lq.includes('bed') || lq.includes('icu') || lq.includes('cath lab')) {
-        reply = `${selectedHospital?.name} has ${selectedHospital?.bedsAvailable || 8} available emergency beds with 24x7 Cath Lab and Level-1/2 Trauma accreditation.`;
-      } else if (lq.includes('breath') || lq.includes('oxygen') || lq.includes('choke')) {
-        reply = 'Ensure patient is in semi-fowler upright position. Loosen all clothing around neck. A-12 is equipped with portable oxygen ventilator.';
-      }
+    try {
+      const systemInstruction = 
+        `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
+        `Respond with concise, authoritative life-safety protocol guidance. ` +
+        `Reference active telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'} with ${selectedHospital?.bedsAvailable || 8} beds.`;
 
-      addCopilotEvent('ai', '🤖 Copilot Clinical Reasoning', reply);
-    }, 400);
+      const evonResult = await queryEvonInference(q, systemInstruction, { task: 'emergency_copilot', maxTokens: 300 });
+
+      let reasoningTrace = evonResult.thoughtTrace ? `\n\n<reasoning>\n${evonResult.thoughtTrace}\n</reasoning>` : '';
+      let replyText = (evonResult.finalAnswer || evonResult.raw || 'Field Protocol: Keep patient resting with open airway.').trim();
+
+      addCopilotEvent('ai', '🧠 Gnani Evon 30B Clinical Reasoning', `${replyText}${reasoningTrace}`);
+    } catch (err) {
+      console.warn('Evon copilot reasoning fallback:', err);
+      addCopilotEvent('ai', '🤖 Copilot Clinical Protocol', `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`);
+    }
   };
 
   // If collapsed, render big clickable circular logo floating assistant with active green dot

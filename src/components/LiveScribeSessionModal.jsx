@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
+import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 
 /**
  * LiveScribeSessionModal Component
@@ -53,6 +54,9 @@ export default function LiveScribeSessionModal({
   const [isRxSigned, setIsRxSigned] = useState(false);
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
   const [liveTranscriptInterim, setLiveTranscriptInterim] = useState('');
+  const [evonReasoning, setEvonReasoning] = useState(null);
+  const [isReasoningWithEvon, setIsReasoningWithEvon] = useState(false);
+  const [showEvonDrawer, setShowEvonDrawer] = useState(false);
 
   const dialogueIntervalRef = useRef(null);
   const micIntervalRef = useRef(null);
@@ -180,6 +184,21 @@ export default function LiveScribeSessionModal({
     };
   }, [isRecording, micMode]);
 
+  const handleRunEvonReasoning = async () => {
+    setIsReasoningWithEvon(true);
+    const transcriptText = dialogueList.map(d => `${d.speaker}: ${d.text}`).join('\n') || 
+      'నమస్కారం డాక్టర్, 4 రోజుల నుంచి ఛాతీలో బరువుగా ఉంది, మెట్లు ఎక్కితే ఆయాసం వస్తోంది.';
+    try {
+      const res = await reasonClinicalNoteWithEvon(transcriptText, patientData);
+      setEvonReasoning(res);
+      setShowEvonDrawer(true);
+    } catch (err) {
+      console.warn('Evon reasoning error:', err);
+    } finally {
+      setIsReasoningWithEvon(false);
+    }
+  };
+
   const handleSignPrescription = () => {
     setIsSynthesizingRx(true);
     setTimeout(() => {
@@ -304,6 +323,30 @@ export default function LiveScribeSessionModal({
                 <span>🎙️ Live Laptop Mic</span>
               </button>
             </div>
+
+            {/* Gnani Evon 30B SOAP Reasoner Action */}
+            <button
+              onClick={handleRunEvonReasoning}
+              disabled={isReasoningWithEvon}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                border: '1px solid #00F5D4',
+                color: '#00F5D4',
+                fontSize: '11.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 0 12px rgba(0,245,212,0.25)'
+              }}
+              title="Run Gnani Evon 30B Sovereign Indic Clinical SOAP reasoning on conversation"
+            >
+              <Cpu size={13} />
+              <span>{isReasoningWithEvon ? 'Evon Reasoning...' : '🧠 Evon 30B SOAP'}</span>
+            </button>
 
             <button
               onClick={() => setIsRecording(!isRecording)}
@@ -649,6 +692,186 @@ export default function LiveScribeSessionModal({
           </div>
         </div>
       </div>
+
+      {/* Gnani Evon 30B SOAP Clinical Reasoning Drawer */}
+      {showEvonDrawer && evonReasoning && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(2, 6, 23, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100000,
+          padding: '20px'
+        }}>
+          <div style={{
+            width: '680px',
+            maxWidth: '95vw',
+            maxHeight: '90vh',
+            background: '#0F172A',
+            border: '1.5px solid #00F5D4',
+            borderRadius: '20px',
+            boxShadow: '0 25px 60px rgba(0, 245, 212, 0.25)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            color: '#F8FAFC'
+          }}>
+            {/* Drawer Header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '16px 22px',
+              borderBottom: '1px solid #1E293B',
+              background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#0A2540'
+                }}>
+                  <Cpu size={18} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Gnani Evon (30B-A3B) Clinical Scribe</span>
+                    <span style={{ fontSize: '9.5px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
+                      MAMBA+MOE HYBRID
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>
+                    Sovereign Indic Clinical Reasoning Foundation Model
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowEvonDrawer(false)}
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  border: 'none',
+                  color: '#94A3B8',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Drawer Content */}
+            <div style={{ padding: '20px 22px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Token Efficiency Banner */}
+              {evonReasoning.tokenMetrics && (
+                <div style={{
+                  background: 'rgba(0, 245, 212, 0.08)',
+                  border: '1px solid rgba(0, 245, 212, 0.3)',
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '12px'
+                }}>
+                  <span style={{ color: '#00F5D4', fontWeight: 800 }}>
+                    ⚡ Indic Token Efficiency:
+                  </span>
+                  <span style={{ color: '#E2E8F0' }}>
+                    <strong>{evonReasoning.tokenMetrics.evonTokens} Evon tokens</strong> vs ~{evonReasoning.tokenMetrics.westernTokens} Western tokens (<strong>{evonReasoning.tokenMetrics.savedPct}% language tax reduction</strong>)
+                  </span>
+                </div>
+              )}
+
+              {/* Chain-of-Thought Reasoning */}
+              {evonReasoning.thoughtTrace && (
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                    Clinical Chain-of-Thought (&lt;reasoning&gt; trace):
+                  </div>
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.4)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '10px',
+                    padding: '12px 14px',
+                    fontFamily: 'monospace',
+                    fontSize: '11.5px',
+                    color: '#CBD5E1',
+                    lineHeight: '1.6',
+                    whiteSpace: 'pre-line'
+                  }}>
+                    {evonReasoning.thoughtTrace}
+                  </div>
+                </div>
+              )}
+
+              {/* Structured SOAP Notes */}
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#00F5D4', textTransform: 'uppercase', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                  Extracted SOAP Note:
+                </div>
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '10px',
+                  padding: '14px 16px',
+                  fontSize: '12.5px',
+                  lineHeight: '1.65',
+                  color: '#F1F5F9',
+                  whiteSpace: 'pre-line'
+                }}>
+                  {evonReasoning.finalAnswer}
+                </div>
+              </div>
+            </div>
+
+            {/* Drawer Footer */}
+            <div style={{
+              padding: '14px 22px',
+              borderTop: '1px solid #1E293B',
+              background: '#0F172A',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span style={{ fontSize: '11px', color: '#64748B' }}>
+                ABDM Compliant Clinical Scribe Draft · Requires Attending Signature
+              </span>
+              <button
+                onClick={() => setShowEvonDrawer(false)}
+                style={{
+                  background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 18px',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                Done / Apply to e-Rx
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Sub-modal: WhatsApp Audio-Rx */}
       <WhatsAppAudioRxModal

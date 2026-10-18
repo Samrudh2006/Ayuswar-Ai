@@ -1232,13 +1232,17 @@ export default function FloatingAssistant({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                     <label style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540' }}>
-                      {selectedProvider === 'gemini_free' ? 'Google Gemini API Key (Free):' : 'API Key / Token:'}
+                      {selectedProvider === 'gnani_evon_30b' 
+                        ? 'Hugging Face Token for Evon 30B (Optional):' 
+                        : (selectedProvider === 'gemini_free' ? 'Google Gemini API Key (Free):' : 'API Key / Token:')}
                     </label>
-                    <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>Free Tier Supported</span>
+                    <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>
+                      {selectedProvider === 'gnani_evon_30b' ? 'Free / Serverless HF' : 'Free Tier Supported'}
+                    </span>
                   </div>
                   <input
                     type="password"
-                    placeholder="Paste AI API Key here..."
+                    placeholder={selectedProvider === 'gnani_evon_30b' ? "Paste Hugging Face Token (hf_...) or leave blank for local Evon engine" : "Paste AI API Key here..."}
                     value={apiKeyInput}
                     onChange={(e) => setApiKeyInput(e.target.value)}
                     style={{
@@ -1252,21 +1256,27 @@ export default function FloatingAssistant({
                     }}
                   />
                   <div style={{ fontSize: '10.5px', color: '#64748B', marginTop: '4px' }}>
-                    🔒 Key stored securely in your browser's local memory. Never sent to third parties.
+                    {selectedProvider === 'gnani_evon_30b'
+                      ? '🔒 If blank, AyuSwar runs the Sovereign Evon 30B CoT engine in-situ with zero downtime.'
+                      : '🔒 Key stored securely in your browser\'s local memory. Never sent to third parties.'}
                   </div>
                 </div>
               )}
 
               <div style={{
-                background: selectedProvider === 'local_offline' ? '#ECFDF5' : '#F0F9FF',
-                border: selectedProvider === 'local_offline' ? '1px solid #A7F3D0' : '1px solid #BAE6FD',
+                background: selectedProvider === 'gnani_evon_30b' ? '#F0FDFA' : (selectedProvider === 'local_offline' ? '#ECFDF5' : '#F0F9FF'),
+                border: selectedProvider === 'gnani_evon_30b' ? '1.5px solid #00F5D4' : (selectedProvider === 'local_offline' ? '1px solid #A7F3D0' : '1px solid #BAE6FD'),
                 borderRadius: '10px',
                 padding: '10px 14px',
                 fontSize: '12px',
-                color: selectedProvider === 'local_offline' ? '#065F46' : '#0369A1',
+                color: selectedProvider === 'gnani_evon_30b' ? '#0F766E' : (selectedProvider === 'local_offline' ? '#065F46' : '#0369A1'),
                 lineHeight: 1.45
               }}>
-                {selectedProvider === 'local_offline' ? (
+                {selectedProvider === 'gnani_evon_30b' ? (
+                  <>
+                    🧠 <strong>Gnani Evon (30B-A3B) Active:</strong> Official Gnani foundation model on Hugging Face (<code>gnani/gnani-evon-v3.3-30B-A3B</code>). Hybrid Mamba+MoE architecture (32B total, ~3.5B active/token) with 128k context and native Indic tokenizer that cuts the "language tax" by 50–65%.
+                  </>
+                ) : selectedProvider === 'local_offline' ? (
                   <>
                     ✅ <strong>Autonomous Local Indic Engine Active (SIMULATION):</strong> Uses AyuSwar's built-in Indic Clinical Ontology & Triage Rule Engine. No external API keys required.
                   </>

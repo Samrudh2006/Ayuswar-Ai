@@ -11,7 +11,11 @@ import {
   Activity, 
   MapPin, 
   FileText, 
-  ExternalLink 
+  ExternalLink,
+  Cpu,
+  Sparkles,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { 
@@ -31,6 +35,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const [dispatchComplete, setDispatchComplete] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [cprMetronomeActive, setCprMetronomeActive] = useState(false);
+  const [showEvonTrace, setShowEvonTrace] = useState(true);
 
   const cprIntervalRef = useRef(null);
 
@@ -348,8 +353,108 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
 
             {/* Vernacular First-Aid Callout */}
             {triageResult.firstAidVernacular && (
-              <div style={{ background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: '10px', padding: '12px 14px', fontSize: '12.5px', color: '#115E59' }}>
+              <div style={{ background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: '10px', padding: '12px 14px', fontSize: '12.5px', color: '#115E59', marginBottom: '14px' }}>
                 <strong>తెలుగు సూచన:</strong> {triageResult.firstAidVernacular.te}
+              </div>
+            )}
+
+            {/* Gnani Evon 30B Sovereign Indic Clinical Reasoner Block */}
+            {triageResult.evonReasoning && (
+              <div style={{
+                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                borderRadius: '12px',
+                border: '1px solid #334155',
+                padding: '16px',
+                color: '#F8FAFC'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '6px',
+                      background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#0A2540'
+                    }}>
+                      <Cpu size={15} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>Gnani Evon (30B-A3B)</span>
+                        <span style={{ fontSize: '9px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
+                          GNANI SOVEREIGN MODEL
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
+                        Mamba+MoE Indic Clinical Reasoner · Hugging Face
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setShowEvonTrace(!showEvonTrace)}
+                    style={{
+                      background: 'rgba(255,255,255,0.08)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      borderRadius: '6px',
+                      color: '#E2E8F0',
+                      padding: '4px 8px',
+                      fontSize: '11px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <span>{showEvonTrace ? 'Hide CoT' : 'View CoT'}</span>
+                    {showEvonTrace ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                  </button>
+                </div>
+
+                {/* Token Efficiency Metric */}
+                {triageResult.evonReasoning.tokenMetrics && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: 'rgba(0, 245, 212, 0.08)',
+                    border: '1px solid rgba(0, 245, 212, 0.25)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '11.5px',
+                    marginBottom: '10px'
+                  }}>
+                    <span style={{ color: '#00F5D4', fontWeight: 750 }}>
+                      ⚡ Indic Token Efficiency:
+                    </span>
+                    <span style={{ color: '#E2E8F0' }}>
+                      <strong>{triageResult.evonReasoning.tokenMetrics.evonTokens} Evon tokens</strong> vs ~{triageResult.evonReasoning.tokenMetrics.westernTokens} LLaMA tokens ({triageResult.evonReasoning.tokenMetrics.savedPct}% language tax reduction)
+                    </span>
+                  </div>
+                )}
+
+                {/* Collapsible Chain-of-Thought Trace */}
+                {showEvonTrace && (
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.35)',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    padding: '10px 12px',
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    color: '#CBD5E1',
+                    lineHeight: '1.55',
+                    whiteSpace: 'pre-line'
+                  }}>
+                    <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '4px', fontSize: '10px', textTransform: 'uppercase' }}>
+                      Auditable Clinical Chain-of-Thought (&lt;reasoning&gt; trace):
+                    </div>
+                    {triageResult.evonReasoning.thoughtTrace}
+                  </div>
+                )}
               </div>
             )}
           </div>
