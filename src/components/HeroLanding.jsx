@@ -593,9 +593,9 @@ export default function HeroLanding({
               textWrap: 'balance',
               marginBottom: '18px'
             }}>
-              <span className="kinetic-word" style={{ animationDelay: '0.08s' }}>Voice-First </span>
-              <span className="kinetic-word" style={{ animationDelay: '0.2s' }}>Health </span>
-              <span className="kinetic-word" style={{ animationDelay: '0.32s' }}>Screening </span>
+              <span className="kinetic-word" style={{ animationDelay: '0.08s', marginRight: '0.28em' }}>Voice-First</span>
+              <span className="kinetic-word" style={{ animationDelay: '0.2s', marginRight: '0.28em' }}>Health</span>
+              <span className="kinetic-word" style={{ animationDelay: '0.32s' }}>Screening</span>
               <br />
               <span className="kinetic-word" style={{
                 color: '#008B8B',

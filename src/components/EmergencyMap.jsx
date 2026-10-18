@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import * as maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { 
   Plus, 
   Minus, 
@@ -20,10 +19,31 @@ import {
   Wifi,
   Sparkles
 } from 'lucide-react';
-import { MAPBOX_TOKEN } from '../services/emergencyHospitalBackend';
 import { emergencySiren } from '../services/emergencyAudioSiren';
 
-mapboxgl.accessToken = MAPBOX_TOKEN;
+// Universal High-Reliability OpenStreetMap Raster Tile Style (No token needed)
+const OSM_STYLE = {
+  version: 8,
+  sources: {
+    'osm-tiles': {
+      type: 'raster',
+      tiles: [
+        'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+      ],
+      tileSize: 256,
+      attribution: '© OpenStreetMap contributors'
+    }
+  },
+  layers: [
+    {
+      id: 'osm-tiles-layer',
+      type: 'raster',
+      source: 'osm-tiles',
+      minzoom: 0,
+      maxzoom: 19
+    }
+  ]
+};
 
 /**
  * EmergencyMap — Real-Time Mapbox GL JS GIS Operational Engine & Telemetry Suite
@@ -60,6 +80,7 @@ export default function EmergencyMap({
   const [followAmbulance, setFollowAmbulance] = useState(false);
   const [is3DCockpitView, setIs3DCockpitView] = useState(false);
   const [showTelemetryHUD, setShowTelemetryHUD] = useState(true);
+  const [mapFailed, setMapFailed] = useState(false);
 
   // Siren Audio State
   const [isSirenPlaying, setIsSirenPlaying] = useState(false);
@@ -108,21 +129,27 @@ export default function EmergencyMap({
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  // 1. Initialize Mapbox Map
+  // 1. Initialize MapLibre GL Map
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/navigation-night-v1',
-      center: [callerCoords.lng, callerCoords.lat],
-      zoom: 14.3,
-      pitch: 32,
-      bearing: 0,
-      attributionControl: false
-    });
-
-    mapRef.current = map;
+    let map = null;
+    try {
+      map = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: OSM_STYLE,
+        center: [callerCoords.lng, callerCoords.lat],
+        zoom: 14.3,
+        pitch: 32,
+        bearing: 0,
+        attributionControl: false
+      });
+      mapRef.current = map;
+    } catch (err) {
+      console.warn('MapLibre GL failed to initialize, degrading to hospital list:', err);
+      setMapFailed(true);
+      return;
+    }
 
     map.on('load', () => {
       // 1. SOURCE: Caller ─── Ambulance Route (Subtle)
@@ -216,7 +243,7 @@ export default function EmergencyMap({
           </div>
         </div>
       `;
-      callerMarkerRef.current = new mapboxgl.Marker({ element: callerEl })
+      callerMarkerRef.current = new maplibregl.Marker({ element: callerEl })
         .setLngLat([callerCoords.lng, callerCoords.lat])
         .addTo(map);
 
@@ -275,7 +302,7 @@ export default function EmergencyMap({
           "></div>
         </div>
       `;
-      ambulanceMarkerRef.current = new mapboxgl.Marker({ element: ambulanceEl })
+      ambulanceMarkerRef.current = new maplibregl.Marker({ element: ambulanceEl })
         .setLngLat([ambulanceData.lng, ambulanceData.lat])
         .addTo(map);
     });
@@ -370,7 +397,7 @@ export default function EmergencyMap({
         onSelectHospital(hosp);
       });
 
-      const marker = new mapboxgl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: el })
         .setLngLat([hosp.lng, hosp.lat])
         .addTo(map);
 
@@ -522,6 +549,66 @@ export default function EmergencyMap({
       setMapStyleType('navigation');
     }
   };
+
+  if (mapFailed) {
+    return (
+      <div style={{ position: 'relative', width: '100%', height: '100%', overflowY: 'auto', background: '#090F1E', padding: '24px', color: '#ffffff' }}>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div style={{ fontSize: '36px', marginBottom: '8px' }}>🏥</div>
+          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#F87171', margin: '0 0 6px 0' }}>
+            Emergency Hospital Registry (Degraded Fallback)
+          </h3>
+          <div style={{
+            background: 'rgba(239, 68, 68, 0.25)',
+            border: '1px solid #EF4444',
+            borderRadius: '10px',
+            padding: '10px 16px',
+            color: '#FEE2E2',
+            fontWeight: 850,
+            fontSize: '15px',
+            display: 'inline-block',
+            margin: '8px auto 14px auto'
+          }}>
+            Emergency? Dial 112 / 108
+          </div>
+          <p style={{ fontSize: '12px', color: '#94A3B8', margin: 0 }}>
+            Operational GIS basemap unavailable. Showing live cached nearest emergency hospital facilities (SIMULATION):
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '580px', margin: '0 auto' }}>
+          {hospitals.map((hosp, i) => (
+            <div
+              key={hosp.id || i}
+              onClick={() => onSelectHospital(hosp)}
+              style={{
+                background: selectedHospital?.id === hosp.id ? 'rgba(0, 210, 211, 0.15)' : '#131F37',
+                border: selectedHospital?.id === hosp.id ? '1.5px solid #00D2D3' : '1px solid #203554',
+                padding: '14px 18px',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px'
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>{hosp.name}</div>
+                <div style={{ fontSize: '11.5px', color: '#38BDF8', marginTop: '2px' }}>
+                  {hosp.type || 'Government District Hospital'} • {hosp.stemiReady ? 'Cath Lab Ready' : 'Emergency Resus'}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '14px', fontWeight: 850, color: '#10B981' }}>{hosp.distanceKm || '2.8'} km</div>
+                <div style={{ fontSize: '11px', color: '#94A3B8' }}>{hosp.etaMinutes || '7'} mins ETA</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>

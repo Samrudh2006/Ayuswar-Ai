@@ -1138,4 +1138,24 @@ body {
   .mobile-menu-btn {
     display: flex !important;
   }
-}
+}
+
+/* Mobile P0 Enhancements: 360px overflow prevention, 16px input font, hero legibility */
+@media (max-width: 768px) {
+  .hero-kinetic-title {
+    font-size: 34px !important;
+    line-height: 1.15 !important;
+  }
+
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  .table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+

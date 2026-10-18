@@ -162,11 +162,17 @@ export function extractLandmarksFromSpeech(transcript) {
 export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 70) {
   const text = transcript.toLowerCase();
   
+  // Safety-Critical Red-Flag Override: Chest pain + Sweating + Breathlessness (English & Telugu-script)
+  const hasChestPain = /chest\s*pain|chest\s*discomfort|heart\s*pain|angina|pressure\s*in\s*chest|chhati\s*noppi|gundello\s*noppi|ఛాతీ\s*నొప్పి|గుండెల్లో\s*నొప్పి|ఛాతీలో\s*నొప్పి|గుండె\s*నొప్పి|గుండెలో\s*నొప్పి|ఛాతీ|గుండె|seena|chhati|heart/i.test(text);
+  const hasSweating = /sweat|sweating|perspir|cold\s*sweat|diaphoresis|paseena|చెమట|చమట|చెమటలు|చమటలు|చల్లని\s*చెమటలు/i.test(text);
+  const hasBreathless = /breath|breathless|breathlessness|shortness\s*of\s*breath|dyspnea|gasping|cant\s*breathe|can't\s*breathe|saans|oopiri|ఆయాసం|శ్వాస|ఊపిరి|దమ్ము|ఊపిరి\s*ఆడటం\s*లేదు/i.test(text);
+
   // Severe Red Triage Triggers (STEMI, Cardiac Arrest, Airway Obstruction, Polytrauma, Hemorrhage)
-  const isCardiac = /chhati|chest|seena|heart|gir pade|behosh|unconscious|dhadkan|palpitations|stemi|paseena|sweating|gundello/i.test(text);
-  const isPediatricRespiratory = /babu|bachha|child|baby|oopiri|saans|wheez|stridor|chhati lopalki|retraction|pasli chalna|blue lips|neela/i.test(text);
-  const isTrauma = /accident|crash|lorry|car|bike|vandi|blood|khoon|raktham|fracture|haddi|trapped|sir phat/i.test(text);
-  const isAnaphylaxisOrStroke = /paralysis|bol nahi pa|face drop|slur|lakwa|soojan|throat choke|allerg/i.test(text);
+  const isRedFlagCardiacOverride = (hasChestPain && (hasSweating || hasBreathless)) || (hasChestPain && hasSweating && hasBreathless);
+  const isCardiac = isRedFlagCardiacOverride || /chhati|chest|seena|heart|gir pade|behosh|unconscious|dhadkan|palpitations|stemi|paseena|sweating|gundello|గుండె|ఛాతీ|నొప్పి|చెమట|ఆయాసం|శ్వాస|దమ్ము|స్పృహ/i.test(text);
+  const isPediatricRespiratory = /babu|bachha|child|baby|oopiri|saans|wheez|stridor|chhati lopalki|retraction|pasli chalna|blue lips|neela|ఆయాసం|శ్వాస|పిల్ల/i.test(text);
+  const isTrauma = /accident|crash|lorry|car|bike|vandi|blood|khoon|raktham|fracture|haddi|trapped|sir phat|రక్తం|గాయం/i.test(text);
+  const isAnaphylaxisOrStroke = /paralysis|bol nahi pa|face drop|slur|lakwa|soojan|throat choke|allerg|పక్షవాతం/i.test(text);
 
   if (isCardiac) {
     return {

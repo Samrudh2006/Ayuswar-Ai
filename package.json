@@ -16,7 +16,6 @@
     "@capacitor/core": "^8.5.3",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.52.0",
-    "mapbox-gl": "^3.32.0",
     "maplibre-gl": "^6.13.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
