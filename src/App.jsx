@@ -18,6 +18,7 @@ import PillVisionScannerModal from './components/PillVisionScannerModal';
 import LiveScribeSessionModal from './components/LiveScribeSessionModal';
 import SeoHead from './components/SeoHead';
 import MobileAppBottomNav from './components/MobileAppBottomNav';
+import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 
 // Dedicated Full-Page Routed Views
 import ArchitectureView from './views/ArchitectureView';
@@ -433,6 +434,9 @@ export default function App() {
         onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
         onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
       />
+
+      {/* Demo Recording Mode Overlay (Active only with ?demo-record=1) */}
+      <DemoRecordingOverlay />
     </div>
   );
 }
