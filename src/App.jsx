@@ -11,7 +11,13 @@ import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
 import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
+import MobileInnovationHubModal from './components/MobileInnovationHubModal';
+import TeleconsultModal from './components/TeleconsultModal';
+import VitalsRppgModal from './components/VitalsRppgModal';
+import PillVisionScannerModal from './components/PillVisionScannerModal';
+import LiveScribeSessionModal from './components/LiveScribeSessionModal';
 import SeoHead from './components/SeoHead';
+import MobileAppBottomNav from './components/MobileAppBottomNav';
 
 // Dedicated Full-Page Routed Views
 import ArchitectureView from './views/ArchitectureView';
@@ -41,6 +47,13 @@ export default function App() {
   const [isDoctorAuthModalOpen, setIsDoctorAuthModalOpen] = useState(false);
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState(false);
   const [isWhatsAppAudioRxModalOpen, setIsWhatsAppAudioRxModalOpen] = useState(false);
+
+  // 14-Phase Mobile Innovation Suite Modals State
+  const [isInnovationHubOpen, setIsInnovationHubOpen] = useState(false);
+  const [isTeleconsultOpen, setIsTeleconsultOpen] = useState(false);
+  const [isVitalsRppgOpen, setIsVitalsRppgOpen] = useState(false);
+  const [isPillVisionOpen, setIsPillVisionOpen] = useState(false);
+  const [isLiveScribeOpen, setIsLiveScribeOpen] = useState(false);
 
   const handleDoctorLoginSuccess = (docProfile) => {
     setCurrentDoctor(docProfile);
@@ -92,6 +105,7 @@ export default function App() {
           onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
           onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
           onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
+          onOpenInnovationHub={() => setIsInnovationHubOpen(true)}
         />
       )}
 
@@ -324,6 +338,68 @@ export default function App() {
         }}
         doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
         initialLanguage="te"
+      />
+
+      {/* 14-Phase Mobile Clinical Innovation Hub Modal */}
+      <MobileInnovationHubModal 
+        isOpen={isInnovationHubOpen}
+        onClose={() => setIsInnovationHubOpen(false)}
+        onOpenTeleconsult={() => setIsTeleconsultOpen(true)}
+        onOpenScribe={() => setIsLiveScribeOpen(true)}
+        onOpenAbha={() => {
+          if (currentPatient) navigate('/patient-portal');
+          else setIsPatientAuthModalOpen(true);
+        }}
+        onOpenScanner={() => navigate('/scanner')}
+        onOpenPillVision={() => setIsPillVisionOpen(true)}
+        onOpenGeoBeacon={() => setIsSanjivaniModalOpen(true)}
+        onOpenAudioRx={() => setIsWhatsAppAudioRxModalOpen(true)}
+        onOpenVitalsRppg={() => setIsVitalsRppgOpen(true)}
+      />
+
+      {/* Phase 1: WebRTC Telemedicine Video Call Modal */}
+      <TeleconsultModal 
+        isOpen={isTeleconsultOpen}
+        onClose={() => setIsTeleconsultOpen(false)}
+        patientName={currentPatient?.patientName || 'Narayana Rao'}
+        doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+      />
+
+      {/* Phase 10: Vitals-rPPG Contactless Camera Scanner Modal */}
+      <VitalsRppgModal 
+        isOpen={isVitalsRppgOpen}
+        onClose={() => setIsVitalsRppgOpen(false)}
+        onSaveVitals={(vitals) => {
+          if (currentPatient) {
+            setCurrentPatient(prev => ({
+              ...prev,
+              vitals: { ...prev.vitals, hr: vitals.heartRate, spo2: vitals.spo2 }
+            }));
+          }
+        }}
+      />
+
+      {/* Phase 7: Pill-Vision Computer Vision Scanner Modal */}
+      <PillVisionScannerModal 
+        isOpen={isPillVisionOpen}
+        onClose={() => setIsPillVisionOpen(false)}
+      />
+
+      {/* Phase 2: Live Ambient Voice Scribe Session Modal */}
+      {currentPatient && (
+        <LiveScribeSessionModal 
+          isOpen={isLiveScribeOpen}
+          onClose={() => setIsLiveScribeOpen(false)}
+          patientData={currentPatient}
+          doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+        />
+      )}
+
+      {/* Global Fixed Mobile Bottom Navigation Bar (Active on Mobile Screens) */}
+      <MobileAppBottomNav 
+        onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
+        onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
+        onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
       />
     </div>
   );

@@ -5,3 +5,19 @@ dist-ssr
 .DS_Store
 .env
 .env.*
+
+# Media, Screen Recordings & Video Walkthroughs
+recordings/
+*.mp4
+*.webm
+*.webp
+
+# Documentation media, screenshots & audit register
+project-documentation/
+
+# Automation scripts for recording & screen capture
+scripts/
+
+# Mobile Native Builds & Artifacts
+android/
+capacitor.config.json

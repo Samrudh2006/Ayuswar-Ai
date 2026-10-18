@@ -902,10 +902,24 @@ h6 {
     overflow-y: visible !important;
     min-height: 520px !important;
   }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 37, 64, 0.75) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1200;
 }
 
-@media (max-width: 768px) {
-  .desktop-auth-pill {
+@media (min-width: 769px) {
+  .global-mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .desktop-auth-pill,
+  .desktop-only-pill {
     display: none !important;
   }
 
@@ -913,11 +927,11 @@ h6 {
   .patient-portal-aside {
     position: fixed !important;
     top: 0 !important;
-    left: -300px !important;
-    width: 270px !important;
+    left: -320px !important;
+    width: 280px !important;
     height: 100vh !important;
-    z-index: 100 !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35) !important;
+    z-index: 1100 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
     transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
@@ -1114,33 +1128,14 @@ body {
   .desktop-lang-picker {
     display: none !important;
   }
-}
 
-
-}
-
-@media (max-width: 480px) {
-  body {
-    font-size: 0.875rem;
-  }
-
-  h1 {
-    font-size: 1.5rem !important;
-  }
-
-  h2 {
-    font-size: 1.25rem !important;
-  }
-
-  .sanjivani-btn-desktop {
-    display: none !important;
-  }
-
-  .sanjivani-btn-mobile {
-    display: inline !important;
-  }
-
-  .desktop-lang-picker {
-    display: none !important;
+  .mobile-menu-btn {
+    display: flex !important;
   }
 }
+
+@media (max-width: 860px) {
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+}

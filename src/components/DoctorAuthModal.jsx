@@ -92,21 +92,30 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   return (
-    <div className="modal-overlay" style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 1100,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}>
+    <div 
+      className="modal-overlay" 
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        background: 'rgba(10, 37, 64, 0.75)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(5px)'
+      }}
+    >
       <div className="modal-content" style={{
         background: '#ffffff',
         width: '490px',
+        maxWidth: '100%',
+        maxHeight: '90vh',
         borderRadius: '20px',
         overflow: 'hidden',
         boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
@@ -238,6 +247,35 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 <ShieldCheck size={18} color="#008B8B" />
                 <span>Select your verified physician profile. Your dashboard will filter patients matching your specialty.</span>
               </div>
+
+              {/* Instant 1-Tap Mobile Demo Login */}
+              <button
+                type="button"
+                onClick={() => {
+                  onLoginSuccess(DOCTOR_REGISTRY.pulmonology);
+                  onClose();
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #008B8B 0%, #006D6D 100%)',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 14px rgba(0, 139, 139, 0.35)',
+                  marginBottom: '16px'
+                }}
+              >
+                <Sparkles size={16} color="#00D2D3" />
+                <span>⚡ 1-Tap Instant Doctor Login (Dr. Priya Sharma, MD)</span>
+              </button>
 
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>

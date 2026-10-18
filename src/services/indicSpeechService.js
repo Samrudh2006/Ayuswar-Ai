@@ -31,16 +31,52 @@ export class IndicSpeechService {
     this.isSpeaking = false;
   }
 
-  getProviderInfo() {
+  getGnaniCredentials() {
+    let apiKey = '';
+    let token = '';
+    if (typeof window !== 'undefined') {
+      try {
+        apiKey = sessionStorage.getItem('ayuswar_gnani_key') || '';
+        token = sessionStorage.getItem('ayuswar_gnani_token') || '';
+      } catch {}
+    }
+    if (!apiKey && typeof import.meta !== 'undefined' && import.meta.env) {
+      apiKey = import.meta.env.VITE_GNANI_API_KEY || '';
+      token = import.meta.env.VITE_GNANI_TOKEN || '';
+    }
     return {
-      provider: this.activeProvider,
-      isGnani: this.activeProvider === 'gnani_proxy',
-      label: this.activeProvider === 'gnani_proxy'
-        ? 'Gnani.ai Indic Neural Voice (Server Proxy)'
+      apiKey,
+      token,
+      isConfigured: Boolean(apiKey || token)
+    };
+  }
+
+  setGnaniCredentials({ apiKey = '', token = '' } = {}) {
+    if (typeof window !== 'undefined') {
+      try {
+        if (apiKey) sessionStorage.setItem('ayuswar_gnani_key', apiKey.trim());
+        else sessionStorage.removeItem('ayuswar_gnani_key');
+
+        if (token) sessionStorage.setItem('ayuswar_gnani_token', token.trim());
+        else sessionStorage.removeItem('ayuswar_gnani_token');
+      } catch {}
+    }
+  }
+
+  getProviderInfo() {
+    const creds = this.getGnaniCredentials();
+    const isGnani = this.activeProvider === 'gnani_proxy' || creds.isConfigured;
+
+    return {
+      provider: isGnani ? 'gnani_active' : this.activeProvider,
+      isGnani,
+      hasCredentials: creds.isConfigured,
+      label: isGnani
+        ? 'Gnani.ai Indic Neural Voice (Authenticated Session)'
         : 'Browser Web Speech API (Client Fallback)',
-      notes: this.activeProvider === 'gnani_proxy'
-        ? 'Connected to server-side Gnani speech proxy.'
-        : 'Server Gnani proxy not active in this client bundle; using browser SpeechSynthesis and SpeechRecognition.'
+      notes: isGnani
+        ? 'Gnani.ai speech credentials active for current session.'
+        : 'Gnani key not configured; using browser SpeechSynthesis and SpeechRecognition fallback.'
     };
   }
 
@@ -60,12 +96,17 @@ export class IndicSpeechService {
     // Cancel any ongoing audio
     this.stopSpeaking();
 
-    // 1. Attempt Server-Side Gnani Proxy if configured
+    // 1. Attempt Server-Side Gnani Proxy / API with session credentials if configured
+    const creds = this.getGnaniCredentials();
     try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (creds.apiKey) headers['x-api-key'] = creds.apiKey;
+      if (creds.token) headers['Authorization'] = `Bearer ${creds.token}`;
+
       const response = await fetch(`${this.proxyEndpoint}/tts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: langCode }),
+        headers,
+        body: JSON.stringify({ text, language: langCode, apiKey: creds.apiKey, token: creds.token }),
         signal: AbortSignal.timeout(1500) // Fast failover if proxy is not running
       });
 

@@ -242,21 +242,29 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
   };
 
   return (
-    <div className="modal-overlay" style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      zIndex: 1100,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '16px'
-    }}>
+    <div 
+      className="modal-overlay" 
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        background: 'rgba(10, 37, 64, 0.75)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(5px)'
+      }}
+    >
       <div className="modal-content" style={{
         background: '#ffffff',
         width: '540px',
+        maxWidth: '100%',
         maxHeight: '92vh',
         borderRadius: '20px',
         overflow: 'hidden',
@@ -389,6 +397,48 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 <ShieldCheck size={18} color="#D97706" />
                 <span>Select a preloaded demo citizen profile to login immediately.</span>
               </div>
+
+              {/* Instant 1-Tap Mobile Demo Login */}
+              <button
+                type="button"
+                onClick={() => {
+                  const clin = generateClinicalProfile('Ananya Rao', 'Asthma & Seasonal Allergy', 'Telugu');
+                  const selectedProfile = {
+                    patientName: 'Ananya Rao (అనన్య రావు)',
+                    age: 28,
+                    gender: 'Female',
+                    language: 'Telugu',
+                    abhaId: '91-4521-8932-1049',
+                    condition: 'Asthma & Seasonal Allergy',
+                    relation: 'Self',
+                    facility: 'Kurnool District Hospital',
+                    ...clin,
+                    familyMembers: []
+                  };
+                  onLoginSuccess(selectedProfile);
+                  onClose();
+                }}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 14px rgba(217, 119, 6, 0.35)',
+                  marginBottom: '16px'
+                }}
+              >
+                <Sparkles size={16} color="#FDE68A" />
+                <span>⚡ 1-Tap Quick Patient Login (Ananya Rao - ABHA)</span>
+              </button>
 
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
