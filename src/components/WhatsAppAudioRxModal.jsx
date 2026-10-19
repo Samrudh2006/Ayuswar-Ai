@@ -703,21 +703,19 @@ export default function WhatsAppAudioRxModal({
                   transition: 'all 0.2s ease'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: '#F59E0B',
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '14px',
-                      boxShadow: '0 0 10px rgba(245, 158, 11, 0.5)'
-                    }}>
-                      🟡
-                    </div>
+                    <img 
+                      src="/images/medicines/yellow_pantoprazole.jpg" 
+                      alt="Pantoprazole 40mg (Yellow Pill)" 
+                      style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '10px',
+                        objectFit: 'cover',
+                        border: '1.5px solid #F59E0B',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)'
+                      }} 
+                    />
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: 800, color: '#92400E' }}>
                         ఉదయం / Morning (1 Tab)
@@ -803,21 +801,19 @@ export default function WhatsAppAudioRxModal({
                   transition: 'all 0.2s ease'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: '#EC4899',
-                      color: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '14px',
-                      boxShadow: '0 0 10px rgba(236, 72, 153, 0.5)'
-                    }}>
-                      🟣
-                    </div>
+                    <img 
+                      src="/images/medicines/pink_metformin.jpg" 
+                      alt="Metformin 500mg SR (Pink Pill)" 
+                      style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '10px',
+                        objectFit: 'cover',
+                        border: '1.5px solid #EC4899',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(236, 72, 153, 0.3)'
+                      }} 
+                    />
                     <div>
                       <div style={{ fontSize: '13px', fontWeight: 800, color: '#9D174D' }}>
                         రాత్రి / Night (1 Tab)

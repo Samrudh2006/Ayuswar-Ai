@@ -747,7 +747,11 @@ export default function AudioRxStudioView() {
                 transition: 'all 200ms ease',
                 transform: activePillHighlight === 'morning' ? 'scale(1.02)' : 'scale(1)'
               }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#F59E0B', border: '2px solid #FFFFFF', boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }} />
+                <img 
+                  src="/images/medicines/yellow_pantoprazole.jpg" 
+                  alt="Pantoprazole 40mg (Yellow Pill)" 
+                  style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #F59E0B', flexShrink: 0, boxShadow: '0 2px 8px rgba(245, 158, 11, 0.25)' }} 
+                />
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
                     Pantoprazole 40mg (పసుపు గోళీ / Yellow Pill)
@@ -770,7 +774,11 @@ export default function AudioRxStudioView() {
                 transition: 'all 200ms ease',
                 transform: activePillHighlight === 'night' ? 'scale(1.02)' : 'scale(1)'
               }}>
-                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#EC4899', border: '2px solid #FFFFFF', boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }} />
+                <img 
+                  src="/images/medicines/pink_metformin.jpg" 
+                  alt="Metformin 500mg SR (Pink Pill)" 
+                  style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #EC4899', flexShrink: 0, boxShadow: '0 2px 8px rgba(236, 72, 153, 0.25)' }} 
+                />
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
                     Metformin 500mg SR (గులాబీ గోళీ / Pink Pill)

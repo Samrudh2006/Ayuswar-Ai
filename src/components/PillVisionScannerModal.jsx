@@ -27,6 +27,7 @@ const FORMULARY_DATABASE = [
     color: '🟡 Yellow Capsule / Tablet',
     shape: 'Oblong Enteric-Coated',
     imprint: 'PAN-40',
+    imageUrl: '/images/medicines/yellow_pantoprazole.jpg',
     brandPrice: '₹148.50 / 10 Tabs',
     genericName: 'Pantoprazole Gastro-Resistant 40mg IP',
     genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
@@ -43,6 +44,7 @@ const FORMULARY_DATABASE = [
     color: '🟣 Pink Tablet',
     shape: 'Round Biconvex SR',
     imprint: 'GLY-500',
+    imageUrl: '/images/medicines/pink_metformin.jpg',
     brandPrice: '₹62.00 / 10 Tabs',
     genericName: 'Metformin Hydrochloride SR 500mg IP',
     genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
@@ -59,6 +61,7 @@ const FORMULARY_DATABASE = [
     color: '⚪ White Tablet',
     shape: 'Oval Scored Tablet',
     imprint: 'DOLO-650',
+    imageUrl: '/images/medicines/white_paracetamol.jpg',
     brandPrice: '₹34.00 / 15 Tabs',
     genericName: 'Paracetamol IP 650mg',
     genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
@@ -72,9 +75,10 @@ const FORMULARY_DATABASE = [
     id: 'amoxicillin_clav',
     keywords: ['augmentin', 'amoxicillin', 'mox', 'clav', 'amoxyclav', '625'],
     brandName: 'Augmentin 625 Duo (Branded)',
-    color: '⚪ White Film-Coated',
+    color: '⚪ Silver Foil Blister Pack',
     shape: 'Oval Biconvex',
     imprint: 'AUG-625',
+    imageUrl: '/images/medicines/silver_amoxicillin_blister.jpg',
     brandPrice: '₹198.00 / 10 Tabs',
     genericName: 'Amoxicillin 500mg + Clavulanic Acid 125mg IP',
     genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
@@ -602,17 +606,27 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
             gap: '14px'
           }}>
             <div style={{
-              width: '50px',
-              height: '50px',
+              width: '64px',
+              height: '64px',
               borderRadius: '12px',
+              overflow: 'hidden',
               background: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '26px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+              flexShrink: 0,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              border: '1.5px solid #CBD5E1'
             }}>
-              💊
+              {currentDisplay.imageUrl ? (
+                <img 
+                  src={currentDisplay.imageUrl} 
+                  alt={currentDisplay.brandName} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                <span style={{ fontSize: '28px' }}>💊</span>
+              )}
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
