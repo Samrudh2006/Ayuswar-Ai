@@ -24,3 +24,6 @@ scripts/whatsapp_audio_test_results.json
 # Mobile Native Builds & Artifacts
 android/
 capacitor.config.json
+
+# Brag video work intermediates
+brag-output/work/
