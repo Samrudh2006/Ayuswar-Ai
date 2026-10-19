@@ -179,11 +179,12 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
       const targetLang = selectedLanguage === 'te' ? 'te-IN' : (selectedLanguage === 'hi' ? 'hi-IN' : 'en-IN');
       speechService.startLiveRecognition({
         langCode: targetLang,
-        onResult: ({ transcript, isFinal }) => {
-          if (transcript) {
-            setInputText(transcript);
-            if (isFinal) {
-              handleTriageAnalyze(transcript);
+        onResult: ({ finalTranscript, interimTranscript, transcript, isFinal }) => {
+          const text = finalTranscript || transcript || interimTranscript;
+          if (text) {
+            setInputText(text);
+            if (isFinal || finalTranscript) {
+              handleTriageAnalyze(text);
             }
           }
         },

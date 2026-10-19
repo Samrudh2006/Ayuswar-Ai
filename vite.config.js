@@ -67,22 +67,64 @@ export default defineConfig(({ mode }) => {
             });
           });
 
-          // 2. Gnani ASR Proxy Endpoint
-          server.middlewares.use('/api/gnani/asr', async (req, res) => {
+          // 2. Gnani ASR / STT (Prisma v2.5) Proxy Endpoints
+          const handleSttProxy = async (req, res) => {
             const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            const token = env.GNANI_TOKEN || process.env.GNANI_TOKEN;
             if (!apiKey || apiKey.includes('placeholder')) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');
               return res.end(JSON.stringify({ 
                 error: 'Gnani API key not configured', 
-                status: 'fallback_to_browser_speech' 
+                status: 'fallback_to_browser_speech',
+                model: 'Gnani Prisma v2.5'
               }));
+            }
+
+            if (req.method === 'POST') {
+              let bodyChunks = [];
+              req.on('data', chunk => { bodyChunks.push(chunk); });
+              req.on('end', async () => {
+                try {
+                  const sttEndpoint = env.GNANI_STT_ENDPOINT || 'https://api.gnani.ai/v2/asr';
+                  const buffer = Buffer.concat(bodyChunks);
+                  const lang = req.headers['x-language-code'] || 'te-IN';
+
+                  const upstream = await fetch(sttEndpoint, {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': `Bearer ${token || apiKey}`,
+                      'x-api-key': apiKey,
+                      'Content-Type': req.headers['content-type'] || 'audio/wav',
+                      'x-language': lang
+                    },
+                    body: buffer
+                  });
+
+                  if (upstream.ok) {
+                    const data = await upstream.json();
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    return res.end(JSON.stringify(data));
+                  } else {
+                    res.statusCode = upstream.status;
+                    return res.end(await upstream.text());
+                  }
+                } catch (err) {
+                  res.statusCode = 502;
+                  return res.end(JSON.stringify({ error: err.message }));
+                }
+              });
+              return;
             }
 
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ status: 'gnani_asr_proxy_active' }));
-          });
+            res.end(JSON.stringify({ status: 'gnani_stt_proxy_active', model: 'Gnani Prisma v2.5' }));
+          };
+
+          server.middlewares.use('/api/gnani/asr', handleSttProxy);
+          server.middlewares.use('/api/gnani/stt', handleSttProxy);
 
           // 3. Gnani Evon Sovereign Indic Reasoner Status Endpoint
           let evonLastSuccessTime = null;

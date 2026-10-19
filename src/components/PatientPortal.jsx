@@ -47,9 +47,12 @@ import {
   Smartphone,
   Sliders,
   Shield,
-  WifiOff
+  WifiOff,
+  Mic,
+  MicOff
 } from 'lucide-react';
 import { askAyuSwarBrain } from '../services/aiBrainService';
+import { speechService } from '../services/indicSpeechService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
@@ -401,11 +404,48 @@ export default function PatientPortal({
     }
   };
 
-  const handleSendChat = async (e) => {
-    e?.preventDefault();
-    if (!patientQuestion.trim()) return;
+  const [isOpdMicListening, setIsOpdMicListening] = useState(false);
 
-    const userText = patientQuestion.trim();
+  const toggleOpdSpeechRecognition = async () => {
+    if (isOpdMicListening) {
+      speechService.stopLiveRecognition();
+      setIsOpdMicListening(false);
+      return;
+    }
+
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const targetLang = selectedLanguage === 'Telugu' ? 'te-IN' : (selectedLanguage === 'Hindi' ? 'hi-IN' : 'en-IN');
+      setIsOpdMicListening(true);
+
+      speechService.startLiveRecognition({
+        langCode: targetLang,
+        onResult: ({ finalTranscript, interimTranscript }) => {
+          const spoken = finalTranscript || interimTranscript;
+          if (spoken) {
+            setPatientQuestion(spoken);
+            if (finalTranscript.trim()) {
+              handleSendChatWithText(finalTranscript.trim());
+              setIsOpdMicListening(false);
+            }
+          }
+        },
+        onError: () => {
+          setIsOpdMicListening(false);
+        },
+        onStatusChange: ({ isListening }) => {
+          setIsOpdMicListening(isListening);
+        }
+      });
+    } catch {
+      setIsOpdMicListening(false);
+      alert('Please grant microphone permission to speak to OPD Assistant.');
+    }
+  };
+
+  const handleSendChatWithText = async (textToSend) => {
+    if (!textToSend || !textToSend.trim()) return;
+    const userText = textToSend.trim();
     setPatientQuestion('');
 
     setChatMessages(prev => [
@@ -414,6 +454,8 @@ export default function PatientPortal({
       { sender: 'ai', text: 'Analyzing symptom against ICMR guidelines...' }
     ]);
 
+    const targetLang = selectedLanguage === 'Telugu' ? 'te-IN' : (selectedLanguage === 'Hindi' ? 'hi-IN' : 'en-IN');
+
     try {
       const aiReply = await askAyuSwarBrain(userText, 'patient');
       setChatMessages(prev => {
@@ -421,16 +463,27 @@ export default function PatientPortal({
         updated[updated.length - 1] = { sender: 'ai', text: aiReply };
         return updated;
       });
+
+      // Speak reply aloud with barge-in support
+      await speechService.speak(aiReply, { langCode: targetLang });
     } catch {
+      const fallbackReply = "AyuSwar AI has recorded your query. Stay comfortable, drink plenty of fluids, and your care team led by Dr. Priya has been informed.";
       setChatMessages(prev => {
         const updated = [...prev];
         updated[updated.length - 1] = { 
           sender: 'ai', 
-          text: "AyuSwar AI has recorded your query. Stay comfortable, drink plenty of fluids, and your care team led by Dr. Priya has been informed." 
+          text: fallbackReply 
         };
         return updated;
       });
+      await speechService.speak(fallbackReply, { langCode: targetLang });
     }
+  };
+
+  const handleSendChat = async (e) => {
+    e?.preventDefault();
+    if (!patientQuestion.trim()) return;
+    handleSendChatWithText(patientQuestion);
   };
 
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
@@ -2856,6 +2909,29 @@ export default function PatientPortal({
                       outline: 'none'
                     }}
                   />
+                  <button
+                    type="button"
+                    onClick={toggleOpdSpeechRecognition}
+                    style={{
+                      background: isOpdMicListening ? '#EF4444' : '#F1F5F9',
+                      color: isOpdMicListening ? '#FFFFFF' : '#008B8B',
+                      border: isOpdMicListening ? 'none' : '1.5px solid #008B8B',
+                      borderRadius: '12px',
+                      padding: '0 16px',
+                      fontSize: '13px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      boxShadow: isOpdMicListening ? '0 0 12px rgba(239, 68, 68, 0.5)' : 'none'
+                    }}
+                    title={isOpdMicListening ? "Listening... click to stop" : "Speak your question aloud"}
+                  >
+                    {isOpdMicListening ? <Mic size={16} className="animate-pulse" /> : <Mic size={16} />}
+                    <span>{isOpdMicListening ? 'Listening...' : 'Voice'}</span>
+                  </button>
+
                   <button
                     type="submit"
                     style={{

@@ -575,9 +575,23 @@ export default function AcousticBiomarkerLabView() {
         <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
           Vocal Biomarker & Acoustic Signal Lab
         </h1>
-        <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6, marginBottom: '10px' }}>
           Explores acoustic signal patterns in recorded audio. Research signal viewer, not for diagnosis. Real-time physical digital signal processing (DSP) and statistical cluster proximity engine.
         </p>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: '#F0FDF4',
+          border: '1px solid #BBF7D0',
+          color: '#166534',
+          padding: '6px 14px',
+          borderRadius: '10px',
+          fontSize: '12px',
+          fontWeight: 700
+        }}>
+          <span>🎙️ One-Way Acoustic Diagnostic Mode: Ingests mic phonation for F0 pitch, Jitter, Shimmer, and HNR analysis (no spoken TTS reply required).</span>
+        </div>
       </div>
 
       {/* Non-Diagnostic Disclaimer Banner */}

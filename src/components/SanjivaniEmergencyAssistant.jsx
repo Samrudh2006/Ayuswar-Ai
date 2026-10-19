@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
 import { queryEvonServer, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import { speechService } from '../services/indicSpeechService';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -69,6 +70,9 @@ export default function SanjivaniEmergencyAssistant({
   const [elapsedSec, setElapsedSec] = useState(1);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isMicListening, setIsMicListening] = useState(false);
+  const [isHandsFreeLiveTalk, setIsHandsFreeLiveTalk] = useState(false);
+  const [voiceState, setVoiceState] = useState('IDLE'); // 'IDLE' | 'LISTENING' | 'THINKING' | 'SPEAKING'
+  const [voiceRms, setVoiceRms] = useState(0);
   const [isMetronomeActive, setIsMetronomeActive] = useState(false);
   const [metronomeBeat, setMetronomeBeat] = useState(1);
   const [compressionCount, setCompressionCount] = useState(0);
@@ -94,6 +98,13 @@ export default function SanjivaniEmergencyAssistant({
   const [inputQuestion, setInputQuestion] = useState('');
   const recognitionRef = useRef(null);
   const eventsEndRef = useRef(null);
+
+  // Clean teardown on unmount
+  useEffect(() => {
+    return () => {
+      speechService.stopConversationalSession();
+    };
+  }, []);
 
   // Scroll to bottom of event feed
   useEffect(() => {
@@ -141,11 +152,94 @@ export default function SanjivaniEmergencyAssistant({
     }
   };
 
-  // 2. MY MIC (LIVE WEB SPEECH RECOGNITION & REAL AUDIO INGESTION)
+  // 2. FULL-DUPLEX HANDS-FREE LIVE TALK (CONVERSATIONAL VAD + BARGE-IN)
+  const toggleHandsFreeLiveTalk = async () => {
+    if (isHandsFreeLiveTalk) {
+      speechService.stopConversationalSession();
+      setIsHandsFreeLiveTalk(false);
+      setIsMicListening(false);
+      setVoiceState('IDLE');
+      setVoiceRms(0);
+      addCopilotEvent('audio', '🛑 Hands-Free Live Talk Deactivated', 'Switched back to push-to-talk microphone mode.');
+      return;
+    }
+
+    try {
+      setIsHandsFreeLiveTalk(true);
+      setIsMicListening(true);
+      setVoiceState('LISTENING');
+      sanjivaniAudio.playClickSound(1046, 0.08);
+      addCopilotEvent('audio', '🎙️ Hands-Free Full-Duplex Voice Live', 'Speak in Telugu, English or Hindi. Gnani Evon will reason and reply via Timbre TTS. Interrupt anytime by speaking (Barge-In).');
+
+      await speechService.startConversationalSession({
+        language: 'te-IN',
+        onStateChange: (st) => {
+          setVoiceState(st);
+        },
+        onTranscript: ({ finalTranscript, interimTranscript }) => {
+          const t = finalTranscript || interimTranscript;
+          if (t) {
+            onUpdateTranscript(t, `Live Audio Ingested: "${t}"`);
+          }
+        },
+        onBargeIn: ({ rms }) => {
+          addCopilotEvent('audio', '🛑 Barge-In Interruption Detected', 'Assistant voice stopped immediately because you spoke. Listening to your voice...');
+        },
+        onVolumeChange: (rms) => {
+          setVoiceRms(rms);
+        },
+        onRequestAssistantReply: async (userQuestion) => {
+          addCopilotEvent('user', '💬 Voice Query', userQuestion);
+
+          // Dynamic Emergency Triage check
+          const triage = analyzeEmergencyClinicalTriage(userQuestion);
+          if (triage.triageLevel === 'RED') {
+            addCopilotEvent('triage', `🚨 Voice Triage Alert: ${triage.suspectedCondition}`, `Action protocol: ${triage.priorityProtocol}`);
+          }
+
+          try {
+            const systemInstruction = 
+              `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
+              `Respond with concise, authoritative life-safety protocol guidance under 35 words so it can be spoken quickly to emergency callers. ` +
+              `Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'}.`;
+
+            const evonResult = await queryEvonServer(userQuestion, systemInstruction, { maxTokens: 120 });
+            const replyText = (evonResult.finalAnswer || evonResult.raw || 'Ambulance is dispatched. Keep patient calm and airway open.').trim();
+            addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', replyText);
+            return replyText;
+          } catch (err) {
+            const fallbackReply = `Emergency Protocol: Keep patient resting with open airway. Ambulance A-12 is en route (${selectedHospital?.etaMinutes || 3} min road ETA).`;
+            addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', fallbackReply);
+            return fallbackReply;
+          }
+        }
+      });
+    } catch (err) {
+      setIsHandsFreeLiveTalk(false);
+      setIsMicListening(false);
+      setVoiceState('IDLE');
+      addCopilotEvent('error', '⚠️ Microphone Permission Notice', 'Please allow microphone access in your browser to talk live.');
+    }
+  };
+
+  // 2B. MANUAL BARGE-IN INTERRUPTION
+  const handleInterruptAssistant = () => {
+    speechService.interruptAssistant('manual_button');
+    setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE');
+    addCopilotEvent('audio', '🛑 Voice Interruption Triggered', 'Assistant speech cut off immediately. Resuming live microphone intake.');
+  };
+
+  // 2C. BASIC MIC TOGGLE (FALLBACK / MANUAL)
   const toggleSpeechRecognition = async () => {
+    if (isHandsFreeLiveTalk) {
+      toggleHandsFreeLiveTalk();
+      return;
+    }
+
     if (isMicListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
       setIsMicListening(false);
+      setVoiceState('IDLE');
       addCopilotEvent('audio', '🎙️ Hardware Microphone Paused', 'Microphone voice capture detached.');
       return;
     }
@@ -174,12 +268,16 @@ export default function SanjivaniEmergencyAssistant({
           }
         };
 
-        recognition.onend = () => setIsMicListening(false);
+        recognition.onend = () => {
+          setIsMicListening(false);
+          setVoiceState('IDLE');
+        };
         recognition.onerror = (e) => console.warn('Speech rec error:', e);
 
         recognitionRef.current = recognition;
         recognition.start();
         setIsMicListening(true);
+        setVoiceState('LISTENING');
         sanjivaniAudio.playClickSound(1046, 0.08);
         addCopilotEvent('audio', '🎙️ Live Microphone Connected', 'Listening to real speaker voice. Real-time Indic transcription running.');
       } else {
@@ -194,10 +292,11 @@ export default function SanjivaniEmergencyAssistant({
   const handleEndCall = () => {
     setCallStatus('ended');
     sanjivaniAudio.playCallEndBeep();
-    if (isMicListening) {
-      if (recognitionRef.current) recognitionRef.current.stop();
-      setIsMicListening(false);
-    }
+    speechService.stopConversationalSession();
+    setIsHandsFreeLiveTalk(false);
+    setIsMicListening(false);
+    setVoiceState('IDLE');
+    setVoiceRms(0);
     if (isMetronomeActive) {
       sanjivaniAudio.stopCPRMetronome();
       setIsMetronomeActive(false);
@@ -284,22 +383,38 @@ export default function SanjivaniEmergencyAssistant({
     const q = inputQuestion.trim();
     setInputQuestion('');
     addCopilotEvent('user', '💬 Operator Query', q);
+    setVoiceState('THINKING');
 
     try {
       const systemInstruction = 
         `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
-        `Respond with concise, authoritative life-safety protocol guidance. ` +
+        `Respond with concise, authoritative life-safety protocol guidance under 35 words. ` +
         `Reference active telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'} with ${selectedHospital?.bedsAvailable || 8} beds.`;
 
-      const evonResult = await queryEvonServer(q, systemInstruction, { maxTokens: 300 });
+      const evonResult = await queryEvonServer(q, systemInstruction, { maxTokens: 150 });
 
       let reasoningTrace = evonResult.thoughtTrace ? `\n\n<reasoning>\n${evonResult.thoughtTrace}\n</reasoning>` : '';
       let replyText = (evonResult.finalAnswer || evonResult.raw || 'Field Protocol: Keep patient resting with open airway.').trim();
 
       addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', `${replyText}${reasoningTrace}`);
+
+      // Synthesize spoken audio with barge-in support
+      setVoiceState('SPEAKING');
+      await speechService.speak(replyText, {
+        langCode: 'te-IN',
+        onStart: () => setVoiceState('SPEAKING'),
+        onEnd: () => setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE')
+      });
     } catch (err) {
       console.warn('Evon server route unavailable; engaging deterministic safety protocol:', err.message);
-      addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`);
+      const fallbackReply = `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`;
+      addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', fallbackReply);
+      setVoiceState('SPEAKING');
+      await speechService.speak(fallbackReply, {
+        langCode: 'en-IN',
+        onStart: () => setVoiceState('SPEAKING'),
+        onEnd: () => setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE')
+      });
     }
   };
 
@@ -489,21 +604,77 @@ export default function SanjivaniEmergencyAssistant({
             </div>
           </div>
 
-          {/* Call Controls & Timer */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Call Controls, Hands-Free Voice & Timer */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <div style={{
               background: '#0F172A',
               border: '1px solid #334155',
               padding: '5px 12px',
               borderRadius: '20px',
               color: '#38BDF8',
-              fontSize: '12.5px',
+              fontSize: '12px',
               fontFamily: 'monospace',
               fontWeight: 800
             }}>
               ⏱️ {String(Math.floor(elapsedSec / 60)).padStart(2, '0')}:{String(elapsedSec % 60).padStart(2, '0')}
             </div>
 
+            {/* FULL-DUPLEX HANDS-FREE LIVE TALK BUTTON */}
+            <button
+              onClick={toggleHandsFreeLiveTalk}
+              style={{
+                background: isHandsFreeLiveTalk 
+                  ? (voiceState === 'SPEAKING' ? '#8B5CF6' : voiceState === 'THINKING' ? '#D97706' : '#059669') 
+                  : '#1E293B',
+                color: '#FFFFFF',
+                border: isHandsFreeLiveTalk ? '1px solid #A7F3D0' : '1px solid #475569',
+                borderRadius: '20px',
+                padding: '6px 12px',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: isHandsFreeLiveTalk ? '0 0 15px rgba(16, 185, 129, 0.45)' : 'none',
+                transition: 'all 0.2s ease'
+              }}
+              title="Toggle Hands-Free Two-Way Voice (Speak naturally, assistant stops if you talk in middle)"
+            >
+              <Mic size={14} className={isHandsFreeLiveTalk ? 'animate-pulse' : ''} />
+              <span>
+                {isHandsFreeLiveTalk 
+                  ? (voiceState === 'SPEAKING' ? '🟣 Speaking (Barge-In Active)' : voiceState === 'THINKING' ? '🟡 Thinking...' : '🟢 Live Talk Active') 
+                  : '🎙️ Hands-Free Live Talk'}
+              </span>
+            </button>
+
+            {/* BARGE-IN INTERRUPTION BUTTON (Visible when assistant is speaking) */}
+            {voiceState === 'SPEAKING' && (
+              <button
+                onClick={handleInterruptAssistant}
+                style={{
+                  background: '#DC2626',
+                  color: '#FFFFFF',
+                  border: '1px solid #FCA5A5',
+                  borderRadius: '20px',
+                  padding: '6px 10px',
+                  fontSize: '11px',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 0 12px rgba(220, 38, 38, 0.7)',
+                  animation: 'pulse 1.5s infinite'
+                }}
+                title="Interrupt Assistant (Barge-In) & Resume Listening"
+              >
+                <span>🛑 Stop Talking</span>
+              </button>
+            )}
+
+            {/* Basic Mic Toggle */}
             <button
               onClick={toggleSpeechRecognition}
               style={{
@@ -524,6 +695,7 @@ export default function SanjivaniEmergencyAssistant({
               {isMicListening ? <Mic size={16} /> : <MicOff size={16} />}
             </button>
 
+            {/* Speaker Mute */}
             <button
               onClick={handleToggleMute}
               style={{
@@ -543,6 +715,7 @@ export default function SanjivaniEmergencyAssistant({
               {isAudioMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
             </button>
 
+            {/* End Call */}
             <button
               onClick={handleEndCall}
               style={{
@@ -564,6 +737,50 @@ export default function SanjivaniEmergencyAssistant({
             </button>
           </div>
         </div>
+
+        {/* Live Audio Energy (RMS) Waveform & State Banner */}
+        {isHandsFreeLiveTalk && (
+          <div style={{
+            background: '#040B18',
+            border: '1px solid #1E2E4A',
+            borderRadius: '6px',
+            padding: '4px 10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '10px',
+            fontSize: '10.5px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                background: voiceState === 'SPEAKING' ? '#A855F7' : voiceState === 'THINKING' ? '#F59E0B' : '#10B981'
+              }}></span>
+              <span style={{ color: '#E2E8F0', fontWeight: 700 }}>
+                {voiceState === 'SPEAKING' 
+                  ? '🔊 Assistant Speaking (Timbre TTS) • Talk anytime to interrupt' 
+                  : voiceState === 'THINKING' 
+                  ? '🧠 Gnani Evon 30B Reasoning in progress...' 
+                  : '🎙️ Listening (Prisma v2.5 ASR ready) • Speak naturally'}
+              </span>
+            </div>
+
+            {/* Audio RMS Level Bar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ color: '#64748B', fontSize: '9.5px', fontFamily: 'monospace' }}>MIC LEVEL</span>
+              <div style={{ width: '60px', height: '6px', background: '#1E293B', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{
+                  width: `${Math.min(100, Math.round(voiceRms * 400))}%`,
+                  height: '100%',
+                  background: voiceRms > 0.04 ? '#EF4444' : '#10B981',
+                  transition: 'width 0.05s linear'
+                }}></div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Live Subtitle Transcript Banner */}
         <div style={{
