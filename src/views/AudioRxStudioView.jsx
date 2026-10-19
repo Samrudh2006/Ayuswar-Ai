@@ -425,9 +425,18 @@ export default function AudioRxStudioView() {
       ? '💡 *जन औषधि लाभ:* यह दवाएं पीएमबीजेपी जन औषधि केंद्रों पर 80% कम कीमत में उपलब्ध हैं।'
       : '💡 *Jan Aushadhi Advantage:* Available at PMBJP generic centres with 80% cost savings.';
 
-    const portalLink = `${window.location.origin}/audio-rx`;
+    const isLocalhost = window.location.origin.includes('localhost');
+    const portalLink = isLocalhost 
+      ? 'https://ayuswar.ai/rx/narayana-rao' 
+      : `${window.location.origin}/audio-rx`;
 
-    return `${header}\n\n*Patient:* ${patientName}\n*Doctor:* ${docName}\n\n💊 *Prescription Schedule / మందుల వేళలు:*\n${morningDose}\n${nightDose}\n\n🔊 *Listen to Doctor's Spoken Audio Note / ఆడియో వినడానికి లింక్:*\n${portalLink}\n\n${genericNote}\n\n_Generated securely by AyuSwar AI Telephony Bridge_`;
+    const audioIndicator = isTe
+      ? '🔊 *డాక్టర్ వాయిస్ నోట్ ఆడియో (MP4/Audio):* నేరుగా వాట్సాప్ వాయిస్ మెసేజ్‌గా పంపబడుతుంది.\n🔗 *డిజిటల్ రికార్డు వెబ్ లింక్:* ' + portalLink
+      : isHi
+      ? '🔊 *डॉक्टर वॉयस नोट ऑडियो (MP4/Audio):* सीधे व्हाट्सएप ऑडियो के रूप में भेजा गया है।\n🔗 *डिजिटल रिकॉर्ड लिंक:* ' + portalLink
+      : '🔊 *Doctor Voice Note Audio (MP4/Audio):* Attached directly as WhatsApp audio note.\n🔗 *Digital Record Link:* ' + portalLink;
+
+    return `${header}\n\n*Patient:* ${patientName}\n*Doctor:* ${docName}\n\n💊 *Prescription Schedule / మందుల వేళలు:*\n${morningDose}\n${nightDose}\n\n${audioIndicator}\n\n${genericNote}\n\n_Generated securely by AyuSwar AI Sovereign Telephony Bridge_`;
   };
 
   // Real WhatsApp Dispatch (Opens wa.me with prefilled message)
