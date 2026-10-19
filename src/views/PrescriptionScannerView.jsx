@@ -24,11 +24,12 @@ import { openCvPreprocessor } from '../services/openCvOcrPreprocessor';
 const CLINICAL_FORMULARY_DATABASE = [
   {
     id: 'pantoprazole',
-    keywords: ['pantocid', 'pantoprazole', 'panto', 'pantodac', 'pan-40', 'pan 40'],
-    brand: 'Pantocid-40 (Gastro-Resistant)',
+    keywords: ['pantocid', 'pantoprazole', 'panto', 'pantodac', 'pan-40', 'pan 40', 'pan-d'],
+    brand: 'Pantocid-40 / Pan-40 (Gastro-Resistant)',
     genericSalt: 'Pantoprazole Gastro-resistant 40mg IP',
     nfiCode: 'NFI-2025-GAS-0492',
     dosageForm: 'Enteric-Coated Tablet',
+    imageUrl: '/images/medicines/yellow_pantoprazole.jpg',
     janAushadhiGeneric: 'Pantoprazole 40mg (PMBJP)',
     brandedPrice: '₹148.50 per strip',
     janAushadhiPrice: '₹22.40 per strip',
@@ -42,6 +43,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     genericSalt: 'Metformin Hydrochloride Prolonged Release 500mg IP',
     nfiCode: 'NFI-2025-MET-0814',
     dosageForm: 'Sustained-Release Tablet',
+    imageUrl: '/images/medicines/pink_metformin.jpg',
     janAushadhiGeneric: 'Metformin 500mg SR (PMBJP)',
     brandedPrice: '₹62.00 per strip',
     janAushadhiPrice: '₹14.50 per strip',
@@ -51,10 +53,11 @@ const CLINICAL_FORMULARY_DATABASE = [
   {
     id: 'paracetamol_ibuprofen',
     keywords: ['combiflam', 'ibuprofen', 'brufen', 'paracetamol', 'crocin', 'dolo', 'calpol', 'pcm', '650'],
-    brand: 'Combiflam / Paracetamol Formulation',
+    brand: 'Combiflam / Paracetamol IP 650mg',
     genericSalt: 'Ibuprofen 400mg + Paracetamol 325mg (or Paracetamol 650mg IP)',
     nfiCode: 'NFI-2025-ANA-0102',
     dosageForm: 'Oral Film-Coated Tablet',
+    imageUrl: '/images/medicines/white_paracetamol.jpg',
     janAushadhiGeneric: 'Ibuprofen + Paracetamol (PMBJP)',
     brandedPrice: '₹54.00 per strip',
     janAushadhiPrice: '₹18.00 per strip',
@@ -64,10 +67,11 @@ const CLINICAL_FORMULARY_DATABASE = [
   {
     id: 'amoxicillin_clav',
     keywords: ['amoxicillin', 'augmentin', 'mox', 'clav', 'amoxyclav', 'amox', '625'],
-    brand: 'Augmentin / Amoxicillin 500mg',
+    brand: 'Augmentin 625 Duo / Amoxicillin 500mg',
     genericSalt: 'Amoxicillin 500mg + Potassium Clavulanate 125mg IP',
     nfiCode: 'NFI-2025-ANT-0284',
     dosageForm: 'Film-Coated Tablet',
+    imageUrl: '/images/medicines/silver_amoxicillin_blister.jpg',
     janAushadhiGeneric: 'Amoxicillin + Clavulanic Acid (PMBJP)',
     brandedPrice: '₹198.00 per strip',
     janAushadhiPrice: '₹48.00 per strip',
@@ -75,12 +79,41 @@ const CLINICAL_FORMULARY_DATABASE = [
     ddiConflict: 'Verify prior history of penicillin/beta-lactam allergy before dispensing.'
   },
   {
+    id: 'amlodipine_telmisartan',
+    keywords: ['amlodipine', 'amlo', 'telma', 'telmisartan', 'amlopres', 'telvas', '5mg', '40mg'],
+    brand: 'Amlodipine 5mg / Telma-40 (Antihypertensive)',
+    genericSalt: 'Amlodipine Besylate 5mg (or Telmisartan 40mg IP)',
+    nfiCode: 'NFI-2025-CVS-0145',
+    dosageForm: 'Uncoated Tablet',
+    imageUrl: '/images/medicines/blue_amlodipine.jpg',
+    janAushadhiGeneric: 'Amlodipine 5mg / Telmisartan 40mg (PMBJP)',
+    brandedPrice: '₹84.00 per strip',
+    janAushadhiPrice: '₹11.20 per strip',
+    savingsPct: '86%',
+    ddiConflict: 'Monitor blood pressure regularly for orthostatic hypotension.'
+  },
+  {
+    id: 'atorvastatin',
+    keywords: ['atorva', 'atorvastatin', 'lipitor', 'statin', 'cholesterol', '10mg', '20mg'],
+    brand: 'Atorva-20 / Lipitor (Lipid-Lowering)',
+    genericSalt: 'Atorvastatin Calcium 20mg IP',
+    nfiCode: 'NFI-2025-CVS-0892',
+    dosageForm: 'Film-Coated Tablet',
+    imageUrl: '/images/medicines/orange_atorvastatin.jpg',
+    janAushadhiGeneric: 'Atorvastatin 20mg (PMBJP)',
+    brandedPrice: '₹165.00 per strip',
+    janAushadhiPrice: '₹28.50 per strip',
+    savingsPct: '82%',
+    ddiConflict: 'Do not co-administer with high-dose macrolides or fibrates without monitoring AST/ALT.'
+  },
+  {
     id: 'azithromycin',
-    keywords: ['azithromycin', 'azee', 'zithromax', 'azimax', 'azithro'],
+    keywords: ['azithromycin', 'azee', 'zithromax', 'azimax', 'azithro', '500'],
     brand: 'Azee-500 (Macrolide Antibiotic)',
     genericSalt: 'Azithromycin Dihydrate 500mg IP',
     nfiCode: 'NFI-2025-ANT-0312',
     dosageForm: 'Tablet',
+    imageUrl: '/images/medicines/silver_amoxicillin_blister.jpg',
     janAushadhiGeneric: 'Azithromycin 500mg (PMBJP)',
     brandedPrice: '₹132.00 per strip',
     janAushadhiPrice: '₹34.00 per strip',
@@ -94,11 +127,26 @@ const CLINICAL_FORMULARY_DATABASE = [
     genericSalt: 'Montelukast Sodium 10mg + Levocetirizine 5mg IP',
     nfiCode: 'NFI-2025-RES-0542',
     dosageForm: 'Chewable / Film Tablet',
+    imageUrl: '/images/medicines/white_paracetamol.jpg',
     janAushadhiGeneric: 'Montelukast + Levocetirizine (PMBJP)',
     brandedPrice: '₹185.00 per strip',
     janAushadhiPrice: '₹38.50 per strip',
     savingsPct: '79%',
     ddiConflict: null
+  },
+  {
+    id: 'zerodol_p',
+    keywords: ['zerodol', 'aceclofenac', 'hifenac', 'zerodol-p'],
+    brand: 'Zerodol-P (NSAID + Paracetamol)',
+    genericSalt: 'Aceclofenac 100mg + Paracetamol 325mg IP',
+    nfiCode: 'NFI-2025-ANA-0329',
+    dosageForm: 'Film-Coated Tablet',
+    imageUrl: '/images/medicines/white_paracetamol.jpg',
+    janAushadhiGeneric: 'Aceclofenac + Paracetamol (PMBJP)',
+    brandedPrice: '₹88.00 per strip',
+    janAushadhiPrice: '₹22.00 per strip',
+    savingsPct: '75%',
+    ddiConflict: 'Do not use in active renal impairment or severe congestive heart failure.'
   },
   {
     id: 'omeprazole',
@@ -107,6 +155,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     genericSalt: 'Omeprazole 20mg IP',
     nfiCode: 'NFI-2025-GAS-0310',
     dosageForm: 'Hard Gelatin Capsule',
+    imageUrl: '/images/medicines/yellow_pantoprazole.jpg',
     janAushadhiGeneric: 'Omeprazole 20mg (PMBJP)',
     brandedPrice: '₹68.00 per strip',
     janAushadhiPrice: '₹12.00 per strip',
@@ -227,6 +276,72 @@ export default function PrescriptionScannerView() {
         { label: 'DUAL_SALT', text: 'IBUPROFEN 400MG + PARACETAMOL 325MG', x: 26, y: 76, w: 320, h: 28, conf: 'High Match' },
         { label: 'MFG_BATCH', text: 'SANOFIAVENTIS • B.No: CB2049', x: 26, y: 112, w: 240, h: 22, conf: 'Verified' }
       ]
+    },
+    {
+      id: 'sample_amlodipine',
+      brand: 'Amlodipine 5mg (Blue Blister Strip)',
+      genericSalt: 'Amlodipine Besylate 5mg IP',
+      nfiCode: 'NFI-2025-CVS-0145',
+      dosageForm: 'Oral Antihypertensive Tablet',
+      janAushadhiGeneric: 'Amlodipine 5mg (PMBJP)',
+      brandedPrice: '₹84.00 per strip',
+      janAushadhiPrice: '₹11.20 per strip',
+      savingsPct: '86%',
+      realImageUrl: '/images/medicines/blue_amlodipine.jpg',
+      extractedText: 'AMLODIPINE 5MG TABLETS EXP 10/2026 LOT 1437 BP CARDIOVASCULAR IP 5 MG',
+      ddiConflict: null,
+      contourDetected: true,
+      imagePlaceholderColor: '#E0F2FE',
+      pillColor: '#0284C7',
+      boundingBoxes: [
+        { label: 'BRAND_NAME', text: 'AMLODIPINE 5MG', x: 26, y: 34, w: 220, h: 32, conf: 'High Match' },
+        { label: 'ACTIVE_SALT', text: 'AMLODIPINE BESYLATE 5MG', x: 26, y: 76, w: 280, h: 26, conf: 'High Match' },
+        { label: 'BATCH_EXP', text: 'LOT: 1437 • EXP: 10/2026', x: 26, y: 112, w: 230, h: 22, conf: 'Verified' }
+      ]
+    },
+    {
+      id: 'sample_atorvastatin',
+      brand: 'Atorvastatin 20mg (Orange Lipid-Lowering)',
+      genericSalt: 'Atorvastatin Calcium 20mg IP',
+      nfiCode: 'NFI-2025-CVS-0892',
+      dosageForm: 'Film-Coated Tablet',
+      janAushadhiGeneric: 'Atorvastatin 20mg (PMBJP)',
+      brandedPrice: '₹165.00 per strip',
+      janAushadhiPrice: '₹28.50 per strip',
+      savingsPct: '82%',
+      realImageUrl: '/images/medicines/orange_atorvastatin.jpg',
+      extractedText: 'ATORVASTATIN 20MG TABLETS LOT: EXP 12/26 ATORVASTATIN CALCIUM TRIHYDRATE IP 20 MG',
+      ddiConflict: 'Avoid co-prescribing with gemfibrozil or high-dose clarithromycin to minimize rhabdomyolysis risk.',
+      contourDetected: true,
+      imagePlaceholderColor: '#FFEDD5',
+      pillColor: '#EA580C',
+      boundingBoxes: [
+        { label: 'BRAND_NAME', text: 'ATORVASTATIN 20MG', x: 28, y: 34, w: 240, h: 32, conf: 'High Match' },
+        { label: 'ACTIVE_SALT', text: 'ATORVASTATIN CALCIUM 20MG', x: 28, y: 76, w: 290, h: 26, conf: 'High Match' },
+        { label: 'BATCH_EXP', text: 'LOT: EXP 12/26 • BARCODE VERIFIED', x: 28, y: 112, w: 260, h: 22, conf: 'Verified' }
+      ]
+    },
+    {
+      id: 'sample_augmentin',
+      brand: 'Augmentin 625 Duo (Aluminum Blister Strip)',
+      genericSalt: 'Amoxicillin 500mg + Clavulanate 125mg',
+      nfiCode: 'NFI-2025-ANT-0284',
+      dosageForm: 'Film-Coated Tablet',
+      janAushadhiGeneric: 'Amoxicillin + Clavulanic Acid (PMBJP)',
+      brandedPrice: '₹198.00 per strip',
+      janAushadhiPrice: '₹48.00 per strip',
+      savingsPct: '75%',
+      realImageUrl: '/images/medicines/silver_amoxicillin_blister.jpg',
+      extractedText: 'AMOXICILLIN 500MG CAPSULES BP BATCH: L 34512A EXP: 10/26 POTASSIUM CLAVULANATE',
+      ddiConflict: 'Verify prior history of penicillin/beta-lactam allergy before dispensing.',
+      contourDetected: true,
+      imagePlaceholderColor: '#F1F5F9',
+      pillColor: '#475569',
+      boundingBoxes: [
+        { label: 'BRAND_NAME', text: 'AMOXICILLIN 500MG', x: 26, y: 34, w: 230, h: 32, conf: 'High Match' },
+        { label: 'ACTIVE_SALT', text: 'AMOXICILLIN + CLAVULANATE', x: 26, y: 76, w: 280, h: 26, conf: 'High Match' },
+        { label: 'BATCH_EXP', text: 'BATCH: L 34512A • EXP: 10/26', x: 26, y: 112, w: 250, h: 22, conf: 'Verified' }
+      ]
     }
   ];
 
@@ -313,6 +428,7 @@ export default function PrescriptionScannerView() {
           genericSalt: matchedDrug.genericSalt,
           nfiCode: matchedDrug.nfiCode,
           dosageForm: matchedDrug.dosageForm,
+          realImageUrl: matchedDrug.imageUrl,
           janAushadhiGeneric: matchedDrug.janAushadhiGeneric,
           brandedPrice: matchedDrug.brandedPrice,
           janAushadhiPrice: matchedDrug.janAushadhiPrice,
@@ -332,6 +448,7 @@ export default function PrescriptionScannerView() {
           genericSalt: rawText ? 'Text extracted • Resolving against National Formulary...' : 'No legible medicine name detected. Please ensure bright lighting.',
           nfiCode: 'NFI-PENDING-MATCH',
           dosageForm: 'Solid Dosage Form',
+          realImageUrl: imageToOcr || '/images/medicines/silver_amoxicillin_blister.jpg',
           janAushadhiGeneric: 'PMBJP Generic Formulary',
           brandedPrice: 'Check local MRP',
           janAushadhiPrice: 'Affordable PMBJP Tier',
@@ -667,7 +784,22 @@ export default function PrescriptionScannerView() {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '16px', height: '16px', borderRadius: '4px', backgroundColor: sample.pillColor }} />
+                    {sample.realImageUrl ? (
+                      <img 
+                        src={sample.realImageUrl} 
+                        alt={sample.brand} 
+                        style={{ 
+                          width: '42px', 
+                          height: '42px', 
+                          borderRadius: '8px', 
+                          objectFit: 'cover', 
+                          border: '1.5px solid #CBD5E1',
+                          flexShrink: 0
+                        }} 
+                      />
+                    ) : (
+                      <div style={{ width: '16px', height: '16px', borderRadius: '4px', backgroundColor: sample.pillColor }} />
+                    )}
                     <div>
                       <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{sample.brand}</div>
                       <div style={{ fontSize: '12px', color: '#64748B' }}>{sample.genericSalt}</div>
@@ -688,7 +820,11 @@ export default function PrescriptionScannerView() {
             <div style={{
               height: '240px',
               borderRadius: '12px',
-              background: uploadedImage ? `url(${uploadedImage}) center/contain no-repeat #0F172A` : currentSample.imagePlaceholderColor,
+              background: uploadedImage 
+                ? `url(${uploadedImage}) center/contain no-repeat #0F172A` 
+                : currentSample.realImageUrl 
+                  ? `linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url(${currentSample.realImageUrl}) center/cover no-repeat #0F172A`
+                  : currentSample.imagePlaceholderColor,
               border: '2px solid #CBD5E1',
               position: 'relative',
               display: 'flex',
@@ -846,11 +982,32 @@ export default function PrescriptionScannerView() {
               </span>
             </div>
 
-            <h2 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', marginBottom: '4px' }}>
-              {currentSample.genericSalt}
-            </h2>
-            <div style={{ fontSize: '13px', color: '#64748B', marginBottom: '16px' }}>
-              Form: {currentSample.dosageForm} • Brand on Packaging: {currentSample.brand}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+              {currentSample.realImageUrl && (
+                <div style={{
+                  width: '68px',
+                  height: '68px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  border: '1.5px solid #CBD5E1',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                }}>
+                  <img 
+                    src={currentSample.realImageUrl} 
+                    alt={currentSample.brand} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                </div>
+              )}
+              <div style={{ flex: 1 }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540', margin: '0 0 4px 0' }}>
+                  {currentSample.genericSalt}
+                </h2>
+                <div style={{ fontSize: '12.5px', color: '#64748B' }}>
+                  Form: {currentSample.dosageForm} • Brand: <strong>{currentSample.brand}</strong>
+                </div>
+              </div>
             </div>
 
             {/* Raw Extracted Bounding Box / OCR Tokens */}

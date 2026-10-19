@@ -87,6 +87,40 @@ const FORMULARY_DATABASE = [
     vernacularTe: 'యాంటీబయాటిక్ మాత్ర (ఇన్ఫెక్షన్ల నివారణకు)',
     vernacularHi: 'एंटीबायोटिक गोली (संक्रमण के लिए)',
     verified: true
+  },
+  {
+    id: 'amlodipine',
+    keywords: ['amlodipine', 'amlo', 'telma', 'telmisartan', 'amlopres', 'telvas', '5mg'],
+    brandName: 'Amlodipine 5mg / Telma (Branded)',
+    color: '🔵 Blue Foil Blister Pack',
+    shape: 'Round Uncoated Tablet',
+    imprint: 'AML-5',
+    imageUrl: '/images/medicines/blue_amlodipine.jpg',
+    brandPrice: '₹84.00 / 10 Tabs',
+    genericName: 'Amlodipine Besylate 5mg IP',
+    genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
+    genericPrice: '₹11.20 / 10 Tabs',
+    savingsPct: '86% Cost Savings',
+    vernacularTe: 'నీలం రంగు స్ట్రిప్ మాత్ర (రక్తపోటు / బీపీ నియంత్రణకు)',
+    vernacularHi: 'नीली पट्टी वाली गोली (ब्लड प्रेशर नियंत्रण के लिए)',
+    verified: true
+  },
+  {
+    id: 'atorvastatin',
+    keywords: ['atorva', 'atorvastatin', 'lipitor', 'statin', 'cholesterol', '10mg', '20mg'],
+    brandName: 'Atorva-20 / Lipitor (Branded)',
+    color: '🟠 Orange Film-Coated Tablet',
+    shape: 'Oval Coated Tablet',
+    imprint: 'ATV-20',
+    imageUrl: '/images/medicines/orange_atorvastatin.jpg',
+    brandPrice: '₹165.00 / 10 Tabs',
+    genericName: 'Atorvastatin Calcium 20mg IP',
+    genericBrand: 'PMBJP Jan Aushadhi (Pradhan Mantri Kendra)',
+    genericPrice: '₹28.50 / 10 Tabs',
+    savingsPct: '82% Cost Savings',
+    vernacularTe: 'నారింజ రంగు మాత్ర (కొలెస్ట్రాల్ మరియు గుండె సంరక్షణకు)',
+    vernacularHi: 'नारंगी गोली (कोलेस्ट्रॉल और हृदय सुरक्षा के लिए)',
+    verified: true
   }
 ];
 
@@ -209,6 +243,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
           color: '⚪ Silver / Foil Strip',
           shape: 'Solid Oral Formulation',
           imprint: 'Packaging Print',
+          imageUrl: imageToScan || '/images/medicines/silver_amoxicillin_blister.jpg',
           brandPrice: 'Check Local MRP',
           genericName: 'Jan Aushadhi Generic Alternative Available',
           genericBrand: 'PMBJP Jan Aushadhi Kendra (Govt. of India)',
