@@ -19,6 +19,7 @@ import {
 import Tesseract from 'tesseract.js';
 import { useApp } from '../context/AppContext';
 import { openCvPreprocessor } from '../services/openCvOcrPreprocessor';
+import { evaluatePharmacovigilanceSafety } from '../services/pharmacovigilanceSentinel';
 
 // Comprehensive Indian Clinical Formulary Database for Real-Time OCR Matching
 const CLINICAL_FORMULARY_DATABASE = [
@@ -345,8 +346,24 @@ export default function PrescriptionScannerView() {
     }
   ];
 
+  // Feature 4: NEJM AI Beers Criteria & Renal Safety Sentinel State
+  const [patientAgeProfile, setPatientAgeProfile] = useState('geriatric'); // 'adult' | 'geriatric'
+  const [patientEgfrProfile, setPatientEgfrProfile] = useState('normal'); // 'normal' | 'mild' | 'severe'
+
   // Current display data: either live OCR result or selected sample
   const currentSample = liveOcrResult || OCR_SAMPLES[selectedSampleIdx];
+
+  // Evaluate Beers Criteria & KDIGO Renal Safety
+  const activeKeywords = currentSample.keywords || [currentSample.id || '', currentSample.brand || ''];
+  const ageVal = patientAgeProfile === 'geriatric' ? 68 : 42;
+  const egfrVal = patientEgfrProfile === 'severe' ? 24 : patientEgfrProfile === 'mild' ? 40 : 92;
+
+  const beersSafety = evaluatePharmacovigilanceSafety({
+    drugId: currentSample.id || currentSample.brand,
+    drugKeywords: activeKeywords,
+    patientAge: ageVal,
+    eGfr: egfrVal
+  });
 
   // Stop webcam stream helper
   const stopWebcam = () => {
@@ -1068,6 +1085,137 @@ export default function PrescriptionScannerView() {
               </span>
             </div>
           )}
+
+          {/* Feature 4: NEJM AI Pharmacovigilance & Beers Criteria Sentinel Card */}
+          <div style={{
+            background: beersSafety.bgColor,
+            border: `1.5px solid ${beersSafety.borderColor}`,
+            borderRadius: '16px',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ShieldCheck size={20} color={beersSafety.color} />
+                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
+                  NEJM AI Pharmacovigilance & Beers Sentinel (2024)
+                </span>
+              </div>
+              <span style={{
+                background: beersSafety.color,
+                color: '#FFFFFF',
+                fontSize: '11px',
+                fontWeight: 800,
+                padding: '3px 10px',
+                borderRadius: '12px'
+              }}>
+                {beersSafety.badge}
+              </span>
+            </div>
+
+            {/* Interactive Clinical Controls: Age Profile & eGFR Level */}
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              padding: '12px',
+              border: '1px solid rgba(0,0,0,0.06)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              {/* Age Toggle */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#475569' }}>
+                  Patient Age Profile:
+                </span>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <button
+                    onClick={() => setPatientAgeProfile('adult')}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '8px',
+                      border: patientAgeProfile === 'adult' ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
+                      background: patientAgeProfile === 'adult' ? '#E6FAF8' : '#F8FAFC',
+                      color: patientAgeProfile === 'adult' ? '#008B8B' : '#64748B',
+                      fontSize: '11.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Adult (&lt;65 yrs)
+                  </button>
+                  <button
+                    onClick={() => setPatientAgeProfile('geriatric')}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '8px',
+                      border: patientAgeProfile === 'geriatric' ? '1.5px solid #B91C1C' : '1px solid #CBD5E1',
+                      background: patientAgeProfile === 'geriatric' ? '#FEE2E2' : '#F8FAFC',
+                      color: patientAgeProfile === 'geriatric' ? '#B91C1C' : '#64748B',
+                      fontSize: '11.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Geriatric (≥65 yrs Beers)
+                  </button>
+                </div>
+              </div>
+
+              {/* eGFR Renal Function Toggle */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#475569' }}>
+                  Renal Function (eGFR):
+                </span>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {[
+                    { id: 'normal', label: '>60 mL/min' },
+                    { id: 'mild', label: '30–59 (Mild)' },
+                    { id: 'severe', label: '<30 (Severe)' }
+                  ].map(eg => (
+                    <button
+                      key={eg.id}
+                      onClick={() => setPatientEgfrProfile(eg.id)}
+                      style={{
+                        padding: '4px 8px',
+                        borderRadius: '8px',
+                        border: patientEgfrProfile === eg.id ? '1.5px solid #0A2540' : '1px solid #CBD5E1',
+                        background: patientEgfrProfile === eg.id ? '#0A2540' : '#F8FAFC',
+                        color: patientEgfrProfile === eg.id ? '#FFFFFF' : '#64748B',
+                        fontSize: '11px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {eg.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sentinel Findings & Recommendation */}
+            <div>
+              <div style={{ fontSize: '13.5px', fontWeight: 800, color: beersSafety.color, marginBottom: '4px' }}>
+                {beersSafety.title}
+              </div>
+              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.5, marginBottom: '6px' }}>
+                {beersSafety.details}
+              </div>
+              <div style={{
+                background: 'rgba(255,255,255,0.8)',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                fontSize: '11.5px',
+                color: '#0A2540',
+                border: '1px solid rgba(0,0,0,0.06)'
+              }}>
+                📋 <strong>Sentinel Recommendation:</strong> {beersSafety.recommendation}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
