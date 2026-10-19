@@ -35,6 +35,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹148.50 per strip',
     janAushadhiPrice: '₹22.40 per strip',
     savingsPct: '85%',
+    vernacularTe: 'పసుపు రంగు క్యాప్సూల్ — ఉదయం పరగడుపున గ్యాస్ మరియు ఎసిడిటీ నివారణకు',
     ddiConflict: null
   },
   {
@@ -49,6 +50,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹62.00 per strip',
     janAushadhiPrice: '₹14.50 per strip',
     savingsPct: '76%',
+    vernacularTe: 'గులాబీ రంగు మాత్ర — రాత్రి భోజనం తర్వాత డయాబెటిస్/షుగర్ నియంత్రణకు',
     ddiConflict: null
   },
   {
@@ -63,6 +65,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹54.00 per strip',
     janAushadhiPrice: '₹18.00 per strip',
     savingsPct: '66%',
+    vernacularTe: 'తెలుపు రంగు మాత్ర — జ్వరం మరియు ఒంటి నొప్పులకు (భోజనం తర్వాత వేసుకోవాలి)',
     ddiConflict: 'CRITICAL SAFETY ALERT: If patient has history of gastric ulcers or is on anti-platelet therapy (Aspirin/Ecosprin), check competitive COX-1 GI bleeding risk.'
   },
   {
@@ -77,6 +80,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹198.00 per strip',
     janAushadhiPrice: '₹48.00 per strip',
     savingsPct: '75%',
+    vernacularTe: 'సిల్వర్ బ్లిస్టర్ మాత్ర — బ్యాక్టీరియల్ ఇన్ఫెక్షన్ నివారణకు పూర్తి కోర్సు వాడాలి',
     ddiConflict: 'Verify prior history of penicillin/beta-lactam allergy before dispensing.'
   },
   {
@@ -91,6 +95,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹84.00 per strip',
     janAushadhiPrice: '₹11.20 per strip',
     savingsPct: '86%',
+    vernacularTe: 'నీలం రంగు స్ట్రిప్ మాత్ర — రక్తపోటు (బీపీ) నియంత్రణకు ఉదయం వేళ',
     ddiConflict: 'Monitor blood pressure regularly for orthostatic hypotension.'
   },
   {
@@ -105,6 +110,7 @@ const CLINICAL_FORMULARY_DATABASE = [
     brandedPrice: '₹165.00 per strip',
     janAushadhiPrice: '₹28.50 per strip',
     savingsPct: '82%',
+    vernacularTe: 'నారింజ రంగు మాత్ర — కొలెస్ట్రాల్ మరియు గుండె రక్తనాళాల రక్షణకు రాత్రి వేళ',
     ddiConflict: 'Do not co-administer with high-dose macrolides or fibrates without monitoring AST/ALT.'
   },
   {
@@ -222,6 +228,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹148.50 per strip',
       janAushadhiPrice: '₹22.40 per strip',
       savingsPct: '85%',
+      vernacularTe: 'పసుపు రంగు క్యాప్సూల్ — ఉదయం పరగడుపున గ్యాస్ మరియు ఎసిడిటీ నివారణకు',
       realImageUrl: '/images/medicines/yellow_pantoprazole.jpg',
       extractedText: 'PANTOCID-40 B.No. P40291 EXP. 08/2027 MFG. SUN PHARMA PANTOPRAZOLE SODIUM IP EQ. TO PANTOPRAZOLE 40 MG',
       ddiConflict: null,
@@ -244,6 +251,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹62.00 per strip',
       janAushadhiPrice: '₹14.50 per strip',
       savingsPct: '76%',
+      vernacularTe: 'గులాబీ రంగు మాత్ర — రాత్రి భోజనం తర్వాత డయాబెటిస్/షుగర్ నియంత్రణకు',
       realImageUrl: '/images/medicines/pink_metformin.jpg',
       extractedText: 'GLYCOMET-500 SR B.No. GM9124 EXP. 11/2026 METFORMIN HYDROCHLORIDE EXTENDED RELEASE IP 500 MG',
       ddiConflict: null,
@@ -266,6 +274,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹54.00 per strip',
       janAushadhiPrice: '₹18.00 per strip',
       savingsPct: '66%',
+      vernacularTe: 'తెలుపు రంగు మాత్ర — జ్వరం మరియు ఒంటి నొప్పులకు (భోజనం తర్వాత వేసుకోవాలి)',
       realImageUrl: '/images/medicines/white_paracetamol.jpg',
       extractedText: 'COMBIFLAM TABLET IBUPROFEN IP 400 MG PARACETAMOL IP 325 MG SANOFIAVENTIS B.No. CB2049',
       ddiConflict: 'CRITICAL SAFETY ALERT: If patient is concurrently taking Aspirin/Ecosprin, combining with Ibuprofen induces competitive COX-1 inhibition and elevates gastrointestinal hemorrhage risk.',
@@ -288,6 +297,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹84.00 per strip',
       janAushadhiPrice: '₹11.20 per strip',
       savingsPct: '86%',
+      vernacularTe: 'నీలం రంగు స్ట్రిప్ మాత్ర — రక్తపోటు (బీపీ) నియంత్రణకు ఉదయం వేళ',
       realImageUrl: '/images/medicines/blue_amlodipine.jpg',
       extractedText: 'AMLODIPINE 5MG TABLETS EXP 10/2026 LOT 1437 BP CARDIOVASCULAR IP 5 MG',
       ddiConflict: null,
@@ -310,6 +320,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹165.00 per strip',
       janAushadhiPrice: '₹28.50 per strip',
       savingsPct: '82%',
+      vernacularTe: 'నారింజ రంగు మాత్ర — కొలెస్ట్రాల్ మరియు గుండె రక్తనాళాల రక్షణకు రాత్రి వేళ',
       realImageUrl: '/images/medicines/orange_atorvastatin.jpg',
       extractedText: 'ATORVASTATIN 20MG TABLETS LOT: EXP 12/26 ATORVASTATIN CALCIUM TRIHYDRATE IP 20 MG',
       ddiConflict: 'Avoid co-prescribing with gemfibrozil or high-dose clarithromycin to minimize rhabdomyolysis risk.',
@@ -332,6 +343,7 @@ export default function PrescriptionScannerView() {
       brandedPrice: '₹198.00 per strip',
       janAushadhiPrice: '₹48.00 per strip',
       savingsPct: '75%',
+      vernacularTe: 'సిల్వర్ బ్లిస్టర్ మాత్ర — బ్యాక్టీరియల్ ఇన్ఫెక్షన్ నివారణకు పూర్తి కోర్సు వాడాలి',
       realImageUrl: '/images/medicines/silver_amoxicillin_blister.jpg',
       extractedText: 'AMOXICILLIN 500MG CAPSULES BP BATCH: L 34512A EXP: 10/26 POTASSIUM CLAVULANATE',
       ddiConflict: 'Verify prior history of penicillin/beta-lactam allergy before dispensing.',
@@ -453,6 +465,7 @@ export default function PrescriptionScannerView() {
           extractedText: rawText || 'No text extracted',
           batchNumber: batch || 'Detected on packaging',
           expiryDate: expiry || 'Inspected',
+          vernacularTe: matchedDrug.vernacularTe,
           ddiConflict: matchedDrug.ddiConflict,
           pillColor: '#008B8B',
           imagePlaceholderColor: '#E6FAF8'
@@ -470,6 +483,7 @@ export default function PrescriptionScannerView() {
           brandedPrice: 'Check local MRP',
           janAushadhiPrice: 'Affordable PMBJP Tier',
           savingsPct: '50-80%',
+          vernacularTe: 'వైద్యుని సలహా ప్రకారం జెనెరిక్ ఔషధాల వివరాలు చూడండి',
           extractedText: rawText || 'No legible text extracted. Ensure strip is held flat under good lighting.',
           batchNumber: batch || 'Not identified',
           expiryDate: expiry || 'Not identified',
@@ -1024,6 +1038,11 @@ export default function PrescriptionScannerView() {
                 <div style={{ fontSize: '12.5px', color: '#64748B' }}>
                   Form: {currentSample.dosageForm} • Brand: <strong>{currentSample.brand}</strong>
                 </div>
+                {currentSample.vernacularTe && (
+                  <div style={{ fontSize: '12px', color: '#008B8B', fontWeight: 750, marginTop: '4px' }}>
+                    తెలుగు: {currentSample.vernacularTe}
+                  </div>
+                )}
               </div>
             </div>
 
