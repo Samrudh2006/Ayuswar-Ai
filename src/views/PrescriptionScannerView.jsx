@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import Tesseract from 'tesseract.js';
 import { useApp } from '../context/AppContext';
+import { openCvPreprocessor } from '../services/openCvOcrPreprocessor';
 
 // Comprehensive Indian Clinical Formulary Database for Real-Time OCR Matching
 const CLINICAL_FORMULARY_DATABASE = [
@@ -152,6 +153,9 @@ export default function PrescriptionScannerView() {
   const [liveOcrResult, setLiveOcrResult] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState(null);
+  const [useCvEnhancement, setUseCvEnhancement] = useState(true);
+  const [cvPreprocessedUrl, setCvPreprocessedUrl] = useState(null);
+  const [cvStats, setCvStats] = useState(null);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -259,15 +263,28 @@ export default function PrescriptionScannerView() {
     }
   };
 
-  // Run Real In-Browser Tesseract.js OCR
+  // Run Real In-Browser Tesseract.js OCR with OpenCV Preprocessing
   const executeRealOcr = async (imageSource) => {
     setIsScanning(true);
-    setOcrProgress(15);
-    setOcrStatusText('Initializing in-browser Tesseract.js OCR worker...');
+    setOcrProgress(10);
+    setOcrStatusText('Applying OpenCV Otsu Binarization & Adaptive Foil Contrast...');
+
+    let imageToOcr = imageSource;
+    if (useCvEnhancement) {
+      try {
+        const cvResult = await openCvPreprocessor.preprocessForOcr(imageSource);
+        imageToOcr = cvResult.processedDataUrl;
+        setCvPreprocessedUrl(cvResult.processedDataUrl);
+        setCvStats(cvResult.stats);
+      } catch (cvErr) {
+        console.warn('OpenCV enhancement fallback:', cvErr);
+      }
+    }
 
     try {
+      setOcrStatusText('Running Tesseract.js WASM on enhanced blister contours...');
       const result = await Tesseract.recognize(
-        imageSource,
+        imageToOcr,
         'eng',
         {
           logger: (m) => {
@@ -744,6 +761,47 @@ export default function PrescriptionScannerView() {
               )}
             </div>
           )}
+
+          {/* OpenCV.js Computer Vision Preprocessing Badge & Toggle */}
+          <div style={{
+            background: useCvEnhancement ? '#F0FDF4' : '#F8FAFC',
+            border: useCvEnhancement ? '1px solid #BBF7D0' : '1px solid #E2E8F0',
+            borderRadius: '10px',
+            padding: '10px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '10px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '14px' }}>🔬</span>
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A' }}>
+                  OpenCV.js Adaptive Foil Binarization
+                </div>
+                <div style={{ fontSize: '10.5px', color: '#64748B' }}>
+                  {cvStats 
+                    ? `Otsu Threshold: ${cvStats.otsuThreshold} • Contrast Range: ${cvStats.minLuminance}–${cvStats.maxLuminance}`
+                    : 'Removes foil reflections, crinkles & shadows prior to Tesseract OCR'}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setUseCvEnhancement(v => !v)}
+              style={{
+                background: useCvEnhancement ? '#16A34A' : '#94A3B8',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '14px',
+                padding: '4px 10px',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer'
+              }}
+            >
+              {useCvEnhancement ? 'CV: ACTIVE' : 'CV: OFF'}
+            </button>
+          </div>
 
           {/* Action Button */}
           {uploadedImage && (

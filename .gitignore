@@ -16,7 +16,10 @@ recordings/
 project-documentation/
 
 # Automation scripts for recording & screen capture
-scripts/
+scripts/record_*.js
+scripts/test_record.js
+scripts/capture_all_screens.js
+scripts/whatsapp_audio_test_results.json
 
 # Mobile Native Builds & Artifacts
 android/
