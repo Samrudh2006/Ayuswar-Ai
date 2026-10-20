@@ -127,23 +127,132 @@ export default function HeroLanding({
   const [activeDialectId, setActiveDialectId] = useState('te');
   const [karaokeProgress, setKaraokeProgress] = useState(40);
   const [isKaraokePlaying, setIsKaraokePlaying] = useState(false);
+  const karaokeUtteranceRef = useRef(null);
+  const karaokeAudioCtxRef = useRef(null);
 
-  // Karaoke Scrubber Playback Simulation Effect
-  useEffect(() => {
-    let timer;
-    if (isKaraokePlaying) {
-      timer = setInterval(() => {
-        setKaraokeProgress((prev) => {
-          if (prev >= 100) {
-            setIsKaraokePlaying(false);
-            return 0;
-          }
-          return prev + 2;
-        });
-      }, 100);
+  // Play natural human voice for a single word
+  const speakSingleWord = (word, langCode = 'te-IN') => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const ut = new SpeechSynthesisUtterance(word);
+      ut.lang = langCode;
+      ut.rate = 0.86;
+      ut.pitch = 1.05;
+      
+      const voices = window.speechSynthesis.getVoices() || [];
+      const match = voices.find(v => v.lang === langCode || v.lang.startsWith(langCode.slice(0, 2))) ||
+                    voices.find(v => v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('natural'));
+      if (match) ut.voice = match;
+
+      window.speechSynthesis.speak(ut);
+    } catch (err) {
+      console.warn('[Karaoke] speakSingleWord fallback:', err);
     }
-    return () => clearInterval(timer);
-  }, [isKaraokePlaying]);
+  };
+
+  // Human-like Speech Synthesis & Real-Time Karaoke Sync Controller
+  const handleToggleKaraokePlayback = () => {
+    if (typeof window === 'undefined') return;
+
+    if (isKaraokePlaying) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setIsKaraokePlaying(false);
+      return;
+    }
+
+    const currentDialect = dialectData[activeDialectId] || dialectData.te;
+    const langCode = currentDialect.langCode || (
+      activeDialectId === 'te' ? 'te-IN' :
+      activeDialectId === 'hi' ? 'hi-IN' :
+      activeDialectId === 'ta' ? 'ta-IN' :
+      activeDialectId === 'kn' ? 'kn-IN' :
+      activeDialectId === 'mr' ? 'mr-IN' :
+      activeDialectId === 'bn' ? 'bn-IN' : 'en-IN'
+    );
+
+    setIsKaraokePlaying(true);
+    setKaraokeProgress(0);
+
+    // Primary: Web Speech API with real human acoustic cadence
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+
+      const textToSpeak = currentDialect.nativeScript;
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = langCode;
+      utterance.rate = 0.85; // deliberate calm clinical doctor cadence
+      utterance.pitch = 1.05;
+
+      const voices = window.speechSynthesis.getVoices() || [];
+      const bestVoice = voices.find(v => v.lang === langCode || v.lang.startsWith(activeDialectId)) ||
+                        voices.find(v => v.name.toLowerCase().includes('india')) ||
+                        voices.find(v => v.lang.includes('IN'));
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+      }
+
+      // Word-by-word boundary tracking for 100% synchronized highlighting
+      utterance.onboundary = (e) => {
+        if (typeof e.charIndex === 'number' && textToSpeak.length > 0) {
+          const charPct = Math.min(95, Math.max(0, (e.charIndex / textToSpeak.length) * 100));
+          setKaraokeProgress(charPct);
+        }
+      };
+
+      utterance.onend = () => {
+        setKaraokeProgress(100);
+        setTimeout(() => {
+          setIsKaraokePlaying(false);
+          setKaraokeProgress(0);
+        }, 800);
+      };
+
+      utterance.onerror = (e) => {
+        console.warn('[Karaoke] SpeechSynthesis boundary notice, continuing synchronized playback:', e);
+      };
+
+      karaokeUtteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Secondary / Fallback Timer to guarantee progress movement & waveform animation
+    let startTime = Date.now();
+    const durationMs = 5200; // Average natural spoken sentence length
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min(100, (elapsed / durationMs) * 100);
+      
+      setKaraokeProgress(prev => Math.max(prev, pct));
+
+      if (elapsed >= durationMs) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setIsKaraokePlaying(false);
+        }, 500);
+      }
+    }, 80);
+
+    // Clear interval when speech ends or unmounts
+    const stopWatcher = () => {
+      clearInterval(interval);
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+    window.addEventListener('beforeunload', stopWatcher, { once: true });
+  };
+
+  // Clean up speech on dialect switch or unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [activeDialectId]);
 
   // Interactive 4-Step Pipeline Step
   const [activePipelineStep, setActivePipelineStep] = useState(0);
@@ -2481,7 +2590,7 @@ export default function HeroLanding({
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <button
-                    onClick={() => setIsKaraokePlaying(!isKaraokePlaying)}
+                    onClick={handleToggleKaraokePlayback}
                     style={{
                       width: '46px',
                       height: '46px',
@@ -2496,6 +2605,8 @@ export default function HeroLanding({
                       boxShadow: '0 4px 16px rgba(0,139,139,0.4)',
                       transition: 'all 0.2s ease'
                     }}
+                    title={isKaraokePlaying ? "Pause Voice Synthesis" : "Play Spoken Vernacular Schedule"}
+                    aria-label={isKaraokePlaying ? "Pause" : "Play"}
                   >
                     {isKaraokePlaying ? <Pause size={18} /> : <Play size={18} fill="#ffffff" />}
                   </button>
@@ -2657,7 +2768,10 @@ export default function HeroLanding({
                         transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
                         cursor: 'pointer'
                       }}
-                      onClick={() => setKaraokeProgress(token.trigger)}
+                      onClick={() => {
+                        setKaraokeProgress(token.trigger);
+                        speakSingleWord(token.word, dialectData[activeDialectId]?.langCode || 'te-IN');
+                      }}
                     >
                       {/* Floating English Subtitle */}
                       <div style={{
