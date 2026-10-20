@@ -834,12 +834,30 @@ export default function Navbar({
             <Link to="/emergency" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isEmergencyActive)}>
               Emergency Triage & CPR Metronome
             </Link>
-            <Link to="/doctor-portal" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isDoctorActive)}>
-              OPD Clinician Console
-            </Link>
-            <Link to="/patient-portal" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isPatientActive)}>
-              Citizen Health Record
-            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (doctorProfile) navigate('/doctor-portal');
+                else if (onOpenDoctorAuth) onOpenDoctorAuth();
+                else navigate('/auth/doctor');
+              }}
+              style={dropdownItemStyle(isDoctorActive)}
+            >
+              OPD Clinician Console {doctorProfile ? '(Active)' : '(Login / Register)'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (patientProfile) navigate('/patient-portal');
+                else if (onOpenPatientAuth) onOpenPatientAuth();
+                else navigate('/auth/patient');
+              }}
+              style={dropdownItemStyle(isPatientActive)}
+            >
+              Citizen Health Record {patientProfile ? '(Active)' : '(Login / Register)'}
+            </button>
 
             <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Clinical Simulation Data:</span>

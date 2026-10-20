@@ -65,13 +65,22 @@ export function AppProvider({ children }) {
     conditions: ['Bronchial Asthma', 'Mild Dyspnea']
   };
 
-  // Authenticated profiles (default demo profiles loaded for seamless clinical review)
+  // Authenticated profiles (starts as null until clinician / citizen explicitly logs in or registers)
   const [doctorProfile, setDoctorProfileState] = useState(() => {
     try {
       const saved = sessionStorage.getItem('ayuswar_doctor_profile');
-      return saved ? JSON.parse(saved) : DEFAULT_DOCTOR;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Cleanse legacy automatic demo fallback if present
+        if (parsed?.hprId === '91-8842-1923-4410' && !parsed?.isExplicitLogin) {
+          sessionStorage.removeItem('ayuswar_doctor_profile');
+          return null;
+        }
+        return parsed;
+      }
+      return null;
     } catch {
-      return DEFAULT_DOCTOR;
+      return null;
     }
   });
 
@@ -79,7 +88,7 @@ export function AppProvider({ children }) {
     setDoctorProfileState(profile);
     try {
       if (profile) {
-        sessionStorage.setItem('ayuswar_doctor_profile', JSON.stringify(profile));
+        sessionStorage.setItem('ayuswar_doctor_profile', JSON.stringify({ ...profile, isExplicitLogin: true }));
       } else {
         sessionStorage.removeItem('ayuswar_doctor_profile');
       }
@@ -91,9 +100,18 @@ export function AppProvider({ children }) {
   const [patientProfile, setPatientProfileState] = useState(() => {
     try {
       const saved = sessionStorage.getItem('ayuswar_patient_profile');
-      return saved ? JSON.parse(saved) : DEFAULT_PATIENT;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Cleanse legacy automatic demo fallback if present
+        if (parsed?.abhaId === '91-4521-8820-9102' && !parsed?.isExplicitLogin) {
+          sessionStorage.removeItem('ayuswar_patient_profile');
+          return null;
+        }
+        return parsed;
+      }
+      return null;
     } catch {
-      return DEFAULT_PATIENT;
+      return null;
     }
   });
 
@@ -101,7 +119,7 @@ export function AppProvider({ children }) {
     setPatientProfileState(profile);
     try {
       if (profile) {
-        sessionStorage.setItem('ayuswar_patient_profile', JSON.stringify(profile));
+        sessionStorage.setItem('ayuswar_patient_profile', JSON.stringify({ ...profile, isExplicitLogin: true }));
       } else {
         sessionStorage.removeItem('ayuswar_patient_profile');
       }
