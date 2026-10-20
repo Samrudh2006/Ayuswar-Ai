@@ -18,23 +18,23 @@ export default defineConfig(({ mode }) => {
               return res.end('Method Not Allowed');
             }
 
-            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
-            const token = env.GNANI_TOKEN || process.env.GNANI_TOKEN;
-
-            if (!apiKey || apiKey.includes('placeholder')) {
-              res.statusCode = 503;
-              res.setHeader('Content-Type', 'application/json');
-              return res.end(JSON.stringify({ 
-                error: 'Gnani API key not configured', 
-                status: 'fallback_to_browser_speech' 
-              }));
-            }
-
             let bodyStr = '';
             req.on('data', chunk => { bodyStr += chunk; });
             req.on('end', async () => {
               try {
                 const body = JSON.parse(bodyStr || '{}');
+                const apiKey = req.headers['x-api-key'] || req.headers['x-gnani-api-key'] || body.apiKey || env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+                const token = req.headers['authorization']?.replace(/^Bearer\s+/i, '') || req.headers['x-gnani-token'] || body.token || env.GNANI_TOKEN || process.env.GNANI_TOKEN;
+
+                if (!apiKey || apiKey.includes('placeholder')) {
+                  res.statusCode = 503;
+                  res.setHeader('Content-Type', 'application/json');
+                  return res.end(JSON.stringify({ 
+                    error: 'Gnani API key not configured', 
+                    status: 'fallback_to_browser_speech' 
+                  }));
+                }
+
                 const ttsEndpoint = env.GNANI_TTS_ENDPOINT || 'https://api.gnani.ai/v2/tts';
 
                 const gnaniRes = await fetch(ttsEndpoint, {
@@ -69,8 +69,8 @@ export default defineConfig(({ mode }) => {
 
           // 2. Gnani ASR / STT (Prisma v2.5) Proxy Endpoints
           const handleSttProxy = async (req, res) => {
-            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
-            const token = env.GNANI_TOKEN || process.env.GNANI_TOKEN;
+            const apiKey = req.headers['x-api-key'] || req.headers['x-gnani-api-key'] || env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            const token = req.headers['authorization']?.replace(/^Bearer\s+/i, '') || req.headers['x-gnani-token'] || env.GNANI_TOKEN || process.env.GNANI_TOKEN;
             if (!apiKey || apiKey.includes('placeholder')) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');
@@ -134,8 +134,8 @@ export default defineConfig(({ mode }) => {
               return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
             }
 
-            const evonBaseUrl = env.EVON_BASE_URL || process.env.EVON_BASE_URL;
-            const evonApiKey = env.EVON_API_KEY || process.env.EVON_API_KEY;
+            const evonBaseUrl = req.headers['x-evon-base-url'] || env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
+            const evonApiKey = req.headers['x-evon-api-key'] || req.headers['x-api-key'] || env.EVON_API_KEY || process.env.EVON_API_KEY;
             const modelName = env.EVON_MODEL_NAME || process.env.EVON_MODEL_NAME || 'gnani/gnani-evon-v3.3-30B-A3B';
 
             res.setHeader('Content-Type', 'application/json');
@@ -221,8 +221,8 @@ export default defineConfig(({ mode }) => {
               return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
             }
 
-            const evonBaseUrl = env.EVON_BASE_URL || process.env.EVON_BASE_URL;
-            const evonApiKey = env.EVON_API_KEY || process.env.EVON_API_KEY;
+            const evonBaseUrl = req.headers['x-evon-base-url'] || env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
+            const evonApiKey = req.headers['x-evon-api-key'] || req.headers['x-api-key'] || env.EVON_API_KEY || process.env.EVON_API_KEY;
             const modelName = env.EVON_MODEL_NAME || process.env.EVON_MODEL_NAME || 'gnani/gnani-evon-v3.3-30B-A3B';
 
             res.setHeader('Content-Type', 'application/json');

@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const baseUrl = process.env.EVON_BASE_URL;
-  const apiKey = process.env.EVON_API_KEY;
+  const baseUrl = req.headers['x-evon-base-url'] || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
+  const apiKey = req.headers['x-evon-api-key'] || req.headers['x-api-key'] || process.env.EVON_API_KEY;
   const modelName = process.env.EVON_MODEL_NAME || 'gnani/gnani-evon-v3.3-30B-A3B';
 
   if (!baseUrl || !apiKey || apiKey.includes('placeholder')) {
