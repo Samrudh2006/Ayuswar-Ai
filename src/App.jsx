@@ -31,7 +31,10 @@ import DatasetExplorerView from './views/DatasetExplorerView';
 import EmergencyTriageView from './views/EmergencyTriageView';
 import EmergencyHandoverView from './views/EmergencyHandoverView';
 import PrescriptionPreviewView from './views/PrescriptionPreviewView';
-
+import PrivacyPolicyView from './views/PrivacyPolicyView';
+import TermsOfServiceView from './views/TermsOfServiceView';
+import NotFoundView from './views/NotFoundView';
+import CookieConsentBanner from './components/CookieConsentBanner';
 
 import { useApp } from './context/AppContext';
 
@@ -286,10 +289,17 @@ export default function App() {
             } 
           />
 
-          {/* Fallback to Home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* Legal & Compliance Routes */}
+          <Route path="/privacy" element={<PrivacyPolicyView />} />
+          <Route path="/terms" element={<TermsOfServiceView />} />
+
+          {/* Custom 404 Route */}
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </main>
+
+      {/* DPDP Act 2023 & Ephemeral Consent Banner */}
+      <CookieConsentBanner />
 
       {/* Global Prototype Disclaimer Footer Banner (Only on public showcase routes) */}
       {!isDedicatedPortal && (

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Mic,
   Languages,
@@ -3654,32 +3654,56 @@ export default function HeroLanding({
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Solutions</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span onClick={() => setSelectedFeatureModalKey('ambient_listening')} style={{ cursor: 'pointer' }}>OPD Ambient Scribe</span>
-              <span onClick={() => setSelectedFeatureModalKey('spoken_audio_rx')} style={{ cursor: 'pointer' }}>Vernacular Audio-Rx</span>
-              <span onClick={() => setSelectedFeatureModalKey('prescription_scanner')} style={{ cursor: 'pointer' }}>Tesseract Blister OCR</span>
-              <span onClick={() => setSelectedFeatureModalKey('acoustic_biomarkers')} style={{ cursor: 'pointer' }}>Pediatric Triage Sentinel</span>
+            <div style={{ fontSize: '14px', fontWeight: 750, color: '#ffffff', marginBottom: '14px' }}>Clinical Suites</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
+              <Link to="/acoustic-lab" style={{ color: '#94A3B8', textDecoration: 'none', transition: 'color 0.2s ease' }}>
+                Acoustic Biomarker Lab
+              </Link>
+              <Link to="/scanner" style={{ color: '#94A3B8', textDecoration: 'none', transition: 'color 0.2s ease' }}>
+                Tesseract Blister OCR
+              </Link>
+              <Link to="/prescription/preview" style={{ color: '#94A3B8', textDecoration: 'none', transition: 'color 0.2s ease' }}>
+                Jan Aushadhi Prescription Rx
+              </Link>
+              <Link to="/audio-rx" style={{ color: '#94A3B8', textDecoration: 'none', transition: 'color 0.2s ease' }}>
+                Vernacular Audio-Rx
+              </Link>
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Standards & Science</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span>Open Acoustic Research</span>
-              <span>ABDM FHIR R4 Schema</span>
-              <span>WHO ICD-10 Taxonomy</span>
-              <span>National Formulary (NFI)</span>
+            <div style={{ fontSize: '14px', fontWeight: 750, color: '#ffffff', marginBottom: '14px' }}>Standards & Open Data</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
+              <Link to="/technology" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+                ABDM FHIR R4 Architecture
+              </Link>
+              <Link to="/datasets" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+                Clinical Datasets & Lexicon
+              </Link>
+              <Link to="/language-matrix" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+                Indic Language Matrix
+              </Link>
+              <Link to="/benchmarks" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+                Verified Audit Benchmarks
+              </Link>
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginBottom: '14px' }}>Challenge Info</div>
+            <div style={{ fontSize: '14px', fontWeight: 750, color: '#ffffff', marginBottom: '14px' }}>Emergency & Support</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
-              <span>Browser speech (Web Speech API)</span>
-              <span>Gnani voice integration: planned</span>
-              <span>Deadline: 10 Nov 2026</span>
-              <span>Synthetic Safe Data Only</span>
+              <a href="tel:108" style={{ color: '#F87171', textDecoration: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                🚨 108 Ambulance Hotline
+              </a>
+              <a href="tel:112" style={{ color: '#F87171', textDecoration: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                🚨 112 National Emergency
+              </a>
+              <a href="https://github.com/Samrudh2006/Ayuswar-Ai" target="_blank" rel="noopener noreferrer" style={{ color: '#00D2D3', textDecoration: 'none' }}>
+                GitHub Open Source Code
+              </a>
+              <span style={{ fontSize: '11px', color: '#64748B' }}>
+                Synthetic Safe Data Prototype
+              </span>
             </div>
           </div>
         </div>
@@ -3693,15 +3717,23 @@ export default function HeroLanding({
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '12px',
-          color: '#64748B'
+          color: '#64748B',
+          flexWrap: 'wrap',
+          gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. All rights reserved. Built with ❤️ for Bharat.
+            © {new Date().getFullYear()} AyuSwar AI. All rights reserved. Built with ❤️ for Bharat.
           </div>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <span>Privacy Policy</span>
-            <span>Terms of Clinical Use</span>
-            <span>DISHA / ABDM Architecture</span>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            <Link to="/privacy" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+              Privacy Policy (DPDP Act)
+            </Link>
+            <Link to="/terms" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+              Terms of Clinical Use
+            </Link>
+            <Link to="/technology" style={{ color: '#94A3B8', textDecoration: 'none' }}>
+              ABDM Architecture
+            </Link>
           </div>
         </div>
       </footer>
