@@ -1,0 +1,11 @@
+id,lang,patient,drug,char_count,est_audio_sec,latency_ms,rtf_speedup,wav_size_kb,opus_whatsapp_kb,numeral_intelligible
+rx_01,te,నారాయణ రావు,Pantoprazole 40mg,118,7.85,347.1,22.62,245.3,34.3,True
+rx_02,te,నారాయణ రావు,Metformin 500mg,105,6.46,317.2,20.37,201.9,28.3,True
+rx_03,te,వెంకటేశ్వర్లు,Ecosprin 75mg,89,5.54,321.1,17.25,173.1,24.2,True
+rx_04,te,సుబ్బారావు,Telmisartan 40mg,85,5.54,320.2,17.3,173.1,24.2,True
+rx_05,hi,आरव,Budesonide Respules 0.5mg,85,8.31,318.2,26.12,259.7,36.4,True
+rx_06,hi,आरव,Paracetamol Syrup 120mg/5ml,81,7.38,329.4,22.4,230.6,32.3,True
+rx_07,hi,सुरेश कुमार,Atorvastatin 10mg,82,8.31,333.9,24.89,259.7,36.4,True
+rx_08,en,Narayana Rao,Pantoprazole 40mg,108,9.23,328.6,28.09,288.4,40.4,True
+rx_09,en,Narayana Rao,Metformin 500mg,89,8.31,326.1,25.48,259.7,36.4,True
+rx_10,mix,సుబ్బలక్ష్మి,Calcium 500mg + Vit D3,90,6.46,337.5,19.14,201.9,28.3,True

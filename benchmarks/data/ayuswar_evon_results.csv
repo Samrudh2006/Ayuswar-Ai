@@ -1,0 +1,11 @@
+id,domain,lang,patient,latency_ms,soap_score_pct,icd10_matched,safety_contraindication,emergency_triaged
+enc_01,Cardiology,Telugu,నారాయణ రావు (58M),832.0,100.0,"R00.2, R06.02",Safe,OPD Standard
+enc_02,Paediatric Pulmonology,Hindi,आरव (4M),792.1,100.0,"R06.2, R06.02",Safe (Weight-based dosing),OPD Standard
+enc_03,Metabolic / Endocrinology,Telugu,లక్ష్మీపతి (62M),771.1,100.0,"E11.9, R42",Safe (Metformin monitor),OPD Standard
+enc_04,Gastroenterology,Code-Mixed,రమేష్ బాబు (45M),800.5,100.0,"K21.9, R10.13",Safe (PPI prescribed),OPD Standard
+enc_05,Neurology / Headache,Hindi,अनीता वर्मा (34F),785.8,100.0,G43.909,Safe,OPD Standard
+enc_06,Emergency Cardiology,Telugu,సత్యనారాయణ (66M),769.0,100.0,"I20.0, R07.9",RED FLAG: Emergency STEMI Protocol,RED (Immediate 108)
+enc_07,Infectious / Dengue Protocol,Code-Mixed,Pooja (22F),802.6,100.0,"A97.9, R50.9",Safe (Avoid NSAIDs in Dengue),OPD Standard
+enc_08,Rheumatology / Orthopaedic,Telugu,సరస్వతమ్మ (68F),762.7,100.0,"M17.0, M25.60",Safe (Gastro-protection),OPD Standard
+enc_09,ENT / Respiratory,Hindi,विकास शर्मा (29M),745.9,100.0,J01.90,Safe,OPD Standard
+enc_10,Dermatology,Code-Mixed,కిరణ్ (31M),779.5,100.0,L50.0,Safe,OPD Standard

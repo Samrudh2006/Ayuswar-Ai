@@ -1,0 +1,51 @@
+id,browser_stt,gnani_prisma
+opd_01,నాకు నిన్న రాత్రి నుండి fever ఉంది doctor గారు,నాకు నిన్న రాత్రి నుండి fever ఉంది doctor గారు
+opd_02,ముక్కు కారుతూ తలనొప్పిగా ఉంది paracetamol వేసుకున్నాను,ముక్కు కారుతూ తలనొప్పిగా ఉంది paracetamol వేసుకున్నాను
+opd_03,నా bp కొద్దిగా ఎక్కువగా ఉందని చెప్పారు,నా BP కొద్దిగా ఎక్కువగా ఉందని చెప్పారు
+opd_04,నాకు sugar ఉంది ఇన్సులిన్ ఇంజెక్షన్ వేసుకుంటాను,నాకు sugar ఉంది insulin injection వేసుకుంటాను
+opd_05,కడుపులో మంటగా ఉంది ఎసిడిటీ అనుకుంటున్నాను,కడుపులో మంటగా ఉంది acidity అనుకుంటున్నాను
+opd_06,గొంతు నొప్పిగా ఉంది రాత్రిపూట దగ్గు ఎక్కువగా ఉంటుంది,గొంతు నొప్పిగా ఉంది రాత్రిపూట cough ఎక్కువగా ఉంటుంది
+opd_07,ఛాతీలో ఒత్తిడిగా ఉంది ecg చేయించుకోవాలా,ఛాతీలో ఒత్తిడిగా ఉంది ECG చేయించుకోవాలా
+opd_08,నాకు ఆస్తమా ఉంది inhaler వాడుతున్నాను,నాకు asthma ఉంది inhaler వాడుతున్నాను
+opd_09,మోకాళ్ల నొప్పిగా ఉంది calcium tablets రాసివ్వండి,మోకాళ్ల నొప్పిగా ఉంది calcium tablets రాసివ్వండి
+opd_10,పిల్లలకు vomiting అవుతోంది ors ఇవ్వొచ్చా,పిల్లలకు vomiting అవుతోంది ORS ఇవ్వొచ్చా
+opd_11,fever తగ్గడం లేదు blood test చేయమంటారా,fever తగ్గడం లేదు blood test చేయమంటారా
+opd_12,కంటి చూపు తగ్గింది sugar వల్లనని అన్నారు,కంటి చూపు తగ్గింది sugar వల్లనని అన్నారు
+opd_13,కళ్లు ఎర్రగా ఉన్నాయి ఐ డ్రాప్స్ వాడాలా,కళ్లు ఎర్రగా ఉన్నాయి eye drops వాడాలా
+opd_14,గుండె గుబులుగా ఉంది థైరాయిడ్ టెస్ట్ చేయించాను,గుండె గుబులుగా ఉంది thyroid test చేయించాను
+opd_15,వాంతులు అవుతున్నాయి typhoid test చేయమన్నారు,వాంతులు అవుతున్నాయి typhoid test చేయమన్నారు
+opd_16,నాకు మైగ్రేన్ ఉంది వెలుతురు చూస్తే తలనొప్పి పెరుగుతుంది,నాకు migraine ఉంది వెలుతురు చూస్తే తలనొప్పి పెరుగుతుంది
+opd_17,vitamin d లోపం ఉందని report లో వచ్చింది,vitamin D లోపం ఉందని report లో వచ్చింది
+opd_18,గ్యాస్ సమస్యగా ఉంది endoscopy చేయించుకోవాలా,గ్యాస్ సమస్యగా ఉంది endoscopy చేయించుకోవాలా
+opd_19,చర్మంపై దద్దుర్లు వచ్చాయి allergy అనుకుంటున్నాను,చర్మంపై దద్దుర్లు వచ్చాయి allergy అనుకుంటున్నాను
+opd_20,దంతం నొప్పిస్తోంది antibiotics రాయండి,దంతం నొప్పిస్తోంది antibiotics రాయండి
+opd_21,मुझे कल रात से fever है paracetamol ले ली थी,मुझे कल रात से fever है paracetamol ले ली थी
+opd_22,सिर दर्द और चक्कर आ रहे हैं bp check करवाना है,सिर दर्द और चक्कर आ रहे हैं BP check करवाना है
+opd_23,मेरी माँ को sugar है इंसुलिन लगती है,मेरी माँ को sugar है insulin लगती है
+opd_24,पेट में जलन हो रही है acidity की गोली चाहिए,पेट में जलन हो रही है acidity की गोली चाहिए
+opd_25,खांसी तीन हफ्ते से नहीं जा रही chest xray करवाऊँ क्या,खांसी तीन हफ्ते से नहीं जा रही chest x ray करवाऊँ क्या
+opd_26,साँस लेने में तकलीफ़ है asthma का inhaler लिख दीजिए,साँस लेने में तकलीफ़ है asthma का inhaler लिख दीजिए
+opd_27,बच्चे को दस्त लगे हैं ors का घोल दे रहे हैं,बच्चे को दस्त लगे हैं ORS का घोल दे रहे हैं
+opd_28,fever के साथ दाने निकल आए हैं डेंगू टेस्ट करवाना है,fever के साथ दाने निकल आए हैं dengue test करवाना है
+opd_29,वज़न बढ़ रहा है thyroid test करवाना है,वज़न बढ़ रहा है thyroid test करवाना है
+opd_30,पीठ दर्द से नींद नहीं आती calcium tablets ले रहा हूँ,पीठ दर्द से नींद नहीं आती calcium tablets ले रहा हूँ
+opd_31,दिल की धड़कन तेज़ हो जाती है ecg करवा लूँ क्या,दिल की धड़कन तेज़ हो जाती है ECG करवा लूँ क्या
+opd_32,नाक बंद रहती है शायद sinusitis है,नाक बंद रहती है शायद sinusitis है
+opd_33,हड्डियों में दर्द रहता है vitamin d की कमी बताई थी,हड्डियों में दर्द रहता है vitamin D की कमी बताई थी
+opd_34,मुझे migraine है रोशनी में सिर दर्द बढ़ जाता है,मुझे migraine है रोशनी में सिर दर्द बढ़ जाता है
+opd_35,पेट में कीड़ों की शिकायत है deworming की दवा दीजिए,पेट में कीड़ों की शिकायत है deworming की दवा दीजिए
+opd_36,Doctor I have fever since yesterday paracetamol 650 తీసుకుంటున్నాను,Doctor I have fever since yesterday paracetamol 650 తీసుకుంటున్నాను
+opd_37,నాకు cold and cough ఉంది antibiotics అవసరమా doctor గారు,నాకు cold and cough ఉంది antibiotics అవసరమా doctor గారు
+opd_38,My BP is 140 by 90 क्या medicine continue करूँ,My BP is 140 by 90 क्या medicine continue करूँ
+opd_39,అమ్మకి sugar levels high గా ఉన్నాయి hba1c test చేయిస్తాను,అమ్మకి sugar levels high గా ఉన్నాయి HbA1c test చేయిస్తాను
+opd_40,I feel acidity and chest burning endoscopy అవసరమా,I feel acidity and chest burning endoscopy అవసరమా
+opd_41,बच्चे को vomiting हो रही है ors देना चाहिए क्या,बच्चे को vomiting हो रही है ORS देना चाहिए क्या
+opd_42,నాకు migraine headache వెలుతురు చూస్తే పెరుగుతుంది,నాకు migraine headache వెలుతురు చూస్తే పెరుగుతుంది
+opd_43,मुझे skin पर allergy हो गई है antihistamine लिख दीजिए,मुझे skin पर allergy हो गई है antihistamine लिख दीजिए
+opd_44,Reports లో cholesterol ఎక్కువగా వచ్చింది doctor గారు,Reports లో cholesterol ఎక్కువగా వచ్చింది doctor గారు
+opd_45,मेरा hemoglobin कम है iron tablets चल रही हैं,मेरा hemoglobin कम है iron tablets चल रही हैं
+opd_46,నాకు wheezing అవుతోంది nebulizer వాడొచ్చా,నాకు wheezing అవుతోంది nebulizer వాడొచ్చా
+opd_47,Fever के साथ body pain भी है dengue ns1 test करवाना है,Fever के साथ body pain भी है dengue NS1 test करवाना है
+opd_48,Motions లో blood కనిపిస్తోంది piles అనిపిస్తోంది,Motions లో blood కనిపిస్తోంది piles అనిపిస్తోంది
+opd_49,Thyroid tsh report normal నా doctor గారు,Thyroid TSH report normal నా doctor గారు
+opd_50,Vaccine schedule గురించి అడగాలి tetanus shot అవసరమా,Vaccine schedule గురించి అడగాలి tetanus shot అవసరమా
