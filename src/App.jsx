@@ -35,6 +35,7 @@ import PrescriptionPreviewView from './views/PrescriptionPreviewView';
 import PrivacyPolicyView from './views/PrivacyPolicyView';
 import TermsOfServiceView from './views/TermsOfServiceView';
 import NotFoundView from './views/NotFoundView';
+import UnifiedAuthView from './views/UnifiedAuthView';
 import CookieConsentBanner from './components/CookieConsentBanner';
 
 import { useApp } from './context/AppContext';
@@ -155,7 +156,9 @@ export default function App() {
   const isDedicatedPortal = 
     location.pathname.startsWith('/doctor-portal') || 
     location.pathname.startsWith('/patient-portal') || 
-    location.pathname.startsWith('/clinical-console');
+    location.pathname.startsWith('/clinical-console') ||
+    location.pathname.startsWith('/auth') ||
+    location.pathname === '/login';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
@@ -169,8 +172,8 @@ export default function App() {
       {!isDedicatedPortal && (
         <Navbar 
           onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
-          onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
-          onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
+          onOpenDoctorAuth={() => navigate('/auth/doctor')}
+          onOpenPatientAuth={() => navigate('/auth/patient')}
           onOpenInnovationHub={() => setIsInnovationHubOpen(true)}
         />
       )}
@@ -187,9 +190,9 @@ export default function App() {
             element={
               <HeroLanding 
                 onOpenSanjivaniModal={() => setIsSanjivaniModalOpen(true)}
-                onOpenDoctorAuthModal={() => setIsDoctorAuthModalOpen(true)}
-                onOpenPatientAuthModal={() => setIsPatientAuthModalOpen(true)}
-                onLaunchStudio={() => setIsDoctorAuthModalOpen(true)}
+                onOpenDoctorAuthModal={() => navigate('/auth/doctor')}
+                onOpenPatientAuthModal={() => navigate('/auth/patient')}
+                onLaunchStudio={() => navigate('/auth/doctor')}
                 onOpenAcousticLab={() => navigate('/acoustic-lab')}
                 onOpenTechModal={() => navigate('/technology')}
                 onOpenDatasetModal={() => navigate('/datasets')}
@@ -261,21 +264,38 @@ export default function App() {
           {/* ABDM FHIR R4 Prescription Preview */}
           <Route path="/prescription/preview" element={<PrescriptionPreviewView />} />
 
-          {/* Dedicated Auth Routes */}
+          {/* Dedicated Unified Split-Screen Auth Routes (Matching Visual Mockup) */}
+          <Route 
+            path="/login" 
+            element={
+              currentDoctor ? (
+                <Navigate to="/doctor-portal" replace />
+              ) : currentPatient ? (
+                <Navigate to="/patient-portal" replace />
+              ) : (
+                <UnifiedAuthView defaultUserType="doctor" />
+              )
+            } 
+          />
+          <Route 
+            path="/auth" 
+            element={
+              currentDoctor ? (
+                <Navigate to="/doctor-portal" replace />
+              ) : currentPatient ? (
+                <Navigate to="/patient-portal" replace />
+              ) : (
+                <UnifiedAuthView defaultUserType="doctor" />
+              )
+            } 
+          />
           <Route 
             path="/auth/doctor" 
             element={
               currentDoctor ? (
                 <Navigate to="/doctor-portal" replace />
               ) : (
-                <DoctorAuthModal 
-                  isOpen={true} 
-                  onClose={() => navigate('/')} 
-                  onLoginSuccess={(doc) => {
-                    handleDoctorLoginSuccess(doc);
-                    navigate('/doctor-portal');
-                  }} 
-                />
+                <UnifiedAuthView defaultUserType="doctor" />
               )
             } 
           />
@@ -285,14 +305,7 @@ export default function App() {
               currentPatient ? (
                 <Navigate to="/patient-portal" replace />
               ) : (
-                <PatientAuthModal 
-                  isOpen={true} 
-                  onClose={() => navigate('/')} 
-                  onLoginSuccess={(pat) => {
-                    handlePatientLoginSuccess(pat);
-                    navigate('/patient-portal');
-                  }} 
-                />
+                <UnifiedAuthView defaultUserType="patient" />
               )
             } 
           />
