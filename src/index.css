@@ -980,6 +980,31 @@ h6 {
     min-height: 44px !important;
   }
 
+  /* Mobile Public Content Bottom Bar Clearance */
+  .app-public-main,
+  main:not(.portal-canvas-main) {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .site-footer {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Accidental pull-to-refresh overscroll guard on active interactive views */
+  .scanner-canvas-container,
+  .audio-rx-canvas,
+  .acoustic-lab-canvas,
+  .modal-content {
+    overscroll-behavior-y: contain !important;
+  }
+
+  /* Mobile touch responsiveness */
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
   .portal-mobile-bottom-nav {
     display: flex !important;
     z-index: 1100 !important;

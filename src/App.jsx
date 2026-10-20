@@ -18,6 +18,7 @@ import PillVisionScannerModal from './components/PillVisionScannerModal';
 import LiveScribeSessionModal from './components/LiveScribeSessionModal';
 import SeoHead from './components/SeoHead';
 import MobileAppBottomNav from './components/MobileAppBottomNav';
+import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 
 // Dedicated Full-Page Routed Views
@@ -58,6 +59,64 @@ export default function App() {
   const [isVitalsRppgOpen, setIsVitalsRppgOpen] = useState(false);
   const [isPillVisionOpen, setIsPillVisionOpen] = useState(false);
   const [isLiveScribeOpen, setIsLiveScribeOpen] = useState(false);
+
+  // Mobile Web Audio Autoplay Unlock on First Touch/Click
+  React.useEffect(() => {
+    const unlockAudio = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          if (ctx.state === 'suspended') {
+            ctx.resume();
+          }
+        }
+      } catch {}
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+    window.addEventListener('touchstart', unlockAudio, { passive: true, once: true });
+    window.addEventListener('click', unlockAudio, { passive: true, once: true });
+    return () => {
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+    };
+  }, []);
+
+  // Mobile Hardware Back Button Handling for Active Full-Screen Modals
+  const anyModalOpen = 
+    isSanjivaniModalOpen || 
+    isDoctorAuthModalOpen || 
+    isPatientAuthModalOpen || 
+    isWhatsAppAudioRxModalOpen || 
+    isInnovationHubOpen || 
+    isTeleconsultOpen || 
+    isVitalsRppgOpen || 
+    isPillVisionOpen || 
+    isLiveScribeOpen;
+
+  React.useEffect(() => {
+    if (!anyModalOpen) return;
+
+    window.history.pushState({ modalOpen: true }, '');
+
+    const handlePopState = () => {
+      setIsSanjivaniModalOpen(false);
+      setIsDoctorAuthModalOpen(false);
+      setIsPatientAuthModalOpen(false);
+      setIsWhatsAppAudioRxModalOpen(false);
+      setIsInnovationHubOpen(false);
+      setIsTeleconsultOpen(false);
+      setIsVitalsRppgOpen(false);
+      setIsPillVisionOpen(false);
+      setIsLiveScribeOpen(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [anyModalOpen]);
 
   const handleDoctorLoginSuccess = (docProfile) => {
     setCurrentDoctor(docProfile);
@@ -100,6 +159,9 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
+      {/* Mobile PWA Add-To-Home-Screen Install Banner */}
+      <MobilePwaInstallBanner />
+
       {/* Dynamic SEO, AEO, and GEO Route Metadata Manager */}
       <SeoHead />
 
@@ -114,7 +176,10 @@ export default function App() {
       )}
 
       {/* Main Routed Content Workspace */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}>
+      <main 
+        className={isDedicatedPortal ? 'portal-canvas-main' : 'app-public-main'}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}
+      >
         <Routes>
           {/* Public Home & Marketing */}
           <Route 
@@ -303,7 +368,9 @@ export default function App() {
 
       {/* Global Prototype Disclaimer Footer Banner (Only on public showcase routes) */}
       {!isDedicatedPortal && (
-        <footer style={{
+        <footer 
+          className="site-footer"
+          style={{
           background: '#0F172A',
           color: '#E2E8F0',
           borderTop: '1px solid #334155',
