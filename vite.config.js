@@ -11,11 +11,59 @@ export default defineConfig(({ mode }) => {
       {
         name: 'gnani-proxy-middleware',
         configureServer(server) {
-          // 1. Gnani TTS Proxy Endpoint
+          // 0. Gnani Speech Services Status Endpoint
+          server.middlewares.use('/api/gnani/status', async (req, res) => {
+            if (req.method !== 'GET') {
+              res.statusCode = 405;
+              return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+            }
+
+            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            res.setHeader('Content-Type', 'application/json');
+
+            if (!apiKey || apiKey.includes('placeholder')) {
+              res.statusCode = 200;
+              return res.end(JSON.stringify({
+                available: false,
+                status: 'UNAVAILABLE',
+                provider: 'browser_fallback',
+                models: {
+                  stt: 'Browser Web SpeechRecognition (Client Fallback)',
+                  tts: 'Browser Web SpeechSynthesis (Client Fallback)'
+                },
+                reason: 'GNANI_API_KEY unset on server. Using safe browser speech fallback.'
+              }));
+            }
+
+            res.statusCode = 200;
+            res.end(JSON.stringify({
+              available: true,
+              status: 'LIVE',
+              provider: 'gnani',
+              models: {
+                stt: 'Gnani Prisma v3 STT',
+                tts: 'Gnani Timbre v2.5 / v3.0'
+              }
+            }));
+          });
+
+          // 1. Gnani Timbre TTS Proxy Endpoint
           server.middlewares.use('/api/gnani/tts', async (req, res) => {
             if (req.method !== 'POST') {
               res.statusCode = 405;
               return res.end('Method Not Allowed');
+            }
+
+            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            if (!apiKey || apiKey.includes('placeholder')) {
+              res.statusCode = 503;
+              res.setHeader('Content-Type', 'application/json');
+              return res.end(JSON.stringify({ 
+                error: 'Gnani API key not configured on server', 
+                status: 'fallback_to_browser_speech',
+                available: false,
+                fallbackRequired: true
+              }));
             }
 
             let bodyStr = '';
@@ -23,31 +71,20 @@ export default defineConfig(({ mode }) => {
             req.on('end', async () => {
               try {
                 const body = JSON.parse(bodyStr || '{}');
-                const apiKey = req.headers['x-api-key'] || req.headers['x-gnani-api-key'] || body.apiKey || env.GNANI_API_KEY || process.env.GNANI_API_KEY;
-                const token = req.headers['authorization']?.replace(/^Bearer\s+/i, '') || req.headers['x-gnani-token'] || body.token || env.GNANI_TOKEN || process.env.GNANI_TOKEN;
-
-                if (!apiKey || apiKey.includes('placeholder')) {
-                  res.statusCode = 503;
-                  res.setHeader('Content-Type', 'application/json');
-                  return res.end(JSON.stringify({ 
-                    error: 'Gnani API key not configured', 
-                    status: 'fallback_to_browser_speech' 
-                  }));
-                }
-
-                const ttsEndpoint = env.GNANI_TTS_ENDPOINT || 'https://api.gnani.ai/v2/tts';
+                const ttsEndpoint = env.GNANI_TTS_ENDPOINT || 'https://api.vachana.ai/api/v1/tts/inference';
 
                 const gnaniRes = await fetch(ttsEndpoint, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token || apiKey}`,
+                    'X-API-Key-ID': apiKey,
                     'x-api-key': apiKey
                   },
                   body: JSON.stringify({
-                    text: body.text,
-                    language: body.language || 'te-IN',
-                    voice: body.voice || 'female'
+                    text: (body.text || '').trim(),
+                    voice: body.voice || 'Nalini',
+                    model: body.model || 'timbre-v2.5',
+                    language: body.language || 'te-IN'
                   })
                 });
 
@@ -62,22 +99,22 @@ export default defineConfig(({ mode }) => {
                 }
               } catch (err) {
                 res.statusCode = 502;
-                return res.end(JSON.stringify({ error: err.message }));
+                return res.end(JSON.stringify({ error: err.message, fallbackRequired: true }));
               }
             });
           });
 
-          // 2. Gnani ASR / STT (Prisma v2.5) Proxy Endpoints
+          // 2. Gnani Prisma STT Proxy Endpoints
           const handleSttProxy = async (req, res) => {
-            const apiKey = req.headers['x-api-key'] || req.headers['x-gnani-api-key'] || env.GNANI_API_KEY || process.env.GNANI_API_KEY;
-            const token = req.headers['authorization']?.replace(/^Bearer\s+/i, '') || req.headers['x-gnani-token'] || env.GNANI_TOKEN || process.env.GNANI_TOKEN;
+            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
             if (!apiKey || apiKey.includes('placeholder')) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');
               return res.end(JSON.stringify({ 
-                error: 'Gnani API key not configured', 
+                error: 'Gnani API key not configured on server', 
                 status: 'fallback_to_browser_speech',
-                model: 'Gnani Prisma v2.5'
+                available: false,
+                fallbackRequired: true
               }));
             }
 
@@ -86,33 +123,52 @@ export default defineConfig(({ mode }) => {
               req.on('data', chunk => { bodyChunks.push(chunk); });
               req.on('end', async () => {
                 try {
-                  const sttEndpoint = env.GNANI_STT_ENDPOINT || 'https://api.gnani.ai/v2/asr';
+                  const sttEndpoint = env.GNANI_STT_ENDPOINT || env.GNANI_ASR_ENDPOINT || 'https://api.vachana.ai/stt/v3';
                   const buffer = Buffer.concat(bodyChunks);
-                  const lang = req.headers['x-language-code'] || 'te-IN';
+                  let audioBuffer = buffer;
+                  let lang = req.headers['x-language-code'] || 'te-IN';
+
+                  // Handle JSON body if client sent JSON base64
+                  if (req.headers['content-type']?.includes('application/json')) {
+                    try {
+                      const parsed = JSON.parse(buffer.toString('utf8'));
+                      if (parsed.audioBase64) {
+                        audioBuffer = Buffer.from(parsed.audioBase64, 'base64');
+                      }
+                      if (parsed.language_code) lang = parsed.language_code;
+                    } catch {}
+                  }
+
+                  const formData = new FormData();
+                  formData.append('audio_file', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
+                  formData.append('language_code', lang);
 
                   const upstream = await fetch(sttEndpoint, {
                     method: 'POST',
                     headers: {
-                      'Authorization': `Bearer ${token || apiKey}`,
-                      'x-api-key': apiKey,
-                      'Content-Type': req.headers['content-type'] || 'audio/wav',
-                      'x-language': lang
+                      'X-API-Key-ID': apiKey,
+                      'x-api-key': apiKey
                     },
-                    body: buffer
+                    body: formData
                   });
 
                   if (upstream.ok) {
                     const data = await upstream.json();
+                    const transcript = data.transcript || data.text || data.transcription || (data.result && data.result[0]?.transcript) || '';
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
-                    return res.end(JSON.stringify(data));
+                    return res.end(JSON.stringify({
+                      transcript: transcript.trim(),
+                      provider: 'gnani_stt',
+                      raw: data
+                    }));
                   } else {
                     res.statusCode = upstream.status;
                     return res.end(await upstream.text());
                   }
                 } catch (err) {
                   res.statusCode = 502;
-                  return res.end(JSON.stringify({ error: err.message }));
+                  return res.end(JSON.stringify({ error: err.message, fallbackRequired: true }));
                 }
               });
               return;
@@ -120,7 +176,7 @@ export default defineConfig(({ mode }) => {
 
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ status: 'gnani_stt_proxy_active', model: 'Gnani Prisma v2.5' }));
+            res.end(JSON.stringify({ status: 'gnani_stt_proxy_active', model: 'Gnani Prisma v3' }));
           };
 
           server.middlewares.use('/api/gnani/asr', handleSttProxy);

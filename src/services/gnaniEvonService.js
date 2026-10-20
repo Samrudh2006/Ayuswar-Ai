@@ -48,19 +48,6 @@ export const EVON_MODEL_METADATA = {
   ]
 };
 
-function getSessionHeaders() {
-  const headers = {};
-  if (typeof window !== 'undefined') {
-    try {
-      const key = sessionStorage.getItem('ayuswar_gnani_key');
-      const token = sessionStorage.getItem('ayuswar_gnani_token');
-      if (key) headers['x-api-key'] = key;
-      if (token) headers['x-gnani-token'] = token;
-    } catch {}
-  }
-  return headers;
-}
-
 /**
  * Checks live operational status of Gnani Evon via server-side status endpoint.
  * Returns { status: 'LIVE' | 'UNAVAILABLE', available: boolean, model: string, latencyMs, lastSuccessTime }
@@ -69,10 +56,7 @@ export async function checkEvonStatus() {
   try {
     const res = await fetch('/api/evon/status', {
       method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        ...getSessionHeaders()
-      }
+      headers: { 'Accept': 'application/json' }
     });
 
     if (res.ok) {
@@ -115,10 +99,7 @@ export async function checkEvonStatus() {
 export async function queryEvonServer(prompt, systemInstruction = '', options = {}) {
   const response = await fetch('/api/evon/chat', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getSessionHeaders()
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       prompt,
       systemInstruction,

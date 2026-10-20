@@ -201,11 +201,36 @@ assert.ok(assistantViewSrc.includes('handleInterruptAssistant'), 'SanjivaniEmerg
 assert.ok(assistantViewSrc.includes('MIC LEVEL'), 'SanjivaniEmergencyAssistant must render live MIC LEVEL visualizer');
 console.log('✓ Test 20 Passed: [Static Code Contract] Sanjivani-108 full-duplex live talk, barge-in interrupt & RMS UI verified.');
 
+// Test 21: [Static Code Contract] Server-side Gnani Speech Services Endpoints (status, stt, tts)
+const gnaniStatusPath = resolve('api/gnani/status.js');
+const gnaniTtsPath = resolve('api/gnani/tts.js');
+const gnaniSttPath = resolve('api/gnani/stt.js');
+assert.ok(existsSync(gnaniStatusPath), 'api/gnani/status.js must exist for Vercel deployment');
+assert.ok(existsSync(gnaniTtsPath), 'api/gnani/tts.js must exist for Vercel deployment');
+assert.ok(existsSync(gnaniSttPath), 'api/gnani/stt.js must exist for Vercel deployment');
+const gnaniStatusSrc = readFileSync(gnaniStatusPath, 'utf8');
+const gnaniTtsSrc = readFileSync(gnaniTtsPath, 'utf8');
+const gnaniSttSrc = readFileSync(gnaniSttPath, 'utf8');
+assert.ok(gnaniStatusSrc.includes('available: true') && gnaniStatusSrc.includes('available: false'), 'api/gnani/status must return available boolean');
+assert.ok(gnaniTtsSrc.includes('process.env.GNANI_API_KEY'), 'api/gnani/tts must read server-side GNANI_API_KEY');
+assert.ok(gnaniSttSrc.includes('process.env.GNANI_API_KEY'), 'api/gnani/stt must read server-side GNANI_API_KEY');
+console.log('✓ Test 21 Passed: [Static Code Contract] Vercel serverless functions (api/gnani/status, stt, tts) verified.');
+
+// Test 22: [Static Code Contract] Zero Client Secrets & Honest Gnani Provider Labeling
+assert.ok(!speechServiceSrc.includes('ayuswar_gnani_key'), 'Client must not store Gnani keys in session/local storage');
+assert.ok(!speechServiceSrc.includes('VITE_GNANI_API_KEY'), 'Client must not use VITE_GNANI_API_KEY');
+const scribeModalPath = resolve('src/components/LiveScribeSessionModal.jsx');
+const scribeModalSrc = readFileSync(scribeModalPath, 'utf8');
+assert.ok(scribeModalSrc.includes('transcribeAudioWithGnani'), 'OPD Scribe must wire audio chunks to transcribeAudioWithGnani');
+assert.ok(scribeModalSrc.includes('Doctor (Browser WebSpeech Fallback)'), 'OPD Scribe must visibly label browser fallback');
+console.log('✓ Test 22 Passed: [Static Code Contract] Zero client secrets & honest live OPD Scribe provider flow verified.');
+
 console.log('======================================================================');
-console.log('ALL 20 STATIC CODE CONTRACT & INTEGRITY TESTS PASSED! 🎉');
-console.log('NOTE: These 20 tests verify architectural isolation and zero-mock code');
-console.log('integrity across the 15-Phases Sovereign Voice Stack.');
+console.log('ALL 22 STATIC CODE CONTRACT & INTEGRITY TESTS PASSED! 🎉');
+console.log('NOTE: These 22 tests verify architectural isolation, serverless Vercel');
+console.log('deployment, and zero-leak code integrity for Gnani Prisma STT & Timbre TTS.');
 console.log('======================================================================');
+
 
 
 

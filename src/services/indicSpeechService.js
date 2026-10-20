@@ -160,54 +160,49 @@ export class IndicSpeechService {
     this.bargeInThreshold = 0.042;
     this.lastVoiceRms = 0;
     this.activePanicIndex = 0;
+    this.gnaniAvailable = null;
+    this.gnaniStatusData = null;
+    this.lastGnaniSuccessTime = null;
   }
 
-  getGnaniCredentials() {
-    let apiKey = '';
-    let token = '';
-    if (typeof window !== 'undefined') {
-      try {
-        apiKey = sessionStorage.getItem('ayuswar_gnani_key') || '';
-        token = sessionStorage.getItem('ayuswar_gnani_token') || '';
-      } catch {}
+  /**
+   * Queries /api/gnani/status server-side endpoint.
+   * Returns { available: boolean, status: string, provider: string, models: object }
+   */
+  async checkGnaniStatus() {
+    try {
+      const res = await fetch('/api/gnani/status');
+      if (res.ok) {
+        const data = await res.json();
+        this.gnaniAvailable = Boolean(data.available);
+        this.gnaniStatusData = data;
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gnani status check error:', err);
     }
-    if (!apiKey && typeof import.meta !== 'undefined' && import.meta.env) {
-      apiKey = import.meta.env.VITE_GNANI_API_KEY || '';
-      token = import.meta.env.VITE_GNANI_TOKEN || '';
-    }
-    return {
-      apiKey,
-      token,
-      isConfigured: Boolean(apiKey || token)
+    this.gnaniAvailable = false;
+    this.gnaniStatusData = {
+      available: false,
+      status: 'UNAVAILABLE',
+      provider: 'browser_fallback',
+      reason: 'Server route unreachable'
     };
-  }
-
-  setGnaniCredentials({ apiKey = '', token = '' } = {}) {
-    if (typeof window !== 'undefined') {
-      try {
-        if (apiKey) sessionStorage.setItem('ayuswar_gnani_key', apiKey.trim());
-        else sessionStorage.removeItem('ayuswar_gnani_key');
-
-        if (token) sessionStorage.setItem('ayuswar_gnani_token', token.trim());
-        else sessionStorage.removeItem('ayuswar_gnani_token');
-      } catch {}
-    }
+    return this.gnaniStatusData;
   }
 
   getProviderInfo() {
-    const creds = this.getGnaniCredentials();
-    const isGnani = this.activeProvider === 'gnani_proxy' || creds.isConfigured;
-
+    const isLive = Boolean(this.activeProvider === 'gnani_tts_live' || (this.gnaniAvailable && this.lastGnaniSuccessTime));
     return {
-      provider: isGnani ? 'gnani_active' : this.activeProvider,
-      isGnani,
-      hasCredentials: creds.isConfigured,
-      label: isGnani
-        ? 'Gnani.ai Indic Neural Voice (Authenticated Session)'
-        : 'Browser Web Speech API (Client Fallback)',
-      notes: isGnani
-        ? 'Gnani.ai speech credentials active for current session.'
-        : 'Gnani key not configured; using browser SpeechSynthesis and SpeechRecognition fallback.'
+      provider: isLive ? 'gnani_live' : 'browser_fallback',
+      isGnani: isLive,
+      hasCredentials: Boolean(this.gnaniAvailable),
+      label: isLive
+        ? 'Gnani.ai Indic Neural Voice (LIVE via Server)'
+        : 'Browser Web Speech API (Client Fallback - Server Key Unset)',
+      notes: isLive
+        ? 'Real-time Indic neural speech verified from Gnani server.'
+        : 'Server GNANI_API_KEY unset; running safe browser speech fallback.'
     };
   }
 
@@ -254,6 +249,57 @@ export class IndicSpeechService {
   }
 
   /**
+   * Transcribe Audio Chunk using Serverless Gnani STT (/api/gnani/stt)
+   * If Gnani server route is unconfigured or fails, returns { transcript: null, fallbackRequired: true }
+   */
+  async transcribeAudioWithGnani(audioBlob, langCode = 'te-IN') {
+    if (this.gnaniAvailable === false) {
+      return { transcript: null, fallbackRequired: true };
+    }
+
+    try {
+      // Safe high-performance native Base64 encoding via FileReader
+      const base64Audio = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const res = reader.result;
+          if (typeof res === 'string') {
+            resolve(res.split(',')[1] || res);
+          } else {
+            reject(new Error('Failed to read audio blob'));
+          }
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(audioBlob);
+      });
+
+      const res = await fetch('/api/gnani/stt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audioBase64: base64Audio,
+          language_code: langCode
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        this.lastGnaniSuccessTime = Date.now();
+        this.activeProvider = 'gnani_stt_live';
+        return {
+          transcript: data.transcript || '',
+          provider: 'gnani_stt',
+          model: data.model || 'Gnani Prisma v3'
+        };
+      }
+      return { transcript: null, fallbackRequired: true };
+    } catch (err) {
+      console.warn('Gnani STT transcription failed, falling back:', err);
+      return { transcript: null, fallbackRequired: true, error: err.message };
+    }
+  }
+
+  /**
    * Synthesize Vernacular Speech (TTS) with Timbre v2.5 / Fallback
    */
   async speak(text, options = {}) {
@@ -269,62 +315,63 @@ export class IndicSpeechService {
     this.isSpeaking = true;
     this.setConversationState('SPEAKING');
 
-    // 1. Gnani Timbre v2.5 Server Proxy
-    const creds = this.getGnaniCredentials();
-    try {
-      const headers = { 'Content-Type': 'application/json' };
-      if (creds.apiKey) headers['x-api-key'] = creds.apiKey;
-      if (creds.token) headers['Authorization'] = `Bearer ${creds.token}`;
-
-      const response = await fetch(`${this.proxyEndpoint}/tts`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          text,
-          language: langCode,
-          rate,
-          pitch,
-          cadence: options.cadence || 'context_aware_indic',
-          apiKey: creds.apiKey,
-          token: creds.token
-        }),
-        signal: AbortSignal.timeout(1800)
-      });
-
-      if (response.ok) {
-        this.activeProvider = 'gnani_proxy';
-        const blob = await response.blob();
-        const audioUrl = URL.createObjectURL(blob);
-        const audio = new Audio(audioUrl);
-        this.currentAudio = audio;
-
-        audio.onplay = () => {
-          this.isSpeaking = true;
-          this.setConversationState('SPEAKING');
-          onStart({ provider: 'gnani_proxy' });
-        };
-        audio.onended = () => {
-          this.isSpeaking = false;
-          if (this.conversationState === 'SPEAKING') {
-            this.setConversationState('LISTENING');
-          }
-          onEnd();
-        };
-        audio.onerror = () => {
-          this.isSpeaking = false;
-          if (this.conversationState === 'SPEAKING') {
-            this.setConversationState('LISTENING');
-          }
-          onError('Gnani audio playback failed');
-        };
-        await audio.play();
-        return;
-      }
-    } catch {
-      this.activeProvider = 'browser_fallback';
+    // Check Gnani operational status if uninitialized
+    if (this.gnaniAvailable === null) {
+      await this.checkGnaniStatus();
     }
 
-    // 2. Browser Web Speech Fallback
+    // 1. Attempt Gnani Timbre Server Proxy if server is configured
+    if (this.gnaniAvailable) {
+      try {
+        const response = await fetch('/api/gnani/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text,
+            language: langCode,
+            voice: langCode.startsWith('te') ? 'Nalini' : 'Nalini',
+            model: 'timbre-v2.5'
+          }),
+          signal: AbortSignal.timeout(6000)
+        });
+
+        if (response.ok) {
+          this.activeProvider = 'gnani_tts_live';
+          this.lastGnaniSuccessTime = Date.now();
+          const blob = await response.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          const audio = new Audio(audioUrl);
+          this.currentAudio = audio;
+
+          audio.onplay = () => {
+            this.isSpeaking = true;
+            this.setConversationState('SPEAKING');
+            onStart({ provider: 'gnani_live' });
+          };
+          audio.onended = () => {
+            this.isSpeaking = false;
+            if (this.conversationState === 'SPEAKING') {
+              this.setConversationState('LISTENING');
+            }
+            onEnd();
+          };
+          audio.onerror = () => {
+            this.isSpeaking = false;
+            if (this.conversationState === 'SPEAKING') {
+              this.setConversationState('LISTENING');
+            }
+            onError('Gnani audio playback failed');
+          };
+          await audio.play();
+          return;
+        }
+      } catch (err) {
+        console.warn('Gnani TTS unavailable, switching to browser speech fallback:', err);
+      }
+    }
+
+    // 2. Visible Browser Web Speech Fallback
+    this.activeProvider = 'browser_fallback';
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);

@@ -5,6 +5,7 @@ dist-ssr
 .DS_Store
 .env
 .env.*
+!.env.example
 
 # Media, Screen Recordings & Video Walkthroughs
 recordings/

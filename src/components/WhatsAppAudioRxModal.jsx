@@ -20,10 +20,11 @@ import {
   RefreshCw,
   Info
 } from 'lucide-react';
+import { speechService } from '../services/indicSpeechService';
 
 /**
  * WhatsAppAudioRxModal Component
- * Implements Vernacular WhatsApp Audio-Rx. Browser speech (Web Speech API). Gnani voice integration: planned.
+ * Implements Vernacular WhatsApp Audio-Rx using Unified Indic Speech Service (Gnani Timbre TTS / Browser Fallback).
  * Features:
  * 1. Live WhatsApp mobile frame with authentic chat UI & verified green badge.
  * 2. Playable Indic Voice Note with real Web Speech Synthesis in Telugu, Hindi, or English.
@@ -219,9 +220,7 @@ export default function WhatsAppAudioRxModal({
     setKaraokeActiveIndex(-1);
     setActivePillHighlight(null);
     setAudioProgress(0);
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    speechService.stopSpeaking();
   };
 
   const startAudio = () => {
@@ -232,26 +231,13 @@ export default function WhatsAppAudioRxModal({
     setKaraokeActiveIndex(0);
     setActivePillHighlight(tokens[0]?.pill || null);
 
-    // Speak using Web Speech API
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentRx.speechText);
-      utterance.lang = currentRx.langCode;
-      utterance.rate = audioPlaybackRate;
-      
-      // Try to select an Indic voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const indicVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('hi') || v.lang.includes('IN'));
-      if (indicVoice) utterance.voice = indicVoice;
-
-      utterance.onend = () => {
-        stopAudio();
-      };
-      utterance.onerror = () => {
-        stopAudio();
-      };
-      window.speechSynthesis.speak(utterance);
-    }
+    // Speak using Unified Indic Speech Service (Gnani Timbre TTS when live / safe browser fallback)
+    speechService.speak(currentRx.speechText, {
+      langCode: currentRx.langCode,
+      rate: audioPlaybackRate,
+      onEnd: () => stopAudio(),
+      onError: () => stopAudio()
+    });
 
     // Interval for visual word token progression
     const intervalTime = Math.max(250, Math.floor(750 / audioPlaybackRate));

@@ -43,15 +43,15 @@ export default function AcousticBiomarkerLabView() {
   const [samplingCountdown, setSamplingCountdown] = useState(5);
   const [sampleSummary, setSampleSummary] = useState(null);
   
-  // Gnani API Key State
-  const [showGnaniModal, setShowGnaniModal] = useState(false);
-  const [gnaniKeyInput, setGnaniKeyInput] = useState(() => {
-    try { return sessionStorage.getItem('ayuswar_gnani_key') || ''; } catch { return ''; }
-  });
-  const [gnaniTokenInput, setGnaniTokenInput] = useState(() => {
-    try { return sessionStorage.getItem('ayuswar_gnani_token') || ''; } catch { return ''; }
-  });
-  const [gnaniStatusMsg, setGnaniStatusMsg] = useState(null);
+  // Gnani Speech Services Server Status (Server-side keys only)
+  const [gnaniSpeechStatus, setGnaniSpeechStatus] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/gnani/status')
+      .then(res => res.json())
+      .then(data => setGnaniSpeechStatus(data))
+      .catch(() => setGnaniSpeechStatus({ available: false, status: 'UNAVAILABLE' }));
+  }, []);
 
   const [dspMetrics, setDspMetrics] = useState({
     pitchF0: 142,
@@ -74,6 +74,36 @@ export default function AcousticBiomarkerLabView() {
     } finally {
       setIsEvonAcousticReasoning(false);
     }
+  };
+
+  // Spoken Acoustic Biomarker Clinical Readout using Gnani Timbre TTS (with Browser SpeechSynthesis fallback)
+  const [isSpeakingReadout, setIsSpeakingReadout] = useState(false);
+  const [readoutProvider, setReadoutProvider] = useState(null);
+
+  const handleSpeakAcousticReadout = async () => {
+    if (isSpeakingReadout) {
+      speechService.stopSpeaking();
+      setIsSpeakingReadout(false);
+      return;
+    }
+
+    const registerText = dspMetrics.pitchF0 < 165 ? 'Low Register' : dspMetrics.pitchF0 > 260 ? 'High Register' : 'Mid Register';
+    const topMatch = analysisResult?.topAcousticMatch?.label || 'Baseline Phonation';
+    const readoutText = `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb} decibels. Reference signal match is ${topMatch}.`;
+
+    setIsSpeakingReadout(true);
+    await speechService.speak(readoutText, {
+      langCode: 'en-IN',
+      onStart: (info) => {
+        setReadoutProvider(info?.provider || 'browser_fallback');
+      },
+      onEnd: () => {
+        setIsSpeakingReadout(false);
+      },
+      onError: () => {
+        setIsSpeakingReadout(false);
+      }
+    });
   };
 
   const audioContextRef = useRef(null);
@@ -694,65 +724,38 @@ export default function AcousticBiomarkerLabView() {
     }
   }, [visualizerMode]);
 
-  // -------------------------------------------------------------
-  // Gnani API Key Handlers
-  // -------------------------------------------------------------
-  const handleSaveGnaniKey = () => {
-    try {
-      if (gnaniKeyInput.trim()) {
-        sessionStorage.setItem('ayuswar_gnani_key', gnaniKeyInput.trim());
-      }
-      if (gnaniTokenInput.trim()) {
-        sessionStorage.setItem('ayuswar_gnani_token', gnaniTokenInput.trim());
-      }
-      setGnaniStatusMsg('Gnani.ai API credentials securely active in current session!');
-      setTimeout(() => {
-        setShowGnaniModal(false);
-        setGnaniStatusMsg(null);
-      }, 1500);
-    } catch (e) {
-      setGnaniStatusMsg('Failed to persist credentials: ' + e.message);
-    }
-  };
-
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1240px', margin: '0 auto' }}>
-      {/* Breadcrumb Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
-            <ArrowLeft size={16} />
-            <span>Home</span>
-          </Link>
-          <span style={{ color: '#94A3B8' }}>/</span>
-          <span style={{ color: '#64748B', fontSize: '13px' }}>Technology</span>
-          <span style={{ color: '#94A3B8' }}>/</span>
-          <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Acoustic Biomarker Lab</span>
-        </div>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px', fontFamily: 'system-ui, sans-serif' }}>
+      {/* Top Navigation Row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <Link 
+          to="/doctor-portal" 
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#008B8B', textDecoration: 'none', fontWeight: 750, fontSize: '13px' }}
+        >
+          <ArrowLeft size={16} />
+          <span>Back to Doctor Portal</span>
+        </Link>
 
-        {/* Gnani.ai Engine Key Setup Pill */}
-        <button
-          type="button"
-          onClick={() => setShowGnaniModal(true)}
+        {/* Gnani Indic Speech Server Status Pill */}
+        <div
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 6,
             padding: '7px 14px',
             borderRadius: 20,
-            background: gnaniKeyInput ? '#E6F7F8' : '#F1F5F9',
+            background: gnaniSpeechStatus?.available ? '#E6F7F8' : '#F1F5F9',
             border: '1.5px solid',
-            borderColor: gnaniKeyInput ? '#008B8B' : '#CBD5E1',
-            color: gnaniKeyInput ? '#008B8B' : '#475569',
+            borderColor: gnaniSpeechStatus?.available ? '#008B8B' : '#CBD5E1',
+            color: gnaniSpeechStatus?.available ? '#008B8B' : '#475569',
             fontSize: '12px',
-            fontWeight: 800,
-            cursor: 'pointer'
+            fontWeight: 800
           }}
-          title="Connect Gnani.ai Speech & Vocal API Key"
+          title={gnaniSpeechStatus?.available ? 'Gnani Indic Neural Speech (LIVE via Server)' : 'Browser Web Speech Active (Server Key Unset)'}
         >
-          <Key size={14} color={gnaniKeyInput ? '#008B8B' : '#64748B'} />
-          <span>{gnaniKeyInput ? 'Gnani.ai Key: Active' : 'Configure Gnani.ai Key'}</span>
-        </button>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: gnaniSpeechStatus?.available ? '#10B981' : '#94A3B8' }} />
+          <span>{gnaniSpeechStatus?.available ? 'Gnani Speech: LIVE' : 'Speech: Browser Fallback'}</span>
+        </div>
       </div>
 
       {/* Header */}
@@ -1223,6 +1226,68 @@ export default function AcousticBiomarkerLabView() {
             </div>
           </div>
 
+          {/* Spoken Acoustic Biomarker Voice Readout (Gnani Timbre TTS / Fallback) */}
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            border: '1px solid #E2E8F0',
+            padding: '16px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: isSpeakingReadout ? '#EF4444' : '#E6F7F8',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: isSpeakingReadout ? '#FFFFFF' : '#008B8B'
+              }}>
+                <Volume2 size={20} />
+              </div>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>
+                  Acoustic Biomarker Voice Readout
+                </div>
+                <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  {readoutProvider === 'gnani_live'
+                    ? '🟢 Gnani Timbre TTS (LIVE Audio Verified)'
+                    : gnaniSpeechStatus?.available
+                      ? '🟡 Gnani Timbre TTS (Ready via Server)'
+                      : '⚪ Browser Web Speech API Fallback (GNANI_API_KEY unset)'}
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSpeakAcousticReadout}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '8px',
+                border: 'none',
+                background: isSpeakingReadout ? '#EF4444' : 'linear-gradient(135deg, #008B8B 0%, #006666 100%)',
+                color: '#FFFFFF',
+                fontSize: '12px',
+                fontWeight: 750,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                boxShadow: '0 2px 8px rgba(0,139,139,0.2)'
+              }}
+            >
+              <Volume2 size={14} />
+              <span>{isSpeakingReadout ? 'Stop Voice Readout' : '🔊 Speak Acoustic Readout'}</span>
+            </button>
+          </div>
+
           {/* Gnani Evon (30B-A3B) Acoustic-Clinical Correlation Reasoner */}
           <div style={{
             background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
@@ -1349,130 +1414,6 @@ export default function AcousticBiomarkerLabView() {
         </div>
       </div>
 
-      {/* Gnani.ai API Key Modal */}
-      {showGnaniModal && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(10, 37, 64, 0.75)',
-          backdropFilter: 'blur(6px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1200,
-          padding: 16
-        }}>
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: 16,
-            maxWidth: '520px',
-            width: '100%',
-            padding: 24,
-            boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#E6F7F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Key size={20} color="#008B8B" />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
-                  Gnani.ai Speech & Vocal API Setup
-                </h3>
-                <span style={{ fontSize: '12px', color: '#64748B' }}>
-                  Secure Session Configuration
-                </span>
-              </div>
-            </div>
-
-            <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
-              Enter your authorized Gnani.ai API credentials below. Credentials are held in temporary memory during your browser session and are never exposed in public code.
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>
-                  Gnani API Key
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter your Gnani API Key..."
-                  value={gnaniKeyInput}
-                  onChange={(e) => setGnaniKeyInput(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    borderRadius: 8,
-                    border: '1px solid #CBD5E1',
-                    fontSize: '13px',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', marginBottom: 4 }}>
-                  Gnani Access Token (Optional)
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter your Gnani Token..."
-                  value={gnaniTokenInput}
-                  onChange={(e) => setGnaniTokenInput(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    borderRadius: 8,
-                    border: '1px solid #CBD5E1',
-                    fontSize: '13px',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              </div>
-            </div>
-
-            {gnaniStatusMsg && (
-              <div style={{ background: '#ECFDF5', border: '1px solid #6EE7B7', color: '#065F46', padding: '10px 12px', borderRadius: 8, fontSize: '12px', fontWeight: 700, marginBottom: 16 }}>
-                ✓ {gnaniStatusMsg}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-              <button
-                type="button"
-                onClick={() => setShowGnaniModal(false)}
-                style={{
-                  padding: '9px 16px',
-                  borderRadius: 8,
-                  border: '1px solid #CBD5E1',
-                  background: '#FFFFFF',
-                  color: '#475569',
-                  fontSize: '12.5px',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveGnaniKey}
-                style={{
-                  padding: '9px 18px',
-                  borderRadius: 8,
-                  border: 'none',
-                  background: '#008B8B',
-                  color: '#FFFFFF',
-                  fontSize: '12.5px',
-                  fontWeight: 800,
-                  cursor: 'pointer'
-                }}
-              >
-                Save & Connect Gnani Engine
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -24,6 +24,7 @@ import {
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import { speechService } from '../services/indicSpeechService';
 import EvonStatusChip from './EvonStatusChip';
 
 /**
@@ -59,9 +60,26 @@ export default function LiveScribeSessionModal({
   const [isReasoningWithEvon, setIsReasoningWithEvon] = useState(false);
   const [showEvonDrawer, setShowEvonDrawer] = useState(false);
 
+  // Gnani Prisma v3 STT & Speech Service Status
+  const [gnaniSpeechStatus, setGnaniSpeechStatus] = useState(null);
+  const [hasGnaniSttTranscribed, setHasGnaniSttTranscribed] = useState(false);
+  const [isTranscribingChunk, setIsTranscribingChunk] = useState(false);
+  const [lastSttError, setLastSttError] = useState(null);
+
   const dialogueIntervalRef = useRef(null);
   const micIntervalRef = useRef(null);
   const speechRecognizerRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioStreamRef = useRef(null);
+  const chunkIntervalRef = useRef(null);
+  const recordedChunksRef = useRef([]);
+
+  // Check Gnani operational status on mount
+  useEffect(() => {
+    speechService.checkGnaniStatus().then(status => {
+      setGnaniSpeechStatus(status);
+    });
+  }, []);
 
   // Scripted clinical encounters based on patient
   const encounterPresets = {
@@ -110,22 +128,86 @@ export default function LiveScribeSessionModal({
   const domainKey = patientData.domain || (patientData.age < 15 ? 'respiratory' : 'cardiometabolic');
   const encounterData = encounterPresets[domainKey] || encounterPresets.cardiometabolic;
 
-  // Real Physical Microphone Web Speech Recognition Setup
+  // Helper to send recorded audio chunk to serverless Gnani STT endpoint
+  const sendChunkToGnani = async (blob) => {
+    if (!blob || blob.size < 500) return;
+    setIsTranscribingChunk(true);
+    setLastSttError(null);
+    const targetLang = patientData.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+    try {
+      const res = await speechService.transcribeAudioWithGnani(blob, targetLang);
+      if (res && res.transcript && res.transcript.trim()) {
+        setHasGnaniSttTranscribed(true);
+        setDialogueList(prev => [...prev, {
+          speaker: 'Doctor (Gnani STT - Live)',
+          lang: patientData.language || 'Telugu',
+          text: res.transcript.trim(),
+          isGnaniLive: true
+        }]);
+      } else if (res?.fallbackRequired) {
+        // Gnani unavailable or key unset, keep fallback active
+      }
+    } catch (err) {
+      console.warn('Gnani STT chunk error:', err);
+      setLastSttError(err.message);
+    } finally {
+      setIsTranscribingChunk(false);
+    }
+  };
+
+  // Manual trigger to force transcribe current chunk immediately
+  const handleTranscribeCurrentChunk = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.requestData();
+    }
+  };
+
+  // Physical Microphone Pipeline: Gnani STT Chunking with Fallback to Browser SpeechRecognition
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition && micMode === 'physical_mic') {
+    if (micMode !== 'physical_mic' || !isRecording) {
+      // Clean up physical recording pipelines
+      if (chunkIntervalRef.current) {
+        clearInterval(chunkIntervalRef.current);
+        chunkIntervalRef.current = null;
+      }
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        try { mediaRecorderRef.current.stop(); } catch(e){}
+      }
+      if (audioStreamRef.current) {
+        audioStreamRef.current.getTracks().forEach(t => t.stop());
+        audioStreamRef.current = null;
+      }
+      if (speechRecognizerRef.current) {
+        try { speechRecognizerRef.current.stop(); } catch(e){}
+        speechRecognizerRef.current = null;
+      }
+      return;
+    }
+
+    let isMounted = true;
+    const targetLang = patientData.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+
+    // Fallback: Browser Web Speech API
+    const startBrowserSpeechFallback = () => {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
       try {
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = patientData.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+        recognition.lang = targetLang;
 
         recognition.onresult = (event) => {
           let interim = '';
           for (let i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
               const text = event.results[i][0].transcript;
-              setDialogueList(prev => [...prev, { speaker: 'Doctor (Live Mic)', lang: 'Indic', text: text }]);
+              setDialogueList(prev => [...prev, {
+                speaker: 'Doctor (Browser WebSpeech Fallback)',
+                lang: 'Indic',
+                text: text,
+                isGnaniLive: false
+              }]);
             } else {
               interim += event.results[i][0].transcript;
             }
@@ -134,26 +216,80 @@ export default function LiveScribeSessionModal({
         };
 
         recognition.onerror = (e) => {
-          console.warn('Speech recognition error:', e);
+          console.warn('Browser SpeechRecognition error:', e);
         };
 
         recognition.start();
         speechRecognizerRef.current = recognition;
       } catch (err) {
-        console.warn('Recognition start failed:', err);
+        console.warn('Browser SpeechRecognition init error:', err);
       }
+    };
+
+    // If Gnani is available on server, initiate MediaRecorder audio chunk pipeline
+    if (gnaniSpeechStatus?.available && typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        if (!isMounted) {
+          stream.getTracks().forEach(t => t.stop());
+          return;
+        }
+        audioStreamRef.current = stream;
+
+        try {
+          const recorder = new MediaRecorder(stream);
+          recordedChunksRef.current = [];
+
+          recorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) {
+              recordedChunksRef.current.push(e.data);
+              // Process chunk
+              const audioBlob = new Blob(recordedChunksRef.current, { type: recorder.mimeType || 'audio/webm' });
+              recordedChunksRef.current = [];
+              sendChunkToGnani(audioBlob);
+            }
+          };
+
+          recorder.start();
+          mediaRecorderRef.current = recorder;
+
+          // Request chunk slice every 4 seconds for continuous Indic ASR
+          chunkIntervalRef.current = setInterval(() => {
+            if (recorder && recorder.state === 'recording') {
+              recorder.requestData();
+            }
+          }, 4000);
+        } catch (e) {
+          console.warn('MediaRecorder init failed, falling back to browser speech:', e);
+          startBrowserSpeechFallback();
+        }
+      }).catch(err => {
+        console.warn('getUserMedia failed, falling back to browser speech:', err);
+        startBrowserSpeechFallback();
+      });
     } else {
-      if (speechRecognizerRef.current) {
-        try { speechRecognizerRef.current.stop(); } catch(e){}
-      }
+      // Gnani key unset on server: safe browser speech fallback
+      startBrowserSpeechFallback();
     }
 
     return () => {
+      isMounted = false;
+      if (chunkIntervalRef.current) {
+        clearInterval(chunkIntervalRef.current);
+        chunkIntervalRef.current = null;
+      }
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        try { mediaRecorderRef.current.stop(); } catch(e){}
+      }
+      if (audioStreamRef.current) {
+        audioStreamRef.current.getTracks().forEach(t => t.stop());
+        audioStreamRef.current = null;
+      }
       if (speechRecognizerRef.current) {
         try { speechRecognizerRef.current.stop(); } catch(e){}
+        speechRecognizerRef.current = null;
       }
     };
-  }, [micMode]);
+  }, [micMode, isRecording, gnaniSpeechStatus]);
 
   // Stream dialogue automatically when recording in simulated mode
   useEffect(() => {
@@ -403,12 +539,25 @@ export default function LiveScribeSessionModal({
           
           {/* COLUMN 1: Ambient Multi-Speaker Dialogue Stream */}
           <div style={{ padding: '20px', borderRight: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Dual-Speaker Diarization (16 kHz PCM)
               </div>
-              <span style={{ fontSize: '11px', color: '#008B8B', fontWeight: 700 }}>
-                Browser speech (Web Speech API). Gnani voice integration: planned.
+              <span style={{
+                fontSize: '11px',
+                fontWeight: 750,
+                color: hasGnaniSttTranscribed ? '#059669' : gnaniSpeechStatus?.available ? '#008B8B' : '#64748B',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}>
+                {hasGnaniSttTranscribed ? (
+                  <span>🟢 Gnani Prisma v3 STT (LIVE Verified)</span>
+                ) : gnaniSpeechStatus?.available ? (
+                  <span>🟡 Gnani Prisma v3 STT (Server Active)</span>
+                ) : (
+                  <span>⚪ Browser Web Speech Fallback (GNANI_API_KEY unset)</span>
+                )}
               </span>
             </div>
 
@@ -444,6 +593,50 @@ export default function LiveScribeSessionModal({
               </div>
             </div>
 
+            {/* Physical Mic Active Banner / Quick Transcribe Action */}
+            {micMode === 'physical_mic' && (
+              <div style={{
+                background: gnaniSpeechStatus?.available ? '#F0FDF4' : '#F8FAFC',
+                border: `1px solid ${gnaniSpeechStatus?.available ? '#86EFAC' : '#E2E8F0'}`,
+                borderRadius: '10px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '11.5px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '13px' }}>{gnaniSpeechStatus?.available ? '🎙️' : '🌐'}</span>
+                  <span style={{ color: gnaniSpeechStatus?.available ? '#166534' : '#475569', fontWeight: 700 }}>
+                    {hasGnaniSttTranscribed
+                      ? '🟢 Gnani Prisma v3 STT (LIVE Verified)'
+                      : gnaniSpeechStatus?.available
+                        ? (isTranscribingChunk ? '⏳ Transcribing audio chunk with Gnani STT...' : '🟡 Gnani Prisma v3 Active (Streaming 4s chunks)')
+                        : '⚪ Safe Browser WebSpeech API Fallback (GNANI_API_KEY unset on server)'}
+                  </span>
+                </div>
+                {gnaniSpeechStatus?.available && (
+                  <button
+                    onClick={handleTranscribeCurrentChunk}
+                    disabled={isTranscribingChunk}
+                    style={{
+                      background: '#16A34A',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      fontSize: '10.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                    title="Send current microphone chunk to /api/gnani/stt"
+                  >
+                    {isTranscribingChunk ? 'Transcribing...' : '⚡ Transcribe Chunk'}
+                  </button>
+                )}
+              </div>
+            )}
+
             {/* Real-time Dialogue Bubbles */}
             <div style={{
               flex: 1,
@@ -455,7 +648,7 @@ export default function LiveScribeSessionModal({
               maxHeight: '440px'
             }}>
               {dialogueList.map((item, idx) => {
-                const isDoc = item.speaker === 'Doctor';
+                const isDoc = typeof item.speaker === 'string' && item.speaker.startsWith('Doctor');
                 return (
                   <div
                     key={idx}
@@ -472,9 +665,24 @@ export default function LiveScribeSessionModal({
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px', gap: '8px' }}>
-                      <span style={{ fontSize: '10.5px', fontWeight: 800, color: isDoc ? '#2DD4BF' : '#D97706' }}>
-                        {item.speaker} ({item.lang})
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: 800, color: isDoc ? '#2DD4BF' : '#D97706' }}>
+                          {item.speaker} {item.lang ? `(${item.lang})` : ''}
+                        </span>
+                        {item.isGnaniLive && (
+                          <span style={{
+                            fontSize: '9px',
+                            background: 'rgba(16, 185, 129, 0.2)',
+                            color: '#10B981',
+                            border: '1px solid rgba(16, 185, 129, 0.4)',
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            fontWeight: 800
+                          }}>
+                            GNANI STT LIVE
+                          </span>
+                        )}
+                      </div>
                       <span style={{ fontSize: '9.5px', opacity: 0.7 }}>00:0{idx * 4 + 2}</span>
                     </div>
                     <div style={{ fontSize: '13px', lineHeight: 1.5, fontWeight: 550 }}>

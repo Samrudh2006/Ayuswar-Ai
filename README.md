@@ -99,21 +99,24 @@ AyuSwar AI separates high-performance client-side browser execution from secure 
 
 ---
 
-## 🔒 Security & Privacy Principles
+## 🔒 Security & Serverless Architecture (Gnani.ai Speech Services)
 
-- **No Client-Bundled Secrets:** Gnani API keys and credentials are not bundled into client-side code (`VITE_*`). Secure server proxy variables are specified in `.env.example`.
-- **Ephemeral Audio Ingestion:** In-browser WebAudio buffers process audio locally for visualization and transcription; no persistent audio recordings are stored on external servers.
-- **Fixture Isolation:** Demonstration profiles and synthetic clinical scenarios are isolated from live flows. Live mode starts empty; synthetic demo fixtures require an explicit opt-in with a persistent banner.
+- **Zero Client-Side Secret Leakage:** `GNANI_API_KEY` is configured exclusively as a server-side environment variable in Vercel. No client-side `VITE_GNANI_*` variables, session storage, or authorization headers exist in browser code.
+- **Vercel Serverless Gateway:**
+  - `GET /api/gnani/status`: Probes Gnani upstream reachability and returns `{ available: true/false, status: 'LIVE'|'UNAVAILABLE' }`.
+  - `POST /api/gnani/stt`: Accepts audio binary / base64 chunks from the ambient scribe, validates payload sizes (<10MB), and forwards multipart requests to Gnani Prisma v3 STT (`https://api.vachana.ai/stt/v3`).
+  - `POST /api/gnani/tts`: Synthesizes Indic vernacular speech via Gnani Timbre v2.5 (`https://api.vachana.ai/api/v1/tts/inference`), returning binary WAV audio directly to client players.
+- **Honest Dynamic Fallback:** The user interface never labels Gnani as "LIVE" unless a real successful Gnani response was received for that session. If keys are unset on the server or upstream is unavailable, the UI clearly labels and falls back to browser Web Speech API (`SpeechRecognition` & `SpeechSynthesis`).
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Getting Started & Vercel Deployment
 
 ### Prerequisites
 - Node.js (v18+)
 - npm or yarn
 
-### Installation & Run
+### Local Development Setup
 
 ```bash
 # Clone the repository
@@ -123,17 +126,31 @@ cd Ayuswar-Ai
 # Install dependencies
 npm install
 
-# Start the Vite local development server
+# Copy example environment variables (optional for local testing)
+cp .env.example .env
+
+# Start local Vite development server
 npm run dev
 ```
+
+### Vercel Deployment & Environment Variables
+
+To activate live Gnani Prisma STT and Timbre TTS on your deployed Vercel instance:
+1. Navigate to your project on [Vercel Dashboard](https://vercel.com).
+2. Go to **Settings** > **Environment Variables**.
+3. Add the following secrets:
+   - `GNANI_API_KEY`: Your private Gnani API key (from [api.vachana.ai](https://api.vachana.ai)).
+   - `GNANI_STT_ENDPOINT`: (Optional, defaults to `https://api.vachana.ai/stt/v3`).
+   - `GNANI_TTS_ENDPOINT`: (Optional, defaults to `https://api.vachana.ai/api/v1/tts/inference`).
+4. Trigger a redeploy. `/api/gnani/status` will automatically return `available: true` and OPD Scribe will stream audio chunks directly to Gnani Prisma.
 
 ### Running Verification Tests & Build
 
 ```bash
-# Verify build
+# Verify production build
 npm run build
 
-# Run unit tests
+# Run static code contracts and audit tests
 npm test
 ```
 
