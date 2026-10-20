@@ -2521,20 +2521,37 @@ export default function DoctorPortal({
                         </span>
 
                         <button
-                          onClick={() => setPrintableRxData({
-                            patientName: rx.patient,
-                            vernacularName: rx.vernacular,
-                            abhaId: rx.abhaId,
-                            age: 42,
-                            gender: 'Male',
-                            diagnosis: 'Clinical Consultation & Prescription',
-                            vitals: 'BP: 120/80 mmHg, HR: 76 bpm, SpO2: 98%',
-                            date: new Date().toLocaleDateString('en-GB'),
-                            medications: [
-                              { name: rx.med.split('+')[0]?.trim() || rx.med, timing: rx.schedule.split('+')[0]?.trim() || 'Morning', days: '30 Days', generic: 'Generic Equivalent' },
-                              ...(rx.med.includes('+') ? [{ name: rx.med.split('+')[1]?.trim(), timing: rx.schedule.split('+')[1]?.trim() || 'Night', days: '30 Days', generic: 'Generic Equivalent' }] : [])
-                            ]
-                          })}
+                          onClick={() => {
+                            const med1 = rx.med.split('+')[0]?.trim() || rx.med;
+                            const med2 = rx.med.includes('+') ? rx.med.split('+')[1]?.trim() : null;
+                            const jan1 = getJanAushadhiGenericInfo(med1);
+                            const jan2 = med2 ? getJanAushadhiGenericInfo(med2) : null;
+                            
+                            setPrintableRxData({
+                              patientName: rx.patient,
+                              vernacularName: rx.vernacular,
+                              abhaId: rx.abhaId,
+                              age: 42,
+                              gender: 'Male',
+                              diagnosis: 'Clinical Consultation & Prescription (PMBJP Cost-Optimized)',
+                              vitals: 'BP: 120/80 mmHg, HR: 76 bpm, SpO2: 98%',
+                              date: new Date().toLocaleDateString('en-GB'),
+                              medications: [
+                                { 
+                                  name: med1, 
+                                  timing: rx.schedule.split('+')[0]?.trim() || 'Morning (After Food)', 
+                                  days: '30 Days', 
+                                  generic: `${jan1.genericName} (MRP: ₹${jan1.brandedMrp} → PMBJP: ₹${jan1.janAushadhiPrice} • Save ${jan1.savingsPercent}%)` 
+                                },
+                                ...(jan2 ? [{ 
+                                  name: med2, 
+                                  timing: rx.schedule.split('+')[1]?.trim() || 'Night (After Food)', 
+                                  days: '30 Days', 
+                                  generic: `${jan2.genericName} (MRP: ₹${jan2.brandedMrp} → PMBJP: ₹${jan2.janAushadhiPrice} • Save ${jan2.savingsPercent}%)` 
+                                }] : [])
+                              ]
+                            });
+                          }}
                           style={{
                             padding: '7px 12px',
                             borderRadius: '8px',
