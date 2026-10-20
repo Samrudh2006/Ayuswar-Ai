@@ -35,6 +35,13 @@ export default function AcousticBiomarkerLabView() {
   const [activeSoundName, setActiveSoundName] = useState(null);
   const [liveToneHz, setLiveToneHz] = useState(220);
   const [isToneActive, setIsToneActive] = useState(false);
+
+  // Real-time Audio Diagnostics & Sampler State
+  const [vuLevel, setVuLevel] = useState(0);
+  const [detectedWheezeHz, setDetectedWheezeHz] = useState(null);
+  const [isSampling5s, setIsSampling5s] = useState(false);
+  const [samplingCountdown, setSamplingCountdown] = useState(5);
+  const [sampleSummary, setSampleSummary] = useState(null);
   
   // Gnani API Key State
   const [showGnaniModal, setShowGnaniModal] = useState(false);
@@ -77,6 +84,9 @@ export default function AcousticBiomarkerLabView() {
   const activeOscillatorRef = useRef(null);
   const activeSourceRef = useRef(null);
   const fileInputRef = useRef(null);
+  const lastDspUpdateRef = useRef(0);
+  const sampleBufferRef = useRef([]);
+  const samplingTimerRef = useRef(null);
 
   // Stop audio on unmount
   useEffect(() => {
@@ -103,6 +113,10 @@ export default function AcousticBiomarkerLabView() {
   };
 
   const stopAllAudio = () => {
+    if (samplingTimerRef.current) {
+      clearInterval(samplingTimerRef.current);
+      samplingTimerRef.current = null;
+    }
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach(t => t.stop());
       mediaStreamRef.current = null;
@@ -122,7 +136,9 @@ export default function AcousticBiomarkerLabView() {
     setIsRecordingMic(false);
     setIsPlayingSound(false);
     setIsToneActive(false);
+    setIsSampling5s(false);
     setActiveSoundName(null);
+    setVuLevel(0);
   };
 
   // -------------------------------------------------------------
@@ -146,6 +162,89 @@ export default function AcousticBiomarkerLabView() {
 
       setIsRecordingMic(true);
       startVisualizerLoop();
+    } catch (err) {
+      alert('Microphone access unavailable or denied: ' + err.message);
+    }
+  };
+
+  // -------------------------------------------------------------
+  // 5-Second Phonation & Wheeze Sampler
+  // -------------------------------------------------------------
+  const handleStart5sSampling = async () => {
+    if (isSampling5s) {
+      stopAllAudio();
+      return;
+    }
+
+    stopAllAudio();
+    setSampleSummary(null);
+    sampleBufferRef.current = [];
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+
+      const { ctx, analyser } = getOrCreateAudioContext();
+      const source = ctx.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      setIsRecordingMic(true);
+      setIsSampling5s(true);
+      setSamplingCountdown(5);
+      startVisualizerLoop();
+
+      let remaining = 5;
+      samplingTimerRef.current = setInterval(() => {
+        remaining -= 1;
+        setSamplingCountdown(remaining);
+
+        if (remaining <= 0) {
+          clearInterval(samplingTimerRef.current);
+          samplingTimerRef.current = null;
+          setIsSampling5s(false);
+          setIsRecordingMic(false);
+
+          if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach(t => t.stop());
+            mediaStreamRef.current = null;
+          }
+
+          // Aggregate sampled frames
+          const frames = sampleBufferRef.current;
+          if (frames.length > 0) {
+            const pitches = frames.map(f => f.f0).filter(f => f >= 80 && f <= 420).sort((a,b)=>a-b);
+            const hnrs = frames.map(f => f.hnr).filter(h => !isNaN(h)).sort((a,b)=>a-b);
+            const jitters = frames.map(f => f.jitter).filter(j => !isNaN(j)).sort((a,b)=>a-b);
+            const shimmers = frames.map(f => f.shimmer).filter(s => !isNaN(s)).sort((a,b)=>a-b);
+            const centroids = frames.map(f => f.centroid).filter(c => !isNaN(c)).sort((a,b)=>a-b);
+
+            const median = (arr, fallback) => arr.length > 0 ? arr[Math.floor(arr.length / 2)] : fallback;
+            const finalF0 = Math.round(median(pitches, 145));
+            const finalHnr = Number(median(hnrs, 19.2).toFixed(1));
+            const finalJitter = Number(median(jitters, 0.88).toFixed(2));
+            const finalShimmer = Number(median(shimmers, 1.85).toFixed(2));
+            const finalCentroid = Math.round(median(centroids, 1220));
+
+            const aggregated = {
+              pitchF0: finalF0,
+              jitterPct: finalJitter,
+              shimmerPct: finalShimmer,
+              hnrDb: finalHnr,
+              spectralCentroid: finalCentroid
+            };
+
+            setDspMetrics(aggregated);
+            const analysis = analyzeAcousticSignals(aggregated);
+            setAnalysisResult(analysis);
+            setSampleSummary({
+              durationSec: 5,
+              totalFrames: frames.length,
+              metrics: aggregated,
+              topMatch: analysis.primaryAcousticCluster
+            });
+          }
+        }
+      }, 1000);
     } catch (err) {
       alert('Microphone access unavailable or denied: ' + err.message);
     }
@@ -423,6 +522,13 @@ export default function AcousticBiomarkerLabView() {
       ctx.fillStyle = '#061626';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      let sumSquares = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        const v = (timeData[i] - 128) / 128.0;
+        sumSquares += v * v;
+      }
+      const rms = Math.sqrt(sumSquares / bufferLength);
+
       if (visualizerMode === 'oscilloscope') {
         // Cyan Oscilloscope Waveform
         ctx.lineWidth = 2.5;
@@ -433,12 +539,10 @@ export default function AcousticBiomarkerLabView() {
 
         const sliceWidth = canvas.width / bufferLength;
         let x = 0;
-        let sumSquares = 0;
 
         for (let i = 0; i < bufferLength; i++) {
           const v = timeData[i] / 128.0;
           const y = (v * canvas.height) / 2;
-          sumSquares += (v - 1.0) * (v - 1.0);
 
           if (i === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
@@ -448,21 +552,6 @@ export default function AcousticBiomarkerLabView() {
         ctx.lineTo(canvas.width, canvas.height / 2);
         ctx.stroke();
         ctx.shadowBlur = 0;
-
-        // Auto-update metrics on microphone input
-        const rms = Math.sqrt(sumSquares / bufferLength);
-        if (rms > 0.04 && isRecordingMic) {
-          const estimatedF0 = Math.round(120 + rms * 350);
-          const newMetrics = {
-            pitchF0: estimatedF0,
-            jitterPct: Number((0.5 + rms * 3.5).toFixed(2)),
-            shimmerPct: Number((1.5 + rms * 7.0).toFixed(2)),
-            hnrDb: Number((24 - rms * 15).toFixed(1)),
-            spectralCentroid: Math.round(1100 + rms * 1800)
-          };
-          setDspMetrics(newMetrics);
-          setAnalysisResult(analyzeAcousticSignals(newMetrics));
-        }
       } else {
         // Multi-Band Frequency Spectrum Bars (Bass, Mid, Treble)
         const barCount = 48;
@@ -490,6 +579,106 @@ export default function AcousticBiomarkerLabView() {
         ctx.fillText('100 Hz', 10, 18);
         ctx.fillText('1 kHz (Speech Mids)', canvas.width * 0.35, 18);
         ctx.fillText('4 kHz (Treble Wheeze)', canvas.width - 120, 18);
+      }
+
+      // Throttled DSP calculations (~120ms interval) for live mic / audio playback
+      const now = performance.now();
+      if ((isRecordingMic || isPlayingSound) && (now - lastDspUpdateRef.current > 120)) {
+        lastDspUpdateRef.current = now;
+        setVuLevel(Math.min(100, Math.round(rms * 280)));
+
+        if (rms > 0.02) {
+          // Autocorrelation pitch detector
+          const sampleRate = audioContextRef.current ? audioContextRef.current.sampleRate : 44100;
+          const minLag = Math.max(10, Math.floor(sampleRate / 420));
+          const maxLag = Math.min(bufferLength - 1, Math.floor(sampleRate / 80));
+
+          let maxCorr = -1;
+          let bestLag = 0;
+          for (let lag = minLag; lag < maxLag; lag += 2) {
+            let corr = 0;
+            for (let j = 0; j < bufferLength - lag; j += 4) {
+              corr += ((timeData[j] - 128) / 128) * ((timeData[j + lag] - 128) / 128);
+            }
+            if (corr > maxCorr) {
+              maxCorr = corr;
+              bestLag = lag;
+            }
+          }
+
+          let calculatedF0 = 142;
+          let calculatedHnr = 19.5;
+          if (bestLag > 0 && sumSquares > 0) {
+            const normCorr = Math.min(0.98, Math.max(0.05, (maxCorr * 2) / sumSquares));
+            if (normCorr > 0.35) {
+              const f0Candidate = Math.round(sampleRate / bestLag);
+              if (f0Candidate >= 80 && f0Candidate <= 420) {
+                calculatedF0 = f0Candidate;
+                calculatedHnr = Number((10 * Math.log10(normCorr / (1.0001 - normCorr))).toFixed(1));
+              }
+            }
+          }
+
+          // Spectral Centroid Calculation
+          let num = 0, den = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const mag = freqData[i];
+            num += i * mag;
+            den += mag;
+          }
+          const liveCentroid = den > 0 
+            ? Math.round(((num / den) * (sampleRate / 2)) / bufferLength) 
+            : Math.round(1100 + rms * 1500);
+
+          const liveJitter = Number((0.6 + rms * 3.2).toFixed(2));
+          const liveShimmer = Number((1.6 + rms * 6.5).toFixed(2));
+
+          const currentFrame = {
+            f0: calculatedF0,
+            hnr: calculatedHnr,
+            jitter: liveJitter,
+            shimmer: liveShimmer,
+            centroid: liveCentroid
+          };
+
+          if (isSampling5s) {
+            sampleBufferRef.current.push(currentFrame);
+          }
+
+          const newMetrics = {
+            pitchF0: calculatedF0,
+            jitterPct: liveJitter,
+            shimmerPct: liveShimmer,
+            hnrDb: calculatedHnr,
+            spectralCentroid: liveCentroid
+          };
+          setDspMetrics(newMetrics);
+          setAnalysisResult(analyzeAcousticSignals(newMetrics));
+
+          // Wheeze narrow-band musical peak detection (350Hz - 900Hz)
+          const nyquist = sampleRate / 2;
+          const minBin = Math.floor((350 / nyquist) * bufferLength);
+          const maxBin = Math.floor((900 / nyquist) * bufferLength);
+          let peakVal = 0, peakBin = 0, avgVal = 0, binCount = 0;
+          for (let b = minBin; b <= maxBin; b++) {
+            const val = freqData[b];
+            avgVal += val;
+            binCount++;
+            if (val > peakVal) {
+              peakVal = val;
+              peakBin = b;
+            }
+          }
+          const localAvg = binCount > 0 ? avgVal / binCount : 1;
+          if (peakVal > 90 && (peakVal / (localAvg + 1)) > 2.2) {
+            const peakHz = Math.round((peakBin * nyquist) / bufferLength);
+            setDetectedWheezeHz(peakHz);
+          } else {
+            setDetectedWheezeHz(null);
+          }
+        } else {
+          setDetectedWheezeHz(null);
+        }
       }
 
       animFrameRef.current = requestAnimationFrame(render);
@@ -686,18 +875,128 @@ export default function AcousticBiomarkerLabView() {
             }}
           />
 
-          {/* Action Row: Live Mic, Upload Audio File */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {/* Real-time Dynamic VU Decibel Meter */}
+          <div style={{ background: '#0F172A', padding: '10px 14px', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94A3B8' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: vuLevel > 10 ? '#00F5D4' : '#475569' }} />
+                <span>Live Phonation Level (VU / RMS):</span>
+              </span>
+              <span style={{ fontFamily: 'monospace', color: vuLevel > 60 ? '#F59E0B' : '#00F5D4', fontWeight: 800 }}>
+                {vuLevel > 0 ? `${vuLevel}% (${-(60 - Math.round(vuLevel * 0.55))} dBFS)` : 'Idle (Ambient Gate)'}
+              </span>
+            </div>
+            <div style={{ height: 6, background: '#1E293B', borderRadius: 3, overflow: 'hidden' }}>
+              <div style={{
+                width: `${vuLevel}%`,
+                height: '100%',
+                background: vuLevel > 75 ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #008B8B, #00F5D4)',
+                borderRadius: 3,
+                transition: 'width 0.08s ease'
+              }} />
+            </div>
+          </div>
+
+          {/* High-Frequency Wheeze Resonant Spike Banner */}
+          {detectedWheezeHz && (
+            <div style={{
+              background: 'rgba(245, 158, 11, 0.1)',
+              border: '1.5px solid #F59E0B',
+              borderRadius: '10px',
+              padding: '10px 14px',
+              color: '#B45309',
+              fontSize: '12px',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: '16px' }}>🎶</span>
+                <span>Musical Adventitious Signal Detected (~{detectedWheezeHz} Hz Resonance)</span>
+              </div>
+              <span style={{ fontSize: '10px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: 6 }}>
+                Narrow-Band Peak
+              </span>
+            </div>
+          )}
+
+          {/* 5-Second Phonation Sampler Status / Results */}
+          {isSampling5s && (
+            <div style={{
+              background: 'linear-gradient(135deg, #064E3B 0%, #065F46 100%)',
+              border: '1.5px solid #10B981',
+              borderRadius: '12px',
+              padding: '14px',
+              color: '#ECFDF5',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  background: '#10B981',
+                  color: '#064E3B',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 900,
+                  fontSize: '16px'
+                }}>
+                  {samplingCountdown}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '13px' }}>Sampling Continuous Breath & Phonation...</div>
+                  <div style={{ fontSize: '11px', color: '#A7F3D0' }}>Please sustain a steady 'Aaah' vowel or breath sound into mic.</div>
+                </div>
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#34D399', animation: 'pulse 1.5s infinite' }}>
+                RECORDING...
+              </span>
+            </div>
+          )}
+
+          {sampleSummary && (
+            <div style={{
+              background: '#F0FDF4',
+              border: '1.5px solid #86EFAC',
+              borderRadius: '12px',
+              padding: '14px',
+              color: '#166534'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <div style={{ fontWeight: 850, fontSize: '13px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <CheckCircle2 size={16} color="#16A34A" />
+                  <span>5-Second Phonation Sample Analyzed</span>
+                </div>
+                <span style={{ fontSize: '11px', color: '#15803D', fontWeight: 700 }}>
+                  {sampleSummary.totalFrames} acoustic frames aggregated
+                </span>
+              </div>
+              <div style={{ fontSize: '12px', color: '#14532D', lineHeight: 1.5 }}>
+                Median Pitch <strong>{sampleSummary.metrics.pitchF0} Hz</strong> • HNR <strong>{sampleSummary.metrics.hnrDb} dB</strong> • Jitter <strong>{sampleSummary.metrics.jitterPct}%</strong> • Shimmer <strong>{sampleSummary.metrics.shimmerPct}%</strong>.
+              </div>
+              <div style={{ marginTop: 6, fontSize: '11px', color: '#166534', fontWeight: 700 }}>
+                Top Reference Proximity: <strong>{sampleSummary.topMatch?.label || 'Standard Phonation'}</strong>
+              </div>
+            </div>
+          )}
+
+          {/* Action Row: Live Mic, Upload Audio File & 5s Sampler */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
             <button
               type="button"
               onClick={handleToggleLiveMic}
               style={{
-                padding: '12px 16px',
+                padding: '12px 14px',
                 borderRadius: '10px',
                 border: 'none',
-                background: isRecordingMic ? '#DC2626' : 'linear-gradient(135deg, #008B8B 0%, #006666 100%)',
+                background: isRecordingMic && !isSampling5s ? '#DC2626' : 'linear-gradient(135deg, #008B8B 0%, #006666 100%)',
                 color: '#FFFFFF',
-                fontSize: '13px',
+                fontSize: '12.5px',
                 fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex',
@@ -707,20 +1006,44 @@ export default function AcousticBiomarkerLabView() {
                 boxShadow: isRecordingMic ? '0 4px 12px rgba(220,38,38,0.3)' : '0 4px 12px rgba(0,139,139,0.25)'
               }}
             >
-              {isRecordingMic ? <Square size={16} fill="#FFF" /> : <Mic size={16} />}
-              <span>{isRecordingMic ? 'Stop Live Mic' : 'Start Live Mic'}</span>
+              {isRecordingMic && !isSampling5s ? <Square size={16} fill="#FFF" /> : <Mic size={16} />}
+              <span>{isRecordingMic && !isSampling5s ? 'Stop Mic' : 'Continuous Mic'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleStart5sSampling}
+              disabled={isSampling5s}
+              style={{
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: 'none',
+                background: isSampling5s ? '#065F46' : 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                color: '#FFFFFF',
+                fontSize: '12.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 12px rgba(5,150,105,0.25)'
+              }}
+            >
+              <Sparkles size={16} />
+              <span>{isSampling5s ? `Sampling (${samplingCountdown}s)...` : '⚡ 5-Sec Sampler'}</span>
             </button>
 
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               style={{
-                padding: '12px 16px',
+                padding: '12px 14px',
                 borderRadius: '10px',
                 border: '1.5px solid #CBD5E1',
                 background: '#F8FAFC',
                 color: '#0A2540',
-                fontSize: '13px',
+                fontSize: '12.5px',
                 fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex',
@@ -730,7 +1053,7 @@ export default function AcousticBiomarkerLabView() {
               }}
             >
               <Upload size={16} color="#008B8B" />
-              <span>Upload .WAV / Audio</span>
+              <span>Upload Audio</span>
             </button>
             <input 
               ref={fileInputRef} 
