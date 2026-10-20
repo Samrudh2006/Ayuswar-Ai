@@ -21,92 +21,23 @@ import {
   X
 } from 'lucide-react';
 
+import AuthenticQrCode from './AuthenticQrCode';
+
 /**
  * High-Density Realistic ABDM 2D Matrix QR Code Generator (SVG)
- * Generates an authentic matrix pattern with corner positioning squares and center ABDM shield icon.
+ * Powered by ISO 18004 compliant Reed-Solomon engine. Scannable by any mobile camera.
  */
 export function RealisticAbdmQrCode({ value = "abdm://abha/91-8842-1920-5511", size = 110, isDoctor = false }) {
-  // Deterministic realistic pattern based on value hash
   return (
-    <div style={{
-      width: `${size}px`,
-      height: `${size}px`,
-      background: '#ffffff',
-      padding: '6px',
-      borderRadius: '10px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      <svg width={size - 12} height={size - 12} viewBox="0 0 100 100" fill="#0A2540">
-        {/* Top-Left Finder Pattern */}
-        <rect x="0" y="0" width="30" height="30" rx="4" fill="#0A2540" />
-        <rect x="4" y="4" width="22" height="22" rx="2" fill="#ffffff" />
-        <rect x="8" y="8" width="14" height="14" rx="2" fill="#008B8B" />
-
-        {/* Top-Right Finder Pattern */}
-        <rect x="70" y="0" width="30" height="30" rx="4" fill="#0A2540" />
-        <rect x="74" y="4" width="22" height="22" rx="2" fill="#ffffff" />
-        <rect x="78" y="8" width="14" height="14" rx="2" fill="#008B8B" />
-
-        {/* Bottom-Left Finder Pattern */}
-        <rect x="0" y="70" width="30" height="30" rx="4" fill="#0A2540" />
-        <rect x="4" y="74" width="22" height="22" rx="2" fill="#ffffff" />
-        <rect x="8" y="78" width="14" height="14" rx="2" fill="#008B8B" />
-
-        {/* Realistic High-Density Data Matrix Dots */}
-        <rect x="36" y="4" width="6" height="6" fill="#0A2540" />
-        <rect x="46" y="4" width="6" height="6" fill="#0A2540" />
-        <rect x="56" y="4" width="6" height="6" fill="#0A2540" />
-        
-        <rect x="36" y="14" width="6" height="6" fill="#0A2540" />
-        <rect x="46" y="18" width="6" height="6" fill="#008B8B" />
-        <rect x="56" y="14" width="6" height="6" fill="#0A2540" />
-
-        <rect x="4" y="36" width="6" height="6" fill="#0A2540" />
-        <rect x="14" y="36" width="6" height="6" fill="#0A2540" />
-        <rect x="24" y="46" width="6" height="6" fill="#0A2540" />
-        <rect x="4" y="56" width="6" height="6" fill="#0A2540" />
-        <rect x="18" y="56" width="6" height="6" fill="#008B8B" />
-
-        <rect x="74" y="36" width="6" height="6" fill="#0A2540" />
-        <rect x="86" y="36" width="6" height="6" fill="#0A2540" />
-        <rect x="78" y="48" width="6" height="6" fill="#0A2540" />
-        <rect x="90" y="56" width="6" height="6" fill="#0A2540" />
-
-        <rect x="36" y="74" width="6" height="6" fill="#0A2540" />
-        <rect x="48" y="74" width="6" height="6" fill="#0A2540" />
-        <rect x="58" y="86" width="6" height="6" fill="#008B8B" />
-        <rect x="40" y="88" width="6" height="6" fill="#0A2540" />
-
-        <rect x="74" y="74" width="6" height="6" fill="#0A2540" />
-        <rect x="88" y="78" width="6" height="6" fill="#0A2540" />
-        <rect x="76" y="88" width="6" height="6" fill="#0A2540" />
-        <rect x="88" y="88" width="6" height="6" fill="#0A2540" />
-
-        {/* Center Verified Emblem Anchor */}
-        <circle cx="50" cy="50" r="13" fill="#ffffff" />
-        <circle cx="50" cy="50" r="10" fill={isDoctor ? "#0A2540" : "#008B8B"} />
-      </svg>
-      {/* Center Micro Badge */}
-      <div style={{
-        position: 'absolute',
-        width: '18px',
-        height: '18px',
-        borderRadius: '50%',
-        background: isDoctor ? '#0A2540' : '#008B8B',
-        color: '#ffffff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '9px',
-        fontWeight: 900
-      }}>
-        {isDoctor ? 'MD' : '✓'}
-      </div>
-    </div>
+    <AuthenticQrCode
+      value={value}
+      size={size}
+      level="M"
+      fgColor="#0A2540"
+      bgColor="#FFFFFF"
+      isDoctor={isDoctor}
+      showCenterBadge={true}
+    />
   );
 }
 

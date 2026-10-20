@@ -55,6 +55,8 @@ import { askAyuSwarBrain } from '../services/aiBrainService';
 import { speechService } from '../services/indicSpeechService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import AuthenticQrCode from './AuthenticQrCode';
+import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 
@@ -82,6 +84,7 @@ export default function PatientPortal({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [showWhatsAppRxModal, setShowWhatsAppRxModal] = useState(false);
+  const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] = useState(false);
   
   // Book Consultation Modal State
   const [isBookConsultationModalOpen, setIsBookConsultationModalOpen] = useState(false);
@@ -769,23 +772,25 @@ export default function PatientPortal({
           </button>
 
           <button 
+            onClick={() => setIsNotificationsDrawerOpen(true)}
             style={{ 
               position: 'relative', 
               cursor: 'pointer',
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              border: '1px solid #E2E8F0',
-              background: '#F8FAFC',
+              border: isNotificationsDrawerOpen ? '1.5px solid #008B8B' : '1px solid #E2E8F0',
+              background: isNotificationsDrawerOpen ? 'rgba(0, 139, 139, 0.1)' : '#F8FAFC',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'all 150ms ease',
               padding: 0
             }} 
-            title="1 New Lab Report Alert"
+            title="Citizen Health Alerts & Reminders"
+            aria-label="Open Health Notifications"
           >
-            <Bell size={18} color="#64748B" />
+            <Bell size={18} color={isNotificationsDrawerOpen ? '#008B8B' : '#64748B'} />
             <span style={{
               position: 'absolute',
               top: '7px',
@@ -4174,24 +4179,15 @@ export default function PatientPortal({
                 justifyContent: 'space-between'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    width: '64px',
-                    height: '64px',
-                    background: '#0A2540',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '4px'
-                  }}>
-                    <QrCode size={36} color="#00D2D3" />
-                    <span style={{ fontSize: '7px', color: '#94A3B8' }}>SCAN TO VERIFY</span>
-                  </div>
+                  <AuthenticQrCode 
+                    value={`https://ayuswar-ai.vercel.app/patient-portal?abha=${abhaId}&pt=${encodeURIComponent(patientName)}`}
+                    size={68}
+                    isDoctor={false}
+                    showCenterBadge={false}
+                  />
                   <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
                     ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
-                    Encrypted with SHA-256 digital certificate.
+                    Encrypted with SHA-256 digital certificate. Scannable via any smartphone camera.
                   </div>
                 </div>
 
@@ -4310,6 +4306,25 @@ export default function PatientPortal({
           );
         })}
       </nav>
+
+      {/* Real-time Citizen Health Notifications Drawer */}
+      <ClinicalNotificationsDrawer
+        isOpen={isNotificationsDrawerOpen}
+        onClose={() => setIsNotificationsDrawerOpen(false)}
+        mode="patient"
+        userProfile={patientProfile}
+        onActionClick={(item) => {
+          if (item.actionType === 'listen_rx') {
+            setShowWhatsAppRxModal(true);
+          } else if (item.actionType === 'prescriptions') {
+            setActiveTab('medications');
+          } else if (item.actionType === 'health_records') {
+            setActiveTab('my_health');
+          } else if (item.actionType === 'scanner') {
+            window.location.href = '/scanner';
+          }
+        }}
+      />
 
       {/* Planned Notice Toast */}
       {plannedNotice && (

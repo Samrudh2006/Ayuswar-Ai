@@ -25,9 +25,9 @@ import {
   Droplets,
   Printer,
   ChevronRight,
-  Send,
   MessageSquare
 } from 'lucide-react';
+import AuthenticQrCode from './AuthenticQrCode';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 
@@ -1074,9 +1074,12 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
             {/* QR Code Audio-Rx */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '20px' }}>
-              <div style={{ width: '64px', height: '64px', background: '#0A2540', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px' }}>
-                <QrCode size={48} />
-              </div>
+              <AuthenticQrCode 
+                value={`https://ayuswar-ai.vercel.app/audio-rx?enc=${currentEncounter.id}&lang=${encodeURIComponent(currentEncounter.language)}`}
+                size={72}
+                isDoctor={false}
+                showCenterBadge={true}
+              />
               <div>
                 <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540' }}>Scan to Listen in {currentEncounter.language}</div>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Illiterate patients can scan with any smartphone camera to replay voice instructions.</div>

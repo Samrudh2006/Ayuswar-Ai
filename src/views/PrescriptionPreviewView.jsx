@@ -22,6 +22,7 @@ import { useApp } from '../context/AppContext';
 import { PMBJP_FORMULARY_DATABASE, lookupPmbjpDrug } from '../data/pmbjpFormulary';
 import { generateAbdmFhirR4Bundle, downloadFhirJson } from '../data/clinicalSafetySentinel';
 import { speechService } from '../services/indicSpeechService';
+import AuthenticQrCode from '../components/AuthenticQrCode';
 
 export default function PrescriptionPreviewView() {
   const { isDemoMode } = useApp();
@@ -752,16 +753,24 @@ export default function PrescriptionPreviewView() {
           paddingTop: '20px', 
           display: 'flex', 
           justifyContent: 'space-between', 
-          alignItems: 'flex-end',
+          alignItems: 'center',
           flexWrap: 'wrap',
           gap: '16px'
         }}>
-          <div>
-            <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 750, marginBottom: '2px' }}>
-              ✓ Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) Verified Dispense Slip
-            </div>
-            <div style={{ fontSize: '11px', color: '#64748B' }}>
-              Show this slip at any PMBJP Kendra across India for price-capped generic delivery.
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <AuthenticQrCode 
+              value={`https://ayuswar-ai.vercel.app/prescription/preview?abha=${patient.abhaId}&token=PMBJP-${patient.id}`}
+              size={72}
+              isDoctor={false}
+              showCenterBadge={true}
+            />
+            <div>
+              <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 750, marginBottom: '2px' }}>
+                ✓ Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) Verified Dispense Slip
+              </div>
+              <div style={{ fontSize: '11px', color: '#64748B' }}>
+                Show this QR slip at any PMBJP Kendra across India for price-capped generic delivery.
+              </div>
             </div>
           </div>
 

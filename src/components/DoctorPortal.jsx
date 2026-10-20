@@ -48,6 +48,8 @@ import { askAyuSwarBrain } from '../services/aiBrainService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import LiveScribeSessionModal from './LiveScribeSessionModal';
+import AuthenticQrCode from './AuthenticQrCode';
+import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../data/indicVernacularOntology';
@@ -93,6 +95,7 @@ export default function DoctorPortal({
   const [dicomContrast, setDicomContrast] = useState(100);
   const [fhirToast, setFhirToast] = useState(null);
   const [plannedToast, setPlannedToast] = useState(null);
+  const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] = useState(false);
 
   const showPlannedNotice = (featureName = 'This feature') => {
     setPlannedToast(`${featureName}: PLANNED in upcoming release.`);
@@ -795,23 +798,25 @@ export default function DoctorPortal({
             </button>
 
             <button 
+              onClick={() => setIsNotificationsDrawerOpen(true)}
               style={{ 
                 position: 'relative', 
                 cursor: 'pointer',
                 width: '38px',
                 height: '38px',
                 borderRadius: '10px',
-                border: '1px solid #E2E8F0',
-                background: '#F8FAFC',
+                border: isNotificationsDrawerOpen ? '1.5px solid #008B8B' : '1px solid #E2E8F0',
+                background: isNotificationsDrawerOpen ? 'rgba(0, 139, 139, 0.1)' : '#F8FAFC',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'all 150ms ease',
                 padding: 0
               }} 
-              title="2 Pending Critical Notifications"
+              title="Clinical Alert Sentinel & Telemetry"
+              aria-label="Open Clinical Notifications"
             >
-              <Bell size={18} color="#64748B" />
+              <Bell size={18} color={isNotificationsDrawerOpen ? '#008B8B' : '#64748B'} />
               <span style={{
                 position: 'absolute',
                 top: '7px',
@@ -4299,24 +4304,15 @@ export default function DoctorPortal({
                 justifyContent: 'space-between'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    width: '64px',
-                    height: '64px',
-                    background: '#0A2540',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '4px'
-                  }}>
-                    <QrCode size={36} color="#00D2D3" />
-                    <span style={{ fontSize: '7px', color: '#94A3B8' }}>SCAN TO VERIFY</span>
-                  </div>
+                  <AuthenticQrCode 
+                    value={`https://ayuswar-ai.vercel.app/patient-portal?enc=ENC-2026-091&hpr=${doctorProfile?.hprId || 'DEMO-HPR'}&dr=${encodeURIComponent(doctorName)}`}
+                    size={68}
+                    isDoctor={true}
+                    showCenterBadge={false}
+                  />
                   <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
                     ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
-                    Encrypted with SHA-256 digital certificate.
+                    Encrypted with SHA-256 digital certificate. Scannable via any smartphone camera.
                   </div>
                 </div>
 
@@ -4356,6 +4352,22 @@ export default function DoctorPortal({
         patientData={whatsAppModalPatient}
         doctorName={doctorName}
         initialLanguage={whatsAppModalPatient?.langCode?.includes('hi') ? 'hi' : 'te'}
+      />
+
+      {/* Real-time Clinical Notifications Drawer */}
+      <ClinicalNotificationsDrawer
+        isOpen={isNotificationsDrawerOpen}
+        onClose={() => setIsNotificationsDrawerOpen(false)}
+        mode="doctor"
+        userProfile={doctorProfile}
+        onActionClick={(item) => {
+          if (item.actionType === 'reports') setActiveTab('reports');
+          else if (item.actionType === 'settings') setActiveTab('settings');
+          else if (item.actionType === 'prescriptions') setActiveTab('prescriptions');
+          else if (item.actionType === 'emergency') {
+            window.location.href = '/emergency';
+          }
+        }}
       />
 
       {/* Native Mobile Bottom Navigation Bar (Visible only on mobile < 768px) */}
