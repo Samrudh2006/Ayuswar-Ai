@@ -125,7 +125,7 @@ export default function DoctorPortal({
   // AyuVision Blister Pack OCR & NFI Formulary Suite
   const [ocrSampleIdx, setOcrSampleIdx] = useState(0);
   const [isOcrScanning, setIsOcrScanning] = useState(false);
-  // ocrScanComplete omitted
+  const [ocrScanComplete, setOcrScanComplete] = useState(false);
   const [printableRxData, setPrintableRxData] = useState(null);
 
   // Physician Settings State Suite
@@ -2106,7 +2106,7 @@ export default function DoctorPortal({
                         gender: 'Male',
                         diagnosis: 'Type-2 Diabetes Mellitus & Dyslipidemia (E11.9)',
                         vitals: 'BP: 140/90 mmHg, HR: 88 bpm, RBS: 168 mg/dL',
-                        date: '23/10/2026',
+                        date: new Date().toLocaleDateString('en-GB'),
                         medications: [
                           { name: 'Pantoprazole 40mg (పసుపు గోళీ)', timing: '08:30 AM (టిఫిన్ ముందు)', days: '30 Days', generic: 'Pantoprazole 40mg (Jan Aushadhi - ₹28)' },
                           { name: 'Metformin 500mg SR (గులాబీ గోళీ)', timing: '08:30 PM (భోజనం తర్వాత)', days: '30 Days', generic: 'Metformin 500mg SR (Jan Aushadhi - ₹35)' }
