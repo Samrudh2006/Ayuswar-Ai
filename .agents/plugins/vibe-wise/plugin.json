@@ -1,0 +1,6 @@
+{
+  "name": "vibe-wise",
+  "displayName": "VibeWise",
+  "version": "1.0.0",
+  "description": "Learning-first development plugin: You build. AI writes. Learner leads design while AI guides, examines tradeoffs, explains unfamiliar concepts, and writes agreed code."
+}
