@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HeroLanding from './components/HeroLanding';
-import DetailedModuleView from './components/DetailedModuleView';
-import DoctorPortal from './components/DoctorPortal';
-import ClinicalConsole from './components/ClinicalConsole';
-import PatientPortal from './components/PatientPortal';
 import FloatingAssistant from './components/FloatingAssistant';
-import SanjivaniEmergencyModal from './components/SanjivaniEmergencyModal';
 import DoctorAuthModal from './components/DoctorAuthModal';
 import PatientAuthModal from './components/PatientAuthModal';
 import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
@@ -20,23 +15,61 @@ import SeoHead from './components/SeoHead';
 import MobileAppBottomNav from './components/MobileAppBottomNav';
 import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
-
-// Dedicated Full-Page Routed Views
-import ArchitectureView from './views/ArchitectureView';
-import PrescriptionScannerView from './views/PrescriptionScannerView';
-import AudioRxStudioView from './views/AudioRxStudioView';
-import AcousticBiomarkerLabView from './views/AcousticBiomarkerLabView';
-import ClinicalBenchmarkView from './views/ClinicalBenchmarkView';
-import IndicLanguageMatrixView from './views/IndicLanguageMatrixView';
-import DatasetExplorerView from './views/DatasetExplorerView';
-import EmergencyTriageView from './views/EmergencyTriageView';
-import EmergencyHandoverView from './views/EmergencyHandoverView';
-import PrescriptionPreviewView from './views/PrescriptionPreviewView';
-import PrivacyPolicyView from './views/PrivacyPolicyView';
-import TermsOfServiceView from './views/TermsOfServiceView';
-import NotFoundView from './views/NotFoundView';
-import UnifiedAuthView from './views/UnifiedAuthView';
 import CookieConsentBanner from './components/CookieConsentBanner';
+
+// Route-Level Code-Split Components (Lazy loaded on demand to minimize initial bundle size)
+const DetailedModuleView = React.lazy(() => import('./components/DetailedModuleView'));
+const DoctorPortal = React.lazy(() => import('./components/DoctorPortal'));
+const ClinicalConsole = React.lazy(() => import('./components/ClinicalConsole'));
+const PatientPortal = React.lazy(() => import('./components/PatientPortal'));
+const SanjivaniEmergencyModal = React.lazy(() => import('./components/SanjivaniEmergencyModal'));
+const ArchitectureView = React.lazy(() => import('./views/ArchitectureView'));
+const PrescriptionScannerView = React.lazy(() => import('./views/PrescriptionScannerView'));
+const AudioRxStudioView = React.lazy(() => import('./views/AudioRxStudioView'));
+const AcousticBiomarkerLabView = React.lazy(() => import('./views/AcousticBiomarkerLabView'));
+const ClinicalBenchmarkView = React.lazy(() => import('./views/ClinicalBenchmarkView'));
+const IndicLanguageMatrixView = React.lazy(() => import('./views/IndicLanguageMatrixView'));
+const DatasetExplorerView = React.lazy(() => import('./views/DatasetExplorerView'));
+const EmergencyTriageView = React.lazy(() => import('./views/EmergencyTriageView'));
+const EmergencyHandoverView = React.lazy(() => import('./views/EmergencyHandoverView'));
+const PrescriptionPreviewView = React.lazy(() => import('./views/PrescriptionPreviewView'));
+const PrivacyPolicyView = React.lazy(() => import('./views/PrivacyPolicyView'));
+const TermsOfServiceView = React.lazy(() => import('./views/TermsOfServiceView'));
+const NotFoundView = React.lazy(() => import('./views/NotFoundView'));
+const UnifiedAuthView = React.lazy(() => import('./views/UnifiedAuthView'));
+
+function RouteLoadingFallback() {
+  return (
+    <div style={{
+      minHeight: '70vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '14px',
+      background: '#FAF8F5',
+      color: '#0F4C5C',
+      fontFamily: 'Outfit, sans-serif'
+    }}>
+      <div style={{
+        width: '38px',
+        height: '38px',
+        border: '3px solid rgba(15, 76, 92, 0.15)',
+        borderTopColor: '#0F4C5C',
+        borderRadius: '50%',
+        animation: 'ayuswar-spin 0.75s linear infinite'
+      }} />
+      <span style={{ fontSize: '13px', fontWeight: 650, color: '#091E26', letterSpacing: '0.02em' }}>
+        Loading clinical module...
+      </span>
+      <style>{`
+        @keyframes ayuswar-spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 import { useApp } from './context/AppContext';
 
@@ -183,9 +216,10 @@ export default function App() {
         className={isDedicatedPortal ? 'portal-canvas-main' : 'app-public-main'}
         style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}
       >
-        <Routes>
-          {/* Public Home & Marketing */}
-          <Route 
+        <React.Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+            {/* Public Home & Marketing */}
+            <Route 
             path="/" 
             element={
               <HeroLanding 
@@ -374,6 +408,7 @@ export default function App() {
           {/* Custom 404 Route */}
           <Route path="*" element={<NotFoundView />} />
         </Routes>
+        </React.Suspense>
       </main>
 
       {/* DPDP Act 2023 & Ephemeral Consent Banner */}
@@ -402,10 +437,12 @@ export default function App() {
       )}
 
       {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
-      <SanjivaniEmergencyModal 
-        isOpen={isSanjivaniModalOpen}
-        onClose={() => setIsSanjivaniModalOpen(false)}
-      />
+      <React.Suspense fallback={null}>
+        <SanjivaniEmergencyModal 
+          isOpen={isSanjivaniModalOpen}
+          onClose={() => setIsSanjivaniModalOpen(false)}
+        />
+      </React.Suspense>
 
       {/* Clinician Authentication & OPD Login Modal */}
       <DoctorAuthModal

@@ -572,7 +572,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '14px' }}>🎧</span>
                   <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
-                    Earshot Acoustic Distress Auditor (Local AST Engine)
+                    Earshot Acoustic Distress Profile (Lexical Estimation)
                   </span>
                 </div>
                 <span style={{
@@ -591,11 +591,14 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   {earshotDistress.topClass}
                 </div>
                 <div style={{ fontSize: '11px', color: '#0F4C5C', fontFamily: 'monospace', fontWeight: 800 }}>
-                  Confidence: {earshotDistress.confidencePercentage}% (14ms CPU)
+                  Confidence: {earshotDistress.confidencePercentage}% (Lexical Profile)
                 </div>
               </div>
               <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '4px', lineHeight: 1.4 }}>
-                Acoustic grounding: Peak {earshotDistress.acousticGrounding.dominantFreqHz} Hz • HNR: {earshotDistress.acousticGrounding.hnrDb} dB • ICD-10: {earshotDistress.icd10}
+                Reference spectral band: Peak {earshotDistress.acousticGrounding.dominantFreqHz} Hz • HNR: {earshotDistress.acousticGrounding.hnrDb} dB • ICD-10: {earshotDistress.icd10}
+              </div>
+              <div style={{ fontSize: '10.5px', color: '#0F4C5C', marginTop: '6px', fontStyle: 'italic', background: 'rgba(15, 76, 92, 0.06)', padding: '4px 8px', borderRadius: '4px' }}>
+                ℹ️ Note: Estimated from clinical symptom text. For live microphone WebAudio DSP, visit the <Link to="/acoustic-lab" style={{ color: '#0F4C5C', fontWeight: 700, textDecoration: 'underline' }}>Acoustic Lab</Link>.
               </div>
             </div>
 
