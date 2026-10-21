@@ -66,8 +66,9 @@ export default function SanjivaniEmergencyAssistant({
   onChangeSimSpeed,
   dispatchState = 2
 }) {
-  const [callStatus, setCallStatus] = useState('connected'); // 'connected' | 'ended'
-  const [elapsedSec, setElapsedSec] = useState(1);
+  const [callStatus, setCallStatus] = useState('ready'); // 'ready' | 'connected' | 'ended'
+  const [elapsedSec, setElapsedSec] = useState(0);
+  const [isAiVoiceReplyEnabled, setIsAiVoiceReplyEnabled] = useState(true);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isMicListening, setIsMicListening] = useState(false);
   const [isHandsFreeLiveTalk, setIsHandsFreeLiveTalk] = useState(false);
@@ -604,8 +605,57 @@ export default function SanjivaniEmergencyAssistant({
             </div>
           </div>
 
-          {/* Call Controls, Hands-Free Voice & Timer */}
+          {/* Call Controls, Two Explicit Voice Buttons & Timer */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            {callStatus === 'ready' && (
+              <button
+                onClick={handleStartCall}
+                style={{
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '6px 14px',
+                  fontSize: '11.5px',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 12px rgba(16, 185, 129, 0.45)',
+                  animation: 'pulse 2s infinite'
+                }}
+                title="Connect 108 Emergency Voice Stream & Start Call Timer"
+              >
+                <PhoneCall size={14} />
+                <span>🟢 Connect 108 Call & Speak</span>
+              </button>
+            )}
+
+            {/* Dedicated AI Voice Reply Toggle */}
+            <button
+              onClick={() => {
+                setIsAiVoiceReplyEnabled(prev => !prev);
+                handleToggleMute();
+              }}
+              style={{
+                background: isAiVoiceReplyEnabled && !isAudioMuted ? '#064E3B' : '#1E293B',
+                color: isAiVoiceReplyEnabled && !isAudioMuted ? '#6EE7B7' : '#94A3B8',
+                border: isAiVoiceReplyEnabled && !isAudioMuted ? '1px solid #10B981' : '1px solid #475569',
+                borderRadius: '20px',
+                padding: '6px 10px',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+              title={isAiVoiceReplyEnabled && !isAudioMuted ? "AI Voice Reply Enabled" : "AI Voice Reply Muted"}
+            >
+              {isAiVoiceReplyEnabled && !isAudioMuted ? <Volume2 size={13} /> : <VolumeX size={13} />}
+              <span>{isAiVoiceReplyEnabled && !isAudioMuted ? 'AI Voice: ON' : 'AI Voice: OFF'}</span>
+            </button>
             <div style={{
               background: '#0F172A',
               border: '1px solid #334155',

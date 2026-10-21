@@ -41,6 +41,8 @@ export default function AcousticBiomarkerLabView() {
   const [vuLevel, setVuLevel] = useState(0);
   const [detectedWheezeHz, setDetectedWheezeHz] = useState(null);
   const [isSampling5s, setIsSampling5s] = useState(false);
+  const [isAiVoiceReplyEnabled, setIsAiVoiceReplyEnabled] = useState(true);
+  const [isAiSpeakingAnalysis, setIsAiSpeakingAnalysis] = useState(false);
   const [samplingCountdown, setSamplingCountdown] = useState(5);
   const [sampleSummary, setSampleSummary] = useState(null);
   
@@ -304,6 +306,10 @@ export default function AcousticBiomarkerLabView() {
               metrics: aggregated,
               topMatch: analysis.primaryAcousticCluster
             });
+
+            // Trigger AI Voice Reply with Clinical Findings
+            const vocalSummary = `Acoustic Biomarker Analysis completed. Your fundamental vocal frequency is ${finalF0} Hertz, and Harmonics to Noise Ratio is ${finalHnr} decibels. Suspected cluster: ${analysis.primaryAcousticCluster}. Vocal acoustic stability is verified.`;
+            speakVoiceDiagnosis(vocalSummary);
           }
         }
       }, 1000);
@@ -1022,6 +1028,37 @@ export default function AcousticBiomarkerLabView() {
 
           {/* Action Row: Live Mic, Upload Audio File & 5s Sampler */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
+            {/* Dedicated AI Voice Reply Toggle */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsAiVoiceReplyEnabled(prev => {
+                  const next = !prev;
+                  if (!next && 'speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                  }
+                  return next;
+                });
+              }}
+              style={{
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: isAiVoiceReplyEnabled ? '1.5px solid #10B981' : '1.5px solid #CBD5E1',
+                background: isAiVoiceReplyEnabled ? '#ECFDF5' : '#F1F5F9',
+                color: isAiVoiceReplyEnabled ? '#065F46' : '#64748B',
+                fontSize: '12.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+              title={isAiVoiceReplyEnabled ? "AI Spoken Voice Diagnosis is Enabled" : "AI Spoken Voice Diagnosis is Disabled (Silent Display Only)"}
+            >
+              {isAiVoiceReplyEnabled ? <Volume2 size={16} color="#059669" /> : <VolumeX size={16} color="#94A3B8" />}
+              <span>{isAiVoiceReplyEnabled ? 'AI Voice Reply: ON' : 'AI Voice Reply: OFF'}</span>
+            </button>
             <button
               type="button"
               onClick={handleToggleLiveMic}

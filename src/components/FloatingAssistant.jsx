@@ -82,7 +82,9 @@ export default function FloatingAssistant({
   const [isMuted, setIsMuted] = useState(false);
   const [showTextInput, setShowTextInput] = useState(false);
   const [textInputValue, setTextInputValue] = useState('');
-  const [listeningSeconds, setListeningSeconds] = useState(12);
+  const [isAiVoiceEnabled, setIsAiVoiceEnabled] = useState(true);
+  const [isMeSpeaking, setIsMeSpeaking] = useState(false);
+  const [elapsedVoiceSec, setElapsedVoiceSec] = useState(0);
   const [liveTranscript, setLiveTranscript] = useState('');
   const [speechLanguage, setSpeechLanguage] = useState('te-IN'); // Telugu default, or hi-IN, en-IN
   const [currentAiReply, setCurrentAiReply] = useState('');
@@ -117,96 +119,34 @@ export default function FloatingAssistant({
     };
   }, []);
 
-  // Handle active listening countdown & speech recognition
-  useEffect(() => {
-    if (assistantState === 'listening') {
-      setListeningSeconds(effectiveRole === 'doctor' ? 12 : (effectiveRole === 'patient' ? 14 : 10));
-      setLiveTranscript(
-        effectiveRole === 'doctor' 
-          ? 'Listening to clinical query...' 
-          : (effectiveRole === 'patient'
-            ? 'Listening to your health symptom...'
-            : 'Listening to your hospital query or token request...')
-      );
-
-      // Attempt webkitSpeechRecognition if supported
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SpeechRecognition && !speechRecognitionRef.current) {
-        try {
-          const recognition = new SpeechRecognition();
-          recognition.continuous = false;
-          recognition.interimResults = true;
-          recognition.lang = speechLanguage;
-
-          recognition.onresult = (event) => {
-            const current = event.resultIndex;
-            const transcript = event.results[current][0].transcript;
-            setLiveTranscript(transcript);
-          };
-
-          recognition.onend = () => {
-            // Once user stops speaking, process question through Brain
-            if (liveTranscript && !liveTranscript.startsWith('Listening to')) {
-              if (handleProcessQuestionRef.current) handleProcessQuestionRef.current(liveTranscript);
-            }
-          };
-
-          recognition.onerror = () => {
-            // Graceful fallback to default query
-          };
-
-          recognition.start();
-          speechRecognitionRef.current = recognition;
-        } catch {
-          // Ignore if permission blocked
-        }
-      }
-
-      timerRef.current = setInterval(() => {
-        setListeningSeconds(prev => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current);
-            // Auto transition to Speaking state with processed answer
-            const autoQ = liveTranscript.startsWith('Listening to') ? (effectiveRole === 'receptionist' ? 'book opd token' : 'cough and fever') : liveTranscript; if (handleProcessQuestionRef.current) handleProcessQuestionRef.current(autoQ);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => {
-        if (timerRef.current) clearInterval(timerRef.current);
-        if (speechRecognitionRef.current) {
-          try { speechRecognitionRef.current.stop(); } catch {}
-          speechRecognitionRef.current = null;
-        }
-      };
-    }
-  }, [assistantState, effectiveRole]);
-
   // Process question via AyuSwar Brain (API / Open-Source / Local Indic NLP)
   const handleProcessQuestion = async (queryText) => {
-  handleProcessQuestionRef.current = handleProcessQuestion;
+    handleProcessQuestionRef.current = handleProcessQuestion;
     setIsProcessingQuery(true);
     setAssistantState('speaking');
     
     try {
       const answer = await askAyuSwarBrain(queryText, effectiveRole, { patientProfile, doctorProfile });
       setCurrentAiReply(answer);
-      speakOutLoud(answer);
+      if (isAiVoiceEnabled && !isMuted) {
+        speakOutLoud(answer);
+      }
     } catch {
       const fallback = effectiveRole === 'receptionist' 
         ? "Namaste! Welcome to AyuSwar Hospital. Token #14 assigned with Dr. Ananya Sharma. Wait time ~8 mins."
         : "I have recorded your symptom. Dr. Priya has been notified and your vitals are stable.";
       setCurrentAiReply(fallback);
-      speakOutLoud(fallback);
+      if (isAiVoiceEnabled && !isMuted) {
+        speakOutLoud(fallback);
+      }
     } finally {
       setIsProcessingQuery(false);
     }
   };
 
   const speakOutLoud = (text) => {
-    if ('speechSynthesis' in window && !isMuted) {
+    if (!isAiVoiceEnabled || isMuted) return;
+    if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.95;
@@ -219,7 +159,72 @@ export default function FloatingAssistant({
       } else {
         utterance.lang = 'en-IN';
       }
+      utterance.onend = () => {
+        setAssistantState('expanded');
+      };
       window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Dedicated Toggle: Me to Speak (starts timer cleanly at 00:00 only when speaking)
+  const handleToggleSpeak = () => {
+    if (isMeSpeaking) {
+      // User finished speaking -> stop mic, stop timer, submit to AI
+      setIsMeSpeaking(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      if (speechRecognitionRef.current) {
+        try { speechRecognitionRef.current.stop(); } catch {}
+        speechRecognitionRef.current = null;
+      }
+
+      const cleaned = liveTranscript.trim();
+      if (cleaned && !cleaned.startsWith('Listening') && !cleaned.startsWith('Tap')) {
+        handleProcessQuestion(cleaned);
+      } else {
+        const defaultQ = effectiveRole === 'doctor' 
+          ? 'latest patient reports and asthma GINA guidelines' 
+          : (effectiveRole === 'patient' ? 'my appointment and medications' : 'book opd token for doctor');
+        handleProcessQuestion(defaultQ);
+      }
+    } else {
+      // User initiates speaking -> timer starts at 00:00
+      setIsMeSpeaking(true);
+      setAssistantState('listening');
+      setElapsedVoiceSec(0);
+      setLiveTranscript('Listening to your voice... Speak now in Telugu, Hindi or English');
+
+      if (timerRef.current) clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        setElapsedVoiceSec(prev => prev + 1);
+      }, 1000);
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = speechLanguage;
+
+          recognition.onresult = (event) => {
+            const current = event.resultIndex;
+            const transcript = event.results[current][0].transcript;
+            setLiveTranscript(transcript);
+          };
+
+          recognition.onerror = (e) => {
+            console.warn('Speech recognition warning:', e);
+          };
+
+          recognition.start();
+          speechRecognitionRef.current = recognition;
+        } catch (err) {
+          console.warn('SpeechRecognition start error:', err);
+        }
+      }
     }
   };
 
@@ -237,11 +242,16 @@ export default function FloatingAssistant({
 
   const handleEndCall = () => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     if (speechRecognitionRef.current) {
       try { speechRecognitionRef.current.stop(); } catch {}
       speechRecognitionRef.current = null;
     }
+    setIsMeSpeaking(false);
+    setElapsedVoiceSec(0);
     setAssistantState('ended');
   };
 
@@ -589,13 +599,11 @@ export default function FloatingAssistant({
                         key={i}
                         style={{
                           width: '3.5px',
-                          height: assistantState === 'speaking' || assistantState === 'listening' ? `${h}px` : '6px',
+                          height: (assistantState === 'speaking' || isMeSpeaking) ? `${h}px` : '6px',
                           borderRadius: '3px',
-                          background: assistantState === 'listening' 
-                            ? '#EF4444' 
-                            : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#334155'),
+                          background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#334155'),
                           transition: 'height 180ms ease',
-                          animation: (assistantState === 'speaking' || assistantState === 'listening') 
+                          animation: (assistantState === 'speaking' || isMeSpeaking) 
                             ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out` 
                             : 'none'
                         }}
@@ -620,9 +628,9 @@ export default function FloatingAssistant({
                       boxShadow: (assistantState === 'listening' || assistantState === 'speaking') ? '0 0 8px currentColor' : 'none'
                     }}></span>
                     <span>
-                      {assistantState === 'listening' 
-                        ? `Recording Live Speech (${listeningSeconds}s)...` 
-                        : (assistantState === 'speaking' ? 'AyuSwar AI Speaking' : 'Ready for Voice Scribe')}
+                      {isMeSpeaking 
+    ? `Recording Live Speech (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})...` 
+    : (assistantState === 'speaking' ? 'AyuSwar AI Speaking' : 'Ready · Standby (00:00)')}
                     </span>
                   </div>
                 </div>
@@ -996,47 +1004,85 @@ export default function FloatingAssistant({
                   </form>
                 )}
 
-                {/* Main Mic Button & End Action */}
+                {/* Two Distinct Control Buttons: Me to Speak & AI Voice Output Toggle */}
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '14px',
-                  paddingTop: '8px',
+                  justifyContent: 'space-between',
+                  gap: '8px',
+                  paddingTop: '10px',
                   borderTop: '1px solid #E2E8F0'
                 }}>
+                  {/* Button 1: Me to Speak (User Mic Input) */}
                   <button
-                    onClick={() => {
-                      if (assistantState === 'listening') {
-                        triggerAiSpeakingReply();
-                      } else {
-                        setAssistantState('listening');
-                      }
-                    }}
+                    onClick={handleToggleSpeak}
                     style={{
-                      width: '46px',
-                      height: '46px',
-                      borderRadius: '50%',
-                      border: 'none',
-                      background: assistantState === 'listening' ? '#EF4444' : 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
-                      color: '#ffffff',
+                      flex: 1,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: assistantState === 'listening' ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 14px rgba(15, 76, 92, 0.35)',
+                      gap: '7px',
+                      padding: '9px 12px',
+                      borderRadius: '20px',
+                      border: isMeSpeaking ? '1.5px solid #EF4444' : '1.5px solid #0F4C5C',
+                      background: isMeSpeaking 
+                        ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' 
+                        : 'linear-gradient(135deg, #0F4C5C 0%, #115E59 100%)',
+                      color: '#ffffff',
+                      fontSize: '11.5px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      boxShadow: isMeSpeaking ? '0 0 14px rgba(239, 68, 68, 0.45)' : '0 2px 8px rgba(15, 76, 92, 0.25)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    title={isMeSpeaking ? "Stop speaking and submit to AI" : "Tap to speak your query"}
+                  >
+                    {isMeSpeaking ? <MicOff size={15} /> : <Mic size={15} />}
+                    <span>
+                      {isMeSpeaking 
+                        ? `Stop & Send (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})` 
+                        : 'Me to Speak'}
+                    </span>
+                  </button>
+
+                  {/* Button 2: Enable AI to Speak (AI Voice Reply Toggle) */}
+                  <button
+                    onClick={() => {
+                      setIsAiVoiceEnabled(prev => {
+                        const next = !prev;
+                        if (!next && 'speechSynthesis' in window) {
+                          window.speechSynthesis.cancel();
+                        }
+                        return next;
+                      });
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '5px',
+                      padding: '9px 12px',
+                      borderRadius: '20px',
+                      border: isAiVoiceEnabled ? '1.5px solid #10B981' : '1.5px solid #CBD5E1',
+                      background: isAiVoiceEnabled ? '#ECFDF5' : '#F1F5F9',
+                      color: isAiVoiceEnabled ? '#065F46' : '#64748B',
+                      fontSize: '11px',
+                      fontWeight: 800,
                       cursor: 'pointer',
                       transition: 'all 0.2s ease'
                     }}
-                    title={assistantState === 'listening' ? "Tap to Stop Listening & Process" : "Tap to Speak"}
+                    title={isAiVoiceEnabled ? "AI Voice Reply is Enabled (Audio Speech)" : "AI Voice Reply is Disabled (Silent Text Only)"}
                   >
-                    {assistantState === 'listening' ? <MicOff size={20} /> : <Mic size={20} />}
+                    {isAiVoiceEnabled ? <Volume2 size={15} color="#059669" /> : <VolumeX size={15} color="#94A3B8" />}
+                    <span>{isAiVoiceEnabled ? 'AI Voice: ON' : 'AI Voice: OFF'}</span>
                   </button>
 
+                  {/* Done / End Button */}
                   <button
                     onClick={handleEndCall}
                     style={{
-                      padding: '7px 14px',
-                      borderRadius: '18px',
+                      padding: '9px 12px',
+                      borderRadius: '20px',
                       background: '#FAF8F5',
                       border: '1px solid #CBD5E1',
                       color: '#475569',
@@ -1046,7 +1092,7 @@ export default function FloatingAssistant({
                     }}
                     title="Finish discussion"
                   >
-                    Done / Summary
+                    Done
                   </button>
                 </div>
               </div>

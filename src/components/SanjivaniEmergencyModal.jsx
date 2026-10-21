@@ -63,8 +63,8 @@ import {
 export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
 
   // Real-Time Auto Live Call State (starts connected at 00:01, auto-incrementing every second)
-  const [callStatus, setCallStatus] = useState('connected'); // 'connected' | 'ended'
-  const [elapsedSec, setElapsedSec] = useState(1);
+  const [callStatus, setCallStatus] = useState('ready'); // 'ready' | 'connected' | 'ended'
+  const [elapsedSec, setElapsedSec] = useState(0);
   const [lastGpsUpdateSec, setLastGpsUpdateSec] = useState(2);
   const [showCliExplainer, setShowCliExplainer] = useState(false);
   const [showAuditTrail, setShowAuditTrail] = useState(false);

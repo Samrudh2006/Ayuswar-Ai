@@ -33,7 +33,8 @@ export default function TeleconsultModal({
 
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
-  const [callDuration, setCallDuration] = useState(1);
+  const [callDuration, setCallDuration] = useState(0);
+  const [isAiVoiceReplyEnabled, setIsAiVoiceReplyEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(true);
   const [subtitleText, setSubtitleText] = useState('నమస్కారం.. మీ గుండె దడ మరియు ఛాతీ బరువు ఎలా ఉంది?');
   const [englishText, setEnglishText] = useState('Hello.. how is your heart flutter and chest heaviness?');
