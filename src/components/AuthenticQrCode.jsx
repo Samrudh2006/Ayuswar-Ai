@@ -94,7 +94,7 @@ export default function AuthenticQrCode({
             width: `${size - 16}px`,
             height: `${size - 16}px`,
             borderRadius: '6px',
-            background: '#F1F5F9',
+            background: '#FAF8F5',
             animation: 'pulse 1.5s infinite'
           }} />
         </div>
@@ -111,7 +111,7 @@ export default function AuthenticQrCode({
             width: `${badgeSize}px`,
             height: `${badgeSize}px`,
             borderRadius: '50%',
-            background: isDoctor ? '#0A2540' : '#008B8B',
+            background: isDoctor ? '#0A2540' : '#0F4C5C',
             color: '#ffffff',
             border: '2px solid #ffffff',
             boxShadow: '0 2px 6px rgba(0,0,0,0.25)',

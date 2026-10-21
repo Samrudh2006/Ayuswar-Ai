@@ -193,8 +193,8 @@ export function generateClinicalProfile(patientName, condition, language = 'Telu
           mealContext: 'Empty Stomach (పరగడుపున / खाली पेट)',
           medicine: 'Budesonide 200mcg Rotacap',
           purpose: 'Maintenance airway anti-inflammatory inhaler',
-          color: '#008B8B',
-          bg: 'rgba(0, 139, 139, 0.1)',
+          color: '#0F4C5C',
+          bg: 'rgba(15, 76, 92, 0.1)',
           teluguAudioText: 'ఉదయం లేవగానే ఖాళీ కడుపుతో బుడెసోనైడ్ ఇన్హేలర్ ఒక పఫ్ తీసుకోండి. తర్వాత నోరు పుక్కిలించి ఉమ్మేయండి.',
           hindiAudioText: 'सुबह उठकर खाली पेट बुडेसोनाइड इन्हेलर का एक पफ लें और उसके बाद पानी से कुल्ला करें।'
         },
@@ -261,8 +261,8 @@ export function generateClinicalProfile(patientName, condition, language = 'Telu
           mealContext: 'Empty Stomach (పరగడుపున / खाली पेट)',
           medicine: 'Telmisartan 40mg + Amlodipine 5mg',
           purpose: '24-hour blood pressure stabilization & renal protection',
-          color: '#008B8B',
-          bg: 'rgba(0, 139, 139, 0.1)',
+          color: '#0F4C5C',
+          bg: 'rgba(15, 76, 92, 0.1)',
           teluguAudioText: 'ఉదయం పరగడుపున టెల్మిసార్టన్ బీపీ మాత్ర వేసుకోండి. రోజంతా రక్తపోటు అదుపులో ఉంటుంది.',
           hindiAudioText: 'सुबह खाली पेट टेल्मिसार्टन की बीपी की दवा लें ताकि पूरा दिन ब्लड प्रेशर सामान्य रहे।'
         },
@@ -329,8 +329,8 @@ export function generateClinicalProfile(patientName, condition, language = 'Telu
         mealContext: 'After Breakfast (టిఫిన్ తర్వాత / नाश्ते के बाद)',
         medicine: 'Paracetamol 650mg SOS',
         purpose: 'Fever and body ache relief after meals',
-        color: '#008B8B',
-        bg: 'rgba(0, 139, 139, 0.1)',
+        color: '#0F4C5C',
+        bg: 'rgba(15, 76, 92, 0.1)',
         teluguAudioText: 'టిఫిన్ తిన్న తర్వాత పారాసిటమాల్ వేసుకోండి. జ్వరం మరియు ఒంటి నొప్పులు తగ్గుతాయి.',
         hindiAudioText: 'नाश्ता करने के बाद पैरासिटामोल लें ताकि बुखार और दर्द में आराम मिले।'
       },

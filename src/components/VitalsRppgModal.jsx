@@ -139,7 +139,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
         width: '100%',
         maxWidth: '460px',
         borderRadius: '24px',
-        border: '1.5px solid rgba(0, 139, 139, 0.35)',
+        border: '1.5px solid rgba(15, 76, 92, 0.35)',
         boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
         overflow: 'hidden',
         display: 'flex',
@@ -148,7 +148,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
         {/* Header */}
         <div style={{
           padding: '16px 20px',
-          background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -216,7 +216,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
               color: '#94A3B8',
               gap: '8px'
             }}>
-              <Camera size={36} color="#008B8B" />
+              <Camera size={36} color="#0F4C5C" />
               <span style={{ fontSize: '12px', fontWeight: 600 }}>Facial ROI Optical Sensor Active</span>
             </div>
           )}
@@ -230,8 +230,8 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
             width: '160px',
             height: '200px',
             borderRadius: '50%',
-            border: isScanning ? '2.5px solid #00D2D3' : '2px dashed #64748B',
-            boxShadow: isScanning ? '0 0 24px rgba(0, 210, 211, 0.45)' : 'none',
+            border: isScanning ? '2.5px solid #D4AF37' : '2px dashed #64748B',
+            boxShadow: isScanning ? '0 0 24px rgba(212, 175, 55, 0.45)' : 'none',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -245,8 +245,8 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
                 left: 0,
                 right: 0,
                 height: '3px',
-                background: '#00D2D3',
-                boxShadow: '0 0 12px #00D2D3',
+                background: '#D4AF37',
+                boxShadow: '0 0 12px #D4AF37',
                 animation: 'pulseGlow 1.2s infinite alternate'
               }} />
             )}
@@ -265,10 +265,10 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            border: '1px solid rgba(0, 139, 139, 0.3)'
+            border: '1px solid rgba(15, 76, 92, 0.3)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Activity size={14} color="#00D2D3" className={isScanning ? 'animate-pulse' : ''} />
+              <Activity size={14} color="#D4AF37" className={isScanning ? 'animate-pulse' : ''} />
               <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 700 }}>Pulse Flux Wave:</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '16px' }}>
@@ -278,7 +278,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
                   style={{
                     width: '4px',
                     height: `${(val / 100) * 16}px`,
-                    background: '#00D2D3',
+                    background: '#D4AF37',
                     borderRadius: '2px',
                     transition: 'height 0.1s ease'
                   }}
@@ -294,10 +294,10 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
                 <span style={{ color: '#94A3B8' }}>Analyzing Micro-Capillary Hemodynamics...</span>
-                <span style={{ color: '#00D2D3', fontWeight: 800 }}>{scanProgress}%</span>
+                <span style={{ color: '#D4AF37', fontWeight: 800 }}>{scanProgress}%</span>
               </div>
               <div style={{ width: '100%', height: '6px', background: '#0F253E', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{ width: `${scanProgress}%`, height: '100%', background: 'linear-gradient(90deg, #008B8B, #00D2D3)', transition: 'width 0.1s' }} />
+                <div style={{ width: `${scanProgress}%`, height: '100%', background: 'linear-gradient(90deg, #0F4C5C, #D4AF37)', transition: 'width 0.1s' }} />
               </div>
             </div>
           ) : heartRate ? (
@@ -358,7 +358,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
                   flex: 1.2,
                   padding: '12px',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #008B8B, #00D2D3)',
+                  background: 'linear-gradient(135deg, #0F4C5C, #D4AF37)',
                   color: '#ffffff',
                   border: 'none',
                   fontWeight: 800,

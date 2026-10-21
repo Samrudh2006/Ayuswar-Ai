@@ -44,7 +44,7 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Budesonide + Formoterol (Foracort 200 Rotacaps)',
       salt: 'Budesonide 200mcg + Formoterol Fumarate 6mcg',
-      pillColor: '#008B8B',
+      pillColor: '#0F4C5C',
       colorName: 'Teal Blue Capsule',
       timingTelugu: 'ఉదయం మరియు రాత్రి పూట ఇన్హేలర్ ద్వారా 1 పఫ్ తీసుకోండి.',
       timingHindi: 'सुबह और रात को इन्हेलर से 1 पफ लें।'

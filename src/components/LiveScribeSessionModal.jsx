@@ -375,7 +375,7 @@ export default function LiveScribeSessionModal({
       }}>
         {/* Studio Header Bar */}
         <div style={{
-          background: 'linear-gradient(135deg, #0A2540 0%, #0D3E4A 50%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0D3E4A 50%, #0F4C5C 100%)',
           padding: '18px 28px',
           color: '#ffffff',
           display: 'flex',
@@ -388,7 +388,7 @@ export default function LiveScribeSessionModal({
               width: '46px',
               height: '46px',
               borderRadius: '14px',
-              background: isRecording ? '#EF4444' : '#008B8B',
+              background: isRecording ? '#EF4444' : '#0F4C5C',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -430,7 +430,7 @@ export default function LiveScribeSessionModal({
                   padding: '5px 12px',
                   borderRadius: '7px',
                   border: 'none',
-                  background: micMode === 'ambient_sim' ? '#008B8B' : 'transparent',
+                  background: micMode === 'ambient_sim' ? '#0F4C5C' : 'transparent',
                   color: '#ffffff',
                   fontSize: '11.5px',
                   fontWeight: 750,
@@ -534,7 +534,7 @@ export default function LiveScribeSessionModal({
           gridTemplateColumns: '1.2fr 1fr 1.1fr',
           flex: 1,
           overflowY: 'auto',
-          background: '#F8FAFC'
+          background: '#FAF8F5'
         }}>
           
           {/* COLUMN 1: Ambient Multi-Speaker Dialogue Stream */}
@@ -546,7 +546,7 @@ export default function LiveScribeSessionModal({
               <span style={{
                 fontSize: '11px',
                 fontWeight: 750,
-                color: hasGnaniSttTranscribed ? '#059669' : gnaniSpeechStatus?.available ? '#008B8B' : '#64748B',
+                color: hasGnaniSttTranscribed ? '#059669' : gnaniSpeechStatus?.available ? '#0F4C5C' : '#64748B',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '5px'
@@ -704,19 +704,19 @@ export default function LiveScribeSessionModal({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               <div style={{ background: '#ffffff', padding: '10px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '10px', color: '#64748B' }}>Blood Pressure</div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>{encounterData.vitals.bp}</div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>{encounterData.vitals.bp}</div>
               </div>
               <div style={{ background: '#ffffff', padding: '10px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '10px', color: '#64748B' }}>Heart Rate / SpO2</div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: '#008B8B' }}>{encounterData.vitals.hr} • {encounterData.vitals.spo2}</div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C' }}>{encounterData.vitals.hr} • {encounterData.vitals.spo2}</div>
               </div>
             </div>
 
             {/* Acoustic Biomarkers */}
             <div style={{ background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                <Activity size={14} color="#008B8B" />
-                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0A2540' }}>Simulated Acoustic Signal Features</span>
+                <Activity size={14} color="#0F4C5C" />
+                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#081C24' }}>Simulated Acoustic Signal Features</span>
               </div>
               <div style={{ fontSize: '11.5px', color: '#475569', lineHeight: 1.6 }}>
                 <div>• Cough Index: <strong>{encounterData.biomarkers.coughIndex}</strong></div>
@@ -729,13 +729,13 @@ export default function LiveScribeSessionModal({
             <div style={{ background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
                 <Sparkles size={14} color="#D97706" />
-                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#0A2540' }}>Colloquial → WHO ICD-10 Auto-Coding</span>
+                <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#081C24' }}>Colloquial → WHO ICD-10 Auto-Coding</span>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {encounterData.icdMappings.map((icd, i) => (
-                  <div key={i} style={{ background: '#F8FAFC', padding: '8px 10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#008B8B' }}>{icd.colloquial}</div>
+                  <div key={i} style={{ background: '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>{icd.colloquial}</div>
                     <div style={{ fontSize: '11px', color: '#1E293B', fontWeight: 600 }}>{icd.clinical}</div>
                     <div style={{ fontSize: '10px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
                       <code>{icd.icd10}</code> • <code>SNOMED: {icd.snomed}</code>
@@ -765,16 +765,16 @@ export default function LiveScribeSessionModal({
                   style={{
                     padding: '12px 14px',
                     borderRadius: '12px',
-                    background: '#F8FAFC',
+                    background: '#FAF8F5',
                     border: '1.5px solid #E2E8F0',
                     borderLeft: `4px solid ${p.color}`
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>{p.name}</span>
+                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{p.name}</span>
                     <span style={{ fontSize: '11px', fontWeight: 800, color: p.color }}>{p.colorLabel}</span>
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#008B8B', fontWeight: 700 }}>
+                  <div style={{ fontSize: '11.5px', color: '#0F4C5C', fontWeight: 700 }}>
                     ⏰ {p.timing} • {p.days}
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
@@ -817,13 +817,13 @@ export default function LiveScribeSessionModal({
                   gap: '10px',
                   padding: '12px',
                   borderRadius: '12px',
-                  background: isRxSigned ? '#10B981' : 'linear-gradient(135deg, #008B8B 0%, #065F46 100%)',
+                  background: isRxSigned ? '#10B981' : 'linear-gradient(135deg, #0F4C5C 0%, #065F46 100%)',
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '13.5px',
                   fontWeight: 800,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(0, 139, 139, 0.3)'
+                  boxShadow: '0 4px 16px rgba(15, 76, 92, 0.3)'
                 }}
               >
                 {isSynthesizingRx ? (
@@ -948,11 +948,11 @@ export default function LiveScribeSessionModal({
                   width: '32px',
                   height: '32px',
                   borderRadius: '8px',
-                  background: 'linear-gradient(135deg, #00F5D4 0%, #008B8B 100%)',
+                  background: 'linear-gradient(135deg, #00F5D4 0%, #0F4C5C 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#0A2540'
+                  color: '#081C24'
                 }}>
                   <Cpu size={18} />
                 </div>
@@ -1057,7 +1057,7 @@ export default function LiveScribeSessionModal({
               <button
                 onClick={() => setShowEvonDrawer(false)}
                 style={{
-                  background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+                  background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
                   color: '#FFFFFF',
                   border: 'none',
                   borderRadius: '8px',

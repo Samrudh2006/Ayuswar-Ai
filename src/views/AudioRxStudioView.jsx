@@ -661,14 +661,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
     <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#64748B', fontSize: '13px' }}>Solutions</span>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Vernacular Audio-Rx Studio</span>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Vernacular Audio-Rx Studio</span>
       </div>
 
       {/* Header */}
@@ -677,7 +677,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           <Volume2 size={14} />
           <span>PATIENT ADHERENCE & LIVE AUDIO-RX</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '10px' }}>
           Vernacular Spoken Audio-Rx Studio
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6 }}>
@@ -695,8 +695,8 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Mic size={18} color="#008B8B" />
-                <span style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>Live Microphone Recording Studio</span>
+                <Mic size={18} color="#0F4C5C" />
+                <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>Live Microphone Recording Studio</span>
               </div>
               <span style={{ 
                 background: isRecordingLiveMic ? '#FEE2E2' : '#F1F5F9', 
@@ -771,7 +771,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   padding: '12px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: isRecordingLiveMic ? '#DC2626' : '#008B8B',
+                  background: isRecordingLiveMic ? '#DC2626' : '#0F4C5C',
                   color: '#FFFFFF',
                   fontSize: '13.5px',
                   fontWeight: 800,
@@ -780,7 +780,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: isRecordingLiveMic ? '0 4px 14px rgba(220,38,38,0.35)' : '0 4px 14px rgba(0,139,139,0.3)'
+                  boxShadow: isRecordingLiveMic ? '0 4px 14px rgba(220,38,38,0.35)' : '0 4px 14px rgba(15, 76, 92, 0.3)'
                 }}
               >
                 {isRecordingLiveMic ? <Square size={16} fill="#FFF" /> : <Mic size={16} />}
@@ -795,8 +795,8 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                     padding: '12px 16px',
                     borderRadius: '12px',
                     border: '1px solid #CBD5E1',
-                    background: '#F8FAFC',
-                    color: '#0A2540',
+                    background: '#FAF8F5',
+                    color: '#081C24',
                     fontSize: '13px',
                     fontWeight: 750,
                     textDecoration: 'none',
@@ -855,7 +855,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Activity size={16} color={acousticResult.wheezeIndex > 40 ? '#D97706' : '#16A34A'} />
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>
                       {acousticResult.title}
                     </span>
                   </div>
@@ -890,7 +890,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
 
             {/* Recorded Audio Audio Element */}
             {liveRecordedAudioUrl && (
-              <div style={{ background: '#F8FAFC', padding: '10px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '11px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>
                   ✓ Live Voice Note Recorded Ready for WhatsApp Dispatch:
                 </div>
@@ -902,7 +902,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           {/* Karaoke Telemetry Box */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>Synthesized Mother Tongue Readout:</span>
+              <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Synthesized Mother Tongue Readout:</span>
               <div style={{ display: 'flex', gap: '6px' }}>
                 {[
                   { code: 'te-IN', label: 'తెలుగు (Telugu)' },
@@ -920,7 +920,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                       padding: '5px 10px',
                       borderRadius: '8px',
                       border: 'none',
-                      background: activeLang === lang.code ? '#008B8B' : '#F1F5F9',
+                      background: activeLang === lang.code ? '#0F4C5C' : '#F1F5F9',
                       color: activeLang === lang.code ? '#FFFFFF' : '#475569',
                       fontSize: '11.5px',
                       fontWeight: 750,
@@ -997,7 +997,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           
           {/* Visual Pill Cards */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '14px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px' }}>
               Color-Coded Visual Pill Chronotherapy Schedule
             </h3>
 
@@ -1020,7 +1020,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #F59E0B', flexShrink: 0, boxShadow: '0 2px 8px rgba(245, 158, 11, 0.25)' }} 
                 />
                 <div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
                     Pantoprazole 40mg (పసుపు గోళీ / Yellow Pill)
                   </div>
                   <div style={{ fontSize: '12px', color: '#64748B' }}>
@@ -1047,7 +1047,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #EC4899', flexShrink: 0, boxShadow: '0 2px 8px rgba(236, 72, 153, 0.25)' }} 
                 />
                 <div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
                     Metformin 500mg SR (గులాబీ గోళీ / Pink Pill)
                   </div>
                   <div style={{ fontSize: '12px', color: '#64748B' }}>
@@ -1128,7 +1128,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               }}>
                 {/* Question 1 */}
                 <div>
-                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#081C24', marginBottom: '6px' }}>
                     1. 🟡 పసుపు గోళీ (Pantoprazole) ను ఎప్పుడు వేసుకోవాలి?
                   </div>
                   <div style={{ display: 'flex', gap: '6px' }}>
@@ -1169,7 +1169,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
 
                 {/* Question 2 */}
                 <div>
-                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#081C24', marginBottom: '6px' }}>
                     2. 🟣 గులాబీ గోళీ (Metformin) ను ఎప్పుడు వేసుకోవాలి?
                   </div>
                   <div style={{ display: 'flex', gap: '6px' }}>
@@ -1260,7 +1260,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                     background: '#FFFFFF',
                     fontSize: '13.5px',
                     fontWeight: 600,
-                    color: '#0A2540',
+                    color: '#081C24',
                     outline: 'none'
                   }}
                 />
@@ -1353,11 +1353,11 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FileSpreadsheet size={20} color="#008B8B" />
-              <h3 style={{ fontSize: '17px', fontWeight: 850, color: '#0A2540', margin: 0 }}>
+              <FileSpreadsheet size={20} color="#0F4C5C" />
+              <h3 style={{ fontSize: '17px', fontWeight: 850, color: '#081C24', margin: 0 }}>
                 Google AMIE Clinical SOAP Note & ICD-10 Diagnostic Export
               </h3>
-              <span style={{ background: '#E6FAF8', color: '#008B8B', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '12px' }}>
+              <span style={{ background: '#E6FAF8', color: '#0F4C5C', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '12px' }}>
                 Nature 2024 Protocol
               </span>
             </div>
@@ -1374,7 +1374,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 borderRadius: '8px',
                 border: '1px solid #CBD5E1',
                 background: '#FFFFFF',
-                color: '#0A2540',
+                color: '#081C24',
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer',
@@ -1416,11 +1416,11 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           gap: '16px'
         }}>
           {/* S - Subjective */}
-          <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', marginBottom: '6px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', marginBottom: '6px' }}>
               S • Subjective (రోగి వివరణ)
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Epigastric Pyrosis & Dyspepsia
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
@@ -1433,11 +1433,11 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* O - Objective */}
-          <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#0284C7', textTransform: 'uppercase', marginBottom: '6px' }}>
               O • Objective (క్లినికల్ కొలతలు)
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Vitals & Acoustic Biomarkers
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
@@ -1448,11 +1448,11 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* A - Assessment */}
-          <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#7C3AED', textTransform: 'uppercase', marginBottom: '6px' }}>
               A • Assessment (ICD-10 Diagnostic Codes)
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               ICD-10-CM Clinical Coding
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
@@ -1463,11 +1463,11 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* P - Plan */}
-          <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', marginBottom: '6px' }}>
               P • Plan (చికిత్స & జన్ ఔషధి)
             </div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Vernacular Pharmacotherapy Plan
             </div>
             <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>

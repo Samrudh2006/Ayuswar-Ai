@@ -563,25 +563,25 @@ export default function ClinicalBenchmarkView() {
     <div style={{ padding: '36px 24px', maxWidth: '1240px', margin: '0 auto' }}>
       {/* Breadcrumbs */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#64748B', fontSize: '13px' }}>Clinical Impact</span>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>
           {activeTab === 'clinical' ? 'Real-World Efficacy & Field Studies' : '24-Point Software QA Assertions'}
         </span>
       </div>
 
       {/* Main Page Header */}
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <ShieldCheck size={15} />
           <span>AUTOMATED INTEGRATION & CONTRACT AUDIT CENTER</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '10px' }}>
           Clinical Workflow Design & Verification Center
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '920px', lineHeight: 1.6 }}>
@@ -593,7 +593,7 @@ export default function ClinicalBenchmarkView() {
           display: 'flex',
           gap: '8px',
           marginTop: '20px',
-          background: '#F1F5F9',
+          background: '#FAF8F5',
           padding: '4px',
           borderRadius: '12px',
           maxWidth: 'fit-content'
@@ -626,7 +626,7 @@ export default function ClinicalBenchmarkView() {
               padding: '9px 18px',
               borderRadius: '9px',
               border: 'none',
-              background: activeTab === 'clinical' ? '#008B8B' : 'transparent',
+              background: activeTab === 'clinical' ? '#0F4C5C' : 'transparent',
               color: activeTab === 'clinical' ? '#FFFFFF' : '#475569',
               fontSize: '13px',
               fontWeight: 800,
@@ -635,7 +635,7 @@ export default function ClinicalBenchmarkView() {
               alignItems: 'center',
               gap: '8px',
               transition: 'all 0.15s ease',
-              boxShadow: activeTab === 'clinical' ? '0 2px 8px rgba(0,139,139,0.3)' : 'none'
+              boxShadow: activeTab === 'clinical' ? '0 2px 8px rgba(15, 76, 92, 0.3)' : 'none'
             }}
           >
             <Layers size={15} />
@@ -651,7 +651,7 @@ export default function ClinicalBenchmarkView() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           {/* Key Metric Highlights Band */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-            <div style={{ background: '#FFFFFF', border: '1.5px solid #CCFBF1', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(0,139,139,0.06)' }}>
+            <div style={{ background: '#FFFFFF', border: '1.5px solid #CCFBF1', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(15, 76, 92, 0.06)' }}>
               <div style={{ fontSize: '11px', color: '#0F766E', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Documentation Target</div>
               <div style={{ fontSize: '32px', fontWeight: 900, color: '#0F766E', margin: '6px 0 2px 0' }}>~1.8 mins</div>
               <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
@@ -688,7 +688,7 @@ export default function ClinicalBenchmarkView() {
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '28px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
               <div>
-                <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', margin: 0 }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#081C24', margin: 0 }}>
                   Primary Health Center (PHC) Time-Motion Workflow Model (Simulation)
                 </h3>
                 <p style={{ fontSize: '13.5px', color: '#64748B', margin: '4px 0 0 0' }}>
@@ -702,9 +702,9 @@ export default function ClinicalBenchmarkView() {
                     padding: '6px 12px',
                     borderRadius: '8px',
                     border: '1px solid',
-                    borderColor: selectedCaseStudy === 'phc_kurnool' ? '#008B8B' : '#CBD5E1',
+                    borderColor: selectedCaseStudy === 'phc_kurnool' ? '#0F4C5C' : '#CBD5E1',
                     background: selectedCaseStudy === 'phc_kurnool' ? '#F0FDFA' : '#FFFFFF',
-                    color: selectedCaseStudy === 'phc_kurnool' ? '#008B8B' : '#475569',
+                    color: selectedCaseStudy === 'phc_kurnool' ? '#0F4C5C' : '#475569',
                     fontSize: '12px',
                     fontWeight: 750,
                     cursor: 'pointer'
@@ -718,9 +718,9 @@ export default function ClinicalBenchmarkView() {
                     padding: '6px 12px',
                     borderRadius: '8px',
                     border: '1px solid',
-                    borderColor: selectedCaseStudy === 'warangal_rural' ? '#008B8B' : '#CBD5E1',
+                    borderColor: selectedCaseStudy === 'warangal_rural' ? '#0F4C5C' : '#CBD5E1',
                     background: selectedCaseStudy === 'warangal_rural' ? '#F0FDFA' : '#FFFFFF',
-                    color: selectedCaseStudy === 'warangal_rural' ? '#008B8B' : '#475569',
+                    color: selectedCaseStudy === 'warangal_rural' ? '#0F4C5C' : '#475569',
                     fontSize: '12px',
                     fontWeight: 750,
                     cursor: 'pointer'
@@ -732,7 +732,7 @@ export default function ClinicalBenchmarkView() {
             </div>
 
             {/* Time Comparison Horizontal Bars */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: '#F8FAFC', padding: '20px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: '#FAF8F5', padding: '20px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 800, marginBottom: '6px' }}>
                   <span style={{ color: '#DC2626' }}>Conventional Desktop EHR Documentation (Status Quo)</span>
@@ -748,11 +748,11 @@ export default function ClinicalBenchmarkView() {
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 800, marginBottom: '6px' }}>
-                  <span style={{ color: '#008B8B' }}>With AyuSwar Ambient Clinical Voice OS</span>
-                  <span style={{ color: '#008B8B' }}>1.8 mins / patient (Target Workflow)</span>
+                  <span style={{ color: '#0F4C5C' }}>With AyuSwar Ambient Clinical Voice OS</span>
+                  <span style={{ color: '#0F4C5C' }}>1.8 mins / patient (Target Workflow)</span>
                 </div>
                 <div style={{ width: '100%', height: '18px', background: '#E2E8F0', borderRadius: '9px', overflow: 'hidden' }}>
-                  <div style={{ width: '19.1%', height: '100%', background: 'linear-gradient(90deg, #14B8A6, #008B8B)', borderRadius: '9px' }} />
+                  <div style={{ width: '19.1%', height: '100%', background: 'linear-gradient(90deg, #14B8A6, #0F4C5C)', borderRadius: '9px' }} />
                 </div>
                 <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>
                   Passive listening creates structured FHIR draft notes. Doctor reviews, validates, and clicks Class-3 DSC sign-off in 45 seconds.
@@ -763,7 +763,7 @@ export default function ClinicalBenchmarkView() {
 
           {/* Diagnostic & Acoustic Biomarker Concordance Table */}
           <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '28px', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
-            <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#0A2540', marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#081C24', marginBottom: '6px' }}>
               Acoustic Biomarker Signal Analysis Parameters (Prototype)
             </h3>
             <p style={{ fontSize: '13.5px', color: '#64748B', marginBottom: '20px' }}>
@@ -773,45 +773,45 @@ export default function ClinicalBenchmarkView() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
                 <thead>
-                  <tr style={{ background: '#F1F5F9', borderBottom: '2px solid #CBD5E1' }}>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Clinical Category</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Signal Biomarker</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>Target Bandwidth</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#008B8B' }}>DSP Modality</th>
-                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0A2540' }}>Clinical Safeguard</th>
+                  <tr style={{ background: '#FAF8F5', borderBottom: '2px solid #CBD5E1' }}>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#081C24' }}>Clinical Category</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#081C24' }}>Signal Biomarker</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0F4C5C' }}>Target Bandwidth</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#0F4C5C' }}>DSP Modality</th>
+                    <th style={{ padding: '12px 16px', fontWeight: 800, color: '#081C24' }}>Clinical Safeguard</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Pulmonology / Asthma</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#081C24' }}>Pulmonology / Asthma</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Continuous musical wheeze</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>400-800 Hz</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Bandpass FFT Filter</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Flags spirometry PFT confirmation draft</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Infectious / COPD & Pneumonia</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#081C24' }}>Infectious / COPD & Pneumonia</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Low-frequency rhonchi & moist rales</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>100-350 Hz</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Short-Time Spectral Flux</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Prompts Chest X-Ray & sputum requisition</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Pediatrics / Stridor & Croup</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#081C24' }}>Pediatrics / Stridor & Croup</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>High spectral centroid</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>&gt;2500 Hz</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Centroid Peak Tracking</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Immediate upper airway obstruction advisory</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Neurology / Parkinson's Tremor</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#081C24' }}>Neurology / Parkinson's Tremor</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Sustained vowel phonatory tremor</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>4-8 Hz</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Pitch Jitter Analysis</td>
                     <td style={{ padding: '12px 16px', color: '#64748B' }}>Advises specialist motor examination</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#0A2540' }}>Cardiology / Vocal Edema</td>
+                    <td style={{ padding: '12px 16px', fontWeight: 750, color: '#081C24' }}>Cardiology / Vocal Edema</td>
                     <td style={{ padding: '12px 16px', color: '#475569' }}>Fluid damping & fundamental pitch jitter</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Fundamental F0</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#0F766E' }}>Harmonics-to-Noise Ratio</td>
@@ -832,7 +832,7 @@ export default function ClinicalBenchmarkView() {
           {/* Action Controls Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', background: '#FFFFFF', border: '1px solid #E2E8F0', padding: '16px 20px', borderRadius: '14px' }}>
             <div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>In-Browser Contract Verification Runner</div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>In-Browser Contract Verification Runner</div>
               <div style={{ fontSize: '12.5px', color: '#64748B' }}>Executes actual JavaScript methods against local services, speech API, and DSP math boundaries.</div>
             </div>
 
@@ -844,7 +844,7 @@ export default function ClinicalBenchmarkView() {
                   padding: '10px 18px',
                   borderRadius: '10px',
                   border: 'none',
-                  background: '#008B8B',
+                  background: '#0F4C5C',
                   color: '#FFFFFF',
                   fontSize: '13px',
                   fontWeight: 800,
@@ -852,7 +852,7 @@ export default function ClinicalBenchmarkView() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 14px rgba(0,139,139,0.25)'
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)'
                 }}
               >
                 {isRunningAll ? <RefreshCw size={15} style={{ animation: 'spin 1s linear infinite' }} /> : <Play size={15} />}
@@ -867,7 +867,7 @@ export default function ClinicalBenchmarkView() {
                   borderRadius: '10px',
                   border: '1px solid #CBD5E1',
                   background: '#FFFFFF',
-                  color: '#0A2540',
+                  color: '#081C24',
                   fontSize: '13px',
                   fontWeight: 750,
                   cursor: executedResults.length === 0 ? 'not-allowed' : 'pointer',
@@ -876,7 +876,7 @@ export default function ClinicalBenchmarkView() {
                   gap: '6px'
                 }}
               >
-                <Download size={15} color="#008B8B" />
+                <Download size={15} color="#0F4C5C" />
                 <span>Export Software Test Report</span>
               </button>
             </div>
@@ -887,7 +887,7 @@ export default function ClinicalBenchmarkView() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
               <div>
                 <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 800, textTransform: 'uppercase' }}>Executed Tests</div>
-                <div style={{ fontSize: '24px', fontWeight: 900, color: '#0A2540' }}>{executedResults.length} / {TEST_CASES.length}</div>
+                <div style={{ fontSize: '24px', fontWeight: 900, color: '#081C24' }}>{executedResults.length} / {TEST_CASES.length}</div>
               </div>
               <div style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
               <div>
@@ -953,14 +953,14 @@ export default function ClinicalBenchmarkView() {
                 >
                   <div style={{ flex: '1 1 300px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 800, color: '#008B8B', background: '#F0FDFA', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 800, color: '#0F4C5C', background: '#F0FDFA', padding: '2px 6px', borderRadius: '4px' }}>
                         {test.id}
                       </span>
                       <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>
                         {test.domain}
                       </span>
                     </div>
-                    <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540', marginBottom: '4px' }}>
+                    <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                       {test.title}
                     </h4>
                     <p style={{ fontSize: '12.5px', color: '#64748B', margin: 0, lineHeight: 1.4 }}>
@@ -984,7 +984,7 @@ export default function ClinicalBenchmarkView() {
                     )}
 
                     {isRunning ? (
-                      <RefreshCw size={18} style={{ animation: 'spin 1s linear infinite', color: '#008B8B' }} />
+                      <RefreshCw size={18} style={{ animation: 'spin 1s linear infinite', color: '#0F4C5C' }} />
                     ) : res?.status === 'passed' ? (
                       <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontSize: '12px', fontWeight: 800, background: '#DCFCE7', padding: '4px 10px', borderRadius: '8px' }}>
                         <CheckCircle2 size={14} /> Passed
@@ -1011,7 +1011,7 @@ export default function ClinicalBenchmarkView() {
                         borderRadius: '8px',
                         border: '1px solid #CBD5E1',
                         background: '#FFFFFF',
-                        color: '#0A2540',
+                        color: '#081C24',
                         fontSize: '11.5px',
                         fontWeight: 750,
                         cursor: isRunning ? 'not-allowed' : 'pointer'

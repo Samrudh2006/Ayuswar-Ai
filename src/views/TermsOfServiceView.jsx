@@ -7,17 +7,17 @@ export default function TermsOfServiceView() {
     <div style={{ padding: '40px 24px', maxWidth: '860px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Terms of Clinical Use</span>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Terms of Clinical Use</span>
       </div>
 
       <div style={{ marginBottom: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#0A2540', margin: 0 }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#081C24', margin: 0 }}>
             Terms of Clinical Use & Research Sandbox
           </h1>
         </div>
@@ -51,7 +51,7 @@ export default function TermsOfServiceView() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', color: '#334155', lineHeight: 1.7, fontSize: '14.5px' }}>
         {/* Section 1 */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', marginTop: 0, marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             1. Clinician-in-the-Loop Requirement
           </h2>
           <p style={{ margin: 0 }}>
@@ -61,7 +61,7 @@ export default function TermsOfServiceView() {
 
         {/* Section 2 */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', marginTop: 0, marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             2. Jan Aushadhi & Generic Substitution Guidance
           </h2>
           <p style={{ margin: 0 }}>
@@ -71,7 +71,7 @@ export default function TermsOfServiceView() {
 
         {/* Section 3 */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', marginTop: 0, marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             3. Emergency Telemetry & Distress Situations
           </h2>
           <p style={{ margin: 0 }}>
@@ -83,7 +83,7 @@ export default function TermsOfServiceView() {
 
         {/* Section 4 */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', marginTop: 0, marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             4. Open Source Apache 2.0 Licensing
           </h2>
           <p style={{ margin: 0 }}>

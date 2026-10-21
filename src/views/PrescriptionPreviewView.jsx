@@ -240,19 +240,19 @@ export default function PrescriptionPreviewView() {
 
       {/* Breadcrumb Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Data.gov.in & PMBJP Prescription Module</span>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Data.gov.in & PMBJP Prescription Module</span>
       </div>
 
       {/* Action Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#0A2540', margin: 0 }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#081C24', margin: 0 }}>
               Jan Aushadhi Prescription Module
             </h1>
             <span style={{ 
@@ -304,7 +304,7 @@ export default function PrescriptionPreviewView() {
               borderRadius: '10px',
               border: '1px solid #CBD5E1',
               background: '#FFFFFF',
-              color: '#0A2540',
+              color: '#081C24',
               fontSize: '13px',
               fontWeight: 750,
               cursor: 'pointer',
@@ -313,7 +313,7 @@ export default function PrescriptionPreviewView() {
               gap: '6px'
             }}
           >
-            <Download size={15} color="#008B8B" />
+            <Download size={15} color="#0F4C5C" />
             <span>FHIR JSON</span>
           </button>
 
@@ -323,7 +323,7 @@ export default function PrescriptionPreviewView() {
               padding: '10px 18px',
               borderRadius: '10px',
               border: 'none',
-              background: '#008B8B',
+              background: '#0F4C5C',
               color: '#FFFFFF',
               fontSize: '13px',
               fontWeight: 800,
@@ -331,7 +331,7 @@ export default function PrescriptionPreviewView() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '0 4px 12px rgba(0, 139, 139, 0.25)'
+              boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
             }}
           >
             <Printer size={15} />
@@ -443,8 +443,8 @@ export default function PrescriptionPreviewView() {
         position: 'relative' 
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-          <Search size={16} color="#008B8B" />
-          <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase' }}>
+          <Search size={16} color="#0F4C5C" />
+          <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase' }}>
             Search Medicine in Data.gov.in & PMBJP Formulary:
           </span>
         </div>
@@ -513,7 +513,7 @@ export default function PrescriptionPreviewView() {
                 onMouseLeave={(e) => e.currentTarget.style.background = '#FFFFFF'}
               >
                 <div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                     {drug.genericName}
                   </div>
                   <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
@@ -533,7 +533,7 @@ export default function PrescriptionPreviewView() {
                       padding: '6px 12px',
                       borderRadius: '8px',
                       border: 'none',
-                      background: '#008B8B',
+                      background: '#0F4C5C',
                       color: '#FFFFFF',
                       fontSize: '12px',
                       fontWeight: 750,
@@ -566,12 +566,12 @@ export default function PrescriptionPreviewView() {
         }}
       >
         {/* Clinician Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #008B8B', paddingBottom: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #0F4C5C', paddingBottom: '16px', marginBottom: '24px' }}>
           <div>
-            <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#0A2540', margin: '0 0 2px 0' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#081C24', margin: '0 0 2px 0' }}>
               {patient.doctorName}
             </h2>
-            <div style={{ fontSize: '13px', color: '#008B8B', fontWeight: 750 }}>
+            <div style={{ fontSize: '13px', color: '#0F4C5C', fontWeight: 750 }}>
               {patient.doctorSpecialty}
             </div>
             <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
@@ -579,7 +579,7 @@ export default function PrescriptionPreviewView() {
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540' }}>Date: {patient.date}</div>
+            <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24' }}>Date: {patient.date}</div>
             <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>FHIR R4 Bundle #RX-2026-PMBJP-0941</div>
             <div style={{ fontSize: '10.5px', color: '#15803D', fontWeight: 750, marginTop: '2px' }}>
               ✓ Data.gov.in / PMBI Compliant
@@ -589,7 +589,7 @@ export default function PrescriptionPreviewView() {
 
         {/* Patient Demographics */}
         <div style={{ 
-          background: '#F8FAFC', 
+          background: '#FAF8F5', 
           borderRadius: '12px', 
           padding: '16px', 
           marginBottom: '24px', 
@@ -600,19 +600,19 @@ export default function PrescriptionPreviewView() {
         }}>
           <div>
             <span style={{ color: '#64748B' }}>Patient Name: </span>
-            <strong style={{ color: '#0A2540' }}>{patient.name} ({patient.vernacularName})</strong>
+            <strong style={{ color: '#081C24' }}>{patient.name} ({patient.vernacularName})</strong>
           </div>
           <div>
             <span style={{ color: '#64748B' }}>Age / Gender: </span>
-            <strong style={{ color: '#0A2540' }}>{patient.age}y / {patient.gender}</strong>
+            <strong style={{ color: '#081C24' }}>{patient.age}y / {patient.gender}</strong>
           </div>
           <div>
             <span style={{ color: '#64748B' }}>ABHA ID: </span>
-            <strong style={{ color: '#0A2540', fontFamily: 'monospace' }}>{patient.abhaId}</strong>
+            <strong style={{ color: '#081C24', fontFamily: 'monospace' }}>{patient.abhaId}</strong>
           </div>
           <div>
             <span style={{ color: '#64748B' }}>Recorded Vitals: </span>
-            <span style={{ color: '#0A2540' }}>{patient.vitals}</span>
+            <span style={{ color: '#081C24' }}>{patient.vitals}</span>
           </div>
         </div>
 
@@ -621,7 +621,7 @@ export default function PrescriptionPreviewView() {
           <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '4px' }}>
             Clinical Diagnosis & Assessment:
           </div>
-          <div style={{ fontSize: '14px', fontWeight: 800, color: '#0A2540' }}>
+          <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
             {patient.diagnosis}
           </div>
         </div>
@@ -630,8 +630,8 @@ export default function PrescriptionPreviewView() {
         <div style={{ marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '26px', fontWeight: 900, color: '#008B8B', fontFamily: 'serif' }}>℞</span>
-              <span style={{ fontSize: '14px', fontWeight: 850, color: '#0A2540', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '26px', fontWeight: 900, color: '#0F4C5C', fontFamily: 'serif' }}>℞</span>
+              <span style={{ fontSize: '14px', fontWeight: 850, color: '#081C24', textTransform: 'uppercase' }}>
                 Medication Order & Jan Aushadhi Dispense Mapping
               </span>
             </div>
@@ -661,7 +661,7 @@ export default function PrescriptionPreviewView() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '14.5px', fontWeight: 850, color: '#0A2540' }}>
+                        <span style={{ fontSize: '14.5px', fontWeight: 850, color: '#081C24' }}>
                           {idx + 1}. {med.isJanAushadhi ? drug.genericName : med.brandName}
                         </span>
                         {med.isJanAushadhi && (
@@ -679,7 +679,7 @@ export default function PrescriptionPreviewView() {
                         )}
                       </div>
 
-                      <div style={{ fontSize: '12px', color: '#008B8B', fontWeight: 700, marginTop: '3px' }}>
+                      <div style={{ fontSize: '12px', color: '#0F4C5C', fontWeight: 700, marginTop: '3px' }}>
                         {med.vernacular}
                       </div>
                     </div>
@@ -776,7 +776,7 @@ export default function PrescriptionPreviewView() {
 
           <div style={{ textAlign: 'right' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '200px', marginBottom: '4px' }} />
-            <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>{patient.doctorName}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{patient.doctorName}</div>
             <div style={{ fontSize: '11px', color: '#64748B' }}>Attending Physician Digital Signature (ABDM HPR Verified)</div>
           </div>
         </div>

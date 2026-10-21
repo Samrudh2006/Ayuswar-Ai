@@ -559,7 +559,7 @@ export default function Navbar({
                 padding: '7px 9px',
                 borderRadius: 8,
                 border: '1.5px solid #cbd5e1',
-                background: mobileMenuOpen ? '#008B8B' : '#f8fafc',
+                background: mobileMenuOpen ? '#0F4C5C' : '#f8fafc',
                 color: mobileMenuOpen ? '#ffffff' : '#0A2540',
                 cursor: 'pointer',
                 display: 'none',
@@ -650,7 +650,7 @@ export default function Navbar({
                   else navigate('/auth/doctor');
                 }}
                 style={{
-                  background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+                  background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: 12,
@@ -660,7 +660,7 @@ export default function Navbar({
                   alignItems: 'center',
                   gap: 6,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(0, 139, 139, 0.28)',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.28)',
                   textAlign: 'center'
                 }}
               >
@@ -673,7 +673,7 @@ export default function Navbar({
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Stethoscope size={20} color="#00D2D3" />
+                  <Stethoscope size={20} color="#D4AF37" />
                 </div>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '0.85rem' }}>Doctor Portal</div>
@@ -737,7 +737,7 @@ export default function Navbar({
                 style={{
                   background: 'linear-gradient(135deg, #061626 0%, #0F3254 100%)',
                   color: '#ffffff',
-                  border: '1.5px solid rgba(0, 210, 211, 0.4)',
+                  border: '1.5px solid rgba(212, 175, 55, 0.4)',
                   borderRadius: 12,
                   padding: '10px 14px',
                   display: 'flex',
@@ -748,7 +748,7 @@ export default function Navbar({
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Sparkles size={18} color="#00D2D3" />
+                  <Sparkles size={18} color="#D4AF37" />
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.85rem', color: '#FFFFFF' }}>
                       🚀 14-Phase Mobile Innovation Suite
@@ -758,16 +758,16 @@ export default function Navbar({
                     </div>
                   </div>
                 </div>
-                <span style={{ fontSize: '11px', background: 'rgba(0, 210, 211, 0.2)', color: '#00D2D3', padding: '3px 8px', borderRadius: '10px', fontWeight: 800 }}>
+                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.2)', color: '#D4AF37', padding: '3px 8px', borderRadius: '10px', fontWeight: 800 }}>
                   OPEN
                 </span>
               </button>
             )}
 
             {/* Language Selector in Drawer */}
-            <div style={{ background: '#F8FAFC', padding: '10px 12px', borderRadius: 10, border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: 10, border: '1px solid #E2E8F0' }}>
               <div style={{ fontSize: '0.725rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Languages size={13} color="#008B8B" />
+                <Languages size={13} color="#0F4C5C" />
                 <span>Select Language</span>
               </div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -780,9 +780,9 @@ export default function Navbar({
                     style={{
                       padding: '4px 10px',
                       borderRadius: 20,
-                      border: selectedLanguage === l.code ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
+                      border: selectedLanguage === l.code ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
                       background: selectedLanguage === l.code ? '#E6F7F8' : '#ffffff',
-                      color: selectedLanguage === l.code ? '#008B8B' : '#334155',
+                      color: selectedLanguage === l.code ? '#0F4C5C' : '#334155',
                       fontSize: '0.75rem',
                       fontWeight: 700,
                       cursor: 'pointer'

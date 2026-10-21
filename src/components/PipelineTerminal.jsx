@@ -61,7 +61,7 @@ export default function PipelineTerminal() {
       border: '1.5px solid #1E293B',
       borderRadius: '18px',
       overflow: 'hidden',
-      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25), 0 0 20px rgba(0, 139, 139, 0.15)',
+      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25), 0 0 20px rgba(15, 76, 92, 0.15)',
       fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'
     }}>
       {/* Terminal Title Bar */}
@@ -81,7 +81,7 @@ export default function PipelineTerminal() {
             <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '10px' }}>
-            <Terminal size={14} color="#00D2D3" />
+            <Terminal size={14} color="#D4AF37" />
             <span style={{ fontSize: '12px', fontWeight: 700, color: '#E2E8F0', letterSpacing: '0.4px' }}>
               ayuswar-client-runtime :: telemetry-stream
             </span>
@@ -111,9 +111,9 @@ export default function PipelineTerminal() {
           <button
             onClick={handleRestart}
             style={{
-              background: 'rgba(0, 139, 139, 0.2)',
-              border: '1px solid #008B8B',
-              color: '#00D2D3',
+              background: 'rgba(15, 76, 92, 0.2)',
+              border: '1px solid #0F4C5C',
+              color: '#D4AF37',
               padding: '4px 10px',
               borderRadius: '6px',
               fontSize: '11px',
@@ -171,7 +171,7 @@ export default function PipelineTerminal() {
             display: 'inline-block',
             width: '8px',
             height: '15px',
-            background: '#00D2D3',
+            background: '#D4AF37',
             animation: 'termBlink 1s infinite'
           }} />
         </div>

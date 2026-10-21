@@ -29,7 +29,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       title: 'Ambient Multi-Speaker Voice Listening',
       badge: 'LAYER 1 • ACOUSTIC INGESTION',
       icon: Mic,
-      color: '#008B8B',
+      color: '#0F4C5C',
       problem: 'Rural Indian OPDs are chaotic, high-noise environments where doctors and patients speak simultaneously with heavy background noise from ceiling fans, waiting crowd murmurs, and clinic corridors.',
       solution: 'AyuSwar AI integrates client-side WebAudio Voice Activity Detection (VAD) with adaptive spectral noise suppression, feeding clean 16 kHz PCM audio chunks into dual-speaker diarization pipelines. It separates doctor clinical questioning from patient symptom descriptions without requiring a headset.',
       scientificMetric: '98.4% speaker separation accuracy in 65 dB ambient OPD noise.',
@@ -39,7 +39,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       title: 'Indic Code-Mixed Transcription Engine',
       badge: 'LAYER 2 • INDIC CODE-MIXED SPEECH',
       icon: Languages,
-      color: '#008B8B',
+      color: '#0F4C5C',
       problem: 'Indian patients rarely speak pure English or textbook regional languages; they speak colloquial hybrids (Tenglish, Hinglish, Tanglish) blending native slang with English pharmaceutical terms.',
       solution: 'Browser speech (Web Speech API). Gnani voice integration: planned. Explores Indic code-switching and recognizes phoneme patterns to transcribe mixed sentences into normalized text.',
       scientificMetric: 'Prototype speech interface testing code-mixed dialect patterns.',
@@ -99,7 +99,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       title: 'AyuSwar Ambient Clinical Studio Architecture',
       badge: 'CORE CLINICAL WORKSPACE',
       icon: Mic,
-      color: '#008B8B',
+      color: '#0F4C5C',
       problem: 'Physicians in Indian government hospitals and rural PHCs consult 80-120 patients every day. Manual computer typing while diagnosing patients is impossible, resulting in zero longitudinal records.',
       solution: 'The Live Clinical Studio operates invisibly in the background. Browser speech (Web Speech API). Gnani voice integration: planned. Performs real-time WebAudio FFT spectrogram analysis, runs automated SOAP note structuring, cross-checks drug contraindications, and creates native audio prescriptions.',
       scientificMetric: 'Prototype consultation workflow aiming to streamline clinical note drafting.',
@@ -136,7 +136,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       }}>
         {/* Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
           padding: '22px 28px',
           color: '#ffffff',
           position: 'relative'
@@ -150,7 +150,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#00D2D3'
+              color: '#D4AF37'
             }}>
               <Icon size={24} />
             </div>
@@ -205,16 +205,16 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
 
           {/* Metrics & Architecture Row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
               <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Clinical Benchmark</div>
-              <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540', marginTop: '4px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 750, color: '#081C24', marginTop: '4px' }}>
                 {current.scientificMetric}
               </div>
             </div>
 
-            <div style={{ background: '#F8FAFC', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
               <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Technical Pipeline</div>
-              <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#008B8B', marginTop: '4px' }}>
+              <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0F4C5C', marginTop: '4px' }}>
                 {current.techSpec}
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
         </div>
 
         {/* Footer Actions */}
-        <div style={{ padding: '16px 28px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#F8FAFC', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ padding: '16px 28px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAF8F5', flexWrap: 'wrap', gap: '10px' }}>
           <span style={{ fontSize: '12px', color: '#64748B' }}>
             Secure access required to run live consultation sessions.
           </span>
@@ -234,7 +234,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
                   navigate('/acoustic-lab');
                 }}
                 className="btn-primary"
-                style={{ fontSize: '13px', padding: '9px 18px', background: '#008B8B', display: 'flex', alignItems: 'center', gap: '6px' }}
+                style={{ fontSize: '13px', padding: '9px 18px', background: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <span>🔬 Launch Live Acoustic Lab</span>
                 <ArrowRight size={14} />
@@ -273,7 +273,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
                   onLaunchLogin();
                 }}
                 className="btn-outline"
-                style={{ fontSize: '12.5px', padding: '8px 16px', borderColor: '#008B8B', color: '#008B8B' }}
+                style={{ fontSize: '12.5px', padding: '8px 16px', borderColor: '#0F4C5C', color: '#0F4C5C' }}
               >
                 🩺 Sign In as Doctor
               </button>

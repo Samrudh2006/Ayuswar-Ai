@@ -181,7 +181,7 @@ export default function IndicLanguageMatrixView() {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#64748B' }}>Text-to-Speech (TTS):</span>
-                  <span style={{ color: '#0A2540', fontWeight: 700 }}>{item.ttsEngine}</span>
+                  <span style={{ color: '#081C24', fontWeight: 700 }}>{item.ttsEngine}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#64748B' }}>Integration Status:</span>
@@ -196,8 +196,8 @@ export default function IndicLanguageMatrixView() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {item.dialectRegions.map((region, idx) => (
-                    <div key={idx} style={{ background: '#F1F5F9', borderRadius: '8px', padding: '8px 12px', fontSize: '12px' }}>
-                      <span style={{ fontWeight: 750, color: '#0A2540' }}>{region.region}: </span>
+                    <div key={idx} style={{ background: '#FAF8F5', borderRadius: '8px', padding: '8px 12px', fontSize: '12px' }}>
+                      <span style={{ fontWeight: 750, color: '#081C24' }}>{region.region}: </span>
                       <span style={{ color: '#334155' }}>"{region.sampleMetaphor}"</span>
                     </div>
                   ))}

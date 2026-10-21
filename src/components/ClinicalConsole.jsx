@@ -499,15 +499,15 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 <div style={{
                   padding: '12px 16px',
                   borderRadius: '12px',
-                  background: 'rgba(0, 139, 139, 0.08)',
-                  border: '1.5px dashed #008B8B',
+                  background: 'rgba(15, 76, 92, 0.08)',
+                  border: '1.5px dashed #0F4C5C',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   animation: 'pulse 1.5s infinite'
                 }}>
                   <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
-                  <div style={{ fontSize: '13.5px', color: '#008B8B', fontWeight: 650 }}>
+                  <div style={{ fontSize: '13.5px', color: '#0F4C5C', fontWeight: 650 }}>
                     Listening: "{liveTranscriptionText}..."
                   </div>
                 </div>
@@ -525,7 +525,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           <div className="dark-telemetry-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Activity size={18} color="#00D2D3" />
+                <Activity size={18} color="#D4AF37" />
                 <h3 style={{ fontSize: '14px', color: '#ffffff', fontWeight: 750 }}>
                   Real-time WebAudio STFT Spectrogram & Code-Switching
                 </h3>
@@ -549,7 +549,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     style={{
                       flex: 1,
                       height: `${barHeight}px`,
-                      background: i % 2 === 0 ? 'linear-gradient(to top, #008B8B, #00D2D3)' : 'linear-gradient(to top, #D97706, #FBBF24)',
+                      background: i % 2 === 0 ? 'linear-gradient(to top, #0F4C5C, #D4AF37)' : 'linear-gradient(to top, #D97706, #FBBF24)',
                       borderRadius: '2px',
                       transition: 'height 0.12s ease'
                     }}
@@ -569,7 +569,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               fontSize: '11.5px'
             }}>
               <span style={{ color: '#94A3B8' }}>Phonetic Code-Switching Ratio (sample model):</span>
-              <span style={{ color: '#00D2D3', fontWeight: 750 }}>
+              <span style={{ color: '#D4AF37', fontWeight: 750 }}>
                 {currentEncounter.langCode.startsWith('te') ? 'Telugu' : 'Hindi'} + Clinical English + Colloquial (sample data)
               </span>
             </div>
@@ -579,34 +579,34 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           <div className="glass-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <Activity size={18} color="#D97706" />
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
                 Acoustic Respiratory Biomarkers (Experimental DSP)
               </h3>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Respiratory Effort & Strain</div>
                 <div style={{ fontSize: '14px', fontWeight: 800, color: '#D97706', marginTop: '2px' }}>
                   {currentEncounter.acousticBiomarkers.respiratoryEffort}
                 </div>
               </div>
 
-              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Cough Acoustic Signature</div>
-                <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#0A2540', marginTop: '2px' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24', marginTop: '2px' }}>
                   {currentEncounter.acousticBiomarkers.coughType}
                 </div>
               </div>
 
-              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Vocal Jitter & Shimmer</div>
-                <div style={{ fontSize: '13px', fontWeight: 750, color: '#008B8B', marginTop: '2px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 750, color: '#0F4C5C', marginTop: '2px' }}>
                   {currentEncounter.acousticBiomarkers.jitterPercent} / {currentEncounter.acousticBiomarkers.shimmerDb}
                 </div>
               </div>
 
-              <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Triage Risk Category</div>
                 <div style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', marginTop: '2px' }}>
                   {currentEncounter.acousticBiomarkers.riskCategory}
@@ -618,8 +618,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           {/* Card 4: Vernacular Semantic Ontology Mapping */}
           <div className="glass-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <Cpu size={18} color="#008B8B" />
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+              <Cpu size={18} color="#0F4C5C" />
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
                 Vernacular Metaphor → WHO ICD-10 & SNOMED Semantic Resolver
               </h3>
             </div>
@@ -634,7 +634,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     justifyContent: 'space-between',
                     padding: '10px 14px',
                     borderRadius: '10px',
-                    background: '#F8FAFC',
+                    background: '#FAF8F5',
                     border: '1px solid #E2E8F0',
                     fontSize: '12px'
                   }}
@@ -646,8 +646,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                   <div style={{ textAlign: 'right' }}>
                     <span style={{
                       fontWeight: 800,
-                      background: 'rgba(0, 139, 139, 0.12)',
-                      color: '#008B8B',
+                      background: 'rgba(15, 76, 92, 0.12)',
+                      color: '#0F4C5C',
                       padding: '3px 8px',
                       borderRadius: '6px',
                       fontSize: '11px'
@@ -971,7 +971,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           }}>
             <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FileText size={18} color="#00D2D3" />
+                <FileText size={18} color="#D4AF37" />
                 <h3 style={{ fontSize: '16px', color: '#ffffff' }}>Official ABDM FHIR R4 Encounter Bundle</h3>
               </div>
               <button 
@@ -1048,9 +1048,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             border: '1px solid #CBD5E1'
           }}>
             {/* Prescription Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #008B8B', paddingBottom: '14px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #0F4C5C', paddingBottom: '14px', marginBottom: '16px' }}>
               <div>
-                <h3 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 850 }}>AYUSWAR HEALTH CLINIC (DEMO)</h3>
+                <h3 style={{ fontSize: '18px', color: '#081C24', fontWeight: 850 }}>AYUSWAR HEALTH CLINIC (DEMO)</h3>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Simulated PHC Demonstration Center #1402 • Synthetic Test Record</div>
               </div>
               <button onClick={() => setShowPrintModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>✕</button>
@@ -1065,7 +1065,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
             {/* Prescribed Items */}
             <div style={{ marginBottom: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540', marginBottom: '8px' }}>Rx Medications:</div>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', marginBottom: '8px' }}>Rx Medications:</div>
               {currentEncounter.medications.map((m, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed #E2E8F0', fontSize: '12.5px' }}>
                   <span><strong>{m.name}</strong> ({m.colorLabel})</span>
@@ -1075,7 +1075,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             </div>
 
             {/* QR Code Audio-Rx */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#F8FAFC', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '20px' }}>
               <AuthenticQrCode 
                 value={`https://ayuswar-ai.vercel.app/audio-rx?enc=${currentEncounter.id}&lang=${encodeURIComponent(currentEncounter.language)}`}
                 size={72}
@@ -1083,7 +1083,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 showCenterBadge={true}
               />
               <div>
-                <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540' }}>Scan to Listen in {currentEncounter.language}</div>
+                <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#081C24' }}>Scan to Listen in {currentEncounter.language}</div>
                 <div style={{ fontSize: '11px', color: '#64748B' }}>Illiterate patients can scan with any smartphone camera to replay voice instructions.</div>
               </div>
             </div>

@@ -273,14 +273,14 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#64748B', fontSize: '13px' }}>Emergency</span>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Sanjivani-108 Simulator</span>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Sanjivani-108 Simulator</span>
       </div>
 
       {/* Real Emergency Advisory Callout */}
@@ -399,8 +399,8 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   padding: '10px 14px',
                   borderRadius: '10px',
                   border: '1px solid #E2E8F0',
-                  background: '#F8FAFC',
-                  color: '#0A2540',
+                  background: '#FAF8F5',
+                  color: '#081C24',
                   fontSize: '12.5px',
                   fontWeight: 700,
                   textAlign: 'left',
@@ -543,7 +543,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
 
             {/* First-Aid Instructions */}
             <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D1E1E6', padding: '16px', marginBottom: '18px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase', marginBottom: '8px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase', marginBottom: '8px' }}>
                 Immediate First-Aid Protocols:
               </div>
               <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12.5px', color: '#334155', lineHeight: 1.6 }}>
@@ -605,7 +605,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
 
               {/* Asynchronous Evon Advisory CoT or Honest Fallback */}
               {isLoadingEvon && (
-                <div style={{ padding: '10px 14px', background: '#F1F5F9', borderRadius: '8px', fontSize: '11px', color: '#475569' }}>
+                <div style={{ padding: '10px 14px', background: '#FAF8F5', borderRadius: '8px', fontSize: '11px', color: '#475569' }}>
                   ⏳ Querying server-side Evon reasoning route (/api/evon/chat)...
                 </div>
               )}
@@ -694,7 +694,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
           {/* Dispatch Pipeline Simulator */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
                 Simulated 108 Telemetry & Dispatch Pipeline
               </h3>
               <button
@@ -704,7 +704,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   padding: '6px 14px',
                   borderRadius: '8px',
                   border: 'none',
-                  background: '#008B8B',
+                  background: '#0F4C5C',
                   color: '#FFFFFF',
                   fontSize: '12px',
                   fontWeight: 800,
@@ -722,8 +722,8 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {dispatchSteps.map((step, idx) => (
-                  <div key={idx} style={{ background: '#F8FAFC', borderRadius: '10px', padding: '12px', fontSize: '12px' }}>
-                    <div style={{ fontWeight: 800, color: '#0A2540', marginBottom: '2px' }}>{step.name}</div>
+                  <div key={idx} style={{ background: '#FAF8F5', borderRadius: '10px', padding: '12px', fontSize: '12px' }}>
+                    <div style={{ fontWeight: 800, color: '#081C24', marginBottom: '2px' }}>{step.name}</div>
                     <div style={{ color: '#64748B' }}>{step.desc}</div>
                   </div>
                 ))}
@@ -738,11 +738,11 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
         {/* Section Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#008B8B', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', marginBottom: '6px' }}>
               <Building2 size={15} />
               <span>ABDM Health Facility Registry (HFR) & GIS Health Bridge</span>
             </div>
-            <h2 style={{ fontSize: '22px', fontWeight: 850, color: '#0A2540', margin: '0 0 6px 0' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 850, color: '#081C24', margin: '0 0 6px 0' }}>
               Verified Nearby Emergency Facilities & Trauma Bays
             </h2>
             <p style={{ fontSize: '13.5px', color: '#64748B', margin: 0 }}>
@@ -757,8 +757,8 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               padding: '10px 16px',
               borderRadius: '10px',
               border: '1px solid #CBD5E1',
-              background: '#F8FAFC',
-              color: '#0A2540',
+              background: '#FAF8F5',
+              color: '#081C24',
               fontSize: '12.5px',
               fontWeight: 750,
               cursor: isLocating ? 'not-allowed' : 'pointer',
@@ -773,10 +773,10 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
         </div>
 
         {/* Location & Search Bar */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: '1 1 320px' }}>
             <MapPin size={18} color="#DC2626" style={{ flexShrink: 0 }} />
-            <div style={{ fontSize: '13px', color: '#0A2540', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <div style={{ fontSize: '13px', color: '#081C24', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               <span style={{ color: '#64748B', fontWeight: 600 }}>Active Location: </span>
               {detectedLocationName}
               <span style={{ marginLeft: '8px', fontSize: '11px', color: '#94A3B8', fontFamily: 'monospace' }}>
@@ -800,7 +800,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   outline: 'none',
                   padding: '8px 10px',
                   fontSize: '12.5px',
-                  color: '#0A2540'
+                  color: '#081C24'
                 }}
               />
             </div>
@@ -828,7 +828,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                     style={{
                       padding: '10px 14px',
                       fontSize: '12.5px',
-                      color: '#0A2540',
+                      color: '#081C24',
                       cursor: 'pointer',
                       borderBottom: '1px solid #F1F5F9'
                     }}
@@ -861,9 +861,9 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 padding: '6px 12px',
                 borderRadius: '20px',
                 border: '1px solid',
-                borderColor: hospitalFilter === flt.id ? '#008B8B' : '#E2E8F0',
-                background: hospitalFilter === flt.id ? 'rgba(0, 139, 139, 0.08)' : '#FFFFFF',
-                color: hospitalFilter === flt.id ? '#008B8B' : '#64748B',
+                borderColor: hospitalFilter === flt.id ? '#0F4C5C' : '#E2E8F0',
+                background: hospitalFilter === flt.id ? 'rgba(15, 76, 92, 0.08)' : '#FFFFFF',
+                color: hospitalFilter === flt.id ? '#0F4C5C' : '#64748B',
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer'
@@ -894,7 +894,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   key={hosp.id || idx}
                   style={{
                     background: isSelected ? '#F0FDFA' : '#FFFFFF',
-                    border: isSelected ? '2px solid #008B8B' : '1px solid #E2E8F0',
+                    border: isSelected ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
                     borderRadius: '14px',
                     padding: '18px',
                     display: 'flex',
@@ -909,7 +909,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                         {isRecommended && (
-                          <span style={{ background: '#008B8B', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px', fontSize: '10.5px', fontWeight: 800 }}>
+                          <span style={{ background: '#0F4C5C', color: '#FFFFFF', padding: '2px 8px', borderRadius: '6px', fontSize: '10.5px', fontWeight: 800 }}>
                             ★ OPTIMAL CLINICAL MATCH
                           </span>
                         )}
@@ -936,7 +936,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                     </div>
 
                     {/* Facility Name & Address */}
-                    <h3 style={{ fontSize: '15px', fontWeight: 850, color: '#0A2540', margin: '0 0 6px 0', lineHeight: 1.35 }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: 850, color: '#081C24', margin: '0 0 6px 0', lineHeight: 1.35 }}>
                       {hosp.name}
                     </h3>
                     <p style={{ fontSize: '11.5px', color: '#64748B', margin: '0 0 10px 0', lineHeight: 1.4 }}>
@@ -956,9 +956,9 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                     </div>
 
                     {/* Live Bed & Bay Assignment */}
-                    <div style={{ background: '#F8FAFC', borderRadius: '8px', padding: '8px 12px', fontSize: '11.5px', color: '#334155', display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ background: '#FAF8F5', borderRadius: '8px', padding: '8px 12px', fontSize: '11.5px', color: '#334155', display: 'flex', justifyContent: 'space-between' }}>
                       <span>🛏️ {hosp.bedAvailability || `${hosp.bedsAvailable} Beds`}</span>
-                      <span style={{ fontWeight: 750, color: '#008B8B' }}>{hosp.resuscitationBayAssigned}</span>
+                      <span style={{ fontWeight: 750, color: '#0F4C5C' }}>{hosp.resuscitationBayAssigned}</span>
                     </div>
                   </div>
 
@@ -971,7 +971,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                         padding: '8px 12px',
                         borderRadius: '8px',
                         border: 'none',
-                        background: isSelected ? '#008B8B' : '#0A2540',
+                        background: isSelected ? '#0F4C5C' : '#0A2540',
                         color: '#FFFFFF',
                         fontSize: '12px',
                         fontWeight: 800,
@@ -994,7 +994,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                         borderRadius: '8px',
                         border: '1px solid #CBD5E1',
                         background: '#FFFFFF',
-                        color: '#0A2540',
+                        color: '#081C24',
                         fontSize: '11.5px',
                         fontWeight: 700,
                         textDecoration: 'none',
@@ -1004,7 +1004,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                       }}
                       title="Open Route Navigation"
                     >
-                      <Navigation size={13} color="#008B8B" />
+                      <Navigation size={13} color="#0F4C5C" />
                       <span>Directions</span>
                     </a>
                   </div>

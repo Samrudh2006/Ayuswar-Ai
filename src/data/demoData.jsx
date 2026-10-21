@@ -61,7 +61,7 @@ export function SampleDataChip({ style = {}, text = 'Sample data' }) {
         fontSize: '10.5px',
         fontWeight: 750,
         color: '#475569',
-        background: '#F1F5F9',
+        background: '#FAF8F5',
         border: '1px solid #CBD5E1',
         padding: '2px 8px',
         borderRadius: '12px',

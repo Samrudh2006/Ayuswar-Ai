@@ -92,7 +92,7 @@ export default function DoctorProfileSelectView() {
         </Link>
       </div>
 
-      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 28 }}>
+      <div style={{ background: '#FAF8F5', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{ width: 44, height: 44, borderRadius: 10, background: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
             <Stethoscope size={24} />

@@ -353,7 +353,7 @@ export default function WhatsAppAudioRxModal({
       >
         {/* Modal Top Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #0A2540 0%, #0F3B3B 50%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F3B3B 50%, #0F4C5C 100%)',
           padding: '20px 28px',
           color: '#ffffff',
           display: 'flex',
@@ -426,7 +426,7 @@ export default function WhatsAppAudioRxModal({
             gridTemplateColumns: '1.15fr 1fr',
             flex: 1,
             overflowY: 'auto',
-            background: '#F8FAFC'
+            background: '#FAF8F5'
           }}
         >
           {/* LEFT COLUMN: Controls, Language, Karaoke Spoken Rx, Visual Schedule */}
@@ -442,8 +442,8 @@ export default function WhatsAppAudioRxModal({
                   <label style={{ fontSize: '11px', color: '#475569', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
                     Recipient Patient
                   </label>
-                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
-                    {patient.name} <span style={{ color: '#008B8B', fontWeight: 700 }}>({patient.vernacularName || 'నారాయణ'})</span>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
+                    {patient.name} <span style={{ color: '#0F4C5C', fontWeight: 700 }}>({patient.vernacularName || 'నారాయణ'})</span>
                   </div>
                   <div style={{ fontSize: '11px', color: '#64748B' }}>
                     ABHA: {patient.abhaId} • {patient.age}y {patient.gender}
@@ -466,7 +466,7 @@ export default function WhatsAppAudioRxModal({
                       border: '1.5px solid #CBD5E1',
                       fontSize: '13px',
                       fontWeight: 700,
-                      color: '#0A2540',
+                      color: '#081C24',
                       outline: 'none',
                       boxSizing: 'border-box'
                     }}
@@ -490,8 +490,8 @@ export default function WhatsAppAudioRxModal({
                       padding: '3px 8px',
                       borderRadius: '6px',
                       border: '1px solid #E2E8F0',
-                      background: phoneNumber === preset.num ? 'rgba(0, 139, 139, 0.1)' : '#F1F5F9',
-                      color: phoneNumber === preset.num ? '#008B8B' : '#475569',
+                      background: phoneNumber === preset.num ? 'rgba(15, 76, 92, 0.1)' : '#F1F5F9',
+                      color: phoneNumber === preset.num ? '#0F4C5C' : '#475569',
                       fontWeight: 700,
                       cursor: 'pointer'
                     }}
@@ -508,7 +508,7 @@ export default function WhatsAppAudioRxModal({
                 <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Spoken Dialect & Synthesis Speed
                 </div>
-                <span style={{ fontSize: '11px', color: '#008B8B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <Volume2 size={13} /> {currentRx.doctorVernacular} Voice
                 </span>
               </div>
@@ -526,9 +526,9 @@ export default function WhatsAppAudioRxModal({
                       flex: 1,
                       padding: '8px 10px',
                       borderRadius: '10px',
-                      border: selectedLanguage === lang.code ? '2px solid #008B8B' : '1px solid #E2E8F0',
-                      background: selectedLanguage === lang.code ? 'rgba(0, 139, 139, 0.08)' : '#ffffff',
-                      color: selectedLanguage === lang.code ? '#008B8B' : '#475569',
+                      border: selectedLanguage === lang.code ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                      background: selectedLanguage === lang.code ? 'rgba(15, 76, 92, 0.08)' : '#ffffff',
+                      color: selectedLanguage === lang.code ? '#0F4C5C' : '#475569',
                       fontSize: '12px',
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -574,8 +574,8 @@ export default function WhatsAppAudioRxModal({
               background: '#061626',
               borderRadius: '16px',
               padding: '20px',
-              border: '1.5px solid rgba(0, 139, 139, 0.4)',
-              boxShadow: '0 8px 24px rgba(0, 139, 139, 0.15)',
+              border: '1.5px solid rgba(15, 76, 92, 0.4)',
+              boxShadow: '0 8px 24px rgba(15, 76, 92, 0.15)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -651,13 +651,13 @@ export default function WhatsAppAudioRxModal({
                     gap: '8px',
                     padding: '12px 20px',
                     borderRadius: '12px',
-                    background: isPlayingAudio ? '#EF4444' : 'linear-gradient(135deg, #008B8B 0%, #065F46 100%)',
+                    background: isPlayingAudio ? '#EF4444' : 'linear-gradient(135deg, #0F4C5C 0%, #065F46 100%)',
                     color: '#ffffff',
                     border: 'none',
                     fontSize: '13.5px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(0, 139, 139, 0.3)'
+                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
                   }}
                 >
                   {isPlayingAudio ? <Pause size={16} fill="#ffffff" /> : <Play size={16} fill="#ffffff" />}
@@ -672,7 +672,7 @@ export default function WhatsAppAudioRxModal({
                 <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Doctor-Selected Dosage Schedule & Meal Timings
                 </div>
-                <span style={{ fontSize: '10px', background: '#F1F5F9', color: '#008B8B', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
+                <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#0F4C5C', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
                   Live Voice Synchronized
                 </span>
               </div>
@@ -941,7 +941,7 @@ export default function WhatsAppAudioRxModal({
                   padding: '10px 14px',
                   borderRadius: '10px',
                   background: '#ffffff',
-                  color: '#0A2540',
+                  color: '#081C24',
                   border: '1.5px solid #CBD5E1',
                   fontSize: '12px',
                   fontWeight: 800,
@@ -980,9 +980,9 @@ export default function WhatsAppAudioRxModal({
                   gap: '6px',
                   padding: '10px 14px',
                   borderRadius: '10px',
-                  background: 'rgba(0, 139, 139, 0.08)',
-                  color: '#008B8B',
-                  border: '1.5px solid rgba(0, 139, 139, 0.3)',
+                  background: 'rgba(15, 76, 92, 0.08)',
+                  color: '#0F4C5C',
+                  border: '1.5px solid rgba(15, 76, 92, 0.3)',
                   fontSize: '12px',
                   fontWeight: 800,
                   cursor: 'pointer'
@@ -1112,7 +1112,7 @@ export default function WhatsAppAudioRxModal({
                       width: '36px',
                       height: '36px',
                       borderRadius: '50%',
-                      background: '#008B8B',
+                      background: '#0F4C5C',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
@@ -1213,7 +1213,7 @@ export default function WhatsAppAudioRxModal({
                       <Volume2 size={20} />
                     </div>
                     <div>
-                      <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#0A2540' }}>
+                      <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#081C24' }}>
                         Tap to Replay Spoken Audio-Rx
                       </div>
                       <div style={{ fontSize: '10px', color: '#64748B' }}>

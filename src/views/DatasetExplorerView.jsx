@@ -101,7 +101,7 @@ export default function DatasetExplorerView() {
         </Link>
       </div>
 
-      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+      <div style={{ background: '#FAF8F5', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{ width: 44, height: 44, borderRadius: 10, background: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
             <Database size={24} />
@@ -236,7 +236,7 @@ export default function DatasetExplorerView() {
                   <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#0f172a' }}>
                     {item.term}
                   </div>
-                  <span style={{ fontSize: '0.725rem', background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.725rem', background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>
                     {item.language} • {item.region}
                   </span>
                 </div>
@@ -257,7 +257,7 @@ export default function DatasetExplorerView() {
                     onClick={() => playSpeech(item.term, item.language === 'Telugu' ? 'te-IN' : 'hi-IN')}
                     style={{
                       border: '1px solid #cbd5e1',
-                      background: '#f8fafc',
+                      background: '#FAF8F5',
                       borderRadius: 6,
                       padding: '4px 8px',
                       cursor: 'pointer',
@@ -330,7 +330,7 @@ export default function DatasetExplorerView() {
                   <strong>Telugu:</strong> {d.teluguName || 'N/A'} • <strong>Hindi:</strong> {d.hindiName || 'N/A'}
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#475569', background: '#f8fafc', padding: 8, borderRadius: 6 }}>
+                <div style={{ fontSize: '0.8rem', color: '#475569', background: '#FAF8F5', padding: 8, borderRadius: 6 }}>
                   <strong>Key Symptoms:</strong> {Array.isArray(d.symptoms) ? d.symptoms.slice(0, 4).join(', ') : d.symptoms}
                 </div>
               </div>
@@ -391,7 +391,7 @@ export default function DatasetExplorerView() {
               style={{
                 padding: '10px 14px',
                 borderRadius: 8,
-                background: '#f1f5f9',
+                background: '#FAF8F5',
                 color: '#334155',
                 border: '1px solid #cbd5e1',
                 fontSize: '0.8rem',
@@ -407,7 +407,7 @@ export default function DatasetExplorerView() {
               style={{
                 padding: '10px 14px',
                 borderRadius: 8,
-                background: '#f1f5f9',
+                background: '#FAF8F5',
                 color: '#334155',
                 border: '1px solid #cbd5e1',
                 fontSize: '0.8rem',
@@ -437,7 +437,7 @@ export default function DatasetExplorerView() {
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {matchResult.matchedDiseases.map((d, i) => (
-                          <div key={i} style={{ padding: 10, background: '#f8fafc', borderRadius: 6, fontSize: '0.825rem', color: '#1e293b' }}>
+                          <div key={i} style={{ padding: 10, background: '#FAF8F5', borderRadius: 6, fontSize: '0.825rem', color: '#1e293b' }}>
                             <strong>{d.name}</strong> ({d.icd10}) — Keyword overlap score: {d.score}
                           </div>
                         ))}
@@ -461,11 +461,11 @@ export default function DatasetExplorerView() {
           {TOP_RESEARCH_DOMAINS.map((domain, i) => (
             <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 18 }}>
               <h3 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: '#0f172a' }}>{domain.domain || domain.title}</h3>
-              <p style={{ margin: '0 0 12px 0', fontSize: '0.85rem', color: '#008B8B', fontWeight: 600 }}>Top Venues: {domain.topVenues || domain.description}</p>
+              <p style={{ margin: '0 0 12px 0', fontSize: '0.85rem', color: '#0F4C5C', fontWeight: 600 }}>Top Venues: {domain.topVenues || domain.description}</p>
               {domain.papers && domain.papers.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
                   {domain.papers.map((p, idx) => (
-                    <div key={idx} style={{ padding: 12, background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.825rem' }}>
+                    <div key={idx} style={{ padding: 12, background: '#FAF8F5', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.825rem' }}>
                       <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>{p.title}</div>
                       <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 3 }}>
                         {p.authors} • <em>{p.journal}</em> {p.doi && `• DOI: ${p.doi}`}
@@ -476,7 +476,7 @@ export default function DatasetExplorerView() {
                         </div>
                       )}
                       {p.recommendationForAyuSwar && (
-                        <div style={{ color: '#008B8B', marginTop: 4, fontWeight: 600 }}>
+                        <div style={{ color: '#0F4C5C', marginTop: 4, fontWeight: 600 }}>
                           💡 <strong>Clinical Recommendation:</strong> {p.recommendationForAyuSwar}
                         </div>
                       )}

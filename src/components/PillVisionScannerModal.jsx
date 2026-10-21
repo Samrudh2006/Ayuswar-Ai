@@ -378,7 +378,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
         </div>
 
         {/* Mode Navigation Tabs */}
-        <div style={{ display: 'flex', background: '#F1F5F9', borderBottom: '1px solid #E2E8F0', padding: '6px 12px', gap: '6px' }}>
+        <div style={{ display: 'flex', background: '#FAF8F5', borderBottom: '1px solid #E2E8F0', padding: '6px 12px', gap: '6px' }}>
           <button
             onClick={() => { setActiveMode('camera'); startWebcam(); }}
             style={{
@@ -543,7 +543,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                 borderRadius: '16px',
                 padding: '24px 16px',
                 textAlign: 'center',
-                background: '#F8FAFC',
+                background: '#FAF8F5',
                 cursor: 'pointer'
               }}
             >
@@ -555,7 +555,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                 style={{ display: 'none' }} 
               />
               <Upload size={32} color="#D97706" style={{ margin: '0 auto 8px auto' }} />
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0A2540' }}>Click to Upload Medicine Strip Photo</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24' }}>Click to Upload Medicine Strip Photo</div>
               <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>Supports Paracetamol, Pantocid, Glycomet, Augmentin packaging</div>
             </div>
           )}
@@ -601,7 +601,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* Scanning Progress Bar */}
           {isScanning && (
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700, color: '#D97706', marginBottom: '6px' }}>
                 <span>{scanStatusText}</span>
                 <span>{scanProgress}%</span>
@@ -614,7 +614,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* OpenCV Before vs After Image Previews */}
           {capturedImageUrl && (
-            <div style={{ display: 'flex', gap: '8px', background: '#F8FAFC', padding: '10px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', gap: '8px', background: '#FAF8F5', padding: '10px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
               <div style={{ flex: 1, textAlign: 'center' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748B', marginBottom: '4px' }}>Original Photo</div>
                 <img src={capturedImageUrl} alt="Original Strip" style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px', background: '#000' }} />
@@ -632,7 +632,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* Recognition Card */}
           <div style={{
-            background: '#F1F5F9',
+            background: '#FAF8F5',
             padding: '14px',
             borderRadius: '14px',
             border: '1px solid #E2E8F0',
@@ -665,7 +665,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentDisplay.brandName}</span>
+                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>{currentDisplay.brandName}</span>
                 <span style={{ background: '#DCFCE7', color: '#166534', fontSize: '10px', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
                   ✓ {currentDisplay.isLiveOcr ? 'Live Scanned' : 'Formulary Verified'}
                 </span>
@@ -673,7 +673,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '2px' }}>
                 {currentDisplay.color} • {currentDisplay.shape} • Imprint: {currentDisplay.imprint}
               </div>
-              <div style={{ fontSize: '11px', color: '#008B8B', fontWeight: 600, marginTop: '3px' }}>
+              <div style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 600, marginTop: '3px' }}>
                 తెలుగు: {currentDisplay.vernacularTe}
               </div>
             </div>
@@ -719,8 +719,8 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                 flex: 1,
                 padding: '10px',
                 borderRadius: '10px',
-                background: '#F1F5F9',
-                color: '#0A2540',
+                background: '#FAF8F5',
+                color: '#081C24',
                 border: '1px solid #CBD5E1',
                 fontWeight: 700,
                 fontSize: '12px',

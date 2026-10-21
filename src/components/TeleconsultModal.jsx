@@ -150,7 +150,7 @@ export default function TeleconsultModal({
           height: '150px',
           borderRadius: '16px',
           background: '#0F172A',
-          border: '2px solid rgba(0, 139, 139, 0.5)',
+          border: '2px solid rgba(15, 76, 92, 0.5)',
           overflow: 'hidden',
           boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
         }}>
@@ -192,7 +192,7 @@ export default function TeleconsultModal({
           backdropFilter: 'blur(12px)',
           borderRadius: '16px',
           padding: '12px 18px',
-          border: '1px solid rgba(0, 139, 139, 0.4)',
+          border: '1px solid rgba(15, 76, 92, 0.4)',
           boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
           textAlign: 'center'
         }}>

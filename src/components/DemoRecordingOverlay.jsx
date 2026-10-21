@@ -97,9 +97,9 @@ export default function DemoRecordingOverlay() {
           width: '38px',
           height: '38px',
           borderRadius: '50%',
-          background: 'rgba(0, 210, 211, 0.16)',
-          border: '2px solid rgba(0, 180, 216, 0.85)',
-          boxShadow: '0 0 14px rgba(0, 210, 211, 0.5), inset 0 0 8px rgba(0, 210, 211, 0.25)',
+          background: 'rgba(212, 175, 55, 0.16)',
+          border: '2px solid rgba(212, 175, 55, 0.85)',
+          boxShadow: '0 0 14px rgba(212, 175, 55, 0.5), inset 0 0 8px rgba(212, 175, 55, 0.25)',
           pointerEvents: 'none',
           transform: 'translate3d(0, 0, 0)',
           transition: 'transform 0.04s ease-out',
@@ -118,8 +118,8 @@ export default function DemoRecordingOverlay() {
             width: '44px',
             height: '44px',
             borderRadius: '50%',
-            border: '2.5px solid #00D2D3',
-            background: 'radial-gradient(circle, rgba(0, 210, 211, 0.35) 0%, transparent 70%)',
+            border: '2.5px solid #D4AF37',
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%)',
             pointerEvents: 'none',
             animation: 'demoClickRipple 0.5s cubic-bezier(0.1, 0.7, 0.1, 1) forwards'
           }}

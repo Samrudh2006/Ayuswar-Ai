@@ -159,7 +159,7 @@ export default function DoctorAvatarVideoCall({
     return `${String(mins).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
-  const themeColor = isEmergency ? '#DC2626' : '#008B8B';
+  const themeColor = isEmergency ? '#DC2626' : '#0F4C5C';
   const themeAccent = isEmergency ? '#EF4444' : '#00F5D4';
 
   return (
@@ -170,10 +170,10 @@ export default function DoctorAvatarVideoCall({
       background: isEmergency ? '#050A14' : '#041322',
       borderRadius: '16px',
       overflow: 'hidden',
-      border: isEmergency ? '1.5px solid rgba(220, 38, 38, 0.4)' : '1.5px solid rgba(0, 139, 139, 0.45)',
+      border: isEmergency ? '1.5px solid rgba(220, 38, 38, 0.4)' : '1.5px solid rgba(15, 76, 92, 0.45)',
       boxShadow: isEmergency 
         ? '0 12px 36px rgba(220, 38, 38, 0.25), inset 0 1px 0 rgba(255,255,255,0.1)' 
-        : '0 16px 40px rgba(0, 139, 139, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
+        : '0 16px 40px rgba(15, 76, 92, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
       position: 'relative',
       transition: 'all 280ms cubic-bezier(0.16, 1, 0.3, 1)'
     }}>
@@ -629,8 +629,8 @@ export default function DoctorAvatarVideoCall({
               title={isMicActive ? "Stop speaking" : "Speak to Doctor"}
               style={{
                 background: isMicActive 
-                  ? (isEmergency ? '#DC2626' : '#008B8B') 
-                  : (isEmergency ? 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)' : 'linear-gradient(135deg, #00D2D3 0%, #008B8B 100%)'),
+                  ? (isEmergency ? '#DC2626' : '#0F4C5C') 
+                  : (isEmergency ? 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)' : 'linear-gradient(135deg, #D4AF37 0%, #0F4C5C 100%)'),
                 border: 'none',
                 borderRadius: '50%',
                 width: '42px',

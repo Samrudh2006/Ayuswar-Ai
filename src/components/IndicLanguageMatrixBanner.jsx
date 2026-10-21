@@ -48,7 +48,7 @@ export default function IndicLanguageMatrixBanner() {
       sampleMetaphor: 'రెండు రోజుల నుంచి పీకల్లో పిల్లికూతలు, రాత్రి వేళ ఆయాసం',
       translation: 'Expiratory Wheezing & Nocturnal Dyspnea',
       clinicalCode: 'ICD-10 R06.2 (Wheezing)',
-      color: '#008B8B'
+      color: '#0F4C5C'
     },
     {
       id: 'telangana',
@@ -121,13 +121,13 @@ export default function IndicLanguageMatrixBanner() {
         width: '350px',
         height: '350px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(0, 139, 139, 0.18) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(15, 76, 92, 0.18) 0%, transparent 70%)',
         pointerEvents: 'none'
       }} />
 
       {/* Top Header Badge */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0, 139, 139, 0.25)', border: '1px solid rgba(0, 139, 139, 0.5)', padding: '5px 12px', borderRadius: '20px', fontSize: '11.5px', fontWeight: 800, color: '#2DD4BF' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 76, 92, 0.25)', border: '1px solid rgba(15, 76, 92, 0.5)', padding: '5px 12px', borderRadius: '20px', fontSize: '11.5px', fontWeight: 800, color: '#2DD4BF' }}>
           <Sparkles size={14} />
           <span>VARIABLE FONT MORPH & VERNACULAR DIALECT REGIONAL MAP</span>
         </div>
@@ -232,13 +232,13 @@ export default function IndicLanguageMatrixBanner() {
             alignItems: 'center'
           }}>
             {/* SVG Stylized Map of Southern/Central India with Pulsing Nodes */}
-            <div style={{ position: 'relative', width: '140px', height: '170px', background: '#0B132B', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0, 139, 139, 0.3)' }}>
+            <div style={{ position: 'relative', width: '140px', height: '170px', background: '#0B132B', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(15, 76, 92, 0.3)' }}>
               <svg viewBox="100 120 180 180" style={{ width: '100%', height: '100%', display: 'block' }}>
                 {/* Stylized Geo Silhouette for Deccan/Andhra/Telangana Region */}
                 <path
                   d="M 140 140 L 220 150 L 250 200 L 240 260 L 190 280 L 160 250 L 130 200 Z"
-                  fill="rgba(0, 139, 139, 0.12)"
-                  stroke="rgba(0, 139, 139, 0.35)"
+                  fill="rgba(15, 76, 92, 0.12)"
+                  stroke="rgba(15, 76, 92, 0.35)"
                   strokeWidth="1.5"
                   strokeDasharray="3 3"
                 />

@@ -213,7 +213,7 @@ export default function MobileAppBottomNav({
           );
         }
 
-        const activeColor = item.id === 'patient' ? '#D97706' : '#008B8B';
+        const activeColor = item.id === 'patient' ? '#D97706' : '#0F4C5C';
 
         return (
           <button
@@ -248,7 +248,7 @@ export default function MobileAppBottomNav({
                     fontWeight: 800,
                     padding: '1px 4px',
                     borderRadius: '6px',
-                    background: item.id === 'patient' ? '#F59E0B' : '#008B8B',
+                    background: item.id === 'patient' ? '#F59E0B' : '#0F4C5C',
                     color: '#ffffff'
                   }}
                 >

@@ -125,7 +125,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{
-              background: '#008B8B',
+              background: '#0F4C5C',
               padding: '4px 10px',
               borderRadius: '8px',
               fontSize: '11px',
@@ -362,7 +362,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
         {/* Footer Actions */}
         <div style={{
           padding: '16px 24px',
-          background: '#F8FAFC',
+          background: '#FAF8F5',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'

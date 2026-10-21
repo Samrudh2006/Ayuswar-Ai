@@ -131,8 +131,8 @@ export default function MobilePwaInstallBanner() {
           <span style={{
             fontSize: '9px',
             fontWeight: 800,
-            background: 'rgba(0, 210, 211, 0.25)',
-            color: '#00D2D3',
+            background: 'rgba(212, 175, 55, 0.25)',
+            color: '#D4AF37',
             padding: '1px 5px',
             borderRadius: '4px'
           }}>
@@ -151,8 +151,8 @@ export default function MobilePwaInstallBanner() {
             type="button"
             onClick={handleInstallClick}
             style={{
-              background: '#00D2D3',
-              color: '#0A2540',
+              background: '#D4AF37',
+              color: '#081C24',
               border: 'none',
               borderRadius: '8px',
               padding: '7px 12px',
@@ -162,7 +162,7 @@ export default function MobilePwaInstallBanner() {
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
-              boxShadow: '0 2px 8px rgba(0, 210, 211, 0.4)'
+              boxShadow: '0 2px 8px rgba(212, 175, 55, 0.4)'
             }}
           >
             <Download size={14} strokeWidth={2.5} />

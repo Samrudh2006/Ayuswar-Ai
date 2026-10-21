@@ -59,7 +59,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       speaker: 'doctor',
       name: 'Dr. Priya Sharma',
       role: 'Attending Clinician (PHC Kurnool)',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       avatar: '🩺',
       teluguText: 'లక్ష్మి గారు, నమస్కారం. ఎలా ఉన్నారు? ఏమి ఇబ్బందిగా ఉంది మీకు?',
       englishText: 'Lakshmi garu, namaskaram. How are you? What trouble brings you today?',
@@ -83,7 +83,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       speaker: 'doctor',
       name: 'Dr. Priya Sharma',
       role: 'Attending Clinician (PHC Kurnool)',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       avatar: '🩺',
       teluguText: 'సరే అమ్మ. మీ ఛాతిలో wheezing సౌండ్ వినిపిస్తుంది. బీపీ 138/88 ఉంది. Salbutamol inhaler మరియు Pantoprazole రాస్తున్నాను.',
       englishText: 'Okay amma. I can hear expiratory wheezing in your chest. Blood pressure is 138/88. Prescribing Salbutamol inhaler and Pantoprazole.',
@@ -107,7 +107,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       speaker: 'doctor',
       name: 'Dr. Priya Sharma',
       role: 'Attending Clinician (PHC Kurnool)',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       avatar: '🩺',
       teluguText: 'కంగారుపడద్దు లక్ష్మి గారు. AyuSwar audio-rx మీకు తెలుగులో ఫోన్ లో చెప్తుంది. పొద్దున్న ఎర్రటి మాత్ర, రాత్రి ఆకుపచ్చ మాత్ర వేసుకోండి.',
       englishText: 'Do not worry Lakshmi garu. AyuSwar will speak the instructions in Telugu on WhatsApp. Red pill morning, green pill night.',
@@ -149,8 +149,8 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(0, 139, 139, 0.25)',
-              border: '1.5px solid #008B8B',
+              background: 'rgba(15, 76, 92, 0.25)',
+              border: '1.5px solid #0F4C5C',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -188,7 +188,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'linear-gradient(135deg, #008B8B 0%, #006666 100%)',
+              background: 'linear-gradient(135deg, #0F4C5C 0%, #006666 100%)',
               color: '#ffffff',
               border: 'none',
               padding: '10px 20px',
@@ -196,7 +196,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               fontSize: '13px',
               fontWeight: 750,
               cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(0, 139, 139, 0.35)',
+              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
               transition: 'all 0.2s ease'
             }}
           >
@@ -249,7 +249,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                 fontSize: '12px',
                 fontWeight: 700,
                 border: filterMode === 'kalman' ? '1.5px solid #2DD4BF' : '1px solid #475569',
-                background: filterMode === 'kalman' ? 'rgba(0, 139, 139, 0.25)' : 'transparent',
+                background: filterMode === 'kalman' ? 'rgba(15, 76, 92, 0.25)' : 'transparent',
                 color: filterMode === 'kalman' ? '#5EEAD4' : '#94A3B8',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease'
@@ -310,7 +310,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: isPlaying ? '#EF4444' : '#008B8B',
+                  background: isPlaying ? '#EF4444' : '#0F4C5C',
                   color: '#ffffff',
                   border: 'none',
                   padding: '8px 16px',
@@ -329,7 +329,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '4px',
-                  background: '#F1F5F9',
+                  background: '#FAF8F5',
                   color: '#475569',
                   border: '1px solid #CBD5E1',
                   padding: '8px 12px',
@@ -356,9 +356,9 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                     borderRadius: '6px',
                     fontSize: '11px',
                     fontWeight: 700,
-                    border: playbackSpeed === speed ? '1.5px solid #008B8B' : '1px solid #E2E8F0',
-                    background: playbackSpeed === speed ? 'rgba(0,139,139,0.1)' : '#ffffff',
-                    color: playbackSpeed === speed ? '#008B8B' : '#64748B',
+                    border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
+                    background: playbackSpeed === speed ? 'rgba(15, 76, 92, 0.1)' : '#ffffff',
+                    color: playbackSpeed === speed ? '#0F4C5C' : '#64748B',
                     cursor: 'pointer'
                   }}
                 >
@@ -386,10 +386,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                       ? (isDoctor ? '#F0FDFA' : '#ECFDF5') 
                       : (idx < activeStep ? '#F8FAFC' : '#ffffff'),
                     border: isCurrent
-                      ? (isDoctor ? '2px solid #008B8B' : '2px solid #10B981')
+                      ? (isDoctor ? '2px solid #0F4C5C' : '2px solid #10B981')
                       : '1.5px solid #E2E8F0',
                     boxShadow: isCurrent 
-                      ? (isDoctor ? '0 6px 18px rgba(0,139,139,0.18)' : '0 6px 18px rgba(16,185,129,0.18)')
+                      ? (isDoctor ? '0 6px 18px rgba(15, 76, 92, 0.18)' : '0 6px 18px rgba(16,185,129,0.18)')
                       : 'none',
                     opacity: idx > activeStep ? 0.6 : 1
                   }}
@@ -401,10 +401,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                       <span style={{
                         fontSize: '12px',
                         fontWeight: 800,
-                        color: isDoctor ? '#008B8B' : '#059669',
+                        color: isDoctor ? '#0F4C5C' : '#059669',
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        background: isDoctor ? 'rgba(0,139,139,0.1)' : 'rgba(16,185,129,0.1)'
+                        background: isDoctor ? 'rgba(15, 76, 92, 0.1)' : 'rgba(16,185,129,0.1)'
                       }}>
                         {item.name}
                       </span>
@@ -413,9 +413,9 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       {isCurrent && isPlaying && (
                         <div style={{ display: 'flex', gap: '2px', alignItems: 'flex-end', height: '12px' }}>
-                          <span style={{ width: '2px', height: '100%', background: isDoctor ? '#008B8B' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
-                          <span style={{ width: '2px', height: '60%', background: isDoctor ? '#008B8B' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
-                          <span style={{ width: '2px', height: '80%', background: isDoctor ? '#008B8B' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
+                          <span style={{ width: '2px', height: '100%', background: isDoctor ? '#0F4C5C' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
+                          <span style={{ width: '2px', height: '60%', background: isDoctor ? '#0F4C5C' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
+                          <span style={{ width: '2px', height: '80%', background: isDoctor ? '#0F4C5C' : '#10B981', borderRadius: '1px' }} className="animate-pulse" />
                         </div>
                       )}
                       <span style={{ fontSize: '10px', color: '#94A3B8', fontWeight: 600 }}>{item.timestamp}</span>
@@ -464,12 +464,12 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           {/* Note Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #E2E8F0', paddingBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FileText size={18} color="#008B8B" />
+              <FileText size={18} color="#0F4C5C" />
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#008B8B' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#0F4C5C' }}>
                   HL7 FHIR R4 Draft Scribe
                 </div>
-                <div style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+                <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
                   Live Structured SOAP Note
                 </div>
               </div>
@@ -494,10 +494,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 1 ? '#F0FDFA' : '#F1F5F9',
-              border: activeStep >= 1 ? '1.5px solid #008B8B' : '1px dashed #CBD5E1',
+              border: activeStep >= 1 ? '1.5px solid #0F4C5C' : '1px dashed #CBD5E1',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 1 ? '#008B8B' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 1 ? '#0F4C5C' : '#64748B', marginBottom: '4px' }}>
                 SUBJECTIVE (S) — Vernacular Symptom Resolution
               </div>
               {activeStep >= 1 ? (
@@ -516,10 +516,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 2 ? '#F0FDFA' : '#F1F5F9',
-              border: activeStep >= 2 ? '1.5px solid #008B8B' : '1px dashed #CBD5E1',
+              border: activeStep >= 2 ? '1.5px solid #0F4C5C' : '1px dashed #CBD5E1',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#008B8B' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#0F4C5C' : '#64748B', marginBottom: '4px' }}>
                 OBJECTIVE (O) — Real-Time Clinical Vitals
               </div>
               {activeStep >= 2 ? (
@@ -598,14 +598,14 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           <div style={{
             fontSize: '11.5px',
             color: '#64748B',
-            background: '#F1F5F9',
+            background: '#FAF8F5',
             padding: '10px 12px',
             borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px'
           }}>
-            <Shield size={16} color="#008B8B" />
+            <Shield size={16} color="#0F4C5C" />
             <span><strong>Doctor-in-the-Loop Safeguard:</strong> Attending physician verification required before ABDM record commit.</span>
           </div>
         </div>
@@ -653,7 +653,7 @@ export default function DetailedModuleView({
       id: 'opd_ambient_scribe',
       category: 'Solutions',
       badge: 'Core Clinical Engine',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       title: 'OPD Ambient Clinical Scribe',
       tagline: 'Zero-Touch Dual-Speaker Clinical Voice Intelligence with Native Diarization',
       icon: Mic,
@@ -1094,7 +1094,7 @@ export default function DetailedModuleView({
       id: 'technology_hld',
       category: 'Architecture',
       badge: 'High-Level Design',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       title: 'Technology & High-Level Design (HLD)',
       tagline: 'Deep Dive into the 8-Layer Sovereign Clinical Voice Stack & Client Speech Processing Architecture',
       icon: Layers,
@@ -1527,7 +1527,7 @@ export default function DetailedModuleView({
       id: 'indic_voice_benchmarks',
       category: 'Resources',
       badge: 'Speech AI Benchmarks',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       title: 'Indic Voice Benchmarks (50+ Dialects)',
       tagline: 'Word Error Rate (WER) Evaluation Across 22 Official Scheduled Indian Languages & Rural Dialects',
       icon: Mic,
@@ -1599,7 +1599,7 @@ export default function DetailedModuleView({
       id: 'abdm_fhir_whitepaper',
       category: 'Resources',
       badge: 'National Architecture',
-      badgeColor: '#008B8B',
+      badgeColor: '#0F4C5C',
       title: 'ABDM & FHIR R4 Architecture Whitepaper',
       tagline: 'Technical Specifications for National Health Authority (NHA) Sandbox Integration',
       icon: Shield,
@@ -1690,7 +1690,7 @@ export default function DetailedModuleView({
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8FAFC', color: '#0F172A', paddingBottom: '96px' }}>
+    <div style={{ minHeight: '100vh', background: '#FAF8F5', color: '#0F172A', paddingBottom: '96px' }}>
       {/* Top Breadcrumb & Navigation Bar */}
       <div style={{
         position: 'sticky',
@@ -1733,7 +1733,7 @@ export default function DetailedModuleView({
             <span style={{ color: '#CBD5E1' }}>/</span>
             <span style={{ color: '#64748B', fontWeight: 600 }}>{currentModule.category}</span>
             <span style={{ color: '#CBD5E1' }}>/</span>
-            <span style={{ color: '#008B8B', fontWeight: 800 }}>{currentModule.title}</span>
+            <span style={{ color: '#0F4C5C', fontWeight: 800 }}>{currentModule.title}</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1742,13 +1742,13 @@ export default function DetailedModuleView({
                 onClick={() => handleInteractiveLaunch(currentModule.interactiveModalKey)}
                 style={{
                   padding: '9px 18px',
-                  background: 'linear-gradient(135deg, #008B8B, #006666)',
+                  background: 'linear-gradient(135deg, #0F4C5C, #006666)',
                   color: '#ffffff',
                   fontWeight: 800,
                   fontSize: '12.5px',
                   borderRadius: '10px',
                   border: 'none',
-                  boxShadow: '0 4px 14px rgba(0, 139, 139, 0.25)',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -1854,11 +1854,11 @@ export default function DetailedModuleView({
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     background: currentPage === idx + 1 
-                      ? '#008B8B' 
+                      ? '#0F4C5C' 
                       : idx + 1 < currentPage 
                       ? '#5EEAD4' 
                       : '#CBD5E1',
-                    boxShadow: currentPage === idx + 1 ? '0 0 0 2px rgba(0, 139, 139, 0.25)' : 'none'
+                    boxShadow: currentPage === idx + 1 ? '0 0 0 2px rgba(15, 76, 92, 0.25)' : 'none'
                   }}
                   title={`Jump to section ${idx + 1}`}
                 />
@@ -1932,10 +1932,10 @@ export default function DetailedModuleView({
                 alignItems: 'center',
                 gap: '8px',
                 cursor: currentPage === currentModule.totalPages ? 'not-allowed' : 'pointer',
-                background: currentPage === currentModule.totalPages ? '#F1F5F9' : '#008B8B',
+                background: currentPage === currentModule.totalPages ? '#F1F5F9' : '#0F4C5C',
                 color: currentPage === currentModule.totalPages ? '#94A3B8' : '#FFFFFF',
                 border: 'none',
-                boxShadow: currentPage === currentModule.totalPages ? 'none' : '0 4px 14px rgba(0, 139, 139, 0.25)'
+                boxShadow: currentPage === currentModule.totalPages ? 'none' : '0 4px 14px rgba(15, 76, 92, 0.25)'
               }}
             >
               <span>Next Section</span>
@@ -1969,7 +1969,7 @@ export default function DetailedModuleView({
                   textAlign: 'left'
                 }}
               >
-                <div style={{ padding: '8px', borderRadius: '10px', background: '#F1F5F9', color: '#475569' }}>
+                <div style={{ padding: '8px', borderRadius: '10px', background: '#FAF8F5', color: '#475569' }}>
                   <ArrowLeft size={16} />
                 </div>
                 <div>
@@ -1999,7 +1999,7 @@ export default function DetailedModuleView({
                   <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#94A3B8' }}>Next Module</div>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F172A' }}>{modulesData[nextModuleKey].title}</div>
                 </div>
-                <div style={{ padding: '8px', borderRadius: '10px', background: '#E6F7F8', color: '#008B8B' }}>
+                <div style={{ padding: '8px', borderRadius: '10px', background: '#E6F7F8', color: '#0F4C5C' }}>
                   <ArrowRight size={16} />
                 </div>
               </button>

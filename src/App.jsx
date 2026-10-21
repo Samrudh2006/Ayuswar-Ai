@@ -161,7 +161,7 @@ export default function App() {
     location.pathname === '/login';
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAF8F5', position: 'relative' }}>
       {/* Mobile PWA Add-To-Home-Screen Install Banner (Shown on public landing/website pages) */}
       {!isDedicatedPortal && <MobilePwaInstallBanner />}
 

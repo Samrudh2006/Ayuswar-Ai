@@ -195,13 +195,13 @@ export default function HandDrawnExplainer() {
             gap: '8px',
             padding: '8px 18px',
             borderRadius: '12px',
-            border: '2px solid #008B8B',
-            background: '#008B8B',
+            border: '2px solid #0F4C5C',
+            background: '#0F4C5C',
             color: '#FFFFFF',
             fontSize: '13px',
             fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 2px 10px rgba(0, 139, 139, 0.28)',
+            boxShadow: '0 2px 10px rgba(15, 76, 92, 0.28)',
             transition: 'all 0.2s ease'
           }}
           title="Replay real-time stroke-by-stroke animation"
@@ -406,13 +406,13 @@ export default function HandDrawnExplainer() {
                   >
                     <defs>
                       <marker id={`arrowHead-${idx}`} viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                        <path d="M 0 1 L 8 5 L 0 9 z" fill={drawnSteps.includes(idx + 1) ? "#008B8B" : "#A8A29E"} />
+                        <path d="M 0 1 L 8 5 L 0 9 z" fill={drawnSteps.includes(idx + 1) ? "#0F4C5C" : "#A8A29E"} />
                       </marker>
                     </defs>
                     <path
                       d={sketchyArrowPaths[idx]}
                       fill="none"
-                      stroke={drawnSteps.includes(idx + 1) ? "#008B8B" : "#C4BBB0"}
+                      stroke={drawnSteps.includes(idx + 1) ? "#0F4C5C" : "#C4BBB0"}
                       strokeWidth="2.4"
                       strokeLinecap="round"
                       markerEnd={`url(#arrowHead-${idx})`}
@@ -472,7 +472,7 @@ export default function HandDrawnExplainer() {
         alignItems: 'flex-start',
         gap: '12px'
       }}>
-        <Info size={17} color="#008B8B" style={{ marginTop: '2px', flexShrink: 0 }} />
+        <Info size={17} color="#0F4C5C" style={{ marginTop: '2px', flexShrink: 0 }} />
         <span style={{ fontSize: '12.5px', color: '#57534E', lineHeight: 1.5 }}>
           <strong style={{ color: '#292524' }}>Privacy & Vendor Notice: </strong>
           Browser speech recognition may send audio to the browser vendor (e.g. Google in Chrome). Backend credentials remain strictly on protected server endpoints and are not bundled into public client builds.

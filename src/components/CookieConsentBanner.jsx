@@ -47,10 +47,10 @@ export default function CookieConsentBanner() {
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: '1 1 300px' }}>
-        <ShieldCheck size={22} color="#00D2D3" style={{ flexShrink: 0 }} />
+        <ShieldCheck size={22} color="#D4AF37" style={{ flexShrink: 0 }} />
         <div style={{ fontSize: '12.5px', lineHeight: 1.5, color: '#CBD5E1' }}>
           <span>AyuSwar AI uses local storage strictly for language preferences and ephemeral clinical sessions in compliance with India's <strong>DPDP Act 2023</strong>. Zero third-party ad tracking.</span>{' '}
-          <Link to="/privacy" style={{ color: '#00D2D3', textDecoration: 'underline', fontWeight: 600 }}>
+          <Link to="/privacy" style={{ color: '#D4AF37', textDecoration: 'underline', fontWeight: 600 }}>
             Privacy Policy
           </Link>
         </div>
@@ -62,13 +62,13 @@ export default function CookieConsentBanner() {
           style={{
             padding: '7px 16px',
             borderRadius: '10px',
-            background: '#008B8B',
+            background: '#0F4C5C',
             color: '#FFFFFF',
             border: 'none',
             fontSize: '12px',
             fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(0, 139, 139, 0.4)'
+            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.4)'
           }}
         >
           Got It

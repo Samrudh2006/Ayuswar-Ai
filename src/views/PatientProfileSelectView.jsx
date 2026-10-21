@@ -87,7 +87,7 @@ export default function PatientProfileSelectView() {
         </Link>
       </div>
 
-      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 28 }}>
+      <div style={{ background: '#FAF8F5', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{ width: 44, height: 44, borderRadius: 10, background: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
             <Users size={24} />
@@ -137,7 +137,7 @@ export default function PatientProfileSelectView() {
             >
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: 4 }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: 4 }}>
                     {pat.tag}
                   </span>
                   {isSelected && <CheckCircle2 size={18} color="#0284c7" />}
@@ -150,7 +150,7 @@ export default function PatientProfileSelectView() {
                   {pat.gender}, {pat.age} yrs • Preferred Language: <strong>{pat.language}</strong>
                 </div>
 
-                <div style={{ background: '#f8fafc', padding: 10, borderRadius: 8, fontSize: '0.8rem', color: '#334155', marginBottom: 10 }}>
+                <div style={{ background: '#FAF8F5', padding: 10, borderRadius: 8, fontSize: '0.8rem', color: '#334155', marginBottom: 10 }}>
                   <div style={{ fontWeight: 600, color: '#0f172a', marginBottom: 2 }}>Condition:</div>
                   <div>{pat.condition}</div>
                 </div>

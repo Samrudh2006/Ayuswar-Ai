@@ -41,8 +41,8 @@ export function AyuSwarOrbLogo({ size = 28, glow = true }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'radial-gradient(circle at 35% 30%, #00F5D4 0%, #008B8B 60%, #0A2540 100%)',
-      boxShadow: glow ? '0 0 16px rgba(0, 245, 212, 0.55), 0 0 30px rgba(0, 139, 139, 0.35)' : 'none',
+      background: 'radial-gradient(circle at 35% 30%, #00F5D4 0%, #0F4C5C 60%, #0A2540 100%)',
+      boxShadow: glow ? '0 0 16px rgba(0, 245, 212, 0.55), 0 0 30px rgba(15, 76, 92, 0.35)' : 'none',
       flexShrink: 0
     }}>
       <svg width={size * 0.72} height={size * 0.72} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -331,10 +331,10 @@ export default function FloatingAssistant({
             alignItems: 'center',
             gap: '12px',
             background: 'linear-gradient(135deg, #ffffff 0%, #F0FDFA 100%)',
-            border: '1.5px solid #00D2D3',
+            border: '1.5px solid #D4AF37',
             padding: '8px 10px 8px 12px',
             borderRadius: '40px',
-            boxShadow: '0 12px 36px rgba(0, 139, 139, 0.22), 0 4px 12px rgba(10, 37, 64, 0.12)',
+            boxShadow: '0 12px 36px rgba(15, 76, 92, 0.22), 0 4px 12px rgba(10, 37, 64, 0.12)',
             cursor: 'pointer',
             transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
             transform: 'scale(1)'
@@ -351,7 +351,7 @@ export default function FloatingAssistant({
             <span style={{
               fontSize: '14px',
               fontWeight: 800,
-              color: '#0A2540',
+              color: '#081C24',
               letterSpacing: '-0.2px',
               display: 'flex',
               alignItems: 'center',
@@ -361,7 +361,7 @@ export default function FloatingAssistant({
               <span style={{
                 fontSize: '9.5px',
                 fontWeight: 800,
-                background: effectiveRole === 'doctor' ? '#008B8B' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
+                background: effectiveRole === 'doctor' ? '#0F4C5C' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
                 color: '#ffffff',
                 padding: '1px 6px',
                 borderRadius: '8px',
@@ -396,14 +396,14 @@ export default function FloatingAssistant({
               width: '34px',
               height: '34px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+              background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
               color: '#ffffff',
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0, 139, 139, 0.35)',
+              boxShadow: '0 2px 8px rgba(15, 76, 92, 0.35)',
               transition: 'transform 150ms ease'
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
@@ -427,7 +427,7 @@ export default function FloatingAssistant({
           background: '#ffffff',
           borderRadius: '24px',
           overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(10, 37, 64, 0.28), 0 8px 24px rgba(0, 139, 139, 0.16)',
+          boxShadow: '0 24px 60px rgba(10, 37, 64, 0.28), 0 8px 24px rgba(15, 76, 92, 0.16)',
           border: '1.5px solid #CCFBF1',
           display: 'flex',
           flexDirection: 'column',
@@ -446,13 +446,13 @@ export default function FloatingAssistant({
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <AyuSwarOrbLogo size={24} glow={false} />
               <div>
-                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
-                  Ayu<span style={{ color: '#008B8B' }}>Swar</span> AI
+                <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
+                  Ayu<span style={{ color: '#0F4C5C' }}>Swar</span> AI
                 </span>
                 <span style={{ 
                   fontSize: '9.5px', 
-                  color: effectiveRole === 'doctor' ? '#008B8B' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
-                  background: effectiveRole === 'doctor' ? 'rgba(0,139,139,0.1)' : (effectiveRole === 'patient' ? 'rgba(217,119,6,0.1)' : 'rgba(13,148,136,0.1)'),
+                  color: effectiveRole === 'doctor' ? '#0F4C5C' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
+                  background: effectiveRole === 'doctor' ? 'rgba(15, 76, 92, 0.1)' : (effectiveRole === 'patient' ? 'rgba(217,119,6,0.1)' : 'rgba(13,148,136,0.1)'),
                   padding: '2px 6px',
                   borderRadius: '6px',
                   fontWeight: 750,
@@ -470,9 +470,9 @@ export default function FloatingAssistant({
               <button
                 onClick={() => setShowAiSettingsModal(true)}
                 style={{
-                  background: 'rgba(0, 139, 139, 0.08)',
-                  border: '1px solid rgba(0, 139, 139, 0.25)',
-                  color: '#008B8B',
+                  background: 'rgba(15, 76, 92, 0.08)',
+                  border: '1px solid rgba(15, 76, 92, 0.25)',
+                  color: '#0F4C5C',
                   cursor: 'pointer',
                   padding: '3px 7px',
                   borderRadius: '12px',
@@ -536,7 +536,7 @@ export default function FloatingAssistant({
                 {/* Acoustic Status & Mute Audio Bar */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={13} color="#008B8B" />
+                    <Sparkles size={13} color="#0F4C5C" />
                     <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F766E' }}>
                       Indic Multi-Dialect Scribe (Auto-Detect)
                     </span>
@@ -551,7 +551,7 @@ export default function FloatingAssistant({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: isMuted ? '#EF4444' : '#008B8B',
+                      color: isMuted ? '#EF4444' : '#0F4C5C',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -591,7 +591,7 @@ export default function FloatingAssistant({
                           borderRadius: '3px',
                           background: assistantState === 'listening' 
                             ? '#EF4444' 
-                            : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #008B8B 100%)' : '#334155'),
+                            : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#334155'),
                           transition: 'height 180ms ease',
                           animation: (assistantState === 'speaking' || assistantState === 'listening') 
                             ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out` 
@@ -633,7 +633,7 @@ export default function FloatingAssistant({
                   padding: '12px 14px',
                   fontSize: '12.5px',
                   lineHeight: 1.55,
-                  color: '#0A2540',
+                  color: '#081C24',
                   minHeight: '62px',
                   maxHeight: '120px',
                   overflowY: 'auto',
@@ -641,7 +641,7 @@ export default function FloatingAssistant({
                 }}>
                   {assistantState === 'speaking' ? (
                     <div>
-                      <div style={{ fontSize: '10px', fontWeight: 800, color: '#008B8B', textTransform: 'uppercase', marginBottom: '3px' }}>
+                      <div style={{ fontSize: '10px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', marginBottom: '3px' }}>
                         AyuSwar AI Response:
                       </div>
                       <div style={{ fontWeight: 600 }}>{currentAiReply || "Analyzing clinical query..."}</div>
@@ -668,7 +668,7 @@ export default function FloatingAssistant({
               {/* Role-Specific Quick Action Pills */}
               <div style={{
                 padding: '10px 14px',
-                background: '#F8FAFC',
+                background: '#FAF8F5',
                 borderTop: '1px solid #E2E8F0',
                 display: 'flex',
                 flexDirection: 'column',
@@ -692,7 +692,7 @@ export default function FloatingAssistant({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#008B8B',
+                      color: '#0F4C5C',
                       fontSize: '11px',
                       fontWeight: 750,
                       cursor: 'pointer',
@@ -723,11 +723,11 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
-                        <FileText size={12} color="#008B8B" />
+                        <FileText size={12} color="#0F4C5C" />
                         <span>SOAP Note</span>
                       </button>
                       <button
@@ -744,11 +744,11 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
-                        <Pill size={12} color="#008B8B" />
+                        <Pill size={12} color="#0F4C5C" />
                         <span>Drug Safety</span>
                       </button>
                       <button
@@ -765,11 +765,11 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
-                        <Sparkles size={12} color="#008B8B" />
+                        <Sparkles size={12} color="#0F4C5C" />
                         <span>తెలుగు Crosswalk</span>
                       </button>
                       <button
@@ -786,11 +786,11 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
-                        <User size={12} color="#008B8B" />
+                        <User size={12} color="#0F4C5C" />
                         <span>Queue</span>
                       </button>
                     </>
@@ -810,7 +810,7 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
@@ -831,7 +831,7 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
@@ -852,7 +852,7 @@ export default function FloatingAssistant({
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
-                          color: '#0A2540',
+                          color: '#081C24',
                           cursor: 'pointer'
                         }}
                       >
@@ -894,7 +894,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1.5px solid #00D2D3',
+                          border: '1.5px solid #D4AF37',
                           background: '#F0FDFA',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -902,7 +902,7 @@ export default function FloatingAssistant({
                           cursor: 'pointer'
                         }}
                       >
-                        <Mic size={12} color="#008B8B" />
+                        <Mic size={12} color="#0F4C5C" />
                         <span>🎙️ OPD Scribe</span>
                       </button>
                       <button
@@ -978,7 +978,7 @@ export default function FloatingAssistant({
                     <button
                       type="submit"
                       style={{
-                        background: '#008B8B',
+                        background: '#0F4C5C',
                         border: 'none',
                         color: '#ffffff',
                         borderRadius: '10px',
@@ -1016,12 +1016,12 @@ export default function FloatingAssistant({
                       height: '46px',
                       borderRadius: '50%',
                       border: 'none',
-                      background: assistantState === 'listening' ? '#EF4444' : 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
+                      background: assistantState === 'listening' ? '#EF4444' : 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: assistantState === 'listening' ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 14px rgba(0, 139, 139, 0.35)',
+                      boxShadow: assistantState === 'listening' ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 14px rgba(15, 76, 92, 0.35)',
                       cursor: 'pointer',
                       transition: 'all 0.2s ease'
                     }}
@@ -1035,7 +1035,7 @@ export default function FloatingAssistant({
                     style={{
                       padding: '7px 14px',
                       borderRadius: '18px',
-                      background: '#F1F5F9',
+                      background: '#FAF8F5',
                       border: '1px solid #CBD5E1',
                       color: '#475569',
                       fontSize: '11px',
@@ -1077,7 +1077,7 @@ export default function FloatingAssistant({
                 <Check size={24} strokeWidth={2.5} />
               </div>
 
-              <div style={{ fontSize: '17px', fontWeight: 800, color: '#0A2540' }}>
+              <div style={{ fontSize: '17px', fontWeight: 800, color: '#081C24' }}>
                 {effectiveRole === 'receptionist' ? 'Inquiry Completed' : 'Call Ended'}
               </div>
               <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px', fontFamily: 'monospace' }}>
@@ -1087,7 +1087,7 @@ export default function FloatingAssistant({
               {/* Discussion Recap Box */}
               <div style={{
                 width: '100%',
-                background: '#F8FAFC',
+                background: '#FAF8F5',
                 border: '1px solid #E2E8F0',
                 borderRadius: '12px',
                 padding: '12px 14px',
@@ -1095,7 +1095,7 @@ export default function FloatingAssistant({
                 marginTop: '16px',
                 marginBottom: '18px'
               }}>
-                <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   {effectiveRole === 'doctor' 
                     ? "Here's what we discussed:" 
                     : (effectiveRole === 'patient' ? "Here's what I found for you:" : "Reception Desk Summary:")}
@@ -1154,7 +1154,7 @@ export default function FloatingAssistant({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#008B8B',
+                    color: '#0F4C5C',
                     fontSize: '11.5px',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -1193,7 +1193,7 @@ export default function FloatingAssistant({
             width: '460px',
             maxWidth: '95vw',
             boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
-            border: '2px solid #008B8B',
+            border: '2px solid #0F4C5C',
             overflow: 'hidden'
           }}>
             {/* Modal Header */}
@@ -1206,7 +1206,7 @@ export default function FloatingAssistant({
               justifyContent: 'space-between'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Cpu size={18} color="#00D2D3" />
+                <Cpu size={18} color="#D4AF37" />
                 <span style={{ fontSize: '15px', fontWeight: 800 }}>AyuSwar AI Brain Settings</span>
               </div>
               <button
@@ -1220,7 +1220,7 @@ export default function FloatingAssistant({
             {/* Modal Body */}
             <div style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 800, color: '#081C24', marginBottom: '6px' }}>
                   Select AI LLM Engine / Provider:
                 </label>
                 <select
@@ -1233,7 +1233,7 @@ export default function FloatingAssistant({
                     border: '1.5px solid #CBD5E1',
                     fontSize: '12.5px',
                     fontWeight: 650,
-                    color: '#0A2540',
+                    color: '#081C24',
                     outline: 'none'
                   }}
                 >
@@ -1248,7 +1248,7 @@ export default function FloatingAssistant({
               {selectedProvider !== 'local_offline' && selectedProvider !== 'gnani_evon_30b' && (
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <label style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540' }}>
+                    <label style={{ fontSize: '12px', fontWeight: 800, color: '#081C24' }}>
                       {selectedProvider === 'gemini_free' ? 'Google Gemini API Key (Free):' : 'API Key / Token:'}
                     </label>
                     <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>

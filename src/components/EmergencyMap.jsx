@@ -583,8 +583,8 @@ export default function EmergencyMap({
               key={hosp.id || i}
               onClick={() => onSelectHospital(hosp)}
               style={{
-                background: selectedHospital?.id === hosp.id ? 'rgba(0, 210, 211, 0.15)' : '#131F37',
-                border: selectedHospital?.id === hosp.id ? '1.5px solid #00D2D3' : '1px solid #203554',
+                background: selectedHospital?.id === hosp.id ? 'rgba(212, 175, 55, 0.15)' : '#131F37',
+                border: selectedHospital?.id === hosp.id ? '1.5px solid #D4AF37' : '1px solid #203554',
                 padding: '14px 18px',
                 borderRadius: '12px',
                 cursor: 'pointer',

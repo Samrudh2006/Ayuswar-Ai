@@ -38,7 +38,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
       detail: 'Telugu-English multi-speaker diarization buffer synchronized. Browser speech (Web Speech API). Gnani voice integration: planned.',
       timestamp: '2 mins ago',
       icon: Volume2,
-      color: '#008B8B'
+      color: '#0F4C5C'
     },
     {
       id: 3,
@@ -91,14 +91,14 @@ export default function NotificationDrawer({ isOpen, onClose }) {
         {/* Header */}
         <div style={{
           padding: '20px 24px',
-          background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
           color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Bell size={20} color="#00D2D3" />
+            <Bell size={20} color="#D4AF37" />
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#ffffff' }}>
                 Clinical Telemetry & Alerts
@@ -123,7 +123,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
           borderBottom: '1px solid #E2E8F0',
           display: 'flex',
           gap: '8px',
-          background: '#F8FAFC'
+          background: '#FAF8F5'
         }}>
           {['all', 'voice', 'dsp', 'safety', 'abdm'].map((tab) => (
             <button
@@ -132,9 +132,9 @@ export default function NotificationDrawer({ isOpen, onClose }) {
               style={{
                 padding: '4px 10px',
                 borderRadius: '12px',
-                border: filter === tab ? '1.5px solid #008B8B' : '1px solid #CBD5E1',
-                background: filter === tab ? 'rgba(0, 139, 139, 0.12)' : '#ffffff',
-                color: filter === tab ? '#008B8B' : '#64748B',
+                border: filter === tab ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
+                background: filter === tab ? 'rgba(15, 76, 92, 0.12)' : '#ffffff',
+                color: filter === tab ? '#0F4C5C' : '#64748B',
                 fontSize: '11px',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -156,7 +156,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
                 style={{
                   padding: '14px',
                   borderRadius: '12px',
-                  background: '#F8FAFC',
+                  background: '#FAF8F5',
                   border: '1px solid #E2E8F0',
                   boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)'
                 }}
@@ -175,7 +175,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
                     }}>
                       <Icon size={14} />
                     </div>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>
                       {alert.title}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function NotificationDrawer({ isOpen, onClose }) {
         </div>
 
         {/* Footer */}
-        <div style={{ padding: '14px 20px', borderTop: '1px solid #E2E8F0', background: '#F8FAFC', textAlign: 'center' }}>
+        <div style={{ padding: '14px 20px', borderTop: '1px solid #E2E8F0', background: '#FAF8F5', textAlign: 'center' }}>
           <button
             onClick={onClose}
             className="btn-outline"

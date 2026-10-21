@@ -259,15 +259,15 @@ export default function ClinicalNotificationsDrawer({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: '#F8FAFC'
+          background: '#FAF8F5'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              background: isDoctor ? 'rgba(0, 139, 139, 0.12)' : 'rgba(16, 185, 129, 0.12)',
-              color: isDoctor ? '#008B8B' : '#10B981',
+              background: isDoctor ? 'rgba(15, 76, 92, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+              color: isDoctor ? '#0F4C5C' : '#10B981',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -275,7 +275,7 @@ export default function ClinicalNotificationsDrawer({
               <Bell size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', fontFamily: 'Outfit, sans-serif' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
                 {isDoctor ? 'Clinical Alert Sentinel' : 'Citizen Health Alerts'}
               </div>
               <div style={{ fontSize: '11px', color: '#64748B' }}>
@@ -350,7 +350,7 @@ export default function ClinicalNotificationsDrawer({
                 gap: '4px',
                 fontSize: '11px',
                 fontWeight: 700,
-                color: '#008B8B',
+                color: '#0F4C5C',
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer'
@@ -416,7 +416,7 @@ export default function ClinicalNotificationsDrawer({
                 width: '48px',
                 height: '48px',
                 borderRadius: '50%',
-                background: '#F8FAFC',
+                background: '#FAF8F5',
                 margin: '0 auto 12px',
                 display: 'flex',
                 alignItems: 'center',
@@ -520,7 +520,7 @@ export default function ClinicalNotificationsDrawer({
                           onClose();
                         }}
                         style={{
-                          background: isUrgent ? '#DC2626' : (isDoctor ? '#008B8B' : '#059669'),
+                          background: isUrgent ? '#DC2626' : (isDoctor ? '#0F4C5C' : '#059669'),
                           color: '#ffffff',
                           border: 'none',
                           borderRadius: '6px',
@@ -582,7 +582,7 @@ export default function ClinicalNotificationsDrawer({
         <div style={{
           padding: '12px 18px',
           borderTop: '1px solid #E2E8F0',
-          background: '#F8FAFC',
+          background: '#FAF8F5',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -590,7 +590,7 @@ export default function ClinicalNotificationsDrawer({
           color: '#64748B'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <ShieldCheck size={14} color="#008B8B" />
+            <ShieldCheck size={14} color="#0F4C5C" />
             <span>ABDM Encrypted Channel</span>
           </div>
           <div>Live Realtime Sync</div>

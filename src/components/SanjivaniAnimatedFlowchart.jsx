@@ -53,7 +53,7 @@ export default function SanjivaniAnimatedFlowchart({ activeStage = 0 }) {
 
   return (
     <div style={{
-      background: '#F8FAFC',
+      background: '#FAF8F5',
       border: '1.5px solid #E2E8F0',
       borderRadius: '16px',
       padding: '20px',
@@ -74,7 +74,7 @@ export default function SanjivaniAnimatedFlowchart({ activeStage = 0 }) {
           }}>
             [SIMULATION]
           </span>
-          <h4 style={{ fontSize: '14.5px', fontWeight: 800, color: '#0A2540', margin: 0 }}>
+          <h4 style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', margin: 0 }}>
             Sanjivani-108 Automated Handover Pipeline
           </h4>
         </div>

@@ -322,7 +322,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
         {/* Tab Switcher: Login vs Register */}
         <div style={{
           display: 'flex',
-          background: '#F1F5F9',
+          background: '#FAF8F5',
           borderBottom: '1px solid #E2E8F0',
           padding: '4px 6px'
         }}>
@@ -441,7 +441,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </button>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   Select Citizen Account
                 </label>
                 <select
@@ -454,7 +454,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     border: '1.5px solid #CBD5E1',
                     fontSize: '13px',
                     fontWeight: 600,
-                    color: '#0A2540',
+                    color: '#081C24',
                     background: '#ffffff'
                   }}
                 >
@@ -468,7 +468,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   Citizen ABHA ID / Registered Mobile
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -492,7 +492,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   Aadhaar / Mobile OTP
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -540,13 +540,13 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
               {/* SECTION 1: PRIMARY CITIZEN DETAILS */}
               <div style={{
-                background: '#F8FAFC',
+                background: '#FAF8F5',
                 border: '1px solid #E2E8F0',
                 borderRadius: '14px',
                 padding: '14px 16px',
                 marginBottom: '16px'
               }}>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>👤</span>
                   <span>Primary Citizen Information (మీ వివరాలు)</span>
                 </div>
@@ -623,7 +623,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   <select
                     value={regCondition}
                     onChange={e => setRegCondition(e.target.value)}
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #008B8B', fontSize: '12px', background: '#fff', fontWeight: 650 }}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #0F4C5C', fontSize: '12px', background: '#fff', fontWeight: 650 }}
                   >
                     <option value="Asthma & Seasonal Airway Wheezing">🫁 Asthma & Seasonal Wheezing (Pulmonology)</option>
                     <option value="Type-2 Diabetes & Hypertension">🩸 Type-2 Diabetes & Hypertension (Cardiology/Diabetology)</option>
@@ -631,7 +631,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   </select>
                   {/* Doctor assignment pill preview */}
                   <div style={{ marginTop: '6px', fontSize: '11px', color: '#065F46', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Stethoscope size={13} color="#008B8B" />
+                    <Stethoscope size={13} color="#0F4C5C" />
                     <span>
                       Assigned Doctor: <strong>{triagePatientCondition(regCondition).doctor.doctorName}</strong> ({triagePatientCondition(regCondition).doctor.specialty})
                     </span>
@@ -648,7 +648,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 background: includeFamily ? '#FFFBEB' : '#F8FAFC'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 800, color: '#081C24' }}>
                     <input
                       type="checkbox"
                       checked={includeFamily}

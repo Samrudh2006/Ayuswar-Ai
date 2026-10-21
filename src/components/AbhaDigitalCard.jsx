@@ -90,7 +90,7 @@ export default function AbhaDigitalCard({
             : 'linear-gradient(135deg, #062D30 0%, #0A4347 50%, #032426 100%)',
           borderRadius: '22px',
           padding: '24px 28px',
-          boxShadow: '0 20px 50px rgba(6, 45, 48, 0.35), 0 0 0 1.5px rgba(0, 210, 211, 0.35)',
+          boxShadow: '0 20px 50px rgba(6, 45, 48, 0.35), 0 0 0 1.5px rgba(212, 175, 55, 0.35)',
           color: '#ffffff',
           position: 'relative',
           overflow: 'hidden',
@@ -105,7 +105,7 @@ export default function AbhaDigitalCard({
           width: '280px',
           height: '280px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0, 210, 211, 0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%)',
           pointerEvents: 'none'
         }}></div>
 
@@ -116,7 +116,7 @@ export default function AbhaDigitalCard({
           width: '220px',
           height: '220px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0, 139, 139, 0.15) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(15, 76, 92, 0.15) 0%, transparent 65%)',
           pointerEvents: 'none'
         }}></div>
 
@@ -128,11 +128,11 @@ export default function AbhaDigitalCard({
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #00D2D3 0%, #008B8B 100%)',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #0F4C5C 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 14px rgba(0, 210, 211, 0.5)'
+              boxShadow: '0 0 14px rgba(212, 175, 55, 0.5)'
             }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2v20M2 12h20" />
@@ -157,8 +157,8 @@ export default function AbhaDigitalCard({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            background: 'rgba(0, 210, 211, 0.18)',
-            border: '1px solid #00D2D3',
+            background: 'rgba(212, 175, 55, 0.18)',
+            border: '1px solid #D4AF37',
             borderRadius: '20px',
             padding: '4px 10px',
             fontSize: '10px',
@@ -182,8 +182,8 @@ export default function AbhaDigitalCard({
               height: '84px',
               borderRadius: '50%',
               padding: '3px',
-              background: 'linear-gradient(135deg, #00D2D3 0%, #008B8B 100%)',
-              boxShadow: '0 0 16px rgba(0, 210, 211, 0.4)'
+              background: 'linear-gradient(135deg, #D4AF37 0%, #0F4C5C 100%)',
+              boxShadow: '0 0 16px rgba(212, 175, 55, 0.4)'
             }}>
               <img 
                 src={isDoctorMode ? dAvatar : pAvatar} 
@@ -270,22 +270,22 @@ export default function AbhaDigitalCard({
           zIndex: 2
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => setShowDossierModal(true)}>
-            <Heart size={13} color="#00D2D3" />
+            <Heart size={13} color="#D4AF37" />
             <span>Health Records</span>
           </div>
           <span style={{ opacity: 0.3 }}>|</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => setShowDossierModal(true)}>
-            <Pill size={13} color="#00D2D3" />
+            <Pill size={13} color="#D4AF37" />
             <span>Prescriptions</span>
           </div>
           <span style={{ opacity: 0.3 }}>|</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => setShowDossierModal(true)}>
-            <FileText size={13} color="#00D2D3" />
+            <FileText size={13} color="#D4AF37" />
             <span>Lab Reports</span>
           </div>
           <span style={{ opacity: 0.3 }}>|</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }} onClick={() => setShowDossierModal(true)}>
-            <User size={13} color="#00D2D3" />
+            <User size={13} color="#D4AF37" />
             <span>Emergency Info</span>
           </div>
         </div>
@@ -299,26 +299,26 @@ export default function AbhaDigitalCard({
           alignItems: 'center',
           gap: '10px',
           background: '#ffffff',
-          border: '1.5px solid #008B8B',
+          border: '1.5px solid #0F4C5C',
           borderRadius: '24px',
           padding: '10px 22px',
-          color: '#0A2540',
+          color: '#081C24',
           fontSize: '13.5px',
           fontWeight: 800,
           cursor: 'pointer',
-          boxShadow: '0 4px 16px rgba(0, 139, 139, 0.12)',
+          boxShadow: '0 4px 16px rgba(15, 76, 92, 0.12)',
           transition: 'all 160ms ease'
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 139, 139, 0.22)';
+          e.currentTarget.style.boxShadow = '0 8px 24px rgba(15, 76, 92, 0.22)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 139, 139, 0.12)';
+          e.currentTarget.style.boxShadow = '0 4px 16px rgba(15, 76, 92, 0.12)';
         }}
       >
-        <QrCode size={18} color="#008B8B" />
+        <QrCode size={18} color="#0F4C5C" />
         <span>Scan QR to view detailed health profile ↗</span>
       </button>
 
@@ -404,7 +404,7 @@ export default function AbhaDigitalCard({
                   height: '64px',
                   borderRadius: '50%',
                   padding: '2px',
-                  background: 'linear-gradient(135deg, #00D2D3 0%, #008B8B 100%)',
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #0F4C5C 100%)',
                   flexShrink: 0
                 }}>
                   <img 
@@ -481,7 +481,7 @@ export default function AbhaDigitalCard({
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                 
                 {/* Vitals */}
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
+                <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', fontWeight: 800, color: '#0284C7', marginBottom: '6px' }}>
                     <Heart size={12} />
                     <span>Vitals (Latest)</span>
@@ -495,7 +495,7 @@ export default function AbhaDigitalCard({
                 </div>
 
                 {/* Current Medications */}
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
+                <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', fontWeight: 800, color: '#7C3AED', marginBottom: '6px' }}>
                     <Pill size={12} />
                     <span>Medications</span>
@@ -511,7 +511,7 @@ export default function AbhaDigitalCard({
                 </div>
 
                 {/* Recent Lab Reports */}
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
+                <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px 8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', fontWeight: 800, color: '#059669', marginBottom: '6px' }}>
                     <FileText size={12} />
                     <span>Lab Reports</span>
@@ -540,7 +540,7 @@ export default function AbhaDigitalCard({
                   </div>
                 </div>
 
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px' }}>
+                <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px' }}>
                   <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F766E', marginBottom: '4px' }}>
                     Past Surgeries
                   </div>
@@ -563,8 +563,8 @@ export default function AbhaDigitalCard({
                   </div>
                 </div>
 
-                <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#0A2540', marginBottom: '3px' }}>
+                <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '10px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 800, color: '#081C24', marginBottom: '3px' }}>
                     Emergency
                   </div>
                   <div style={{ fontSize: '10px', color: '#475569', lineHeight: 1.4 }}>
@@ -577,7 +577,7 @@ export default function AbhaDigitalCard({
               {/* 5. 4 Action Buttons */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', marginTop: '4px' }}>
                 {[
-                  { label: 'Prescriptions', icon: Pill, color: '#008B8B', bg: '#F0FDFA' },
+                  { label: 'Prescriptions', icon: Pill, color: '#0F4C5C', bg: '#F0FDFA' },
                   { label: 'Lab Reports', icon: FileText, color: '#0284C7', bg: '#F0F9FF' },
                   { label: 'Documents', icon: ShieldCheck, color: '#7C3AED', bg: '#F5F3FF' },
                   { label: 'Timeline', icon: Clock, color: '#D97706', bg: '#FFFBEB' }
@@ -598,7 +598,7 @@ export default function AbhaDigitalCard({
                       <div style={{ color: act.color, display: 'flex', justifyContent: 'center', marginBottom: '3px' }}>
                         <Icon size={16} />
                       </div>
-                      <div style={{ fontSize: '9.5px', fontWeight: 750, color: '#0A2540' }}>
+                      <div style={{ fontSize: '9.5px', fontWeight: 750, color: '#081C24' }}>
                         {act.label}
                       </div>
                     </div>

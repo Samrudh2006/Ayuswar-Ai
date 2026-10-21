@@ -19,8 +19,8 @@ export default function TechSpecsView({ onLaunchConsole }) {
               gap: '6px',
               padding: '4px 12px',
               borderRadius: '20px',
-              background: 'rgba(0, 139, 139, 0.1)',
-              color: '#008B8B',
+              background: 'rgba(15, 76, 92, 0.1)',
+              color: '#0F4C5C',
               fontSize: '11px',
               fontWeight: 800,
               textTransform: 'uppercase',
@@ -29,7 +29,7 @@ export default function TechSpecsView({ onLaunchConsole }) {
               <Cpu size={14} />
               SYSTEM DESIGN & RESEARCH RIGOR
             </div>
-            <h1 style={{ fontSize: '28px', color: '#0A2540', fontWeight: 850 }}>
+            <h1 style={{ fontSize: '28px', color: '#081C24', fontWeight: 850 }}>
               AyuSwar AI — Technical Architecture (HLD / LLD)
             </h1>
             <p style={{ fontSize: '14.5px', color: '#5A7184', marginTop: '4px', maxWidth: '780px' }}>
@@ -49,8 +49,8 @@ export default function TechSpecsView({ onLaunchConsole }) {
         {/* Card 1: Signal Processing & DSP Mathematical Formulation */}
         <div className="glass-panel" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-            <Activity size={20} color="#008B8B" />
-            <h2 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 800 }}>
+            <Activity size={20} color="#0F4C5C" />
+            <h2 style={{ fontSize: '18px', color: '#081C24', fontWeight: 800 }}>
               1. Digital Signal Processing (DSP) & Biomarkers
             </h2>
           </div>
@@ -59,24 +59,24 @@ export default function TechSpecsView({ onLaunchConsole }) {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '12.5px' }}>
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-              <strong style={{ color: '#0A2540' }}>• Short-Time Fourier Transform (STFT):</strong>
-              <div style={{ fontFamily: 'monospace', color: '#008B8B', margin: '4px 0', fontSize: '12px' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <strong style={{ color: '#081C24' }}>• Short-Time Fourier Transform (STFT):</strong>
+              <div style={{ fontFamily: 'monospace', color: '#0F4C5C', margin: '4px 0', fontSize: '12px' }}>
                 X(m, ω) = ∑ x[n] · w[n - m] · e^(-jωn)
               </div>
               <span style={{ color: '#64748B' }}>512-point Hanning window with 50% overlap for real-time frequency spectrogram estimation.</span>
             </div>
 
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-              <strong style={{ color: '#0A2540' }}>• Spectral Centroid (Cough Wet vs Dry):</strong>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <strong style={{ color: '#081C24' }}>• Spectral Centroid (Cough Wet vs Dry):</strong>
               <div style={{ fontFamily: 'monospace', color: '#D97706', margin: '4px 0', fontSize: '12px' }}>
                 Centroid = (∑ f · |X(f)|) / (∑ |X(f)|)
               </div>
               <span style={{ color: '#64748B' }}>High centroids (above 2.8 kHz) correlate with high-frequency stridor, while low centroids indicate productive phlegm.</span>
             </div>
 
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-              <strong style={{ color: '#0A2540' }}>• Mel-Frequency Cepstral Coefficients (MFCCs):</strong>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <strong style={{ color: '#081C24' }}>• Mel-Frequency Cepstral Coefficients (MFCCs):</strong>
               <span style={{ color: '#64748B', display: 'block', marginTop: '3px' }}>
                 13-dimensional cepstral feature vector mapping vocal jitter and tremor indicative of acute patient distress.
               </span>
@@ -88,7 +88,7 @@ export default function TechSpecsView({ onLaunchConsole }) {
         <div className="glass-panel" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
             <BookOpen size={20} color="#D97706" />
-            <h2 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 800 }}>
+            <h2 style={{ fontSize: '18px', color: '#081C24', fontWeight: 800 }}>
               2. Scientific Reference Datasets & Standards
             </h2>
           </div>
@@ -97,19 +97,19 @@ export default function TechSpecsView({ onLaunchConsole }) {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '12.5px' }}>
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong style={{ color: '#0A2540' }}>Acoustic Signal Processing:</strong>
-                <span style={{ color: '#008B8B', fontWeight: 700 }}>Signal Research</span>
+                <strong style={{ color: '#081C24' }}>Acoustic Signal Processing:</strong>
+                <span style={{ color: '#0F4C5C', fontWeight: 700 }}>Signal Research</span>
               </div>
               <p style={{ color: '#64748B', marginTop: '4px' }}>
                 Evaluates acoustic feature extraction and frequency signatures for non-diagnostic educational demonstration.
               </p>
             </div>
 
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong style={{ color: '#0A2540' }}>Clinical Dialogue Taxonomy:</strong>
+                <strong style={{ color: '#081C24' }}>Clinical Dialogue Taxonomy:</strong>
                 <span style={{ color: '#D97706', fontWeight: 700 }}>Code-Mixed Indic NLP</span>
               </div>
               <p style={{ color: '#64748B', marginTop: '4px' }}>
@@ -117,9 +117,9 @@ export default function TechSpecsView({ onLaunchConsole }) {
               </p>
             </div>
 
-            <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong style={{ color: '#0A2540' }}>WHO ICD-10-CM & SNOMED-CT:</strong>
+                <strong style={{ color: '#081C24' }}>WHO ICD-10-CM & SNOMED-CT:</strong>
                 <span style={{ color: '#10B981', fontWeight: 700 }}>Ontology Graph</span>
               </div>
               <p style={{ color: '#64748B', marginTop: '4px' }}>
@@ -133,7 +133,7 @@ export default function TechSpecsView({ onLaunchConsole }) {
       {/* Full-Width Card: Voice Resilience Architecture */}
       <div className="dark-telemetry-panel" style={{ padding: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-          <ShieldCheck size={22} color="#00D2D3" />
+          <ShieldCheck size={22} color="#D4AF37" />
           <h2 style={{ fontSize: '18px', color: '#ffffff', fontWeight: 850 }}>
             3. Voice Service Resilience & Rate Limiting Architecture
           </h2>
@@ -144,17 +144,17 @@ export default function TechSpecsView({ onLaunchConsole }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', fontSize: '12.5px' }}>
           <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <div style={{ color: '#00D2D3', fontWeight: 800, marginBottom: '6px' }}>Client-Side VAD (Voice Activity)</div>
+            <div style={{ color: '#D4AF37', fontWeight: 800, marginBottom: '6px' }}>Client-Side VAD (Voice Activity)</div>
             <p style={{ color: '#CBD5E1' }}>Silence and background ambient hospital murmur are discarded client-side before processing audio chunks.</p>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <div style={{ color: '#00D2D3', fontWeight: 800, marginBottom: '6px' }}>Token-Bucket Rate Limiter</div>
+            <div style={{ color: '#D4AF37', fontWeight: 800, marginBottom: '6px' }}>Token-Bucket Rate Limiter</div>
             <p style={{ color: '#CBD5E1' }}>Limits requests to 12 calls/minute per physician session, absorbing burst traffic without violating voice gateway limits.</p>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <div style={{ color: '#00D2D3', fontWeight: 800, marginBottom: '6px' }}>In-Memory Vernacular Audio Cache</div>
+            <div style={{ color: '#D4AF37', fontWeight: 800, marginBottom: '6px' }}>In-Memory Vernacular Audio Cache</div>
             <p style={{ color: '#CBD5E1' }}>Standard dosage instructions (e.g., "ఈ మాత్ర ఉదయం వేసుకోవాలి") are hashed and served from local memory, cutting redundant TTS calls by 68%.</p>
           </div>
         </div>

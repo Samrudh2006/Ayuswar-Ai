@@ -126,7 +126,7 @@ export default function MobileInnovationHubModal({
       title: 'Teleconsult',
       desc: 'WebRTC video/audio telemedicine room connecting rural PHC with urban specialists.',
       icon: Video,
-      color: '#008B8B',
+      color: '#0F4C5C',
       action: onOpenTeleconsult,
       btnLabel: 'Launch Video Call'
     },
@@ -307,7 +307,7 @@ export default function MobileInnovationHubModal({
         {/* Header */}
         <div style={{
           padding: '18px 24px',
-          background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
           color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
@@ -323,7 +323,7 @@ export default function MobileInnovationHubModal({
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <Sparkles size={22} color="#00D2D3" />
+              <Sparkles size={22} color="#D4AF37" />
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -380,7 +380,7 @@ export default function MobileInnovationHubModal({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
           gap: '14px',
-          background: '#F8FAFC'
+          background: '#FAF8F5'
         }}>
           {phases.map((p) => {
             const Icon = p.icon;
@@ -414,11 +414,11 @@ export default function MobileInnovationHubModal({
                       }}>
                         <Icon size={18} />
                       </div>
-                      <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
+                      <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                         {p.title}
                       </span>
                     </div>
-                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#94A3B8', background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px' }}>
+                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#94A3B8', background: '#FAF8F5', padding: '2px 6px', borderRadius: '4px' }}>
                       PHASE {p.num}
                     </span>
                   </div>

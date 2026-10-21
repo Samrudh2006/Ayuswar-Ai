@@ -40,7 +40,7 @@ export default function Sidebar({
       flexDirection: 'column',
       justifyContent: 'space-between',
       transition: 'width 220ms cubic-bezier(0.23, 1, 0.32, 1)',
-      borderRight: '1px solid rgba(0, 139, 139, 0.2)',
+      borderRight: '1px solid rgba(15, 76, 92, 0.2)',
       position: 'relative',
       zIndex: 90,
       flexShrink: 0
@@ -127,8 +127,8 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'landing' ? 'rgba(0, 139, 139, 0.18)' : 'transparent',
-              color: activeView === 'landing' ? '#00D2D3' : '#CBD5E1',
+              background: activeView === 'landing' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
+              color: activeView === 'landing' ? '#D4AF37' : '#CBD5E1',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'landing' ? 700 : 500,
@@ -153,8 +153,8 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'doctor_portal' ? 'rgba(0, 139, 139, 0.18)' : 'transparent',
-              color: activeView === 'doctor_portal' ? '#00D2D3' : '#CBD5E1',
+              background: activeView === 'doctor_portal' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
+              color: activeView === 'doctor_portal' ? '#D4AF37' : '#CBD5E1',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'doctor_portal' ? 700 : 500,
@@ -168,7 +168,7 @@ export default function Sidebar({
             {!isCollapsed && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                 <span>Doctor Portal</span>
-                <span style={{ fontSize: '10px', background: '#008B8B', color: '#ffffff', padding: '1px 6px', borderRadius: '8px' }}>
+                <span style={{ fontSize: '10px', background: '#0F4C5C', color: '#ffffff', padding: '1px 6px', borderRadius: '8px' }}>
                   OPD
                 </span>
               </div>
@@ -186,8 +186,8 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'console' ? 'rgba(0, 139, 139, 0.18)' : 'transparent',
-              color: activeView === 'console' ? '#00D2D3' : '#CBD5E1',
+              background: activeView === 'console' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
+              color: activeView === 'console' ? '#D4AF37' : '#CBD5E1',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'console' ? 700 : 500,
@@ -219,8 +219,8 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'patient_portal' ? 'rgba(0, 139, 139, 0.18)' : 'transparent',
-              color: activeView === 'patient_portal' ? '#00D2D3' : '#CBD5E1',
+              background: activeView === 'patient_portal' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
+              color: activeView === 'patient_portal' ? '#D4AF37' : '#CBD5E1',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'patient_portal' ? 700 : 500,
@@ -252,8 +252,8 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'tech_specs' ? 'rgba(0, 139, 139, 0.18)' : 'transparent',
-              color: activeView === 'tech_specs' ? '#00D2D3' : '#CBD5E1',
+              background: activeView === 'tech_specs' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
+              color: activeView === 'tech_specs' ? '#D4AF37' : '#CBD5E1',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'tech_specs' ? 700 : 500,
@@ -297,7 +297,7 @@ export default function Sidebar({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ position: 'relative' }}>
-              <Bell size={17} color="#00D2D3" />
+              <Bell size={17} color="#D4AF37" />
               {unreadNotificationsCount > 0 && (
                 <span style={{
                   position: 'absolute',

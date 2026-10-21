@@ -125,7 +125,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
       }}>
         {/* Modal Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+          background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
           padding: '22px 24px',
           color: '#ffffff',
           position: 'relative'
@@ -140,7 +140,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <Stethoscope size={22} color="#00D2D3" />
+              <Stethoscope size={22} color="#D4AF37" />
             </div>
             <div>
               <h3 style={{ fontSize: '18px', color: '#ffffff', fontWeight: 800, margin: 0 }}>
@@ -172,7 +172,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
         {/* Tab Switcher */}
         <div style={{
           display: 'flex',
-          background: '#F1F5F9',
+          background: '#FAF8F5',
           borderBottom: '1px solid #E2E8F0',
           padding: '4px 6px'
         }}>
@@ -185,7 +185,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'login' ? '#ffffff' : 'transparent',
-              color: authMode === 'login' ? '#008B8B' : '#64748B',
+              color: authMode === 'login' ? '#0F4C5C' : '#64748B',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -209,7 +209,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'register' ? '#ffffff' : 'transparent',
-              color: authMode === 'register' ? '#008B8B' : '#64748B',
+              color: authMode === 'register' ? '#0F4C5C' : '#64748B',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -233,8 +233,8 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                ========================================================================= */
             <div>
               <div style={{
-                background: 'rgba(0, 139, 139, 0.06)',
-                border: '1px solid rgba(0, 139, 139, 0.2)',
+                background: 'rgba(15, 76, 92, 0.06)',
+                border: '1px solid rgba(15, 76, 92, 0.2)',
                 padding: '12px 14px',
                 borderRadius: '10px',
                 fontSize: '12px',
@@ -244,7 +244,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 gap: '8px',
                 marginBottom: '18px'
               }}>
-                <ShieldCheck size={18} color="#008B8B" />
+                <ShieldCheck size={18} color="#0F4C5C" />
                 <span>Select your verified physician profile. Your dashboard will filter patients matching your specialty.</span>
               </div>
 
@@ -259,7 +259,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #008B8B 0%, #006D6D 100%)',
+                  background: 'linear-gradient(135deg, #0F4C5C 0%, #006D6D 100%)',
                   color: '#ffffff',
                   fontWeight: 800,
                   fontSize: '13px',
@@ -269,16 +269,16 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 14px rgba(0, 139, 139, 0.35)',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
                   marginBottom: '16px'
                 }}
               >
-                <Sparkles size={16} color="#00D2D3" />
+                <Sparkles size={16} color="#D4AF37" />
                 <span>⚡ 1-Tap Instant Doctor Login (Dr. Priya Sharma, MD)</span>
               </button>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   Select Physician Session
                 </label>
                 <select
@@ -291,7 +291,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     border: '1.5px solid #CBD5E1',
                     fontSize: '13px',
                     fontWeight: 650,
-                    color: '#0A2540',
+                    color: '#081C24',
                     background: '#ffffff'
                   }}
                 >
@@ -305,7 +305,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '22px' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#0A2540', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   Biometric / ABDM Security Token PIN
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -350,7 +350,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', marginBottom: '5px' }}>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#081C24', marginBottom: '5px' }}>
                   Doctor Full Name & Degree
                 </label>
                 <input
@@ -364,13 +364,13 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', marginBottom: '5px' }}>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#081C24', marginBottom: '5px' }}>
                   Clinical Specialty (Determines Patient Disease Routing)
                 </label>
                 <select
                   value={regSpecialty}
                   onChange={e => setRegSpecialty(e.target.value)}
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #008B8B', fontSize: '12.5px', background: '#fff', fontWeight: 650 }}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #0F4C5C', fontSize: '12.5px', background: '#fff', fontWeight: 650 }}
                 >
                   <option value="Pulmonology & Critical Care">🫁 Pulmonology & Critical Care (Respiratory OPD)</option>
                   <option value="Cardiology & Diabetology">🩸 Cardiology & Diabetology (Cardiometabolic OPD)</option>
@@ -383,7 +383,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '10px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', marginBottom: '5px' }}>
+                  <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#081C24', marginBottom: '5px' }}>
                     NMC / Medical Council Reg. No.
                   </label>
                   <input
@@ -396,7 +396,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', marginBottom: '5px' }}>
+                  <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#081C24', marginBottom: '5px' }}>
                     Clinical Experience
                   </label>
                   <input
@@ -410,7 +410,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#0A2540', marginBottom: '5px' }}>
+                <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#081C24', marginBottom: '5px' }}>
                   Hospital / Facility Name
                 </label>
                 <input

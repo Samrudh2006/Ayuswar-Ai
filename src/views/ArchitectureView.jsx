@@ -57,23 +57,23 @@ export default function ArchitectureView() {
     <div style={{ padding: '36px 24px 64px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#64748B', fontSize: '13px' }}>Technology</span>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Architecture Pipeline</span>
+        <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Architecture Pipeline</span>
       </div>
 
       {/* Clean, Modern Header */}
       <div style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '10px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '10px' }}>
           <Layers size={14} />
           <span>SYSTEM ARCHITECTURE & PIPELINE HLD</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '8px', letterSpacing: '-0.4px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '8px', letterSpacing: '-0.4px' }}>
           Technical Architecture & Intake Pipeline
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.5, margin: 0 }}>
@@ -92,7 +92,7 @@ export default function ArchitectureView() {
       {/* Compact 3-Column Interoperability Standards Grid */}
       <div style={{ marginTop: '36px' }}>
         <div style={{ marginBottom: '18px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0A2540', margin: '0 0 4px 0' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
             Core Interoperability & Clinical Schema Standards
           </h2>
           <p style={{ fontSize: '13.5px', color: '#64748B', margin: 0 }}>
@@ -136,7 +136,7 @@ export default function ArchitectureView() {
                     <Icon size={20} />
                   </div>
 
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', margin: '0 0 4px 0' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
                     {std.title}
                   </h3>
                   <div style={{ fontSize: '12px', fontWeight: 700, color: std.color, marginBottom: '8px' }}>
