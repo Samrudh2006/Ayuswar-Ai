@@ -23,9 +23,10 @@ export default function MobilePwaInstallBanner() {
       return;
     }
 
-    // Check if dismissed recently (past 3 days)
+    // Check if dismissed
+    const isDismissed = localStorage.getItem('ayuswar_pwa_dismissed') === 'true';
     const dismissedAt = localStorage.getItem('ayuswar_pwa_dismissed_at');
-    if (dismissedAt && Date.now() - Number(dismissedAt) < 3 * 24 * 60 * 60 * 1000) {
+    if (isDismissed || (dismissedAt && Date.now() - Number(dismissedAt) < 7 * 24 * 60 * 60 * 1000)) {
       return;
     }
 
@@ -38,6 +39,7 @@ export default function MobilePwaInstallBanner() {
     const handleBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      // Only show banner if install prompt is genuine and available
       setShowBanner(true);
     };
 
@@ -73,6 +75,7 @@ export default function MobilePwaInstallBanner() {
   const handleDismiss = () => {
     setShowBanner(false);
     try {
+      localStorage.setItem('ayuswar_pwa_dismissed', 'true');
       localStorage.setItem('ayuswar_pwa_dismissed_at', String(Date.now()));
     } catch {}
   };

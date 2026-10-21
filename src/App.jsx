@@ -162,8 +162,8 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8FAFC', position: 'relative' }}>
-      {/* Mobile PWA Add-To-Home-Screen Install Banner */}
-      <MobilePwaInstallBanner />
+      {/* Mobile PWA Add-To-Home-Screen Install Banner (Shown on public landing/website pages) */}
+      {!isDedicatedPortal && <MobilePwaInstallBanner />}
 
       {/* Dynamic SEO, AEO, and GEO Route Metadata Manager */}
       <SeoHead />
@@ -422,7 +422,7 @@ export default function App() {
       />
 
       {/* Floating Ambient Voice Assistant (Role-aware across landing, doctor, and patient portals) */}
-      {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && (
+      {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && !location.pathname.startsWith('/auth') && (
         <FloatingAssistant 
           activeView={
             location.pathname.startsWith('/doctor-portal') 

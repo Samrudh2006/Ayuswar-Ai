@@ -1183,4 +1183,42 @@ body {
     max-width: 100% !important;
   }
 }
+
+/* Authentication Responsive Rules: Stack cleanly on mobile/tablet without cramping */
+@media (max-width: 960px) {
+  .auth-layout-container {
+    flex-direction: column !important;
+  }
+
+  .auth-hero-panel {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 190px !important;
+    padding: 24px 20px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .auth-hero-desktop-only {
+    display: none !important;
+  }
+
+  .auth-form-panel-wrapper {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    padding: 10px !important;
+    margin-top: -16px !important;
+    position: relative !important;
+    z-index: 10 !important;
+    min-height: auto !important;
+  }
+
+  .auth-form-panel {
+    border-radius: 18px !important;
+    padding: 20px 16px !important;
+  }
+}
+
+
 

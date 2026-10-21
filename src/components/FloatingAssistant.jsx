@@ -378,22 +378,39 @@ export default function FloatingAssistant({
           </div>
 
           {/* Mic Button Circle */}
-          <div 
+          <button 
+            type="button"
             className="floating-assistant-mic"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                  .then(() => setAssistantState('listening'))
+                  .catch(() => setAssistantState('listening'));
+              } else {
+                setAssistantState('listening');
+              }
+            }}
+            title="Click to speak with AyuSwar Voice Assistant"
             style={{
               width: '34px',
               height: '34px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #008B8B 0%, #00B4D8 100%)',
               color: '#ffffff',
+              border: 'none',
+              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0, 139, 139, 0.35)'
+              boxShadow: '0 2px 8px rgba(0, 139, 139, 0.35)',
+              transition: 'transform 150ms ease'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             <Mic size={17} />
-          </div>
+          </button>
         </div>
       )}
 
