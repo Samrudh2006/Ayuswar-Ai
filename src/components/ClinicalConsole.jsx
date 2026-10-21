@@ -310,30 +310,31 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               width: '46px',
               height: '46px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0A2540 0%, #008B8B 100%)',
+              background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
-              fontSize: '18px'
+              fontSize: '18px',
+              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)'
             }}>
               {currentEncounter.patient.name.charAt(0)}
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h2 style={{ fontSize: '18px', color: '#0A2540', fontWeight: 800 }}>
+                <h2 style={{ fontSize: '18px', color: '#0F4C5C', fontWeight: 800 }}>
                   {currentEncounter.patient.name}
                 </h2>
                 <span style={{ fontSize: '12px', background: '#E2E8F0', padding: '2px 8px', borderRadius: '12px', fontWeight: 650, color: '#334155' }}>
                   {currentEncounter.patient.gender}, {currentEncounter.patient.age}y
                 </span>
-                <span style={{ fontSize: '11px', background: 'rgba(0, 139, 139, 0.12)', color: '#008B8B', padding: '2px 8px', borderRadius: '12px', fontWeight: 700 }}>
+                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.16)', color: '#6A5005', border: '1px solid rgba(212, 175, 55, 0.4)', padding: '2px 8px', borderRadius: '12px', fontWeight: 750 }}>
                   ABHA: {currentEncounter.patient.abhaId}
                 </span>
               </div>
-              <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: '#3D545E', marginTop: '2px' }}>
                 Facility: {currentEncounter.patient.location} • Attending: {doctorProfile ? doctorProfile.doctorName : 'Dr. Ananya Sharma, MD'}
               </div>
             </div>
@@ -351,9 +352,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                   fontSize: '12.5px',
                   fontWeight: 650,
                   fontFamily: 'Outfit, sans-serif',
-                  border: selectedEncounterIndex === idx ? '2px solid #008B8B' : '1px solid #D8E7EB',
-                  background: selectedEncounterIndex === idx ? 'rgba(0, 139, 139, 0.12)' : '#ffffff',
-                  color: selectedEncounterIndex === idx ? '#008B8B' : '#0B2545',
+                  border: selectedEncounterIndex === idx ? '2px solid #0F4C5C' : '1px solid #D1E1E6',
+                  background: selectedEncounterIndex === idx ? 'rgba(15, 76, 92, 0.12)' : '#ffffff',
+                  color: selectedEncounterIndex === idx ? '#0F4C5C' : '#091E26',
                   cursor: 'pointer',
                   transition: 'all 160ms ease'
                 }}
@@ -393,39 +394,39 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           paddingTop: '12px',
           borderTop: '1px solid #E2E8F0'
         }}>
-          <div style={{ background: '#F8FAFC', padding: '8px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Heart size={12} color="#EF4444" /> Blood Pressure
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
+            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Heart size={12} color="#D64550" /> Blood Pressure
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentEncounter.vitals.bp}</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bp}</div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '8px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Activity size={12} color="#008B8B" /> Heart Rate
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
+            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Activity size={12} color="#0F4C5C" /> Heart Rate
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentEncounter.vitals.heartRate}</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.heartRate}</div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '8px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Droplets size={12} color="#3B82F6" /> SpO2 Oxygen
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
+            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Droplets size={12} color="#176579" /> SpO2 Oxygen
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentEncounter.vitals.spo2}</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.spo2}</div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '8px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Thermometer size={12} color="#D97706" /> Temperature
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
+            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Thermometer size={12} color="#D4AF37" /> Temperature
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentEncounter.vitals.temp}</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.temp}</div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '8px 12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Sparkles size={12} color="#8B5CF6" /> Blood Sugar
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
+            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Sparkles size={12} color="#6D214F" /> Blood Sugar
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>{currentEncounter.vitals.bloodSugar}</div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bloodSugar}</div>
           </div>
         </div>
       </div>
@@ -447,10 +448,10 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           <div className="glass-panel" style={{ padding: '22px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C' }}>
                   Ambient Multi-Speaker Transcript
                 </h3>
-                <div style={{ fontSize: '11px', color: '#5A7184' }}>
+                <div style={{ fontSize: '11px', color: '#3D545E' }}>
                   Browser speech (Web Speech API). Gnani voice integration: planned.
                 </div>
               </div>
@@ -477,17 +478,17 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     style={{
                       padding: '12px 16px',
                       borderRadius: '12px',
-                      background: isDoc ? 'rgba(10, 37, 64, 0.04)' : 'rgba(0, 139, 139, 0.07)',
-                      borderLeft: isDoc ? '3.5px solid #0A2540' : '3.5px solid #008B8B'
+                      background: isDoc ? 'rgba(15, 76, 92, 0.05)' : 'rgba(212, 175, 55, 0.08)',
+                      borderLeft: isDoc ? '3.5px solid #0F4C5C' : '3.5px solid #D4AF37'
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: isDoc ? '#0A2540' : '#008B8B' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: isDoc ? '#0F4C5C' : '#6A5005' }}>
                         {turn.speaker}
                       </span>
-                      <span style={{ fontSize: '10px', color: '#94A3B8' }}>{turn.time}</span>
+                      <span style={{ fontSize: '10px', color: '#64748B' }}>{turn.time}</span>
                     </div>
-                    <div style={{ fontSize: '14px', color: '#1E293B', lineHeight: 1.5 }}>
+                    <div style={{ fontSize: '14px', color: '#091E26', lineHeight: 1.5, fontWeight: 500 }}>
                       {turn.text}
                     </div>
                   </div>
@@ -670,21 +671,22 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           {/* Card 5: Spoken Vernacular Audio-Rx with Word Karaoke */}
           <div className="glass-panel" style={{
             padding: '24px',
-            border: '2px solid rgba(0, 139, 139, 0.35)',
-            boxShadow: '0 16px 36px rgba(0, 139, 139, 0.08)'
+            border: '2px solid rgba(15, 76, 92, 0.35)',
+            boxShadow: '0 16px 36px rgba(15, 76, 92, 0.08)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Volume2 size={22} color="#008B8B" />
-                <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#0A2540' }}>
+                <Volume2 size={22} color="#0F4C5C" />
+                <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C' }}>
                   Spoken Vernacular Audio-Rx (Browser speech)
                 </h3>
               </div>
               <span style={{
                 fontSize: '10px',
                 fontWeight: 800,
-                color: '#ffffff',
-                background: '#D97706',
+                color: '#5E4605',
+                background: 'linear-gradient(135deg, #FFFDF5 0%, #FBF3D6 100%)',
+                border: '1px solid #D4AF37',
                 padding: '3px 8px',
                 borderRadius: '12px'
               }}>
@@ -699,9 +701,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               gap: '14px',
               padding: '12px 16px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(0, 139, 139, 0.08) 0%, rgba(217, 119, 6, 0.05) 100%)',
+              background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.07) 0%, rgba(212, 175, 55, 0.08) 100%)',
               marginBottom: '16px',
-              border: '1px solid rgba(0, 139, 139, 0.2)'
+              border: '1px solid rgba(15, 76, 92, 0.2)'
             }}>
               <div style={{
                 position: 'relative',
@@ -709,7 +711,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 height: '56px',
                 borderRadius: '50%',
                 overflow: 'hidden',
-                border: '2.5px solid #008B8B',
+                border: '2.5px solid #0F4C5C',
                 flexShrink: 0
               }}>
                 <img 
@@ -724,24 +726,24 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     left: 0,
                     right: 0,
                     height: '14px',
-                    background: 'rgba(0, 139, 139, 0.9)',
+                    background: 'rgba(15, 76, 92, 0.92)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '2px'
                   }}>
-                    <span style={{ width: '2px', height: '6px', background: '#ffffff', animation: 'waveOscillate 0.5s infinite' }}></span>
+                    <span style={{ width: '2px', height: '6px', background: '#D4AF37', animation: 'waveOscillate 0.5s infinite' }}></span>
                     <span style={{ width: '2px', height: '10px', background: '#ffffff', animation: 'waveOscillate 0.5s infinite 0.1s' }}></span>
-                    <span style={{ width: '2px', height: '7px', background: '#ffffff', animation: 'waveOscillate 0.5s infinite 0.2s' }}></span>
+                    <span style={{ width: '2px', height: '7px', background: '#D4AF37', animation: 'waveOscillate 0.5s infinite 0.2s' }}></span>
                   </div>
                 )}
               </div>
 
               <div>
-                <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0A2540' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0F4C5C' }}>
                   Dr. Ananya — Virtual Attending
                 </div>
-                <div style={{ fontSize: '11px', color: '#5A7184' }}>
+                <div style={{ fontSize: '11px', color: '#3D545E' }}>
                   Synthesizing spoken dosage instructions in {currentEncounter.language}
                 </div>
               </div>
@@ -804,7 +806,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             </div>
 
             {/* Visual Color-Coded Pill Schedule */}
-            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0A2540', marginBottom: '10px' }}>
+            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F4C5C', marginBottom: '10px' }}>
               Color-Coded Visual Pill Schedule for Patient:
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -818,8 +820,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     padding: '10px 14px',
                     borderRadius: '10px',
                     background: '#ffffff',
-                    border: '1px solid #E2E8F0',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+                    border: '1px solid #D1E1E6',
+                    boxShadow: '0 2px 6px rgba(15, 76, 92, 0.04)'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -831,11 +833,11 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                       boxShadow: `0 0 8px ${med.color}`
                     }} />
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 750, color: '#0A2540' }}>{med.name}</div>
-                      <div style={{ fontSize: '11px', color: '#64748B' }}>{med.colorLabel}</div>
+                      <div style={{ fontSize: '13px', fontWeight: 750, color: '#091E26' }}>{med.name}</div>
+                      <div style={{ fontSize: '11px', color: '#3D545E' }}>{med.colorLabel}</div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right', fontSize: '12px', fontWeight: 700, color: '#008B8B' }}>
+                  <div style={{ textAlign: 'right', fontSize: '12px', fontWeight: 700, color: '#0F4C5C' }}>
                     {med.timing}
                   </div>
                 </div>
@@ -847,8 +849,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
           <div className="glass-panel" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Camera size={18} color="#D97706" />
-                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0A2540' }}>
+                <Camera size={18} color="#D4AF37" />
+                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F4C5C' }}>
                   Tesseract Blister Strip Scanner
                 </h3>
               </div>

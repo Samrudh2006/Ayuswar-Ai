@@ -106,9 +106,9 @@ export default function Navbar({
     gap: 4,
     padding: '7px 12px',
     borderRadius: 8,
-    border: isActive ? '1px solid #0e7490' : '1px solid transparent',
-    background: isActive ? '#f0fdfa' : 'transparent',
-    color: isActive ? '#0e7490' : '#1e293b',
+    border: isActive ? '1px solid #0F4C5C' : '1px solid transparent',
+    background: isActive ? '#EEF6F8' : 'transparent',
+    color: isActive ? '#0F4C5C' : '#091E26',
     fontWeight: isActive ? 700 : 500,
     fontSize: '0.875rem',
     textDecoration: 'none',
@@ -124,9 +124,9 @@ export default function Navbar({
     left: 0,
     marginTop: 6,
     background: '#ffffff',
-    border: '1px solid #cbd5e1',
+    border: '1px solid #D1E1E6',
     borderRadius: 10,
-    boxShadow: '0 12px 30px -5px rgba(15, 23, 42, 0.15), 0 8px 12px -6px rgba(15, 23, 42, 0.08)',
+    boxShadow: '0 12px 30px -5px rgba(15, 76, 92, 0.14), 0 8px 12px -6px rgba(15, 76, 92, 0.06)',
     padding: '8px',
     minWidth: 295,
     zIndex: 1000,
@@ -141,9 +141,9 @@ export default function Navbar({
     gap: 10,
     padding: '10px 12px',
     borderRadius: 8,
-    background: isActive ? '#f0fdfa' : 'transparent',
-    color: isActive ? '#0e7490' : '#1e293b',
-    fontWeight: isActive ? 600 : 500,
+    background: isActive ? '#EEF6F8' : 'transparent',
+    color: isActive ? '#0F4C5C' : '#091E26',
+    fontWeight: isActive ? 650 : 500,
     fontSize: '0.85rem',
     textDecoration: 'none',
     cursor: 'pointer',
@@ -196,9 +196,9 @@ export default function Navbar({
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        background: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)'
+        background: '#FAF8F5',
+        borderBottom: '1px solid #D1E1E6',
+        boxShadow: '0 1px 4px 0 rgba(15, 76, 92, 0.06)'
       }}>
         <div style={{
           width: '100%',
@@ -415,12 +415,12 @@ export default function Navbar({
                 gap: 6,
                 padding: '6px 12px',
                 borderRadius: 8,
-                background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)',
+                background: 'linear-gradient(135deg, #D64550 0%, #B91C1C 100%)',
                 color: '#ffffff',
                 fontSize: '0.825rem',
                 fontWeight: 750,
-                border: '1.5px solid #EF4444',
-                boxShadow: '0 2px 10px rgba(220, 38, 38, 0.35)',
+                border: '1.5px solid #E53E3E',
+                boxShadow: '0 2px 10px rgba(214, 69, 80, 0.35)',
                 cursor: 'pointer',
                 letterSpacing: '0.2px',
                 transition: 'all 0.15s ease',
@@ -428,11 +428,11 @@ export default function Navbar({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(220, 38, 38, 0.55)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(214, 69, 80, 0.55)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 10px rgba(220, 38, 38, 0.35)';
+                e.currentTarget.style.boxShadow = '0 2px 10px rgba(214, 69, 80, 0.35)';
               }}
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
@@ -452,16 +452,16 @@ export default function Navbar({
                   gap: 6,
                   padding: '6px 10px',
                   borderRadius: 6,
-                  border: '1px solid #cbd5e1',
-                  background: '#f8fafc',
-                  color: '#1e293b',
+                  border: '1px solid #D1E1E6',
+                  background: '#FAF8F5',
+                  color: '#091E26',
                   fontSize: '0.8rem',
-                  fontWeight: 600,
+                  fontWeight: 650,
                   cursor: 'pointer'
                 }}
                 aria-label={`Language selector. Current: ${currentLangObj.name}`}
               >
-                <Languages size={14} color="#0e7490" />
+                <Languages size={14} color="#0F4C5C" />
                 <span>{currentLangObj.label}</span>
                 <ChevronDown size={12} />
               </button>
@@ -481,7 +481,7 @@ export default function Navbar({
                       }}
                     >
                       <span>{l.name}</span>
-                      {selectedLanguage === l.code && <span style={{ color: '#0e7490', fontWeight: 700 }}>✓</span>}
+                      {selectedLanguage === l.code && <span style={{ color: '#0F4C5C', fontWeight: 700 }}>✓</span>}
                     </button>
                   ))}
                 </div>
@@ -503,19 +503,19 @@ export default function Navbar({
                 gap: 5,
                 padding: '6px 10px',
                 borderRadius: 8,
-                background: isDoctorActive ? '#0e7490' : '#f1f5f9',
-                color: isDoctorActive ? '#ffffff' : '#0f172a',
+                background: isDoctorActive ? '#0F4C5C' : '#FAF8F5',
+                color: isDoctorActive ? '#ffffff' : '#0F4C5C',
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 border: '1px solid',
-                borderColor: isDoctorActive ? '#0e7490' : '#cbd5e1',
+                borderColor: isDoctorActive ? '#0F4C5C' : '#D1E1E6',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
                 whiteSpace: 'nowrap'
               }}
               title="Doctor Clinical Login & OPD Workspace"
             >
-              <Stethoscope size={14} color={isDoctorActive ? '#ffffff' : '#0e7490'} />
+              <Stethoscope size={14} color={isDoctorActive ? '#ffffff' : '#0F4C5C'} />
               <span>{doctorProfile ? 'Doctor (Active)' : 'Doctor'}</span>
             </button>
 
@@ -534,19 +534,19 @@ export default function Navbar({
                 gap: 5,
                 padding: '6px 10px',
                 borderRadius: 8,
-                background: isPatientActive ? '#0284c7' : '#f1f5f9',
-                color: isPatientActive ? '#ffffff' : '#0f172a',
+                background: isPatientActive ? '#0F4C5C' : '#FAF8F5',
+                color: isPatientActive ? '#ffffff' : '#0F4C5C',
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 border: '1px solid',
-                borderColor: isPatientActive ? '#0284c7' : '#cbd5e1',
+                borderColor: isPatientActive ? '#0F4C5C' : '#D1E1E6',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
                 whiteSpace: 'nowrap'
               }}
               title="Patient ABHA Citizen Login"
             >
-              <Users size={14} color={isPatientActive ? '#ffffff' : '#0284c7'} />
+              <Users size={14} color={isPatientActive ? '#ffffff' : '#0F4C5C'} />
               <span>{patientProfile ? 'Patient (ABHA)' : 'Patient'}</span>
             </button>
 

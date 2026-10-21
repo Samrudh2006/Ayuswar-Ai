@@ -49,12 +49,12 @@ export default function MeshGradientBackground({
     );
     if (containerRef.current) observer.observe(containerRef.current);
 
-    // 4 Fluid Color Blobs (Teal, Cyan, Slate-Blue, Amber-Gold)
+    // 4 Fluid Color Blobs — Theme 10: Banarasi Zari (Silk Petrol Teal, Zari Gold, Silk Wine)
     const blobs = [
-      { x: width * 0.2, y: height * 0.25, r: Math.min(width, height) * 0.45, vx: 0.35, vy: 0.22, color: 'rgba(0, 139, 139, 0.28)' },
-      { x: width * 0.75, y: height * 0.3, r: Math.min(width, height) * 0.48, vx: -0.28, vy: 0.3, color: 'rgba(0, 180, 216, 0.22)' },
-      { x: width * 0.45, y: height * 0.8, r: Math.min(width, height) * 0.52, vx: 0.25, vy: -0.25, color: 'rgba(14, 116, 144, 0.20)' },
-      { x: width * 0.85, y: height * 0.75, r: Math.min(width, height) * 0.38, vx: -0.2, vy: -0.18, color: 'rgba(245, 158, 11, 0.12)' }
+      { x: width * 0.2, y: height * 0.25, r: Math.min(width, height) * 0.45, vx: 0.35, vy: 0.22, color: 'rgba(15, 76, 92, 0.22)' },
+      { x: width * 0.75, y: height * 0.3, r: Math.min(width, height) * 0.48, vx: -0.28, vy: 0.3, color: 'rgba(212, 175, 55, 0.16)' },
+      { x: width * 0.45, y: height * 0.8, r: Math.min(width, height) * 0.52, vx: 0.25, vy: -0.25, color: 'rgba(23, 101, 121, 0.18)' },
+      { x: width * 0.85, y: height * 0.75, r: Math.min(width, height) * 0.38, vx: -0.2, vy: -0.18, color: 'rgba(109, 33, 79, 0.10)' }
     ];
 
     let t = 0;
@@ -63,8 +63,8 @@ export default function MeshGradientBackground({
       if (isVisibleRef.current && !prefersReducedMotion) {
         ctx.clearRect(0, 0, width, height);
 
-        // Fill subtle clean background
-        ctx.fillStyle = '#FFFFFF';
+        // Fill subtle clean Silk Cream Ivory background
+        ctx.fillStyle = '#FAF8F5';
         ctx.fillRect(0, 0, width, height);
 
         blobs.forEach((b, i) => {

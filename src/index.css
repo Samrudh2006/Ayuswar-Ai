@@ -5,21 +5,44 @@
    ========================================================================== */
 
 :root {
-  /* Brand Clinical Palette */
-  --color-primary-navy: #0A2540;
-  --color-dark-navy: #061A2D;
-  --color-teal: #008B8B;
-  --color-teal-bright: #00A896;
-  --color-teal-light: #E6F7F8;
-  --color-teal-subtle: #D0F0F3;
-  --color-amber: #D97706;
-  --color-amber-light: #FEF3C7;
-  --color-bg-light: #F8FAFC;
+  /* ==========================================================================
+     Theme 10: Banarasi Zari — Clinical Enterprise & Royal Indian Medical Sovereign
+     ========================================================================== */
+  /* Primary Clinical Base: Silk Petrol Teal (WCAG AAA Contrast > 11.4:1) */
+  --color-primary-navy: #0F4C5C;
+  --color-dark-navy: #08232C;
+  --color-teal: #0F4C5C;
+  --color-teal-bright: #176579;
+  --color-teal-light: #EEF6F8;
+  --color-teal-subtle: #D8EBEF;
+
+  /* Zari Royal Gold & Warm Accents */
+  --color-gold: #D4AF37;
+  --color-gold-hover: #C59E27;
+  --color-gold-light: #FDF9EC;
+  --color-gold-border: #E8D595;
+  --color-amber: #D4AF37;
+  --color-amber-light: #FDF9EC;
+
+  /* Banarasi Wine Accent */
+  --color-wine: #6D214F;
+  --color-wine-light: #FAF0F4;
+
+  /* Clinical Ruby Alert (Emergency / Triage) */
+  --color-ruby: #D64550;
+  --color-ruby-light: #FDF2F3;
+
+  /* Canvas & Surface (Calm on eyes, zero glare) */
+  --color-bg-light: #FAF8F5;
   --color-bg-white: #FFFFFF;
-  --color-text-main: #0B2545;
-  --color-text-muted: #5A7184;
-  --color-border: #D8E7EB;
-  --color-border-subtle: #E2E8F0;
+  --color-bg-card: #FFFFFF;
+
+  /* Text & Legibility (Strict WCAG AAA Visibility) */
+  --color-text-main: #091E26;
+  --color-text-muted: #3D545E;
+  --color-text-on-dark: #FFFFFF;
+  --color-border: #D1E1E6;
+  --color-border-subtle: #E5ECEF;
 
   /* Typography */
   --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -84,32 +107,32 @@ h6 {
 
 /* Glassmorphism & Elevation with Specular Lighting */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 12px 32px -4px rgba(10, 37, 64, 0.06);
+  border: 1px solid rgba(209, 225, 230, 0.85);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 12px 32px -4px rgba(15, 76, 92, 0.07);
   border-radius: 16px;
 }
 
 .glass-panel-subtle {
-  background: rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 18px rgba(10, 37, 64, 0.03);
+  border: 1px solid rgba(229, 236, 239, 0.85);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 18px rgba(15, 76, 92, 0.04);
   border-radius: 14px;
 }
 
 .dark-telemetry-panel {
-  background: #061626;
-  border: 1px solid rgba(0, 168, 150, 0.25);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(0, 0, 0, 0.32);
+  background: #081C24;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(7, 35, 43, 0.45);
   border-radius: 14px;
   color: #ffffff;
 }
 
-/* Tactile Button Physics (Emil Kowalski + UX Peak: scale(0.97) on :active with custom bezier) */
+/* Tactile Button Physics */
 .btn-primary {
   background-color: var(--color-primary-navy);
   color: #ffffff;
@@ -123,18 +146,105 @@ h6 {
   align-items: center;
   gap: 10px;
   transition: transform 140ms var(--ease-out), background-color 140ms ease, box-shadow 140ms ease;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 4px 14px rgba(10, 37, 64, 0.18);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 4px 14px rgba(15, 76, 92, 0.25);
 }
 
 .btn-primary:hover {
-  background-color: #0e355c;
+  background-color: #155e71;
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 8px 24px rgba(10, 37, 64, 0.28);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 8px 24px rgba(15, 76, 92, 0.35);
 }
 
 .btn-primary:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(10, 37, 64, 0.14);
+  box-shadow: 0 2px 8px rgba(15, 76, 92, 0.18);
+}
+
+.btn-outline {
+  background-color: #ffffff;
+  color: var(--color-primary-navy);
+  font-family: var(--font-display);
+  font-weight: 650;
+  padding: 11px 22px;
+  border-radius: 30px;
+  border: 1.5px solid var(--color-border);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  transition: transform 140ms var(--ease-out), border-color 140ms ease, color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(15, 76, 92, 0.04);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-teal);
+  color: var(--color-teal);
+  background-color: var(--color-teal-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 76, 92, 0.16);
+}
+
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
+.btn-teal {
+  background: linear-gradient(135deg, var(--color-teal) 0%, #176579 100%);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 650;
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms ease;
+  box-shadow: 0 4px 16px rgba(15, 76, 92, 0.35);
+}
+
+.btn-teal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 76, 92, 0.48);
+}
+
+.btn-teal:active {
+  transform: scale(0.97);
+}
+
+/* Banarasi Zari Gold Button & Badges */
+.btn-zari-gold {
+  background: linear-gradient(135deg, #D4AF37 0%, #BA9425 100%);
+  color: #08232C;
+  font-family: var(--font-display);
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 30px;
+  border: 1px solid #E8D595;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 140ms var(--ease-out), box-shadow 140ms ease;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+}
+
+.btn-zari-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+}
+
+.btn-zari-gold:active {
+  transform: scale(0.97);
+}
+
+.badge-zari-gold {
+  background: linear-gradient(135deg, #FFFDF5 0%, #FBF3D6 100%);
+  border: 1px solid #D4AF37;
+  color: #5E4605 !important;
+  font-weight: 750;
+  box-shadow: 0 1px 4px rgba(212, 175, 55, 0.15);
 }
 
 .btn-outline {

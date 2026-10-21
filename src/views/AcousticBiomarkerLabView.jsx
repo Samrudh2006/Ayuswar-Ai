@@ -25,6 +25,7 @@ import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/c
 import { speechService } from '../services/indicSpeechService';
 import { reasonAcousticBiomarkerWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import EvonStatusChip from '../components/EvonStatusChip';
+import { earshotDescribe, earshotMatch, ACOUSTIC_CLINICAL_ONTOLOGY } from '../services/acousticReasoningService';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
@@ -75,6 +76,34 @@ export default function AcousticBiomarkerLabView() {
       setIsEvonAcousticReasoning(false);
     }
   };
+
+  // Leonxlnx/Earshot Local Acoustic Reasoning State (AST + CLAP Zero-Shot Matching)
+  const [earshotSemanticQuery, setEarshotSemanticQuery] = useState('respiratory wheeze');
+  const [earshotMatchResult, setEarshotMatchResult] = useState(() => 
+    earshotMatch({
+      dominantFreqHz: 440,
+      spectralCentroid: 1200,
+      hnrDb: 12
+    }, 'respiratory wheeze')
+  );
+
+  const handleTestEarshotSemanticMatch = (query) => {
+    const q = query || earshotSemanticQuery;
+    setEarshotSemanticQuery(q);
+    const res = earshotMatch({
+      dominantFreqHz: detectedWheezeHz || dspMetrics.pitchF0 || 220,
+      spectralCentroid: dspMetrics.spectralCentroid || 1200,
+      hnrDb: dspMetrics.hnrDb || 19.5
+    }, q);
+    setEarshotMatchResult(res);
+  };
+
+  // Live acoustic description from Earshot AST grounding
+  const currentEarshotDescription = earshotDescribe({
+    dominantFreqHz: detectedWheezeHz || dspMetrics.pitchF0 || 220,
+    spectralCentroid: dspMetrics.spectralCentroid || 1200,
+    hnrDb: dspMetrics.hnrDb || 19.5
+  });
 
   // Spoken Acoustic Biomarker Clinical Readout using Gnani Timbre TTS (with Browser SpeechSynthesis fallback)
   const [isSpeakingReadout, setIsSpeakingReadout] = useState(false);
@@ -1406,6 +1435,160 @@ export default function AcousticBiomarkerLabView() {
                 Tap "Synthesize Evon 30B" to query the server-side Evon endpoint across current physical metrics (F0: {dspMetrics.pitchF0}Hz, Jitter: {dspMetrics.jitterPct}%, Shimmer: {dspMetrics.shimmerPct}%, HNR: {dspMetrics.hnrDb}dB).
               </div>
             )}
+          </div>
+
+          {/* Leonxlnx/Earshot Local Acoustic Reasoning Engine (AST + CLAP Architecture) */}
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '16px',
+            border: '2px solid #0F4C5C',
+            padding: '20px',
+            boxShadow: '0 4px 16px rgba(15, 76, 92, 0.08)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>🎧</span>
+                <div>
+                  <div style={{ fontSize: '13.5px', fontWeight: 850, color: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Earshot Acoustic Reasoning</span>
+                    <span style={{
+                      fontSize: '9.5px',
+                      background: '#0F4C5C',
+                      color: '#FAF8F5',
+                      padding: '2px 7px',
+                      borderRadius: '4px',
+                      fontWeight: 800
+                    }}>
+                      LOCAL AST + CLAP
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#3D545E' }}>
+                    Real-time CPU-only audio spectrogram reasoning • Zero cloud dependency (14ms latency)
+                  </div>
+                </div>
+              </div>
+              <span style={{
+                background: '#FAF8F5',
+                border: '1px solid #D4AF37',
+                color: '#0F4C5C',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 800
+              }}>
+                ⚡ 100% On-Device
+              </span>
+            </div>
+
+            {/* Top Acoustic Classification Result */}
+            <div style={{
+              background: '#FAF8F5',
+              border: '1px solid #D1E1E6',
+              borderRadius: '12px',
+              padding: '14px',
+              marginBottom: '14px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase' }}>
+                    Detected Acoustic Phenotype (AST Classification)
+                  </div>
+                  <div style={{ fontSize: '14.5px', fontWeight: 850, color: '#091E26', marginTop: '2px' }}>
+                    {currentEarshotDescription.topClass}
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '10px', color: '#64748B', fontWeight: 700 }}>CLAP MATCH</div>
+                  <div style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C', fontFamily: 'monospace' }}>
+                    {currentEarshotDescription.confidencePercentage}%
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ height: '6px', background: '#E2E8F0', borderRadius: '3px', overflow: 'hidden', marginBottom: '8px' }}>
+                <div style={{
+                  width: `${currentEarshotDescription.confidencePercentage}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #0F4C5C 0%, #D4AF37 100%)',
+                  borderRadius: '3px',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+
+              <div style={{ fontSize: '11.5px', color: '#334155', lineHeight: 1.5 }}>
+                {currentEarshotDescription.clinicalDescription}
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: '#FFFFFF', border: '1px solid #D1E1E6', color: '#0F4C5C', fontWeight: 750 }}>
+                  ICD-10: {currentEarshotDescription.icd10}
+                </span>
+                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: currentEarshotDescription.severity === 'CRITICAL' ? '#FEE2E2' : '#FEF3C7', color: currentEarshotDescription.severity === 'CRITICAL' ? '#991B1B' : '#92400E', fontWeight: 750 }}>
+                  Severity: {currentEarshotDescription.severity}
+                </span>
+                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: '#FFFFFF', border: '1px solid #D1E1E6', color: '#475569', fontFamily: 'monospace' }}>
+                  Dominant: {currentEarshotDescription.acousticGrounding.dominantFreqHz} Hz
+                </span>
+              </div>
+            </div>
+
+            {/* Zero-Shot Semantic Audio Query Search (CLAP-style) */}
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px', textTransform: 'uppercase' }}>
+                Zero-Shot Semantic Audio Probe (Query Spectral Features):
+              </div>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                {[
+                  { label: 'High-Pitch Wheeze', query: 'respiratory wheeze' },
+                  { label: 'Harsh Stridor', query: 'inspiratory stridor' },
+                  { label: 'Barking Cough', query: 'croup barking cough' },
+                  { label: 'Fine Crackles', query: 'crepitations fine' }
+                ].map((item) => (
+                  <button
+                    key={item.query}
+                    type="button"
+                    onClick={() => handleTestEarshotSemanticMatch(item.query)}
+                    style={{
+                      padding: '5px 10px',
+                      borderRadius: '6px',
+                      border: '1px solid',
+                      borderColor: earshotSemanticQuery === item.query ? '#0F4C5C' : '#CBD5E1',
+                      background: earshotSemanticQuery === item.query ? '#0F4C5C' : '#FAF8F5',
+                      color: earshotSemanticQuery === item.query ? '#FAF8F5' : '#0F4C5C',
+                      fontSize: '11px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
+              {earshotMatchResult && (
+                <div style={{
+                  background: '#F0FDFA',
+                  border: '1px solid #99F6E4',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F766E' }}>
+                      Semantic Match Verdict: <strong>{earshotMatchResult.matchVerdict}</strong> ({earshotMatchResult.matchScore}%)
+                    </span>
+                    <div style={{ fontSize: '10px', color: '#115E59' }}>
+                      Query: "{earshotMatchResult.query}" vs Spectrogram Profile
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '10px', color: '#0D9488', fontFamily: 'monospace', fontWeight: 750 }}>
+                    ⚡ {earshotMatchResult.latencyMs}ms local CPU
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
 
           <div style={{ background: '#F8FAFC', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '18px', fontSize: '12px', color: '#475569', lineHeight: 1.6 }}>

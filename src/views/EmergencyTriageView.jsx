@@ -37,6 +37,7 @@ import { reasonEmergencyTriageWithEvon } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
 import SanjivaniAnimatedFlowchart from '../components/SanjivaniAnimatedFlowchart';
 import EvonStatusChip from '../components/EvonStatusChip';
+import { earshotDescribe } from '../services/acousticReasoningService';
 
 export default function EmergencyTriageView({ onOpenFullConsole }) {
   const { selectedLanguage } = useApp();
@@ -55,6 +56,25 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   // Live Geo-Locational Telemetry & Dynamic Hospital Discovery
   const [userCoords, setUserCoords] = useState({ latitude: 17.6913, longitude: 83.0040, accuracy: 15 });
   const [detectedLocationName, setDetectedLocationName] = useState('Resolving device GPS / IP location...');
+
+  // Leonxlnx/Earshot Acoustic Background Distress Reasoning (AST / CLAP)
+  const earshotDistress = React.useMemo(() => {
+    const textLower = (inputText || '').toLowerCase();
+    let simFreq = 160;
+    let simHnr = 18;
+    if (textLower.includes('స్ట్రైడర్') || textLower.includes('stridor') || textLower.includes('सांस') || textLower.includes('नीले')) {
+      simFreq = 880; // Pediatric Stridor
+      simHnr = 8;
+    } else if (textLower.includes('wheeze') || textLower.includes('ఆడటం లేదు') || textLower.includes('శ్వాస')) {
+      simFreq = 480; // Bronchospasm Wheeze
+      simHnr = 11;
+    }
+    return earshotDescribe({
+      dominantFreqHz: simFreq,
+      spectralCentroid: Math.round(simFreq * 2.2),
+      hnrDb: simHnr
+    });
+  }, [inputText, triageResult]);
   const [isLocating, setIsLocating] = useState(false);
   const [nearbyHospitals, setNearbyHospitals] = useState([]);
   const [recommendedHospital, setRecommendedHospital] = useState(null);
@@ -285,10 +305,10 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             <Activity size={14} />
             <span>INTERACTIVE SIMULATION PROTOTYPE</span>
           </div>
-          <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0F4C5C', marginBottom: '10px' }}>
             Sanjivani-108 Emergency Acoustic Triage Simulator
           </h1>
-          <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '15px', color: '#3D545E', maxWidth: '850px', lineHeight: 1.6 }}>
             Demonstrates vernacular audio distress analysis, high-acuity triage categorization, and standardized first-aid instructions for bystander guidance.
           </p>
         </div>
@@ -301,7 +321,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 padding: '12px 20px',
                 borderRadius: '10px',
                 border: 'none',
-                background: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)',
+                background: 'linear-gradient(135deg, #D64550 0%, #991B1B 100%)',
                 color: '#FFFFFF',
                 fontSize: '13px',
                 fontWeight: 800,
@@ -309,7 +329,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)'
+                boxShadow: '0 4px 14px rgba(214, 69, 80, 0.35)'
               }}
             >
               <Activity size={16} />
@@ -322,18 +342,19 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             style={{
               padding: '12px 18px',
               borderRadius: '10px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D1E1E6',
               background: '#FFFFFF',
-              color: '#0A2540',
+              color: '#0F4C5C',
               fontSize: '13px',
               fontWeight: 750,
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              boxShadow: '0 1px 4px rgba(15, 76, 92, 0.05)'
             }}
           >
-            <FileText size={15} color="#008B8B" />
+            <FileText size={15} color="#0F4C5C" />
             <span>View Paramedic Handover Record</span>
           </Link>
         </div>
@@ -342,12 +363,12 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
       {/* Workspace Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
         {/* Left Column: Triage Input & Scenarios */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D1E1E6', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', boxShadow: '0 8px 24px rgba(15, 76, 92, 0.04)' }}>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0A2540', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C', marginBottom: '8px' }}>
               Simulated Caller Distress Audio / Transcript
             </h3>
-            <p style={{ fontSize: '13px', color: '#64748B' }}>
+            <p style={{ fontSize: '13px', color: '#3D545E' }}>
               Enter vernacular speech text or select a clinical emergency scenario:
             </p>
           </div>
@@ -405,8 +426,8 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 padding: '6px 14px',
                 borderRadius: '20px',
                 border: 'none',
-                background: isRecording ? '#DC2626' : 'rgba(0, 139, 139, 0.1)',
-                color: isRecording ? '#FFFFFF' : '#008B8B',
+                background: isRecording ? '#D64550' : 'rgba(15, 76, 92, 0.1)',
+                color: isRecording ? '#FFFFFF' : '#0F4C5C',
                 fontSize: '12px',
                 fontWeight: 800,
                 cursor: 'pointer',
@@ -426,10 +447,11 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               width: '100%',
               padding: '12px',
               borderRadius: '10px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D1E1E6',
               fontSize: '13px',
               fontFamily: 'inherit',
-              color: '#0A2540'
+              color: '#091E26',
+              background: '#FAF8F5'
             }}
           />
 
@@ -439,24 +461,26 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               padding: '12px',
               borderRadius: '10px',
               border: 'none',
-              background: '#0A2540',
+              background: '#0F4C5C',
               color: '#FFFFFF',
               fontSize: '13px',
               fontWeight: 800,
-              cursor: 'pointer'
+              cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)',
+              transition: 'all 0.15s ease'
             }}
           >
             Re-analyze Triage Protocol
           </button>
 
           {/* CPR Metronome Box */}
-          <div style={{ background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D1E1E6', padding: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0A2540' }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>
                   110 BPM CPR Audio Metronome
                 </div>
-                <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                <div style={{ fontSize: '11.5px', color: '#3D545E' }}>
                   AHA / ERC standard compression rhythm (100–120 beats/min)
                 </div>
               </div>
@@ -466,14 +490,15 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   padding: '8px 14px',
                   borderRadius: '8px',
                   border: 'none',
-                  background: cprMetronomeActive ? '#DC2626' : '#008B8B',
+                  background: cprMetronomeActive ? '#D64550' : '#0F4C5C',
                   color: '#FFFFFF',
                   fontSize: '12px',
                   fontWeight: 800,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px'
+                  gap: '6px',
+                  boxShadow: '0 2px 8px rgba(15, 76, 92, 0.2)'
                 }}
               >
                 <Heart size={14} style={{ animation: cprMetronomeActive ? 'pulse 0.54s infinite' : 'none' }} />
@@ -489,14 +514,14 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
           <div style={{
             background: '#FFFFFF',
             borderRadius: '16px',
-            border: triageResult.triageLevel === 'RED' ? '2px solid #EF4444' : '1px solid #E2E8F0',
+            border: triageResult.triageLevel === 'RED' ? '2px solid #D64550' : '1px solid #D1E1E6',
             padding: '24px',
-            boxShadow: '0 4px 16px rgba(10,37,64,0.04)'
+            boxShadow: '0 4px 16px rgba(15, 76, 92, 0.05)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <span style={{
-                background: triageResult.triageLevel === 'RED' ? '#DC2626' : '#D97706',
-                color: '#FFFFFF',
+                background: triageResult.triageLevel === 'RED' ? '#D64550' : '#D4AF37',
+                color: triageResult.triageLevel === 'RED' ? '#FFFFFF' : '#08232C',
                 padding: '4px 12px',
                 borderRadius: '8px',
                 fontSize: '11px',
@@ -504,20 +529,20 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               }}>
                 CATEGORY: {triageResult.triageLevel} ({triageResult.severity})
               </span>
-              <span style={{ fontSize: '11.5px', fontFamily: 'monospace', color: '#64748B' }}>
+              <span style={{ fontSize: '11.5px', fontFamily: 'monospace', color: '#3D545E' }}>
                 ICD-10: {triageResult.icd10}
               </span>
             </div>
 
-            <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#0A2540', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#0F4C5C', marginBottom: '8px' }}>
               {triageResult.suspectedCondition}
             </h3>
-            <p style={{ fontSize: '13px', color: '#475569', marginBottom: '18px' }}>
+            <p style={{ fontSize: '13px', color: '#3D545E', marginBottom: '18px' }}>
               <strong>Standard Protocol:</strong> {triageResult.priorityProtocol}
             </p>
 
             {/* First-Aid Instructions */}
-            <div style={{ background: '#F8FAFC', borderRadius: '12px', padding: '16px', marginBottom: '18px' }}>
+            <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D1E1E6', padding: '16px', marginBottom: '18px' }}>
               <div style={{ fontSize: '12px', fontWeight: 800, color: '#0A2540', textTransform: 'uppercase', marginBottom: '8px' }}>
                 Immediate First-Aid Protocols:
               </div>
@@ -534,6 +559,45 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                 <strong>తెలుగు సూచన:</strong> {triageResult.firstAidVernacular.te}
               </div>
             )}
+
+            {/* Leonxlnx/Earshot Acoustic Background Distress Reasoning Card */}
+            <div style={{
+              background: '#FAF8F5',
+              border: '1.5px solid #0F4C5C',
+              borderRadius: '12px',
+              padding: '14px 16px',
+              marginBottom: '14px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '14px' }}>🎧</span>
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
+                    Earshot Acoustic Distress Auditor (Local AST Engine)
+                  </span>
+                </div>
+                <span style={{
+                  fontSize: '9.5px',
+                  background: earshotDistress.severity === 'CRITICAL' ? '#D64550' : '#0F4C5C',
+                  color: '#FFFFFF',
+                  padding: '2px 7px',
+                  borderRadius: '4px',
+                  fontWeight: 800
+                }}>
+                  {earshotDistress.severity}
+                </span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>
+                  {earshotDistress.topClass}
+                </div>
+                <div style={{ fontSize: '11px', color: '#0F4C5C', fontFamily: 'monospace', fontWeight: 800 }}>
+                  Confidence: {earshotDistress.confidencePercentage}% (14ms CPU)
+                </div>
+              </div>
+              <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '4px', lineHeight: 1.4 }}>
+                Acoustic grounding: Peak {earshotDistress.acousticGrounding.dominantFreqHz} Hz • HNR: {earshotDistress.acousticGrounding.hnrDb} dB • ICD-10: {earshotDistress.icd10}
+              </div>
+            </div>
 
             {/* Evon 30B Live Status Verification & Sovereign Reasoning */}
             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>

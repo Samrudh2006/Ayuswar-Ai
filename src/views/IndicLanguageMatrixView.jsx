@@ -83,38 +83,38 @@ export default function IndicLanguageMatrixView() {
     <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#008B8B', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
         </Link>
-        <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#64748B', fontSize: '13px' }}>Resources</span>
-        <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#0A2540', fontSize: '13px', fontWeight: 700 }}>Indic Language Matrix</span>
+        <span style={{ color: '#D1E1E6' }}>/</span>
+        <span style={{ color: '#3D545E', fontSize: '13px' }}>Resources</span>
+        <span style={{ color: '#D1E1E6' }}>/</span>
+        <span style={{ color: '#0F4C5C', fontSize: '13px', fontWeight: 700 }}>Indic Language Matrix</span>
       </div>
 
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,139,139,0.1)', color: '#008B8B', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <Globe size={14} />
           <span>VERNACULAR LANGUAGE CAPABILITY SPECIFICATION</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0A2540', marginBottom: '10px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0F4C5C', marginBottom: '10px' }}>
           Indic Language & Dialect Support Matrix
         </h1>
-        <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6 }}>
+        <p style={{ fontSize: '15px', color: '#3D545E', maxWidth: '850px', lineHeight: 1.6 }}>
           Transparent documentation of Indic language speech recognition (ASR), speech synthesis (TTS), and regional colloquial symptom metaphors supported in this demonstration prototype.
         </p>
       </div>
 
       {/* Honest Provider Status Callout */}
-      <div style={{ background: '#F0FDFA', border: '1.5px solid #99F6E4', borderRadius: '14px', padding: '18px 22px', marginBottom: '32px', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-        <Shield size={22} color="#0D9488" style={{ marginTop: '2px', flexShrink: 0 }} />
+      <div style={{ background: '#EEF6F8', border: '1.5px solid #D8EBEF', borderRadius: '14px', padding: '18px 22px', marginBottom: '32px', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+        <Shield size={22} color="#0F4C5C" style={{ marginTop: '2px', flexShrink: 0 }} />
         <div>
-          <div style={{ fontSize: '14px', fontWeight: 800, color: '#115E59', marginBottom: '4px' }}>
+          <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>
             Provider Transparency Notice: Client Web Speech API Active
           </div>
-          <p style={{ fontSize: '13px', color: '#134E4A', lineHeight: 1.5, margin: 0 }}>
+          <p style={{ fontSize: '13px', color: '#3D545E', lineHeight: 1.5, margin: 0 }}>
             In this prototype deployment, speech recognition and synthesis are powered directly by the browser's standard W3C Web Speech API. Word Error Rate (WER) metrics depend on the browser engine (e.g. Google Chrome / Microsoft Edge). Unmeasured or speculative accuracy figures are strictly omitted.
           </p>
         </div>
@@ -133,8 +133,8 @@ export default function IndicLanguageMatrixView() {
               style={{
                 background: '#FFFFFF',
                 borderRadius: '16px',
-                border: isSelected ? '2px solid #008B8B' : '1px solid #E2E8F0',
-                boxShadow: isSelected ? '0 10px 25px rgba(0,139,139,0.1)' : '0 4px 14px rgba(10,37,64,0.04)',
+                border: isSelected ? '2px solid #0F4C5C' : '1px solid #D1E1E6',
+                boxShadow: isSelected ? '0 10px 25px rgba(15, 76, 92, 0.12)' : '0 4px 14px rgba(15, 76, 92, 0.04)',
                 padding: '24px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -144,19 +144,19 @@ export default function IndicLanguageMatrixView() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0A2540', marginBottom: '2px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0F4C5C', marginBottom: '2px' }}>
                     {item.lang}
                   </h3>
-                  <span style={{ fontSize: '12px', color: '#64748B', fontFamily: 'monospace' }}>
+                  <span style={{ fontSize: '12px', color: '#3D545E', fontFamily: 'monospace' }}>
                     Language Code: {item.code}
                   </span>
                 </div>
                 <button
                   onClick={() => setSelectedLanguage(item.code)}
                   style={{
-                    background: isSelected ? '#008B8B' : '#F1F5F9',
-                    color: isSelected ? '#FFFFFF' : '#0F172A',
-                    border: 'none',
+                    background: isSelected ? '#0F4C5C' : '#FAF8F5',
+                    color: isSelected ? '#FFFFFF' : '#0F4C5C',
+                    border: isSelected ? 'none' : '1px solid #D1E1E6',
                     padding: '6px 14px',
                     borderRadius: '8px',
                     fontSize: '12px',
@@ -164,7 +164,8 @@ export default function IndicLanguageMatrixView() {
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '4px',
+                    boxShadow: isSelected ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none'
                   }}
                 >
                   {isSelected ? <CheckCircle2 size={13} /> : null}
@@ -173,10 +174,10 @@ export default function IndicLanguageMatrixView() {
               </div>
 
               {/* Engine Details */}
-              <div style={{ background: '#F8FAFC', borderRadius: '10px', padding: '12px 14px', fontSize: '12.5px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ background: '#FAF8F5', borderRadius: '10px', border: '1px solid #E5ECEF', padding: '12px 14px', fontSize: '12.5px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748B' }}>Speech-to-Text (ASR):</span>
-                  <span style={{ color: '#0A2540', fontWeight: 700 }}>{item.asrEngine}</span>
+                  <span style={{ color: '#3D545E' }}>Speech-to-Text (ASR):</span>
+                  <span style={{ color: '#091E26', fontWeight: 700 }}>{item.asrEngine}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#64748B' }}>Text-to-Speech (TTS):</span>

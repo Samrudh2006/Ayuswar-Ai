@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import DeepamHeartbeatEmblem from './DeepamHeartbeatEmblem';
 
 /**
  * AyuSwarLogoReveal
  * Clean, prominent, high-visibility Brand Mark & Typography for AyuSwar AI.
- * 
- * Fixes resolved:
- * 1. Removed double concentric circles and crossed circle artifact.
- * 2. Scaled and clipped the inner emblem to 44px circle with overflow:hidden so 
- *    the gray square canvas is completely eliminated and only the silver-teal 
- *    clinical shield fills the badge.
- * 3. Elevated typography to bold 1.35rem with crisp amber-gold AI pill badge and 
- *    emerald acoustic pulse wave, ensuring 100% legibility at standard 100% desktop scale.
+ * Powered by Concept #21 "Deepam Heartbeat" (Score 38/40 — Highest Overall in Logo Evaluation):
+ * "A diya flame becomes a coral heartbeat pulse line, ringed by sound —
+ * the lamp of life on the pulse of life."
  */
 export default function AyuSwarLogoReveal({
   variant = 'navbar', // 'navbar' | 'hero' | 'standalone'
@@ -50,36 +46,8 @@ export default function AyuSwarLogoReveal({
       }}
       title="AyuSwar AI — Ambient Clinical Voice OS"
     >
-      {/* Crisp Circular Brand Emblem Badge */}
-      <div style={{
-        position: 'relative',
-        width: '46px',
-        height: '46px',
-        borderRadius: '50%',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#071F36',
-        border: '2px solid #008B8B',
-        boxShadow: '0 2px 12px rgba(0, 139, 139, 0.32)',
-        flexShrink: 0,
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease'
-      }}>
-        {/* Emblem Image cleanly zoomed by 1.18x to clip out square gray background */}
-        <img
-          src="/assets/ayuswar_master_emblem.png"
-          alt="AyuSwar AI Emblem"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: 'scale(1.18)',
-            display: 'block',
-            filter: 'contrast(1.1) brightness(1.05)'
-          }}
-        />
-      </div>
+      {/* Concept #21: Deepam Heartbeat SVG Vector Emblem */}
+      <DeepamHeartbeatEmblem size={44} animated={true} />
 
       {/* Brand Typography & Pulse Line */}
       {showText && (
@@ -88,30 +56,31 @@ export default function AyuSwarLogoReveal({
             <span style={{
               fontSize: '1.35rem',
               fontWeight: 800,
-              color: '#0F172A',
+              color: '#091E26',
               letterSpacing: '-0.4px',
               display: 'flex',
               alignItems: 'baseline',
               gap: '1px'
             }}>
-              Ayu<span style={{ color: '#008B8B' }}>Swar</span>
+              Ayu<span style={{ color: '#0F4C5C' }}>Swar</span>
             </span>
 
-            {/* Vibrant High-Contrast AI Badge */}
+            {/* Zari Gold High-Contrast AI Badge */}
             <span style={{
-              background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-              color: '#FFFFFF',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #BA9425 100%)',
+              color: '#08232C',
               fontSize: '0.78rem',
               fontWeight: 900,
               padding: '2px 7px',
               borderRadius: '6px',
               letterSpacing: '0.5px',
-              boxShadow: '0 1px 4px rgba(217, 119, 6, 0.35)'
+              border: '1px solid #E8D595',
+              boxShadow: '0 1px 4px rgba(212, 175, 55, 0.35)'
             }}>
               AI
             </span>
 
-            {/* Smooth Emerald Acoustic Waveform Indicator */}
+            {/* Zari Gold Frequency Waveform Indicator */}
             <div style={{ width: '38px', height: '16px', display: 'flex', alignItems: 'center' }}>
               <svg
                 key={animationKey}
@@ -121,7 +90,7 @@ export default function AyuSwarLogoReveal({
                 <path
                   d="M 1 8 L 6 8 L 11 2 L 16 14 L 21 4 L 26 8 L 37 8"
                   fill="none"
-                  stroke="#10B981"
+                  stroke="#D4AF37"
                   strokeWidth="2.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
