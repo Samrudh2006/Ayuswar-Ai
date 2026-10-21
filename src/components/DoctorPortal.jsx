@@ -53,7 +53,7 @@ import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import DoctorClinicalLibraryTab from './doctor/DoctorClinicalLibraryTab';
 import DoctorAiAssistantTab from './doctor/DoctorAiAssistantTab';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
-import { downloadFhirJson, checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
+import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 
 /**
@@ -93,7 +93,7 @@ export default function DoctorPortal({
   const [reportSearchTerm, setReportSearchTerm] = useState('');
   const [reportCategoryFilter, setReportCategoryFilter] = useState('all');
   const [dicomInvert, setDicomInvert] = useState(false);
-  const [dicomContrast, setDicomContrast] = useState(100);
+  // dicomContrast omitted
   const [fhirToast, setFhirToast] = useState(null);
   const [plannedToast, setPlannedToast] = useState(null);
   const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] = useState(false);
@@ -125,7 +125,7 @@ export default function DoctorPortal({
   // AyuVision Blister Pack OCR & NFI Formulary Suite
   const [ocrSampleIdx, setOcrSampleIdx] = useState(0);
   const [isOcrScanning, setIsOcrScanning] = useState(false);
-  const [ocrScanComplete, setOcrScanComplete] = useState(false);
+  // ocrScanComplete omitted
   const [printableRxData, setPrintableRxData] = useState(null);
 
   // Physician Settings State Suite
@@ -2106,7 +2106,7 @@ export default function DoctorPortal({
                         gender: 'Male',
                         diagnosis: 'Type-2 Diabetes Mellitus & Dyslipidemia (E11.9)',
                         vitals: 'BP: 140/90 mmHg, HR: 88 bpm, RBS: 168 mg/dL',
-                        date: new Date().toLocaleDateString('en-GB'),
+                        date: '23/10/2026',
                         medications: [
                           { name: 'Pantoprazole 40mg (పసుపు గోళీ)', timing: '08:30 AM (టిఫిన్ ముందు)', days: '30 Days', generic: 'Pantoprazole 40mg (Jan Aushadhi - ₹28)' },
                           { name: 'Metformin 500mg SR (గులాబీ గోళీ)', timing: '08:30 PM (భోజనం తర్వాత)', days: '30 Days', generic: 'Metformin 500mg SR (Jan Aushadhi - ₹35)' }
