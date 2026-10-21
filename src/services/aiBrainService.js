@@ -10,6 +10,7 @@
  */
 
 import { queryEvonServer, EVON_MODEL_METADATA } from './gnaniEvonService';
+import { retrieveGroundedClinicalKnowledge } from '../data/clinicalRagKnowledgeBase';
 
 export const AI_PROVIDERS = [
   { 
@@ -21,7 +22,7 @@ export const AI_PROVIDERS = [
   },
   { id: 'local_offline', name: 'Heuristic Rule-Based Demonstrator (Local Fallback)', model: 'Rule-Based-Indic-Demo' },
   { id: 'gemini_free', name: 'Google Gemini Free Tier (gemini-1.5-flash / 2.5-flash)', model: 'gemini-1.5-flash' },
-  { id: 'groq_opensource', name: 'Groq Cloud (Llama-3-8B-Instant / Open Source)', model: 'llama-3.1-8b-instant' },
+  { id: 'groq_opensource', name: 'Groq Cloud (Open Source Qwen-27B / Llama 800t/s)', model: 'qwen/qwen3.8-27b' },
   { id: 'huggingface_biomistral', name: 'Hugging Face Inference (BioMistral-7B Medical)', model: 'BioMistral/BioMistral-7B' },
   { id: 'ollama_local', name: 'Local Ollama (http://localhost:11434 / MedLlama)', model: 'llama3:8b' }
 ];
@@ -57,16 +58,20 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
     return "Please ask a question regarding hospital navigation, doctor appointment timings, or spoken prescription features.";
   }
 
+  // Pre-fetch Grounded RAG Knowledge
+  const ragMatch = retrieveGroundedClinicalKnowledge(cleanPrompt, role);
+  const enrichedContext = ragMatch?.answer ? { ...context, ragKnowledge: ragMatch.answer } : context;
+
   const { provider, apiKey } = getAiConfig();
 
   // 1. Gnani Evon 30B Sovereign Indic Reasoning (Secure Server-Side Route)
   if (provider === 'gnani_evon_30b') {
     try {
-      const response = await callGnaniEvonApi(cleanPrompt, role, context);
+      const response = await callGnaniEvonApi(cleanPrompt, role, enrichedContext);
       if (response) return response;
     } catch (err) {
       console.warn("Gnani Evon server route unreachable; using honest fallback guidance:", err.message);
-      const fallback = generateSafeDemonstrationResponse(cleanPrompt, role, context);
+      const fallback = generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
       return `🛡️ [FALLBACK: DETERMINISTIC GUIDANCE (Evon Unavailable)]\n\n${fallback}`;
     }
   }
@@ -75,13 +80,13 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
   if (apiKey && provider !== 'local_offline' && provider !== 'gnani_evon_30b') {
     try {
       if (provider === 'gemini_free') {
-        const response = await callGeminiApi(cleanPrompt, apiKey, role, context);
+        const response = await callGeminiApi(cleanPrompt, apiKey, role, enrichedContext);
         if (response) return response;
       } else if (provider === 'groq_opensource') {
-        const response = await callGroqApi(cleanPrompt, apiKey, role, context);
+        const response = await callGroqApi(cleanPrompt, apiKey, role, enrichedContext);
         if (response) return response;
       } else if (provider === 'huggingface_biomistral') {
-        const response = await callHuggingFaceApi(cleanPrompt, apiKey, role, context);
+        const response = await callHuggingFaceApi(cleanPrompt, apiKey, role, enrichedContext);
         if (response) return response;
       }
     } catch (err) {
@@ -90,7 +95,7 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
   }
 
   // Safe heuristic conversational demonstration
-  return generateSafeDemonstrationResponse(cleanPrompt, role, context);
+  return generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
 }
 
 async function callGnaniEvonApi(prompt, role, context) {
@@ -132,27 +137,37 @@ async function callGeminiApi(prompt, apiKey, role, context) {
 async function callGroqApi(prompt, apiKey, role, context) {
   const systemPrompt = getSystemPromptForRole(role, context);
   const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
+  const modelsToTry = ['qwen/qwen3.8-27b', 'openai/gpt-oss-20b', 'llama-3.1-8b-instant'];
 
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: `${systemPrompt}\nDo not provide autonomous prescriptions or unverified diagnoses.` },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.3,
-      max_tokens: 350
-    })
-  });
+  for (const model of modelsToTry) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: 'system', content: `${systemPrompt}\nDo not provide autonomous prescriptions or unverified diagnoses.` },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.3,
+          max_tokens: 350
+        })
+      });
 
-  if (!res.ok) throw new Error(`Groq API returned status ${res.status}`);
-  const data = await res.json();
-  return data?.choices?.[0]?.message?.content?.trim() || null;
+      if (res.ok) {
+        const data = await res.json();
+        const text = data?.choices?.[0]?.message?.content?.trim();
+        if (text) return text;
+      }
+    } catch {
+      // Continue to next model fallback
+    }
+  }
+  return null;
 }
 
 async function callHuggingFaceApi(prompt, apiKey, role, context) {
@@ -182,19 +197,32 @@ async function callHuggingFaceApi(prompt, apiKey, role, context) {
 }
 
 function getSystemPromptForRole(role, context) {
+  let basePrompt = "";
   if (role === 'doctor') {
-    return "You are AyuSwar Clinical Co-Pilot draft assistant. Provide structured draft documentation notes adhering to standard medical terminology. All outputs require attending clinician review and signature.";
+    basePrompt = "You are AyuSwar Clinical Knowledge Co-Pilot. Provide structured draft clinical notes adhering strictly to established medical terminology, ICD-10 crosswalks, and hospital knowledge. All draft notes require attending clinician review and physical signature. Do not invent unverified clinical assertions.";
+  } else if (role === 'patient') {
+    basePrompt = "You are AyuSwar Hospital Knowledge & Wellness Guide. Provide verified healthcare knowledge, clinic navigation, PMBJP Jan Aushadhi generic medicine savings facts, and healthy lifestyle information. Strictly DO NOT prescribe drug dosages or diagnose diseases autonomously. Direct users to consult treating physicians for medical care, and direct emergency symptoms immediately to 108 / 112.";
+  } else {
+    basePrompt = "You are AyuSwar Hospital Front Desk Knowledge Assistant. Guide citizens with OPD clinic navigation, registration token protocols, ABHA digital health account information, and general clinic questions in Telugu, Hindi, or English based strictly on hospital guidelines.";
   }
-  if (role === 'patient') {
-    return "You are AyuSwar Virtual Assistant. Provide general wellness guidance and hospital navigation assistance. Do not diagnose diseases or prescribe drug dosages. Advise patients to consult a licensed doctor for medical care.";
+
+  if (context?.ragKnowledge) {
+    basePrompt += `\n\n[VERIFIED HOSPITAL RAG KNOWLEDGE BASE]:\n${context.ragKnowledge}\nAnswer user queries accurately grounded in this verified knowledge snippet.`;
   }
-  return "You are AyuSwar Hospital Front Desk Assistant. Guide citizens with clinic navigation, OPD registration steps, and general queries in English, Telugu, or Hindi.";
+
+  return basePrompt;
 }
 
 /**
  * Safe, Non-Diagnostic Local Heuristic Fallback
  */
 function generateSafeDemonstrationResponse(q, role, context) {
+  // 1. High-Precision Grounded RAG Knowledge Base Retrieval
+  const ragMatch = retrieveGroundedClinicalKnowledge(q, role);
+  if (ragMatch?.answer) {
+    return ragMatch.answer;
+  }
+
   const query = q.toLowerCase();
 
   // 1. EMERGENCY TRIAGE SAFETY GUARD
