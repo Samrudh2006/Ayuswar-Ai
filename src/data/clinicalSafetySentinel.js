@@ -8,7 +8,7 @@
  * 4. National Formulary of India (NFI) & PMBJP Open Database
  */
 
-import { lookupPmbjpDrug, PMBJP_FORMULARY_DATABASE } from './pmbjpFormulary';
+import { lookupPmbjpDrug, PMBJP_FORMULARY_DATABASE } from './pmbjpFormulary.js';
 
 export const DRUG_INTERACTION_DATABASE = [
   {

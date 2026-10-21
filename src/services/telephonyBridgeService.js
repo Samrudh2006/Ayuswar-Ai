@@ -2,13 +2,16 @@
  * AyuSwar AI — Telephony & Cellular SIP Bridge (telephonyBridgeService.js)
  * 
  * Phase 6: Full-Duplex SIP / VoIP Telephony Gateway
- * Bridges cellular phone calls (108 / 112 / GSM SIP Trunks) into the Gnani Prisma & Timbre stack.
+ * Architectural interface bridging cellular phone calls (108 / 112 / GSM SIP Trunks) 
+ * into the Gnani Prisma & Timbre stack.
+ * NOTE: Operates via WebRTC browser audio simulation; physical PRI/PSTN trunk integration planned.
  */
 
 export class TelephonyBridgeService {
   constructor() {
     this.activeCalls = new Map();
     this.gatewayStatus = 'READY';
+    this.gatewayMode = 'SIMULATION (Browser WebRTC Audio Bridge)';
   }
 
   /**
@@ -28,7 +31,8 @@ export class TelephonyBridgeService {
       location,
       startTime: Date.now(),
       status: 'STREAMING',
-      audioCodec: 'G.711 / Linear 16kHz PCM',
+      audioCodec: 'G.711 / Linear 16kHz PCM (Simulated Audio Stream)',
+      gatewayMode: 'SIMULATION',
       latencyMs: 185
     };
 
