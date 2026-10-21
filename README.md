@@ -15,7 +15,9 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-ayuswar--ai.vercel.app-0F4C5C?style=for-the-badge&logo=vercel&logoColor=white)](https://ayuswar-ai.vercel.app/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Test Suite](https://img.shields.io/badge/Tests-22%2F22%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![Test Suite](https://img.shields.io/badge/Unit%20Tests-29%2F29%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![E2E Suite](https://img.shields.io/badge/Puppeteer%20E2E-5%2F5%20PASSING-0F4C5C?style=for-the-badge&logo=puppeteer&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![CodeRabbit](https://img.shields.io/badge/CodeRabbit-REVIEW%20CLEAN-34D399?style=for-the-badge&logo=githubactions&logoColor=black)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Acoustic Engine](https://img.shields.io/badge/Acoustic%20AI-Earshot%20AST%2BCLAP-D4AF37?style=for-the-badge&logo=soundcharts&logoColor=08232C)](https://github.com/Leonxlnx/earshot)
 [![Compliance](https://img.shields.io/badge/Schema-HL7%20FHIR%20R4%20%7C%20ABDM-008B8B?style=for-the-badge)](https://abdm.gov.in/)
 
@@ -161,12 +163,12 @@ AyuSwar AI enforces strict quality and safety guarantees via an automated CLI te
 npm test
 ```
 
-### Passing Test Suites (22 / 22 Tests Passing):
-- ✔️ **Security Isolation:** Zero client-side API secret leakage (`VITE_GNANI_*` strictly banned).
-- ✔️ **Compliance Claims:** Verified that no unbacked claims (e.g., fake GPU server claims or unsubstantiated WER numbers) exist.
-- ✔️ **FHIR R4 Integrity:** Validates that draft prescriptions adhere to HL7 FHIR Bundle and Composition schemas.
-- ✔️ **Acoustic Bounds:** Confirms Earshot DSP metrics stay within valid mathematical ranges ($F_0 \in [50, 2000]\text{ Hz}$, HNR $\ge 0\text{ dB}$).
-- ✔️ **Deterministic Fallback:** Verifies that all network failures seamlessly fall back to local rule-based safety protocols.
+### Passing Automated Suites (29 / 29 Unit & Workflow Tests + 5 E2E Tests Passing):
+- ✔️ **Security & Cloud Isolation (22 Contract Tests):** Zero client-side API secret leakage (`VITE_GNANI_*` strictly banned), honest proxy telemetry, zero fabricated AI reasoning traces.
+- ✔️ **Clinical Safety Sentinel (7 Workflow Tests):** Pharmacovigilance DDI detection (Warfarin + Ciprofloxacin, Dual RAAS blockade), MEWS physiological risk scoring, PMBJP Jan Aushadhi 70-85% savings calculations, Indic colloquial to ICD-10 crosswalk, and ABDM FHIR R4 JSON serialization.
+- ✔️ **Headless Browser E2E Suite (5 Tests):** Full Puppeteer verification across Landing Page, Acoustic Lab oscilloscope, Sanjivani Emergency Triage, Doctor Portal, and Citizen Health Locker.
+- ✔️ **CodeRabbit AI Review:** Clean bill of health with 0 unresolved findings.
+- ✔️ **Oxlint Static Analysis:** 0 errors across 111 source files.
 
 ---
 
