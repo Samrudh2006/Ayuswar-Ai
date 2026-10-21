@@ -1351,6 +1351,12 @@ body {
     border-radius: 18px !important;
     padding: 20px 16px !important;
   }
+
+  /* Mobile Bottom Bar & Floating Assistant Viewport Clearance (Resolves Audit Finding 1) */
+  .floating-assistant-container {
+    bottom: 84px !important;
+    right: 16px !important;
+  }
 }
 
 
