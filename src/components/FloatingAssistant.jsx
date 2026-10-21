@@ -104,6 +104,7 @@ export default function FloatingAssistant({
 
   // Timer reference for listening countdown and speech simulation
   const timerRef = useRef(null);
+  const handleProcessQuestionRef = useRef(null);
   const speechRecognitionRef = useRef(null);
 
   // Clean speech synthesis on unmount
@@ -146,7 +147,7 @@ export default function FloatingAssistant({
           recognition.onend = () => {
             // Once user stops speaking, process question through Brain
             if (liveTranscript && !liveTranscript.startsWith('Listening to')) {
-              handleProcessQuestion(liveTranscript);
+              if (handleProcessQuestionRef.current) handleProcessQuestionRef.current(liveTranscript);
             }
           };
 
@@ -166,7 +167,7 @@ export default function FloatingAssistant({
           if (prev <= 1) {
             clearInterval(timerRef.current);
             // Auto transition to Speaking state with processed answer
-            handleProcessQuestion(liveTranscript.startsWith('Listening to') ? (effectiveRole === 'receptionist' ? 'book opd token' : 'cough and fever') : liveTranscript);
+            const autoQ = liveTranscript.startsWith('Listening to') ? (effectiveRole === 'receptionist' ? 'book opd token' : 'cough and fever') : liveTranscript; if (handleProcessQuestionRef.current) handleProcessQuestionRef.current(autoQ);
             return 0;
           }
           return prev - 1;
@@ -185,6 +186,7 @@ export default function FloatingAssistant({
 
   // Process question via AyuSwar Brain (API / Open-Source / Local Indic NLP)
   const handleProcessQuestion = async (queryText) => {
+  handleProcessQuestionRef.current = handleProcessQuestion;
     setIsProcessingQuery(true);
     setAssistantState('speaking');
     

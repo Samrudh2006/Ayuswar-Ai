@@ -86,7 +86,7 @@ export default function EmergencyHandoverView() {
               TRIAGE RED: CATEGORY 1
             </div>
             <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>
-              Handover ID: SIM-HO-{Date.now().toString().slice(-6)}
+              Handover ID: SIM-HO-849201
             </div>
           </div>
         </div>

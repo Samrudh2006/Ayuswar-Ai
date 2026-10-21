@@ -125,7 +125,6 @@ const FORMULARY_DATABASE = [
 ];
 
 export default function PillVisionScannerModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
 
   const [activeMode, setActiveMode] = useState('camera'); // 'camera' | 'upload' | 'preset'
   const [selectedPreset, setSelectedPreset] = useState('pantoprazole');
@@ -225,8 +224,8 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
       );
 
       // Extract batch / expiry if present
-      const batchMatch = raw.match(/(?:B\.?\s*No\.?|Batch(?:\s*No)?|BNo)[:\s]*([A-Z0-9\-\/]+)/i);
-      const expMatch = raw.match(/(?:EXP\.?|Expiry|Exp\s*Date)[:\s]*([0-9]{1,2}[\/\-][0-9]{2,4}|[A-Za-z]{3}[\/\-\s]*[0-9]{2,4})/i);
+      const batchMatch = raw.match(/(?:B\.?\s*No\.?|Batch(?:\s*No)?|BNo)[:\s]*([A-Z0-9/-]+)/i);
+      const expMatch = raw.match(/(?:EXP\.?|Expiry|Exp\s*Date)[:\s]*([0-9]{1,2}[/-][0-9]{2,4}|[A-Za-z]{3}[/-\s]*[0-9]{2,4})/i);
 
       if (matched) {
         setDetectedResult({

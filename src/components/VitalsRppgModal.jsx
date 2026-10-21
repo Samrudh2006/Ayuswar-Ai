@@ -19,7 +19,6 @@ import {
  * Uses video stream / simulated facial blood volume pulse analysis to derive Heart Rate (BPM) & Respiration Rate.
  */
 export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
-  if (!isOpen) return null;
 
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -117,6 +116,8 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
     }
     onClose();
   };
+  if (!isOpen) return null;
+
 
   return (
     <div className="modal-overlay" style={{

@@ -41,8 +41,6 @@ export default function WhatsAppAudioRxModal({
   customMedications = null,
   initialLanguage = 'te'
 }) {
-  if (!isOpen) return null;
-
   // Default patient fallback
   const defaultPatient = {
     name: 'Narayana Rao',
@@ -311,6 +309,8 @@ export default function WhatsAppAudioRxModal({
       setTimeout(() => setSendSuccessToast(false), 4500);
     }, 2800);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div 
@@ -1143,7 +1143,7 @@ export default function WhatsAppAudioRxModal({
                               key={i}
                               style={{
                                 width: '3px',
-                                height: isPlayingAudio ? `${Math.max(4, (h * (0.6 + Math.random() * 0.8)))}px` : `${h}px`,
+                                height: isPlayingAudio ? `${Math.max(4, (h * (0.6 + ((h * 11) % 7) * 0.1)))}px` : `${h}px`,
                                 background: isBarActive ? '#25D366' : '#94A3B8',
                                 borderRadius: '2px',
                                 transition: 'height 0.1s'

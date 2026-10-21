@@ -45,7 +45,6 @@ export default function LiveScribeSessionModal({
   doctorName = 'Dr. Priya Sharma, MD',
   onCompleteEncounter
 }) {
-  if (!isOpen || !patientData) return null;
 
   const [isRecording, setIsRecording] = useState(true);
   const [micMode, setMicMode] = useState('ambient_sim'); // 'ambient_sim' | 'physical_mic'
@@ -125,7 +124,7 @@ export default function LiveScribeSessionModal({
     }
   };
 
-  const domainKey = patientData.domain || (patientData.age < 15 ? 'respiratory' : 'cardiometabolic');
+  const domainKey = patientData?.domain || ((patientData?.age || 0) < 15 ? 'respiratory' : 'cardiometabolic');
   const encounterData = encounterPresets[domainKey] || encounterPresets.cardiometabolic;
 
   // Helper to send recorded audio chunk to serverless Gnani STT endpoint
@@ -133,7 +132,7 @@ export default function LiveScribeSessionModal({
     if (!blob || blob.size < 500) return;
     setIsTranscribingChunk(true);
     setLastSttError(null);
-    const targetLang = patientData.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+    const targetLang = patientData?.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
     try {
       const res = await speechService.transcribeAudioWithGnani(blob, targetLang);
       if (res && res.transcript && res.transcript.trim()) {

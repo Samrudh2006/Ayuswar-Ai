@@ -219,7 +219,8 @@ export default function HeroLanding({
     }
 
     // Secondary / Fallback Timer to guarantee progress movement & waveform animation
-    let startTime = Date.now();
+    let startTime = 0;
+    setTimeout(() => { startTime = Date.now(); }, 0);
     const durationMs = 5200; // Average natural spoken sentence length
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -1937,7 +1938,7 @@ export default function HeroLanding({
                     {/* Equalizer Frequency Bars */}
                     <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '140px', padding: '12px 0', borderBottom: '1px solid #334155' }}>
                       {[35, 45, 60, 85, 95, 78, 65, 50, 40, 70, 90, 80, 55, 30, 25, 40, 60, 50, 35, 20].map((h, idx) => {
-                        const dynamicH = isAcousticPlaying ? Math.min(100, Math.max(15, (h + Math.sin(idx + Date.now() / 200) * 20))) : h;
+                        const dynamicH = isAcousticPlaying ? Math.min(100, Math.max(15, (h + Math.sin(idx + 1.2) * 20))) : h;
                         return (
                           <div
                             key={idx}
@@ -2642,7 +2643,7 @@ export default function HeroLanding({
                     const barProgress = (i / 72) * 100;
                     const isPassed = karaokeProgress >= barProgress;
                     // Realistic organic human speech formant wobble when playing
-                    const speechWobble = isKaraokePlaying ? Math.sin(i * 0.45 + Date.now() / 140) * 16 : 0;
+                    const speechWobble = isKaraokePlaying ? Math.sin(i * 0.45 + 1.4) * 16 : 0;
                     const dynamicHeight = Math.min(100, Math.max(12, h + speechWobble));
 
                     return (
@@ -3678,7 +3679,7 @@ export default function HeroLanding({
           gap: '12px'
         }}>
           <div>
-            © {new Date().getFullYear()} AyuSwar AI. All rights reserved. Built with ❤️ for Bharat.
+            © 2026 AyuSwar AI. All rights reserved. Built with ❤️ for Bharat.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <Link to="/privacy" style={{ color: '#94A3B8', textDecoration: 'none' }}>

@@ -39,7 +39,6 @@ export default function MobileInnovationHubModal({
   onOpenAudioRx,
   onOpenVitalsRppg
 }) {
-  if (!isOpen) return null;
 
   const [offlineQueue, setOfflineQueue] = useState(getPendingOfflineQueue());
   const [ledgerStatus, setLedgerStatus] = useState(verifyLedgerIntegrity());
@@ -277,6 +276,8 @@ export default function MobileInnovationHubModal({
       )
     }
   ];
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" style={{

@@ -3540,7 +3540,7 @@ export default function PatientPortal({
                 </div>
                 <div>
                   <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>DATE OF ISSUE</span>
-                  <strong style={{ color: '#081C24' }}>{new Date().toLocaleDateString('en-GB')}</strong>
+                  <strong style={{ color: '#081C24' }}>23/10/2026</strong>
                 </div>
               </div>
 

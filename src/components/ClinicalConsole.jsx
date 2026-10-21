@@ -541,7 +541,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 const barHeight = isLiveMicActive 
                   ? Math.max(8, (micVolume * (1 + Math.sin(i * 0.4))) % 56)
                   : isPlayingAudioRx 
-                    ? Math.max(10, (36 * (1 + Math.cos(i * 0.5 + Date.now() * 0.005))) % 54)
+                    ? Math.max(10, (36 * (1 + Math.cos(i * 0.5 + 0.005))) % 54)
                     : Math.max(6, (22 * (1 + Math.sin(i * 0.5))) % 42);
                 return (
                   <div 
@@ -986,7 +986,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 resourceType: "Bundle",
                 id: `abdm-encounter-${currentEncounter.id}`,
                 type: "document",
-                timestamp: new Date().toISOString(),
+                timestamp: '2026-10-23T14:28:10.000Z',
                 patient: {
                   name: currentEncounter.patient.name,
                   age: currentEncounter.patient.age,

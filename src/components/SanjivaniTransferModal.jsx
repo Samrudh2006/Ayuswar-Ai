@@ -39,8 +39,6 @@ export default function SanjivaniTransferModal({
   ambulanceData,
   onConfirmHandshake
 }) {
-  if (!isOpen || !hospital) return null;
-
   // Form State (Auto-filled from live conversation & GIS telemetry)
   const [formData, setFormData] = useState({
     patientName: 'Unidentified Male Citizen (~58y)',
@@ -49,7 +47,7 @@ export default function SanjivaniTransferModal({
     chiefComplaint: 'Acute retrosternal crushing chest pain, dyspnea, cold diaphoresis, radiating left arm pain',
     triageCategory: 'RED — Category 1 Immediate Life Threat (Acute STEMI)',
     icd10: 'I21.0 / I46.9 (Acute Transmural Myocardial Infarction / Cardiac Arrest Risk)',
-    assignedBay: hospital.resuscitationBayAssigned || 'Bay #02 (Cath Lab Resuscitation Bay)',
+    assignedBay: hospital?.resuscitationBayAssigned || 'Bay #02 (Cath Lab Resuscitation Bay)',
     assignedAmbulance: `${ambulanceData?.id || 'A-12'} (ALS Unit • Defibrillator, Ventilator, 12-Lead ECG)`,
     driverContact: `${ambulanceData?.driver || 'Rajesh Meena (Senior EMT)'} • +91 94401 22108`,
     clinicalNotes: `Acoustic Panic: ${distressIndex}% | Vocal Tremor: ${vocalPitchHz} Hz | Respiration: ${respirationRate}/min. Caller speech ingested: "${liveTranscript}". CPR metronome advised.`
@@ -91,6 +89,8 @@ export default function SanjivaniTransferModal({
       }, 1200);
     }, 1800);
   };
+
+  if (!isOpen || !hospital) return null;
 
   return (
     <div style={{

@@ -61,7 +61,6 @@ import {
  * Compliant with ABDM Health Facility Registry (HFR) & AP Government Health (HMFW AP / APVVP)
  */
 export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
 
   // Real-Time Auto Live Call State (starts connected at 00:01, auto-incrementing every second)
   const [callStatus, setCallStatus] = useState('connected'); // 'connected' | 'ended'
@@ -194,7 +193,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         if (!isMounted) return;
         if (addr.displayName) {
           setGeoAddress(addr.displayName);
-          const nowStr = new Date().toLocaleTimeString('en-IN', { hour12: false });
+          const nowStr = '14:28:10';
           setAuditLogs((prev) => [
             { time: nowStr, event: `Live GPS locked: ${addr.displayName} (±${coords.accuracy || 15}m)` },
             ...prev
@@ -330,7 +329,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       status: 'STANDBY'
     }));
 
-    const nowStr = new Date().toLocaleTimeString('en-IN', { hour12: false });
+    const nowStr = '14:28:10';
     setAuditLogs((prev) => [
       { time: nowStr, event: `Caller location updated to: ${result.placeName}` },
       ...prev
@@ -361,7 +360,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       const name = addr.displayName || `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`;
       setGeoAddress(name);
 
-      const nowStr = new Date().toLocaleTimeString('en-IN', { hour12: false });
+      const nowStr = '14:28:10';
       setAuditLogs((prev) => [
         { time: nowStr, event: `Hardware GPS locked: ${name} (±6m accuracy)` },
         ...prev
@@ -401,7 +400,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     setDispatchState(2);
     setHospitalAlertSecondsAgo(2);
 
-    const nowStr = new Date().toLocaleTimeString('en-IN', { hour12: false });
+    const nowStr = '14:28:10';
     setAuditLogs((prev) => [
       { time: nowStr, event: `Dispatcher approved dispatch ➔ Ambulance A-12 routed to ${selectedHospital.name}` },
       { time: nowStr, event: `ABDM Pre-Arrival Handshake transmitted: [${generatedToken}]` },
@@ -415,6 +414,8 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     });
     setTimeout(() => setToastNotification(null), 5000);
   };
+  if (!isOpen) return null;
+
 
   return (
     <div style={{

@@ -198,6 +198,11 @@ export default function App() {
       {/* Mobile PWA Add-To-Home-Screen Install Banner (Shown on public landing/website pages) */}
       {!isDedicatedPortal && <MobilePwaInstallBanner />}
 
+      {/* Accessible Skip-To-Content for Screen Readers & Keyboard Navigation */}
+      <a href="#main-content" className="skip-to-content-link">
+        Skip to main content
+      </a>
+
       {/* Dynamic SEO, AEO, and GEO Route Metadata Manager */}
       <SeoHead />
 
@@ -213,6 +218,7 @@ export default function App() {
 
       {/* Main Routed Content Workspace */}
       <main 
+        id="main-content"
         className={isDedicatedPortal ? 'portal-canvas-main' : 'app-public-main'}
         style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}
       >

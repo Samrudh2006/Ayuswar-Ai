@@ -30,7 +30,6 @@ export default function TeleconsultModal({
   doctorName = 'Dr. Priya Sharma, MD',
   specialty = 'Internal Medicine & AI Teleconsult'
 }) {
-  if (!isOpen) return null;
 
   const [isMicOn, setIsMicOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
@@ -77,6 +76,8 @@ export default function TeleconsultModal({
     const s = (sec % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   };
+  if (!isOpen) return null;
+
 
   return (
     <div className="modal-overlay" style={{

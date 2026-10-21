@@ -73,7 +73,7 @@ export default function PatientProfileSelectView() {
       ...pat,
       isDemoProfile: true,
       demoAbhaId: 'SANDBOX-ABHA-9145',
-      timestamp: new Date().toISOString()
+      timestamp: '2026-10-23T14:28:10.000Z'
     };
     setCurrentPatient(profile);
     navigate('/patient-portal');

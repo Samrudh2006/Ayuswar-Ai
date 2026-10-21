@@ -175,10 +175,10 @@ function extractBatchAndExpiry(rawText) {
   let batch = null;
   let expiry = null;
 
-  const batchMatch = rawText.match(/(?:B\.?\s*No\.?|Batch(?:\s*No)?|BNo)[:\s]*([A-Z0-9\-\/]+)/i);
+  const batchMatch = rawText.match(/(?:B\.?\s*No\.?|Batch(?:\s*No)?|BNo)[:\s]*([A-Z0-9/-]+)/i);
   if (batchMatch) batch = batchMatch[1].trim();
 
-  const expMatch = rawText.match(/(?:EXP\.?|Expiry|Exp\s*Date)[:\s]*([0-9]{1,2}[\/\-][0-9]{2,4}|[A-Za-z]{3}[\/\-\s]*[0-9]{2,4})/i);
+  const expMatch = rawText.match(/(?:EXP\.?|Expiry|Exp\s*Date)[:\s]*([0-9]{1,2}[/-][0-9]{2,4}|[A-Za-z]{3}[/-\s]*[0-9]{2,4})/i);
   if (expMatch) expiry = expMatch[1].trim();
 
   return { batch, expiry };

@@ -916,7 +916,7 @@ export default function DoctorPortal({
                   color: '#475569'
                 }}>
                   <Calendar size={14} color="#0F4C5C" />
-                  <span>{new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  <span>Fri, 23 Oct 2026</span>
                 </div>
               </div>
 

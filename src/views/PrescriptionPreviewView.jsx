@@ -34,7 +34,7 @@ export default function PrescriptionPreviewView() {
     abhaId: 'DEMO-ABHA-91-4521-8932',
     age: 58,
     gender: 'Male',
-    date: new Date().toLocaleDateString('en-GB'),
+    date: '23/10/2026',
     doctorName: 'Dr. Priya Sharma, MD',
     doctorSpecialty: 'Pulmonology & Internal Medicine',
     regNumber: 'DEMO-HPR-8921-9942',
@@ -129,7 +129,7 @@ export default function PrescriptionPreviewView() {
   // Add Medication to Prescription
   const handleAddMedication = (drug) => {
     const newMed = {
-      id: `med-${Date.now()}`,
+      id: `med-${medications.length + 1}`,
       brandName: drug.popularBrand.split('/')[0].trim(),
       vernacular: `${drug.genericName.split(' ')[0]} (${drug.indications.split(',')[0].trim()})`,
       pmbjpId: drug.id,

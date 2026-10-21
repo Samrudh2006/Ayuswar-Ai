@@ -150,7 +150,10 @@ export default function AcousticBiomarkerLabView() {
   // Stop audio on unmount
   useEffect(() => {
     return () => {
-      stopAllAudio();
+      if (samplingTimerRef.current) clearInterval(samplingTimerRef.current);
+      if (mediaStreamRef.current) mediaStreamRef.current.getTracks().forEach(t => t.stop());
+      if (activeOscillatorRef.current) { try { activeOscillatorRef.current.stop(); } catch {} }
+      if (activeSourceRef.current) { try { activeSourceRef.current.stop(); } catch {} }
     };
   }, []);
 
