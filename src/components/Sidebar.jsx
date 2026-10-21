@@ -57,20 +57,21 @@ export default function Sidebar({
           {!isCollapsed && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '11px', overflow: 'hidden' }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '50px',
+                height: '50px',
                 borderRadius: '50%',
-                background: '#061626',
+                background: '#FAF8F5',
                 overflow: 'hidden',
                 flexShrink: 0,
-                border: '2px solid #00D2D3',
-                boxShadow: '0 2px 10px rgba(0, 210, 211, 0.3)'
+                border: '2px solid #D4AF37',
+                boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+                padding: '3px'
               }}>
-                <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <div style={{ whiteSpace: 'nowrap' }}>
                 <div style={{ fontSize: '18px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
-                  Ayu<span style={{ color: '#00D2D3' }}>Swar</span> AI
+                  Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
                 </div>
                 <div style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '-2px' }}>
                   Clinical OS
@@ -81,15 +82,16 @@ export default function Sidebar({
 
           {isCollapsed && (
             <div style={{
-              width: '44px',
-              height: '44px',
+              width: '48px',
+              height: '48px',
               borderRadius: '50%',
-              background: '#061626',
+              background: '#FAF8F5',
               overflow: 'hidden',
-              border: '2px solid #00D2D3',
-              boxShadow: '0 2px 10px rgba(0, 210, 211, 0.3)'
+              border: '2px solid #D4AF37',
+              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+              padding: '3px'
             }}>
-              <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
           )}
 

@@ -3751,12 +3751,12 @@ export default function HeroLanding({
           marginBottom: '50px'
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ffffff', overflow: 'hidden', border: '2px solid #00D2D3', boxShadow: '0 4px 16px rgba(0, 210, 211, 0.3)', flexShrink: 0 }}>
-                <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FAF8F5', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.35)', flexShrink: 0, padding: '3px' }}>
+                <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
-              <span style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>
-                Ayu<span style={{ color: '#00D2D3' }}>Swar</span> AI
+              <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
+                Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
               </span>
             </div>
             <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.6, maxWidth: '380px', marginBottom: '18px' }}>

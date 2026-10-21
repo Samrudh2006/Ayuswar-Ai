@@ -608,23 +608,24 @@ export default function DoctorPortal({
             title="AyuSwar AI — Return to Website"
           >
             <div style={{
-              width: isCollapsedView ? '40px' : '46px',
-              height: isCollapsedView ? '40px' : '46px',
+              width: isCollapsedView ? '44px' : '50px',
+              height: isCollapsedView ? '44px' : '50px',
               borderRadius: '50%',
-              border: '2px solid #008B8B',
+              border: '2px solid #D4AF37',
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: '#ffffff',
-              boxShadow: '0 4px 12px rgba(0, 139, 139, 0.25)',
-              flexShrink: 0
+              background: '#FAF8F5',
+              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+              flexShrink: 0,
+              padding: '2px'
             }}>
-              <img src="/assets/ayuswar_master_emblem.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             {!isCollapsedView && (
-              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#0A2540', whiteSpace: 'nowrap' }}>
-                Ayu<span style={{ color: '#008B8B' }}>Swar</span> <span style={{ color: '#D97706' }}>AI</span>
+              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#091E26', whiteSpace: 'nowrap' }}>
+                Ayu<span style={{ color: '#0F4C5C' }}>Swar</span> <span style={{ color: '#D4AF37' }}>AI</span>
               </div>
             )}
           </div>

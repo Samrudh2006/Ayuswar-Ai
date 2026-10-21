@@ -97,8 +97,8 @@ export default function MobilePwaInstallBanner() {
         background: 'linear-gradient(135deg, #0A2540 0%, #004D40 100%)',
         borderRadius: '16px',
         padding: '12px 14px',
-        boxShadow: '0 12px 32px rgba(10, 37, 64, 0.4), 0 2px 6px rgba(0,0,0,0.2)',
-        border: '1.5px solid rgba(0, 210, 211, 0.3)',
+        boxShadow: '0 12px 32px rgba(15, 76, 92, 0.4), 0 2px 6px rgba(0,0,0,0.2)',
+        border: '1.5px solid #D4AF37',
         color: '#ffffff',
         display: 'flex',
         alignItems: 'center',
@@ -108,13 +108,14 @@ export default function MobilePwaInstallBanner() {
     >
       {/* App Icon */}
       <img
-        src="/assets/ayuswar_master_emblem.png"
+        src="/assets/ayuswar_emblem_mark.png"
         alt="AyuSwar AI App"
         style={{
-          width: '42px',
-          height: '42px',
-          borderRadius: '10px',
-          background: '#ffffff',
+          width: '46px',
+          height: '46px',
+          borderRadius: '50%',
+          background: '#FAF8F5',
+          border: '1.5px solid #D4AF37',
           padding: '2px',
           flexShrink: 0,
           boxShadow: '0 2px 8px rgba(0,0,0,0.25)'

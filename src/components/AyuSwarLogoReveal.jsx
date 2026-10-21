@@ -48,27 +48,26 @@ export default function AyuSwarLogoReveal({
     >
       {/* Official Concept #21: Deepam Heartbeat Master Emblem */}
       <div style={{
-        width: 44,
-        height: 44,
+        width: 54,
+        height: 54,
         borderRadius: '50%',
         overflow: 'hidden',
-        boxShadow: '0 2px 8px rgba(15, 76, 92, 0.2)',
+        boxShadow: '0 4px 14px rgba(15, 76, 92, 0.22)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         background: '#FAF8F5',
-        border: '1.5px solid #D4AF37',
-        flexShrink: 0
+        border: '2px solid #D4AF37',
+        flexShrink: 0,
+        padding: '3px'
       }}>
         <img
-          src="/assets/ayuswar_master_emblem.png"
+          src="/assets/ayuswar_emblem_mark.png"
           alt="AyuSwar AI Official Emblem"
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center 14%',
-            transform: 'scale(1.42)'
+            objectFit: 'contain'
           }}
         />
       </div>
