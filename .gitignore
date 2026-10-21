@@ -29,3 +29,9 @@ capacitor.config.json
 # Brag video work intermediates
 brag-output/work/
 scratch/
+
+# Internal Audit Artifacts (Not for public repository push)
+AI_SLOP_AND_VIBE_CODING_AUDIT.md
+AUDIT_FIX_LOG.md
+ENGINEERING_AUTHENTICITY_REPORT.md
+FINAL_SCORECARD.md

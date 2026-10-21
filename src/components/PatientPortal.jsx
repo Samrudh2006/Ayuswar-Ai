@@ -3884,7 +3884,7 @@ export default function PatientPortal({
                     </label>
                   </div>
 
-                  <div style={{ fontSize: '11.5px', color: '#64748B', background: '#FEF3C7', padding: '10px', borderRadius: '8px', color: '#92400E' }}>
+                  <div style={{ fontSize: '11.5px', background: '#FEF3C7', padding: '10px', borderRadius: '8px', color: '#92400E' }}>
                     🔒 <strong>Privacy Guard:</strong> Individual consent artifacts adhere to India Digital Personal Data Protection (DPDP) Act 2023.
                   </div>
                 </div>
