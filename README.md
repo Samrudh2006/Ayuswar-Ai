@@ -1,6 +1,10 @@
 <div align="center">
 
-# 🪔 AyuSwar AI (ఆయుస్వర)
+<a href="https://ayuswar-ai.vercel.app/">
+  <img src="public/assets/ayuswar_master_emblem.png" width="220" alt="AyuSwar AI Official Logo — Concept #21 Deepam Heartbeat" style="border-radius: 24px; box-shadow: 0 12px 36px rgba(15, 76, 92, 0.25);" />
+</a>
+
+# AyuSwar AI (ఆయుస్వర)
 ### *Sovereign Indic Ambient Clinical Voice Scribe, Acoustic Biomarker Phenotyping & 108 Emergency Dispatch*
 
 **Developed for the Great Indian AI Internship Challenge 2026 by Gnani.ai**  
@@ -8,12 +12,16 @@
 
 ---
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ayuswar--ai.vercel.app-0F4C5C?style=for-the-badge&logo=vercel&logoColor=white)](https://ayuswar-ai.vercel.app/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Test Suite](https://img.shields.io/badge/Tests-22%2F22%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
-[![Acoustic Engine](https://img.shields.io/badge/Acoustic%20AI-Earshot%20AST%2BCLAP-0F4C5C?style=for-the-badge&logo=soundcharts&logoColor=white)](https://github.com/Leonxlnx/earshot)
-[![Design System](https://img.shields.io/badge/Theme%2010-Banarasi%20Zari-D4AF37?style=for-the-badge)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![Acoustic Engine](https://img.shields.io/badge/Acoustic%20AI-Earshot%20AST%2BCLAP-D4AF37?style=for-the-badge&logo=soundcharts&logoColor=08232C)](https://github.com/Leonxlnx/earshot)
 [![Compliance](https://img.shields.io/badge/Schema-HL7%20FHIR%20R4%20%7C%20ABDM-008B8B?style=for-the-badge)](https://abdm.gov.in/)
+
+<br/>
+
+### 🌐 **Live Deployed Production Instance:** [https://ayuswar-ai.vercel.app](https://ayuswar-ai.vercel.app)
 
 <br/>
 
@@ -74,7 +82,7 @@ AyuSwar AI is styled with **Theme 10 (Banarasi Zari)**, fusing India's handloom 
 
 </div>
 
-- **Brand Emblem:** **Concept #21 (Deepam Heartbeat)** — Integrates a brass Diya bowl (`#0F4C5C`), an eternal golden flame (`#D4AF37`), an ECG sinus pulse (`#D64550`), and radiating acoustic frequency ripples. Scored **38/40** across 8 independent design metrics.
+- **Official Brand Mark:** **Concept #21 (Deepam Heartbeat)** — Integrates a brass Diya bowl (`#0F4C5C`), an eternal golden flame (`#D4AF37`), an ECG sinus pulse (`#D64550`), and radiating acoustic frequency ripples. Scored **38/40** across 8 independent design metrics.
 
 ---
 
@@ -99,46 +107,48 @@ Inspired by [Leonxlnx/earshot](https://github.com/Leonxlnx/earshot), AyuSwar AI 
 
 ## 🚀 Key Functional Modules
 
-### 1. Ambient Doctor OPD Scribe (`/doctor-portal`, `/solutions/ambient-opd-scribe`)
+### 1. Ambient Doctor OPD Scribe ([Live Doctor Console](https://ayuswar-ai.vercel.app/doctor-portal))
 - Real-time dual-party transcription separating doctor and patient utterances.
 - Extracts chief complaints, clinical history, and symptoms directly into draft consultation notes.
 - **Doctor-in-the-Loop:** Requires mandatory physician review, edits, and signature before generating any official record.
 
-### 2. Vernacular Spoken Audio-Rx Studio (`/audio-rx`)
+### 2. Vernacular Spoken Audio-Rx Studio ([Live Audio-Rx Studio](https://ayuswar-ai.vercel.app/audio-rx))
 - Converts complex medical prescriptions into voice-guided directions in the patient's native dialect.
 - Word-by-word synchronized **karaoke highlighting** synchronized with meal and dosage timing badges.
 
-### 3. Sanjivani-108 Emergency Dispatch & CPR Metronome (`/emergency`)
+### 3. Sanjivani-108 Emergency Dispatch & CPR Metronome ([Live Emergency Triage](https://ayuswar-ai.vercel.app/emergency))
 - Immediate, deterministic triage categorization (Category RED, YELLOW, GREEN) with 0ms latency.
 - Audible **110 BPM CPR pulse metronome** adhering to American Heart Association / Indian Resuscitation Council guidelines.
 - Live GPS reverse-geocoding, automated hospital bay reservation, and printable paramedic handover summaries.
 
-### 4. PMBJP Jan Aushadhi Price Arbitrage Comparator (`/scanner`)
+### 4. PMBJP Jan Aushadhi Price Arbitrage Comparator ([Live Medicine Scanner](https://ayuswar-ai.vercel.app/scanner))
 - Instant OCR and text identification of prescribed brand-name pharmaceuticals.
 - Cross-references the National Formulary of India (NFI) and Pradhan Mantri Jan Aushadhi Pariyojana database to calculate direct patient savings (up to 85% discount).
 
-### 5. Indic Language Support Matrix (`/language-matrix`)
+### 5. Indic Language Support Matrix ([Live Language Matrix](https://ayuswar-ai.vercel.app/language-matrix))
 - Comprehensive coverage across 22 Scheduled Indian Languages.
 - Grounded in IndiaAI AIKosh datasets and Bhashini dialect benchmarks.
 
 ---
 
-## 🗺️ Application Route Directory
+## 🗺️ Live Deployed Application Route Directory
 
-| Route | Workspace / Module | Focus |
+Every module is fully deployed, responsive, and directly accessible on Vercel:
+
+| Workspace / Module | Focus | Live Deployed Production Link |
 | :--- | :--- | :--- |
-| `/` | **Landing Showcase** | Hero, Deepam Heartbeat branding, Bento features, Live stats |
-| `/doctor-portal` | **OPD Physician Console** | Ambient recording, live FHIR drafting, patient queue |
-| `/patient-portal` | **Citizen Health Locker** | ABHA profile, verified records, vernacular audio instructions |
-| `/emergency` | **Sanjivani-108 Triage** | Distress intake, Earshot acoustic distress, 110 BPM CPR metronome |
-| `/emergency/handover` | **Paramedic Handover** | Printable simulation transfer record with vitals & interventions |
-| `/acoustic-lab` | **Acoustic Biomarker Lab** | Earshot AST + CLAP reasoning, FFT spectrum, synthetic tests |
-| `/scanner` | **Jan Aushadhi Scanner** | Generic medicine price comparison & NFI database lookups |
-| `/audio-rx` | **Spoken Audio-Rx Studio** | Visual karaoke pill schedule in Hindi, Telugu, and English |
-| `/benchmarks` | **Interactive Assertions** | 24 in-browser integration tests with millisecond benchmarks |
-| `/technology` | **6-Layer Blueprint** | Full architectural overview, privacy boundaries, and data flows |
-| `/language-matrix` | **Indic Language Matrix**| Dialect support, AIKosh grounding, phoneme mapping |
-| `/datasets` | **Clinical Lexicon Explorer**| Colloquial-to-ICD10 crosswalk and terminology references |
+| **Landing Showcase** | Hero, Deepam Heartbeat branding, Bento features, Live stats | [🚀 https://ayuswar-ai.vercel.app/](https://ayuswar-ai.vercel.app/) |
+| **OPD Physician Console** | Ambient recording, live FHIR drafting, patient queue | [🩺 https://ayuswar-ai.vercel.app/doctor-portal](https://ayuswar-ai.vercel.app/doctor-portal) |
+| **Citizen Health Locker** | ABHA profile, verified records, vernacular audio instructions | [👤 https://ayuswar-ai.vercel.app/patient-portal](https://ayuswar-ai.vercel.app/patient-portal) |
+| **Sanjivani-108 Triage** | Distress intake, Earshot acoustic distress, 110 BPM CPR metronome | [🚑 https://ayuswar-ai.vercel.app/emergency](https://ayuswar-ai.vercel.app/emergency) |
+| **Paramedic Handover** | Printable simulation transfer record with vitals & interventions | [📋 https://ayuswar-ai.vercel.app/emergency/handover](https://ayuswar-ai.vercel.app/emergency/handover) |
+| **Acoustic Biomarker Lab** | Earshot AST + CLAP reasoning, FFT spectrum, synthetic tests | [🎧 https://ayuswar-ai.vercel.app/acoustic-lab](https://ayuswar-ai.vercel.app/acoustic-lab) |
+| **Jan Aushadhi Scanner** | Generic medicine price comparison & NFI database lookups | [💊 https://ayuswar-ai.vercel.app/scanner](https://ayuswar-ai.vercel.app/scanner) |
+| **Spoken Audio-Rx Studio** | Visual karaoke pill schedule in Hindi, Telugu, and English | [🎙️ https://ayuswar-ai.vercel.app/audio-rx](https://ayuswar-ai.vercel.app/audio-rx) |
+| **Interactive Assertions** | 24 in-browser integration tests with millisecond benchmarks | [🧪 https://ayuswar-ai.vercel.app/benchmarks](https://ayuswar-ai.vercel.app/benchmarks) |
+| **6-Layer Blueprint** | Full architectural overview, privacy boundaries, and data flows | [📐 https://ayuswar-ai.vercel.app/technology](https://ayuswar-ai.vercel.app/technology) |
+| **Indic Language Matrix**| Dialect support, AIKosh grounding, phoneme mapping | [🇮🇳 https://ayuswar-ai.vercel.app/language-matrix](https://ayuswar-ai.vercel.app/language-matrix) |
+| **Clinical Lexicon Explorer**| Colloquial-to-ICD10 crosswalk and terminology references | [📚 https://ayuswar-ai.vercel.app/datasets](https://ayuswar-ai.vercel.app/datasets) |
 
 ---
 
@@ -178,7 +188,7 @@ npm install
 npm run dev
 ```
 
-The application will be accessible at `http://localhost:5173/`.
+*Experience the live production deployment anytime at [https://ayuswar-ai.vercel.app/](https://ayuswar-ai.vercel.app/).*
 
 ### Production Build
 ```bash

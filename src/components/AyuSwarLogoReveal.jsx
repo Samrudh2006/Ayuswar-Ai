@@ -46,8 +46,32 @@ export default function AyuSwarLogoReveal({
       }}
       title="AyuSwar AI — Ambient Clinical Voice OS"
     >
-      {/* Concept #21: Deepam Heartbeat SVG Vector Emblem */}
-      <DeepamHeartbeatEmblem size={44} animated={true} />
+      {/* Official Concept #21: Deepam Heartbeat Master Emblem */}
+      <div style={{
+        width: 44,
+        height: 44,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(15, 76, 92, 0.2)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#FAF8F5',
+        border: '1.5px solid #D4AF37',
+        flexShrink: 0
+      }}>
+        <img
+          src="/assets/ayuswar_master_emblem.png"
+          alt="AyuSwar AI Official Emblem"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center 14%',
+            transform: 'scale(1.42)'
+          }}
+        />
+      </div>
 
       {/* Brand Typography & Pulse Line */}
       {showText && (
