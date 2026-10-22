@@ -60,6 +60,7 @@ import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import PatientHealthGoalsTab from './patient/PatientHealthGoalsTab';
 import DeepamHeartbeatEmblem from './DeepamHeartbeatEmblem';
 import BotanicalWatermark from './BotanicalWatermark';
+import MintIvoryWaveBackground from './MintIvoryWaveBackground';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 
@@ -434,7 +435,10 @@ export default function PatientPortal({
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+      {/* Pristine Mint-Ivory Flow Vector Canvas */}
+      <MintIvoryWaveBackground />
+
       {/* Mobile Drawer Overlay Backdrop */}
       {mobileDrawerOpen && (
         <div
@@ -460,8 +464,9 @@ export default function PatientPortal({
           height: '100vh',
           position: 'sticky',
           top: 0,
-          background: '#ffffff',
-          borderRight: '1px solid #E2E8F0',
+          background: 'rgba(255, 255, 255, 0.94)',
+          backdropFilter: 'blur(16px)',
+          borderRight: '1px solid rgba(15, 76, 92, 0.08)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -649,15 +654,17 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div className="patient-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      <div className="patient-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
-          background: '#ffffff',
+          background: 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
           padding: '12px clamp(12px, 2vw, 28px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid rgba(15, 76, 92, 0.08)',
           position: 'sticky',
           top: 0,
           zIndex: 50,
@@ -967,7 +974,7 @@ export default function PatientPortal({
                 gap: '18px',
                 marginBottom: '26px'
               }}>
-                <div onClick={() => setActiveTab('appointments')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer', textAlign: 'center' }}>
+                <div onClick={() => setActiveTab('appointments')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
                     <Calendar size={20} />
                   </div>
@@ -979,7 +986,7 @@ export default function PatientPortal({
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('my_health')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer', textAlign: 'center' }}>
+                <div onClick={() => setActiveTab('my_health')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
                     <Heart size={20} />
                   </div>
@@ -991,7 +998,7 @@ export default function PatientPortal({
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('reports')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer', textAlign: 'center' }}>
+                <div onClick={() => setActiveTab('reports')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.08)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
                     <Upload size={20} />
                   </div>
@@ -1003,7 +1010,7 @@ export default function PatientPortal({
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('medications')} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer', textAlign: 'center' }}>
+                <div onClick={() => setActiveTab('medications')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
                   <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.08)', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
                     <Pill size={20} />
                   </div>
@@ -1021,7 +1028,7 @@ export default function PatientPortal({
                 {/* Left Column */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   {/* Upcoming Appointments */}
-                  <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                  <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
                         Upcoming Appointments
@@ -1035,8 +1042,8 @@ export default function PatientPortal({
                       justifyContent: 'space-between',
                       padding: '14px 16px',
                       borderRadius: '12px',
-                      background: '#FAF8F5',
-                      border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)'
+                      background: 'rgba(255, 255, 255, 0.75)',
+                      border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 2px 10px -2px rgba(15, 76, 92, 0.03)'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <div style={{
@@ -1076,7 +1083,7 @@ export default function PatientPortal({
                   </div>
 
                   {/* Health Overview (Vitals) */}
-                  <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                  <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
@@ -1099,28 +1106,28 @@ export default function PatientPortal({
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-                      <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', textAlign: 'center' }}>
+                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Heart Rate</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>72 bpm</div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', textAlign: 'center' }}>
+                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Activity size={16} color="#DC2626" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Blood Pressure</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>115/76</div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', textAlign: 'center' }}>
+                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Scale size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Weight</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>62 kg</div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', textAlign: 'center' }}>
+                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Moon size={16} color="#6366F1" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Sleep</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>7.5 hrs</div>
@@ -1130,7 +1137,7 @@ export default function PatientPortal({
                   </div>
 
                   {/* Recent Reports */}
-                  <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                  <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
                         Recent Reports

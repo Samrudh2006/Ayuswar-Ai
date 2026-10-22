@@ -215,11 +215,11 @@ export default function PatientAnalyticsCard() {
         </div>
       </div>
 
-      {/* Interactive SVG Chart */}
-      <div style={{ position: 'relative', width: '100%', height: '260px' }}>
+      {/* Interactive SVG Chart (Responsive & Touch-Friendly) */}
+      <div style={{ position: 'relative', width: '100%', height: '260px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <svg
           viewBox="0 0 840 240"
-          style={{ width: '100%', height: '100%', overflow: 'visible' }}
+          style={{ width: '100%', height: '100%', minWidth: '580px', overflow: 'visible' }}
           preserveAspectRatio="none"
         >
           <defs>

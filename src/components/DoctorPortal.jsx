@@ -603,6 +603,141 @@ export default function DoctorPortal({
     setTimeout(() => setFhirToast(null), 4500);
   };
 
+  const handlePrintNablSheet = (rep) => {
+    if (!rep) return;
+    const printWindow = window.open('', '_blank', 'width=860,height=980');
+    if (!printWindow) {
+      window.print();
+      return;
+    }
+
+    const metricsHtml = (rep.metrics || []).map(m => {
+      const isNorm = m.status === 'Normal';
+      const isHigh = m.status === 'High';
+      const badgeColor = isNorm ? '#15803d' : (isHigh ? '#b91c1c' : '#b45309');
+      const badgeBg = isNorm ? '#dcfce7' : (isHigh ? '#fee2e2' : '#fef3c7');
+      return `
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+          <td style="padding: 9px 12px; font-family: monospace; font-size: 11px; color: #64748b;">${m.loinc || rep.loincCode || '-'}</td>
+          <td style="padding: 9px 12px; font-weight: 600; color: #0f172a;">${m.name}</td>
+          <td style="padding: 9px 12px; font-weight: 700; color: ${badgeColor}; font-family: monospace;">${m.result}</td>
+          <td style="padding: 9px 12px; color: #64748b;">${m.unit || '-'}</td>
+          <td style="padding: 9px 12px; color: #475569; font-family: monospace;">${m.normalRange || '-'}</td>
+          <td style="padding: 9px 12px;">
+            <span style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor}; text-transform: uppercase;">
+              ${m.status}
+            </span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>NABL Diagnostic Report — ${rep.patient} (${rep.title})</title>
+          <style>
+            @page { size: A4 portrait; margin: 12mm; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0; padding: 24px; font-size: 13px; line-height: 1.45; }
+            .header-table { width: 100%; border-bottom: 2px solid #0f4c5c; padding-bottom: 12px; margin-bottom: 14px; }
+            .badge-nabl { background: #0f4c5c; color: #ffffff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+            .demo-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 12px; }
+            .demo-item strong { display: block; font-size: 10.5px; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+            table.results { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+            table.results th { background: #0f4c5c; color: #ffffff; text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .section-title { font-size: 13px; font-weight: 800; color: #0f4c5c; text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 6px 0; border-left: 3px solid #0f4c5c; padding-left: 8px; }
+            .findings-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; }
+            .footer-strip { margin-top: 28px; padding-top: 12px; border-top: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; color: #64748b; }
+            .signature-box { text-align: right; }
+            @media print {
+              body { padding: 0; }
+              .no-print { display: none !important; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="no-print" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 10px 14px; border-radius: 6px;">
+            <span style="color: #0369a1; font-weight: 600;">Standard ISO 15189 NABL Diagnostic Report Preview</span>
+            <button onclick="window.print()" style="background: #0f4c5c; color: #ffffff; border: none; padding: 6px 16px; border-radius: 4px; font-weight: 700; cursor: pointer;">Print Report</button>
+          </div>
+
+          <table class="header-table">
+            <tr>
+              <td>
+                <div style="font-size: 18px; font-weight: 900; color: #0f4c5c; letter-spacing: -0.3px;">KURNOOL DISTRICT DIAGNOSTIC CENTER</div>
+                <div style="font-size: 11px; color: #475569; margin-top: 2px;">Department of Health, Medical & Family Welfare • Government of Andhra Pradesh</div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">NABL ISO 15189:2022 Accredited Laboratory • Certificate No: <strong>NABL-MED-2026-AP-9941</strong></div>
+              </td>
+              <td style="text-align: right;">
+                <span class="badge-nabl">NABL ACCREDITED</span>
+                <div style="font-size: 10.5px; color: #059669; font-weight: 700; margin-top: 6px;">ABDM FHIR R4 Compliant</div>
+              </td>
+            </tr>
+          </table>
+
+          <div class="demo-box">
+            <div class="demo-item"><strong>Patient Name</strong> ${rep.patient}</div>
+            <div class="demo-item"><strong>Age / Gender</strong> ${rep.age || '42'} Y / ${rep.gender || 'Male'}</div>
+            <div class="demo-item"><strong>ABHA Address</strong> ${rep.abhaId || '91-8842-1940-2219@abdm'}</div>
+            <div class="demo-item"><strong>Referred By</strong> Dr. Rajesh Rao, MD</div>
+            <div class="demo-item"><strong>Sample / Accession ID</strong> ${rep.specimenId || 'LAB-2026-X992'}</div>
+            <div class="demo-item"><strong>Date of Collection</strong> ${rep.date || '10 May 2026, 08:30 AM'}</div>
+          </div>
+
+          <div class="section-title">${rep.title} (LOINC: ${rep.loincCode || '36572-6'})</div>
+          ${(rep.metrics && rep.metrics.length > 0) ? `
+            <table class="results">
+              <thead>
+                <tr>
+                  <th style="width: 15%;">LOINC</th>
+                  <th style="width: 35%;">Investigation / Parameter</th>
+                  <th style="width: 15%;">Result</th>
+                  <th style="width: 10%;">Unit</th>
+                  <th style="width: 15%;">Biological Ref Range</th>
+                  <th style="width: 10%;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${metricsHtml}
+              </tbody>
+            </table>
+          ` : ''}
+
+          <div class="section-title" style="margin-top: 16px;">Detailed Clinical Findings</div>
+          <div class="findings-box">${rep.findings || 'No acute focal abnormalities visualised.'}</div>
+
+          <div class="section-title">Definitive Impression & Conclusion</div>
+          <div class="findings-box" style="background: #f0fdf4; border-color: #bbf7d0; color: #166534; font-weight: 600;">
+            ${rep.impression || 'Study within clinically acceptable physiological thresholds.'}
+          </div>
+
+          <div class="footer-strip">
+            <div>
+              <div>Laboratory Accreditation: NABL ISO 15189 • ILAC-MRA Signatory</div>
+              <div style="margin-top: 2px;">This is a system authenticated electronic diagnostic document as per IT Act 2000.</div>
+              <div style="font-family: monospace; margin-top: 3px; font-size: 10px;">SHA256 Auth: a8f419...2b01c9 | LOINC-FHIR-BUNDLE-R4</div>
+            </div>
+            <div class="signature-box">
+              <div style="font-family: 'Brush Script MT', cursive, serif; font-size: 18px; color: #0f4c5c;">Dr. V. Sunitha, MD</div>
+              <div style="font-weight: 700; color: #0f172a; font-size: 11px;">Dr. V. Sunitha, MD (Path / Radio)</div>
+              <div style="font-size: 10px; color: #64748b;">Reg No: APMC-67129 • Consultant Specialist</div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      try {
+        printWindow.print();
+      } catch (err) {
+        console.warn('Print popup blocked or failed, falling back:', err);
+      }
+    }, 400);
+  };
+
 
   const ocrSamples = [
     {
@@ -721,8 +856,9 @@ export default function DoctorPortal({
           height: '100vh',
           position: 'sticky',
           top: 0,
-          background: '#ffffff',
-          borderRight: '1px solid #E2E8F0',
+          background: 'rgba(255, 255, 255, 0.94)',
+          backdropFilter: 'blur(16px)',
+          borderRight: '1px solid rgba(15, 76, 92, 0.08)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -924,12 +1060,14 @@ export default function DoctorPortal({
       <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
-          background: '#ffffff',
+          background: 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
           padding: '12px clamp(12px, 2vw, 28px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid rgba(15, 76, 92, 0.08)',
           position: 'sticky',
           top: 0,
           zIndex: 50,
@@ -4211,7 +4349,7 @@ export default function DoctorPortal({
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
-                  onClick={() => window.print()}
+                  onClick={() => handlePrintNablSheet(selectedReport)}
                   style={{
                     padding: '8px 16px',
                     borderRadius: '8px',

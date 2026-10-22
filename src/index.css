@@ -33,10 +33,10 @@
   --color-ruby: #D64550;
   --color-ruby-light: #FDF2F3;
 
-  /* Canvas & Surface (Calm on eyes, zero glare) */
-  --color-bg-light: #FAF8F5;
+  /* Canvas & Surface (Mint-Ivory Healthcare Ambient System) */
+  --color-bg-light: #F3FAF7;
   --color-bg-white: #FFFFFF;
-  --color-bg-card: #FFFFFF;
+  --color-bg-card: rgba(255, 255, 255, 0.92);
 
   /* Text & Legibility (Strict WCAG AAA Visibility) */
   --color-text-main: #091E26;
@@ -93,6 +93,12 @@
 body {
   font-family: var(--font-main);
   background-color: var(--color-bg-light);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(220, 252, 245, 0.65) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(204, 251, 241, 0.55) 0px, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(230, 248, 244, 0.50) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(254, 249, 235, 0.45) 0px, transparent 45%);
+  background-attachment: fixed;
   color: var(--color-text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -1432,3 +1438,24 @@ body {
   color: #0F4C5C;
   border: 1px solid rgba(15, 76, 92, 0.15);
 }
+
+/* =========================================================================
+   MEDIA PRINT STYLESHEET (NABL DIAGNOSTIC LAB SHEETS & OFFICIAL RECORDS)
+   ========================================================================= */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .mint-ivory-wave-background,
+  header,
+  aside,
+  .doctor-portal-aside,
+  .patient-portal-aside,
+  .portal-mobile-menu-btn,
+  .mobile-pwa-install-bar,
+  .no-print {
+    display: none !important;
+  }
+}
+

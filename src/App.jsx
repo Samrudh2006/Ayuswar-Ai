@@ -17,6 +17,8 @@ import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 import CookieConsentBanner from './components/CookieConsentBanner';
 
+import MintIvoryWaveBackground from './components/MintIvoryWaveBackground';
+
 // Route-Level Code-Split Components (Lazy loaded on demand to minimize initial bundle size)
 const DetailedModuleView = React.lazy(() => import('./components/DetailedModuleView'));
 const DoctorPortal = React.lazy(() => import('./components/DoctorPortal'));
@@ -194,7 +196,10 @@ export default function App() {
     location.pathname === '/login';
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAF8F5', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', position: 'relative' }}>
+      {/* Signature AyuSwar Mint-Ivory Vector Wave Canvas (Active on every screen) */}
+      <MintIvoryWaveBackground />
+
       {/* Mobile PWA Add-To-Home-Screen Install Banner (Shown on public landing/website pages) */}
       {!isDedicatedPortal && <MobilePwaInstallBanner />}
 
