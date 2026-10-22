@@ -1,7 +1,7 @@
 <div align="center">
 
 <a href="https://ayuswar-ai.vercel.app/">
-  <img src="public/assets/ayuswar_master_emblem.png" width="220" alt="AyuSwar AI Official Logo — Concept #21 Deepam Heartbeat" style="border-radius: 24px; box-shadow: 0 12px 36px rgba(15, 76, 92, 0.25);" />
+  <img src="public/assets/ayuswar_master_emblem.png" width="220" alt="AyuSwar AI Official Logo — Deepam Heartbeat" style="border-radius: 24px; box-shadow: 0 12px 36px rgba(15, 76, 92, 0.25);" />
 </a>
 
 # AyuSwar AI (ఆయుస్వర)
@@ -27,9 +27,9 @@
 
 <br/>
 
-| 🎨 **Theme 10: Banarasi Zari** | 🛡️ **WCAG AAA Contrast** | ⚡ **Zero Cloud Secret Leakage** | 🪔 **Emblem: Concept #21** |
+| 🎨 **Design System: Banarasi Zari** | 🛡️ **WCAG AAA Contrast** | ⚡ **Zero Cloud Secret Leakage** | 🪔 **Emblem: Deepam Heartbeat** |
 | :---: | :---: | :---: | :---: |
-| `#0F4C5C` Silk Petrol Teal & `#D4AF37` Zari Gold | **> 11.4:1** Contrast Ratio | Vercel Serverless Gateway (`/api/gnani`) | Deepam Heartbeat (38/40 Score) |
+| `#0F4C5C` Silk Petrol Teal & `#D4AF37` Zari Gold | **> 11.4:1** Contrast Ratio | Vercel Serverless Gateway (`/api/gnani`) | Sovereign Indic Clinical Brand Mark |
 
 </div>
 
@@ -68,9 +68,9 @@ AyuSwar AI bridges India's linguistic diversity and overburdened outpatient clin
 
 ---
 
-## 💎 Design System: Theme 10 (Banarasi Zari)
+## 💎 Design System: Banarasi Zari Clinical Palette
 
-AyuSwar AI is styled with **Theme 10 (Banarasi Zari)**, fusing India's handloom textile heritage with precision clinical telemetry:
+AyuSwar AI is styled with the **Banarasi Zari Clinical Design System**, fusing India's handloom textile heritage with precision clinical telemetry:
 
 <div align="center">
 
@@ -84,7 +84,7 @@ AyuSwar AI is styled with **Theme 10 (Banarasi Zari)**, fusing India's handloom 
 
 </div>
 
-- **Official Brand Mark:** **Concept #21 (Deepam Heartbeat)** — Integrates a brass Diya bowl (`#0F4C5C`), an eternal golden flame (`#D4AF37`), an ECG sinus pulse (`#D64550`), and radiating acoustic frequency ripples. Scored **38/40** across 8 independent design metrics.
+- **Official Brand Mark:** **Deepam Heartbeat** — Integrates a brass Diya bowl (`#0F4C5C`), an eternal golden flame (`#D4AF37`), an ECG sinus pulse (`#D64550`), and radiating acoustic frequency ripples reflecting Indian healthcare sovereignty.
 
 ---
 
