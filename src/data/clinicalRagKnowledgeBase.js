@@ -18,7 +18,7 @@ export const CLINICAL_RAG_CORPUS = [
     id: 'rag_hosp_01',
     category: 'Hospital Navigation',
     topics: ['opd_timings', 'doctor_schedule', 'clinic_hours'],
-    keywords: ['timing', 'timings', 'time', 'open', 'hours', 'schedule', 'doctor timing', 'opd', 'షెడ్యూల్', 'సమయం', 'వేళలు', 'క్లినిక్', 'समय', 'कब खुलता है'],
+    keywords: ['timing', 'timings', 'time', 'open', 'hours', 'schedule', 'doctor timing', 'opd', 'clinic', 'hospital', 'doctor', 'doctors', 'when', 'షెడ్యూల్', 'సమయం', 'వేళలు', 'క్లినిక్', 'డాక్టర్', 'समय', 'कब खुलता है', 'डॉक्टर'],
     questions: [
       'What are the OPD clinic timings and doctor schedules?',
       'డాక్టర్లు ఎప్పుడు అందుబాటులో ఉంటారు? OPD సమయాలు ఏమిటి?',
@@ -32,7 +32,7 @@ export const CLINICAL_RAG_CORPUS = [
     id: 'rag_hosp_02',
     category: 'Hospital Navigation',
     topics: ['token_booking', 'appointment', 'queue'],
-    keywords: ['token', 'book', 'appointment', 'slot', 'queue', 'wait', 'number', 'టోకెన్', 'అపాయింట్‌మెంట్', 'నంబర్', 'వెయిటింగ్', 'टोकन', 'अपॉइंटमेंट', 'नंबर'],
+    keywords: ['token', 'book', 'booking', 'appointment', 'slot', 'queue', 'wait', 'number', 'registration', 'consultation', 'టోకెన్', 'అపాయింట్‌మెంట్', 'నంబర్', 'వెయిటింగ్', 'బుకింగ్', 'टोकन', 'अपॉइंटमेंट', 'नंबर', 'बुकिंग'],
     questions: [
       'How to book an OPD token or check appointment queue?',
       'ఓపీడీ టోకెన్ ఎలా బుక్ చేసుకోవాలి? నా వెయిటింగ్ నంబర్ ఎలా తెలుస్తుంది?',
@@ -146,7 +146,7 @@ export const CLINICAL_RAG_CORPUS = [
     id: 'rag_symp_01',
     category: 'Symptom Care',
     topics: ['fever', 'body_pain', 'temperature', 'dengue_warning'],
-    keywords: ['fever', 'jwaram', 'bukhar', 'temperature', 'body pain', 'chills', 'cold fever', 'జ్వరం', 'చలి జ్వరం', 'ఒళ్లు నొప్పులు', 'తలనొప్పి', 'డెంగ్యూ', 'बुखार', 'सिरदर्द', 'डेंगू'],
+    keywords: ['fever', 'cough', 'cold', 'headache', 'throat', 'sore throat', 'jwaram', 'daggu', 'bukhar', 'khansi', 'temperature', 'body pain', 'chills', 'cold fever', 'జ్వరం', 'దగ్గు', 'చలి జ్వరం', 'ఒళ్లు నొప్పులు', 'తలనొప్పి', 'డెంగ్యూ', 'బుఖార్', 'बुखार', 'खांसी', 'सिरदर्द', 'डेंगू'],
     questions: [
       'How to manage acute fever and when to suspect dengue/malaria warning signs?',
       'జ్వరం వచ్చినప్పుడు ఇంట్లో ఏం జాగ్రత్తలు తీసుకోవాలి? డెంగ్యూ ఎప్పుడు అనుమానించాలి?',

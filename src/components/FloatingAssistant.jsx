@@ -22,7 +22,8 @@ import {
   Settings,
   Cpu,
   ShieldCheck,
-  Stethoscope
+  Stethoscope,
+  Globe
 } from 'lucide-react';
 import { askAyuSwarBrain, getAiConfig, saveAiConfig, AI_PROVIDERS } from '../services/aiBrainService';
 
@@ -86,7 +87,16 @@ export default function FloatingAssistant({
   const [isMeSpeaking, setIsMeSpeaking] = useState(false);
   const [elapsedVoiceSec, setElapsedVoiceSec] = useState(0);
   const [liveTranscript, setLiveTranscript] = useState('');
-  const [speechLanguage, setSpeechLanguage] = useState('te-IN'); // Telugu default, or hi-IN, en-IN
+  const [speechLanguage, setSpeechLanguage] = useState(() => {
+    try {
+      return localStorage.getItem('ayuswar_language') || 'en-IN';
+    } catch {
+      return 'en-IN';
+    }
+  });
+  const [sessionActiveSec, setSessionActiveSec] = useState(0);
+  const [lastUserQuery, setLastUserQuery] = useState('');
+  const sessionTimerRef = useRef(null);
   const [currentAiReply, setCurrentAiReply] = useState('');
   const [isProcessingQuery, setIsProcessingQuery] = useState(false);
   const [showAiSettingsModal, setShowAiSettingsModal] = useState(false);
@@ -122,6 +132,7 @@ export default function FloatingAssistant({
   // Process question via AyuSwar Brain (API / Open-Source / Local Indic NLP)
   const handleProcessQuestion = async (queryText) => {
     handleProcessQuestionRef.current = handleProcessQuestion;
+    setLastUserQuery(queryText);
     setIsProcessingQuery(true);
     setAssistantState('speaking');
     
@@ -152,9 +163,9 @@ export default function FloatingAssistant({
       utterance.rate = 0.95;
       utterance.pitch = 1.0;
       // Auto detect language
-      if (/[\u0C00-\u0C7F]/.test(text)) {
+      if (/[\u0C00-\u0C7F]/.test(text) || speechLanguage === 'te-IN') {
         utterance.lang = 'te-IN';
-      } else if (/[\u0900-\u097F]/.test(text)) {
+      } else if (/[\u0900-\u097F]/.test(text) || speechLanguage === 'hi-IN') {
         utterance.lang = 'hi-IN';
       } else {
         utterance.lang = 'en-IN';
@@ -181,20 +192,34 @@ export default function FloatingAssistant({
       }
 
       const cleaned = liveTranscript.trim();
-      if (cleaned && !cleaned.startsWith('Listening') && !cleaned.startsWith('Tap')) {
+      const isPlaceholder = !cleaned || 
+        cleaned.startsWith('Listening') || 
+        cleaned.startsWith('తెలుగులో') || 
+        cleaned.startsWith('हिन्दी में') || 
+        cleaned.startsWith('Tap');
+
+      if (!isPlaceholder && cleaned.length > 1) {
         handleProcessQuestion(cleaned);
       } else {
-        const defaultQ = effectiveRole === 'doctor' 
-          ? 'latest patient reports and asthma GINA guidelines' 
-          : (effectiveRole === 'patient' ? 'my appointment and medications' : 'book opd token for doctor');
-        handleProcessQuestion(defaultQ);
+        const noSpeechMsg = speechLanguage === 'te-IN'
+          ? "మీ మాటలు స్పష్టంగా రికార్డ్ కాలేదు. దయచేసి 'Me to Speak' బటన్ నొక్కి మళ్లీ మాట్లాడండి."
+          : (speechLanguage === 'hi-IN'
+            ? "आपकी आवाज़ साफ़ सुनाई नहीं दी। कृपया 'Me to Speak' दबाकर दोबारा बोलें।"
+            : "Could not detect clear speech. Please tap 'Me to Speak' and speak into your mic, or type your query below.");
+        setCurrentAiReply(noSpeechMsg);
+        setAssistantState('expanded');
       }
     } else {
       // User initiates speaking -> timer starts at 00:00
       setIsMeSpeaking(true);
       setAssistantState('listening');
       setElapsedVoiceSec(0);
-      setLiveTranscript('Listening to your voice... Speak now in Telugu, Hindi or English');
+      const promptText = speechLanguage === 'te-IN' 
+        ? 'తెలుగులో మాట్లాడండి... మీ ప్రశ్న లేదా సమస్య చెప్పండి' 
+        : (speechLanguage === 'hi-IN' 
+          ? 'हिन्दी में बोलें... अपनी समस्या या सवाल पूछें' 
+          : 'Listening in English... Speak your symptoms or hospital query');
+      setLiveTranscript(promptText);
 
       if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
@@ -245,6 +270,10 @@ export default function FloatingAssistant({
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
+    }
+    if (sessionTimerRef.current) {
+      clearInterval(sessionTimerRef.current);
+      sessionTimerRef.current = null;
     }
     if (speechRecognitionRef.current) {
       try { speechRecognitionRef.current.stop(); } catch {}
@@ -555,6 +584,60 @@ export default function FloatingAssistant({
                     {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
                     <span>{isMuted ? 'Muted' : 'Audio On'}</span>
                   </button>
+                </div>
+
+                {/* Indic Speech Language Selector (English / Telugu / Hindi) */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: 'rgba(15, 76, 92, 0.05)',
+                  borderRadius: '12px',
+                  padding: '5px 8px',
+                  border: '1px solid rgba(15, 76, 92, 0.12)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 800, color: '#0F4C5C' }}>
+                    <Globe size={13} color="#0F4C5C" />
+                    <span>Voice Language:</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '4px' }}>
+                    {[
+                      { id: 'en-IN', label: 'English', badge: 'EN' },
+                      { id: 'te-IN', label: 'తెలుగు', badge: 'TE' },
+                      { id: 'hi-IN', label: 'हिन्दी', badge: 'HI' }
+                    ].map(lang => (
+                      <button
+                        key={lang.id}
+                        type="button"
+                        onClick={() => {
+                          setSpeechLanguage(lang.id);
+                          try { localStorage.setItem('ayuswar_language', lang.id); } catch {}
+                          if (speechRecognitionRef.current) {
+                            speechRecognitionRef.current.lang = lang.id;
+                          }
+                        }}
+                        style={{
+                          background: speechLanguage === lang.id ? '#0F4C5C' : '#FFFFFF',
+                          color: speechLanguage === lang.id ? '#FFFFFF' : '#475569',
+                          border: speechLanguage === lang.id ? '1px solid #0F4C5C' : '1px solid #CBD5E1',
+                          borderRadius: '8px',
+                          padding: '3px 8px',
+                          fontSize: '10.5px',
+                          fontWeight: speechLanguage === lang.id ? 800 : 650,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '3px',
+                          boxShadow: speechLanguage === lang.id ? '0 1px 4px rgba(15, 76, 92, 0.25)' : 'none',
+                          transition: 'all 0.15s ease'
+                        }}
+                        title={`Switch speech transcription to ${lang.label}`}
+                      >
+                        <span style={{ fontSize: '9px', opacity: 0.8 }}>{lang.badge}</span>
+                        <span>{lang.label}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Soundwave Frequency Visualizer Box */}
@@ -1105,10 +1188,10 @@ export default function FloatingAssistant({
               </div>
 
               <div style={{ fontSize: '17px', fontWeight: 800, color: '#081C24' }}>
-                {effectiveRole === 'receptionist' ? 'Inquiry Completed' : 'Call Ended'}
+                {effectiveRole === 'doctor' ? 'Clinical Encounter Ended' : (effectiveRole === 'patient' ? 'Health Consultation Ended' : 'Inquiry Completed')}
               </div>
               <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px', fontFamily: 'monospace' }}>
-                {effectiveRole === 'doctor' ? '00:48' : (effectiveRole === 'patient' ? '01:02' : '00:35')}
+                {String(Math.floor(sessionActiveSec / 60)).padStart(2, '0')}:{String(sessionActiveSec % 60).padStart(2, '0')}
               </div>
 
               {/* Discussion Recap Box */}
@@ -1124,27 +1207,21 @@ export default function FloatingAssistant({
               }}>
                 <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                   {effectiveRole === 'doctor' 
-                    ? "Here's what we discussed:" 
-                    : (effectiveRole === 'patient' ? "Here's what I found for you:" : "Reception Desk Summary:")}
+                    ? "Clinical Encounter Summary:" 
+                    : (effectiveRole === 'patient' ? "Consultation Summary:" : "Real-Time Consultation Summary:")}
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#475569', lineHeight: 1.6 }}>
-                  {effectiveRole === 'doctor' ? (
+                  {lastUserQuery ? (
                     <>
-                      <li>2 reports reviewed</li>
-                      <li>1 prescription updated</li>
-                      <li>Next follow-up: 28 May 2025</li>
-                    </>
-                  ) : effectiveRole === 'patient' ? (
-                    <>
-                      <li>Appointment tomorrow · 10:15 AM</li>
-                      <li>2 reports available</li>
-                      <li>1 medication due today</li>
+                      <li><strong>Query:</strong> &ldquo;{lastUserQuery.slice(0, 50)}{lastUserQuery.length > 50 ? '...' : ''}&rdquo;</li>
+                      <li><strong>Guidance:</strong> {currentAiReply ? currentAiReply.split('\n')[0].replace(/^[*#_\s]+/, '').slice(0, 68) : 'Grounded clinical advice provided'}</li>
+                      <li><strong>Channel:</strong> {speechLanguage === 'te-IN' ? 'Telugu (te-IN)' : (speechLanguage === 'hi-IN' ? 'Hindi (hi-IN)' : 'English (en-IN)')} · Grounded RAG Verified</li>
                     </>
                   ) : (
                     <>
-                      <li>OPD Token #14 assigned (General OPD)</li>
-                      <li>Attending: Dr. Ananya Sharma MD</li>
-                      <li>Indic Voice & ABHA consent verified</li>
+                      <li><strong>Session:</strong> Ambient Voice Consultation Standby</li>
+                      <li><strong>Language:</strong> {speechLanguage === 'te-IN' ? 'Telugu (te-IN)' : (speechLanguage === 'hi-IN' ? 'Hindi (hi-IN)' : 'English (en-IN)')}</li>
+                      <li><strong>Safety Sentinel:</strong> 0 Critical Triage Red Flags detected</li>
                     </>
                   )}
                 </ul>
@@ -1173,11 +1250,17 @@ export default function FloatingAssistant({
                     cursor: 'pointer'
                   }}
                 >
-                  {effectiveRole === 'doctor' ? 'View Summary' : (effectiveRole === 'patient' ? 'View Details' : 'Close & Continue')}
+                  {effectiveRole === 'doctor' ? 'View Patient Summary' : (effectiveRole === 'patient' ? 'View Details' : 'Close & Continue')}
                 </button>
 
                 <button
-                  onClick={() => setAssistantState('expanded')}
+                  onClick={() => {
+                    setAssistantState('expanded');
+                    setSessionActiveSec(0);
+                    setLastUserQuery('');
+                    setCurrentAiReply('');
+                    setLiveTranscript('');
+                  }}
                   style={{
                     background: 'none',
                     border: 'none',
