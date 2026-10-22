@@ -443,26 +443,32 @@ export default function App() {
       )}
 
       {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
-      <React.Suspense fallback={null}>
-        <SanjivaniEmergencyModal 
-          isOpen={isSanjivaniModalOpen}
-          onClose={() => setIsSanjivaniModalOpen(false)}
-        />
-      </React.Suspense>
+      {isSanjivaniModalOpen && (
+        <React.Suspense fallback={null}>
+          <SanjivaniEmergencyModal 
+            isOpen={isSanjivaniModalOpen}
+            onClose={() => setIsSanjivaniModalOpen(false)}
+          />
+        </React.Suspense>
+      )}
 
       {/* Clinician Authentication & OPD Login Modal */}
-      <DoctorAuthModal
-        isOpen={isDoctorAuthModalOpen}
-        onClose={() => setIsDoctorAuthModalOpen(false)}
-        onLoginSuccess={handleDoctorLoginSuccess}
-      />
+      {isDoctorAuthModalOpen && (
+        <DoctorAuthModal
+          isOpen={isDoctorAuthModalOpen}
+          onClose={() => setIsDoctorAuthModalOpen(false)}
+          onLoginSuccess={handleDoctorLoginSuccess}
+        />
+      )}
 
       {/* Patient ABHA Citizen Login Modal */}
-      <PatientAuthModal
-        isOpen={isPatientAuthModalOpen}
-        onClose={() => setIsPatientAuthModalOpen(false)}
-        onLoginSuccess={handlePatientLoginSuccess}
-      />
+      {isPatientAuthModalOpen && (
+        <PatientAuthModal
+          isOpen={isPatientAuthModalOpen}
+          onClose={() => setIsPatientAuthModalOpen(false)}
+          onLoginSuccess={handlePatientLoginSuccess}
+        />
+      )}
 
       {/* Floating Ambient Voice Assistant (Role-aware across landing, doctor, and patient portals) */}
       {!isSanjivaniModalOpen && location.pathname !== '/sanjivani' && !location.pathname.startsWith('/emergency') && !location.pathname.startsWith('/auth') && (
@@ -488,71 +494,81 @@ export default function App() {
       )}
 
       {/* Universal WhatsApp Vernacular Spoken Audio-Rx Modal */}
-      <WhatsAppAudioRxModal 
-        isOpen={isWhatsAppAudioRxModalOpen}
-        onClose={() => setIsWhatsAppAudioRxModalOpen(false)}
-        patientData={{
-          name: currentPatient?.patientName || 'Narayana Rao',
-          vernacularName: 'నారాయణ రావు',
-          phone: '+91 98490 12345',
-          cleanPhone: '919849012345',
-          age: currentPatient?.age || 58,
-          gender: currentPatient?.gender || 'Male',
-          abhaId: currentPatient?.abhaId || '91-4521-8932-1049',
-          language: currentPatient?.language || 'Telugu',
-          langCode: 'te-IN'
-        }}
-        doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
-        initialLanguage="te"
-      />
+      {isWhatsAppAudioRxModalOpen && (
+        <WhatsAppAudioRxModal 
+          isOpen={isWhatsAppAudioRxModalOpen}
+          onClose={() => setIsWhatsAppAudioRxModalOpen(false)}
+          patientData={{
+            name: currentPatient?.patientName || 'Narayana Rao',
+            vernacularName: 'నారాయణ రావు',
+            phone: '+91 98490 12345',
+            cleanPhone: '919849012345',
+            age: currentPatient?.age || 58,
+            gender: currentPatient?.gender || 'Male',
+            abhaId: currentPatient?.abhaId || '91-4521-8932-1049',
+            language: currentPatient?.language || 'Telugu',
+            langCode: 'te-IN'
+          }}
+          doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+          initialLanguage="te"
+        />
+      )}
 
       {/* 14-Phase Mobile Clinical Innovation Hub Modal */}
-      <MobileInnovationHubModal 
-        isOpen={isInnovationHubOpen}
-        onClose={() => setIsInnovationHubOpen(false)}
-        onOpenTeleconsult={() => setIsTeleconsultOpen(true)}
-        onOpenScribe={() => setIsLiveScribeOpen(true)}
-        onOpenAbha={() => {
-          if (currentPatient) navigate('/patient-portal');
-          else setIsPatientAuthModalOpen(true);
-        }}
-        onOpenScanner={() => navigate('/scanner')}
-        onOpenPillVision={() => setIsPillVisionOpen(true)}
-        onOpenGeoBeacon={() => setIsSanjivaniModalOpen(true)}
-        onOpenAudioRx={() => setIsWhatsAppAudioRxModalOpen(true)}
-        onOpenVitalsRppg={() => setIsVitalsRppgOpen(true)}
-      />
+      {isInnovationHubOpen && (
+        <MobileInnovationHubModal 
+          isOpen={isInnovationHubOpen}
+          onClose={() => setIsInnovationHubOpen(false)}
+          onOpenTeleconsult={() => setIsTeleconsultOpen(true)}
+          onOpenScribe={() => setIsLiveScribeOpen(true)}
+          onOpenAbha={() => {
+            if (currentPatient) navigate('/patient-portal');
+            else setIsPatientAuthModalOpen(true);
+          }}
+          onOpenScanner={() => navigate('/scanner')}
+          onOpenPillVision={() => setIsPillVisionOpen(true)}
+          onOpenGeoBeacon={() => setIsSanjivaniModalOpen(true)}
+          onOpenAudioRx={() => setIsWhatsAppAudioRxModalOpen(true)}
+          onOpenVitalsRppg={() => setIsVitalsRppgOpen(true)}
+        />
+      )}
 
       {/* Phase 1: WebRTC Telemedicine Video Call Modal */}
-      <TeleconsultModal 
-        isOpen={isTeleconsultOpen}
-        onClose={() => setIsTeleconsultOpen(false)}
-        patientName={currentPatient?.patientName || 'Narayana Rao'}
-        doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
-      />
+      {isTeleconsultOpen && (
+        <TeleconsultModal 
+          isOpen={isTeleconsultOpen}
+          onClose={() => setIsTeleconsultOpen(false)}
+          patientName={currentPatient?.patientName || 'Narayana Rao'}
+          doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+        />
+      )}
 
       {/* Phase 10: Vitals-rPPG Contactless Camera Scanner Modal */}
-      <VitalsRppgModal 
-        isOpen={isVitalsRppgOpen}
-        onClose={() => setIsVitalsRppgOpen(false)}
-        onSaveVitals={(vitals) => {
-          if (currentPatient) {
-            setCurrentPatient(prev => ({
-              ...prev,
-              vitals: { ...prev.vitals, hr: vitals.heartRate, spo2: vitals.spo2 }
-            }));
-          }
-        }}
-      />
+      {isVitalsRppgOpen && (
+        <VitalsRppgModal 
+          isOpen={isVitalsRppgOpen}
+          onClose={() => setIsVitalsRppgOpen(false)}
+          onSaveVitals={(vitals) => {
+            if (currentPatient) {
+              setCurrentPatient(prev => ({
+                ...prev,
+                vitals: { ...prev.vitals, hr: vitals.heartRate, spo2: vitals.spo2 }
+              }));
+            }
+          }}
+        />
+      )}
 
       {/* Phase 7: Pill-Vision Computer Vision Scanner Modal */}
-      <PillVisionScannerModal 
-        isOpen={isPillVisionOpen}
-        onClose={() => setIsPillVisionOpen(false)}
-      />
+      {isPillVisionOpen && (
+        <PillVisionScannerModal 
+          isOpen={isPillVisionOpen}
+          onClose={() => setIsPillVisionOpen(false)}
+        />
+      )}
 
       {/* Phase 2: Live Ambient Voice Scribe Session Modal */}
-      {currentPatient && (
+      {isLiveScribeOpen && currentPatient && (
         <LiveScribeSessionModal 
           isOpen={isLiveScribeOpen}
           onClose={() => setIsLiveScribeOpen(false)}
