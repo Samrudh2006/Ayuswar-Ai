@@ -303,6 +303,8 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className="modal-overlay" style={{
       position: 'fixed',
