@@ -477,29 +477,8 @@ export default function FloatingAssistant({
               </div>
             </div>
 
-            {/* Window Controls: AI Engine Settings, Minimize, Close */}
+            {/* Window Controls: Minimize, Close */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <button
-                onClick={() => setShowAiSettingsModal(true)}
-                style={{
-                  background: 'rgba(15, 76, 92, 0.08)',
-                  border: '1px solid rgba(15, 76, 92, 0.25)',
-                  color: '#0F4C5C',
-                  cursor: 'pointer',
-                  padding: '3px 7px',
-                  borderRadius: '12px',
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px'
-                }}
-                title="AI Brain Engine"
-              >
-                <Cpu size={11} />
-                <span>AI</span>
-              </button>
-
               <button
                 onClick={() => setAssistantState('collapsed')}
                 style={{
