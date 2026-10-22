@@ -783,7 +783,7 @@ export default function HeroLanding({
                       boxShadow: isSelected ? '0 8px 20px rgba(15, 76, 92, 0.14)' : '0 2px 8px rgba(10, 37, 64, 0.03)',
                       cursor: 'pointer',
                       width: '104px',
-                      transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                       transform: isSelected ? 'translateY(-2px)' : 'none'
                     }}
                   >
@@ -799,7 +799,7 @@ export default function HeroLanding({
                         justifyContent: 'center',
                         color: isSelected ? '#ffffff' : '#0F4C5C',
                         marginBottom: '8px',
-                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                        transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
                       }}
                     >
                       <IconComponent size={20} className="solution-micro-icon" />
@@ -2736,7 +2736,7 @@ export default function HeroLanding({
                             : '1px solid #334155',
                         boxShadow: isHighlighted ? '0 0 20px rgba(45, 212, 191, 0.6)' : 'none',
                         transform: isHighlighted ? 'scale(1.08)' : 'none',
-                        transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                         cursor: 'pointer'
                       }}
                       onClick={() => {
@@ -4050,7 +4050,7 @@ export default function HeroLanding({
           box-shadow: 0 6px 18px rgba(15, 76, 92, 0.32);
         }
         .solution-micro-card:hover .solution-micro-icon {
-          animation: microIconPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          animation: microIconPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .solution-micro-card::after {
           content: '';

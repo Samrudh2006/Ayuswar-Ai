@@ -776,8 +776,7 @@ export default function LiveScribeSessionModal({
                     padding: '12px 14px',
                     borderRadius: '12px',
                     background: '#FAF8F5',
-                    border: '1.5px solid #E2E8F0',
-                    borderLeft: `4px solid ${p.color}`
+                    border: `1.5px solid ${p.color}33`
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>

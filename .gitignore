@@ -38,3 +38,9 @@ FINAL_SCORECARD.md
 
 # VibeWise local learning notes & state
 .vibe-wise/
+
+# Agent & Impeccable Tool directories
+.agent/
+.agents/
+.gemini/
+.impeccable/

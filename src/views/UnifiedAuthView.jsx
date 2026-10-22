@@ -414,17 +414,18 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             <div style={{
               width: '46px',
               height: '46px',
-              borderRadius: '13px',
-              background: 'rgba(7, 26, 46, 0.9)',
-              border: '1.5px solid #D4AF37',
+              borderRadius: '50%',
+              background: '#FAF8F5',
+              border: '2px solid #D4AF37',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
+              overflow: 'hidden',
+              padding: '2px',
+              flexShrink: 0
             }}>
-              <Activity size={24} color="#D4AF37" />
+              <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div>
               <div style={{ fontSize: '22px', fontWeight: 900, color: '#FFFFFF', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.3px' }}>
@@ -1092,6 +1093,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1120,6 +1123,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1151,6 +1156,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1179,6 +1186,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1210,6 +1219,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 36px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1253,6 +1264,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             padding: '10px 36px 10px 36px',
                             borderRadius: '9px',
                             border: '1.5px solid #CBD5E1',
+                            background: '#FFFFFF',
+                            backgroundColor: '#FFFFFF',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',

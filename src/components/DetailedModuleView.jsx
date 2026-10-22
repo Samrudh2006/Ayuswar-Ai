@@ -1219,7 +1219,7 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Elimination of illegible handwriting, dosage confusion, and missed drug interactions.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-indigo-600 mb-2">4.8x</div>
+                  <div className="text-3xl font-black text-[#0F4C5C] mb-2">4.8x</div>
                   <div className="text-sm font-bold text-slate-900">Faster e-Prescription Dispatch</div>
                   <div className="text-xs text-slate-500 mt-1">Instant voice prescription sent via WhatsApp before the patient even reaches the pharmacy counter.</div>
                 </div>
@@ -1306,7 +1306,7 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Multi-symptom presentations mapped to verified ICD-10 codes across disease categories.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-indigo-600 mb-2">100%</div>
+                  <div className="text-3xl font-black text-[#0F4C5C] mb-2">100%</div>
                   <div className="text-sm font-bold text-slate-900">ABDM SNOMED-CT Alignment</div>
                   <div className="text-xs text-slate-500 mt-1">Standard clinical vocabulary extension for interoperable schema generation.</div>
                 </div>
@@ -1459,7 +1459,7 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Deterministic symptom and vocabulary mapping on synthetic test assertions.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-3xl font-black text-indigo-600 mb-2">168 ms</div>
+                  <div className="text-3xl font-black text-[#0F4C5C] mb-2">168 ms</div>
                   <div className="text-sm font-bold text-slate-900">Median Evaluation Latency</div>
                   <div className="text-xs text-slate-500 mt-1">High-throughput real-time validation across all test suites.</div>
                 </div>

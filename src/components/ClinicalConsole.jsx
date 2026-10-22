@@ -1267,8 +1267,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                         padding: '10px 14px',
                         borderRadius: '10px',
                         background: '#ffffff',
-                        border: '1px solid #E2E8F0',
-                        borderLeft: `4px solid ${med.color}`,
+                        border: `1px solid ${med.color}33`,
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between'
@@ -1716,7 +1716,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                   background: '#F0FDFA',
                   padding: '10px',
                   borderRadius: '8px',
-                  borderLeft: '3px solid #0F4C5C',
+                  border: '1px solid rgba(15, 76, 92, 0.15)',
                   fontStyle: 'italic',
                   fontSize: '12px'
                 }}>
@@ -1725,7 +1725,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                 <div style={{ color: '#0284C7', textDecoration: 'underline', fontSize: '11.5px' }}>
                   🔊 https://ayuswar.ai/rx/{currentEncounter.patient.abhaId}
                 </div>
-                <div style={{ fontSize: '10px', color: '#667781', textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: '#667781', textAlign: 'right' }}>
                   Delivered • ABDM Verified ✅
                 </div>
               </div>

@@ -1196,7 +1196,7 @@ export default function AcousticBiomarkerLabView() {
                   fontFamily: 'monospace',
                   fontSize: '12px',
                   color: '#E2E8F0',
-                  borderLeft: '3px solid #00F5D4',
+                  border: '1px solid rgba(0, 245, 212, 0.3)',
                   flex: 1
                 }}>
                   {dspAnalysisStage}

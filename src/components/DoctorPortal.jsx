@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Users, 
   Calendar, 
@@ -13,7 +13,8 @@ import {
   Sun, 
   TrendingUp, 
   TrendingDown, 
-  ArrowRight, 
+  ArrowRight,
+  ArrowLeft, 
   Mic, 
   CheckCircle2, 
   Clock, 
@@ -54,6 +55,8 @@ import DoctorClinicalLibraryTab from './doctor/DoctorClinicalLibraryTab';
 import DoctorAiAssistantTab from './doctor/DoctorAiAssistantTab';
 import DeepamHeartbeatEmblem from './DeepamHeartbeatEmblem';
 import BotanicalWatermark from './BotanicalWatermark';
+import MintIvoryWaveBackground from './MintIvoryWaveBackground';
+import PatientAnalyticsCard from './PatientAnalyticsCard';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
@@ -224,6 +227,8 @@ export default function DoctorPortal({
   };
   const [reportSearchTerm, setReportSearchTerm] = useState('');
   const [reportCategoryFilter, setReportCategoryFilter] = useState('all');
+  const [selectedReportPatient, setSelectedReportPatient] = useState(null);
+  const [reportsViewMode, setReportsViewMode] = useState('by_patient'); // 'by_patient' | 'all'
   const [dicomInvert, setDicomInvert] = useState(false);
   // dicomContrast omitted
   const [fhirToast, setFhirToast] = useState(null);
@@ -375,6 +380,141 @@ export default function DoctorPortal({
   const appointments = dashboardAppointments;
 
   const recentReports = DIAGNOSTIC_REPORTS_DATABASE;
+
+  // Group diagnostics by individual patient profile
+  const patientsWithReports = useMemo(() => {
+    const map = new Map();
+
+    // 1. Index known patients from allPatients
+    allPatients.forEach(p => {
+      const key = (p.name || '').trim().toLowerCase();
+      map.set(key, {
+        id: p.id,
+        name: p.name,
+        vernacular: p.vernacular || p.name,
+        age: p.age,
+        gender: p.gender || 'Unknown',
+        genderLabel: p.genderLabel || p.gender || 'Unknown',
+        abhaId: p.abhaId,
+        phone: p.phone,
+        village: p.village,
+        conditions: p.conditions || [],
+        primaryCondition: p.primaryCondition || (p.conditions && p.conditions[0]) || 'General Clinical Care',
+        triage: p.triage || 'Stable',
+        triageColor: p.triageColor || '#10B981',
+        vitals: p.vitals || { bp: '120/80', hr: '76 bpm', spo2: '98%' },
+        reports: []
+      });
+    });
+
+    // 2. Populate and connect from DIAGNOSTIC_REPORTS_DATABASE
+    DIAGNOSTIC_REPORTS_DATABASE.forEach(rep => {
+      const pName = (rep.patient || '').trim();
+      const key = pName.toLowerCase();
+
+      let entry = null;
+      for (const [k, v] of map.entries()) {
+        if (k === key || k.includes(key) || key.includes(k)) {
+          entry = v;
+          break;
+        }
+      }
+
+      if (!entry) {
+        entry = {
+          id: `rep_patient_${rep.id}`,
+          name: rep.patient,
+          vernacular: rep.patient,
+          age: rep.age || 45,
+          gender: rep.gender || 'Male',
+          genderLabel: rep.gender || 'Male',
+          abhaId: rep.abhaId || `91-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`,
+          phone: '+91 98480 22338',
+          village: 'Kurnool PHC Catchment',
+          conditions: [rep.category || 'Pathology Examination'],
+          primaryCondition: rep.category || 'Clinical Examination',
+          triage: 'Stable',
+          triageColor: '#10B981',
+          vitals: { bp: '120/80', hr: '74 bpm', spo2: '98%' },
+          reports: []
+        };
+        map.set(key, entry);
+      }
+
+      entry.reports.push(rep);
+    });
+
+    // Return only patients with at least 1 diagnostic report, sorted by report count
+    return Array.from(map.values())
+      .filter(p => p.reports.length > 0)
+      .sort((a, b) => b.reports.length - a.reports.length);
+  }, [allPatients]);
+
+  const filteredPatientsWithReports = useMemo(() => {
+    let list = patientsWithReports;
+
+    if (reportCategoryFilter !== 'all') {
+      list = list.filter(p => p.reports.some(r => {
+        if (reportCategoryFilter === 'Radiology') return r.category === 'Radiology' || r.modality?.toLowerCase().includes('radiograph') || r.modality?.toLowerCase().includes('ct') || r.modality?.toLowerCase().includes('mri') || r.modality?.toLowerCase().includes('sonography');
+        if (reportCategoryFilter === 'Cardiology') return r.category === 'Cardiology' || r.title?.toLowerCase().includes('ecg') || r.title?.toLowerCase().includes('echo');
+        if (reportCategoryFilter === 'Hematology') return r.category === 'Hematology' || r.title?.toLowerCase().includes('blood') || r.title?.toLowerCase().includes('cbc');
+        if (reportCategoryFilter === 'Biochemistry') return r.category === 'Biochemistry' || r.title?.toLowerCase().includes('hba1c') || r.title?.toLowerCase().includes('lipid') || r.title?.toLowerCase().includes('renal') || r.title?.toLowerCase().includes('liver');
+        if (reportCategoryFilter === 'Microbiology') return r.category === 'Microbiology' || r.category === 'Infectious' || r.title?.toLowerCase().includes('dengue') || r.title?.toLowerCase().includes('widal') || r.title?.toLowerCase().includes('genexpert');
+        if (reportCategoryFilter === 'Pulmonology') return r.category === 'Pulmonology' || r.title?.toLowerCase().includes('spirometry') || r.title?.toLowerCase().includes('abg');
+        return true;
+      }));
+    }
+
+    if (reportSearchTerm.trim()) {
+      const q = reportSearchTerm.toLowerCase().trim();
+      list = list.filter(p => 
+        p.name.toLowerCase().includes(q) ||
+        p.vernacular?.toLowerCase().includes(q) ||
+        p.abhaId?.toLowerCase().includes(q) ||
+        p.primaryCondition?.toLowerCase().includes(q) ||
+        p.reports.some(r => 
+          r.title.toLowerCase().includes(q) || 
+          r.modality?.toLowerCase().includes(q) || 
+          (r.loincCode && r.loincCode.toLowerCase().includes(q)) ||
+          r.findings?.toLowerCase().includes(q) ||
+          r.impression?.toLowerCase().includes(q)
+        )
+      );
+    }
+
+    return list;
+  }, [patientsWithReports, reportCategoryFilter, reportSearchTerm]);
+
+  // If a patient is selected, their specific filtered reports
+  const selectedPatientReports = useMemo(() => {
+    if (!selectedReportPatient) return [];
+    let list = selectedReportPatient.reports;
+
+    if (reportCategoryFilter !== 'all') {
+      list = list.filter(r => {
+        if (reportCategoryFilter === 'Radiology') return r.category === 'Radiology' || r.modality?.toLowerCase().includes('radiograph') || r.modality?.toLowerCase().includes('ct') || r.modality?.toLowerCase().includes('mri') || r.modality?.toLowerCase().includes('sonography');
+        if (reportCategoryFilter === 'Cardiology') return r.category === 'Cardiology' || r.title?.toLowerCase().includes('ecg') || r.title?.toLowerCase().includes('echo');
+        if (reportCategoryFilter === 'Hematology') return r.category === 'Hematology' || r.title?.toLowerCase().includes('blood') || r.title?.toLowerCase().includes('cbc');
+        if (reportCategoryFilter === 'Biochemistry') return r.category === 'Biochemistry' || r.title?.toLowerCase().includes('hba1c') || r.title?.toLowerCase().includes('lipid') || r.title?.toLowerCase().includes('renal') || r.title?.toLowerCase().includes('liver');
+        if (reportCategoryFilter === 'Microbiology') return r.category === 'Microbiology' || r.category === 'Infectious' || r.title?.toLowerCase().includes('dengue') || r.title?.toLowerCase().includes('widal') || r.title?.toLowerCase().includes('genexpert');
+        if (reportCategoryFilter === 'Pulmonology') return r.category === 'Pulmonology' || r.title?.toLowerCase().includes('spirometry') || r.title?.toLowerCase().includes('abg');
+        return true;
+      });
+    }
+
+    if (reportSearchTerm.trim()) {
+      const q = reportSearchTerm.toLowerCase().trim();
+      list = list.filter(r => 
+        r.title.toLowerCase().includes(q) || 
+        r.modality?.toLowerCase().includes(q) || 
+        (r.loincCode && r.loincCode.toLowerCase().includes(q)) ||
+        r.findings?.toLowerCase().includes(q) ||
+        r.impression?.toLowerCase().includes(q)
+      );
+    }
+
+    return list;
+  }, [selectedReportPatient, reportCategoryFilter, reportSearchTerm]);
 
   const [aiResponses, setAiResponses] = useState([
     {
@@ -552,7 +692,10 @@ export default function DoctorPortal({
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F7F9' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+      {/* Pristine Mint-Ivory Flow Vector Canvas */}
+      <MintIvoryWaveBackground />
+
       {/* Mobile Drawer Overlay Backdrop */}
       {mobileDrawerOpen && (
         <div
@@ -681,7 +824,7 @@ export default function DoctorPortal({
           </div>
 
           {/* Navigation Items (All 8 Sidebar Items) */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
               { id: 'opd_queue', label: 'OPD Queue & Patients', icon: Users },
@@ -706,17 +849,30 @@ export default function DoctorPortal({
                     justifyContent: isCollapsedView ? 'center' : 'flex-start',
                     gap: isCollapsedView ? '0' : '12px',
                     padding: isCollapsedView ? '10px 0' : '10px 14px',
-                    borderRadius: '12px',
+                    borderRadius: '10px',
                     border: 'none',
-                    background: isActive ? 'rgba(15, 76, 92, 0.1)' : 'transparent',
+                    background: isActive ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
                     color: isActive ? '#0F4C5C' : '#475569',
                     fontFamily: 'Outfit, sans-serif',
                     fontSize: '14px',
-                    fontWeight: isActive ? 750 : 500,
+                    fontWeight: isActive ? 700 : 500,
                     cursor: 'pointer',
                     textAlign: 'left',
                     transition: 'all 160ms ease',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    boxShadow: 'none'
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'rgba(15, 76, 92, 0.04)';
+                      e.currentTarget.style.color = '#0F4C5C';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }
                   }}
                 >
                   <Icon size={18} color={isActive ? '#0F4C5C' : '#64748B'} />
@@ -765,7 +921,7 @@ export default function DoctorPortal({
       {/* =========================================================================
           MAIN PHYSICIAN OPERATING CANVAS
           ========================================================================= */}
-      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
           background: '#ffffff',
@@ -1314,127 +1470,65 @@ export default function DoctorPortal({
                 </div>
               </div>
 
-              {/* Bottom Section: Analytics + Reports */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '20px', marginBottom: '28px' }}>
-                {/* Patient Analytics */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
-                      Patient Analytics
+              {/* Patient Inflow & Follow-Up Analytics Card (Full-Width Showcase) */}
+              <PatientAnalyticsCard />
+
+              {/* Recent Diagnostic & Lab Reports Preview */}
+              <div style={{ background: '#ffffff', borderRadius: '18px', padding: '22px 26px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', marginBottom: '28px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                      Recent Diagnostic & Lab Reports
                     </h3>
-                    <div style={{ display: 'flex', gap: '4px', background: '#FAF8F5', padding: '3px', borderRadius: '10px' }}>
-                      {['Weekly', 'Monthly', 'Yearly'].map(tab => (
-                        <button
-                          key={tab}
-                          onClick={() => setAnalyticsRange(tab.toLowerCase())}
-                          style={{
-                            padding: '4px 10px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            background: analyticsRange === tab.toLowerCase() ? '#ffffff' : 'transparent',
-                            color: analyticsRange === tab.toLowerCase() ? '#0A2540' : '#64748B',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            boxShadow: analyticsRange === tab.toLowerCase() ? '0 1px 3px rgba(0,0,0,0.06)' : 'none'
-                          }}
-                        >
-                          {tab}
-                        </button>
-                      ))}
-                    </div>
+                    <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 0 0' }}>
+                      NABL accredited medical laboratory investigations & verified digital DICOM scans
+                    </p>
                   </div>
-
-                  {/* Legend */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '14px', fontSize: '11.5px', color: '#64748B' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#0F4C5C' }}></span>
-                      <span>New Patients</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3B82F6' }}></span>
-                      <span>Follow-ups</span>
-                    </div>
-                  </div>
-
-                  {/* Chart SVG */}
-                  <div style={{ position: 'relative', width: '100%', height: '180px' }}>
-                    <svg viewBox="0 0 520 180" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-                      {[30, 70, 110, 150].map((y, idx) => (
-                        <line key={idx} x1="30" y1={y} x2="510" y2={y} stroke="#F1F5F9" strokeWidth="1" />
-                      ))}
-                      <text x="10" y="34" fontSize="10" fill="#94A3B8">40</text>
-                      <text x="10" y="74" fontSize="10" fill="#94A3B8">30</text>
-                      <text x="10" y="114" fontSize="10" fill="#94A3B8">20</text>
-                      <text x="10" y="154" fontSize="10" fill="#94A3B8">10</text>
-
-                      <path d="M 40,120 Q 110,95 180,135 T 320,110 T 460,90 L 500,85" fill="none" stroke="#0F4C5C" strokeWidth="3" />
-                      <path d="M 40,145 Q 110,135 180,120 T 320,95 T 460,75 L 500,80" fill="none" stroke="#3B82F6" strokeWidth="3" />
-
-                      <circle cx="180" cy="135" r="4" fill="#0F4C5C" />
-                      <circle cx="320" cy="110" r="4" fill="#0F4C5C" />
-                      <circle cx="460" cy="90" r="4" fill="#0F4C5C" />
-
-                      <circle cx="180" cy="120" r="4" fill="#3B82F6" />
-                      <circle cx="320" cy="95" r="4" fill="#3B82F6" />
-                      <circle cx="460" cy="75" r="4" fill="#3B82F6" />
-
-                      {['May 5', 'May 6', 'May 7', 'May 8', 'May 9', 'May 10', 'May 11'].map((dt, i) => (
-                        <text key={i} x={40 + i * 75} y="175" fontSize="10" fill="#94A3B8" textAnchor="middle">{dt}</text>
-                      ))}
-                    </svg>
-                  </div>
+                  <span onClick={() => setActiveTab('reports')} style={{ fontSize: '13px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    View All in Reports & Lab →
+                  </span>
                 </div>
 
-                {/* Recent Reports */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
-                      Recent Reports
-                    </h3>
-                    <span onClick={() => setActiveTab('reports')} style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View All →</span>
-                  </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+                  {recentReports.slice(0, 3).map(rep => (
+                    <div
+                      key={rep.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '12px 14px',
+                        borderRadius: '12px',
+                        background: '#FAF8F5',
+                        border: '1px solid rgba(15, 76, 92, 0.08)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '20px' }}>{rep.icon}</span>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 750, color: '#081C24' }}>{rep.title}</div>
+                          <div style={{ fontSize: '11px', color: '#64748B' }}>{rep.patient} • {rep.date}</div>
+                        </div>
+                      </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {recentReports.slice(0, 2).map(rep => (
-                      <div
-                        key={rep.id}
+                      <button
+                        onClick={() => setSelectedReport(rep)}
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '10px 12px',
-                          borderRadius: '12px',
-                          background: '#FAF8F5',
-                          border: '1px solid #F1F5F9'
+                          padding: '6px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(15, 76, 92, 0.15)',
+                          background: '#ffffff',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          color: '#0F4C5C',
+                          cursor: 'pointer',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '18px' }}>{rep.icon}</span>
-                          <div>
-                            <div style={{ fontSize: '13px', fontWeight: 750, color: '#081C24' }}>{rep.title}</div>
-                            <div style={{ fontSize: '11px', color: '#64748B' }}>{rep.patient} • {rep.date}</div>
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => setSelectedReport(rep)}
-                          style={{
-                            padding: '5px 12px',
-                            borderRadius: '8px',
-                            border: '1px solid rgba(15, 76, 92, 0.12)',
-                            background: '#ffffff',
-                            fontSize: '11.5px',
-                            fontWeight: 700,
-                            color: '#081C24',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          View
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                        Inspect
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </>
@@ -2209,220 +2303,889 @@ export default function DoctorPortal({
                     </span>
                   </div>
                   <p style={{ fontSize: '13px', color: '#64748B' }}>
-                    Standardized LOINC-coded diagnostics, DICOM radiography viewport, spirometry flow-loops, and 1-click ABDM FHIR R4 export.
+                    {selectedReportPatient 
+                      ? `Viewing individual diagnostic repository for ${selectedReportPatient.name} (ABHA: ${selectedReportPatient.abhaId})`
+                      : "Browse patient diagnostic profiles. Click any patient's card or arrow to review their individual lab tests, radiography, and DICOM series."}
                   </p>
                 </div>
 
-                {/* Quick Search */}
-                <div style={{ position: 'relative', width: '320px' }}>
-                  <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
-                  <input
-                    type="text"
-                    placeholder="Search by patient, LOINC, test or analyte..."
-                    value={reportSearchTerm}
-                    onChange={e => setReportSearchTerm(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '9px 12px 9px 36px',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(15, 76, 92, 0.12)',
-                      fontSize: '13px',
-                      background: '#ffffff',
-                      color: '#081C24',
-                      outline: 'none'
-                    }}
-                  />
-                  {reportSearchTerm && (
+                {/* Right Header Controls: Mode Toggle & Search */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  {/* View Mode Toggle: By Patient vs All Flat */}
+                  <div style={{ 
+                    display: 'flex', 
+                    background: '#E2E8F0', 
+                    borderRadius: '10px', 
+                    padding: '3px',
+                    gap: '2px'
+                  }}>
                     <button
-                      onClick={() => setReportSearchTerm('')}
-                      style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '13px' }}
+                      type="button"
+                      onClick={() => { setReportsViewMode('by_patient'); }}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: reportsViewMode === 'by_patient' ? '#ffffff' : 'transparent',
+                        color: reportsViewMode === 'by_patient' ? '#0F4C5C' : '#64748B',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        boxShadow: reportsViewMode === 'by_patient' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                        transition: 'all 0.15s'
+                      }}
                     >
-                      ✕
+                      👥 By Patient Directory ({patientsWithReports.length})
                     </button>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => { setReportsViewMode('all'); setSelectedReportPatient(null); }}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        background: reportsViewMode === 'all' ? '#ffffff' : 'transparent',
+                        color: reportsViewMode === 'all' ? '#0F4C5C' : '#64748B',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        boxShadow: reportsViewMode === 'all' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      📑 All Reports ({recentReports.length})
+                    </button>
+                  </div>
+
+                  {/* Quick Search */}
+                  <div style={{ position: 'relative', width: '280px' }}>
+                    <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                    <input
+                      type="text"
+                      placeholder={selectedReportPatient ? `Search ${selectedReportPatient.name.split(' ')[0]}'s tests...` : "Search by patient, LOINC or test..."}
+                      value={reportSearchTerm}
+                      onChange={e => setReportSearchTerm(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '9px 12px 9px 36px',
+                        borderRadius: '10px',
+                        border: '1px solid rgba(15, 76, 92, 0.12)',
+                        fontSize: '13px',
+                        background: '#ffffff',
+                        color: '#081C24',
+                        outline: 'none'
+                      }}
+                    />
+                    {reportSearchTerm && (
+                      <button
+                        onClick={() => setReportSearchTerm('')}
+                        style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Category Filter Pills */}
-              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '18px' }}>
-                {[
-                  { key: 'all', label: 'All Reports', count: recentReports.length },
-                  { key: 'Radiology', label: '🩻 Radiology & DICOM', count: recentReports.filter(r => r.category === 'Radiology').length },
-                  { key: 'Cardiology', label: '🫀 Cardiology & ECG', count: recentReports.filter(r => r.category === 'Cardiology').length },
-                  { key: 'Hematology', label: '🩸 Hematology', count: recentReports.filter(r => r.category === 'Hematology').length },
-                  { key: 'Biochemistry', label: '🧪 Biochemistry', count: recentReports.filter(r => r.category === 'Biochemistry').length },
-                  { key: 'Microbiology', label: '🧫 Microbiology', count: recentReports.filter(r => r.category === 'Microbiology' || r.category === 'Infectious').length },
-                  { key: 'Pulmonology', label: '🫁 Pulmonology & PFT', count: recentReports.filter(r => r.category === 'Pulmonology').length }
-                ].map(cat => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setReportCategoryFilter(cat.key)}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: '20px',
-                      fontSize: '12.5px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      border: reportCategoryFilter === cat.key ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-                      background: reportCategoryFilter === cat.key ? '#0F4C5C' : '#ffffff',
-                      color: reportCategoryFilter === cat.key ? '#ffffff' : '#475569',
-                      whiteSpace: 'nowrap',
-                      boxShadow: reportCategoryFilter === cat.key ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {cat.label} <span style={{ opacity: 0.8, fontSize: '11px', marginLeft: '4px' }}>({cat.count})</span>
-                  </button>
-                ))}
-              </div>
+              {/* VIEW 1: SELECTED PATIENT'S DEDICATED REPORTS */}
+              {selectedReportPatient ? (
+                <div>
+                  {/* Back Navigation Bar */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+                    <button
+                      onClick={() => { setSelectedReportPatient(null); setReportSearchTerm(''); setReportCategoryFilter('all'); }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px 16px',
+                        borderRadius: '10px',
+                        border: '1.5px solid #0F4C5C',
+                        background: '#ffffff',
+                        color: '#0F4C5C',
+                        fontSize: '13px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 6px rgba(15, 76, 92, 0.08)',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <ArrowLeft size={16} />
+                      <span>← Back to Patients Directory</span>
+                    </button>
 
-              {/* Reports Grid */}
-              {filteredReports.length === 0 ? (
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
-                  <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No diagnostic records matching query "{reportSearchTerm}" in {reportCategoryFilter} filter.</p>
-                  <button onClick={() => { setReportSearchTerm(''); setReportCategoryFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
-                    Reset Filters
-                  </button>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '18px' }}>
-                  {filteredReports.map(rep => {
-                    const hasAbnormal = (rep.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal');
-                    return (
-                      <div
-                        key={rep.id}
+                    <div style={{ fontSize: '12px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>Reports & Lab</span>
+                      <span>/</span>
+                      <strong style={{ color: '#0F4C5C' }}>{selectedReportPatient.name}</strong>
+                      <span style={{ background: '#E0F2FE', color: '#0369A1', padding: '2px 8px', borderRadius: '12px', fontWeight: 700, fontSize: '11px' }}>
+                        {selectedReportPatient.reports.length} {selectedReportPatient.reports.length === 1 ? 'Report' : 'Reports'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Patient Clinical Profile Card */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #08232C 0%, #0F4C5C 100%)',
+                    borderRadius: '16px',
+                    padding: '20px 24px',
+                    color: '#ffffff',
+                    marginBottom: '20px',
+                    boxShadow: '0 8px 24px -4px rgba(15, 76, 92, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '16px'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{
+                        width: '56px',
+                        height: '56px',
+                        borderRadius: '50%',
+                        background: '#FAF8F5',
+                        color: '#0F4C5C',
+                        fontWeight: 900,
+                        fontSize: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '2.5px solid #D4AF37',
+                        flexShrink: 0
+                      }}>
+                        {selectedReportPatient.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <h3 style={{ fontSize: '19px', fontWeight: 800, margin: 0, color: '#ffffff' }}>
+                            {selectedReportPatient.name}
+                          </h3>
+                          {selectedReportPatient.vernacular && selectedReportPatient.vernacular !== selectedReportPatient.name && (
+                            <span style={{ fontSize: '13px', color: '#99F6E4', fontWeight: 650 }}>
+                              ({selectedReportPatient.vernacular})
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '6px', fontSize: '12.5px', color: '#CBD5E1', flexWrap: 'wrap' }}>
+                          <span>{selectedReportPatient.age} Yrs • {selectedReportPatient.genderLabel || selectedReportPatient.gender}</span>
+                          <span>•</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <ShieldCheck size={14} color="#34D399" />
+                            ABHA: <strong>{selectedReportPatient.abhaId}</strong>
+                          </span>
+                          <span>•</span>
+                          <span>Village: {selectedReportPatient.village || 'Kurnool PHC'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vitals & Summary Badges */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '8px', fontSize: '12px' }}>
+                        <span style={{ color: '#94A3B8' }}>Primary: </span>
+                        <strong>{selectedReportPatient.primaryCondition}</strong>
+                      </div>
+                      {selectedReportPatient.vitals && (
+                        <div style={{ background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '8px', fontSize: '12px' }}>
+                          <span style={{ color: '#94A3B8' }}>BP: </span>
+                          <strong>{selectedReportPatient.vitals.bp}</strong>
+                          <span style={{ color: '#94A3B8', marginLeft: '6px' }}>SpO2: </span>
+                          <strong>{selectedReportPatient.vitals.spo2}</strong>
+                        </div>
+                      )}
+                      <div style={{
+                        background: '#D4AF37',
+                        color: '#081C24',
+                        padding: '6px 14px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: 800,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <FileText size={14} />
+                        <span>{selectedReportPatient.reports.length} {selectedReportPatient.reports.length === 1 ? 'Report' : 'Reports'} on Record</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Category Filter Pills for Selected Patient */}
+                  <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '18px' }}>
+                    {[
+                      { key: 'all', label: 'All Patient Reports', count: selectedReportPatient.reports.length },
+                      { key: 'Radiology', label: '🩻 Radiology & DICOM', count: selectedReportPatient.reports.filter(r => r.category === 'Radiology').length },
+                      { key: 'Cardiology', label: '🫀 Cardiology & ECG', count: selectedReportPatient.reports.filter(r => r.category === 'Cardiology').length },
+                      { key: 'Hematology', label: '🩸 Hematology', count: selectedReportPatient.reports.filter(r => r.category === 'Hematology').length },
+                      { key: 'Biochemistry', label: '🧪 Biochemistry', count: selectedReportPatient.reports.filter(r => r.category === 'Biochemistry').length },
+                      { key: 'Microbiology', label: '🧫 Microbiology', count: selectedReportPatient.reports.filter(r => r.category === 'Microbiology' || r.category === 'Infectious').length },
+                      { key: 'Pulmonology', label: '🫁 Pulmonology & PFT', count: selectedReportPatient.reports.filter(r => r.category === 'Pulmonology').length }
+                    ].filter(cat => cat.key === 'all' || cat.count > 0).map(cat => (
+                      <button
+                        key={cat.key}
+                        onClick={() => setReportCategoryFilter(cat.key)}
                         style={{
-                          background: '#ffffff',
-                          borderRadius: '16px',
-                          padding: '20px',
-                          border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+                          padding: '6px 14px',
+                          borderRadius: '20px',
+                          fontSize: '12.5px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          border: reportCategoryFilter === cat.key ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
+                          background: reportCategoryFilter === cat.key ? '#0F4C5C' : '#ffffff',
+                          color: reportCategoryFilter === cat.key ? '#ffffff' : '#475569',
+                          whiteSpace: 'nowrap',
+                          boxShadow: reportCategoryFilter === cat.key ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none',
+                          transition: 'all 0.2s ease'
                         }}
                       >
-                        <div>
-                          {/* Header */}
-                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px', gap: '8px' }}>
-                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                              <span style={{ fontSize: '26px', lineHeight: 1 }}>{rep.icon}</span>
+                        {cat.label} <span style={{ opacity: 0.8, fontSize: '11px', marginLeft: '4px' }}>({cat.count})</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Reports Grid for Selected Patient */}
+                  {selectedPatientReports.length === 0 ? (
+                    <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                      <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No reports matching query "{reportSearchTerm}" for {selectedReportPatient.name}.</p>
+                      <button onClick={() => { setReportSearchTerm(''); setReportCategoryFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
+                        Reset Filters
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '18px' }}>
+                      {selectedPatientReports.map(rep => {
+                        const hasAbnormal = (rep.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal');
+                        return (
+                          <div
+                            key={rep.id}
+                            style={{
+                              background: '#ffffff',
+                              borderRadius: '16px',
+                              padding: '20px',
+                              border: '1.5px solid #94A3B8',
+                              boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.06)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                              transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+                            }}
+                          >
+                            <div>
+                              {/* Header */}
+                              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                  <span style={{ fontSize: '26px', lineHeight: 1 }}>{rep.icon}</span>
+                                  <div>
+                                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', lineHeight: 1.3 }}>{rep.title}</div>
+                                    <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+                                      {rep.modality} • {rep.date}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                                  <span style={{ fontSize: '10.5px', background: '#FAF8F5', color: '#334155', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, border: '1px solid #CBD5E1' }}>
+                                    {rep.facility ? rep.facility.split('(')[0].trim() : 'PHC Diagnostic Lab'}
+                                  </span>
+                                  {rep.loincCode && (
+                                    <span style={{ fontSize: '9.5px', color: '#0F4C5C', fontWeight: 750, fontFamily: 'monospace' }}>
+                                      LOINC: {rep.loincCode}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Original Diagnostic Scan Thumbnail Preview */}
+                              {rep.realScanImage && (
+                                <div 
+                                  onClick={() => setSelectedReport(rep)}
+                                  style={{
+                                    height: '140px',
+                                    borderRadius: '10px',
+                                    overflow: 'hidden',
+                                    marginBottom: '12px',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    border: '1.5px solid #94A3B8',
+                                    background: '#07111E'
+                                  }}
+                                  title="Click to inspect original high-resolution scan & DICOM telemetry"
+                                >
+                                  <img 
+                                    src={rep.realScanImage} 
+                                    alt={rep.title} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  />
+                                  <div style={{
+                                    position: 'absolute',
+                                    bottom: '6px',
+                                    right: '6px',
+                                    background: 'rgba(10, 37, 64, 0.90)',
+                                    backdropFilter: 'blur(4px)',
+                                    color: '#38BDF8',
+                                    fontSize: '10px',
+                                    fontWeight: 800,
+                                    padding: '3px 8px',
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    border: '1px solid rgba(56, 189, 248, 0.4)'
+                                  }}>
+                                    <span>🔬 View Original Scan</span>
+                                  </div>
+                                  {rep.nablLogo && (
+                                    <img src={rep.nablLogo} alt="NABL" style={{
+                                      position: 'absolute',
+                                      top: '6px',
+                                      left: '6px',
+                                      width: '28px',
+                                      height: '28px',
+                                      borderRadius: '50%',
+                                      background: '#ffffff',
+                                      padding: '1.5px',
+                                      boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                                      border: '1px solid #D4AF37'
+                                    }} />
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Quantitative Metrics Snippet */}
+                              {rep.quantitativeMetrics && rep.quantitativeMetrics.length > 0 && (
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1.5px solid #CBD5E1', marginBottom: '12px' }}>
+                                  {rep.quantitativeMetrics.slice(0, 4).map((m, mIdx) => {
+                                    const isNorm = m.status === 'Normal';
+                                    const isHigh = m.status?.toLowerCase().includes('high') || m.status?.toLowerCase().includes('elevated') || m.status?.toLowerCase().includes('severe');
+                                    return (
+                                      <div key={mIdx} style={{ fontSize: '11px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                        <div style={{ color: '#64748B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.parameter}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                                          <strong style={{ color: '#081C24', fontSize: '12px' }}>{m.result} {m.unit}</strong>
+                                          <span style={{
+                                            fontSize: '9px',
+                                            fontWeight: 800,
+                                            padding: '1px 5px',
+                                            borderRadius: '4px',
+                                            background: isNorm ? '#DCFCE7' : (isHigh ? '#FEE2E2' : '#FEF3C7'),
+                                            color: isNorm ? '#15803D' : (isHigh ? '#B91C1C' : '#B45309')
+                                          }}>
+                                            {m.status}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              {/* Findings Snippet */}
+                              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.45, marginBottom: '10px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                <strong>Findings:</strong> {rep.findings}
+                              </div>
+
+                              {/* Impression */}
+                              <div style={{
+                                fontSize: '11.5px',
+                                color: hasAbnormal ? '#991B1B' : '#065F46',
+                                background: hasAbnormal ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                                padding: '8px 10px',
+                                borderRadius: '8px',
+                                fontWeight: 700,
+                                lineHeight: 1.35,
+                                marginBottom: '14px',
+                                border: hasAbnormal ? '1px solid #FECACA' : '1px solid #A7F3D0'
+                              }}>
+                                <strong>Impression:</strong> {rep.impression}
+                              </div>
+                            </div>
+
+                            {/* Card Actions */}
+                            <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+                              <button
+                                onClick={() => setSelectedReport(rep)}
+                                style={{
+                                  flex: 1,
+                                  padding: '8px 10px',
+                                  borderRadius: '8px',
+                                  border: '1.5px solid #0F4C5C',
+                                  background: 'transparent',
+                                  color: '#0F4C5C',
+                                  fontSize: '12px',
+                                  fontWeight: 750,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '6px'
+                                }}
+                              >
+                                <FileText size={13} />
+                                <span>Inspect Lab / DICOM</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleExportFhir(rep)}
+                                style={{
+                                  padding: '8px 14px',
+                                  borderRadius: '8px',
+                                  border: 'none',
+                                  background: '#0A2540',
+                                  color: '#ffffff',
+                                  fontSize: '12px',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                <Download size={13} />
+                                <span>ABDM FHIR</span>
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ) : reportsViewMode === 'by_patient' ? (
+                /* VIEW 2: PATIENTS DIRECTORY (DEFAULT - AS REQUESTED BY USER) */
+                <div>
+                  {/* Category Filter Pills for Patient Directory */}
+                  <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '18px' }}>
+                    {[
+                      { key: 'all', label: `All Patients (${patientsWithReports.length})` },
+                      { key: 'Radiology', label: '🩻 Radiology' },
+                      { key: 'Cardiology', label: '🫀 Cardiology' },
+                      { key: 'Hematology', label: '🩸 Hematology' },
+                      { key: 'Biochemistry', label: '🧪 Biochemistry' },
+                      { key: 'Microbiology', label: '🧫 Microbiology' },
+                      { key: 'Pulmonology', label: '🫁 Pulmonology' }
+                    ].map(cat => (
+                      <button
+                        key={cat.key}
+                        onClick={() => setReportCategoryFilter(cat.key)}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: '20px',
+                          fontSize: '12.5px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          border: reportCategoryFilter === cat.key ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
+                          background: reportCategoryFilter === cat.key ? '#0F4C5C' : '#ffffff',
+                          color: reportCategoryFilter === cat.key ? '#ffffff' : '#475569',
+                          whiteSpace: 'nowrap',
+                          boxShadow: reportCategoryFilter === cat.key ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Patient Cards List with Arrow at the end */}
+                  {filteredPatientsWithReports.length === 0 ? (
+                    <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                      <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No patients found matching query "{reportSearchTerm}".</p>
+                      <button onClick={() => { setReportSearchTerm(''); setReportCategoryFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
+                        Reset Filters
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                      {filteredPatientsWithReports.map(pat => {
+                        const categoriesPresent = Array.from(new Set(pat.reports.map(r => r.category))).filter(Boolean);
+                        const hasAbnormal = pat.reports.some(r => (r.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal'));
+
+                        return (
+                          <div
+                            key={pat.id}
+                            onClick={() => { setSelectedReportPatient(pat); setReportCategoryFilter('all'); }}
+                            style={{
+                              background: '#ffffff',
+                              borderRadius: '16px',
+                              padding: '18px 22px',
+                              border: '1.5px solid #94A3B8',
+                              boxShadow: '0 2px 10px rgba(15, 76, 92, 0.05)',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              gap: '16px',
+                              flexWrap: 'wrap',
+                              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                            }}
+                            onMouseEnter={e => {
+                              e.currentTarget.style.borderColor = '#0F4C5C';
+                              e.currentTarget.style.transform = 'translateY(-2px)';
+                              e.currentTarget.style.boxShadow = '0 8px 24px -4px rgba(15, 76, 92, 0.15)';
+                            }}
+                            onMouseLeave={e => {
+                              e.currentTarget.style.borderColor = '#94A3B8';
+                              e.currentTarget.style.transform = 'translateY(0)';
+                              e.currentTarget.style.boxShadow = '0 2px 10px rgba(15, 76, 92, 0.05)';
+                            }}
+                          >
+                            {/* Left: Patient Avatar & Profile Details */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '280px' }}>
+                              <div style={{
+                                width: '48px',
+                                height: '48px',
+                                borderRadius: '50%',
+                                background: '#EEF6F8',
+                                color: '#0F4C5C',
+                                fontWeight: 800,
+                                fontSize: '16px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '2px solid #D8EBEF',
+                                flexShrink: 0
+                              }}>
+                                {pat.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                              </div>
                               <div>
-                                <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', lineHeight: 1.3 }}>{rep.title}</div>
-                                <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
-                                  {rep.modality} • {rep.date}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <strong style={{ fontSize: '15.5px', color: '#081C24' }}>
+                                    {pat.name}
+                                  </strong>
+                                  {pat.vernacular && pat.vernacular !== pat.name && (
+                                    <span style={{ fontSize: '12px', color: '#0F4C5C', fontWeight: 700 }}>
+                                      ({pat.vernacular})
+                                    </span>
+                                  )}
+                                  {hasAbnormal && (
+                                    <span style={{ fontSize: '10px', background: '#FEE2E2', color: '#B91C1C', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>
+                                      Needs Review
+                                    </span>
+                                  )}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '3px', fontSize: '12px', color: '#64748B' }}>
+                                  <span>{pat.age} Yrs • {pat.genderLabel || pat.gender}</span>
+                                  <span>•</span>
+                                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#475569' }}>
+                                    <ShieldCheck size={13} color="#0D9488" />
+                                    {pat.abhaId}
+                                  </span>
                                 </div>
                               </div>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                              <span style={{ fontSize: '10.5px', background: '#FAF8F5', color: '#334155', padding: '2px 8px', borderRadius: '6px', fontWeight: 700 }}>
-                                {rep.patient}
-                              </span>
-                              {rep.loincCode && (
-                                <span style={{ fontSize: '9.5px', color: '#0F4C5C', fontWeight: 750, fontFamily: 'monospace' }}>
-                                  LOINC: {rep.loincCode}
+
+                            {/* Center: Report Count & Modality Badges */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '240px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <span style={{
+                                  fontSize: '12px',
+                                  fontWeight: 800,
+                                  background: pat.reports.length >= 3 ? '#EEF6F8' : '#FAF8F5',
+                                  color: pat.reports.length >= 3 ? '#0F4C5C' : '#334155',
+                                  border: `1.5px solid ${pat.reports.length >= 3 ? '#0F4C5C' : '#CBD5E1'}`,
+                                  padding: '3px 10px',
+                                  borderRadius: '20px',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}>
+                                  📁 {pat.reports.length} {pat.reports.length === 1 ? 'Report Available' : 'Reports Available'}
                                 </span>
-                              )}
+
+                                {categoriesPresent.map(cat => (
+                                  <span key={cat} style={{
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    background: '#F1F5F9',
+                                    color: '#475569',
+                                    padding: '2px 8px',
+                                    borderRadius: '6px'
+                                  }}>
+                                    {cat === 'Radiology' ? '🩻 Radiology' :
+                                     cat === 'Cardiology' ? '🫀 Cardiology' :
+                                     cat === 'Hematology' ? '🩸 Hematology' :
+                                     cat === 'Biochemistry' ? '🧪 Biochemistry' :
+                                     cat === 'Pulmonology' ? '🫁 Pulmonology' : `🧫 ${cat}`}
+                                  </span>
+                                ))}
+                              </div>
+
+                              <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                                <span style={{ color: '#0F4C5C', fontWeight: 650 }}>Latest:</span> {pat.reports[0].title} ({pat.reports[0].date})
+                              </div>
+                            </div>
+
+                            {/* Right: ARROW IN THE LAST OF THEIR PROFILE (AS REQUESTED) */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '9px 18px',
+                                borderRadius: '24px',
+                                border: '1.5px solid #0F4C5C',
+                                background: '#EEF6F8',
+                                color: '#0F4C5C',
+                                fontSize: '13px',
+                                fontWeight: 800,
+                                boxShadow: '0 2px 6px rgba(15, 76, 92, 0.08)',
+                                transition: 'all 0.15s ease'
+                              }}>
+                                <span>View Reports ({pat.reports.length})</span>
+                                <ArrowRight size={15} color="#0F4C5C" />
+                              </div>
                             </div>
                           </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* VIEW 3: ALL FLAT REPORTS GRID */
+                <div>
+                  {/* Category Filter Pills */}
+                  <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '18px' }}>
+                    {[
+                      { key: 'all', label: 'All Reports', count: recentReports.length },
+                      { key: 'Radiology', label: '🩻 Radiology & DICOM', count: recentReports.filter(r => r.category === 'Radiology').length },
+                      { key: 'Cardiology', label: '🫀 Cardiology & ECG', count: recentReports.filter(r => r.category === 'Cardiology').length },
+                      { key: 'Hematology', label: '🩸 Hematology', count: recentReports.filter(r => r.category === 'Hematology').length },
+                      { key: 'Biochemistry', label: '🧪 Biochemistry', count: recentReports.filter(r => r.category === 'Biochemistry').length },
+                      { key: 'Microbiology', label: '🧫 Microbiology', count: recentReports.filter(r => r.category === 'Microbiology' || r.category === 'Infectious').length },
+                      { key: 'Pulmonology', label: '🫁 Pulmonology & PFT', count: recentReports.filter(r => r.category === 'Pulmonology').length }
+                    ].map(cat => (
+                      <button
+                        key={cat.key}
+                        onClick={() => setReportCategoryFilter(cat.key)}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: '20px',
+                          fontSize: '12.5px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          border: reportCategoryFilter === cat.key ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
+                          background: reportCategoryFilter === cat.key ? '#0F4C5C' : '#ffffff',
+                          color: reportCategoryFilter === cat.key ? '#ffffff' : '#475569',
+                          whiteSpace: 'nowrap',
+                          boxShadow: reportCategoryFilter === cat.key ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {cat.label} <span style={{ opacity: 0.8, fontSize: '11px', marginLeft: '4px' }}>({cat.count})</span>
+                      </button>
+                    ))}
+                  </div>
 
-                          {/* Quantitative Metrics Snippet */}
-                          {rep.quantitativeMetrics && rep.quantitativeMetrics.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', marginBottom: '12px' }}>
-                              {rep.quantitativeMetrics.slice(0, 4).map((m, mIdx) => {
-                                const isNorm = m.status === 'Normal';
-                                const isHigh = m.status?.toLowerCase().includes('high') || m.status?.toLowerCase().includes('elevated') || m.status?.toLowerCase().includes('severe');
-                                return (
-                                  <div key={mIdx} style={{ fontSize: '11px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <div style={{ color: '#64748B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.parameter}</div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                                      <strong style={{ color: '#081C24', fontSize: '12px' }}>{m.result} {m.unit}</strong>
-                                      <span style={{
-                                        fontSize: '9px',
-                                        fontWeight: 800,
-                                        padding: '1px 5px',
-                                        borderRadius: '4px',
-                                        background: isNorm ? '#DCFCE7' : (isHigh ? '#FEE2E2' : '#FEF3C7'),
-                                        color: isNorm ? '#15803D' : (isHigh ? '#B91C1C' : '#B45309')
-                                      }}>
-                                        {m.status}
-                                      </span>
+                  {filteredReports.length === 0 ? (
+                    <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
+                      <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No diagnostic records matching query "{reportSearchTerm}" in {reportCategoryFilter} filter.</p>
+                      <button onClick={() => { setReportSearchTerm(''); setReportCategoryFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
+                        Reset Filters
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '18px' }}>
+                      {filteredReports.map(rep => {
+                        const hasAbnormal = (rep.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal');
+                        return (
+                          <div
+                            key={rep.id}
+                            style={{
+                              background: '#ffffff',
+                              borderRadius: '16px',
+                              padding: '20px',
+                              border: '1.5px solid #94A3B8',
+                              boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.06)',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              justifyContent: 'space-between',
+                              transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+                            }}
+                          >
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                  <span style={{ fontSize: '26px', lineHeight: 1 }}>{rep.icon}</span>
+                                  <div>
+                                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', lineHeight: 1.3 }}>{rep.title}</div>
+                                    <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+                                      {rep.modality} • {rep.date}
                                     </div>
                                   </div>
-                                );
-                              })}
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                                  <span 
+                                    onClick={() => {
+                                      const matchedPat = patientsWithReports.find(p => p.name.toLowerCase() === rep.patient?.toLowerCase());
+                                      if (matchedPat) {
+                                        setSelectedReportPatient(matchedPat);
+                                      }
+                                    }}
+                                    style={{ fontSize: '10.5px', background: '#FAF8F5', color: '#0F4C5C', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, cursor: 'pointer', border: '1px solid #CBD5E1' }}
+                                    title="Click to view all reports for this patient"
+                                  >
+                                    👤 {rep.patient} →
+                                  </span>
+                                  {rep.loincCode && (
+                                    <span style={{ fontSize: '9.5px', color: '#0F4C5C', fontWeight: 750, fontFamily: 'monospace' }}>
+                                      LOINC: {rep.loincCode}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Original Diagnostic Scan Thumbnail Preview */}
+                              {rep.realScanImage && (
+                                <div 
+                                  onClick={() => setSelectedReport(rep)}
+                                  style={{
+                                    height: '140px',
+                                    borderRadius: '10px',
+                                    overflow: 'hidden',
+                                    marginBottom: '12px',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    border: '1.5px solid #94A3B8',
+                                    background: '#07111E'
+                                  }}
+                                  title="Click to inspect original high-resolution scan & DICOM telemetry"
+                                >
+                                  <img 
+                                    src={rep.realScanImage} 
+                                    alt={rep.title} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  />
+                                  <div style={{
+                                    position: 'absolute',
+                                    bottom: '6px',
+                                    right: '6px',
+                                    background: 'rgba(10, 37, 64, 0.90)',
+                                    backdropFilter: 'blur(4px)',
+                                    color: '#38BDF8',
+                                    fontSize: '10px',
+                                    fontWeight: 800,
+                                    padding: '3px 8px',
+                                    borderRadius: '6px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    border: '1px solid rgba(56, 189, 248, 0.4)'
+                                  }}>
+                                    <span>🔬 View Original Scan</span>
+                                  </div>
+                                  {rep.nablLogo && (
+                                    <img src={rep.nablLogo} alt="NABL" style={{
+                                      position: 'absolute',
+                                      top: '6px',
+                                      left: '6px',
+                                      width: '28px',
+                                      height: '28px',
+                                      borderRadius: '50%',
+                                      background: '#ffffff',
+                                      padding: '1.5px',
+                                      boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                                      border: '1px solid #D4AF37'
+                                    }} />
+                                  )}
+                                </div>
+                              )}
+
+                              {rep.quantitativeMetrics && rep.quantitativeMetrics.length > 0 && (
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', marginBottom: '12px' }}>
+                                  {rep.quantitativeMetrics.slice(0, 4).map((m, mIdx) => {
+                                    const isNorm = m.status === 'Normal';
+                                    const isHigh = m.status?.toLowerCase().includes('high') || m.status?.toLowerCase().includes('elevated') || m.status?.toLowerCase().includes('severe');
+                                    return (
+                                      <div key={mIdx} style={{ fontSize: '11px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                        <div style={{ color: '#64748B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.parameter}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                                          <strong style={{ color: '#081C24', fontSize: '12px' }}>{m.result} {m.unit}</strong>
+                                          <span style={{
+                                            fontSize: '9px',
+                                            fontWeight: 800,
+                                            padding: '1px 5px',
+                                            borderRadius: '4px',
+                                            background: isNorm ? '#DCFCE7' : (isHigh ? '#FEE2E2' : '#FEF3C7'),
+                                            color: isNorm ? '#15803D' : (isHigh ? '#B91C1C' : '#B45309')
+                                          }}>
+                                            {m.status}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.45, marginBottom: '10px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                <strong>Findings:</strong> {rep.findings}
+                              </div>
+
+                              <div style={{
+                                fontSize: '11.5px',
+                                color: hasAbnormal ? '#991B1B' : '#065F46',
+                                background: hasAbnormal ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                                padding: '8px 10px',
+                                borderRadius: '8px',
+                                fontWeight: 700,
+                                lineHeight: 1.35,
+                                marginBottom: '14px'
+                              }}>
+                                <strong>Impression:</strong> {rep.impression}
+                              </div>
                             </div>
-                          )}
 
-                          {/* Findings Snippet */}
-                          <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.45, marginBottom: '10px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                            <strong>Findings:</strong> {rep.findings}
+                            <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+                              <button
+                                onClick={() => setSelectedReport(rep)}
+                                style={{
+                                  flex: 1,
+                                  padding: '8px 10px',
+                                  borderRadius: '8px',
+                                  border: '1.5px solid #0F4C5C',
+                                  background: 'transparent',
+                                  color: '#0F4C5C',
+                                  fontSize: '12px',
+                                  fontWeight: 750,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '6px'
+                                }}
+                              >
+                                <FileText size={13} />
+                                <span>Inspect Lab / DICOM</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleExportFhir(rep)}
+                                style={{
+                                  padding: '8px 14px',
+                                  borderRadius: '8px',
+                                  border: 'none',
+                                  background: '#0A2540',
+                                  color: '#ffffff',
+                                  fontSize: '12px',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                <Download size={13} />
+                                <span>ABDM FHIR</span>
+                              </button>
+                            </div>
                           </div>
-
-                          {/* Impression */}
-                          <div style={{
-                            fontSize: '11.5px',
-                            color: hasAbnormal ? '#991B1B' : '#065F46',
-                            background: hasAbnormal ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
-                            padding: '8px 10px',
-                            borderRadius: '8px',
-                            fontWeight: 700,
-                            lineHeight: 1.35,
-                            marginBottom: '14px'
-                          }}>
-                            <strong>Impression:</strong> {rep.impression}
-                          </div>
-                        </div>
-
-                        {/* Card Actions */}
-                        <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
-                          <button
-                            onClick={() => setSelectedReport(rep)}
-                            style={{
-                              flex: 1,
-                              padding: '8px 10px',
-                              borderRadius: '8px',
-                              border: '1.5px solid #0F4C5C',
-                              background: 'transparent',
-                              color: '#0F4C5C',
-                              fontSize: '12px',
-                              fontWeight: 750,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '6px'
-                            }}
-                          >
-                            <FileText size={13} />
-                            <span>Inspect Lab / DICOM</span>
-                          </button>
-
-                          <button
-                            onClick={() => handleExportFhir(rep)}
-                            style={{
-                              padding: '8px 14px',
-                              borderRadius: '8px',
-                              border: 'none',
-                              background: '#0A2540',
-                              color: '#ffffff',
-                              fontSize: '12px',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            <Download size={13} />
-                            <span>ABDM FHIR</span>
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -2839,25 +3602,26 @@ export default function DoctorPortal({
                 gap: '16px'
               }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
                     <span style={{ 
-                      background: 'rgba(15, 76, 92, 0.3)', 
-                      padding: '4px 10px', 
+                      background: 'rgba(0, 245, 212, 0.15)', 
+                      padding: '4px 12px', 
                       borderRadius: '20px', 
                       fontSize: '11px', 
                       fontWeight: 800, 
                       letterSpacing: '0.5px',
                       textTransform: 'uppercase',
-                      border: '1px solid rgba(255,255,255,0.2)' 
+                      color: '#00F5D4',
+                      border: '1px solid rgba(0, 245, 212, 0.35)' 
                     }}>
                       ABDM Healthcare Professional Registry (HPR)
                     </span>
-                    <span style={{ fontSize: '12px', color: '#93C5FD' }}>• Verified Physician Console</span>
+                    <span style={{ fontSize: '12.5px', color: '#93C5FD', fontWeight: 700 }}>• Verified Physician Console</span>
                   </div>
-                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0' }}>
+                  <h2 style={{ fontSize: '24px', fontWeight: 850, fontFamily: 'Outfit, sans-serif', margin: '0 0 8px 0', color: '#FFFFFF', letterSpacing: '-0.3px', textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
                     Physician Credentials, AI Scribe Engine & ABDM Calibration
                   </h2>
-                  <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '13.5px', color: '#F1F5F9', margin: 0, maxWidth: '680px', lineHeight: 1.55, fontWeight: 500 }}>
                     Configure ambient acoustic ingestion, Browser speech (Web Speech API). Gnani voice integration: planned, automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
                   </p>
                 </div>
@@ -3091,7 +3855,7 @@ export default function DoctorPortal({
           gap: '12px',
           fontSize: '13px',
           fontWeight: 650,
-          borderLeft: '4px solid #10B981',
+          border: '1px solid #10B981',
           maxWidth: '480px',
           animation: 'slideUp 0.25s ease'
         }}>
@@ -3152,7 +3916,23 @@ export default function DoctorPortal({
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {selectedReport.nablLogo && (
+                  <img
+                    src={selectedReport.nablLogo}
+                    alt="NABL Accredited"
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#FFFFFF', padding: '2px', border: '1.5px solid #D4AF37', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0 }}
+                    title="NABL ISO 15189 Accredited Laboratory"
+                  />
+                )}
+                {selectedReport.abdmLogo && (
+                  <img
+                    src={selectedReport.abdmLogo}
+                    alt="ABDM Certified"
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#FFFFFF', padding: '2px', border: '1.5px solid #00F5D4', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', flexShrink: 0 }}
+                    title="ABDM FHIR R4 Certified Health Records Repository"
+                  />
+                )}
                 <span style={{
                   fontSize: '11px',
                   fontWeight: 800,
@@ -3191,7 +3971,8 @@ export default function DoctorPortal({
               {/* Patient & Specimen Demographics Strip */}
               <div style={{
                 background: '#FAF8F5',
-                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                border: '1.5px solid #CBD5E1',
+                boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                 borderRadius: '12px',
                 padding: '12px 16px',
                 display: 'grid',
@@ -3221,157 +4002,117 @@ export default function DoctorPortal({
                 </div>
               </div>
 
-              {/* Interactive Visual Inspection Viewport */}
-              {selectedReport.category === 'Radiology' && (
+              {/* Primary High-Resolution Authentic Diagnostic Scan & Analyzer Asset Viewport */}
+              {selectedReport.realScanImage && (
                 <div style={{
-                  background: '#0B132B',
-                  borderRadius: '12px',
+                  background: '#07111E',
+                  borderRadius: '14px',
                   padding: '16px',
                   color: '#ffffff',
-                  border: '1px solid #1C2541'
+                  border: '1.5px solid #334155',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.35)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>🩻 High-Res DICOM Viewport</span>
-                      <span style={{ fontSize: '10.5px', background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', padding: '2px 8px', borderRadius: '6px' }}>
-                        16-Bit Grayscale • Matrix 2048x2048
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '14.5px', fontWeight: 800, color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>🔬</span>
+                        <span>Original Diagnostic Scan & Analyzer Printout</span>
+                      </span>
+                      <span style={{
+                        fontSize: '10.5px',
+                        background: 'rgba(56, 189, 248, 0.15)',
+                        color: '#38BDF8',
+                        padding: '2px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(56, 189, 248, 0.3)',
+                        fontWeight: 750
+                      }}>
+                        NABL ISO 15189 Verified Source
                       </span>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button
-                        onClick={() => setDicomInvert(!dicomInvert)}
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {selectedReport.category === 'Radiology' && (
+                        <button
+                          onClick={() => setDicomInvert(!dicomInvert)}
+                          style={{
+                            background: dicomInvert ? '#38BDF8' : 'rgba(255,255,255,0.12)',
+                            color: dicomInvert ? '#07111E' : '#ffffff',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {dicomInvert ? 'Negative Inverted' : 'Invert Grayscale'}
+                        </button>
+                      )}
+                      <a
+                        href={selectedReport.realScanImage}
+                        target="_blank"
+                        rel="noreferrer"
                         style={{
-                          background: dicomInvert ? '#38BDF8' : 'rgba(255,255,255,0.1)',
-                          color: dicomInvert ? '#0B132B' : '#ffffff',
-                          border: 'none',
+                          background: 'rgba(255,255,255,0.12)',
+                          color: '#ffffff',
+                          border: '1px solid rgba(255,255,255,0.2)',
                           padding: '4px 10px',
                           borderRadius: '6px',
                           fontSize: '11px',
                           fontWeight: 700,
-                          cursor: 'pointer'
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
                         }}
                       >
-                        {dicomInvert ? 'Negative Inverted' : 'Invert Grayscale'}
-                      </button>
+                        <span>Open Full Image ↗</span>
+                      </a>
                     </div>
                   </div>
 
-                  {/* DICOM Simulation Canvas / Graphic */}
+                  {selectedReport.instrument && (
+                    <div style={{
+                      fontSize: '11.5px',
+                      color: '#94A3B8',
+                      marginBottom: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: 'rgba(255,255,255,0.04)',
+                      padding: '5px 10px',
+                      borderRadius: '6px'
+                    }}>
+                      <strong style={{ color: '#E2E8F0' }}>Laboratory Instrument:</strong> {selectedReport.instrument}
+                    </div>
+                  )}
+
+                  {/* The Authentic Scan Viewport */}
                   <div style={{
-                    height: '180px',
-                    borderRadius: '8px',
-                    background: dicomInvert ? '#E2E8F0' : '#030712',
-                    border: '1px solid #334155',
+                    maxHeight: '440px',
+                    borderRadius: '10px',
+                    background: dicomInvert ? '#FFFFFF' : '#030712',
+                    border: '1.5px solid #334155',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     position: 'relative',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    padding: '8px'
                   }}>
-                    {/* Simulated Radiograph Silhouette / Graphic */}
-                    <svg viewBox="0 0 400 180" style={{ width: '100%', height: '100%', filter: dicomInvert ? 'invert(1)' : 'none' }}>
-                      {/* Grid background */}
-                      <defs>
-                        <pattern id="dicomGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-                          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
-                        </pattern>
-                      </defs>
-                      <rect width="400" height="180" fill="url(#dicomGrid)" />
-
-                      {/* Trachea & Spine */}
-                      <line x1="200" y1="10" x2="200" y2="170" stroke="rgba(255,255,255,0.7)" strokeWidth="6" strokeDasharray="4 2" />
-                      <circle cx="200" cy="20" r="8" fill="rgba(0,0,0,0.8)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-
-                      {/* Left & Right Lung Fields */}
-                      <path d="M 190 35 C 130 40, 100 80, 100 145 C 130 155, 170 148, 190 140 Z" fill="rgba(15, 23, 42, 0.95)" stroke="rgba(255,255,255,0.5)" strokeWidth="2" />
-                      <path d="M 210 35 C 270 40, 300 80, 300 145 C 270 155, 230 148, 210 140 Z" fill="rgba(15, 23, 42, 0.95)" stroke="rgba(255,255,255,0.5)" strokeWidth="2" />
-
-                      {/* Cardiac Silhouette */}
-                      <path d="M 175 90 C 160 110, 160 135, 205 142 C 225 142, 235 125, 220 100 Z" fill="rgba(255,255,255,0.55)" />
-
-                      {/* Diaphragm Curves */}
-                      <path d="M 90 150 Q 145 138, 190 142" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2.5" />
-                      <path d="M 210 142 Q 255 138, 310 150" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2.5" />
-
-                      {/* Markers */}
-                      <text x="20" y="30" fill="#38BDF8" fontSize="11" fontWeight="bold" fontFamily="monospace">R (PA)</text>
-                      <text x="365" y="30" fill="#38BDF8" fontSize="11" fontWeight="bold" fontFamily="monospace">L</text>
-                      <text x="20" y="165" fill="rgba(255,255,255,0.6)" fontSize="9" fontFamily="monospace">WL: -600 WW: 1500</text>
-                      <text x="310" y="165" fill="#34D399" fontSize="9" fontWeight="bold" fontFamily="monospace">CTR: 0.44</text>
-                    </svg>
-                  </div>
-                </div>
-              )}
-
-              {/* Interactive ECG Strip if Cardiology */}
-              {selectedReport.category === 'Cardiology' && (
-                <div style={{
-                  background: '#FEF2F2',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  border: '1px solid #FECACA'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#991B1B' }}>📈 12-Lead ECG Rhythm Strip (Lead II Continuous)</span>
-                    <span style={{ fontSize: '11px', color: '#7F1D1D', fontWeight: 700 }}>25 mm/s • 10 mm/mV • HR: 74 bpm (NSR)</span>
-                  </div>
-                  <div style={{
-                    height: '80px',
-                    borderRadius: '8px',
-                    background: '#FFF5F5',
-                    border: '1px solid #FCA5A5',
-                    overflow: 'hidden'
-                  }}>
-                    <svg viewBox="0 0 600 80" style={{ width: '100%', height: '100%' }}>
-                      <defs>
-                        <pattern id="ecgGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-                          <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(239, 68, 68, 0.18)" strokeWidth="0.5" />
-                        </pattern>
-                      </defs>
-                      <rect width="600" height="80" fill="url(#ecgGrid)" />
-                      {/* 3 ECG Cycles */}
-                      <path
-                        d="M 0 45 L 30 45 Q 40 38, 50 45 L 65 45 L 70 50 L 78 12 L 86 60 L 92 45 L 110 45 Q 125 32, 140 45 L 200 45
-                           L 230 45 Q 240 38, 250 45 L 265 45 L 270 50 L 278 12 L 286 60 L 292 45 L 310 45 Q 325 32, 340 45 L 400 45
-                           L 430 45 Q 440 38, 450 45 L 465 45 L 470 50 L 478 12 L 486 60 L 492 45 L 510 45 Q 525 32, 540 45 L 600 45"
-                        fill="none"
-                        stroke="#DC2626"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              )}
-
-              {/* Interactive Spirometry Curve if Pulmonology */}
-              {selectedReport.category === 'Pulmonology' && (
-                <div style={{
-                  background: '#EFF6FF',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  border: '1px solid #BFDBFE'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#1E40AF' }}>🫁 Spirometry Flow-Volume Loop (Pre vs Post Bronchodilator)</span>
-                    <span style={{ fontSize: '11px', color: '#1E3A8A', fontWeight: 700 }}>+14% Reversibility (Asthma Phenotype)</span>
-                  </div>
-                  <div style={{
-                    height: '90px',
-                    borderRadius: '8px',
-                    background: '#F0F7FF',
-                    border: '1px solid #93C5FD',
-                    overflow: 'hidden'
-                  }}>
-                    <svg viewBox="0 0 500 90" style={{ width: '100%', height: '100%' }}>
-                      <line x1="40" y1="75" x2="480" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
-                      <line x1="40" y1="10" x2="40" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
-                      {/* Pre-BD Loop (Orange) */}
-                      <path d="M 40 75 Q 80 18, 140 38 Q 240 55, 300 75 Z" fill="rgba(245, 158, 11, 0.2)" stroke="#D97706" strokeWidth="2" strokeDasharray="3 3" />
-                      {/* Post-BD Loop (Green) */}
-                      <path d="M 40 75 Q 90 12, 160 30 Q 280 48, 360 75 Z" fill="rgba(16, 185, 129, 0.2)" stroke="#059669" strokeWidth="2.5" />
-                      <text x="380" y="30" fill="#059669" fontSize="10" fontWeight="bold">Post-BD (FEV1: 2.39L)</text>
-                      <text x="380" y="48" fill="#D97706" fontSize="10" fontWeight="bold">Pre-BD (FEV1: 2.10L)</text>
-                    </svg>
+                    <img
+                      src={selectedReport.realScanImage}
+                      alt={selectedReport.title}
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '420px',
+                        objectFit: 'contain',
+                        borderRadius: '6px',
+                        filter: (selectedReport.category === 'Radiology' && dicomInvert) ? 'invert(1)' : 'none',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
+                      }}
+                    />
                   </div>
                 </div>
               )}
@@ -3609,10 +4350,10 @@ export default function DoctorPortal({
                   {(selectedPatientModal.encounters && selectedPatientModal.encounters.length > 0 ? selectedPatientModal.encounters : [
                     { id: 'DEMO-ENC-01', offsetDays: -3, complaint: selectedPatientModal.chiefComplaint, doctorNote: 'Evaluated patient. Adjusted lifestyle and dosage. Advised regular follow-up.' }
                   ]).map((enc, idx) => (
-                    <div key={enc.id || idx} style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid #0F4C5C', fontSize: '12px' }}>
+                    <div key={enc.id || idx} style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', color: '#0F4C5C', fontWeight: 750, marginBottom: '3px' }}>
                         <span>{formatDemoDate(enc.offsetDays || 0)} ({getRelativeDaysLabel(enc.offsetDays || 0)})</span>
-                        <span style={{ fontSize: '10px', color: '#64748B' }}>{enc.id}</span>
+                        <span style={{ fontSize: '11px', color: '#64748B' }}>{enc.id}</span>
                       </div>
                       <div style={{ color: '#081C24', fontWeight: 650 }}>{enc.complaint}</div>
                       <div style={{ color: '#475569', marginTop: '2px', fontStyle: 'italic' }}>Note: {enc.doctorNote}</div>
@@ -4140,7 +4881,7 @@ export default function DoctorPortal({
                 <div style={{ fontSize: '12.5px', background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', color: '#334155', marginBottom: '8px' }}>
                   {printableRxData.vitals}
                 </div>
-                <div style={{ fontSize: '13px', color: '#081C24', background: 'rgba(15, 76, 92, 0.08)', padding: '10px 14px', borderRadius: '8px', borderLeft: '4px solid #0F4C5C' }}>
+                <div style={{ fontSize: '13px', color: '#081C24', background: 'rgba(15, 76, 92, 0.08)', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.2)' }}>
                   <strong>Provisional Diagnosis (ICD-10): </strong> {printableRxData.diagnosis}
                 </div>
               </div>

@@ -377,7 +377,7 @@ export default function WhatsAppAudioRxModal({
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, letterSpacing: '-0.3px', fontFamily: 'Outfit, sans-serif' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, letterSpacing: '-0.3px', fontFamily: 'Outfit, sans-serif', color: '#FFFFFF' }}>
                   Vernacular WhatsApp Audio-Rx
                 </h2>
                 <span style={{
@@ -1179,15 +1179,15 @@ export default function WhatsAppAudioRxModal({
                     Patient: <strong>{patient.name}</strong> • Dr. Priya Sharma
                   </div>
 
-                  <div style={{ background: '#FFFBEB', padding: '6px 8px', borderRadius: '6px', marginBottom: '6px', borderLeft: '3px solid #F59E0B' }}>
+                  <div style={{ background: '#FFFBEB', padding: '6px 8px', borderRadius: '6px', marginBottom: '6px', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
                     🟡 <strong>{selectedLanguage === 'te' ? 'పసుపు రంగు (Morning)' : (selectedLanguage === 'hi' ? 'पीली गोली (Morning)' : 'Yellow Pill (Morning)')}:</strong> Pantoprazole 40mg (1 {selectedLanguage === 'te' ? 'గోళీ' : 'Tab'} {selectedLanguage === 'te' ? morningMealTelugu : (selectedLanguage === 'hi' ? morningMealHindi : morningMealEnglish)} - {morningTime})
                   </div>
 
-                  <div style={{ background: '#FDF2F8', padding: '6px 8px', borderRadius: '6px', marginBottom: '8px', borderLeft: '3px solid #EC4899' }}>
+                  <div style={{ background: '#FDF2F8', padding: '6px 8px', borderRadius: '6px', marginBottom: '8px', border: '1px solid rgba(236, 72, 153, 0.3)' }}>
                     🟣 <strong>{selectedLanguage === 'te' ? 'గులాబీ రంగు (Night)' : (selectedLanguage === 'hi' ? 'गुलाबी गोली (Night)' : 'Pink Pill (Night)')}:</strong> Metformin 500mg (1 {selectedLanguage === 'te' ? 'గోళీ' : 'Tab'} {selectedLanguage === 'te' ? nightMealTelugu : (selectedLanguage === 'hi' ? nightMealHindi : nightMealEnglish)} - {nightTime})
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '10px', color: '#667781', marginTop: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px', color: '#667781', marginTop: '6px' }}>
                     <span>10:42 AM</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '2px', color: deliveryStatus === 'read' ? '#53BDEB' : '#8696A0' }}>
                       <CheckCheck size={14} />

@@ -643,8 +643,8 @@ export default function DoctorAvatarVideoCall({
                 boxShadow: isMicActive 
                   ? (isEmergency ? '0 0 16px rgba(220, 38, 38, 0.9)' : '0 0 16px rgba(0, 245, 212, 0.9)')
                   : '0 4px 12px rgba(0,0,0,0.4)',
-                transform: isMicActive ? 'scale(1.08)' : 'scale(1)',
-                transition: 'all 180ms cubic-bezier(0.34, 1.4, 0.64, 1)'
+                transform: isMicActive ? 'scale(1.05)' : 'scale(1)',
+                transition: 'all 200ms cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
               {isMicActive ? <MicOff size={20} /> : <Mic size={20} />}
