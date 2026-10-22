@@ -52,6 +52,8 @@ import AuthenticQrCode from './AuthenticQrCode';
 import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import DoctorClinicalLibraryTab from './doctor/DoctorClinicalLibraryTab';
 import DoctorAiAssistantTab from './doctor/DoctorAiAssistantTab';
+import DeepamHeartbeatEmblem from './DeepamHeartbeatEmblem';
+import BotanicalWatermark from './BotanicalWatermark';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
@@ -625,7 +627,7 @@ export default function DoctorPortal({
             height: '24px',
             borderRadius: '50%',
             background: '#ffffff',
-            border: '1.5px solid #CBD5E1',
+            border: '1px solid rgba(15, 76, 92, 0.15)',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             display: 'flex',
             alignItems: 'center',
@@ -790,7 +792,7 @@ export default function DoctorPortal({
                 width: '38px',
                 height: '38px',
                 borderRadius: '8px',
-                border: '1.5px solid #CBD5E1',
+                border: '1px solid rgba(15, 76, 92, 0.15)',
                 background: '#FAF8F5',
                 color: '#0F4C5C',
                 cursor: 'pointer',
@@ -813,7 +815,7 @@ export default function DoctorPortal({
                 width: '100%',
                 padding: '9px 14px 9px 38px',
                 borderRadius: '24px',
-                border: '1px solid #E2E8F0',
+                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                 background: '#FAF8F5',
                 fontSize: '13px',
                 color: '#0F172A',
@@ -949,54 +951,64 @@ export default function DoctorPortal({
               --------------------------------------------------------------------- */}
           {activeTab === 'dashboard' && (
             <>
-              {/* Welcome Banner */}
-              <div style={{
-                background: '#ffffff',
-                borderRadius: '16px',
-                padding: '20px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                border: '1px solid #E2E8F0',
-                marginBottom: '24px',
-                boxShadow: '0 2px 8px rgba(10, 37, 64, 0.02)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '12px',
-                    background: 'rgba(245, 158, 11, 0.12)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <Sun size={24} color="#F59E0B" />
-                  </div>
+              {/* Iconic AyuSwar Botanical Clinician Banner */}
+              <div 
+                className="ayuswar-banner-botanical"
+                style={{
+                  padding: '26px 30px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '24px',
+                  position: 'relative',
+                  flexWrap: 'wrap',
+                  gap: '16px'
+                }}
+              >
+                <BotanicalWatermark opacity={0.10} size={220} style={{ right: -20, bottom: -35 }} />
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '18px', zIndex: 1 }}>
+                  <DeepamHeartbeatEmblem size={54} />
                   <div>
-                    <h1 style={{ fontSize: '20px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
-                      Good Morning, {doctorName ? doctorName.split(',')[0] : 'Doctor'}
-                    </h1>
-                    <p style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>
-                      Here's what's happening with your patients today.
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <h1 style={{ fontSize: '23px', fontWeight: 850, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                        Good Morning, {doctorName ? doctorName.split(',')[0] : 'Doctor'}
+                      </h1>
+                      <span className="ayuswar-accent-badge">
+                        Clinician Seva Portal
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '13px', color: '#475569', marginTop: '5px', fontWeight: 500 }}>
+                      Kurnool District Hospital OPD • Ambient Indic Voice Scribe & Pharmacovigilance Sentinel Active
                     </p>
                   </div>
                 </div>
 
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 14px',
-                  borderRadius: '20px',
-                  border: '1px solid #E2E8F0',
-                  background: '#FAF8F5',
-                  fontSize: '12.5px',
-                  fontWeight: 650,
-                  color: '#475569'
-                }}>
-                  <Calendar size={14} color="#0F4C5C" />
-                  <span>Fri, 23 Oct 2026</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, flexWrap: 'wrap' }}>
+                  <div style={{
+                    padding: '8px 16px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.90)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(15, 76, 92, 0.15)',
+                    textAlign: 'right',
+                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.04)'
+                  }}>
+                    <div style={{ fontSize: '10.5px', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Session Date</div>
+                    <div style={{ fontSize: '13.5px', fontWeight: 850, color: '#0F4C5C' }}>{formatDemoDate(0)}</div>
+                  </div>
+                  <div style={{
+                    padding: '8px 16px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.90)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(15, 76, 92, 0.15)',
+                    textAlign: 'right',
+                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.04)'
+                  }}>
+                    <div style={{ fontSize: '10.5px', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Active OPD Roster</div>
+                    <div style={{ fontSize: '13.5px', fontWeight: 850, color: '#059669' }}>{dashboardAppointments.length} Consultations</div>
+                  </div>
                 </div>
               </div>
 
@@ -1104,7 +1116,7 @@ export default function DoctorPortal({
                 gap: '18px',
                 marginBottom: '24px'
               }}>
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(15, 76, 92, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F4C5C' }}>
                       <Users size={18} />
@@ -1115,7 +1127,7 @@ export default function DoctorPortal({
                   <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Registered in local registry</div>
                 </div>
 
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(59, 130, 246, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3B82F6' }}>
                       <Calendar size={18} />
@@ -1126,7 +1138,7 @@ export default function DoctorPortal({
                   <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Active queue tokens</div>
                 </div>
 
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
                       <Activity size={18} />
@@ -1137,7 +1149,7 @@ export default function DoctorPortal({
                   <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px' }}>Scribe encounters completed</div>
                 </div>
 
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 20px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
                       <FileText size={18} />
@@ -1150,7 +1162,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Middle Section: Today's Consultation Queue (Spacious Full-Width OPD View) */}
-              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px 28px', border: '1px solid #E2E8F0', marginBottom: '24px', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)' }}>
+              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px 28px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', marginBottom: '24px', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1194,7 +1206,7 @@ export default function DoctorPortal({
                         padding: '8px 14px',
                         background: '#FAF8F5',
                         color: '#0F4C5C',
-                        border: '1.5px solid #CBD5E1',
+                        border: '1px solid rgba(15, 76, 92, 0.15)',
                         borderRadius: '10px',
                         fontSize: '12.5px',
                         fontWeight: 750,
@@ -1217,7 +1229,7 @@ export default function DoctorPortal({
                         padding: '14px 18px',
                         borderRadius: '12px',
                         background: '#FAF8F5',
-                        border: '1px solid #E2E8F0',
+                        border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                         flexWrap: 'wrap',
                         gap: '12px',
                         transition: 'all 0.15s ease'
@@ -1305,7 +1317,7 @@ export default function DoctorPortal({
               {/* Bottom Section: Analytics + Reports */}
               <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '20px', marginBottom: '28px' }}>
                 {/* Patient Analytics */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
                       Patient Analytics
@@ -1375,7 +1387,7 @@ export default function DoctorPortal({
                 </div>
 
                 {/* Recent Reports */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
                       Recent Reports
@@ -1410,7 +1422,7 @@ export default function DoctorPortal({
                           style={{
                             padding: '5px 12px',
                             borderRadius: '8px',
-                            border: '1px solid #CBD5E1',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
                             background: '#ffffff',
                             fontSize: '11.5px',
                             fontWeight: 700,
@@ -1531,7 +1543,7 @@ export default function DoctorPortal({
                         background: '#ffffff', 
                         padding: '16px 20px', 
                         borderRadius: '14px', 
-                        border: '1px solid #E2E8F0',
+                        border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                         cursor: 'pointer'
                       }}
                     >
@@ -1569,7 +1581,7 @@ export default function DoctorPortal({
                 background: '#FAF8F5', 
                 padding: '8px 12px', 
                 borderRadius: '16px', 
-                border: '1px solid #E2E8F0',
+                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                 flexWrap: 'wrap',
                 gap: '12px'
               }}>
@@ -1650,7 +1662,7 @@ export default function DoctorPortal({
                       width: '100%',
                       padding: '8px 12px 8px 34px',
                       borderRadius: '20px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1px solid rgba(15, 76, 92, 0.15)',
                       fontSize: '12.5px',
                       outline: 'none',
                       background: '#ffffff',
@@ -1694,7 +1706,7 @@ export default function DoctorPortal({
                             textAlign: 'center',
                             background: '#ffffff',
                             borderRadius: '16px',
-                            border: '1px solid #E2E8F0',
+                            border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                             color: '#64748B'
                           }}>
                             <p style={{ margin: 0, fontWeight: 700 }}>No consultations in queue matching the criteria.</p>
@@ -1704,7 +1716,7 @@ export default function DoctorPortal({
                                 marginTop: '12px',
                                 padding: '6px 14px',
                                 borderRadius: '8px',
-                                border: '1px solid #CBD5E1',
+                                border: '1px solid rgba(15, 76, 92, 0.12)',
                                 background: '#FAF8F5',
                                 cursor: 'pointer',
                                 fontSize: '12px',
@@ -1798,7 +1810,7 @@ export default function DoctorPortal({
                                   style={{
                                     padding: '8px 14px',
                                     borderRadius: '10px',
-                                    border: '1.5px solid #CBD5E1',
+                                    border: '1px solid rgba(15, 76, 92, 0.15)',
                                     background: '#ffffff',
                                     color: '#081C24',
                                     fontSize: '12px',
@@ -1843,7 +1855,7 @@ export default function DoctorPortal({
                   SUBVIEW 2: CONSULTATION SCHEDULES
                   ------------------------------------------------------------- */}
               {opdViewMode === 'schedule' && (
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '20px' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24' }}>
                       Master Consultation Schedule (Runtime-Relative)
@@ -1947,7 +1959,7 @@ export default function DoctorPortal({
                               style={{
                                 padding: '6px 12px',
                                 borderRadius: '8px',
-                                border: '1px solid #CBD5E1',
+                                border: '1px solid rgba(15, 76, 92, 0.12)',
                                 background: '#ffffff',
                                 color: '#081C24',
                                 fontSize: '12px',
@@ -2032,7 +2044,7 @@ export default function DoctorPortal({
                         textAlign: 'center',
                         background: '#ffffff',
                         borderRadius: '16px',
-                        border: '1px solid #E2E8F0',
+                        border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                         color: '#64748B'
                       }}>
                         <p style={{ margin: 0, fontWeight: 700 }}>No demo patients found matching "{patientSearchTerm}".</p>
@@ -2042,7 +2054,7 @@ export default function DoctorPortal({
                             marginTop: '12px',
                             padding: '6px 14px',
                             borderRadius: '8px',
-                            border: '1px solid #CBD5E1',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
                             background: '#FAF8F5',
                             cursor: 'pointer',
                             fontSize: '12px',
@@ -2061,7 +2073,7 @@ export default function DoctorPortal({
                           background: '#ffffff',
                           borderRadius: '14px',
                           padding: '18px 22px',
-                          border: '1px solid #E2E8F0',
+                          border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -2125,7 +2137,7 @@ export default function DoctorPortal({
                               style={{
                                 padding: '8px 14px',
                                 borderRadius: '10px',
-                                border: '1.5px solid #CBD5E1',
+                                border: '1px solid rgba(15, 76, 92, 0.15)',
                                 background: '#ffffff',
                                 color: '#081C24',
                                 fontSize: '12px',
@@ -2213,7 +2225,7 @@ export default function DoctorPortal({
                       width: '100%',
                       padding: '9px 12px 9px 36px',
                       borderRadius: '10px',
-                      border: '1px solid #CBD5E1',
+                      border: '1px solid rgba(15, 76, 92, 0.12)',
                       fontSize: '13px',
                       background: '#ffffff',
                       color: '#081C24',
@@ -2266,7 +2278,7 @@ export default function DoctorPortal({
 
               {/* Reports Grid */}
               {filteredReports.length === 0 ? (
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No diagnostic records matching query "{reportSearchTerm}" in {reportCategoryFilter} filter.</p>
                   <button onClick={() => { setReportSearchTerm(''); setReportCategoryFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
                     Reset Filters
@@ -2283,7 +2295,7 @@ export default function DoctorPortal({
                           background: '#ffffff',
                           borderRadius: '16px',
                           padding: '20px',
-                          border: '1px solid #E2E8F0',
+                          border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                           boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
                           display: 'flex',
                           flexDirection: 'column',
@@ -2317,7 +2329,7 @@ export default function DoctorPortal({
 
                           {/* Quantitative Metrics Snippet */}
                           {rep.quantitativeMetrics && rep.quantitativeMetrics.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid #E2E8F0', marginBottom: '12px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', marginBottom: '12px' }}>
                               {rep.quantitativeMetrics.slice(0, 4).map((m, mIdx) => {
                                 const isNorm = m.status === 'Normal';
                                 const isHigh = m.status?.toLowerCase().includes('high') || m.status?.toLowerCase().includes('elevated') || m.status?.toLowerCase().includes('severe');
@@ -2459,7 +2471,7 @@ export default function DoctorPortal({
                     style={{
                       padding: '8px 16px',
                       borderRadius: '10px',
-                      border: '1px solid #CBD5E1',
+                      border: '1px solid rgba(15, 76, 92, 0.12)',
                       background: '#ffffff',
                       color: '#081C24',
                       fontSize: '12.5px',
@@ -2662,7 +2674,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Active Prescriptions Table */}
-              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '22px', marginBottom: '22px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>
                     Today's Active Regimens & Patient Dispatches
@@ -2688,7 +2700,7 @@ export default function DoctorPortal({
                         padding: '16px 20px',
                         borderRadius: '12px',
                         background: '#FAF8F5',
-                        border: '1px solid #E2E8F0',
+                        border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -2756,7 +2768,7 @@ export default function DoctorPortal({
                           style={{
                             padding: '7px 12px',
                             borderRadius: '8px',
-                            border: '1px solid #CBD5E1',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
                             background: '#ffffff',
                             color: '#334155',
                             fontSize: '12px',
@@ -2902,7 +2914,7 @@ export default function DoctorPortal({
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
                 {/* 1. ABDM HPR Registry */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <ShieldCheck size={18} color="#0F4C5C" />
                     <span>ABDM Healthcare Professional Registry (HPR) [DEMO]</span>
@@ -2917,7 +2929,7 @@ export default function DoctorPortal({
                 </div>
 
                 {/* 2. Microphone & AudioWorklet VAD Calibration */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Mic size={18} color="#2563EB" />
                     <span>Microphone & Acoustic VAD Calibration</span>
@@ -2930,7 +2942,7 @@ export default function DoctorPortal({
                     <select
                       value={docScribeEngine}
                       onChange={e => setDocScribeEngine(e.target.value)}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', fontWeight: 650 }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px', fontWeight: 650 }}
                     >
                       <option value="browser_speech">Browser speech (Web Speech API). Gnani voice integration: planned</option>
                       <option value="google_medlm">Google MedLM Clinical Ambient (Bio-Clinical)</option>
@@ -2945,7 +2957,7 @@ export default function DoctorPortal({
                     <select
                       value={docNoiseCancellation}
                       onChange={e => setDocNoiseCancellation(e.target.value)}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '12.5px', fontWeight: 650 }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px', fontWeight: 650 }}
                     >
                       <option value="crowded_opd">Crowded OPD Waiting Hall (65 dB Spectral Subtraction)</option>
                       <option value="quiet_chamber">Private Doctor Chamber (40 dB Noise Gate)</option>
@@ -2959,14 +2971,14 @@ export default function DoctorPortal({
                 </div>
 
                 {/* 3. Clinical AI Guardrails & Auto-Coding */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Stethoscope size={18} color="#059669" />
                     <span>Clinical Guardrails & Auto-Coding</span>
                   </h3>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Automated ICD-10 & SNOMED CT Extraction</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Maps colloquial Indian phrases to clinical billing codes</div>
@@ -2979,7 +2991,7 @@ export default function DoctorPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Drug-Drug Interaction (DDI) & Allergy Sentinel</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Real-time alert before confirming e-Prescription</div>
@@ -2992,7 +3004,7 @@ export default function DoctorPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>NFI Formulary Generic Drug Preference</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Prioritize Jan Aushadhi generic equivalents</div>
@@ -3008,14 +3020,14 @@ export default function DoctorPortal({
                 </div>
 
                 {/* 4. Digital Signature & Patient Push */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FileCheck size={18} color="#D97706" />
                     <span>Digital Signature & Tele-OPD Dispatch</span>
                   </h3>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Class-3 DSC e-Signature Stamp</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Cryptographic PKI e-sign on official OPD Rx sheets</div>
@@ -3028,7 +3040,7 @@ export default function DoctorPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>ABDM Gateway Auto-Sync</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Transmit FHIR R4 encounter bundle upon consultation sign-off</div>
@@ -3041,7 +3053,7 @@ export default function DoctorPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Automatic WhatsApp Spoken Audio Dispatch</div>
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Send regional voice note directly to patient upon prescription closure</div>
@@ -3114,7 +3126,7 @@ export default function DoctorPortal({
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            border: '1px solid #CBD5E1'
+            border: '1px solid rgba(15, 76, 92, 0.12)'
           }}>
             {/* NABL Diagnostic Letterhead Header */}
             <div style={{
@@ -3179,7 +3191,7 @@ export default function DoctorPortal({
               {/* Patient & Specimen Demographics Strip */}
               <div style={{
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                 borderRadius: '12px',
                 padding: '12px 16px',
                 display: 'grid',
@@ -3370,7 +3382,7 @@ export default function DoctorPortal({
                   <h4 style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span>📊 Quantitative Analyte & Parameter Analysis</span>
                   </h4>
-                  <div style={{ border: '1px solid #E2E8F0', borderRadius: '10px', overflow: 'hidden' }}>
+                  <div style={{ border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', borderRadius: '10px', overflow: 'hidden' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
                       <thead>
                         <tr style={{ background: '#FAF8F5', color: '#475569', textAlign: 'left', fontWeight: 700 }}>
@@ -3422,7 +3434,7 @@ export default function DoctorPortal({
 
               {/* Findings & Clinical Impression */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
-                <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                   <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>
                     Detailed Clinical Findings
                   </div>
@@ -3462,7 +3474,7 @@ export default function DoctorPortal({
                   style={{
                     padding: '8px 16px',
                     borderRadius: '8px',
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
                     background: '#ffffff',
                     color: '#334155',
                     fontSize: '12.5px',
@@ -3564,7 +3576,7 @@ export default function DoctorPortal({
             {/* Scrollable Body */}
             <div style={{ overflowY: 'auto', flex: 1, paddingRight: '4px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {/* Vitals Summary Card */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: '#FAF8F5', padding: '12px', borderRadius: '12px', textAlign: 'center', fontSize: '12px', border: '1px solid #E2E8F0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: '#FAF8F5', padding: '12px', borderRadius: '12px', textAlign: 'center', fontSize: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
                 <div><span style={{ color: '#64748B' }}>BP</span><br /><strong style={{ fontSize: '14px', color: '#081C24' }}>{selectedPatientModal.vitals.bp}</strong></div>
                 <div><span style={{ color: '#64748B' }}>Pulse</span><br /><strong style={{ fontSize: '14px', color: '#081C24' }}>{selectedPatientModal.vitals.hr}</strong></div>
                 <div><span style={{ color: '#64748B' }}>SpO2</span><br /><strong style={{ fontSize: '14px', color: '#081C24' }}>{selectedPatientModal.vitals.spo2}</strong></div>
@@ -3572,7 +3584,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Conditions List */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '12px 14px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '12px 14px' }}>
                 <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '6px' }}>
                   Active Clinical Conditions
                 </div>
@@ -3586,7 +3598,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Encounter Timeline (Most Recent First) */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase' }}>
                     Past Encounters Timeline
@@ -3610,7 +3622,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Prescriptions with Audio-Rx Play Action */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase' }}>
                     Active Prescriptions & Spoken Audio-Rx
@@ -3621,7 +3633,7 @@ export default function DoctorPortal({
                   {(selectedPatientModal.prescriptions && selectedPatientModal.prescriptions.length > 0 ? selectedPatientModal.prescriptions : [
                     { id: 'DEMO-RX-01', drugName: 'Metformin Hydrochloride', dosage: '500 mg', frequency: '1 tab BD after meals (as prescribed)' }
                   ]).map((rx, idx) => (
-                    <div key={rx.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', gap: '10px' }}>
+                    <div key={rx.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', gap: '10px' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#081C24' }}>{rx.drugName} • {rx.dosage}</div>
                         <div style={{ fontSize: '11.5px', color: '#64748B' }}>{rx.frequency}</div>
@@ -3658,7 +3670,7 @@ export default function DoctorPortal({
               </div>
 
               {/* Lab Reports with Status Chips */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '14px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '14px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase', marginBottom: '8px' }}>
                   Laboratory & Diagnostic Reports
                 </div>
@@ -3710,7 +3722,7 @@ export default function DoctorPortal({
                 style={{
                   padding: '10px 16px',
                   borderRadius: '10px',
-                  border: '1px solid #CBD5E1',
+                  border: '1px solid rgba(15, 76, 92, 0.12)',
                   background: '#FAF8F5',
                   color: '#475569',
                   fontSize: '12px',
@@ -3762,7 +3774,7 @@ export default function DoctorPortal({
             width: '100%',
             maxWidth: '520px',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-            border: '1px solid #CBD5E1',
+            border: '1px solid rgba(15, 76, 92, 0.12)',
             overflow: 'hidden'
           }}>
             {/* Modal Header */}
@@ -3822,7 +3834,7 @@ export default function DoctorPortal({
                     width: '100%',
                     padding: '10px 12px',
                     borderRadius: '10px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1px solid rgba(15, 76, 92, 0.15)',
                     fontSize: '13px',
                     background: '#FAF8F5'
                   }}
@@ -3847,7 +3859,7 @@ export default function DoctorPortal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1px solid rgba(15, 76, 92, 0.15)',
                       fontSize: '13px',
                       background: '#FAF8F5'
                     }}
@@ -3869,7 +3881,7 @@ export default function DoctorPortal({
                       width: '100%',
                       padding: '10px 12px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1px solid rgba(15, 76, 92, 0.15)',
                       fontSize: '13px',
                       background: '#FAF8F5'
                     }}
@@ -3928,7 +3940,7 @@ export default function DoctorPortal({
                     width: '100%',
                     padding: '10px 12px',
                     borderRadius: '10px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1px solid rgba(15, 76, 92, 0.15)',
                     fontSize: '13px',
                     boxSizing: 'border-box'
                   }}
@@ -3944,7 +3956,7 @@ export default function DoctorPortal({
                     flex: 1,
                     padding: '10px',
                     borderRadius: '10px',
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
                     background: '#FAF8F5',
                     color: '#475569',
                     fontSize: '13px',
@@ -4092,7 +4104,7 @@ export default function DoctorPortal({
               {/* Patient Barcode & Demographics Grid */}
               <div style={{
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
                 borderRadius: '10px',
                 padding: '12px 16px',
                 marginBottom: '18px',
@@ -4142,7 +4154,7 @@ export default function DoctorPortal({
                   </span>
                 </div>
 
-                <div style={{ border: '1px solid #E2E8F0', borderRadius: '10px', overflow: 'hidden' }}>
+                <div style={{ border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', borderRadius: '10px', overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                     <thead>
                       <tr style={{ background: '#FAF8F5', borderBottom: '1px solid #E2E8F0', color: '#475569', textAlign: 'left' }}>
