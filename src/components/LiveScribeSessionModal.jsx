@@ -45,6 +45,15 @@ export default function LiveScribeSessionModal({
   doctorName = 'Dr. Priya Sharma, MD',
   onCompleteEncounter
 }) {
+  const safePatient = patientData || {
+    name: 'Narayana Rao',
+    vernacular: 'నారాయణ రావు',
+    token: 'OPD-101',
+    age: 58,
+    gender: 'Male',
+    language: 'Telugu',
+    domain: 'cardiometabolic'
+  };
 
   const [isRecording, setIsRecording] = useState(true);
   const [micMode, setMicMode] = useState('ambient_sim'); // 'ambient_sim' | 'physical_mic'
@@ -124,7 +133,7 @@ export default function LiveScribeSessionModal({
     }
   };
 
-  const domainKey = patientData?.domain || ((patientData?.age || 0) < 15 ? 'respiratory' : 'cardiometabolic');
+  const domainKey = safePatient?.domain || ((safePatient?.age || 0) < 15 ? 'respiratory' : 'cardiometabolic');
   const encounterData = encounterPresets[domainKey] || encounterPresets.cardiometabolic;
 
   // Helper to send recorded audio chunk to serverless Gnani STT endpoint
@@ -132,14 +141,14 @@ export default function LiveScribeSessionModal({
     if (!blob || blob.size < 500) return;
     setIsTranscribingChunk(true);
     setLastSttError(null);
-    const targetLang = patientData?.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+    const targetLang = safePatient?.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
     try {
       const res = await speechService.transcribeAudioWithGnani(blob, targetLang);
       if (res && res.transcript && res.transcript.trim()) {
         setHasGnaniSttTranscribed(true);
         setDialogueList(prev => [...prev, {
           speaker: 'Doctor (Gnani STT - Live)',
-          lang: patientData.language || 'Telugu',
+          lang: safePatient.language || 'Telugu',
           text: res.transcript.trim(),
           isGnaniLive: true
         }]);
@@ -184,7 +193,7 @@ export default function LiveScribeSessionModal({
     }
 
     let isMounted = true;
-    const targetLang = patientData.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+    const targetLang = safePatient.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
 
     // Fallback: Browser Web Speech API
     const startBrowserSpeechFallback = () => {
@@ -341,9 +350,11 @@ export default function LiveScribeSessionModal({
       setIsSynthesizingRx(false);
       setIsRxSigned(true);
       setShowWhatsAppModal(true);
-      if (onCompleteEncounter) onCompleteEncounter(patientData);
+      if (onCompleteEncounter) onCompleteEncounter(safePatient);
     }, 1200);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div style={{
@@ -415,7 +426,7 @@ export default function LiveScribeSessionModal({
                 </span>
               </div>
               <p style={{ fontSize: '12px', color: '#CBD5E1', margin: '3px 0 0 0' }}>
-                Patient: <strong>{patientData.name}</strong> ({patientData.vernacular || 'నారాయణ'}) • Token #{patientData.token || 'OPD-101'} • Attending: {doctorName}
+                Patient: <strong>{safePatient.name}</strong> ({safePatient.vernacular || 'నారాయణ'}) • Token #{safePatient.token || 'OPD-101'} • Attending: {doctorName}
               </p>
             </div>
           </div>
@@ -802,7 +813,7 @@ export default function LiveScribeSessionModal({
             {/* Human-In-The-Loop Sign & WhatsApp Action */}
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ fontSize: '11px', color: '#64748B', lineHeight: 1.4 }}>
-                🔒 <strong>Doctor-in-the-loop:</strong> Reviewing and signing generates a spoken prescription in {patientData.language || 'Telugu'} (Browser speech (Web Speech API). Gnani voice integration: planned) and prepares the WhatsApp message.
+                🔒 <strong>Doctor-in-the-loop:</strong> Reviewing and signing generates a spoken prescription in {safePatient.language || 'Telugu'} (Synthesized via Gnani Indic Neural TTS / Browser Speech Fallback) and prepares the WhatsApp message.
               </div>
 
               <button
@@ -875,7 +886,7 @@ export default function LiveScribeSessionModal({
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `ABDM_FHIR_R4_${(patientData.name || 'Patient').replace(/\s+/g, '_')}_Rx.json`;
+                    a.download = `ABDM_FHIR_R4_${(safePatient.name || 'Patient').replace(/\s+/g, '_')}_Rx.json`;
                     a.click();
                     URL.revokeObjectURL(url);
                   }}
@@ -1077,9 +1088,9 @@ export default function LiveScribeSessionModal({
       <WhatsAppAudioRxModal
         isOpen={showWhatsAppModal}
         onClose={() => setShowWhatsAppModal(false)}
-        patientData={patientData}
+        patientData={safePatient}
         doctorName={doctorName}
-        initialLanguage={patientData.language?.toLowerCase().includes('hindi') ? 'hi' : 'te'}
+        initialLanguage={safePatient.language?.toLowerCase().includes('hindi') ? 'hi' : 'te'}
       />
     </div>
   );

@@ -182,7 +182,7 @@ export default function App() {
     } else if (modalKey === 'dataset' || modalKey === 'kaggle_hub') {
       navigate('/datasets');
     } else if (modalKey === 'scribe' || modalKey === 'console') {
-      setIsDoctorAuthModalOpen(true);
+      navigate('/clinical-console');
     }
   };
 
@@ -397,13 +397,9 @@ export default function App() {
           <Route 
             path="/clinical-console" 
             element={
-              currentDoctor ? (
-                <ClinicalConsole 
-                  doctorProfile={currentDoctor} 
-                />
-              ) : (
-                <Navigate to="/auth/doctor" replace />
-              )
+              <ClinicalConsole 
+                doctorProfile={currentDoctor || { doctorName: 'Dr. Priya Sharma, MD', registrationNumber: 'MCI-98421-AP', specialty: 'General & Preventive Medicine' }} 
+              />
             } 
           />
 

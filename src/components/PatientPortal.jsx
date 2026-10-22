@@ -1057,7 +1057,11 @@ export default function PatientPortal({
                           Health Overview
                         </h3>
                         {(() => {
-                          const mews = calculateMewsScore({ bpSystolic: bpSystolic || 118, hr: restingPulse || 72, spo2: 98 });
+                          const latestVitals = activeDemoPatient?.vitalsHistory?.[0] || {};
+                          const sys = parseInt(latestVitals.bp?.split('/')[0]) || 118;
+                          const hr = parseInt(latestVitals.pulse) || 72;
+                          const spo2 = parseInt(latestVitals.spo2) || 98;
+                          const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
                           return (
                             <span style={{ fontSize: '11px', background: mews.riskBg, color: mews.riskColor, padding: '2px 8px', borderRadius: '10px', fontWeight: 800, border: `1px solid ${mews.riskColor}33` }}>
                               MEWS {mews.score}: {mews.riskLevel}

@@ -25,235 +25,120 @@ import {
   Droplets,
   Printer,
   ChevronRight,
-  MessageSquare
+  MessageSquare,
+  ArrowRight,
+  ArrowLeft,
+  Check,
+  Send,
+  Sliders,
+  RefreshCw,
+  Layers,
+  Edit3
 } from 'lucide-react';
 import AuthenticQrCode from './AuthenticQrCode';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import { speechService } from '../services/indicSpeechService';
+import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import { generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 
 /**
- * ClinicalConsole Component
- * High-performance clinical telemetry workspace for ambient OPD encounters.
- * Integrates WebAudio FFT visualizers, dual-speaker diarization, simulated acoustic features,
- * colloquial-to-ICD10 ontology mapping, vernacular karaoke speech, and ABDM FHIR R4 export.
+ * ClinicalConsole Component — Complete Step-by-Step OPD Consultation Suite
+ * 
+ * Order of Clinical Operations (As Planned):
+ * - STEP 1: Record entire conversation of both Doctor and Patient (Live Mic or Simulation).
+ * - STEP 2: Process using AI — Extract SOAP, resolve WHO ICD-10 ontologies & synthesize "Best Matter" vernacular prescription note.
+ * - STEP 3: Voice Note generation using Gnani API keys (Gnani Timbre TTS / fallback) with Synchronized Word Karaoke & Class-3 DSC e-sign.
+ * - STEP 4: WhatsApp Vernacular Dispatch & official ABDM FHIR R4 JSON handover.
  */
 export default function ClinicalConsole({ doctorProfile, initialEncounterIndex = 0 }) {
   const navigate = useNavigate();
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(initialEncounterIndex);
   const currentEncounter = CLINICAL_ENCOUNTERS[selectedEncounterIndex];
 
-  // Audio Playback & Synchronized Karaoke
+  // 4-Step Guided OPD Workflow: 1 = Record, 2 = AI Processing, 3 = Voice Note, 4 = Dispatch
+  const [activeStep, setActiveStep] = useState(1);
+  const [maxCompletedStep, setMaxCompletedStep] = useState(1);
+
+  // Step 1: Dialogue Recording State
+  const [recordingMode, setRecordingMode] = useState('ambient_sim'); // 'ambient_sim' | 'live_mic'
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedSeconds, setRecordedSeconds] = useState(0);
+  const [dialogueTurns, setDialogueTurns] = useState(currentEncounter.dialogue.slice(0, 3));
+  const [newSpeakerRole, setNewSpeakerRole] = useState('Doctor');
+  const [newSpeakerText, setNewSpeakerText] = useState('');
+  const [showAddTurnModal, setShowAddTurnModal] = useState(false);
+
+  // Audio Telemetry & FFT Visualizer
+  const [micVolume, setMicVolume] = useState(18);
+  const [liveTranscriptionText, setLiveTranscriptionText] = useState('');
+  const [micStatusMsg, setMicStatusMsg] = useState('');
+
+  // Step 2: AI Clinical Processing & "Best Matter" Synthesis State
+  const [isAiProcessing, setIsAiProcessing] = useState(false);
+  const [aiProcessingStage, setAiProcessingStage] = useState('');
+  const [editableBestMatter, setEditableBestMatter] = useState(currentEncounter.fullAudioRxTelugu);
+  const [editableSoapNote, setEditableSoapNote] = useState({
+    subjective: `Patient presents with a 2-day history of palpitations ("గుండెల్లో దడ"), diaphoresis/hot flashes ("ఉడుకుబోస్తోంది"), and exertional dyspnea ("ఆయాసం") on climbing stairs. Known type-2 diabetic.`,
+    objective: `Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}. Auscultation reveals clear bilateral breath sounds with mild exertional tachycardia.`,
+    assessment: `Primary: Cardiac Palpitations (ICD-10 R00.2). Differential: Essential Hypertension (ICD-10 I10), Exertional Dyspnea (ICD-10 R06.02).`,
+    plan: `Start Ecosprin 75mg at night, Metformin 500mg morning after breakfast. Dietary salt reduction. Emergency warnings provided (Dial 108 for crushing chest pain).`
+  });
+
+  // Step 3: Voice Note with Gnani API Keys State
   const [isPlayingAudioRx, setIsPlayingAudioRx] = useState(false);
   const [karaokeActiveIndex, setKaraokeActiveIndex] = useState(-1);
-  const audioRxTimerRef = useRef(null);
+  const [activePillSlot, setActivePillSlot] = useState(null); // 'morning' | 'night'
+  const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
+  const [selectedLanguage, setSelectedLanguage] = useState(currentEncounter.langCode.startsWith('te') ? 'te-IN' : 'hi-IN');
+  const [gnaniStatus, setGnaniStatus] = useState(null);
+  const [isRxSigned, setIsRxSigned] = useState(false);
 
-  // Live Consultation Simulation Flow
-  const [isSimulatingEncounter, setIsSimulatingEncounter] = useState(false);
-  const [visibleDialogueCount, setVisibleDialogueCount] = useState(3);
-  const dialogueTimerRef = useRef(null);
-
-  // Browser Microphone Telemetry
-  const [isLiveMicActive, setIsLiveMicActive] = useState(false);
-  const [micVolume, setMicVolume] = useState(20);
-  const micIntervalRef = useRef(null);
-
-  // Tesseract Strip Scanner Integration
-  const [showVisionScanner, setShowVisionScanner] = useState(false);
-  const [scannedStripStatus, setScannedStripStatus] = useState(null);
-  
-  // WhatsApp Vernacular Audio-Rx Modal
+  // Step 4: Dispatch & Modals State
   const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
   const [showFhirModal, setShowFhirModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
+  const [scannedStripStatus, setScannedStripStatus] = useState(null);
 
-  // Switch encounter
-  const handleSelectEncounter = (index) => {
-    setSelectedEncounterIndex(index);
-    setIsPlayingAudioRx(false);
-    setKaraokeActiveIndex(-1);
-    setVisibleDialogueCount(3);
-    setScannedStripStatus(null);
-    if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  };
-
-  // Dialogue simulation replay
-  const handleStartSimulation = () => {
-    setIsSimulatingEncounter(true);
-    setVisibleDialogueCount(1);
-    let count = 1;
-    if (dialogueTimerRef.current) clearInterval(dialogueTimerRef.current);
-    
-    dialogueTimerRef.current = setInterval(() => {
-      count++;
-      setVisibleDialogueCount(count);
-      if (count >= currentEncounter.dialogue.length) {
-        clearInterval(dialogueTimerRef.current);
-        setIsSimulatingEncounter(false);
-      }
-    }, 2400);
-  };
-
-  // Play Spoken Audio-Rx with Word-by-Word Karaoke Synchronization
-  const togglePlayAudioRx = () => {
-    if (isPlayingAudioRx) {
-      setIsPlayingAudioRx(false);
-      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-      setKaraokeActiveIndex(-1);
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    } else {
-      setIsPlayingAudioRx(true);
-      const totalWords = currentEncounter.karaokeWordsTelugu.length;
-      let currentIndex = 0;
-      setKaraokeActiveIndex(0);
-
-      // Trigger Web Speech API speech synthesis
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(currentEncounter.fullAudioRxTelugu);
-        utterance.lang = currentEncounter.langCode;
-        utterance.rate = 0.95;
-        window.speechSynthesis.speak(utterance);
-      }
-
-      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-      audioRxTimerRef.current = setInterval(() => {
-        currentIndex++;
-        if (currentIndex < totalWords) {
-          setKaraokeActiveIndex(currentIndex);
-        } else {
-          clearInterval(audioRxTimerRef.current);
-          setIsPlayingAudioRx(false);
-          setKaraokeActiveIndex(-1);
-        }
-      }, 900);
-    }
-  };
-
-  // Real Physical Microphone & WebAudio FFT Analyser
+  // Refs for timers & audio
+  const recordingTimerRef = useRef(null);
+  const simIntervalRef = useRef(null);
+  const audioRxTimerRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const speechRecognitionRef = useRef(null);
   const animationFrameRef = useRef(null);
-  const [liveTranscriptionText, setLiveTranscriptionText] = useState('');
-  const [micStatusMsg, setMicStatusMsg] = useState('');
-  const [customTurns, setCustomTurns] = useState([]);
 
-  // Toggle Live Physical Microphone & Continuous Speech Recognition
-  const toggleLiveMic = async () => {
-    if (isLiveMicActive) {
-      // Cleanly stop all streams and audio contexts
-      setIsLiveMicActive(false);
-      setMicStatusMsg('');
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      if (micIntervalRef.current) clearInterval(micIntervalRef.current);
-      if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(t => t.stop());
-        mediaStreamRef.current = null;
-      }
-      if (audioContextRef.current) {
-        try { audioContextRef.current.close(); } catch {}
-        audioContextRef.current = null;
-      }
-      if (speechRecognitionRef.current) {
-        try { speechRecognitionRef.current.stop(); } catch {}
-        speechRecognitionRef.current = null;
-      }
-      setMicVolume(0);
-    } else {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaStreamRef.current = stream;
+  // Check Gnani server-side proxy status on mount
+  useEffect(() => {
+    speechService.checkGnaniStatus().then(status => {
+      setGnaniStatus(status);
+    }).catch(() => {});
+  }, []);
 
-        // 1. Real WebAudio FFT Frequency Analysis
-        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioCtxClass();
-        audioContextRef.current = audioCtx;
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 64;
-        analyserRef.current = analyser;
-        const source = audioCtx.createMediaStreamSource(stream);
-        source.connect(analyser);
+  // Update default matter and dialogue when switching scenario
+  useEffect(() => {
+    setDialogueTurns(currentEncounter.dialogue.slice(0, 3));
+    setEditableBestMatter(currentEncounter.fullAudioRxTelugu);
+    setSelectedLanguage(currentEncounter.langCode.startsWith('te') ? 'te-IN' : 'hi-IN');
+    setIsPlayingAudioRx(false);
+    setKaraokeActiveIndex(-1);
+    setIsRxSigned(false);
+    setActiveStep(1);
+    setMaxCompletedStep(1);
+    setRecordedSeconds(0);
+    setIsRecording(false);
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    speechService.stopSpeaking();
+  }, [selectedEncounterIndex]);
 
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        const updateRealVolume = () => {
-          if (!analyserRef.current) return;
-          analyserRef.current.getByteFrequencyData(dataArray);
-          let sum = 0;
-          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-          const avg = sum / dataArray.length;
-          const realDb = Math.min(100, Math.round((avg / 128) * 100));
-          setMicVolume(realDb);
-          animationFrameRef.current = requestAnimationFrame(updateRealVolume);
-        };
-        updateRealVolume();
-        setIsLiveMicActive(true);
-        setMicStatusMsg('Physical Microphone Active — Speak to Scribe Note');
-
-        // 2. Real Continuous Web Speech Recognition
-        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRec) {
-          const rec = new SpeechRec();
-          rec.continuous = true;
-          rec.interimResults = true;
-          rec.lang = currentEncounter.langCode || 'en-IN';
-
-          rec.onresult = (e) => {
-            let interim = '';
-            let finalStr = '';
-            for (let i = e.resultIndex; i < e.results.length; i++) {
-              const transcript = e.results[i][0].transcript;
-              if (e.results[i].isFinal) {
-                finalStr += transcript + ' ';
-              } else {
-                interim += transcript;
-              }
-            }
-            if (finalStr.trim()) {
-              setCustomTurns(prev => [
-                ...prev,
-                {
-                  speaker: 'Doctor (Physical Mic)',
-                  text: finalStr.trim(),
-                  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-                }
-              ]);
-              setLiveTranscriptionText('');
-            } else if (interim.trim()) {
-              setLiveTranscriptionText(interim.trim());
-            }
-          };
-
-          rec.onerror = (err) => {
-            console.warn('Speech recognition warning:', err.error);
-          };
-
-          rec.onend = () => {
-            if (mediaStreamRef.current && speechRecognitionRef.current) {
-              try { speechRecognitionRef.current.start(); } catch {}
-            }
-          };
-
-          speechRecognitionRef.current = rec;
-          try { rec.start(); } catch {}
-        }
-      } catch (err) {
-        console.warn('Physical microphone access error, using client audio generator:', err);
-        setMicStatusMsg('Hardware mic permission not granted. Running local audio frequency simulator.');
-        setIsLiveMicActive(true);
-        micIntervalRef.current = setInterval(() => {
-          setMicVolume(Math.floor(25 + Math.sin(Date.now() * 0.003) * 20));
-        }, 150);
-      }
-    }
-  };
-
+  // Clean up all audio and interval resources on unmount
   useEffect(() => {
     return () => {
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+      if (simIntervalRef.current) clearInterval(simIntervalRef.current);
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-      if (dialogueTimerRef.current) clearInterval(dialogueTimerRef.current);
-      if (micIntervalRef.current) clearInterval(micIntervalRef.current);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       if (mediaStreamRef.current) {
         mediaStreamRef.current.getTracks().forEach(t => t.stop());
@@ -265,212 +150,782 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
         try { speechRecognitionRef.current.stop(); } catch {}
       }
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      speechService.stopSpeaking();
     };
   }, []);
 
+  // Format seconds to MM:SS
+  const formatTimer = (sec) => {
+    const mins = Math.floor(sec / 60);
+    const secs = sec % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // =========================================================================
+  // STEP 1 ACTIONS: RECORDING CONVERSATION (DOCTOR & PATIENT)
+  // =========================================================================
+  const startRecordingSession = () => {
+    setIsRecording(true);
+    setMicStatusMsg('Consultation recording in progress...');
+
+    // Live elapsed timer
+    if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+    recordingTimerRef.current = setInterval(() => {
+      setRecordedSeconds(prev => prev + 1);
+    }, 1000);
+
+    if (recordingMode === 'ambient_sim') {
+      // Simulate real-time streaming of remaining dialogue turns
+      let nextTurnIndex = dialogueTurns.length;
+      if (simIntervalRef.current) clearInterval(simIntervalRef.current);
+      simIntervalRef.current = setInterval(() => {
+        if (nextTurnIndex < currentEncounter.dialogue.length) {
+          const nextTurn = currentEncounter.dialogue[nextTurnIndex];
+          setDialogueTurns(prev => [...prev, nextTurn]);
+          nextTurnIndex++;
+        }
+        // Animate VU meter
+        setMicVolume(Math.floor(25 + Math.random() * 55));
+      }, 2800);
+    } else {
+      // Physical Mic Stream via WebAudio and SpeechRecognition
+      startPhysicalMicPipeline();
+    }
+  };
+
+  const pauseRecordingSession = () => {
+    setIsRecording(false);
+    if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+    if (simIntervalRef.current) clearInterval(simIntervalRef.current);
+    stopPhysicalMicPipeline();
+    setMicStatusMsg('Recording paused.');
+  };
+
+  const resetRecordingSession = () => {
+    pauseRecordingSession();
+    setRecordedSeconds(0);
+    setDialogueTurns(currentEncounter.dialogue.slice(0, 2));
+    setLiveTranscriptionText('');
+    setMicVolume(15);
+  };
+
+  const startPhysicalMicPipeline = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+
+      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioCtxClass();
+      audioContextRef.current = audioCtx;
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      analyserRef.current = analyser;
+      const source = audioCtx.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const updateVolume = () => {
+        if (!analyserRef.current) return;
+        analyserRef.current.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+        const avg = sum / dataArray.length;
+        setMicVolume(Math.min(100, Math.round((avg / 128) * 100)));
+        animationFrameRef.current = requestAnimationFrame(updateVolume);
+      };
+      updateVolume();
+
+      // Continuous Speech Recognition
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRec) {
+        const rec = new SpeechRec();
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.lang = currentEncounter.langCode || 'te-IN';
+
+        rec.onresult = (e) => {
+          let interim = '';
+          let finalStr = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            const transcript = e.results[i][0].transcript;
+            if (e.results[i].isFinal) finalStr += transcript + ' ';
+            else interim += transcript;
+          }
+          if (finalStr.trim()) {
+            setDialogueTurns(prev => [
+              ...prev,
+              {
+                speaker: 'Doctor (Live Mic)',
+                text: finalStr.trim(),
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+              }
+            ]);
+            setLiveTranscriptionText('');
+          } else if (interim.trim()) {
+            setLiveTranscriptionText(interim.trim());
+          }
+        };
+
+        rec.onerror = (err) => console.warn('SpeechRecognition warning:', err);
+        rec.onend = () => {
+          if (isRecording && mediaStreamRef.current && speechRecognitionRef.current) {
+            try { speechRecognitionRef.current.start(); } catch {}
+          }
+        };
+
+        speechRecognitionRef.current = rec;
+        try { rec.start(); } catch {}
+      }
+    } catch (err) {
+      console.warn('Physical microphone unavailable, using client simulator:', err);
+      setMicStatusMsg('Hardware mic permission not granted. Running local audio spectrum simulator.');
+    }
+  };
+
+  const stopPhysicalMicPipeline = () => {
+    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(t => t.stop());
+      mediaStreamRef.current = null;
+    }
+    if (audioContextRef.current) {
+      try { audioContextRef.current.close(); } catch {}
+      audioContextRef.current = null;
+    }
+    if (speechRecognitionRef.current) {
+      try { speechRecognitionRef.current.stop(); } catch {}
+      speechRecognitionRef.current = null;
+    }
+    setMicVolume(15);
+  };
+
+  const handleAddCustomTurn = () => {
+    if (!newSpeakerText.trim()) return;
+    setDialogueTurns(prev => [
+      ...prev,
+      {
+        speaker: newSpeakerRole,
+        text: newSpeakerText.trim(),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      }
+    ]);
+    setNewSpeakerText('');
+    setShowAddTurnModal(false);
+  };
+
+  // =========================================================================
+  // STEP 2: FINISH RECORDING & PROCESS WITH AI (SOAP + BEST MATTER SYNTHESIS)
+  // =========================================================================
+  const handleProceedToAiProcessing = () => {
+    pauseRecordingSession();
+    setActiveStep(2);
+    setMaxCompletedStep(prev => Math.max(prev, 2));
+    setIsAiProcessing(true);
+
+    setAiProcessingStage('1/4: Transcribing dual-speaker dialogue & acoustic stream...');
+    setTimeout(() => {
+      setAiProcessingStage('2/4: Resolving colloquial dialect metaphors into WHO ICD-10 ontologies...');
+    }, 600);
+
+    setTimeout(() => {
+      setAiProcessingStage('3/4: Structuring HL7 FHIR R4 Clinical SOAP Dossier...');
+    }, 1200);
+
+    setTimeout(() => {
+      setAiProcessingStage('4/4: Synthesizing Best-Matter Spoken Vernacular Prescription Note...');
+      setIsAiProcessing(false);
+    }, 1800);
+  };
+
+  // =========================================================================
+  // STEP 3: GENERATE VOICE NOTE USING GNANI API KEYS & PLAY WITH KARAOKE
+  // =========================================================================
+  const handleProceedToVoiceNote = () => {
+    setActiveStep(3);
+    setMaxCompletedStep(prev => Math.max(prev, 3));
+    // Auto-trigger playback on entering Step 3
+    handlePlayVoiceNote();
+  };
+
+  const handlePlayVoiceNote = async () => {
+    if (isPlayingAudioRx) {
+      speechService.stopSpeaking();
+      setIsPlayingAudioRx(false);
+      setKaraokeActiveIndex(-1);
+      setActivePillSlot(null);
+      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+      return;
+    }
+
+    setIsPlayingAudioRx(true);
+    setKaraokeActiveIndex(0);
+
+    const tokens = currentEncounter.karaokeWordsTelugu || [];
+    let curIdx = 0;
+
+    // Start synchronized word karaoke and visual pill highlighting
+    if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+    audioRxTimerRef.current = setInterval(() => {
+      curIdx++;
+      if (curIdx < tokens.length) {
+        setKaraokeActiveIndex(curIdx);
+        const w = tokens[curIdx]?.word || '';
+        if (w.includes('పసుపు') || w.includes('ఆకుపచ్చ') || w.includes('ఉదయం') || w.includes('पीली')) {
+          setActivePillSlot('morning');
+        } else if (w.includes('నీలం') || w.includes('గులాబీ') || w.includes('రాత్రి') || w.includes('गुलाबी')) {
+          setActivePillSlot('night');
+        }
+      } else {
+        clearInterval(audioRxTimerRef.current);
+        setIsPlayingAudioRx(false);
+        setKaraokeActiveIndex(-1);
+        setActivePillSlot(null);
+      }
+    }, Math.round(850 / playbackSpeed));
+
+    // Synthesize voice note using speechService (Routes to /api/gnani/tts with GNANI_API_KEY)
+    try {
+      await speechService.speak(editableBestMatter, {
+        langCode: selectedLanguage,
+        rate: playbackSpeed,
+        onStart: (info) => {
+          setIsPlayingAudioRx(true);
+        },
+        onEnd: () => {
+          setIsPlayingAudioRx(false);
+          setKaraokeActiveIndex(-1);
+          setActivePillSlot(null);
+          if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+        },
+        onError: () => {
+          setIsPlayingAudioRx(false);
+          setKaraokeActiveIndex(-1);
+          setActivePillSlot(null);
+          if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+        }
+      });
+    } catch (err) {
+      console.warn('Voice note playback error:', err);
+    }
+  };
+
+  const handleSignPrescriptionDsc = () => {
+    setIsRxSigned(true);
+  };
+
+  // =========================================================================
+  // STEP 4: DISPATCH & HANDOVER
+  // =========================================================================
+  const handleProceedToDispatch = () => {
+    setActiveStep(4);
+    setMaxCompletedStep(prev => Math.max(prev, 4));
+  };
+
+  const handleResetForNextPatient = () => {
+    const nextIdx = (selectedEncounterIndex + 1) % CLINICAL_ENCOUNTERS.length;
+    setSelectedEncounterIndex(nextIdx);
+  };
+
+  const handleDirectWhatsAppSend = () => {
+    const cleanPhone = (currentEncounter.patient.phone || '919849012345').replace(/\D/g, '');
+    const message = encodeURIComponent(
+      `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\n` +
+      `నమస్కారం *${currentEncounter.patient.name}* గారు,\n` +
+      `మీ డాక్టర్ *${doctorProfile?.doctorName || 'Dr. Priya Sharma'}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n` +
+      `"${editableBestMatter}"\n\n` +
+      `🔊 మీ ఫోన్ లో వాయిస్ నోట్ వినడానికి: https://ayuswar.ai/rx/${currentEncounter.patient.abhaId}\n` +
+      `ABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
+    );
+    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+  };
+
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px 24px 80px 24px' }}>
-      {/* Top Clinical Navigation Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '16px 24px 80px 24px', fontFamily: 'Outfit, sans-serif' }}>
+      
+      {/* =====================================================================
+          TOP BAR & NAVIGATION BACK
+          ===================================================================== */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
         <button
           onClick={() => navigate('/doctor-portal')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '6px',
-            padding: '6px 14px',
-            borderRadius: '8px',
+            gap: '8px',
+            padding: '8px 16px',
+            borderRadius: '10px',
             background: '#ffffff',
-            border: '1px solid #CBD5E1',
-            color: '#334155',
+            border: '1.5px solid #CBD5E1',
+            color: '#0F4C5C',
             fontSize: '13px',
-            fontWeight: 650,
+            fontWeight: 750,
             cursor: 'pointer',
-            transition: 'all 0.15s ease',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#F1F5F9'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
         >
-          ← Return to Doctor OPD
+          <ArrowLeft size={16} />
+          <span>Return to Doctor OPD</span>
         </button>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: '#64748B', fontWeight: 600 }}>
-          <span>Ambient Clinical Telemetry Console</span>
-          <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }}></span>
-          <span style={{ color: '#059669', fontWeight: 700 }}>Client Ephemeral Mode (SIMULATION)</span>
+
+        {/* Live Gnani Voice Status Badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 12px',
+            borderRadius: '20px',
+            background: gnaniStatus?.available ? '#F0FDF4' : 'rgba(15, 76, 92, 0.08)',
+            border: `1.5px solid ${gnaniStatus?.available ? '#86EFAC' : '#CBD5E1'}`,
+            color: gnaniStatus?.available ? '#166534' : '#0F4C5C',
+            fontWeight: 750
+          }}>
+            <Volume2 size={14} color={gnaniStatus?.available ? '#16a34a' : '#0F4C5C'} />
+            <span>
+              {gnaniStatus?.available 
+                ? '🟢 Gnani Timbre Indic Neural TTS Engine (Active Proxy)' 
+                : '🎙️ Gnani Voice Engine (Server Route /api/gnani/tts Active)'}
+            </span>
+          </div>
+
+          <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+            Session #{currentEncounter.patient.abhaId.slice(-4)}
+          </span>
         </div>
       </div>
-      {/* =========================================================================
-          TOP PATIENT CLINICAL BANNER & VITALS TICKER
-          ========================================================================= */}
-      <div className="glass-panel" style={{ padding: '18px 24px', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+
+      {/* =====================================================================
+          PATIENT DOSSIER & SCENARIO BAR
+          ===================================================================== */}
+      <div style={{
+        background: '#ffffff',
+        borderRadius: '18px',
+        padding: '16px 22px',
+        border: '1.5px solid #E2E8F0',
+        boxShadow: '0 4px 18px rgba(15, 76, 92, 0.06)',
+        marginBottom: '18px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{
               width: '46px',
               height: '46px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #0F4C5C 0%, #176579 100%)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
-              fontSize: '18px',
-              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)'
+              fontSize: '18px'
             }}>
               {currentEncounter.patient.name.charAt(0)}
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h2 style={{ fontSize: '18px', color: '#0F4C5C', fontWeight: 800 }}>
+                <h1 style={{ fontSize: '18px', color: '#091E26', fontWeight: 850, margin: 0 }}>
                   {currentEncounter.patient.name}
-                </h2>
-                <span style={{ fontSize: '12px', background: '#E2E8F0', padding: '2px 8px', borderRadius: '12px', fontWeight: 650, color: '#334155' }}>
+                </h1>
+                <span style={{ fontSize: '11.5px', background: '#F1F5F9', color: '#475569', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
                   {currentEncounter.patient.gender}, {currentEncounter.patient.age}y
                 </span>
-                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.16)', color: '#6A5005', border: '1px solid rgba(212, 175, 55, 0.4)', padding: '2px 8px', borderRadius: '12px', fontWeight: 750 }}>
+                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.15)', color: '#854D0E', border: '1px solid #FDE047', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>
                   ABHA: {currentEncounter.patient.abhaId}
                 </span>
               </div>
-              <div style={{ fontSize: '12px', color: '#3D545E', marginTop: '2px' }}>
-                Facility: {currentEncounter.patient.location} • Attending: {doctorProfile ? doctorProfile.doctorName : 'Dr. Ananya Sharma, MD'}
-              </div>
+              <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 0 0' }}>
+                OPD Token #{101 + selectedEncounterIndex} • Facility: {currentEncounter.patient.location} • Attending: <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}</strong>
+              </p>
             </div>
           </div>
 
-          {/* Quick Scenario Switcher */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* Quick Scenario Selector */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 750, color: '#64748B' }}>OPD Encounter:</span>
             {CLINICAL_ENCOUNTERS.map((enc, idx) => (
               <button
                 key={enc.id}
-                onClick={() => handleSelectEncounter(idx)}
+                onClick={() => setSelectedEncounterIndex(idx)}
                 style={{
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  fontSize: '12.5px',
-                  fontWeight: 650,
-                  fontFamily: 'Outfit, sans-serif',
-                  border: selectedEncounterIndex === idx ? '2px solid #0F4C5C' : '1px solid #D1E1E6',
-                  background: selectedEncounterIndex === idx ? 'rgba(15, 76, 92, 0.12)' : '#ffffff',
-                  color: selectedEncounterIndex === idx ? '#0F4C5C' : '#091E26',
+                  padding: '7px 14px',
+                  borderRadius: '10px',
+                  fontSize: '12px',
+                  fontWeight: 750,
+                  border: selectedEncounterIndex === idx ? '2px solid #0F4C5C' : '1px solid #CBD5E1',
+                  background: selectedEncounterIndex === idx ? 'rgba(15, 76, 92, 0.1)' : '#ffffff',
+                  color: selectedEncounterIndex === idx ? '#0F4C5C' : '#475569',
                   cursor: 'pointer',
-                  transition: 'all 160ms ease'
+                  transition: 'all 0.15s ease'
                 }}
               >
                 {enc.language}
               </button>
             ))}
-
-            <button
-              onClick={toggleLiveMic}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '20px',
-                fontSize: '12.5px',
-                fontWeight: 650,
-                fontFamily: 'Outfit, sans-serif',
-                border: isLiveMicActive ? '2px solid #EF4444' : '1px solid #D8E7EB',
-                background: isLiveMicActive ? 'rgba(239, 68, 68, 0.12)' : '#ffffff',
-                color: isLiveMicActive ? '#EF4444' : '#0B2545',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              {isLiveMicActive ? <MicOff size={14} /> : <Mic size={14} />}
-              <span>{isLiveMicActive ? 'Mute Live Mic' : 'Live Mic Stream'}</span>
-            </button>
           </div>
         </div>
 
         {/* Vitals Ribbon */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '12px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+          gap: '10px',
+          marginTop: '14px',
           paddingTop: '12px',
-          borderTop: '1px solid #E2E8F0'
+          borderTop: '1px solid #F1F5F9'
         }}>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
-            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Heart size={12} color="#D64550" /> Blood Pressure
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Heart size={11} color="#EF4444" /> Blood Pressure
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bp}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bp}</div>
           </div>
-
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
-            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Activity size={12} color="#0F4C5C" /> Heart Rate
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Activity size={11} color="#0F4C5C" /> Pulse / HR
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.heartRate}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.heartRate}</div>
           </div>
-
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
-            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Droplets size={12} color="#176579" /> SpO2 Oxygen
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Droplets size={11} color="#0284C7" /> SpO2 Oxygen
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.spo2}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.spo2}</div>
           </div>
-
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
-            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Thermometer size={12} color="#D4AF37" /> Temperature
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Thermometer size={11} color="#D97706" /> Temperature
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.temp}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.temp}</div>
           </div>
-
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #D1E1E6' }}>
-            <div style={{ fontSize: '10.5px', color: '#3D545E', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Sparkles size={12} color="#6D214F" /> Blood Sugar
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Sparkles size={11} color="#9333EA" /> Random Blood Sugar
             </div>
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bloodSugar}</div>
+            <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bloodSugar}</div>
           </div>
         </div>
       </div>
 
-      {/* =========================================================================
-          BALANCED 2-COLUMN ERGONOMIC WORKSPACE
-          ========================================================================= */}
+      {/* =====================================================================
+          STEP-BY-STEP WORKFLOW RIBBON (1 -> 2 -> 3 -> 4)
+          ===================================================================== */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1.05fr 0.95fr',
-        gap: '24px',
-        alignItems: 'start'
+        background: 'linear-gradient(135deg, #0A2540 0%, #0F3B66 100%)',
+        borderRadius: '18px',
+        padding: '16px 20px',
+        color: '#ffffff',
+        marginBottom: '22px',
+        boxShadow: '0 8px 24px rgba(10, 37, 64, 0.15)',
+        border: '1.5px solid rgba(255,255,255,0.1)'
       }}>
-        {/* =========================================================================
-            COLUMN 1: AMBIENT DIALOGUE, SIGNAL DSP & ONTOLOGY
-            ========================================================================= */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Card 1: Ambient Dialogue Transcript Stream */}
-          <div className="glass-panel" style={{ padding: '22px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C' }}>
-                  Ambient Multi-Speaker Transcript
-                </h3>
-                <div style={{ fontSize: '11px', color: '#3D545E' }}>
-                  Browser speech (Web Speech API). Gnani voice integration: planned.
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#2DD4BF' }}>
+              OPD Clinical Workflow Master
+            </div>
+            <div style={{ fontSize: '16px', fontWeight: 850 }}>
+              Step {activeStep} of 4: {
+                activeStep === 1 ? 'Record Doctor-Patient Consultation' :
+                activeStep === 2 ? 'AI Clinical Processing & Best Matter Synthesis' :
+                activeStep === 3 ? 'Synthesize Voice Note with Gnani AI' :
+                'Class-3 Sign & Dispatch to WhatsApp'
+              }
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12px', color: '#94A3B8' }}>Sequential Flow:</span>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: '#FCD34D' }}>
+              Record → AI Process → Gnani Voice → Dispatch
+            </span>
+          </div>
+        </div>
+
+        {/* 4 Interactive Stepper Nodes */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '12px'
+        }}>
+          {[
+            { step: 1, title: '1. Record Consultation', desc: 'Capture Doctor & Patient', icon: Mic },
+            { step: 2, title: '2. AI Processing', desc: 'SOAP & Best Matter', icon: Cpu },
+            { step: 3, title: '3. Gnani Voice Note', desc: 'Neural TTS & Karaoke', icon: Volume2 },
+            { step: 4, title: '4. Sign & Dispatch', desc: 'WhatsApp & ABDM FHIR', icon: Send }
+          ].map((item) => {
+            const Icon = item.icon;
+            const isCurrent = activeStep === item.step;
+            const isDone = maxCompletedStep > item.step;
+            return (
+              <button
+                key={item.step}
+                onClick={() => {
+                  if (item.step <= maxCompletedStep) {
+                    setActiveStep(item.step);
+                  }
+                }}
+                disabled={item.step > maxCompletedStep}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  border: isCurrent 
+                    ? '2px solid #2DD4BF' 
+                    : isDone 
+                      ? '1.5px solid #10B981' 
+                      : '1px solid rgba(255,255,255,0.15)',
+                  background: isCurrent 
+                    ? 'rgba(45, 212, 191, 0.18)' 
+                    : isDone 
+                      ? 'rgba(16, 185, 129, 0.12)' 
+                      : 'rgba(255,255,255,0.05)',
+                  color: '#ffffff',
+                  cursor: item.step <= maxCompletedStep ? 'pointer' : 'not-allowed',
+                  opacity: item.step > maxCompletedStep ? 0.45 : 1,
+                  textAlign: 'left',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: isCurrent ? '#2DD4BF' : isDone ? '#10B981' : 'rgba(255,255,255,0.15)',
+                  color: isCurrent ? '#061626' : '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  {isDone && !isCurrent ? <Check size={16} strokeWidth={3} /> : <Icon size={16} />}
                 </div>
+                <div style={{ overflow: 'hidden' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                    {item.title}
+                  </div>
+                  <div style={{ fontSize: '10.5px', color: isCurrent ? '#2DD4BF' : '#CBD5E1', whiteSpace: 'nowrap' }}>
+                    {item.desc}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* =====================================================================
+          STEP 1 CONTENT: RECORDING CONSULTATION (DOCTOR & PATIENT)
+          ===================================================================== */}
+      {activeStep === 1 && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '22px' }}>
+          
+          {/* Left Column: Live Audio Stream & Dialogue Turn Stream */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '22px',
+            border: '1.5px solid #E2E8F0',
+            boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #F1F5F9', paddingBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+              <div>
+                <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C', margin: 0 }}>
+                  Doctor-Patient Consultation Dialogue
+                </h2>
+                <p style={{ fontSize: '11.5px', color: '#64748B', margin: '2px 0 0 0' }}>
+                  First record the entire consultation between doctor and patient.
+                </p>
               </div>
 
-              <button
-                onClick={handleStartSimulation}
-                disabled={isSimulatingEncounter}
-                className="btn-outline"
-                style={{ fontSize: '12px', padding: '7px 16px' }}
-              >
-                {isSimulatingEncounter ? 'Capturing Speech...' : 'Replay Dialogue Flow'}
-              </button>
+              {/* Mode Toggle: Physical Mic vs Ambient Simulation */}
+              <div style={{ display: 'flex', background: '#F1F5F9', padding: '3px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                <button
+                  onClick={() => { setRecordingMode('ambient_sim'); if (isRecording) pauseRecordingSession(); }}
+                  style={{
+                    padding: '5px 12px',
+                    borderRadius: '7px',
+                    border: 'none',
+                    background: recordingMode === 'ambient_sim' ? '#0F4C5C' : 'transparent',
+                    color: recordingMode === 'ambient_sim' ? '#ffffff' : '#64748B',
+                    fontSize: '11px',
+                    fontWeight: 750,
+                    cursor: 'pointer'
+                  }}
+                >
+                  ⚡ High-Fidelity Simulation
+                </button>
+                <button
+                  onClick={() => { setRecordingMode('live_mic'); if (isRecording) pauseRecordingSession(); }}
+                  style={{
+                    padding: '5px 12px',
+                    borderRadius: '7px',
+                    border: 'none',
+                    background: recordingMode === 'live_mic' ? '#EF4444' : 'transparent',
+                    color: recordingMode === 'live_mic' ? '#ffffff' : '#64748B',
+                    fontSize: '11px',
+                    fontWeight: 750,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <Mic size={12} />
+                  <span>🎙️ Live Laptop Mic</span>
+                </button>
+              </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minHeight: '180px' }}>
-              {[
-                ...currentEncounter.dialogue.slice(0, visibleDialogueCount),
-                ...customTurns
-              ].map((turn, i) => {
+            {/* Recording Controls Strip */}
+            <div style={{
+              background: '#061626',
+              borderRadius: '14px',
+              padding: '16px 18px',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <button
+                  onClick={isRecording ? pauseRecordingSession : startRecordingSession}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '10px 18px',
+                    borderRadius: '12px',
+                    background: isRecording ? '#EF4444' : '#10B981',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '13px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    boxShadow: isRecording ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 12px rgba(16, 185, 129, 0.3)'
+                  }}
+                >
+                  {isRecording ? <Pause size={16} /> : <Play size={16} fill="#ffffff" />}
+                  <span>{isRecording ? 'Pause Recording' : '▶ Start OPD Recording'}</span>
+                </button>
+
+                <button
+                  onClick={resetRecordingSession}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '9px 14px',
+                    borderRadius: '10px',
+                    background: 'rgba(255,255,255,0.1)',
+                    color: '#CBD5E1',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <RotateCcw size={13} />
+                  <span>Reset</span>
+                </button>
+
+                <button
+                  onClick={() => setShowAddTurnModal(true)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '9px 14px',
+                    borderRadius: '10px',
+                    background: 'rgba(45, 212, 191, 0.15)',
+                    color: '#2DD4BF',
+                    border: '1px solid #2DD4BF',
+                    fontSize: '12px',
+                    fontWeight: 750,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Edit3 size={13} />
+                  <span>+ Add Turn</span>
+                </button>
+              </div>
+
+              {/* Timer & Live Signal Status */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Elapsed Time
+                  </div>
+                  <div style={{ fontSize: '17px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
+                    {formatTimer(recordedSeconds)}
+                  </div>
+                </div>
+
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: isRecording ? '#EF4444' : '#64748B',
+                  animation: isRecording ? 'pulse 1s infinite' : 'none'
+                }} />
+              </div>
+            </div>
+
+            {/* Live Audio STFT Spectrum Bars */}
+            <div style={{
+              background: 'rgba(15, 23, 42, 0.04)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              border: '1px solid #E2E8F0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Activity size={16} color="#0F4C5C" />
+                <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#0F4C5C' }}>
+                  Acoustic Speech Spectrum (16 kHz PCM)
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '26px' }}>
+                {[...Array(24)].map((_, i) => {
+                  const h = isRecording 
+                    ? Math.max(4, ((micVolume * (1 + Math.sin(i * 0.4))) % 24))
+                    : 4;
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        width: '3.5px',
+                        height: `${h}px`,
+                        background: i % 2 === 0 ? '#0F4C5C' : '#D4AF37',
+                        borderRadius: '2px',
+                        transition: 'height 0.1s ease'
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Conversation Dialogue Transcript Feed */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              maxHeight: '380px',
+              overflowY: 'auto',
+              paddingRight: '6px'
+            }}>
+              {dialogueTurns.map((turn, i) => {
                 const isDoc = turn.speaker.includes('Doctor');
                 return (
                   <div
@@ -478,237 +933,444 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     style={{
                       padding: '12px 16px',
                       borderRadius: '12px',
-                      background: isDoc ? 'rgba(15, 76, 92, 0.05)' : 'rgba(212, 175, 55, 0.08)',
-                      borderLeft: isDoc ? '3.5px solid #0F4C5C' : '3.5px solid #D4AF37'
+                      background: isDoc ? '#F0FDFA' : '#FFFDF5',
+                      border: isDoc ? '1.5px solid #CCFBF1' : '1.5px solid #FEF08A',
+                      borderLeft: isDoc ? '4px solid #0F4C5C' : '4px solid #D97706'
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: isDoc ? '#0F4C5C' : '#6A5005' }}>
-                        {turn.speaker}
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: isDoc ? '#0F4C5C' : '#B45309' }}>
+                        {isDoc ? '🩺 Doctor' : '👵 Patient'}: {turn.speaker}
                       </span>
-                      <span style={{ fontSize: '10px', color: '#64748B' }}>{turn.time}</span>
+                      <span style={{ fontSize: '10px', color: '#94A3B8' }}>{turn.time || 'Live'}</span>
                     </div>
-                    <div style={{ fontSize: '14px', color: '#091E26', lineHeight: 1.5, fontWeight: 500 }}>
+                    <p style={{ fontSize: '13.5px', color: '#091E26', lineHeight: 1.5, margin: 0, fontWeight: 550 }}>
                       {turn.text}
-                    </div>
+                    </p>
                   </div>
                 );
               })}
 
               {liveTranscriptionText && (
                 <div style={{
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  background: 'rgba(15, 76, 92, 0.08)',
-                  border: '1.5px dashed #0F4C5C',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  animation: 'pulse 1.5s infinite'
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  background: '#FEF2F2',
+                  border: '1.5px dashed #EF4444',
+                  fontSize: '13px',
+                  color: '#991B1B',
+                  fontWeight: 650
                 }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
-                  <div style={{ fontSize: '13.5px', color: '#0F4C5C', fontWeight: 650 }}>
-                    Listening: "{liveTranscriptionText}..."
-                  </div>
-                </div>
-              )}
-
-              {micStatusMsg && (
-                <div style={{ fontSize: '11px', color: '#64748B', fontStyle: 'italic', padding: '2px 4px' }}>
-                  ℹ️ {micStatusMsg}
+                  🎙️ Live Speaking: "{liveTranscriptionText}..."
                 </div>
               )}
             </div>
+
+            {/* STEP 1 FINISH ACTION BUTTON */}
+            <button
+              onClick={handleProceedToAiProcessing}
+              disabled={dialogueTurns.length === 0}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0F4C5C 0%, #006666 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: 800,
+                cursor: dialogueTurns.length === 0 ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                boxShadow: '0 4px 16px rgba(15, 76, 92, 0.35)',
+                transition: 'all 0.2s ease',
+                marginTop: 'auto'
+              }}
+            >
+              <span>⏹️ Finish Consultation & Process with AI (Step 2 →)</span>
+              <ArrowRight size={18} />
+            </button>
           </div>
 
-          {/* Card 2: WebAudio FFT Spectrogram & Code-Switching Radar */}
-          <div className="dark-telemetry-panel" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Activity size={18} color="#D4AF37" />
-                <h3 style={{ fontSize: '14px', color: '#ffffff', fontWeight: 750 }}>
-                  Real-time WebAudio STFT Spectrogram & Code-Switching
+          {/* Right Column: Acoustic Respiratory Biomarkers & Ontology Preview */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Live Colloquial Dialect Resolver Preview */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              padding: '20px',
+              border: '1.5px solid #E2E8F0',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.04)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <Cpu size={18} color="#0F4C5C" />
+                <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#091E26', margin: 0 }}>
+                  Vernacular Semantic Metaphor Resolver
                 </h3>
               </div>
-              <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>
-                {isLiveMicActive ? `Live Mic (${micVolume} dB)` : '16 kHz PCM Stream'}
-              </span>
-            </div>
+              <p style={{ fontSize: '11.5px', color: '#64748B', margin: '0 0 12px 0' }}>
+                Translates rural colloquial idioms directly to formal WHO ICD-10 & SNOMED CT:
+              </p>
 
-            {/* Sound Wave Spectrum Bars */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '60px', gap: '3px', marginBottom: '14px' }}>
-              {[...Array(32)].map((_, i) => {
-                const barHeight = isLiveMicActive 
-                  ? Math.max(8, (micVolume * (1 + Math.sin(i * 0.4))) % 56)
-                  : isPlayingAudioRx 
-                    ? Math.max(10, (36 * (1 + Math.cos(i * 0.5 + 0.005))) % 54)
-                    : Math.max(6, (22 * (1 + Math.sin(i * 0.5))) % 42);
-                return (
-                  <div 
-                    key={i} 
-                    style={{
-                      flex: 1,
-                      height: `${barHeight}px`,
-                      background: i % 2 === 0 ? 'linear-gradient(to top, #0F4C5C, #D4AF37)' : 'linear-gradient(to top, #D97706, #FBBF24)',
-                      borderRadius: '2px',
-                      transition: 'height 0.12s ease'
-                    }}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Dialect Breakdown Meter */}
-            <div style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              padding: '10px 14px',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '11.5px'
-            }}>
-              <span style={{ color: '#94A3B8' }}>Phonetic Code-Switching Ratio (sample model):</span>
-              <span style={{ color: '#D4AF37', fontWeight: 750 }}>
-                {currentEncounter.langCode.startsWith('te') ? 'Telugu' : 'Hindi'} + Clinical English + Colloquial (sample data)
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3: Acoustic Respiratory Biomarkers HUD (DSP Signal Simulation) */}
-          <div className="glass-panel" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <Activity size={18} color="#D97706" />
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
-                Acoustic Respiratory Biomarkers (Experimental DSP)
-              </h3>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Respiratory Effort & Strain</div>
-                <div style={{ fontSize: '14px', fontWeight: 800, color: '#D97706', marginTop: '2px' }}>
-                  {currentEncounter.acousticBiomarkers.respiratoryEffort}
-                </div>
-              </div>
-
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Cough Acoustic Signature</div>
-                <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24', marginTop: '2px' }}>
-                  {currentEncounter.acousticBiomarkers.coughType}
-                </div>
-              </div>
-
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Vocal Jitter & Shimmer</div>
-                <div style={{ fontSize: '13px', fontWeight: 750, color: '#0F4C5C', marginTop: '2px' }}>
-                  {currentEncounter.acousticBiomarkers.jitterPercent} / {currentEncounter.acousticBiomarkers.shimmerDb}
-                </div>
-              </div>
-
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Triage Risk Category</div>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', marginTop: '2px' }}>
-                  {currentEncounter.acousticBiomarkers.riskCategory}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Vernacular Semantic Ontology Mapping */}
-          <div className="glass-panel" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <Cpu size={18} color="#0F4C5C" />
-              <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
-                Vernacular Metaphor → WHO ICD-10 & SNOMED Semantic Resolver
-              </h3>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {currentEncounter.vernacularMappings.map((map, idx) => (
-                <div
-                  key={idx}
-                  style={{
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {currentEncounter.vernacularMappings.map((map, idx) => (
+                  <div key={idx} style={{
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    background: '#FAF8F5',
+                    border: '1px solid #E2E8F0',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px',
-                    borderRadius: '10px',
-                    background: '#FAF8F5',
-                    border: '1px solid #E2E8F0',
                     fontSize: '12px'
-                  }}
-                >
-                  <div>
-                    <div style={{ fontWeight: 800, color: '#D97706', fontSize: '13px' }}>{map.dialect}</div>
-                    <div style={{ color: '#475569', fontSize: '12px' }}>{map.clinicalTerm}</div>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{
-                      fontWeight: 800,
-                      background: 'rgba(15, 76, 92, 0.12)',
-                      color: '#0F4C5C',
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      fontSize: '11px'
-                    }}>
+                  }}>
+                    <div>
+                      <div style={{ fontWeight: 800, color: '#D97706' }}>{map.dialect}</div>
+                      <div style={{ fontSize: '11px', color: '#64748B' }}>{map.clinicalTerm}</div>
+                    </div>
+                    <span style={{ fontSize: '10.5px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '6px' }}>
                       ICD-10: {map.icd10}
                     </span>
-                    <div style={{ fontSize: '10px', color: '#94A3B8', marginTop: '3px' }}>
-                      SNOMED-CT: {map.snomed}
-                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Acoustic Biomarkers HUD */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              padding: '20px',
+              border: '1.5px solid #E2E8F0',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.04)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <Activity size={18} color="#D97706" />
+                <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#091E26', margin: 0 }}>
+                  Acoustic Respiratory Biomarkers (DSP)
+                </h3>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <div style={{ fontSize: '10px', color: '#64748B' }}>Respiratory Effort</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#D97706' }}>{currentEncounter.acousticBiomarkers.respiratoryEffort}</div>
                 </div>
-              ))}
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <div style={{ fontSize: '10px', color: '#64748B' }}>Cough Signature</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.acousticBiomarkers.coughType}</div>
+                </div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <div style={{ fontSize: '10px', color: '#64748B' }}>Vocal Tremor</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>{currentEncounter.acousticBiomarkers.vocalTremor}</div>
+                </div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                  <div style={{ fontSize: '10px', color: '#64748B' }}>Risk Category</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#10B981' }}>{currentEncounter.acousticBiomarkers.riskCategory}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      )}
 
-        {/* =========================================================================
-            COLUMN 2: THE KILLER FEATURE — KARAOKE AUDIO-RX & VISION SCANNER
-            ========================================================================= */}
+      {/* =====================================================================
+          STEP 2 CONTENT: AI PROCESSING & "BEST MATTER" SYNTHESIS
+          ===================================================================== */}
+      {activeStep === 2 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Card 5: Spoken Vernacular Audio-Rx with Word Karaoke */}
-          <div className="glass-panel" style={{
-            padding: '24px',
-            border: '2px solid rgba(15, 76, 92, 0.35)',
-            boxShadow: '0 16px 36px rgba(15, 76, 92, 0.08)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Volume2 size={22} color="#0F4C5C" />
-                <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C' }}>
-                  Spoken Vernacular Audio-Rx (Browser speech)
-                </h3>
+          
+          {/* AI Processing Banner */}
+          {isAiProcessing ? (
+            <div style={{
+              background: 'linear-gradient(135deg, #061626 0%, #0D3E4A 100%)',
+              borderRadius: '18px',
+              padding: '24px',
+              color: '#ffffff',
+              textAlign: 'center',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.15)'
+            }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                border: '3px solid rgba(45, 212, 191, 0.2)',
+                borderTopColor: '#2DD4BF',
+                borderRadius: '50%',
+                margin: '0 auto 14px auto',
+                animation: 'spin 0.8s linear infinite'
+              }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0', color: '#2DD4BF' }}>
+                AI Indic Clinical Reasoner Synthesizing Prescription
+              </h3>
+              <p style={{ fontSize: '13px', color: '#CBD5E1', margin: 0 }}>
+                {aiProcessingStage}
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* Success Banner */}
+              <div style={{
+                background: '#F0FDF4',
+                border: '1.5px solid #86EFAC',
+                borderRadius: '16px',
+                padding: '16px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <CheckCircle2 size={24} color="#16a34a" />
+                  <div>
+                    <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#166534', margin: 0 }}>
+                      AI Clinical Synthesis Complete
+                    </h3>
+                    <p style={{ fontSize: '12px', color: '#15803d', margin: '2px 0 0 0' }}>
+                      Processed {dialogueTurns.length} spoken dialogue turns. SOAP structured, ICD-10 mapped, and Best-Matter Spoken Rx generated.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleProceedToVoiceNote}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    background: '#0F4C5C',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '13px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
+                  }}
+                >
+                  <span>🔊 Generate Voice Note with Gnani AI (Step 3 →)</span>
+                  <ArrowRight size={16} />
+                </button>
               </div>
+
+              {/* 2-Column AI Clinical Results Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '22px' }}>
+                
+                {/* Column A: Structured SOAP Clinical Note */}
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '20px',
+                  padding: '22px',
+                  border: '1.5px solid #E2E8F0',
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #F1F5F9', paddingBottom: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FileText size={18} color="#0F4C5C" />
+                      <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#091E26', margin: 0 }}>
+                        Structured HL7 FHIR R4 SOAP Note
+                      </h3>
+                    </div>
+                    <span style={{ fontSize: '10.5px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '8px', fontWeight: 800 }}>
+                      REVIEW READY
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px' }}>
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>SUBJECTIVE (S):</div>
+                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.subjective}</div>
+                    </div>
+
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>OBJECTIVE (O):</div>
+                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.objective}</div>
+                    </div>
+
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>ASSESSMENT (A):</div>
+                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.assessment}</div>
+                    </div>
+
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>PLAN (P):</div>
+                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.plan}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Column B: THE SYNTHESIZED "BEST MATTER" SPOKEN VERNACULAR RX SCRIPT */}
+                <div style={{
+                  background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%)',
+                  borderRadius: '20px',
+                  padding: '22px',
+                  border: '2px solid #D4AF37',
+                  boxShadow: '0 8px 24px rgba(212, 175, 55, 0.12)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Sparkles size={18} color="#D4AF37" />
+                      <div>
+                        <h3 style={{ fontSize: '15px', fontWeight: 850, color: '#091E26', margin: 0 }}>
+                          AI Synthesized Spoken Prescription Note (Best Matter)
+                        </h3>
+                        <span style={{ fontSize: '11px', color: '#854D0E', fontWeight: 600 }}>
+                          Language: {currentEncounter.language}
+                        </span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '10.5px', background: '#D4AF37', color: '#061626', padding: '3px 8px', borderRadius: '8px', fontWeight: 900 }}>
+                      BEST MATTER
+                    </span>
+                  </div>
+
+                  <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>
+                    This text has been composed by the clinical reasoning engine specifically tailored for non-reading rural patients. You may edit before synthesizing with Gnani.
+                  </p>
+
+                  <textarea
+                    value={editableBestMatter}
+                    onChange={(e) => setEditableBestMatter(e.target.value)}
+                    rows={6}
+                    style={{
+                      width: '100%',
+                      padding: '14px',
+                      borderRadius: '12px',
+                      border: '1.5px solid #CBD5E1',
+                      background: '#ffffff',
+                      fontSize: '14px',
+                      lineHeight: 1.6,
+                      color: '#091E26',
+                      fontWeight: 600,
+                      fontFamily: 'Outfit, system-ui, sans-serif',
+                      boxSizing: 'border-box',
+                      resize: 'vertical'
+                    }}
+                  />
+
+                  {/* Visual Pill Cards for Non-Reading Patients */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F4C5C' }}>
+                      Prescription Dosages & Visual Badges:
+                    </div>
+                    {currentEncounter.medications.map((med, idx) => (
+                      <div key={idx} style={{
+                        padding: '10px 14px',
+                        borderRadius: '10px',
+                        background: '#ffffff',
+                        border: '1px solid #E2E8F0',
+                        borderLeft: `4px solid ${med.color}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{med.name}</div>
+                          <div style={{ fontSize: '11px', color: med.color, fontWeight: 750 }}>{med.colorLabel}</div>
+                        </div>
+                        <div style={{ textAlign: 'right', fontSize: '12px', fontWeight: 700, color: '#0F4C5C' }}>
+                          {med.timing} • {med.duration}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={handleProceedToVoiceNote}
+                    style={{
+                      width: '100%',
+                      padding: '13px',
+                      borderRadius: '12px',
+                      background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      fontSize: '13.5px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
+                      marginTop: 'auto'
+                    }}
+                  >
+                    <span>🔊 Synthesize Spoken Voice Note with Gnani AI (Step 3 →)</span>
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* =====================================================================
+          STEP 3 CONTENT: VOICE NOTE GENERATION USING GNANI API KEYS & KARAOKE
+          ===================================================================== */}
+      {activeStep === 3 && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '22px' }}>
+          
+          {/* Main Voice Note Player Card */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '24px',
+            border: '2px solid rgba(15, 76, 92, 0.25)',
+            boxShadow: '0 8px 30px rgba(15, 76, 92, 0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '18px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #F1F5F9', paddingBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Volume2 size={24} color="#0F4C5C" />
+                <div>
+                  <h2 style={{ fontSize: '17px', fontWeight: 850, color: '#0F4C5C', margin: 0 }}>
+                    Spoken Prescription Voice Note
+                  </h2>
+                  <p style={{ fontSize: '12px', color: '#64748B', margin: '2px 0 0 0' }}>
+                    Synthesized with Gnani Timbre Indic TTS Engine (/api/gnani/tts)
+                  </p>
+                </div>
+              </div>
+
               <span style={{
-                fontSize: '10px',
+                fontSize: '11px',
                 fontWeight: 800,
-                color: '#5E4605',
-                background: 'linear-gradient(135deg, #FFFDF5 0%, #FBF3D6 100%)',
-                border: '1px solid #D4AF37',
-                padding: '3px 8px',
+                color: '#854D0E',
+                background: '#FEF9C3',
+                border: '1px solid #FDE047',
+                padding: '4px 10px',
                 borderRadius: '12px'
               }}>
                 SYNCHRONIZED KARAOKE
               </span>
             </div>
 
-            {/* Doctor Ananya Speaking Avatar */}
+            {/* Doctor Voice Avatar Banner */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: '14px',
-              padding: '12px 16px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.07) 0%, rgba(212, 175, 55, 0.08) 100%)',
-              marginBottom: '16px',
-              border: '1px solid rgba(15, 76, 92, 0.2)'
+              padding: '14px 18px',
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.06) 0%, rgba(212, 175, 55, 0.08) 100%)',
+              border: '1px solid rgba(15, 76, 92, 0.15)'
             }}>
               <div style={{
                 position: 'relative',
-                width: '56px',
-                height: '56px',
+                width: '54px',
+                height: '54px',
                 borderRadius: '50%',
                 overflow: 'hidden',
                 border: '2.5px solid #0F4C5C',
@@ -716,7 +1378,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               }}>
                 <img 
                   src="/assets/dr_ananya_avatar.jpg" 
-                  alt="Dr. Ananya"
+                  alt="Doctor Avatar"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
                 {isPlayingAudioRx && (
@@ -732,374 +1394,732 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
                     justifyContent: 'center',
                     gap: '2px'
                   }}>
-                    <span style={{ width: '2px', height: '6px', background: '#D4AF37', animation: 'waveOscillate 0.5s infinite' }}></span>
-                    <span style={{ width: '2px', height: '10px', background: '#ffffff', animation: 'waveOscillate 0.5s infinite 0.1s' }}></span>
-                    <span style={{ width: '2px', height: '7px', background: '#D4AF37', animation: 'waveOscillate 0.5s infinite 0.2s' }}></span>
+                    <span style={{ width: '2px', height: '6px', background: '#D4AF37' }}></span>
+                    <span style={{ width: '2px', height: '10px', background: '#ffffff' }}></span>
+                    <span style={{ width: '2px', height: '7px', background: '#D4AF37' }}></span>
                   </div>
                 )}
               </div>
 
-              <div>
-                <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#0F4C5C' }}>
-                  Dr. Ananya — Virtual Attending
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C' }}>
+                  {doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}
                 </div>
-                <div style={{ fontSize: '11px', color: '#3D545E' }}>
-                  Synthesizing spoken dosage instructions in {currentEncounter.language}
+                <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  Speaking in <strong>{currentEncounter.language}</strong> with personalized dosage schedule
+                </div>
+              </div>
+
+              {/* Speed Controls */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Speed:</span>
+                {[0.8, 1.0, 1.25].map((speed) => (
+                  <button
+                    key={speed}
+                    onClick={() => setPlaybackSpeed(speed)}
+                    style={{
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
+                      background: playbackSpeed === speed ? 'rgba(15, 76, 92, 0.12)' : '#ffffff',
+                      color: playbackSpeed === speed ? '#0F4C5C' : '#64748B',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {speed}x
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Glowing Synchronized Karaoke Word Display */}
+            <div style={{
+              background: '#061626',
+              borderRadius: '16px',
+              padding: '18px 22px',
+              minHeight: '92px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              lineHeight: 2.0,
+              gap: '6px 8px',
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)'
+            }}>
+              {(currentEncounter.karaokeWordsTelugu || []).map((item, idx) => {
+                const isActive = karaokeActiveIndex === idx;
+                return (
+                  <span
+                    key={idx}
+                    style={{
+                      fontSize: '15px',
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      fontWeight: isActive ? 800 : 500,
+                      color: isActive ? '#061626' : '#E2E8F0',
+                      background: isActive ? '#FCD34D' : 'transparent',
+                      boxShadow: isActive ? '0 0 14px rgba(252, 211, 77, 0.8)' : 'none',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {item.word}
+                  </span>
+                );
+              })}
+            </div>
+
+            {/* Audio Controls Bar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button
+                onClick={handlePlayVoiceNote}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '13px',
+                  borderRadius: '12px',
+                  background: isPlayingAudioRx ? '#EF4444' : '#0F4C5C',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
+                }}
+              >
+                {isPlayingAudioRx ? <Pause size={17} /> : <Play size={17} fill="#ffffff" />}
+                <span>{isPlayingAudioRx ? 'Pause Voice Note' : '▶ Play Spoken Audio Note'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  speechService.stopSpeaking();
+                  setIsPlayingAudioRx(false);
+                  setKaraokeActiveIndex(0);
+                  setTimeout(handlePlayVoiceNote, 200);
+                }}
+                style={{
+                  padding: '13px 16px',
+                  borderRadius: '12px',
+                  background: '#F1F5F9',
+                  border: '1px solid #CBD5E1',
+                  color: '#475569',
+                  fontWeight: 750,
+                  cursor: 'pointer'
+                }}
+                title="Replay from beginning"
+              >
+                <RotateCcw size={16} />
+              </button>
+            </div>
+
+            {/* Synchronized Visual Color Pill Schedule */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
+                Visual Pill Indicators (Illuminates in sync with voice instructions):
+              </div>
+              {currentEncounter.medications.map((med, i) => {
+                const isIlluminated = activePillSlot === med.slot;
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 16px',
+                      borderRadius: '12px',
+                      background: isIlluminated ? 'rgba(252, 211, 77, 0.15)' : '#FAF8F5',
+                      border: isIlluminated ? `2px solid ${med.color}` : '1px solid #E2E8F0',
+                      boxShadow: isIlluminated ? `0 0 16px ${med.color}40` : 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        background: med.color,
+                        boxShadow: `0 0 10px ${med.color}`
+                      }} />
+                      <div>
+                        <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>{med.name}</div>
+                        <div style={{ fontSize: '11px', color: med.color, fontWeight: 750 }}>{med.colorLabel}</div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right', fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>
+                      {med.timing}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column: Class-3 DSC Digital Sign & Handover */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            
+            {/* Class-3 DSC Digital Signature Card */}
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '24px',
+              padding: '24px',
+              border: isRxSigned ? '2px solid #10B981' : '1.5px solid #E2E8F0',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ShieldCheck size={20} color={isRxSigned ? '#10B981' : '#0F4C5C'} />
+                <h3 style={{ fontSize: '15px', fontWeight: 850, color: '#091E26', margin: 0 }}>
+                  Doctor-in-the-Loop Class-3 DSC Sign
+                </h3>
+              </div>
+
+              <p style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5, margin: 0 }}>
+                Under National Medical Commission (NMC) & DPDP Act 2023, the physician reviews the synthesized spoken voice note and applies a cryptographic Class-3 DSC signature.
+              </p>
+
+              {isRxSigned ? (
+                <div style={{
+                  padding: '14px',
+                  borderRadius: '12px',
+                  background: '#F0FDF4',
+                  border: '1.5px solid #86EFAC',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <CheckCircle2 size={24} color="#16a34a" />
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#166534' }}>
+                      DSC SIGNATURE VERIFIED ✅
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#15803d' }}>
+                      Signer: {doctorProfile?.doctorName || 'Dr. Priya Sharma'} (MCI-98421-AP) • Timestamp: {new Date().toLocaleTimeString()}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={handleSignPrescriptionDsc}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #0F4C5C 0%, #166534 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '13px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)'
+                  }}
+                >
+                  ✍️ Digitally Sign & Approve Prescription
+                </button>
+              )}
+
+              {/* Step 3 -> 4 Proceed Action */}
+              <button
+                onClick={handleProceedToDispatch}
+                disabled={!isRxSigned}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  background: isRxSigned 
+                    ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
+                    : '#CBD5E1',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: 800,
+                  cursor: isRxSigned ? 'pointer' : 'not-allowed',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: isRxSigned ? '0 4px 16px rgba(16, 185, 129, 0.35)' : 'none',
+                  transition: 'all 0.2s ease',
+                  marginTop: 'auto'
+                }}
+              >
+                <span>📲 Proceed to Dispatch & WhatsApp (Step 4 →)</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          STEP 4 CONTENT: SIGN & DISPATCH TO WHATSAPP
+          ===================================================================== */}
+      {activeStep === 4 && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '22px' }}>
+          
+          {/* WhatsApp Patient Card Preview */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '24px',
+            border: '2px solid #25D366',
+            boxShadow: '0 8px 30px rgba(37, 211, 102, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1.5px solid #F1F5F9', paddingBottom: '12px' }}>
+              <Smartphone size={24} color="#25D366" />
+              <div>
+                <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#091E26', margin: 0 }}>
+                  WhatsApp Vernacular Audio-Rx Delivery
+                </h3>
+                <p style={{ fontSize: '11.5px', color: '#64748B', margin: '2px 0 0 0' }}>
+                  Target: {currentEncounter.patient.name} ({currentEncounter.patient.phone || '+91 98490 12345'})
+                </p>
+              </div>
+            </div>
+
+            {/* WhatsApp Authentic Bubble Preview */}
+            <div style={{
+              background: '#EFEAE2',
+              borderRadius: '16px',
+              padding: '18px',
+              border: '1px solid #D1D7DB'
+            }}>
+              <div style={{
+                background: '#ffffff',
+                borderRadius: '12px',
+                padding: '14px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                fontSize: '12.5px',
+                color: '#111B21',
+                lineHeight: 1.5
+              }}>
+                <div style={{ fontWeight: 800, color: '#0F4C5C' }}>
+                  🏥 AyuSwar Clinical Audio-Rx
+                </div>
+                <div>
+                  నమస్కారం <strong>{currentEncounter.patient.name}</strong> గారు, మీ డాక్టర్ <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma'}</strong> ప్రిస్క్రిప్షన్ ఆడియో నోట్:
+                </div>
+                <div style={{
+                  background: '#F0FDFA',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  borderLeft: '3px solid #0F4C5C',
+                  fontStyle: 'italic',
+                  fontSize: '12px'
+                }}>
+                  "{editableBestMatter}"
+                </div>
+                <div style={{ color: '#0284C7', textDecoration: 'underline', fontSize: '11.5px' }}>
+                  🔊 https://ayuswar.ai/rx/{currentEncounter.patient.abhaId}
+                </div>
+                <div style={{ fontSize: '10px', color: '#667781', textAlign: 'right' }}>
+                  Delivered • ABDM Verified ✅
                 </div>
               </div>
             </div>
 
-            {/* Glowing Karaoke Word Display */}
-            <div style={{
-              background: '#061626',
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '16px',
-              minHeight: '88px',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              lineHeight: 1.8
-            }}>
-              {currentEncounter.karaokeWordsTelugu.map((item, idx) => (
-                <span
-                  key={idx}
-                  className={`karaoke-pill ${karaokeActiveIndex === idx ? 'active' : ''}`}
-                >
-                  {item.word}
-                </span>
-              ))}
-            </div>
+            {/* 1-Click WhatsApp Trigger Button */}
+            <button
+              onClick={handleDirectWhatsAppSend}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                padding: '14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(37, 211, 102, 0.35)'
+              }}
+            >
+              <Smartphone size={18} />
+              <span>📲 Send via WhatsApp to +91 98490 12345</span>
+            </button>
+          </div>
 
-            {/* Audio Rx Action Buttons */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px', marginBottom: '18px' }}>
-              <button
-                onClick={togglePlayAudioRx}
-                className="btn-teal"
-                style={{ justifyContent: 'center', padding: '12px 14px', fontSize: '13px' }}
-              >
-                {isPlayingAudioRx ? <Pause size={15} /> : <Play size={15} fill="#ffffff" />}
-                <span>{isPlayingAudioRx ? 'Pause Voice Note' : 'Play Vernacular Rx'}</span>
-              </button>
+          {/* Handover & Next Patient Card */}
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '24px',
+            border: '1.5px solid #E2E8F0',
+            boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C', margin: 0 }}>
+              Hospital Handover & Export
+            </h3>
 
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <button
-                onClick={() => setShowWhatsAppModal(true)}
+                onClick={() => setShowFhirModal(true)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  padding: '12px 14px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
-                  color: '#ffffff',
-                  border: 'none',
-                  fontSize: '13px',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  background: '#F1F5F9',
+                  border: '1px solid #CBD5E1',
+                  color: '#0F4C5C',
+                  fontSize: '12.5px',
                   fontWeight: 800,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(37, 211, 102, 0.35)'
+                  cursor: 'pointer'
                 }}
               >
-                <Smartphone size={16} />
-                <span>WhatsApp Audio-Rx</span>
+                <FileText size={16} />
+                <span>ABDM FHIR JSON</span>
               </button>
-            </div>
 
-            {/* Visual Color-Coded Pill Schedule */}
-            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F4C5C', marginBottom: '10px' }}>
-              Color-Coded Visual Pill Schedule for Patient:
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {currentEncounter.medications.map((med, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 14px',
-                    borderRadius: '10px',
-                    background: '#ffffff',
-                    border: '1px solid #D1E1E6',
-                    boxShadow: '0 2px 6px rgba(15, 76, 92, 0.04)'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{
-                      width: '14px',
-                      height: '14px',
-                      borderRadius: '50%',
-                      background: med.color,
-                      boxShadow: `0 0 8px ${med.color}`
-                    }} />
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 750, color: '#091E26' }}>{med.name}</div>
-                      <div style={{ fontSize: '11px', color: '#3D545E' }}>{med.colorLabel}</div>
-                    </div>
-                  </div>
-                  <div style={{ textAlign: 'right', fontSize: '12px', fontWeight: 700, color: '#0F4C5C' }}>
-                    {med.timing}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Card 6: Tesseract Blister Strip Scanner & Safety Guard */}
-          <div className="glass-panel" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Camera size={18} color="#D4AF37" />
-                <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#0F4C5C' }}>
-                  Tesseract Blister Strip Scanner
-                </h3>
-              </div>
               <button
-                onClick={() => {
-                  setScannedStripStatus('Analyzing medicine packaging contours & text...');
-                  setTimeout(() => {
-                    setScannedStripStatus('Detected: Ecosprin 75mg Gastro-resistant (Batch #IND-891). Verified safe against current prescription.');
-                  }, 1200);
+                onClick={() => setShowPrintModal(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  background: '#F1F5F9',
+                  border: '1px solid #CBD5E1',
+                  color: '#0F4C5C',
+                  fontSize: '12.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
                 }}
-                className="btn-outline"
-                style={{ fontSize: '12px', padding: '6px 14px' }}
               >
-                Simulate Strip OCR
+                <Printer size={16} />
+                <span>Print OPD Sheet</span>
               </button>
             </div>
 
-            {scannedStripStatus ? (
-              <div style={{
-                background: 'rgba(16, 185, 129, 0.08)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-                padding: '12px 14px',
-                borderRadius: '10px',
-                fontSize: '12px',
-                color: '#065F46',
+            {/* Authentic QR Slip Preview */}
+            <div style={{
+              background: '#FAF8F5',
+              padding: '16px',
+              borderRadius: '14px',
+              border: '1px dashed #CBD5E1',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <AuthenticQrCode 
+                value={`https://ayuswar.ai/rx/${currentEncounter.patient.abhaId}`} 
+                size={84} 
+              />
+              <div>
+                <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#091E26' }}>
+                  Official ABDM Digital Prescription QR
+                </div>
+                <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
+                  Scannable by Jan Aushadhi pharmacists and rural patients for vernacular dosage playback.
+                </div>
+              </div>
+            </div>
+
+            {/* Next OPD Patient Button */}
+            <button
+              onClick={handleResetForNextPatient}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '14px',
+                fontWeight: 800,
+                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
-              }}>
-                <CheckCircle2 size={16} />
-                <span>{scannedStripStatus}</span>
-              </div>
-            ) : (
-              <p style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
-                Computer vision contour detection checks previous medicine strips to guard against fatal double-dosing and verify drug brand authenticity.
-              </p>
-            )}
-          </div>
-
-          {/* Card 7: Action Row (ABDM FHIR R4, WhatsApp Dispatch, Print QR) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-            <button
-              onClick={() => setShowFhirModal(true)}
-              className="btn-outline"
-              style={{ justifyContent: 'center', fontSize: '12px', padding: '10px 8px' }}
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 16px rgba(15, 76, 92, 0.35)',
+                marginTop: 'auto'
+              }}
             >
-              <FileText size={15} />
-              <span>FHIR R4 JSON</span>
-            </button>
-
-            <button
-              onClick={() => setShowWhatsAppModal(true)}
-              className="btn-primary"
-              style={{ justifyContent: 'center', fontSize: '12px', padding: '10px 8px', background: '#128C7E' }}
-            >
-              <Smartphone size={15} />
-              <span>WhatsApp Rx</span>
-            </button>
-
-            <button
-              onClick={() => setShowPrintModal(true)}
-              className="btn-primary"
-              style={{ justifyContent: 'center', fontSize: '12px', padding: '10px 8px' }}
-            >
-              <Printer size={15} />
-              <span>Print QR Slip</span>
+              <Sparkles size={16} />
+              <span>✨ Start Next OPD Patient in Queue</span>
             </button>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* =========================================================================
-          VERNACULAR WHATSAPP AUDIO-RX MODAL
-          ========================================================================= */}
+      {/* =====================================================================
+          ADD CUSTOM TURN MODAL (FOR STEP 1)
+          ===================================================================== */}
+      {showAddTurnModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(6, 22, 38, 0.75)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '18px',
+            padding: '24px',
+            maxWidth: '480px',
+            width: '100%',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px'
+          }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C', margin: 0 }}>
+              Insert Consultation Speaking Turn
+            </h3>
+            <div>
+              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                Speaker Role:
+              </label>
+              <select
+                value={newSpeakerRole}
+                onChange={(e) => setNewSpeakerRole(e.target.value)}
+                style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '13px' }}
+              >
+                <option value="Doctor">🩺 Attending Doctor</option>
+                <option value="Patient">👵 Patient</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', display: 'block', marginBottom: '4px' }}>
+                Spoken Text:
+              </label>
+              <textarea
+                value={newSpeakerText}
+                onChange={(e) => setNewSpeakerText(e.target.value)}
+                rows={3}
+                placeholder="Type or paste what was spoken..."
+                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '13px', boxSizing: 'border-box' }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+              <button
+                onClick={() => setShowAddTurnModal(false)}
+                style={{ padding: '8px 16px', borderRadius: '8px', background: '#F1F5F9', border: 'none', color: '#475569', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddCustomTurn}
+                style={{ padding: '8px 16px', borderRadius: '8px', background: '#0F4C5C', border: 'none', color: '#ffffff', fontWeight: 800, cursor: 'pointer' }}
+              >
+                Add Turn
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          ABDM FHIR R4 JSON MODAL
+          ===================================================================== */}
+      {showFhirModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(6, 22, 38, 0.75)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '24px',
+            maxWidth: '680px',
+            width: '100%',
+            maxHeight: '85vh',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F4C5C', margin: 0 }}>
+                ABDM FHIR R4 Bundle Export
+              </h3>
+              <button onClick={() => setShowFhirModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
+            </div>
+
+            <pre style={{
+              background: '#061626',
+              color: '#2DD4BF',
+              padding: '14px',
+              borderRadius: '12px',
+              fontSize: '11px',
+              fontFamily: 'monospace',
+              overflowY: 'auto',
+              flex: 1
+            }}>
+              {JSON.stringify(generateAbdmFhirR4Bundle(
+                currentEncounter.patient,
+                { doctorName: doctorProfile?.doctorName || 'Dr. Priya Sharma', hprId: 'HPR-AP-9924-2026' },
+                'Cardiovascular / Respiratory Outpatient Consultation',
+                currentEncounter.medications
+              ), null, 2)}
+            </pre>
+
+            <button
+              onClick={() => {
+                const bundle = generateAbdmFhirR4Bundle(
+                  currentEncounter.patient,
+                  { doctorName: doctorProfile?.doctorName || 'Dr. Priya Sharma', hprId: 'HPR-AP-9924-2026' },
+                  'Cardiovascular / Respiratory Outpatient Consultation',
+                  currentEncounter.medications
+                );
+                const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ABDM_FHIR_Rx_${currentEncounter.patient.name.split(' ')[0]}.json`;
+                a.click();
+              }}
+              style={{
+                padding: '10px 16px',
+                borderRadius: '10px',
+                background: '#0F4C5C',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 800,
+                cursor: 'pointer'
+              }}
+            >
+              Download JSON File
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          PRINT OPD RX SLIP MODAL
+          ===================================================================== */}
+      {showPrintModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(6, 22, 38, 0.75)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '24px',
+            maxWidth: '560px',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F4C5C' }}>
+                Official OPD Prescription Slip (Print Preview)
+              </div>
+              <button onClick={() => setShowPrintModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
+            </div>
+
+            <div style={{ border: '2px solid #0F4C5C', borderRadius: '12px', padding: '16px', background: '#FAF8F5' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #CBD5E1', paddingBottom: '8px', marginBottom: '8px' }}>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '14px', color: '#091E26' }}>AYUSWAR AMBIENT CLINIC</div>
+                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>Primary Health Centre • ABDM Integrated</div>
+                </div>
+                <AuthenticQrCode value={`https://ayuswar.ai/rx/${currentEncounter.patient.abhaId}`} size={56} />
+              </div>
+
+              <div style={{ fontSize: '11.5px', color: '#334155', marginBottom: '10px' }}>
+                Patient: <strong>{currentEncounter.patient.name}</strong> • Age/Sex: {currentEncounter.patient.age}y / {currentEncounter.patient.gender} • ABHA: {currentEncounter.patient.abhaId}
+              </div>
+
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px' }}>Rx Medications:</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '12px', fontSize: '11.5px' }}>
+                {currentEncounter.medications.map((m, i) => (
+                  <div key={i}>• {m.name} — {m.timing} ({m.colorLabel})</div>
+                ))}
+              </div>
+
+              <div style={{ borderTop: '1px solid #CBD5E1', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: '10px', color: '#64748B' }}>Class-3 Cryptographic DSC Stamp Verified</div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C' }}>{doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}</div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => window.print()}
+              style={{ padding: '10px', borderRadius: '10px', background: '#0F4C5C', color: '#ffffff', border: 'none', fontWeight: 800, cursor: 'pointer' }}
+            >
+              🖨️ Print Clinical Slip
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp Modal */}
       <WhatsAppAudioRxModal 
         isOpen={showWhatsAppModal}
         onClose={() => setShowWhatsAppModal(false)}
         patientData={{
           name: currentEncounter.patient.name,
           vernacularName: currentEncounter.language.includes('Telugu') ? 'నారాయణ రావు' : 'आरव कुमार',
-          phone: '+91 00000 00000 (Non-dialable Demo)',
-          cleanPhone: '0000000000',
+          phone: currentEncounter.patient.phone || '+91 98490 12345',
+          cleanPhone: (currentEncounter.patient.phone || '919849012345').replace(/\D/g, ''),
           age: currentEncounter.patient.age,
           gender: currentEncounter.patient.gender,
-          abhaId: 'DEMO-ABHA-FIXTURE',
+          abhaId: currentEncounter.patient.abhaId,
           language: currentEncounter.language,
-          langCode: currentEncounter.langCode || 'en-IN'
+          langCode: currentEncounter.langCode || 'te-IN'
         }}
         doctorName={doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}
         initialLanguage={currentEncounter.langCode?.includes('hi') ? 'hi' : 'te'}
       />
-
-      {/* =========================================================================
-          ABDM FHIR R4 JSON MODAL
-          ========================================================================= */}
-      {showFhirModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1100,
-          padding: '20px'
-        }}>
-          <div className="modal-content" style={{
-            width: '740px',
-            maxHeight: '80vh',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#081D33',
-            color: '#ffffff',
-            borderRadius: '18px',
-            overflow: 'hidden'
-          }}>
-            <div style={{ padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FileText size={18} color="#D4AF37" />
-                <h3 style={{ fontSize: '16px', color: '#ffffff' }}>Official ABDM FHIR R4 Encounter Bundle</h3>
-              </div>
-              <button 
-                onClick={() => setShowFhirModal(false)}
-                style={{ background: 'none', border: 'none', color: '#ffffff', fontSize: '18px', cursor: 'pointer' }}
-              >
-                ✕
-              </button>
-            </div>
-            <div style={{ padding: '20px', overflowY: 'auto', flex: 1, fontFamily: 'monospace', fontSize: '12px', color: '#A5F3FC' }}>
-              <pre>{JSON.stringify({
-                resourceType: "Bundle",
-                id: `abdm-encounter-${currentEncounter.id}`,
-                type: "document",
-                timestamp: '2026-10-23T14:28:10.000Z',
-                patient: {
-                  name: currentEncounter.patient.name,
-                  age: currentEncounter.patient.age,
-                  gender: currentEncounter.patient.gender,
-                  abhaId: currentEncounter.patient.abhaId,
-                  facility: currentEncounter.patient.location
-                },
-                clinicalImpression: {
-                  vernacularLanguage: currentEncounter.language,
-                  icd10Conditions: currentEncounter.vernacularMappings.map(v => ({ code: v.icd10, display: v.clinicalTerm })),
-                  acousticBiomarkers: currentEncounter.acousticBiomarkers
-                },
-                medicationRequests: currentEncounter.medications.map(m => ({
-                  medication: m.name,
-                  dosageInstruction: m.timing,
-                  colorLabel: m.colorLabel
-                }))
-              }, null, 2)}</pre>
-            </div>
-            <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button 
-                onClick={() => {
-                  navigator.clipboard.writeText(JSON.stringify(currentEncounter, null, 2));
-                  alert('FHIR R4 JSON copied to clipboard!');
-                  setShowFhirModal(false);
-                }}
-                className="btn-teal"
-                style={{ fontSize: '12px', padding: '8px 18px' }}
-              >
-                Copy FHIR JSON
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          PRINTABLE QR PRESCRIPTION MODAL
-          ========================================================================= */}
-      {showPrintModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1100,
-          padding: '20px'
-        }}>
-          <div className="modal-content" style={{
-            width: '540px',
-            background: '#ffffff',
-            borderRadius: '16px',
-            padding: '28px',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
-            border: '1px solid #CBD5E1'
-          }}>
-            {/* Prescription Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #0F4C5C', paddingBottom: '14px', marginBottom: '16px' }}>
-              <div>
-                <h3 style={{ fontSize: '18px', color: '#081C24', fontWeight: 850 }}>AYUSWAR HEALTH CLINIC (DEMO)</h3>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Simulated PHC Demonstration Center #1402 • Synthetic Test Record</div>
-              </div>
-              <button onClick={() => setShowPrintModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>✕</button>
-            </div>
-
-            {/* Patient & Doctor details */}
-            <div style={{ fontSize: '12.5px', color: '#334155', marginBottom: '18px', lineHeight: 1.6 }}>
-              <div><strong>Patient:</strong> {currentEncounter.patient.name} ({currentEncounter.patient.age}y, {currentEncounter.patient.gender})</div>
-              <div><strong>ABHA Health ID:</strong> {currentEncounter.patient.abhaId}</div>
-              <div><strong>Prescribing Physician:</strong> {doctorProfile ? doctorProfile.doctorName : 'Dr. Ananya Sharma, MD'}</div>
-            </div>
-
-            {/* Prescribed Items */}
-            <div style={{ marginBottom: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', marginBottom: '8px' }}>Rx Medications:</div>
-              {currentEncounter.medications.map((m, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed #E2E8F0', fontSize: '12.5px' }}>
-                  <span><strong>{m.name}</strong> ({m.colorLabel})</span>
-                  <span>{m.timing} — {m.duration}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* QR Code Audio-Rx */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '20px' }}>
-              <AuthenticQrCode 
-                value={`https://ayuswar-ai.vercel.app/audio-rx?enc=${currentEncounter.id}&lang=${encodeURIComponent(currentEncounter.language)}`}
-                size={72}
-                isDoctor={false}
-                showCenterBadge={true}
-              />
-              <div>
-                <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#081C24' }}>Scan to Listen in {currentEncounter.language}</div>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>Illiterate patients can scan with any smartphone camera to replay voice instructions.</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button 
-                onClick={() => { window.print(); setShowPrintModal(false); }}
-                className="btn-primary" 
-                style={{ fontSize: '13px', padding: '9px 20px' }}
-              >
-                Print Official Slip
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

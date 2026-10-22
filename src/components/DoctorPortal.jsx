@@ -68,6 +68,69 @@ import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel,
  * 7. Clinical Library (WHO ICD-10 taxonomy, colloquial Indic symptom resolver, clinical protocols)
  * 8. Settings (ABDM HPR credentials, hospital facility #1402, WebAudio mic VAD calibration)
  */
+const INITIAL_DASHBOARD_APPOINTMENTS = [
+  {
+    id: 0,
+    patientName: 'Rohit Kumar',
+    name: 'Rohit Kumar',
+    vernacular: 'రోహిత్ కుమార్',
+    token: 'OPD-101',
+    age: 42,
+    gender: 'Male',
+    time: '09:30 AM',
+    type: 'Follow-up (Asthma)',
+    status: 'Completed',
+    statusColor: '#10B981',
+    statusBg: 'rgba(16, 185, 129, 0.1)',
+    encounterIndex: 0
+  },
+  {
+    id: 1,
+    patientName: 'Ananya Rao',
+    name: 'Ananya Rao',
+    vernacular: 'అనన్య రావు',
+    token: 'OPD-102',
+    age: 28,
+    gender: 'Female',
+    time: '10:15 AM',
+    type: 'Consultation (Fever)',
+    status: 'In Progress',
+    statusColor: '#3B82F6',
+    statusBg: 'rgba(59, 130, 246, 0.12)',
+    encounterIndex: 1
+  },
+  {
+    id: 2,
+    patientName: 'Suresh Babu',
+    name: 'Suresh Babu',
+    vernacular: 'సురేష్ బాబు',
+    token: 'OPD-103',
+    age: 56,
+    gender: 'Male',
+    time: '11:00 AM',
+    type: 'Follow-up (Diabetes)',
+    status: 'Upcoming',
+    statusColor: '#6366F1',
+    statusBg: 'rgba(99, 102, 241, 0.1)',
+    encounterIndex: 2
+  },
+  {
+    id: 3,
+    patientName: 'Meera Nair',
+    name: 'Meera Nair',
+    vernacular: 'మీరా నాయర్',
+    token: 'OPD-104',
+    age: 34,
+    gender: 'Female',
+    time: '11:45 AM',
+    type: 'Consultation (Cough)',
+    status: 'Upcoming',
+    statusColor: '#6366F1',
+    statusBg: 'rgba(99, 102, 241, 0.1)',
+    encounterIndex: 0
+  }
+];
+
 export default function DoctorPortal({ 
   doctorProfile, 
   onSelectEncounterAndLaunch, 
@@ -90,6 +153,73 @@ export default function DoctorPortal({
   const [activeScribeSessionPatient, setActiveScribeSessionPatient] = useState(null);
   const [patientSearchTerm, setPatientSearchTerm] = useState('');
   const [patientTriageFilter, setPatientTriageFilter] = useState('all');
+  const [opdViewMode, setOpdViewMode] = useState('queue'); // 'queue' | 'schedule' | 'directory'
+  const [allAppointmentsList, setAllAppointmentsList] = useState(DEMO_APPOINTMENTS);
+  const [dashboardAppointments, setDashboardAppointments] = useState(INITIAL_DASHBOARD_APPOINTMENTS);
+  const [isNewAppointmentModalOpen, setIsNewAppointmentModalOpen] = useState(false);
+  const [newApptForm, setNewApptForm] = useState({
+    patientId: 'DEMO-P001',
+    patientName: 'Lakshmi Amma (fictional)',
+    dateOffset: 0,
+    time: '11:30 AM',
+    type: 'In-Person OPD',
+    complaint: 'Seasonal dry cough and breathlessness on exertion',
+    triage: 'Green'
+  });
+
+  const handleCreateAppointment = (e) => {
+    e.preventDefault();
+    const tokenNum = 100 + allAppointmentsList.length + 1;
+    const newToken = `OPD-${tokenNum}`;
+    
+    const selectedPat = DEMO_PATIENTS.find(p => p.id === newApptForm.patientId) || {
+      id: `DEMO-P${tokenNum}`,
+      name: newApptForm.patientName || 'Walk-in Patient',
+      age: 45,
+      gender: 'M',
+      genderLabel: 'Male',
+      language: 'Telugu (తెలుగు)',
+      phone: '+91-98480-12345'
+    };
+
+    const newApptItem = {
+      id: `DEMO-APPT-${Date.now()}`,
+      patientId: selectedPat.id,
+      patientName: selectedPat.name,
+      token: newToken,
+      offsetDays: Number(newApptForm.dateOffset),
+      time: newApptForm.time,
+      isTeleconsult: newApptForm.type.includes('Teleconsult'),
+      complaint: newApptForm.complaint,
+      status: 'Upcoming',
+      language: selectedPat.language?.split(' ')[0] || 'Telugu'
+    };
+
+    const newDashItem = {
+      id: Date.now(),
+      patientName: selectedPat.name,
+      name: selectedPat.name,
+      vernacular: selectedPat.name,
+      token: newToken,
+      age: selectedPat.age || 45,
+      gender: selectedPat.genderLabel || 'Male',
+      time: newApptForm.time,
+      type: `${newApptForm.type} (${newApptForm.complaint.slice(0, 24)}...)`,
+      status: 'Upcoming',
+      statusColor: '#6366F1',
+      statusBg: 'rgba(99, 102, 241, 0.1)',
+      encounterIndex: 0
+    };
+
+    setAllAppointmentsList(prev => [newApptItem, ...prev]);
+    if (Number(newApptForm.dateOffset) === 0) {
+      setDashboardAppointments(prev => [newDashItem, ...prev]);
+    }
+
+    setFhirToast(`Appointment Scheduled: Token ${newToken} generated for ${selectedPat.name} at ${newApptForm.time}. Added to OPD Queue.`);
+    setTimeout(() => setFhirToast(null), 4500);
+    setIsNewAppointmentModalOpen(false);
+  };
   const [reportSearchTerm, setReportSearchTerm] = useState('');
   const [reportCategoryFilter, setReportCategoryFilter] = useState('all');
   const [dicomInvert, setDicomInvert] = useState(false);
@@ -240,56 +370,7 @@ export default function DoctorPortal({
     return true; // General sees all
   });
 
-  const appointments = [
-    {
-      id: 0,
-      patientName: 'Rohit Kumar',
-      age: 42,
-      gender: 'Male',
-      time: '09:30 AM',
-      type: 'Follow-up (Asthma)',
-      status: 'Completed',
-      statusColor: '#10B981',
-      statusBg: 'rgba(16, 185, 129, 0.1)',
-      encounterIndex: 0
-    },
-    {
-      id: 1,
-      patientName: 'Ananya Rao',
-      age: 28,
-      gender: 'Female',
-      time: '10:15 AM',
-      type: 'Consultation (Fever)',
-      status: 'In Progress',
-      statusColor: '#3B82F6',
-      statusBg: 'rgba(59, 130, 246, 0.12)',
-      encounterIndex: 1
-    },
-    {
-      id: 2,
-      patientName: 'Suresh Babu',
-      age: 56,
-      gender: 'Male',
-      time: '11:00 AM',
-      type: 'Follow-up (Diabetes)',
-      status: 'Upcoming',
-      statusColor: '#6366F1',
-      statusBg: 'rgba(99, 102, 241, 0.1)',
-      encounterIndex: 2
-    },
-    {
-      id: 3,
-      patientName: 'Meera Nair',
-      age: 34,
-      gender: 'Female',
-      time: '11:45 AM',
-      type: 'Consultation (Cough)',
-      status: 'Upcoming',
-      statusColor: '#6366F1',
-      statusBg: 'rgba(99, 102, 241, 0.1)',
-      encounterIndex: 0
-    }
-  ];
+  const appointments = dashboardAppointments;
 
   const recentReports = DIAGNOSTIC_REPORTS_DATABASE;
 
@@ -601,15 +682,14 @@ export default function DoctorPortal({
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Home },
-              { id: 'patients', label: 'Patients', icon: Users },
-              { id: 'appointments', label: 'Appointments', icon: Calendar },
+              { id: 'opd_queue', label: 'OPD Queue & Patients', icon: Users },
               { id: 'reports', label: 'Reports & Lab', icon: FileText },
               { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
               { id: 'clinical_library', label: 'Clinical Library', icon: BookOpen },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(item => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = activeTab === item.id || (item.id === 'opd_queue' && (activeTab === 'patients' || activeTab === 'appointments' || activeTab === 'opd_queue'));
               return (
                 <button
                   key={item.id}
@@ -958,7 +1038,7 @@ export default function DoctorPortal({
                       </span>
                     </div>
                     <p style={{ fontSize: '12.5px', color: '#94A3B8', margin: '4px 0 0 0' }}>
-                      Bilingual OPD Consultation Diarization • Instant SOAP Notes • ABDM FHIR R4 Bundle
+                      Step-by-Step Flow: Record Conversation • AI Clinical Synthesis • Gnani Voice Note • WhatsApp Dispatch
                     </p>
                   </div>
                 </div>
@@ -1069,186 +1149,156 @@ export default function DoctorPortal({
                 </div>
               </div>
 
-              {/* Middle Section: Appointments + AI Assistant */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '20px', marginBottom: '24px' }}>
-                {/* Today's Appointments */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
-                      Today's Appointments
-                    </h3>
-                    <span onClick={() => setActiveTab('appointments')} style={{ fontSize: '12.5px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View All →</span>
+              {/* Middle Section: Today's Consultation Queue (Spacious Full-Width OPD View) */}
+              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '24px 28px', border: '1px solid #E2E8F0', marginBottom: '24px', boxShadow: '0 2px 10px rgba(15, 23, 42, 0.03)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                        Today's Consultation Queue & Patient Roster
+                      </h3>
+                      <span style={{ fontSize: '11px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px', fontWeight: 800 }}>
+                        {dashboardAppointments.length} Active Consultations
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '12.5px', color: '#64748B', margin: '4px 0 0 0' }}>
+                      Active outpatient roster for Dr. Priya Sharma • Real-time clinical voice scribe dispatch
+                    </p>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    {appointments.map(item => (
-                      <div 
-                        key={item.id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '12px 14px',
-                          borderRadius: '12px',
-                          background: '#FAF8F5',
-                          border: '1px solid #F1F5F9'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%',
-                            background: '#E2E8F0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '14px',
-                            fontWeight: 700,
-                            color: '#475569'
-                          }}>
-                            {item.patientName[0]}
-                          </div>
-                          <div>
-                            <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24' }}>{item.patientName}</div>
-                            <div style={{ fontSize: '11px', color: '#64748B' }}>{item.age} y • {item.gender}</div>
-                          </div>
-                        </div>
-
-                        <div style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#081C24' }}>{item.time}</div>
-                          <div style={{ fontSize: '11px', color: '#64748B' }}>{item.type}</div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 750,
-                            padding: '4px 10px',
-                            borderRadius: '12px',
-                            background: item.statusBg,
-                            color: item.statusColor
-                          }}>
-                            {item.status}
-                          </span>
-                          <button
-                            onClick={() => setActiveScribeSessionPatient({
-                              name: item.name,
-                              vernacular: item.vernacular || 'నారాయణ',
-                              token: item.token || 'OPD-101',
-                              phone: '+91 98490 12345',
-                              age: 58,
-                              gender: 'Male',
-                              language: 'Telugu',
-                              domain: 'cardiometabolic'
-                            })}
-                            title="Launch In-Situ Ambient Voice Scribe Studio"
-                            style={{
-                              background: '#0F4C5C',
-                              border: 'none',
-                              borderRadius: '8px',
-                              color: '#ffffff',
-                              padding: '6px 12px',
-                              fontSize: '11px',
-                              fontWeight: 750,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              boxShadow: '0 2px 6px rgba(15, 76, 92, 0.3)'
-                            }}
-                          >
-                            <Mic size={12} />
-                            <span>Start Scribe</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* AI Clinical Assistant Widget */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '22px 24px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
-                      AI Clinical Assistant
-                    </h3>
-                    <span style={{ fontSize: '10px', background: 'rgba(16, 185, 129, 0.15)', color: '#059669', padding: '2px 6px', borderRadius: '8px', fontWeight: 800 }}>
-                      New
-                    </span>
-                  </div>
-                  <p style={{ fontSize: '12px', color: '#64748B', marginBottom: '16px' }}>
-                    Ask about symptoms, guidelines, drug interactions and more.
-                  </p>
-
-                  <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '14px' }}>
-                    {aiResponses.map((res, i) => (
-                      <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <div style={{
-                          alignSelf: 'flex-end',
-                          background: '#E6F7F7',
-                          color: '#006D6D',
-                          padding: '8px 12px',
-                          borderRadius: '12px 12px 2px 12px',
-                          fontSize: '12px',
-                          fontWeight: 650,
-                          maxWidth: '85%'
-                        }}>
-                          {res.q}
-                        </div>
-                        <div style={{
-                          alignSelf: 'flex-start',
-                          background: '#FAF8F5',
-                          border: '1px solid #E2E8F0',
-                          color: '#1E293B',
-                          padding: '12px 14px',
-                          borderRadius: '12px 12px 12px 2px',
-                          fontSize: '12px',
-                          lineHeight: 1.5,
-                          whiteSpace: 'pre-line',
-                          maxWidth: '95%'
-                        }}>
-                          {res.a}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <form onSubmit={handleAskAi} style={{ display: 'flex', gap: '8px' }}>
-                    <input 
-                      type="text"
-                      value={aiPrompt}
-                      onChange={e => setAiPrompt(e.target.value)}
-                      placeholder="Ask treatment guidelines or DDI conflicts..."
-                      style={{
-                        flex: 1,
-                        padding: '9px 12px',
-                        borderRadius: '10px',
-                        border: '1.5px solid #E2E8F0',
-                        fontSize: '12.5px',
-                        outline: 'none'
-                      }}
-                    />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                     <button
-                      type="submit"
+                      onClick={() => setIsNewAppointmentModalOpen(true)}
                       style={{
-                        background: '#0A2540',
+                        padding: '8px 16px',
+                        background: '#0F4C5C',
                         color: '#ffffff',
                         border: 'none',
                         borderRadius: '10px',
-                        padding: '0 14px',
-                        fontSize: '12px',
-                        fontWeight: 700,
+                        fontSize: '12.5px',
+                        fontWeight: 750,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '4px'
+                        gap: '6px',
+                        boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
                       }}
                     >
-                      <Send size={13} />
-                      <span>Ask</span>
+                      <Plus size={14} />
+                      <span>New Appointment</span>
                     </button>
-                  </form>
+
+                    <button
+                      onClick={() => { setActiveTab('opd_queue'); setOpdViewMode('queue'); }}
+                      style={{
+                        padding: '8px 14px',
+                        background: '#FAF8F5',
+                        color: '#0F4C5C',
+                        border: '1.5px solid #CBD5E1',
+                        borderRadius: '10px',
+                        fontSize: '12.5px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      View All in OPD Queue →
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {dashboardAppointments.map((item, idx) => (
+                    <div 
+                      key={item.id || idx}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 18px',
+                        borderRadius: '12px',
+                        background: '#FAF8F5',
+                        border: '1px solid #E2E8F0',
+                        flexWrap: 'wrap',
+                        gap: '12px',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{
+                          width: '42px',
+                          height: '42px',
+                          borderRadius: '12px',
+                          background: 'rgba(15, 76, 92, 0.12)',
+                          color: '#0F4C5C',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: 800
+                        }}>
+                          {item.token || `OPD-${101 + idx}`}
+                        </div>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24' }}>{item.patientName}</span>
+                            <span style={{ fontSize: '11.5px', color: '#64748B' }}>• {item.age} y • {item.gender}</span>
+                          </div>
+                          <div style={{ fontSize: '12.5px', color: '#475569', marginTop: '2px' }}>
+                            {item.type}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{item.time}</div>
+                          <span style={{
+                            fontSize: '10.5px',
+                            fontWeight: 750,
+                            padding: '3px 8px',
+                            borderRadius: '10px',
+                            background: item.statusBg || '#DCFCE7',
+                            color: item.statusColor || '#166534',
+                            display: 'inline-block',
+                            marginTop: '2px'
+                          }}>
+                            {item.status}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => setActiveScribeSessionPatient({
+                            name: item.patientName || item.name,
+                            vernacular: item.vernacular || item.patientName,
+                            token: item.token || `OPD-${101 + idx}`,
+                            phone: '+91 98490 12345',
+                            age: item.age || 50,
+                            gender: item.gender || 'Female',
+                            language: 'Telugu',
+                            domain: 'general'
+                          })}
+                          title="Launch In-Situ Ambient Voice Scribe Studio"
+                          style={{
+                            background: '#0F4C5C',
+                            border: 'none',
+                            borderRadius: '10px',
+                            color: '#ffffff',
+                            padding: '8px 16px',
+                            fontSize: '12px',
+                            fontWeight: 750,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                          }}
+                        >
+                          <Mic size={14} />
+                          <span>Start Voice Scribe</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -1379,265 +1429,44 @@ export default function DoctorPortal({
           )}
 
           {/* ---------------------------------------------------------------------
-              TAB 2: PATIENTS (COMPREHENSIVE OPD REGISTRY & LONGITUDINAL EHR)
+              TAB 2: UNIFIED OPD QUEUE & PATIENTS (MASTER TOKEN QUEUE, SCHEDULE & EHR)
               --------------------------------------------------------------------- */}
-          {activeTab === 'patients' && (
+          {(activeTab === 'opd_queue' || activeTab === 'patients' || activeTab === 'appointments') && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '14px' }}>
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '14px' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
-                      Outpatient Registry & EHR Records
+                      OPD Queue & Patients
                     </h2>
                     <SampleDataChip />
                   </div>
                   <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
-                    Shared fictional cohort across districts with longitudinal EHR, vitals history, and Audio-Rx.
-                  </p>
-                </div>
-
-                {/* Search and Filters Bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                  <div style={{ position: 'relative', width: '240px' }}>
-                    <Search size={14} color="#64748B" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
-                    <input
-                      type="text"
-                      placeholder="Search name, DEMO- ID, complaint..."
-                      value={patientSearchTerm}
-                      onChange={(e) => setPatientSearchTerm(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '8px 12px 8px 34px',
-                        borderRadius: '20px',
-                        border: '1.5px solid #CBD5E1',
-                        fontSize: '12.5px',
-                        outline: 'none',
-                        background: '#ffffff',
-                        boxSizing: 'border-box'
-                      }}
-                    />
-                  </div>
-
-                  {/* Filter Chips */}
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                    {[
-                      { key: 'all', label: 'All' },
-                      { key: 'this_week', label: 'New This Week' },
-                      { key: 'has_upcoming', label: 'Has Upcoming Visit' },
-                      { key: 'urgent', label: 'High Priority' }
-                    ].map(chip => (
-                      <button
-                        key={chip.key}
-                        onClick={() => setPatientTriageFilter(chip.key)}
-                        style={{
-                          padding: '6px 12px',
-                          borderRadius: '20px',
-                          border: 'none',
-                          background: patientTriageFilter === chip.key ? '#0A2540' : '#E2E8F0',
-                          color: patientTriageFilter === chip.key ? '#ffffff' : '#475569',
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {chip.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Patient Table Grid */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {filteredPatients.length === 0 ? (
-                  <div style={{
-                    padding: '36px',
-                    textAlign: 'center',
-                    background: '#ffffff',
-                    borderRadius: '16px',
-                    border: '1px solid #E2E8F0',
-                    color: '#64748B'
-                  }}>
-                    <p style={{ margin: 0, fontWeight: 700 }}>No demo patients found matching "{patientSearchTerm}".</p>
-                    <button
-                      onClick={() => { setPatientSearchTerm(''); setPatientTriageFilter('all'); }}
-                      style={{
-                        marginTop: '12px',
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        border: '1px solid #CBD5E1',
-                        background: '#FAF8F5',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        fontWeight: 700
-                      }}
-                    >
-                      Reset filters
-                    </button>
-                  </div>
-                ) : null}
-                {filteredPatients.map(pat => (
-                  <div
-                    key={pat.id}
-                    style={{
-                      background: '#ffffff',
-                      borderRadius: '14px',
-                      padding: '18px 22px',
-                      border: '1px solid #E2E8F0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      flexWrap: 'wrap',
-                      gap: '16px'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <div style={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '12px',
-                        background: 'rgba(15, 76, 92, 0.1)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 800,
-                        fontSize: '16px',
-                        color: '#0F4C5C'
-                      }}>
-                        {pat.token.split('-')[1]}
-                      </div>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{pat.name}</span>
-                          <span style={{ fontSize: '12px', color: '#64748B' }}>({pat.vernacular})</span>
-                          <span style={{ fontSize: '10px', background: `${pat.triageColor}18`, color: pat.triageColor, padding: '2px 8px', borderRadius: '8px', fontWeight: 750 }}>
-                            {pat.triage}
-                          </span>
-                        </div>
-                        <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
-                          ABHA: <code>{pat.abhaId}</code> • {pat.age} y • {pat.gender} • {pat.language}
-                        </div>
-                        <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '4px' }}>
-                          Chief Complaint: {pat.chiefComplaint}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                      {/* Vitals HUD */}
-                      <div style={{ textAlign: 'right', fontSize: '12px', color: '#475569' }}>
-                        <div>BP: <strong>{pat.vitals.bp}</strong> • HR: <strong>{pat.vitals.hr}</strong></div>
-                        <div>SpO2: <strong>{pat.vitals.spo2}</strong> {pat.vitals.rbs && `• RBS: ${pat.vitals.rbs}`}</div>
-                        {(() => {
-                          const sys = parseInt(pat.vitals.bp?.split('/')[0]) || 120;
-                          const hr = parseInt(pat.vitals.hr) || 76;
-                          const spo2 = parseInt(pat.vitals.spo2) || 98;
-                          const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
-                          return (
-                            <div style={{ fontSize: '11px', color: mews.riskColor, fontWeight: 750, marginTop: '2px' }}>
-                              MEWS {mews.score} ({mews.riskLevel})
-                            </div>
-                          );
-                        })()}
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <button
-                          onClick={() => setSelectedPatientModal(pat)}
-                          style={{
-                            padding: '8px 14px',
-                            borderRadius: '10px',
-                            border: '1.5px solid #CBD5E1',
-                            background: '#ffffff',
-                            color: '#081C24',
-                            fontSize: '12px',
-                            fontWeight: 700,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          View EHR
-                        </button>
-
-                        <button
-                          onClick={() => setActiveScribeSessionPatient(pat)}
-                          style={{
-                            padding: '8px 16px',
-                            borderRadius: '10px',
-                            border: 'none',
-                            background: '#0F4C5C',
-                            color: '#ffffff',
-                            fontSize: '12px',
-                            fontWeight: 750,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            cursor: 'pointer',
-                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
-                          }}
-                        >
-                          <Mic size={14} />
-                          <span>Start Voice Scribe</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ---------------------------------------------------------------------
-              TAB 3: AI CLINICAL ASSISTANT (ADVANCED CO-PILOT VIEW)
-              --------------------------------------------------------------------- */}
-          {activeTab === 'ai_assistant' && (
-            <DoctorAiAssistantTab
-              aiCategory={aiCategory}
-              setAiCategory={setAiCategory}
-              aiResponses={aiResponses}
-              aiPrompt={aiPrompt}
-              setAiPrompt={setAiPrompt}
-              handleAskAi={handleAskAi}
-            />
-          )}
-
-          {/* ---------------------------------------------------------------------
-              TAB 4: APPOINTMENTS (OPD QUEUE MASTER & TOKEN MANAGER)
-              --------------------------------------------------------------------- */}
-          {activeTab === 'appointments' && (
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '22px', flexWrap: 'wrap', gap: '14px' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
-                      OPD Consultation Queue & Schedules
-                    </h2>
-                    <SampleDataChip />
-                  </div>
-                  <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
-                    Real-time outpatient queue management for District Hospital OPD • Runtime relative schedule.
+                    Unified outpatient consultation queue, appointment schedules, and longitudinal patient EHR dossiers for District Hospital OPD.
                   </p>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                   <button
-                    onClick={() => showPlannedNotice('Schedule New OPD Appointment')}
+                    onClick={() => setIsNewAppointmentModalOpen(true)}
                     style={{
-                      background: '#FAF8F5',
-                      border: '1px solid #CBD5E1',
+                      background: '#0F4C5C',
+                      border: 'none',
                       borderRadius: '12px',
-                      padding: '8px 14px',
-                      fontSize: '12px',
+                      padding: '8px 16px',
+                      fontSize: '12.5px',
                       fontWeight: 750,
-                      color: '#475569',
+                      color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
                     }}
                   >
                     <Plus size={14} />
                     <span>New Appointment</span>
-                    <span style={{ fontSize: '9px', background: '#E2E8F0', padding: '1px 6px', borderRadius: '8px', fontWeight: 800 }}>PLANNED</span>
                   </button>
 
                   <div style={{
@@ -1654,187 +1483,701 @@ export default function DoctorPortal({
                 </div>
               </div>
 
-              {/* Metric Counters (Computed directly from demo appointments) */}
+              {/* KPI Counters */}
               {(() => {
-                const todayAppts = DEMO_APPOINTMENTS.filter(a => a.offsetDays === 0);
-                const completedCount = DEMO_APPOINTMENTS.filter(a => a.status === 'Completed').length;
-                const upcomingCount = DEMO_APPOINTMENTS.filter(a => a.status === 'Upcoming').length;
+                const todayAppts = allAppointmentsList.filter(a => a.offsetDays === 0);
+                const completedCount = allAppointmentsList.filter(a => a.status === 'Completed').length;
+                const upcomingCount = allAppointmentsList.filter(a => a.status === 'Upcoming').length;
 
                 return (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
-                    <div style={{ background: '#ffffff', padding: '16px 20px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Today's Consultations</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+                    <div 
+                      onClick={() => setOpdViewMode('queue')}
+                      style={{ 
+                        background: '#ffffff', 
+                        padding: '16px 20px', 
+                        borderRadius: '14px', 
+                        border: opdViewMode === 'queue' ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: opdViewMode === 'queue' ? '0 4px 14px rgba(15, 76, 92, 0.12)' : 'none'
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's OPD Queue</div>
                       <div style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginTop: '4px' }}>{todayAppts.length} Patients</div>
-                      <div style={{ fontSize: '11px', color: '#D97706', marginTop: '2px' }}>Next session: {todayAppts[0]?.time || '10:00 AM'}</div>
+                      <div style={{ fontSize: '11px', color: '#D97706', marginTop: '2px', fontWeight: 600 }}>Next: {todayAppts[0]?.time || '10:00 AM'}</div>
                     </div>
 
-                    <div style={{ background: '#ffffff', padding: '16px 20px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Upcoming This Week</div>
-                      <div style={{ fontSize: '24px', fontWeight: 850, color: '#3B82F6', marginTop: '4px' }}>{upcomingCount} Scheduled</div>
+                    <div 
+                      onClick={() => setOpdViewMode('schedule')}
+                      style={{ 
+                        background: '#ffffff', 
+                        padding: '16px 20px', 
+                        borderRadius: '14px', 
+                        border: opdViewMode === 'schedule' ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: opdViewMode === 'schedule' ? '0 4px 14px rgba(15, 76, 92, 0.12)' : 'none'
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Upcoming Visits</div>
+                      <div style={{ fontSize: '24px', fontWeight: 850, color: '#2563EB', marginTop: '4px' }}>{upcomingCount} Scheduled</div>
                       <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>In-person & teleconsult</div>
                     </div>
 
-                    <div style={{ background: '#ffffff', padding: '16px 20px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Completed Visits</div>
+                    <div 
+                      onClick={() => setOpdViewMode('schedule')}
+                      style={{ 
+                        background: '#ffffff', 
+                        padding: '16px 20px', 
+                        borderRadius: '14px', 
+                        border: '1px solid #E2E8F0',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Completed Visits</div>
                       <div style={{ fontSize: '24px', fontWeight: 850, color: '#10B981', marginTop: '4px' }}>{completedCount} Recorded</div>
                       <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>With past encounter notes</div>
+                    </div>
+
+                    <div 
+                      onClick={() => setOpdViewMode('directory')}
+                      style={{ 
+                        background: '#ffffff', 
+                        padding: '16px 20px', 
+                        borderRadius: '14px', 
+                        border: opdViewMode === 'directory' ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: opdViewMode === 'directory' ? '0 4px 14px rgba(15, 76, 92, 0.12)' : 'none'
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>All Cohort Patients</div>
+                      <div style={{ fontSize: '24px', fontWeight: 850, color: '#0F4C5C', marginTop: '4px' }}>{patientsList.length} Registered</div>
+                      <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>Searchable ABHA dossiers</div>
                     </div>
                   </div>
                 );
               })()}
 
-              {/* Appointments List */}
-              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24' }}>
-                    Master Consultation Schedule (Runtime-Relative)
-                  </div>
-                  <span style={{ fontSize: '11px', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '3px 10px', borderRadius: '12px', fontWeight: 750 }}>
-                    Click any patient name to inspect EHR dossier
-                  </span>
+              {/* View Selector Switcher */}
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                marginBottom: '20px', 
+                background: '#FAF8F5', 
+                padding: '8px 12px', 
+                borderRadius: '16px', 
+                border: '1px solid #E2E8F0',
+                flexWrap: 'wrap',
+                gap: '12px'
+              }}>
+                <div style={{ display: 'inline-flex', background: '#E2E8F0', padding: '4px', borderRadius: '12px', gap: '4px' }}>
+                  <button
+                    onClick={() => setOpdViewMode('queue')}
+                    style={{
+                      padding: '8px 18px',
+                      borderRadius: '9px',
+                      border: 'none',
+                      background: opdViewMode === 'queue' ? '#0F4C5C' : 'transparent',
+                      color: opdViewMode === 'queue' ? '#ffffff' : '#475569',
+                      fontSize: '12.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <Clock size={14} />
+                    <span>Today's Live Queue ({allAppointmentsList.filter(a => a.offsetDays === 0).length})</span>
+                  </button>
+
+                  <button
+                    onClick={() => setOpdViewMode('schedule')}
+                    style={{
+                      padding: '8px 18px',
+                      borderRadius: '9px',
+                      border: 'none',
+                      background: opdViewMode === 'schedule' ? '#0F4C5C' : 'transparent',
+                      color: opdViewMode === 'schedule' ? '#ffffff' : '#475569',
+                      fontSize: '12.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <Calendar size={14} />
+                    <span>Consultation Schedules ({allAppointmentsList.length})</span>
+                  </button>
+
+                  <button
+                    onClick={() => setOpdViewMode('directory')}
+                    style={{
+                      padding: '8px 18px',
+                      borderRadius: '9px',
+                      border: 'none',
+                      background: opdViewMode === 'directory' ? '#0F4C5C' : 'transparent',
+                      color: opdViewMode === 'directory' ? '#ffffff' : '#475569',
+                      fontSize: '12.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <Users size={14} />
+                    <span>All Patients Registry ({patientsList.length})</span>
+                  </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {DEMO_APPOINTMENTS.map((item) => {
-                    const matchedPatient = patientsList.find(p => p.id === item.patientId) || patientsList[0];
-                    const isToday = item.offsetDays === 0;
-                    const isTeleconsult = item.isTeleconsult;
-                    const isCompleted = item.status === 'Completed';
+                {/* Quick Search */}
+                <div style={{ position: 'relative', width: '260px' }}>
+                  <Search size={14} color="#64748B" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input
+                    type="text"
+                    placeholder="Search patient, token, complaint..."
+                    value={patientSearchTerm}
+                    onChange={(e) => setPatientSearchTerm(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px 8px 34px',
+                      borderRadius: '20px',
+                      border: '1.5px solid #CBD5E1',
+                      fontSize: '12.5px',
+                      outline: 'none',
+                      background: '#ffffff',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              </div>
 
-                    return (
+              {/* -------------------------------------------------------------
+                  SUBVIEW 1: TODAY'S LIVE QUEUE
+                  ------------------------------------------------------------- */}
+              {opdViewMode === 'queue' && (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>
+                      Active Outpatient Tokens for Today ({formatDemoDate(0)})
+                    </div>
+                    <span style={{ fontSize: '11px', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '3px 10px', borderRadius: '12px', fontWeight: 750 }}>
+                      Live Queue • Priority Triage Automated
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {(() => {
+                      const todayAppts = allAppointmentsList.filter(a => a.offsetDays === 0);
+                      const matchingToday = todayAppts.filter(a => {
+                        if (!patientSearchTerm.trim()) return true;
+                        const term = patientSearchTerm.toLowerCase();
+                        return (
+                          a.patientName.toLowerCase().includes(term) ||
+                          a.token.toLowerCase().includes(term) ||
+                          a.complaint.toLowerCase().includes(term)
+                        );
+                      });
+
+                      if (matchingToday.length === 0) {
+                        return (
+                          <div style={{
+                            padding: '36px',
+                            textAlign: 'center',
+                            background: '#ffffff',
+                            borderRadius: '16px',
+                            border: '1px solid #E2E8F0',
+                            color: '#64748B'
+                          }}>
+                            <p style={{ margin: 0, fontWeight: 700 }}>No consultations in queue matching the criteria.</p>
+                            <button
+                              onClick={() => setPatientSearchTerm('')}
+                              style={{
+                                marginTop: '12px',
+                                padding: '6px 14px',
+                                borderRadius: '8px',
+                                border: '1px solid #CBD5E1',
+                                background: '#FAF8F5',
+                                cursor: 'pointer',
+                                fontSize: '12px',
+                                fontWeight: 700
+                              }}
+                            >
+                              Clear search
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      return matchingToday.map((appt) => {
+                        const pat = patientsList.find(p => p.id === appt.patientId) || patientsList[0];
+                        return (
+                          <div
+                            key={appt.id}
+                            style={{
+                              background: '#ffffff',
+                              borderRadius: '14px',
+                              padding: '18px 22px',
+                              border: '1.5px solid #F59E0B',
+                              boxShadow: '0 3px 12px rgba(245, 158, 11, 0.08)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              flexWrap: 'wrap',
+                              gap: '16px'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                              <div style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '12px',
+                                background: 'rgba(245, 158, 11, 0.15)',
+                                border: '1px solid rgba(245, 158, 11, 0.4)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 850,
+                                fontSize: '15px',
+                                color: '#B45309'
+                              }}>
+                                <span style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', color: '#78350F' }}>Token</span>
+                                {appt.token}
+                              </div>
+
+                              <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                  <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{appt.patientName}</span>
+                                  <span style={{ fontSize: '12px', color: '#64748B' }}>({pat.vernacular})</span>
+                                  <span style={{ fontSize: '10px', background: `${pat.triageColor}18`, color: pat.triageColor, padding: '2px 8px', borderRadius: '8px', fontWeight: 750 }}>
+                                    {pat.triage}
+                                  </span>
+                                  <span style={{ fontSize: '11px', color: '#0F4C5C', background: 'rgba(15, 76, 92, 0.08)', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
+                                    Slot: {appt.time}
+                                  </span>
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#64748B', marginTop: '3px' }}>
+                                  ABHA: <code>{pat.abhaId}</code> • {pat.age} y • {pat.gender} • {pat.language}
+                                </div>
+                                <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '4px' }}>
+                                  Chief Complaint: {appt.complaint}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                              {/* Vitals HUD */}
+                              <div style={{ textAlign: 'right', fontSize: '12px', color: '#475569' }}>
+                                <div>BP: <strong>{pat.vitals.bp}</strong> • HR: <strong>{pat.vitals.hr}</strong></div>
+                                <div>SpO2: <strong>{pat.vitals.spo2}</strong> {pat.vitals.rbs && `• RBS: ${pat.vitals.rbs}`}</div>
+                                {(() => {
+                                  const sys = parseInt(pat.vitals.bp?.split('/')[0]) || 120;
+                                  const hr = parseInt(pat.vitals.hr) || 76;
+                                  const spo2 = parseInt(pat.vitals.spo2) || 98;
+                                  const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
+                                  return (
+                                    <div style={{ fontSize: '11px', color: mews.riskColor, fontWeight: 750, marginTop: '2px' }}>
+                                      MEWS {mews.score} ({mews.riskLevel})
+                                    </div>
+                                  );
+                                })()}
+                              </div>
+
+                              <div style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                  onClick={() => setSelectedPatientModal(pat)}
+                                  style={{
+                                    padding: '8px 14px',
+                                    borderRadius: '10px',
+                                    border: '1.5px solid #CBD5E1',
+                                    background: '#ffffff',
+                                    color: '#081C24',
+                                    fontSize: '12px',
+                                    fontWeight: 700,
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  View EHR
+                                </button>
+
+                                <button
+                                  onClick={() => setActiveScribeSessionPatient(pat)}
+                                  style={{
+                                    padding: '8px 16px',
+                                    borderRadius: '10px',
+                                    border: 'none',
+                                    background: '#0F4C5C',
+                                    color: '#ffffff',
+                                    fontSize: '12px',
+                                    fontWeight: 750,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                                  }}
+                                >
+                                  <Mic size={14} />
+                                  <span>Start Voice Scribe</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              {/* -------------------------------------------------------------
+                  SUBVIEW 2: CONSULTATION SCHEDULES
+                  ------------------------------------------------------------- */}
+              {opdViewMode === 'schedule' && (
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24' }}>
+                      Master Consultation Schedule (Runtime-Relative)
+                    </div>
+                    <span style={{ fontSize: '11px', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '3px 10px', borderRadius: '12px', fontWeight: 750 }}>
+                      Click any patient to inspect EHR dossier or start scribe
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {allAppointmentsList.filter(item => {
+                      if (!patientSearchTerm.trim()) return true;
+                      const term = patientSearchTerm.toLowerCase();
+                      return (
+                        item.patientName.toLowerCase().includes(term) ||
+                        item.token.toLowerCase().includes(term) ||
+                        item.complaint.toLowerCase().includes(term)
+                      );
+                    }).map((item) => {
+                      const matchedPatient = patientsList.find(p => p.id === item.patientId) || patientsList[0];
+                      const isToday = item.offsetDays === 0;
+                      const isTeleconsult = item.isTeleconsult;
+                      const isCompleted = item.status === 'Completed';
+
+                      return (
+                        <div
+                          key={item.id}
+                          style={{
+                            padding: '16px 20px',
+                            borderRadius: '14px',
+                            background: isToday ? '#FFFBEB' : '#F8FAFC',
+                            border: isToday ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '14px',
+                            boxShadow: isToday ? '0 4px 14px rgba(245, 158, 11, 0.12)' : 'none'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                            <div style={{
+                              width: '42px',
+                              height: '42px',
+                              borderRadius: '10px',
+                              background: isToday ? '#F59E0B' : (isCompleted ? '#10B981' : '#0F4C5C'),
+                              color: '#ffffff',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 800,
+                              fontSize: '13px'
+                            }}>
+                              {item.token}
+                            </div>
+
+                            <div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                <span
+                                  onClick={() => setSelectedPatientModal(matchedPatient)}
+                                  style={{
+                                    fontSize: '15px',
+                                    fontWeight: 800,
+                                    color: '#081C24',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                    textDecorationColor: '#CBD5E1'
+                                  }}
+                                >
+                                  {item.patientName}
+                                </span>
+                                <span style={{ fontSize: '11px', color: '#64748B' }}>
+                                  ({item.language})
+                                </span>
+                                {isTeleconsult && (
+                                  <span style={{ fontSize: '10px', background: '#DBEAFE', color: '#1E40AF', padding: '2px 8px', borderRadius: '10px', fontWeight: 750 }}>
+                                    Teleconsult
+                                  </span>
+                                )}
+                                <span style={{
+                                  fontSize: '10px',
+                                  padding: '2px 8px',
+                                  borderRadius: '10px',
+                                  fontWeight: 750,
+                                  background: isCompleted ? '#DCFCE7' : (isToday ? '#FEF3C7' : '#E0E7FF'),
+                                  color: isCompleted ? '#166534' : (isToday ? '#92400E' : '#3730A3')
+                                }}>
+                                  {item.status} ({getRelativeDaysLabel(item.offsetDays)})
+                                </span>
+                              </div>
+
+                              <div style={{ fontSize: '12.5px', color: '#475569', marginTop: '3px' }}>
+                                <strong>{formatDemoDate(item.offsetDays)} at {item.time}</strong> • {item.complaint}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <button
+                              onClick={() => setSelectedPatientModal(matchedPatient)}
+                              style={{
+                                padding: '6px 12px',
+                                borderRadius: '8px',
+                                border: '1px solid #CBD5E1',
+                                background: '#ffffff',
+                                color: '#081C24',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Dossier
+                            </button>
+
+                            <button
+                              onClick={() => setActiveScribeSessionPatient(matchedPatient)}
+                              style={{
+                                padding: '6px 14px',
+                                borderRadius: '8px',
+                                border: 'none',
+                                background: '#0F4C5C',
+                                color: '#ffffff',
+                                fontSize: '12px',
+                                fontWeight: 750,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                              }}
+                            >
+                              <Mic size={14} />
+                              <span>Voice Scribe</span>
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* -------------------------------------------------------------
+                  SUBVIEW 3: ALL PATIENTS REGISTRY & LONGITUDINAL EHR
+                  ------------------------------------------------------------- */}
+              {opdViewMode === 'directory' && (
+                <div>
+                  {/* Filter Chips Bar */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      {[
+                        { key: 'all', label: 'All Registered' },
+                        { key: 'this_week', label: 'New This Week' },
+                        { key: 'has_upcoming', label: 'Has Upcoming Visit' },
+                        { key: 'urgent', label: 'High Priority Triage' }
+                      ].map(chip => (
+                        <button
+                          key={chip.key}
+                          onClick={() => setPatientTriageFilter(chip.key)}
+                          style={{
+                            padding: '6px 14px',
+                            borderRadius: '20px',
+                            border: 'none',
+                            background: patientTriageFilter === chip.key ? '#0A2540' : '#E2E8F0',
+                            color: patientTriageFilter === chip.key ? '#ffffff' : '#475569',
+                            fontSize: '12px',
+                            fontWeight: 750,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {chip.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+                      Showing {filteredPatients.length} of {patientsList.length} patients
+                    </div>
+                  </div>
+
+                  {/* Patient Table Grid */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {filteredPatients.length === 0 ? (
+                      <div style={{
+                        padding: '36px',
+                        textAlign: 'center',
+                        background: '#ffffff',
+                        borderRadius: '16px',
+                        border: '1px solid #E2E8F0',
+                        color: '#64748B'
+                      }}>
+                        <p style={{ margin: 0, fontWeight: 700 }}>No demo patients found matching "{patientSearchTerm}".</p>
+                        <button
+                          onClick={() => { setPatientSearchTerm(''); setPatientTriageFilter('all'); }}
+                          style={{
+                            marginTop: '12px',
+                            padding: '6px 14px',
+                            borderRadius: '8px',
+                            border: '1px solid #CBD5E1',
+                            background: '#FAF8F5',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            fontWeight: 700
+                          }}
+                        >
+                          Reset filters
+                        </button>
+                      </div>
+                    ) : null}
+
+                    {filteredPatients.map(pat => (
                       <div
-                        key={item.id}
+                        key={pat.id}
                         style={{
-                          padding: '16px 20px',
+                          background: '#ffffff',
                           borderRadius: '14px',
-                          background: isToday ? '#FFFBEB' : '#F8FAFC',
-                          border: isToday ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+                          padding: '18px 22px',
+                          border: '1px solid #E2E8F0',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           flexWrap: 'wrap',
-                          gap: '14px',
-                          boxShadow: isToday ? '0 4px 14px rgba(245, 158, 11, 0.12)' : 'none'
+                          gap: '16px'
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                          <span style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C', fontFamily: 'monospace', minWidth: '40px' }}>
-                            {item.token || 'T-OPD'}
-                          </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                          <div style={{
+                            width: '46px',
+                            height: '46px',
+                            borderRadius: '12px',
+                            background: 'rgba(15, 76, 92, 0.1)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 800,
+                            fontSize: '16px',
+                            color: '#0F4C5C'
+                          }}>
+                            {pat.token.split('-')[1]}
+                          </div>
                           <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                              <button
-                                onClick={() => setSelectedPatientModal(matchedPatient)}
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  padding: 0,
-                                  fontSize: '15px',
-                                  fontWeight: 800,
-                                  color: '#081C24',
-                                  cursor: 'pointer',
-                                  textDecoration: 'underline',
-                                  textDecorationColor: '#CBD5E1'
-                                }}
-                                title="Click to view EHR dossier"
-                              >
-                                {item.patientName}
-                              </button>
-                              <span style={{ fontSize: '11px', color: '#64748B' }}>
-                                • <code style={{ color: '#0F4C5C' }}>{item.patientId}</code>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{pat.name}</span>
+                              <span style={{ fontSize: '12px', color: '#64748B' }}>({pat.vernacular})</span>
+                              <span style={{ fontSize: '10px', background: `${pat.triageColor}18`, color: pat.triageColor, padding: '2px 8px', borderRadius: '8px', fontWeight: 750 }}>
+                                {pat.triage}
                               </span>
-                              <span style={{ fontSize: '11.5px', color: isToday ? '#D97706' : '#0284C7', fontWeight: 750 }}>
-                                • {item.time} ({item.relativeLabel})
-                              </span>
-                              {isTeleconsult && (
-                                <span style={{ fontSize: '10px', background: '#E0E7FF', color: '#4338CA', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>
-                                  📹 Teleconsult
-                                </span>
-                              )}
                             </div>
-                            <div style={{ fontSize: '12px', color: '#475569', marginTop: '3px' }}>
-                              {item.reason} • <span style={{ color: '#0F4C5C', fontWeight: 650 }}>{item.type}</span> • <span style={{ color: '#64748B' }}>Date: {item.dateFormatted}</span>
+                            <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                              ABHA: <code>{pat.abhaId}</code> • {pat.age} y • {pat.gender} • {pat.language}
+                            </div>
+                            <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '4px' }}>
+                              Chief Complaint: {pat.chiefComplaint}
                             </div>
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 800,
-                            padding: '4px 10px',
-                            borderRadius: '10px',
-                            background: isCompleted ? '#DCFCE7' : (isToday ? '#FEF3C7' : '#E0F2FE'),
-                            color: isCompleted ? '#15803D' : (isToday ? '#B45309' : '#0369A1')
-                          }}>
-                            {item.status.toUpperCase()}
-                          </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                          {/* Vitals HUD */}
+                          <div style={{ textAlign: 'right', fontSize: '12px', color: '#475569' }}>
+                            <div>BP: <strong>{pat.vitals.bp}</strong> • HR: <strong>{pat.vitals.hr}</strong></div>
+                            <div>SpO2: <strong>{pat.vitals.spo2}</strong> {pat.vitals.rbs && `• RBS: ${pat.vitals.rbs}`}</div>
+                            {(() => {
+                              const sys = parseInt(pat.vitals.bp?.split('/')[0]) || 120;
+                              const hr = parseInt(pat.vitals.hr) || 76;
+                              const spo2 = parseInt(pat.vitals.spo2) || 98;
+                              const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
+                              return (
+                                <div style={{ fontSize: '11px', color: mews.riskColor, fontWeight: 750, marginTop: '2px' }}>
+                                  MEWS {mews.score} ({mews.riskLevel})
+                                </div>
+                              );
+                            })()}
+                          </div>
 
-                          {isTeleconsult && !isCompleted && (
+                          <div style={{ display: 'flex', gap: '8px' }}>
                             <button
-                              onClick={() => showPlannedNotice('Video Teleconsult Room (WebRTC / SIP)')}
+                              onClick={() => setSelectedPatientModal(pat)}
                               style={{
-                                padding: '7px 14px',
-                                borderRadius: '8px',
-                                background: '#4F46E5',
-                                color: '#ffffff',
-                                border: 'none',
+                                padding: '8px 14px',
+                                borderRadius: '10px',
+                                border: '1.5px solid #CBD5E1',
+                                background: '#ffffff',
+                                color: '#081C24',
                                 fontSize: '12px',
-                                fontWeight: 800,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px'
+                                fontWeight: 700,
+                                cursor: 'pointer'
                               }}
                             >
-                              <span>Join Call</span>
-                              <span style={{ fontSize: '9px', background: 'rgba(255,255,255,0.2)', padding: '1px 5px', borderRadius: '6px' }}>PLANNED</span>
+                              View EHR
                             </button>
-                          )}
 
-                          <button
-                            onClick={() => setSelectedPatientModal(matchedPatient)}
-                            style={{
-                              padding: '7px 14px',
-                              borderRadius: '8px',
-                              border: '1.5px solid #CBD5E1',
-                              background: '#ffffff',
-                              color: '#081C24',
-                              fontSize: '12px',
-                              fontWeight: 750,
-                              cursor: 'pointer'
-                            }}
-                          >
-                            View EHR
-                          </button>
-
-                          <button
-                            onClick={() => setActiveScribeSessionPatient(matchedPatient)}
-                            style={{
-                              padding: '7px 16px',
-                              borderRadius: '8px',
-                              background: '#0F4C5C',
-                              color: '#ffffff',
-                              border: 'none',
-                              fontSize: '12px',
-                              fontWeight: 750,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px',
-                              boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
-                            }}
-                          >
-                            <Mic size={14} />
-                            <span>Voice Scribe</span>
-                          </button>
+                            <button
+                              onClick={() => setActiveScribeSessionPatient(pat)}
+                              style={{
+                                padding: '8px 16px',
+                                borderRadius: '10px',
+                                border: 'none',
+                                background: '#0F4C5C',
+                                color: '#ffffff',
+                                fontSize: '12px',
+                                fontWeight: 750,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                              }}
+                            >
+                              <Mic size={14} />
+                              <span>Start Voice Scribe</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+          )}
+
+          {/* ---------------------------------------------------------------------
+              TAB 3: AI CLINICAL ASSISTANT (ADVANCED CO-PILOT VIEW)
+              --------------------------------------------------------------------- */}
+          {activeTab === 'ai_assistant' && (
+            <DoctorAiAssistantTab
+              aiCategory={aiCategory}
+              setAiCategory={setAiCategory}
+              aiResponses={aiResponses}
+              aiPrompt={aiPrompt}
+              setAiPrompt={setAiPrompt}
+              handleAskAi={handleAskAi}
+            />
           )}
 
           {/* ---------------------------------------------------------------------
@@ -3397,6 +3740,243 @@ export default function DoctorPortal({
       {/* Indic Vernacular Semantic Hierarchy Modal */}
       
       
+      {/* Schedule New OPD Appointment Modal */}
+      {isNewAppointmentModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(8, 28, 36, 0.7)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '18px',
+            width: '100%',
+            maxWidth: '520px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+            border: '1px solid #CBD5E1',
+            overflow: 'hidden'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              background: '#0F4C5C',
+              color: '#ffffff',
+              padding: '18px 24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>
+                  Schedule New OPD Consultation
+                </h3>
+                <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
+                  Assign token, consultation slot & register chief complaint
+                </div>
+              </div>
+              <button
+                onClick={() => setIsNewAppointmentModalOpen(false)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  color: '#ffffff',
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleCreateAppointment} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24', display: 'block', marginBottom: '6px' }}>
+                  Select Patient (from Cohort / ABHA Registry)
+                </label>
+                <select
+                  value={newApptForm.patientId}
+                  onChange={(e) => {
+                    const pat = DEMO_PATIENTS.find(p => p.id === e.target.value);
+                    setNewApptForm(prev => ({
+                      ...prev,
+                      patientId: e.target.value,
+                      patientName: pat?.name || 'Walk-in Patient'
+                    }));
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #CBD5E1',
+                    fontSize: '13px',
+                    background: '#FAF8F5'
+                  }}
+                >
+                  {DEMO_PATIENTS.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.age}y {p.genderLabel || p.gender}) — {p.primaryCondition}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                <div>
+                  <label style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24', display: 'block', marginBottom: '6px' }}>
+                    Consultation Day
+                  </label>
+                  <select
+                    value={newApptForm.dateOffset}
+                    onChange={(e) => setNewApptForm(prev => ({ ...prev, dateOffset: Number(e.target.value) }))}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      border: '1.5px solid #CBD5E1',
+                      fontSize: '13px',
+                      background: '#FAF8F5'
+                    }}
+                  >
+                    <option value={0}>Today ({formatDemoDate(0)})</option>
+                    <option value={1}>Tomorrow ({formatDemoDate(1)})</option>
+                    <option value={2}>In 2 Days ({formatDemoDate(2)})</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24', display: 'block', marginBottom: '6px' }}>
+                    Time Slot
+                  </label>
+                  <select
+                    value={newApptForm.time}
+                    onChange={(e) => setNewApptForm(prev => ({ ...prev, time: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      border: '1.5px solid #CBD5E1',
+                      fontSize: '13px',
+                      background: '#FAF8F5'
+                    }}
+                  >
+                    <option value="11:30 AM">11:30 AM (Next Slot)</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="12:30 PM">12:30 PM</option>
+                    <option value="02:30 PM">02:30 PM</option>
+                    <option value="03:00 PM">03:00 PM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24', display: 'block', marginBottom: '6px' }}>
+                  Consultation Mode
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {[
+                    { label: 'In-Person OPD (Room 4)', val: 'In-Person OPD' },
+                    { label: 'Teleconsult (WhatsApp)', val: 'Teleconsult' }
+                  ].map(mode => (
+                    <button
+                      type="button"
+                      key={mode.val}
+                      onClick={() => setNewApptForm(prev => ({ ...prev, type: mode.val }))}
+                      style={{
+                        padding: '10px',
+                        borderRadius: '10px',
+                        border: newApptForm.type === mode.val ? '2px solid #0F4C5C' : '1px solid #CBD5E1',
+                        background: newApptForm.type === mode.val ? 'rgba(15, 76, 92, 0.08)' : '#FAF8F5',
+                        color: newApptForm.type === mode.val ? '#0F4C5C' : '#475569',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {mode.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24', display: 'block', marginBottom: '6px' }}>
+                  Chief Complaint / Reason for Visit
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newApptForm.complaint}
+                  onChange={(e) => setNewApptForm(prev => ({ ...prev, complaint: e.target.value }))}
+                  placeholder="e.g. Wheezing, dry cough & fever for 3 days"
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #CBD5E1',
+                    fontSize: '13px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsNewAppointmentModalOpen(false)}
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    borderRadius: '10px',
+                    border: '1px solid #CBD5E1',
+                    background: '#FAF8F5',
+                    color: '#475569',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    flex: 2,
+                    padding: '10px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    background: '#0F4C5C',
+                    color: '#ffffff',
+                    fontSize: '13px',
+                    fontWeight: 750,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                  }}
+                >
+                  Confirm & Generate Token
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Official Color Printable Prescription Modal */}
       {printableRxData && (
         <div className="modal-overlay" style={{
@@ -3637,12 +4217,14 @@ export default function DoctorPortal({
       )}
 
       {/* Live Ambient Voice Scribe Studio Modal (In-Situ Telemetry Studio) */}
-      <LiveScribeSessionModal
-        isOpen={!!activeScribeSessionPatient}
-        onClose={() => setActiveScribeSessionPatient(null)}
-        patientData={activeScribeSessionPatient}
-        doctorName={doctorName}
-      />
+      {activeScribeSessionPatient && (
+        <LiveScribeSessionModal
+          isOpen={!!activeScribeSessionPatient}
+          onClose={() => setActiveScribeSessionPatient(null)}
+          patientData={activeScribeSessionPatient}
+          doctorName={doctorName}
+        />
+      )}
 
       {/* WhatsApp Vernacular Audio-Rx Modal */}
       <WhatsAppAudioRxModal 
@@ -3692,13 +4274,13 @@ export default function DoctorPortal({
       >
         {[
           { id: 'dashboard', label: 'Dashboard', icon: Home },
-          { id: 'patients', label: 'Patients', icon: Users },
+          { id: 'opd_queue', label: 'Queue & Pts', icon: Users },
           { id: 'prescriptions', label: 'Rx Meds', icon: Pill },
           { id: 'reports', label: 'Labs', icon: FileText },
           { id: 'settings', label: 'Settings', icon: Settings }
         ].map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+          const isActive = activeTab === tab.id || (tab.id === 'opd_queue' && (activeTab === 'patients' || activeTab === 'appointments' || activeTab === 'opd_queue'));
           return (
             <button
               key={tab.id}
