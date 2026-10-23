@@ -1135,14 +1135,14 @@ h6 {
     min-height: 44px !important;
   }
 
-  /* Mobile Public Content Bottom Bar Clearance */
+  /* Mobile Public Content & Footer Spacing (Bottom nav removed) */
   .app-public-main,
   main:not(.portal-canvas-main) {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: 0 !important;
   }
 
   .site-footer {
-    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* Accidental pull-to-refresh overscroll guard on active interactive views */

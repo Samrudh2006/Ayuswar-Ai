@@ -239,7 +239,7 @@ export default function App() {
       <main 
         id="main-content"
         className={isDedicatedPortal ? 'portal-canvas-main' : 'app-public-main'}
-        style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto' }}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column', height: isDedicatedPortal ? '100vh' : 'auto', position: 'relative', zIndex: 1 }}
       >
         <React.Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
@@ -592,12 +592,6 @@ export default function App() {
         />
       )}
 
-      {/* Global Fixed Mobile Bottom Navigation Bar (Active on Mobile Screens) */}
-      <MobileAppBottomNav 
-        onOpenSanjivani={() => setIsSanjivaniModalOpen(true)}
-        onOpenDoctorAuth={() => setIsDoctorAuthModalOpen(true)}
-        onOpenPatientAuth={() => setIsPatientAuthModalOpen(true)}
-      />
 
       {/* Demo Recording Mode Overlay (Active only with ?demo-record=1) */}
       <DemoRecordingOverlay />

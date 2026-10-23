@@ -16,7 +16,7 @@ export default function MintIvoryWaveBackground() {
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 0,
+        zIndex: -1,
         pointerEvents: 'none',
         overflow: 'hidden',
         backgroundColor: '#FAF9F6',
