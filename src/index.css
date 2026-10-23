@@ -1671,11 +1671,169 @@ body {
   }
 }
 
+/* Section 2: Visual Comparison Pill Overlay Base (Desktop) */
+.hero-gap-pills-wrapper {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.hero-gap-pill {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-width: calc(50% - 10px);
+}
+
+.hero-gap-pill-left {
+  border: 1.5px solid rgba(239, 68, 68, 0.6);
+  color: #FCA5A5;
+}
+
+.hero-gap-pill-right {
+  border: 1.5px solid rgba(16, 185, 129, 0.7);
+  color: #6EE7B7;
+}
+
 /* =========================================================================
-   MOBILE RESPONSIVENESS SUITE (SECTIONS 3-8)
+   MOBILE RESPONSIVENESS SUITE (SECTIONS 1-8)
    Strictly scoped to <= 768px and <= 480px. Zero changes to desktop view.
    ========================================================================= */
 @media (max-width: 768px) {
+  /* Trust Strip: Clean 2x2 Grid on Mobile (All 4 items 100% visible) */
+  .hero-trust-strip-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px 10px !important;
+    padding-bottom: 20px !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-trust-strip-item {
+    gap: 10px !important;
+    min-width: 0 !important;
+  }
+
+  .hero-trust-strip-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 10px !important;
+  }
+
+  .hero-trust-strip-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .hero-trust-strip-title {
+    font-size: 14px !important;
+    letter-spacing: -0.3px !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero-trust-strip-sub {
+    font-size: 10.5px !important;
+  }
+
+  /* Section 2: Visual Comparison Card (Image 100% visible, pills docked below) */
+  .hero-gap-visual-card {
+    border-radius: 18px !important;
+    margin-bottom: 20px !important;
+    overflow: hidden !important;
+  }
+
+  .hero-gap-img {
+    height: 210px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .hero-gap-pills-wrapper {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    background: #0B132B !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-gap-pill {
+    max-width: 100% !important;
+    padding: 7px 10px !important;
+    border-radius: 10px !important;
+    font-size: 11.5px !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Section 2: Metrics Strip (Cards stack, each with 3 centered equal columns) */
+  .hero-gap-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-gap-metric-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 14px 14px !important;
+    gap: 10px !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-gap-metric-badge {
+    justify-content: flex-start !important;
+  }
+
+  .hero-gap-metric-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-gap-stat-divider {
+    display: none !important;
+  }
+
+  .hero-gap-stat-col {
+    text-align: center !important;
+    min-width: 0 !important;
+  }
+
+  .hero-gap-stat-col span:first-child {
+    font-size: 16px !important;
+  }
+
+  .hero-gap-stat-col span:last-child {
+    font-size: 9.5px !important;
+    line-height: 1.25 !important;
+    word-break: normal !important;
+  }
+
   /* Section 3: Closed-Loop Neural Bus & Stepped Pipeline */
   .hero-pipeline-step-labels {
     position: static !important;

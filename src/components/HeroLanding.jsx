@@ -1026,7 +1026,7 @@ export default function HeroLanding({
           position: 'relative',
           zIndex: 1
         }}>
-          <div style={{
+          <div className="hero-trust-strip-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '24px',
@@ -1035,43 +1035,43 @@ export default function HeroLanding({
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             paddingBottom: '28px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
                 <Globe2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Indic Voices</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Indic Voices</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24' }}>
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24' }}>
                 <Building2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Synthetic Data</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Synthetic Data</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
                 <Users2 size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Clinician Agency</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Clinician Agency</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399' }}>
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399' }}>
                 <HeartPulse size={24} />
               </div>
               <div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Assistive Prototype</div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Assistive Prototype</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
               </div>
             </div>
           </div>
@@ -1101,7 +1101,7 @@ export default function HeroLanding({
         </div>
 
         {/* Visual Comparison Card Featuring sec2_gap.png */}
-        <div style={{
+        <div className="hero-gap-visual-card" style={{
           position: 'relative',
           maxWidth: '1240px',
           margin: '0 auto 36px auto',
@@ -1114,6 +1114,7 @@ export default function HeroLanding({
           <img
             src="/assets/sections/sec2_gap.png"
             alt="The Clinical Gap: Left Keyboard Burnout vs Right Warm Ambient Eye-Contact"
+            className="hero-gap-img"
             style={{
               width: '100%',
               height: 'auto',
@@ -1123,57 +1124,30 @@ export default function HeroLanding({
               display: 'block'
             }}
           />
-          {/* Left HTML Overlay Pill */}
-          <div style={{
-            position: 'absolute',
-            bottom: '18px',
-            left: '20px',
-            background: 'rgba(15, 23, 42, 0.88)',
-            backdropFilter: 'blur(8px)',
-            border: '1.5px solid rgba(239, 68, 68, 0.6)',
-            borderRadius: '14px',
-            padding: '8px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#FCA5A5',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-            maxWidth: 'calc(50% - 30px)'
-          }}>
-            <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#EF4444' }} />
-            <div style={{ fontSize: '12px' }}>
-              <strong style={{ color: '#F87171' }}>TRADITIONAL OPD: </strong>
-              <span style={{ color: '#E2E8F0' }}>Keyboard Burnout • Patient Waiting • Zero Eye Contact</span>
+          {/* Overlay Pills Wrapper (Desktop: overlaid along bottom; Mobile: docked neatly so image is 100% visible) */}
+          <div className="hero-gap-pills-wrapper">
+            {/* Left Pill */}
+            <div className="hero-gap-pill hero-gap-pill-left">
+              <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#EF4444' }} />
+              <div style={{ fontSize: '12px' }}>
+                <strong style={{ color: '#F87171' }}>TRADITIONAL OPD: </strong>
+                <span style={{ color: '#E2E8F0' }}>Keyboard Burnout • Patient Waiting • Zero Eye Contact</span>
+              </div>
             </div>
-          </div>
 
-          {/* Right HTML Overlay Pill */}
-          <div style={{
-            position: 'absolute',
-            bottom: '18px',
-            right: '20px',
-            background: 'rgba(15, 23, 42, 0.88)',
-            backdropFilter: 'blur(8px)',
-            border: '1.5px solid rgba(16, 185, 129, 0.7)',
-            borderRadius: '14px',
-            padding: '8px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#6EE7B7',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-            maxWidth: 'calc(50% - 30px)'
-          }}>
-            <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
-            <div style={{ fontSize: '12px' }}>
-              <strong style={{ color: '#34D399' }}>AYUSWAR AMBIENT: </strong>
-              <span style={{ color: '#E2E8F0' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
+            {/* Right Pill */}
+            <div className="hero-gap-pill hero-gap-pill-right">
+              <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
+              <div style={{ fontSize: '12px' }}>
+                <strong style={{ color: '#34D399' }}>AYUSWAR AMBIENT: </strong>
+                <span style={{ color: '#E2E8F0' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Option A: Sleek Key Metrics Strip Directly Under sec2_gap.png */}
-        <div style={{
+        {/* Sleek Key Metrics Strip Directly Under sec2_gap.png */}
+        <div className="hero-gap-metrics-grid" style={{
           maxWidth: '1240px',
           margin: '0 auto',
           display: 'grid',
@@ -1181,7 +1155,7 @@ export default function HeroLanding({
           gap: '18px'
         }}>
           {/* Left Metrics (Status Quo Burnout) */}
-          <div style={{
+          <div className="hero-gap-metric-card hero-gap-metric-statusquo" style={{
             background: 'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)',
             border: '1.5px solid #F87171',
             borderRadius: '18px',
@@ -1192,22 +1166,22 @@ export default function HeroLanding({
             justifyContent: 'space-between',
             gap: '12px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="hero-gap-metric-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#EF4444' }} />
               <span style={{ fontSize: '12px', fontWeight: 800, color: '#B91C1C', textTransform: 'uppercase' }}>Status Quo</span>
             </div>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <div style={{ textAlign: 'center' }}>
+            <div className="hero-gap-metric-stats" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>9.4 min</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Typing Time</span>
               </div>
-              <div style={{ width: 1, height: 24, background: '#FECACA' }} />
-              <div style={{ textAlign: 'center' }}>
+              <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>24%</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
               </div>
-              <div style={{ width: 1, height: 24, background: '#FECACA' }} />
-              <div style={{ textAlign: 'center' }}>
+              <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>42%</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Medication Errors</span>
               </div>
@@ -1215,7 +1189,7 @@ export default function HeroLanding({
           </div>
 
           {/* Right Metrics (AyuSwar Ambient Freedom) */}
-          <div style={{
+          <div className="hero-gap-metric-card hero-gap-metric-ayuswar" style={{
             background: 'linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%)',
             border: '1.5px solid #34D399',
             borderRadius: '18px',
@@ -1226,22 +1200,22 @@ export default function HeroLanding({
             justifyContent: 'space-between',
             gap: '12px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="hero-gap-metric-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
               <span style={{ fontSize: '12px', fontWeight: 800, color: '#047857', textTransform: 'uppercase' }}>AyuSwar AI</span>
             </div>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <div style={{ textAlign: 'center' }}>
+            <div className="hero-gap-metric-stats" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>1.8 min</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#047857', fontWeight: 700 }}>78% Saved</span>
               </div>
-              <div style={{ width: 1, height: 24, background: '#A7F3D0' }} />
-              <div style={{ textAlign: 'center' }}>
+              <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>86%</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
               </div>
-              <div style={{ width: 1, height: 24, background: '#A7F3D0' }} />
-              <div style={{ textAlign: 'center' }}>
+              <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
+              <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>93.4%</span>
                 <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Doctor Approval</span>
               </div>
