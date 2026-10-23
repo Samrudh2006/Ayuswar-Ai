@@ -67,6 +67,17 @@ export default function HeroLanding({
   const [activeFeature, setActiveFeature] = useState(0);
   const [selectedFeatureModalKey, setSelectedFeatureModalKey] = useState(null);
 
+  // Responsive Viewport State: Strictly separates Mobile View from Laptop/Desktop View
+  const [isMobileView, setIsMobileView] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 900 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileView(window.innerWidth <= 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Dynamic Real-Time Typing Animation Phrases for Bharat Clinical Voice OS
   const typewriterPhrases = [
     'Listens in Telugu, Hindi, Tamil & 15+ Indic Dialects',
@@ -565,76 +576,80 @@ export default function HeroLanding({
           zIndex: 0
         }}></div>
 
-        {/* Dedicated Mobile-Only Doctor Background Visual (Fitted, Clean, Zero Text Mistakes) */}
-        <div className="hero-mobile-doctor-bg" aria-hidden="true">
-          <img
-            src="/assets/mobile_hero_doctor_bg.jpg"
-            alt=""
-            className="hero-mobile-doctor-bg-img"
-          />
-          <div className="hero-mobile-doctor-overlay"></div>
-        </div>
+        {/* Dedicated Mobile-Only Doctor Background Visual: ONLY rendered on Mobile (<= 900px), NEVER on Laptop/Desktop */}
+        {isMobileView && (
+          <div className="hero-mobile-doctor-bg" aria-hidden="true" style={{ position: 'absolute' }}>
+            <img
+              src="/assets/mobile_hero_doctor_bg.jpg"
+              alt=""
+              className="hero-mobile-doctor-bg-img"
+            />
+            <div className="hero-mobile-doctor-overlay"></div>
+          </div>
+        )}
 
-        {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual */}
-        <div className="hero-doctor-visual-container" style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: '54%',
-          minWidth: '520px',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'stretch',
-          justifyContent: 'flex-end',
-          pointerEvents: 'none',
-          zIndex: 1,
-          overflow: 'hidden'
-        }}>
-          <div style={{
-            position: 'relative',
-            width: '100%',
+        {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual: Strictly Laptop/Desktop (> 900px) */}
+        {!isMobileView && (
+          <div className="hero-doctor-visual-container" style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: '54%',
+            minWidth: '520px',
             height: '100%',
             display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end'
+            alignItems: 'stretch',
+            justifyContent: 'flex-end',
+            pointerEvents: 'none',
+            zIndex: 1,
+            overflow: 'hidden'
           }}>
-            <img
-              src="/assets/sections/sec1_hero.png"
-              alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'right 20%',
-                filter: 'contrast(1.02) saturate(1.02)',
-                imageRendering: '-webkit-optimize-contrast',
-                userSelect: 'none',
-                display: 'block',
-                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)'
-              }}
-              onError={(e) => {
-                e.target.src = '/assets/ayuswar_doctor_hero_no_header.png';
-              }}
-            />
             <div style={{
-              position: 'absolute',
-              bottom: '12px',
-              right: '16px',
-              background: 'rgba(10, 37, 64, 0.75)',
-              backdropFilter: 'blur(4px)',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              fontSize: '10px',
-              color: '#94A3B8',
-              letterSpacing: '0.3px',
-              border: '1px solid rgba(255,255,255,0.1)'
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end'
             }}>
-              Illustrative image / simulation
+              <img
+                src="/assets/sections/sec1_hero.png"
+                alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'right 20%',
+                  filter: 'contrast(1.02) saturate(1.02)',
+                  imageRendering: '-webkit-optimize-contrast',
+                  userSelect: 'none',
+                  display: 'block',
+                  maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 12%, black 35%)'
+                }}
+                onError={(e) => {
+                  e.target.src = '/assets/ayuswar_doctor_hero_no_header.png';
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                bottom: '12px',
+                right: '16px',
+                background: 'rgba(10, 37, 64, 0.75)',
+                backdropFilter: 'blur(4px)',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '10px',
+                color: '#94A3B8',
+                letterSpacing: '0.3px',
+                border: '1px solid rgba(255,255,255,0.1)'
+              }}>
+                Illustrative image / simulation
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Hero Left Content Container */}
         <div style={{

@@ -88,6 +88,16 @@ export default function Navbar({
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  const [isMobileNavbar, setIsMobileNavbar] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 640 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileNavbar(window.innerWidth <= 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const currentPath = location.pathname;
 
   const isSolutionsActive = currentPath.startsWith('/solutions') || currentPath === '/scanner' || currentPath === '/audio-rx' || currentPath === '/acoustic-lab';
@@ -438,8 +448,7 @@ export default function Navbar({
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
               <PhoneCall size={14} style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
-              <span className="sanjivani-btn-desktop">🚨 Sanjivani-108</span>
-              <span className="sanjivani-btn-mobile">🚨 108</span>
+              <span>{isMobileNavbar ? '🚨 108' : '🚨 Sanjivani-108'}</span>
             </button>
 
             {/* Shared Language Selector */}
