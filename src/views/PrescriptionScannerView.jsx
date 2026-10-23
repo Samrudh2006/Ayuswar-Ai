@@ -202,6 +202,8 @@ export default function PrescriptionScannerView() {
   const { isDemoMode } = useApp();
   const [selectedSampleIdx, setSelectedSampleIdx] = useState(0);
   const [isScanning, setIsScanning] = useState(false);
+  const [ocrPhase, setOcrPhase] = useState('idle'); // 'idle' | 'preprocessing' | 'loading-wasm' | 'recognizing' | 'success' | 'empty-error' | 'failed'
+  const [measuredProgress, setMeasuredProgress] = useState(null); // numeric progress exposed ONLY when measured
   const [ocrProgress, setOcrProgress] = useState(0);
   const [ocrStatusText, setOcrStatusText] = useState('');
   const [activeTab, setActiveTab] = useState('samples'); // 'samples' | 'camera' | 'upload'
@@ -216,6 +218,7 @@ export default function PrescriptionScannerView() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
+  const ocrAbortRef = useRef(false);
 
   const OCR_SAMPLES = [
     {
@@ -412,14 +415,18 @@ export default function PrescriptionScannerView() {
 
   // Run Real In-Browser Tesseract.js OCR with OpenCV Preprocessing
   const executeRealOcr = async (imageSource) => {
+    ocrAbortRef.current = false;
     setIsScanning(true);
-    setOcrProgress(10);
-    setOcrStatusText('Applying OpenCV Otsu Binarization & Adaptive Foil Contrast...');
+    setOcrPhase('preprocessing');
+    setMeasuredProgress(null); // No fixed numeric progress during preparation
+    setOcrProgress(0);
+    setOcrStatusText('Reading image on your device: Preparing foil contours...');
 
     let imageToOcr = imageSource;
     if (useCvEnhancement) {
       try {
         const cvResult = await openCvPreprocessor.preprocessForOcr(imageSource);
+        if (ocrAbortRef.current) return;
         imageToOcr = cvResult.processedDataUrl;
         setCvPreprocessedUrl(cvResult.processedDataUrl);
         setCvStats(cvResult.stats);
@@ -428,78 +435,116 @@ export default function PrescriptionScannerView() {
       }
     }
 
+    if (ocrAbortRef.current) return;
+
     try {
-      setOcrStatusText('Running Tesseract.js WASM on enhanced blister contours...');
+      setOcrPhase('loading-wasm');
+      setMeasuredProgress(null);
+      setOcrStatusText('Reading image on your device: Initializing local WASM engine...');
+
       const result = await Tesseract.recognize(
         imageToOcr,
         'eng',
         {
           logger: (m) => {
+            if (ocrAbortRef.current) return;
+            // Connect fill ONLY to actual Tesseract recognizing-text progress
             if (m.status === 'recognizing text') {
-              const pct = Math.round((m.progress || 0) * 100);
+              setOcrPhase('recognizing');
+              const pct = Math.min(99, Math.max(1, Math.round((m.progress || 0) * 100)));
+              setMeasuredProgress(pct);
               setOcrProgress(pct);
-              setOcrStatusText(`Reading text from physical packaging (${pct}%)...`);
+              setOcrStatusText(`Reading image on your device: Extracting packaging text (${pct}%)...`);
             } else if (m.status) {
-              setOcrStatusText(`WASM Pipeline: ${m.status}...`);
+              setOcrStatusText(`Reading image on your device: ${m.status}...`);
             }
           }
         }
       );
 
+      if (ocrAbortRef.current) return;
+
       const rawText = result.data.text ? result.data.text.trim() : '';
+
+      // On error/empty result: stop animation and offer clearer-image retry, NO success check!
+      if (!rawText || rawText.length < 3) {
+        setOcrPhase('empty-error');
+        setMeasuredProgress(null);
+        setOcrProgress(0);
+        setOcrStatusText('No legible text found. Please hold medicine strip flat under bright light.');
+        return;
+      }
+
+      // Show 100% + check only after successful processing with non-empty text
+      setOcrPhase('success');
+      setMeasuredProgress(100);
+      setOcrProgress(100);
+      setOcrStatusText('Reading image on your device: Text recognized successfully!');
+
       const { batch, expiry } = extractBatchAndExpiry(rawText);
       const matchedDrug = matchDrugFromOcrText(rawText);
 
-      if (matchedDrug) {
-        setLiveOcrResult({
-          isLiveExtraction: true,
-          brand: `${matchedDrug.brand} [Live OCR Extracted]`,
-          genericSalt: matchedDrug.genericSalt,
-          nfiCode: matchedDrug.nfiCode,
-          dosageForm: matchedDrug.dosageForm,
-          realImageUrl: matchedDrug.imageUrl,
-          janAushadhiGeneric: matchedDrug.janAushadhiGeneric,
-          brandedPrice: matchedDrug.brandedPrice,
-          janAushadhiPrice: matchedDrug.janAushadhiPrice,
-          savingsPct: matchedDrug.savingsPct,
-          extractedText: rawText || 'No text extracted',
-          batchNumber: batch || 'Detected on packaging',
-          expiryDate: expiry || 'Inspected',
-          vernacularTe: matchedDrug.vernacularTe,
-          ddiConflict: matchedDrug.ddiConflict,
-          pillColor: '#0F4C5C',
-          imagePlaceholderColor: '#E6FAF8'
-        });
-      } else {
-        // Fallback with raw extracted text
-        setLiveOcrResult({
-          isLiveExtraction: true,
-          brand: rawText ? `Extracted Text: ${rawText.slice(0, 32)}...` : 'Unrecognized Packaging Text',
-          genericSalt: rawText ? 'Text extracted • Resolving against National Formulary...' : 'No legible medicine name detected. Please ensure bright lighting.',
-          nfiCode: 'NFI-PENDING-MATCH',
-          dosageForm: 'Solid Dosage Form',
-          realImageUrl: imageToOcr || '/images/medicines/silver_amoxicillin_blister.jpg',
-          janAushadhiGeneric: 'PMBJP Generic Formulary',
-          brandedPrice: 'Check local MRP',
-          janAushadhiPrice: 'Affordable PMBJP Tier',
-          savingsPct: '50-80%',
-          vernacularTe: 'వైద్యుని సలహా ప్రకారం జెనెరిక్ ఔషధాల వివరాలు చూడండి',
-          extractedText: rawText || 'No legible text extracted. Ensure strip is held flat under good lighting.',
-          batchNumber: batch || 'Not identified',
-          expiryDate: expiry || 'Not identified',
-          ddiConflict: null,
-          pillColor: '#64748B',
-          imagePlaceholderColor: '#F1F5F9'
-        });
-      }
+      setTimeout(() => {
+        if (matchedDrug) {
+          setLiveOcrResult({
+            isLiveExtraction: true,
+            brand: `${matchedDrug.brand} [Live OCR Extracted]`,
+            genericSalt: matchedDrug.genericSalt,
+            nfiCode: matchedDrug.nfiCode,
+            dosageForm: matchedDrug.dosageForm,
+            realImageUrl: matchedDrug.imageUrl,
+            janAushadhiGeneric: matchedDrug.janAushadhiGeneric,
+            brandedPrice: matchedDrug.brandedPrice,
+            janAushadhiPrice: matchedDrug.janAushadhiPrice,
+            savingsPct: matchedDrug.savingsPct,
+            extractedText: rawText || 'No text extracted',
+            batchNumber: batch || 'Detected on packaging',
+            expiryDate: expiry || 'Inspected',
+            vernacularTe: matchedDrug.vernacularTe,
+            ddiConflict: matchedDrug.ddiConflict,
+            pillColor: '#0F4C5C',
+            imagePlaceholderColor: '#E6FAF8'
+          });
+        } else {
+          // Fallback with raw extracted text
+          setLiveOcrResult({
+            isLiveExtraction: true,
+            brand: `Extracted Text: ${rawText.slice(0, 32)}...`,
+            genericSalt: 'Text extracted • Resolving against National Formulary...',
+            nfiCode: 'NFI-PENDING-MATCH',
+            dosageForm: 'Solid Dosage Form',
+            realImageUrl: imageToOcr || '/images/medicines/silver_amoxicillin_blister.jpg',
+            janAushadhiGeneric: 'PMBJP Generic Formulary',
+            brandedPrice: 'Check local MRP',
+            janAushadhiPrice: 'Affordable PMBJP Tier',
+            savingsPct: '50-80%',
+            vernacularTe: 'వైద్యుని సలహా ప్రకారం జెనెరిక్ ఔషధాల వివరాలు చూడండి',
+            extractedText: rawText,
+            batchNumber: batch || 'Not identified',
+            expiryDate: expiry || 'Not identified',
+            ddiConflict: null,
+            pillColor: '#64748B',
+            imagePlaceholderColor: '#F1F5F9'
+          });
+        }
+        setIsScanning(false);
+        setOcrPhase('idle');
+      }, 750);
     } catch (ocrErr) {
       console.error("Tesseract OCR execution error:", ocrErr);
-      setCameraError("OCR recognition encountered an error. Falling back to reference formulary.");
-    } finally {
-      setIsScanning(false);
-      setOcrProgress(100);
-      setOcrStatusText('');
+      setOcrPhase('failed');
+      setMeasuredProgress(null);
+      setCameraError("OCR recognition encountered an error. Please try uploading a clearer image.");
     }
+  };
+
+  const handleCancelOcr = () => {
+    ocrAbortRef.current = true;
+    setIsScanning(false);
+    setOcrPhase('idle');
+    setMeasuredProgress(null);
+    setOcrProgress(0);
+    setOcrStatusText('');
   };
 
   // Capture video frame to canvas & run OCR
@@ -901,31 +946,125 @@ export default function PrescriptionScannerView() {
                 </div>
               )}
 
-              {/* Scanning Active Overlay with Real Tesseract Progress */}
+              {/* Teal Liquid Wave in Rounded Medicine-Foil Container */}
               {isScanning && (
-                <div style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'rgba(10, 37, 64, 0.92)',
-                  backdropFilter: 'blur(4px)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  padding: '20px',
-                  color: '#FFFFFF'
-                }}>
-                  <RefreshCw size={26} style={{ animation: 'spin 1s linear infinite', color: '#2DD4BF' }} />
-                  <div style={{ fontSize: '13px', fontWeight: 800, textAlign: 'center' }}>
-                    {ocrStatusText || 'Executing Client-Side Tesseract OCR...'}
+                <div
+                  role="progressbar"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow={measuredProgress ?? undefined}
+                  aria-live="polite"
+                  aria-label="Reading medicine blister foil image on your device"
+                  className="ayuswar-foil-liquid-overlay"
+                >
+                  <div className="ayuswar-foil-blister-card">
+                    {/* Metallic Foil Texture Highlight */}
+                    <div className="ayuswar-foil-emboss-pattern" />
+
+                    {/* Liquid Reservoir */}
+                    <div
+                      className={`ayuswar-liquid-body ${
+                        ocrPhase === 'preprocessing' || ocrPhase === 'loading-wasm'
+                          ? 'ayuswar-liquid-indeterminate'
+                          : ocrPhase === 'empty-error' || ocrPhase === 'failed'
+                          ? 'ayuswar-liquid-drained'
+                          : ''
+                      }`}
+                      style={{
+                        height:
+                          ocrPhase === 'recognizing' && measuredProgress !== null
+                            ? `${measuredProgress}%`
+                            : ocrPhase === 'success'
+                            ? '100%'
+                            : ocrPhase === 'empty-error' || ocrPhase === 'failed'
+                            ? '0%'
+                            : '22%'
+                      }}
+                    >
+                      {/* Sinusoidal Wave Crest */}
+                      <svg
+                        className="ayuswar-liquid-wave-svg"
+                        viewBox="0 0 400 30"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M 0 15 Q 50 0 100 15 T 200 15 T 300 15 T 400 15 L 400 30 L 0 30 Z"
+                          fill="rgba(45, 212, 191, 0.95)"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Foil Blister Cavity Rim Indicator */}
+                    <div className="ayuswar-foil-pill-rim" />
+
+                    {/* Center Phase Icon / Percentage Display */}
+                    <div className="ayuswar-foil-center-hud">
+                      {ocrPhase === 'success' ? (
+                        <div className="ayuswar-liquid-success-badge">
+                          <CheckCircle2 size={30} color="#FFFFFF" />
+                          <span style={{ fontSize: '11px', fontWeight: 900, color: '#FFFFFF' }}>100%</span>
+                        </div>
+                      ) : ocrPhase === 'empty-error' || ocrPhase === 'failed' ? (
+                        <div className="ayuswar-liquid-error-badge">
+                          <AlertTriangle size={26} color="#F59E0B" />
+                        </div>
+                      ) : measuredProgress !== null ? (
+                        <div className="ayuswar-liquid-percent-readout">
+                          <span className="ayuswar-liquid-num">{measuredProgress}</span>
+                          <span className="ayuswar-liquid-pct">%</span>
+                        </div>
+                      ) : (
+                        <div className="ayuswar-liquid-prep-pulse">
+                          <Scan size={24} color="#2DD4BF" className="ayuswar-liquid-scan-icon" />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {/* Progress Bar */}
-                  <div style={{ width: '80%', height: '6px', background: 'rgba(255,255,255,0.2)', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div style={{ width: `${ocrProgress}%`, height: '100%', background: '#2DD4BF', transition: 'width 200ms ease' }} />
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>
-                    WASM Engine running in browser • Zero cloud upload
+
+                  {/* Accessible Status Copy & Action */}
+                  <div className="ayuswar-liquid-status-block">
+                    <div className="ayuswar-liquid-primary-label">
+                      Reading image on your device
+                    </div>
+                    <div className="ayuswar-liquid-subtext">
+                      {ocrPhase === 'preprocessing' && 'Enhancing foil contrast with OpenCV.js...'}
+                      {ocrPhase === 'loading-wasm' && 'Initializing in-memory Tesseract WASM...'}
+                      {ocrPhase === 'recognizing' && (
+                        <span>
+                          Extracting text: <strong>{measuredProgress}%</strong>
+                        </span>
+                      )}
+                      {ocrPhase === 'success' && 'Text recognized successfully!'}
+                      {ocrPhase === 'empty-error' && 'No legible text detected. Ensure strip is held flat.'}
+                      {ocrPhase === 'failed' && 'Recognition failed. Please try a clearer picture.'}
+                    </div>
+                    <div className="ayuswar-liquid-privacy-badge">
+                      🔒 Client-side execution • Image stays on your device
+                    </div>
+
+                    {/* Actions: Cancel during run, or Retry on empty/error */}
+                    {(ocrPhase === 'empty-error' || ocrPhase === 'failed') ? (
+                      <button
+                        onClick={() => {
+                          setOcrPhase('idle');
+                          setIsScanning(false);
+                          setUploadedImage(null);
+                        }}
+                        className="ayuswar-liquid-retry-btn"
+                      >
+                        <RefreshCw size={13} />
+                        <span>Retry with Clearer Image</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleCancelOcr}
+                        className="ayuswar-liquid-cancel-btn"
+                      >
+                        <X size={13} />
+                        <span>Cancel</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -1237,6 +1376,230 @@ export default function PrescriptionScannerView() {
           </div>
         </div>
       </div>
+
+      {/* Scoped CSS for Teal Liquid Wave in Rounded Foil Container */}
+      <style>{`
+        .ayuswar-foil-liquid-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(8, 28, 36, 0.94);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          padding: 16px;
+          z-index: 50;
+        }
+
+        /* Medicine Foil Container */
+        .ayuswar-foil-blister-card {
+          position: relative;
+          width: 140px;
+          height: 165px;
+          border-radius: 28px;
+          border: 2px solid #2DD4BF;
+          background: radial-gradient(circle at 50% 30%, #0F3B4A 0%, #061B23 100%);
+          box-shadow: 0 10px 30px rgba(15, 76, 92, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+          overflow: hidden;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+        }
+
+        .ayuswar-foil-emboss-pattern {
+          position: absolute;
+          inset: 0;
+          background-image: radial-gradient(rgba(45, 212, 191, 0.12) 1px, transparent 1px);
+          background-size: 8px 8px;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        .ayuswar-foil-pill-rim {
+          position: absolute;
+          top: 14px;
+          bottom: 14px;
+          left: 20px;
+          right: 20px;
+          border-radius: 999px;
+          border: 1px dashed rgba(255, 255, 255, 0.2);
+          pointer-events: none;
+          z-index: 3;
+        }
+
+        /* Teal Liquid Wave Body */
+        .ayuswar-liquid-body {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(180deg, #2DD4BF 0%, #0F4C5C 80%, #08232C 100%);
+          transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: 1;
+        }
+
+        .ayuswar-liquid-indeterminate {
+          animation: liquidWaveHover 2.2s ease-in-out infinite alternate;
+        }
+
+        .ayuswar-liquid-drained {
+          background: rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .ayuswar-liquid-wave-svg {
+          position: absolute;
+          top: -12px;
+          left: 0;
+          width: 200%;
+          height: 14px;
+          animation: liquidWaveSlide 2.5s linear infinite;
+        }
+
+        .ayuswar-foil-center-hud {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 4;
+          pointer-events: none;
+        }
+
+        .ayuswar-liquid-percent-readout {
+          display: flex;
+          align-items: baseline;
+          gap: 2px;
+          color: #FFFFFF;
+          font-family: Outfit, sans-serif;
+          font-weight: 850;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .ayuswar-liquid-num {
+          font-size: 32px;
+          line-height: 1;
+        }
+
+        .ayuswar-liquid-pct {
+          font-size: 14px;
+          color: #2DD4BF;
+        }
+
+        .ayuswar-liquid-success-badge {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          animation: successPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ayuswar-liquid-scan-icon {
+          animation: iconFloat 2s ease-in-out infinite;
+        }
+
+        /* Status copy */
+        .ayuswar-liquid-status-block {
+          text-align: center;
+          max-width: 290px;
+          color: #FFFFFF;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .ayuswar-liquid-primary-label {
+          font-size: 13.5px;
+          font-weight: 800;
+          letter-spacing: -0.2px;
+          color: #FFFFFF;
+        }
+
+        .ayuswar-liquid-subtext {
+          font-size: 11.5px;
+          color: #D1E1E6;
+          line-height: 1.4;
+        }
+
+        .ayuswar-liquid-privacy-badge {
+          font-size: 9.5px;
+          font-weight: 750;
+          color: #2DD4BF;
+          background: rgba(45, 212, 191, 0.12);
+          border: 1px solid rgba(45, 212, 191, 0.25);
+          padding: 2px 8px;
+          border-radius: 6px;
+          margin-top: 2px;
+        }
+
+        .ayuswar-liquid-cancel-btn {
+          margin-top: 8px;
+          padding: 6px 14px;
+          min-height: 38px;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #E2E8F0;
+          font-size: 11.5px;
+          font-weight: 700;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          transition: background 0.15s ease;
+        }
+
+        .ayuswar-liquid-retry-btn {
+          margin-top: 8px;
+          padding: 7px 16px;
+          min-height: 40px;
+          border-radius: 8px;
+          background: #D97706;
+          border: none;
+          color: #FFFFFF;
+          font-size: 12px;
+          font-weight: 800;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+        }
+
+        @keyframes liquidWaveSlide {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        @keyframes liquidWaveHover {
+          0% { height: 18%; }
+          100% { height: 26%; }
+        }
+
+        @keyframes iconFloat {
+          0%, 100% { transform: translateY(0); opacity: 0.7; }
+          50% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        @keyframes successPop {
+          0% { transform: scale(0.6); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* prefers-reduced-motion: static status, no waves/ripples/spinners */
+        @media (prefers-reduced-motion: reduce) {
+          .ayuswar-liquid-wave-svg,
+          .ayuswar-liquid-indeterminate,
+          .ayuswar-liquid-scan-icon,
+          .ayuswar-liquid-success-badge {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

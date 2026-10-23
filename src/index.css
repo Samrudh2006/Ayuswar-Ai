@@ -478,6 +478,30 @@ h6 {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
 
+/* Bento Architecture Matrix — Arranged 3 and 3 on Laptop/Desktop */
+.hero-bento-grid-matrix {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 18px !important;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) and (min-width: 641px) {
+  .hero-bento-grid-matrix {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-bento-grid-matrix {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
 /* Modal Appear Transition */
 .modal-overlay {
   background: rgba(6, 26, 45, 0.75);
@@ -2273,10 +2297,21 @@ body {
   .scanner-view-container,
   .audiorx-view-container,
   .acoustic-lab-container,
-  .detailed-module-container,
   .emergency-view-container,
   .prescription-preview-container {
     padding: 14px 10px 40px 10px !important;
+  }
+
+  .detailed-module-container {
+    padding: 0 !important;
+  }
+
+  .detailed-module-main-body {
+    padding: 12px 10px 40px 10px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 }
 

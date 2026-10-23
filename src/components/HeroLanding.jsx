@@ -1469,13 +1469,8 @@ export default function HeroLanding({
             </span>
           </div>
 
-          {/* Native CSS Responsive Bento Grid (Zero misalignment, crisp, readable 13-14px typography) */}
-          <div className="hero-bento-grid-matrix" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-            gap: '18px',
-            position: 'relative'
-          }}>
+          {/* Native CSS Responsive Bento Grid (Arranged 3 and 3 for laptop view) */}
+          <div className="hero-bento-grid-matrix">
             {[
               {
                 id: 'spectrogram',
@@ -2451,17 +2446,20 @@ export default function HeroLanding({
           </div>
 
           {/* Interactive Dialect Atlas Console: 2-Column Side-by-Side */}
-          <div className="hero-dialect-atlas-grid" style={{
+          <div className="hero-dialect-outer-card" style={{
             background: '#ffffff',
             borderRadius: '28px',
             border: '2px solid #94A3B8',
             boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
-            padding: '24px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-            gap: '24px',
-            alignItems: 'start'
+            padding: '24px'
           }}>
+            <div className="hero-dialect-atlas-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+              gap: '24px',
+              alignItems: 'stretch',
+              marginBottom: '20px'
+            }}>
             {/* Left Column: Interactive Regional Dialect Showcase (10/10 Clean Design, Zero Collision) */}
             <div className="hero-dialect-left-card" style={{
               background: '#FFFFFF',
@@ -2836,8 +2834,9 @@ export default function HeroLanding({
                 })}
               </div>
             </div>
+            </div>
 
-            {/* Bottom Actions Bar */}
+            {/* Bottom Actions Bar (Full Width across both columns) */}
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', borderTop: '1px solid #E2E8F0', paddingTop: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '13px', color: '#64748B' }}>

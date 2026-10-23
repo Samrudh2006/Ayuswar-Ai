@@ -1964,6 +1964,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   <input
                     type="text"
                     required
+                    autoComplete="off"
+                    data-lpignore="true"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     placeholder={userType === 'doctor' ? 'e.g. dr.priya@kurnoolphc.abdm.in' : (userType === 'hospital' ? 'e.g. phc.kurnool@abdm.gov.in' : 'e.g. lakshmi.amma@91-8842-1920-5511')}
@@ -2003,6 +2005,11 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   <input
                     type={showPassword ? 'text' : 'password'}
                     required
+                    autoComplete="new-password"
+                    data-lpignore="true"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"

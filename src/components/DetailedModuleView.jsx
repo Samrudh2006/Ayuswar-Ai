@@ -289,17 +289,19 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       </div>
 
       {/* Main Studio Two-Column Layout */}
-      <div className="opd-dual-studio-workspace" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '20px' }}>
+      <div className="opd-dual-studio-workspace" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '16px', width: '100%', boxSizing: 'border-box' }}>
         {/* Left Column: Interactive Dialogue Timeline */}
         <div style={{
           background: '#ffffff',
           borderRadius: '24px',
           border: '1.5px solid #E2E8F0',
-          padding: '24px',
+          padding: 'clamp(14px, 3.5vw, 24px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px'
+          gap: '16px',
+          minWidth: 0,
+          boxSizing: 'border-box'
         }}>
           {/* Timeline Controls */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #F1F5F9', paddingBottom: '14px' }}>
@@ -455,11 +457,13 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           background: 'linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%)',
           borderRadius: '24px',
           border: '1.5px solid #CBD5E1',
-          padding: '24px',
+          padding: 'clamp(14px, 3.5vw, 24px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px'
+          gap: '16px',
+          minWidth: 0,
+          boxSizing: 'border-box'
         }}>
           {/* Note Header */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #E2E8F0', paddingBottom: '12px' }}>
@@ -673,13 +677,13 @@ export default function DetailedModuleView({
           subtitle: 'How rural Telugu, Hindi, and colloquial idioms map accurately into WHO ICD-10.',
           content: (
             <div className="space-y-8">
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+              <div className="p-3 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4 sm:space-y-6 w-full max-w-full box-border overflow-hidden">
                 <h3 className="text-xl font-bold text-slate-900">Authentic Vernacular Metaphor Translation Engine</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Rural patients never describe their ailments using textbook clinical terminology like <em>"Palpitations"</em> or <em>"Diaphoresis"</em>. Instead, they use visceral cultural metaphors. Conventional LLMs fail completely because literal translations lose clinical meaning.
                 </p>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto w-full -mx-1 sm:mx-0">
                   <table className="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
                     <thead className="bg-slate-100 text-slate-700 font-bold uppercase">
                       <tr>
@@ -1869,7 +1873,7 @@ export default function DetailedModuleView({
       </div>
 
       {/* Main Multi-Page Section Content */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
+      <div className="detailed-module-main-body" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(16px, 3vw, 32px) clamp(10px, 3vw, 24px)', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div style={{ borderBottom: '1px solid #E2E8F0', paddingBottom: '16px' }}>
             <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#0F172A', margin: 0, letterSpacing: '-0.01em' }}>

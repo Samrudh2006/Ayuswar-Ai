@@ -311,6 +311,8 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="password"
+                    autoComplete="new-password"
+                    data-lpignore="true"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
                     required

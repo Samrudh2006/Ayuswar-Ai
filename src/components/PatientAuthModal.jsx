@@ -498,6 +498,8 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="password"
+                    autoComplete="new-password"
+                    data-lpignore="true"
                     value={mobileOtp}
                     onChange={(e) => setMobileOtp(e.target.value)}
                     required
