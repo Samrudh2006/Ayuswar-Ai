@@ -876,7 +876,7 @@ export default function AcousticBiomarkerLabView() {
   }, [visualizerMode]);
 
   return (
-    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="acoustic-lab-container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px', fontFamily: 'system-ui, sans-serif' }}>
       {/* Top Navigation Row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <Link 
@@ -951,7 +951,7 @@ export default function AcousticBiomarkerLabView() {
       </div>
 
       {/* Main Lab Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="acoustic-lab-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
         
         {/* Left Column: Visualizer, Live Mic, File Upload & Tone Generator */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>

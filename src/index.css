@@ -1764,7 +1764,8 @@ body {
   .scanner-view-container,
   .audiorx-view-container,
   .acoustic-lab-container,
-  .detailed-module-container {
+  .detailed-module-container,
+  .emergency-view-container {
     padding: 18px 14px 48px 14px !important;
   }
 
@@ -1779,10 +1780,21 @@ body {
     line-height: 1.5 !important;
   }
 
-  /* 1. Solutions: Generic Grids Stacking */
+  /* 1. Solutions: Generic & Dedicated Grids Stacking */
+  .opd-dual-studio-workspace,
+  .scanner-workspace-grid,
+  .audiorx-studio-grid,
+  .acoustic-lab-grid,
+  .emergency-workspace-grid,
   div[style*="minmax(360px"] {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
+  }
+
+  .opd-dual-studio-header-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
   }
 
   /* 2. Technology: Hand-Drawn Whiteboard Explainer & Pipeline Terminal */
@@ -1877,7 +1889,12 @@ body {
   .architecture-view-container,
   .clinical-benchmark-container,
   .indic-matrix-container,
-  .dataset-explorer-container {
+  .dataset-explorer-container,
+  .scanner-view-container,
+  .audiorx-view-container,
+  .acoustic-lab-container,
+  .detailed-module-container,
+  .emergency-view-container {
     padding: 14px 10px 40px 10px !important;
   }
 }

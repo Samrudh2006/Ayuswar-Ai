@@ -537,7 +537,7 @@ export default function PrescriptionScannerView() {
   };
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="scanner-view-container" style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
@@ -622,7 +622,7 @@ export default function PrescriptionScannerView() {
       )}
 
       {/* Workspace Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="scanner-workspace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
         {/* Left Column: Interactive Input / Sample Selector */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>

@@ -758,7 +758,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
   };
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="audiorx-view-container" style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
@@ -786,7 +786,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
       </div>
 
       {/* Main Studio Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="audiorx-studio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
         
         {/* Left Column: Live Mic Studio & 60 FPS Visualizer */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

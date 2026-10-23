@@ -270,7 +270,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   };
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="emergency-view-container" style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
@@ -361,7 +361,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
       </div>
 
       {/* Workspace Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="emergency-workspace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
         {/* Left Column: Triage Input & Scenarios */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D1E1E6', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', boxShadow: '0 8px 24px rgba(15, 76, 92, 0.04)' }}>
           <div>

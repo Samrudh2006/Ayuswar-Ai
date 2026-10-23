@@ -73,6 +73,17 @@ function RouteLoadingFallback() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.body.style.overflow = '';
+  }, [pathname]);
+
+  return null;
+}
+
 import { useApp } from './context/AppContext';
 
 export default function App() {
@@ -197,6 +208,9 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'transparent', position: 'relative' }}>
+      {/* Route-Change Instant Scroll to Top and Body Overflow Reset */}
+      <ScrollToTop />
+
       {/* Signature AyuSwar Mint-Ivory Vector Wave Canvas (Active on every screen) */}
       <MintIvoryWaveBackground />
 

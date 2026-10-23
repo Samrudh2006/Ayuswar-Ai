@@ -135,7 +135,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Studio Header Bar */}
-      <div style={{
+      <div className="opd-dual-studio-header-card" style={{
         background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
         color: '#ffffff',
         borderRadius: '24px',
@@ -289,7 +289,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       </div>
 
       {/* Main Studio Two-Column Layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.9fr', gap: '24px' }}>
+      <div className="opd-dual-studio-workspace" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.9fr', gap: '24px' }}>
         {/* Left Column: Interactive Dialogue Timeline */}
         <div style={{
           background: '#ffffff',
@@ -1690,7 +1690,7 @@ export default function DetailedModuleView({
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAF8F5', color: '#0F172A', paddingBottom: '96px' }}>
+    <div className="detailed-module-container" style={{ minHeight: '100vh', background: '#FAF8F5', color: '#0F172A', paddingBottom: '96px' }}>
       {/* Top Breadcrumb & Navigation Bar */}
       <div style={{
         position: 'sticky',
