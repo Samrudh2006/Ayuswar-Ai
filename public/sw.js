@@ -1,6 +1,6 @@
-// AyuSwar AI Progressive Web App Service Worker (v3)
+// AyuSwar AI Progressive Web App Service Worker (v4)
 // High-resilience offline clinical cache with immediate deployment revalidation
-const CACHE_NAME = 'ayuswar-ai-v3-cache';
+const CACHE_NAME = 'ayuswar-ai-v4-cache';
 
 const STATIC_SHELL = [
   '/',

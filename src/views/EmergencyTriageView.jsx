@@ -361,7 +361,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
       </div>
 
       {/* Workspace Grid */}
-      <div className="emergency-workspace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="emergency-workspace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
         {/* Left Column: Triage Input & Scenarios */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D1E1E6', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', boxShadow: '0 8px 24px rgba(15, 76, 92, 0.04)' }}>
           <div>
@@ -568,10 +568,10 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
               padding: '14px 16px',
               marginBottom: '14px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '14px' }}>🎧</span>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexWrap: 'wrap', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+                  <span style={{ fontSize: '14px', flexShrink: 0 }}>🎧</span>
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', overflowWrap: 'break-word' }}>
                     Earshot Acoustic Distress Profile (Lexical Estimation)
                   </span>
                 </div>
@@ -581,12 +581,13 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
                   color: '#FFFFFF',
                   padding: '2px 7px',
                   borderRadius: '4px',
-                  fontWeight: 800
+                  fontWeight: 800,
+                  flexShrink: 0
                 }}>
                   {earshotDistress.severity}
                 </span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '4px' }}>
                 <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>
                   {earshotDistress.topClass}
                 </div>
@@ -888,7 +889,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
             No facilities found matching filter. Try selecting "All Emergency Hubs" or searching another location.
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '16px' }}>
             {nearbyHospitals.map((hosp, idx) => {
               const isSelected = selectedHospital?.id === hosp.id;
               const isRecommended = recommendedHospital?.id === hosp.id;

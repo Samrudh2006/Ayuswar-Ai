@@ -289,7 +289,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
       </div>
 
       {/* Main Studio Two-Column Layout */}
-      <div className="opd-dual-studio-workspace" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.9fr', gap: '24px' }}>
+      <div className="opd-dual-studio-workspace" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '20px' }}>
         {/* Left Column: Interactive Dialogue Timeline */}
         <div style={{
           background: '#ffffff',

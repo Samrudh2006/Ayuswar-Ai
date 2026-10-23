@@ -786,7 +786,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
       </div>
 
       {/* Main Studio Grid */}
-      <div className="audiorx-studio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px' }}>
+      <div className="audiorx-studio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
         
         {/* Left Column: Live Mic Studio & 60 FPS Visualizer */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -1555,7 +1555,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
         {/* 4 SOAP Quadrants Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
           gap: '16px'
         }}>
           {/* S - Subjective */}

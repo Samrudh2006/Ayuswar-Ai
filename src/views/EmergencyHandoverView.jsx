@@ -23,7 +23,7 @@ export default function EmergencyHandoverView() {
       </div>
 
       {/* Action Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '26px', fontWeight: 850, color: '#081C24', marginBottom: '4px' }}>
             Emergency Pre-Hospital Handover Record
@@ -68,11 +68,16 @@ export default function EmergencyHandoverView() {
         borderRadius: '16px',
         border: '1px solid #CBD5E1',
         boxShadow: '0 8px 30px rgba(10,37,64,0.06)',
-        padding: '36px',
-        position: 'relative'
+        padding: 'clamp(16px, 4vw, 36px)',
+        position: 'relative',
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        overflow: 'hidden'
       }}>
         {/* Document Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #0A2540', paddingBottom: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', borderBottom: '2px solid #0A2540', paddingBottom: '16px', marginBottom: '24px' }}>
           <div>
             <div style={{ fontSize: '18px', fontWeight: 900, color: '#081C24' }}>
               SANJIVANI-108 EMERGENCY MEDICAL SERVICES
@@ -81,7 +86,7 @@ export default function EmergencyHandoverView() {
               Government Health Transport & Trauma Transit Network (Simulation Record)
             </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#DC2626', background: '#FEE2E2', padding: '3px 8px', borderRadius: '6px', display: 'inline-block' }}>
               TRIAGE RED: CATEGORY 1
             </div>
@@ -92,7 +97,7 @@ export default function EmergencyHandoverView() {
         </div>
 
         {/* Section 1: Demographics & Transit */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '24px', fontSize: '13px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: '16px', marginBottom: '24px', fontSize: '13px' }}>
           <div>
             <span style={{ color: '#64748B' }}>Patient Name: </span>
             <strong style={{ color: '#081C24' }}>Narayana Rao (Sample Patient)</strong>
@@ -116,7 +121,7 @@ export default function EmergencyHandoverView() {
           <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase', marginBottom: '10px' }}>
             Pre-Hospital Vital Signs Baseline:
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', textAlign: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))', gap: '10px', textAlign: 'center' }}>
             <div style={{ background: '#FFFFFF', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
               <div style={{ fontSize: '11px', color: '#64748B' }}>Blood Pressure</div>
               <div style={{ fontSize: '15px', fontWeight: 850, color: '#DC2626' }}>90/60 mmHg</div>
@@ -155,13 +160,13 @@ export default function EmergencyHandoverView() {
         </div>
 
         {/* Section 4: Receiving Hospital & Signatures */}
-        <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '18px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ fontSize: '12px', color: '#64748B' }}>Receiving Facility:</div>
             <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>Government General Hospital (Trauma Center)</div>
             <div style={{ fontSize: '12px', color: '#64748B' }}>Destination Bay: Red Bay #02</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'left' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '180px', marginBottom: '4px' }} />
             <div style={{ fontSize: '11px', color: '#475569' }}>Lead Paramedic Handover Signature (Simulated Protocol)</div>
           </div>

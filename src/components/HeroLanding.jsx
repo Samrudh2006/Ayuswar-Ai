@@ -1151,7 +1151,7 @@ export default function HeroLanding({
           maxWidth: '1240px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
           gap: '18px'
         }}>
           {/* Left Metrics (Status Quo Burnout) */}
@@ -1472,7 +1472,7 @@ export default function HeroLanding({
           {/* Native CSS Responsive Bento Grid (Zero misalignment, crisp, readable 13-14px typography) */}
           <div className="hero-bento-grid-matrix" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
             gap: '18px',
             position: 'relative'
           }}>
@@ -2458,7 +2458,7 @@ export default function HeroLanding({
             boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
             padding: '24px',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '24px',
             alignItems: 'start'
           }}>

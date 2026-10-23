@@ -214,7 +214,7 @@ export default function PrescriptionPreviewView() {
   };
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '960px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="prescription-preview-container" style={{ padding: '36px 24px', maxWidth: '960px', margin: '0 auto', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Toast Notification */}
       {toastMessage && (
         <div style={{
@@ -380,7 +380,7 @@ export default function PrescriptionPreviewView() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <div className="prescription-savings-stats" style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ 
             background: 'rgba(0, 0, 0, 0.2)', 
             padding: '14px 18px', 
@@ -556,6 +556,7 @@ export default function PrescriptionPreviewView() {
       {/* 📄 Prescription Document Sheet (Printable Format) */}
       <div 
         id="prescription-sheet"
+        className="prescription-sheet-card"
         style={{
           background: '#FFFFFF',
           borderRadius: '16px',
@@ -594,7 +595,7 @@ export default function PrescriptionPreviewView() {
           padding: '16px', 
           marginBottom: '24px', 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(2, 1fr)', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', 
           gap: '10px', 
           fontSize: '13px' 
         }}>

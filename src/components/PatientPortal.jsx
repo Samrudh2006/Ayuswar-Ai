@@ -827,7 +827,7 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1 }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',
@@ -928,6 +928,7 @@ export default function PatientPortal({
 
           {/* Profile Trigger */}
           <div 
+            className="patient-header-profile-badge"
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             style={{
               display: 'flex',
@@ -938,7 +939,9 @@ export default function PatientPortal({
               borderRadius: '12px',
               background: isProfileMenuOpen ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
               transition: 'background 140ms ease',
-              position: 'relative'
+              position: 'relative',
+              minWidth: 0,
+              flexShrink: 0
             }}
             title="Click to Switch Citizen Profile"
           >
@@ -957,11 +960,11 @@ export default function PatientPortal({
             }}>
               {patientName[0]}
             </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24' }}>{patientName}</div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>{abhaId}</div>
+            <div className="patient-header-profile-sub" style={{ textAlign: 'left', minWidth: 0 }}>
+              <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24', whiteSpace: 'nowrap' }}>{patientName}</div>
+              <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>{abhaId}</div>
             </div>
-            <ChevronDown size={14} color="#64748B" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease' }} />
+            <ChevronDown size={14} color="#64748B" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', flexShrink: 0 }} />
 
             {/* Profile Dropdown Menu */}
             {isProfileMenuOpen && (

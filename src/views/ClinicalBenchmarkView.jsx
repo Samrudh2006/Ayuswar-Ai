@@ -654,7 +654,7 @@ export default function ClinicalBenchmarkView() {
       {activeTab === 'clinical' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           {/* Key Metric Highlights Band */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '16px' }}>
             <div style={{ background: '#FFFFFF', border: '1.5px solid #CCFBF1', borderRadius: '16px', padding: '22px', boxShadow: '0 4px 16px rgba(15, 76, 92, 0.06)' }}>
               <div style={{ fontSize: '11px', color: '#0F766E', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>Documentation Target</div>
               <div style={{ fontSize: '32px', fontWeight: 900, color: '#0F766E', margin: '6px 0 2px 0' }}>~1.8 mins</div>
@@ -887,31 +887,31 @@ export default function ClinicalBenchmarkView() {
           </div>
 
           {/* Real Execution Metrics Bar */}
-          <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
-              <div>
+          <div className="benchmark-metrics-summary-bar" style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+            <div className="benchmark-metrics-counts-row" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', minWidth: 0 }}>
+              <div style={{ minWidth: '70px' }}>
                 <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 800, textTransform: 'uppercase' }}>Executed Tests</div>
                 <div style={{ fontSize: '24px', fontWeight: 900, color: '#081C24' }}>{executedResults.length} / {TEST_CASES.length}</div>
               </div>
-              <div style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
-              <div>
+              <div className="benchmark-metric-divider" style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
+              <div style={{ minWidth: '55px' }}>
                 <div style={{ fontSize: '11px', color: '#16A34A', fontWeight: 800, textTransform: 'uppercase' }}>Passed</div>
                 <div style={{ fontSize: '24px', fontWeight: 900, color: '#16A34A' }}>{passedCount}</div>
               </div>
-              <div style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
-              <div>
+              <div className="benchmark-metric-divider" style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
+              <div style={{ minWidth: '55px' }}>
                 <div style={{ fontSize: '11px', color: '#DC2626', fontWeight: 800, textTransform: 'uppercase' }}>Failed</div>
                 <div style={{ fontSize: '24px', fontWeight: 900, color: '#DC2626' }}>{failedCount}</div>
               </div>
-              <div style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
-              <div>
+              <div className="benchmark-metric-divider" style={{ width: '1px', height: '36px', background: '#E2E8F0' }} />
+              <div style={{ minWidth: '70px' }}>
                 <div style={{ fontSize: '11px', color: '#D97706', fontWeight: 800, textTransform: 'uppercase' }}>Skipped (Env)</div>
                 <div style={{ fontSize: '24px', fontWeight: 900, color: '#D97706' }}>{skippedCount}</div>
               </div>
             </div>
 
             {/* Filter Pills */}
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {['all', 'passed', 'failed', 'unrun'].map(f => (
                 <button
                   key={f}
@@ -947,32 +947,34 @@ export default function ClinicalBenchmarkView() {
                     background: '#FFFFFF',
                     borderRadius: '12px',
                     border: '1px solid #E2E8F0',
-                    padding: '18px 20px',
+                    padding: '16px 18px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
-                    gap: '12px'
+                    gap: '12px',
+                    minWidth: 0,
+                    boxSizing: 'border-box'
                   }}
                 >
-                  <div style={{ flex: '1 1 300px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 800, color: '#0F4C5C', background: '#F0FDFA', padding: '2px 6px', borderRadius: '4px' }}>
+                  <div style={{ flex: '1 1 200px', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 800, color: '#0F4C5C', background: '#F0FDFA', padding: '2px 6px', borderRadius: '4px', flexShrink: 0 }}>
                         {test.id}
                       </span>
                       <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>
                         {test.domain}
                       </span>
                     </div>
-                    <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
+                    <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px', overflowWrap: 'break-word' }}>
                       {test.title}
                     </h4>
-                    <p style={{ fontSize: '12.5px', color: '#64748B', margin: 0, lineHeight: 1.4 }}>
+                    <p style={{ fontSize: '12.5px', color: '#64748B', margin: 0, lineHeight: 1.4, overflowWrap: 'break-word' }}>
                       {test.desc}
                     </p>
 
                     {res?.detail && (
-                      <div style={{ marginTop: '8px', fontSize: '11.5px', color: res.status === 'passed' ? '#166534' : res.status === 'failed' ? '#991B1B' : '#92400E', background: res.status === 'passed' ? '#F0FDF4' : res.status === 'failed' ? '#FEF2F2' : '#FFFBEB', padding: '6px 10px', borderRadius: '6px', fontFamily: 'monospace' }}>
+                      <div style={{ marginTop: '8px', fontSize: '11.5px', color: res.status === 'passed' ? '#166534' : res.status === 'failed' ? '#991B1B' : '#92400E', background: res.status === 'passed' ? '#F0FDF4' : res.status === 'failed' ? '#FEF2F2' : '#FFFBEB', padding: '6px 10px', borderRadius: '6px', fontFamily: 'monospace', overflowWrap: 'anywhere' }}>
                         {res.status === 'passed' ? '✓ ' : res.status === 'failed' ? '✗ ' : '○ '}
                         {res.detail}
                       </div>
@@ -980,7 +982,7 @@ export default function ClinicalBenchmarkView() {
                   </div>
 
                   {/* Status and Action */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
                     {res?.latencyMs && (
                       <span style={{ fontSize: '11.5px', color: '#94A3B8', fontFamily: 'monospace' }}>
                         {res.latencyMs} ms

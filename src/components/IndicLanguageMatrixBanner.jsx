@@ -102,10 +102,10 @@ export default function IndicLanguageMatrixBanner() {
   };
 
   return (
-    <div style={{
+    <div className="indic-language-matrix-banner" style={{
       background: 'linear-gradient(135deg, #0A2540 0%, #0F172A 100%)',
       borderRadius: '20px',
-      padding: '28px',
+      padding: '24px',
       color: '#FFFFFF',
       marginBottom: '32px',
       boxShadow: '0 12px 36px rgba(10, 37, 64, 0.18)',
@@ -127,19 +127,19 @@ export default function IndicLanguageMatrixBanner() {
 
       {/* Top Header Badge */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 76, 92, 0.25)', border: '1px solid rgba(15, 76, 92, 0.5)', padding: '5px 12px', borderRadius: '20px', fontSize: '11.5px', fontWeight: 800, color: '#2DD4BF' }}>
-          <Sparkles size={14} />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 76, 92, 0.25)', border: '1.5px solid rgba(15, 76, 92, 0.5)', padding: '5px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 800, color: '#2DD4BF', flexWrap: 'wrap', lineHeight: 1.35 }}>
+          <Sparkles size={14} style={{ flexShrink: 0 }} />
           <span>VARIABLE FONT MORPH & VERNACULAR DIALECT REGIONAL MAP</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#94A3B8' }}>
-          <Radio size={14} color="#10B981" />
+          <Radio size={14} color="#10B981" style={{ flexShrink: 0 }} />
           <span>Active Dialect Pipeline • Rayalaseema & Telangana</span>
         </div>
       </div>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
         gap: '24px',
         alignItems: 'center'
       }}>
@@ -225,9 +225,9 @@ export default function IndicLanguageMatrixBanner() {
             </span>
           </div>
 
-          <div style={{
+          <div className="indic-banner-map-grid" style={{
             display: 'grid',
-            gridTemplateColumns: '140px 1fr',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
             gap: '14px',
             alignItems: 'center'
           }}>

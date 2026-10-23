@@ -52,7 +52,7 @@ export default function HeroFaqSection({ onSelectModule }) {
 
       <div className="hero-faq-layout-grid" style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(320px, 420px) 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
         gap: '32px',
         alignItems: 'start'
       }}>

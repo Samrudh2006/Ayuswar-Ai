@@ -124,7 +124,7 @@ export default function IndicLanguageMatrixView() {
       <IndicLanguageMatrixBanner />
 
       {/* Language Matrix Cards */}
-      <div className="indic-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+      <div className="indic-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}>
         {SUPPORTED_DIALECT_DOMAINS.map((item) => {
           const isSelected = selectedLanguage === item.code;
           return (
@@ -135,10 +135,12 @@ export default function IndicLanguageMatrixView() {
                 borderRadius: '16px',
                 border: isSelected ? '2px solid #0F4C5C' : '1px solid #D1E1E6',
                 boxShadow: isSelected ? '0 10px 25px rgba(15, 76, 92, 0.12)' : '0 4px 14px rgba(15, 76, 92, 0.04)',
-                padding: '24px',
+                padding: '20px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '16px',
+                minWidth: 0,
+                boxSizing: 'border-box',
                 transition: 'all 200ms ease'
               }}
             >

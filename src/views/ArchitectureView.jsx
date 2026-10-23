@@ -102,7 +102,7 @@ export default function ArchitectureView() {
 
         <div className="architecture-standards-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
           gap: '16px'
         }}>
           {INTEROP_STANDARDS.map((std, idx) => {

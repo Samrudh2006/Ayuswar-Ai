@@ -229,27 +229,27 @@ export default function DatasetExplorerView() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 14 }}>
+          <div className="dataset-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
             {filteredDictionary.map((item, idx) => (
-              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#0f172a' }}>
+              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
+                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#0f172a', minWidth: 0, overflowWrap: 'break-word' }}>
                     {item.term}
                   </div>
-                  <span style={{ fontSize: '0.725rem', background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.725rem', background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: 4, fontWeight: 600, flexShrink: 0 }}>
                     {item.language} • {item.region}
                   </span>
                 </div>
 
-                <div style={{ fontSize: '0.85rem', color: '#0e7490', fontWeight: 600, marginBottom: 6 }}>
+                <div style={{ fontSize: '0.85rem', color: '#0e7490', fontWeight: 600, marginBottom: 6, overflowWrap: 'break-word' }}>
                   → Standard Clinical: {item.standardClinicalTerm}
                 </div>
 
-                <div style={{ fontSize: '0.825rem', color: '#64748b', lineHeight: 1.4, marginBottom: 10 }}>
+                <div style={{ fontSize: '0.825rem', color: '#64748b', lineHeight: 1.4, marginBottom: 10, overflowWrap: 'break-word' }}>
                   Meaning: {item.meaning}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
                   <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
                     Category: {item.category}
                   </span>
@@ -265,7 +265,8 @@ export default function DatasetExplorerView() {
                       alignItems: 'center',
                       gap: 4,
                       fontSize: '0.75rem',
-                      color: '#334155'
+                      color: '#334155',
+                      flexShrink: 0
                     }}
                   >
                     <Volume2 size={12} />
@@ -288,7 +289,8 @@ export default function DatasetExplorerView() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                flex: '1 1 240px',
+                flex: '1 1 200px',
+                minWidth: 0,
                 padding: '10px 14px',
                 border: '1px solid #cbd5e1',
                 borderRadius: 8,
@@ -299,6 +301,7 @@ export default function DatasetExplorerView() {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               style={{
+                flex: '0 1 160px',
                 padding: '10px 14px',
                 border: '1px solid #cbd5e1',
                 borderRadius: 8,
@@ -310,14 +313,14 @@ export default function DatasetExplorerView() {
             </select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 14 }}>
+          <div className="dataset-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
             {filteredDiseases.map((d, idx) => (
-              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a' }}>
+              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
+                  <div style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a', minWidth: 0, overflowWrap: 'break-word' }}>
                     {d.diseaseName}
                   </div>
-                  <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: 4, fontWeight: 700 }}>
+                  <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: 4, fontWeight: 700, flexShrink: 0 }}>
                     {d.icd10}
                   </span>
                 </div>
@@ -326,11 +329,11 @@ export default function DatasetExplorerView() {
                   Category: {d.category}
                 </div>
 
-                <div style={{ fontSize: '0.825rem', color: '#334155', marginBottom: 6 }}>
+                <div style={{ fontSize: '0.825rem', color: '#334155', marginBottom: 6, overflowWrap: 'break-word' }}>
                   <strong>Telugu:</strong> {d.teluguName || 'N/A'} • <strong>Hindi:</strong> {d.hindiName || 'N/A'}
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#475569', background: '#FAF8F5', padding: 8, borderRadius: 6 }}>
+                <div style={{ fontSize: '0.8rem', color: '#475569', background: '#FAF8F5', padding: 8, borderRadius: 6, overflowWrap: 'break-word' }}>
                   <strong>Key Symptoms:</strong> {Array.isArray(d.symptoms) ? d.symptoms.slice(0, 4).join(', ') : d.symptoms}
                 </div>
               </div>
@@ -465,18 +468,18 @@ export default function DatasetExplorerView() {
               {domain.papers && domain.papers.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
                   {domain.papers.map((p, idx) => (
-                    <div key={idx} style={{ padding: 12, background: '#FAF8F5', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.825rem' }}>
-                      <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' }}>{p.title}</div>
-                      <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 3 }}>
+                    <div key={idx} style={{ padding: 12, background: '#FAF8F5', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.825rem', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                      <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem', overflowWrap: 'break-word' }}>{p.title}</div>
+                      <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 3, overflowWrap: 'break-word' }}>
                         {p.authors} • <em>{p.journal}</em> {p.doi && `• DOI: ${p.doi}`}
                       </div>
                       {p.coreInsight && (
-                        <div style={{ color: '#334155', marginTop: 6, lineHeight: 1.45 }}>
+                        <div style={{ color: '#334155', marginTop: 6, lineHeight: 1.45, overflowWrap: 'break-word' }}>
                           <strong>Core Insight:</strong> {p.coreInsight}
                         </div>
                       )}
                       {p.recommendationForAyuSwar && (
-                        <div style={{ color: '#0F4C5C', marginTop: 4, fontWeight: 600 }}>
+                        <div style={{ color: '#0F4C5C', marginTop: 4, fontWeight: 600, overflowWrap: 'break-word' }}>
                           💡 <strong>Clinical Recommendation:</strong> {p.recommendationForAyuSwar}
                         </div>
                       )}

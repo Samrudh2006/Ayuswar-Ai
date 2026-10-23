@@ -1057,7 +1057,7 @@ export default function DoctorPortal({
       {/* =========================================================================
           MAIN PHYSICIAN OPERATING CANVAS
           ========================================================================= */}
-      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1, background: 'transparent' }}>
+      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',
@@ -1175,6 +1175,7 @@ export default function DoctorPortal({
 
             {/* Single Doctor Login Badge (No Switcher) */}
             <div 
+              className="doctor-header-profile-badge"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1182,7 +1183,9 @@ export default function DoctorPortal({
                 padding: '6px 14px',
                 borderRadius: '14px',
                 background: 'rgba(15, 76, 92, 0.06)',
-                border: '1.5px solid rgba(15, 76, 92, 0.22)'
+                border: '1.5px solid rgba(15, 76, 92, 0.22)',
+                minWidth: 0,
+                flexShrink: 1
               }}
               title="Verified Physician ABDM Session (Single Doctor Login)"
             >
@@ -1200,11 +1203,11 @@ export default function DoctorPortal({
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
               </div>
-              <div style={{ textAlign: 'left' }}>
+              <div style={{ textAlign: 'left', minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>{doctorName}</span>
+                  <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap' }}>{doctorName}</span>
                 </div>
-                <div style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 650 }}>
+                <div className="doctor-header-profile-sub" style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 650, whiteSpace: 'nowrap' }}>
                   {doctorSpecialty} • {doctorProfile?.facility || 'Kurnool District Hospital'}
                 </div>
               </div>
@@ -1212,6 +1215,7 @@ export default function DoctorPortal({
 
             {/* Prominent Header Logout Button */}
             <button
+              className="doctor-header-logout-btn"
               onClick={() => {
                 if (onLogoutDoctor) onLogoutDoctor();
               }}
@@ -1227,6 +1231,7 @@ export default function DoctorPortal({
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer',
+                flexShrink: 0,
                 transition: 'all 140ms ease'
               }}
               title="Securely exit doctor portal and ABDM session"
@@ -2691,7 +2696,7 @@ export default function DoctorPortal({
                       </button>
                     </div>
                   ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '18px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '18px' }}>
                       {selectedPatientReports.map(rep => {
                         const hasAbnormal = (rep.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal');
                         return (
@@ -3124,7 +3129,7 @@ export default function DoctorPortal({
                       </button>
                     </div>
                   ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '18px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '18px' }}>
                       {filteredReports.map(rep => {
                         const hasAbnormal = (rep.quantitativeMetrics || []).some(m => m.status && m.status !== 'Normal');
                         return (
