@@ -1453,7 +1453,7 @@ export default function HeroLanding({
       {/* =========================================================================
           SECTION 4: 6 DEEP-TECH MOATS (CLICKABLE FOR DETAILED TECHNICAL MATTER)
           ========================================================================= */}
-      <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
+      <section className="hero-bento-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 30px auto' }}>
           <div style={{ fontSize: '12px', fontWeight: 850, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
             ENGINEERING EXCELLENCE
@@ -1467,7 +1467,7 @@ export default function HeroLanding({
         </div>
 
         {/* Bento Grid Architecture Showcase Featuring sec4_moats.png with Interactive Frame Hotspots */}
-        <div style={{
+        <div className="hero-bento-outer-card" style={{
           position: 'relative',
           background: '#ffffff',
           borderRadius: '28px',
@@ -1476,7 +1476,7 @@ export default function HeroLanding({
           marginBottom: '28px',
           boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <div className="hero-bento-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Layers size={18} color="#0F4C5C" />
               <span style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
@@ -1767,6 +1767,7 @@ export default function HeroLanding({
               return (
                 <div
                   key={tile.id}
+                  className="hero-bento-tile-card"
                   onClick={() => setActiveWorkbenchMoat(prev => prev === tile.id ? null : tile.id)}
                   style={{
                     cursor: 'pointer',
@@ -1798,9 +1799,9 @@ export default function HeroLanding({
                   }}
                 >
                   {/* Top Body: Left 3D Icon Container + Right High-Fidelity UI Preview */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: '14px', alignItems: 'stretch', marginBottom: '14px' }}>
+                  <div className="hero-bento-tile-body" style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: '14px', alignItems: 'stretch', marginBottom: '14px' }}>
                     {/* Left 3D-Styled Icon Plinth */}
-                    <div style={{
+                    <div className="hero-bento-icon-plinth" style={{
                       background: tile.gradient,
                       borderRadius: '16px',
                       display: 'flex',
@@ -1826,18 +1827,20 @@ export default function HeroLanding({
                     </div>
 
                     {/* Right Dedicated UI Telemetry Box */}
-                    <div style={{ minHeight: '125px' }}>
+                    <div className="hero-bento-right-box" style={{ minHeight: '125px', minWidth: 0, overflow: 'hidden' }}>
                       {tile.rightBox}
                     </div>
                   </div>
 
                   {/* Bottom Row: Title on Left, Badge on Right */}
-                  <div style={{
+                  <div className="hero-bento-tile-footer" style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     paddingTop: '12px',
-                    borderTop: isSelected ? '1px solid #BBF7D0' : '1px solid #F1F5F9'
+                    borderTop: isSelected ? '1px solid #BBF7D0' : '1px solid #F1F5F9',
+                    flexWrap: 'wrap',
+                    gap: '6px'
                   }}>
                     <span style={{
                       fontSize: '14px',
@@ -1855,7 +1858,8 @@ export default function HeroLanding({
                       padding: '3px 10px',
                       borderRadius: '999px',
                       border: isSelected ? '1.5px solid #10B981' : `1.5px solid ${tile.col}40`,
-                      boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                      whiteSpace: 'nowrap'
                     }}>
                       {tile.badge}
                     </span>
@@ -2457,14 +2461,14 @@ export default function HeroLanding({
       {/* =========================================================================
           SECTION 5: PAN-INDIA LINGUISTIC COVERAGE — INTERACTIVE DIALECT ATLAS & KARAOKE SCRUBBER
           ========================================================================= */}
-      <section style={{ background: '#FAF8F5', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
+      <section className="hero-dialect-section" style={{ background: '#FAF8F5', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           {/* Header */}
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 32px auto' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
               PAN-INDIA LINGUISTIC COVERAGE
             </div>
-            <h2 style={{ fontSize: '34px', color: '#081C24', marginBottom: '8px' }}>
+            <h2 className="hero-dialect-heading" style={{ fontSize: '34px', color: '#081C24', marginBottom: '8px' }}>
               Interactive Dialect Atlas & Karaoke Scrubber
             </h2>
             <p style={{ fontSize: '15px', color: '#5A7184' }}>
@@ -2485,7 +2489,7 @@ export default function HeroLanding({
             alignItems: 'start'
           }}>
             {/* Left Column: Interactive Regional Dialect Showcase (10/10 Clean Design, Zero Collision) */}
-            <div style={{
+            <div className="hero-dialect-left-card" style={{
               background: '#FFFFFF',
               borderRadius: '24px',
               border: '2px solid #94A3B8',
@@ -2498,7 +2502,7 @@ export default function HeroLanding({
             }}>
               <div>
                 {/* Dialect Selector Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <div className="hero-dialect-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Languages size={18} color="#0F4C5C" />
                     <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -2555,7 +2559,7 @@ export default function HeroLanding({
                 </div>
 
                 {/* Active Dialect Highlighted Card (Zero Overlap, Crystal-Clear Typography) */}
-                <div style={{
+                <div className="hero-dialect-active-preview" style={{
                   background: 'linear-gradient(145deg, #F0FDF4 0%, #FFFFFF 100%)',
                   borderRadius: '18px',
                   border: '2px solid #10B981',
@@ -2619,7 +2623,7 @@ export default function HeroLanding({
               </div>
 
               {/* Bottom Acoustic Telemetry Bar */}
-              <div style={{
+              <div className="hero-dialect-bottom-bar" style={{
                 marginTop: '16px',
                 paddingTop: '12px',
                 borderTop: '1px solid #E2E8F0',
@@ -2636,7 +2640,7 @@ export default function HeroLanding({
             </div>
 
             {/* Karaoke Main Stage & Scrubber */}
-            <div style={{
+            <div className="hero-karaoke-stage-card" style={{
               background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
               borderRadius: '24px',
               padding: '28px',
@@ -2645,7 +2649,7 @@ export default function HeroLanding({
               boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
             }}>
               {/* Transport Bar */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
+              <div className="hero-karaoke-transport" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <button
                     onClick={handleToggleKaraokePlayback}
@@ -2694,6 +2698,7 @@ export default function HeroLanding({
 
               {/* Realistic High-Fidelity Acoustic Speech Waveform */}
               <div
+                className="hero-karaoke-waveform"
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   const clickX = e.clientX - rect.left;
@@ -2790,7 +2795,7 @@ export default function HeroLanding({
               />
 
               {/* Synchronized Glowing Word-by-Word Pill Tracker */}
-              <div style={{
+              <div className="hero-karaoke-tokens-container" style={{
                 background: 'rgba(15, 23, 42, 0.75)',
                 borderRadius: '16px',
                 padding: '24px',
