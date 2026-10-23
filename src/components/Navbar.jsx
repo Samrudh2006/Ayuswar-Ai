@@ -88,6 +88,18 @@ export default function Navbar({
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const [isMobileNavbar, setIsMobileNavbar] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth <= 640 : false
   );
@@ -584,370 +596,283 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Mobile Slide-down Drawer */}
+        {/* Mobile Slide-in Sidebar (Sheet) & Backdrop Overlay */}
         {mobileMenuOpen && (
-          <div 
-            className="mobile-slide-drawer"
-            style={{
-              padding: '16px 20px 24px 20px',
-              background: '#ffffff',
-              borderTop: '1px solid #e2e8f0',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-              boxShadow: '0 12px 32px rgba(10, 37, 64, 0.12)',
-              animation: 'slideDownNav 0.22s ease-out'
-            }}
-          >
-            {/* Sanjivani-108 Dedicated Mobile Emergency Dispatch Card */}
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (onOpenSanjivani) onOpenSanjivani();
-                else navigate('/sanjivani');
-              }}
+          <>
+            {/* Backdrop Blur Overlay */}
+            <div 
+              className="mobile-sidebar-backdrop"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
               style={{
-                background: 'linear-gradient(135deg, #DC2626 0%, #991B1B 100%)',
-                color: '#ffffff',
-                border: '1.5px solid #EF4444',
-                borderRadius: 12,
-                padding: '12px 14px',
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(9, 30, 38, 0.45)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
+                zIndex: 9998,
+                animation: 'fadeInBackdrop 0.2s ease'
+              }}
+            />
+
+            {/* Slide-in Sidebar Panel */}
+            <aside 
+              className="mobile-sidebar-panel"
+              role="dialog"
+              aria-label="Navigation Menu"
+              aria-modal="true"
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '320px',
+                maxWidth: '85vw',
+                background: '#FFFFFF',
+                zIndex: 9999,
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '-10px 0 36px rgba(10, 37, 64, 0.22)',
+                animation: 'slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                borderLeft: '1px solid #E2E8F0'
+              }}
+            >
+              {/* Sidebar Header */}
+              <div style={{
+                padding: '16px 18px',
+                borderBottom: '1px solid #E2E8F0',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(220, 38, 38, 0.4)',
-                width: '100%',
-                textAlign: 'left'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}>
-                  <PhoneCall size={20} color="#ffffff" style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#FFFFFF' }}>
-                    🚨 Sanjivani-108 Emergency GIS
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#FECACA' }}>
-                    Live Ambulance Dispatch & Triage
-                  </div>
-                </div>
-              </div>
-              <span style={{ fontSize: '11px', background: '#FFFFFF', color: '#DC2626', padding: '3px 8px', borderRadius: '8px', fontWeight: 800 }}>
-                SOS
-              </span>
-            </button>
-
-            {/* Top Quick Action Cards: Doctor Portal & Patient Portal */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 2 }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  if (doctorProfile) navigate('/doctor-portal');
-                  else if (onOpenDoctorAuth) onOpenDoctorAuth();
-                  else navigate('/auth/doctor');
-                }}
-                style={{
-                  background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: 12,
-                  padding: '12px 10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 6,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.28)',
-                  textAlign: 'center'
-                }}
-              >
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.18)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Stethoscope size={20} color="#D4AF37" />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: '0.85rem' }}>Doctor Portal</div>
-                  <div style={{ fontSize: '0.675rem', opacity: 0.85 }}>
-                    {doctorProfile ? 'Open OPD Workspace' : 'Sign In / Register'}
-                  </div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  if (patientProfile) navigate('/patient-portal');
-                  else if (onOpenPatientAuth) onOpenPatientAuth();
-                  else navigate('/auth/patient');
-                }}
-                style={{
-                  background: 'linear-gradient(135deg, #0A2540 0%, #D97706 100%)',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: 12,
-                  padding: '12px 10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 6,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(217, 119, 6, 0.28)',
-                  textAlign: 'center'
-                }}
-              >
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.18)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Users size={20} color="#FBBF24" />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: '0.85rem' }}>Patient Portal</div>
-                  <div style={{ fontSize: '0.675rem', opacity: 0.85 }}>
-                    {patientProfile ? 'Open ABHA Card' : 'Sign In / ABHA'}
-                  </div>
-                </div>
-              </button>
-            </div>
-
-            {/* 14-Phase Mobile Clinical Innovation Suite Launcher Card */}
-            {onOpenInnovationHub && (
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenInnovationHub();
-                }}
-                style={{
-                  background: 'linear-gradient(135deg, #061626 0%, #0F3254 100%)',
-                  color: '#ffffff',
-                  border: '1.5px solid rgba(212, 175, 55, 0.4)',
-                  borderRadius: 12,
-                  padding: '10px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
-                }}
-              >
+                background: '#FAF8F5'
+              }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Sparkles size={18} color="#D4AF37" />
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: 800, fontSize: '0.85rem', color: '#FFFFFF' }}>
-                      🚀 14-Phase Mobile Innovation Suite
+                  <AyuSwarLogoReveal size={30} showText={false} />
+                  <div>
+                    <div style={{ fontWeight: 850, fontSize: '1rem', color: '#0F4C5C', letterSpacing: '-0.2px' }}>
+                      AyuSwar AI
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#94A3B8' }}>
-                      Teleconsult, Scribe, Pill-Vision, rPPG Vitals, Offline-Sync
+                    <div style={{ fontSize: '0.675rem', color: '#64748B', fontWeight: 600 }}>
+                      Clinical Navigation Menu
                     </div>
                   </div>
                 </div>
-                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.2)', color: '#D4AF37', padding: '3px 8px', borderRadius: '10px', fontWeight: 800 }}>
-                  OPEN
-                </span>
-              </button>
-            )}
 
-            {/* Language Selector in Drawer */}
-            <div style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: 10, border: '1px solid #E2E8F0' }}>
-              <div style={{ fontSize: '0.725rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Languages size={13} color="#0F4C5C" />
-                <span>Select Language</span>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 8,
+                    border: '1px solid #CBD5E1',
+                    background: '#FFFFFF',
+                    color: '#0F172A',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.06)'
+                  }}
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </button>
               </div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {SUPPORTED_LANGUAGES.map((l) => (
+
+              {/* Sidebar Scrollable Body */}
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '14px 16px 24px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12
+              }}>
+                {/* Top Quick Action Cards: Doctor Portal & Patient Portal */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                   <button
-                    key={l.code}
+                    type="button"
                     onClick={() => {
-                      setSelectedLanguage(l.code);
+                      setMobileMenuOpen(false);
+                      if (doctorProfile) navigate('/doctor-portal');
+                      else if (onOpenDoctorAuth) onOpenDoctorAuth();
+                      else navigate('/auth/doctor');
                     }}
                     style={{
-                      padding: '4px 10px',
-                      borderRadius: 20,
-                      border: selectedLanguage === l.code ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
-                      background: selectedLanguage === l.code ? '#E6F7F8' : '#ffffff',
-                      color: selectedLanguage === l.code ? '#0F4C5C' : '#334155',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer'
+                      background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: 10,
+                      padding: '10px 8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 4,
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)',
+                      textAlign: 'center'
                     }}
                   >
-                    {l.name}
+                    <Stethoscope size={18} color="#D4AF37" />
+                    <div style={{ fontWeight: 800, fontSize: '0.8rem' }}>Doctor Portal</div>
+                    <div style={{ fontSize: '0.625rem', opacity: 0.85 }}>
+                      {doctorProfile ? 'Open OPD' : 'Sign In'}
+                    </div>
                   </button>
-                ))}
-              </div>
-            </div>
 
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/')}>
-              <div style={{ fontWeight: 750, color: currentPath === '/' ? '#0F4C5C' : '#091E26' }}>🏠 Home Landing</div>
-            </Link>
-            
-            {/* Solutions Section */}
-            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span>Clinical Solutions (5)</span>
-            </div>
-            
-            <Link to="/solutions/opd_ambient_scribe" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}>
-              <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>OPD Ambient Scribe</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Vernacular consultation drafting</div>
-              </div>
-            </Link>
-            
-            <Link to="/scanner" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/scanner')}>
-              <Scan size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Blister Strip Scanner</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>OCR & PMBJP generic pricing</div>
-              </div>
-            </Link>
-            
-            <Link to="/audio-rx" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/audio-rx')}>
-              <Volume2 size={18} color="#6366F1" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Vernacular Audio-Rx Studio</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Spoken dosage instructions</div>
-              </div>
-            </Link>
-            
-            <Link to="/acoustic-lab" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/acoustic-lab')}>
-              <Activity size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Acoustic Biomarker Lab</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Non-diagnostic audio DSP features</div>
-              </div>
-            </Link>
-
-            {/* Technology Section */}
-            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span>Technology & Evidence</span>
-            </div>
-
-            <Link to="/technology" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isTechActive)}>
-              <Layers size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Technology & Architecture</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Deep-Tech pipeline HLD & terminal</div>
-              </div>
-            </Link>
-
-            <Link to="/benchmarks" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isImpactActive)}>
-              <BarChart3 size={18} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Clinical Impact & Validation</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>24 QA test suite & workflow model</div>
-              </div>
-            </Link>
-
-            {/* Resources Section (2 Things) */}
-            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span>Resources (2 Modules)</span>
-            </div>
-
-            <Link to="/language-matrix" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/language-matrix')}>
-              <Languages size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Indic Language Matrix</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>22 Scheduled languages & dialects</div>
-              </div>
-            </Link>
-
-            <Link to="/datasets" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/datasets')}>
-              <BookOpen size={18} color="#D97706" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>Clinical Knowledge & Lexicon</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>ICD-10 taxonomy & colloquial phrases</div>
-              </div>
-            </Link>
-
-            {/* Clinical Workspaces & Profiles */}
-            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span>Clinical Emergency & Portals</span>
-            </div>
-            <Link to="/emergency" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isEmergencyActive)}>
-              <PhoneCall size={18} color="#DC2626" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#DC2626' }}>Emergency Triage & CPR Metronome</div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Rapid distress escalation</div>
-              </div>
-            </Link>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (doctorProfile) navigate('/doctor-portal');
-                else if (onOpenDoctorAuth) onOpenDoctorAuth();
-                else navigate('/auth/doctor');
-              }}
-              style={dropdownItemStyle(isDoctorActive)}
-            >
-              <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
-                <div style={{ fontWeight: 700, color: '#0F172A' }}>
-                  OPD Clinician Console {doctorProfile ? '(Active)' : '(Sign In)'}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (patientProfile) navigate('/patient-portal');
+                      else if (onOpenPatientAuth) onOpenPatientAuth();
+                      else navigate('/auth/patient');
+                    }}
+                    style={{
+                      background: 'linear-gradient(135deg, #0A2540 0%, #D97706 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: 10,
+                      padding: '10px 8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 4,
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(217, 119, 6, 0.25)',
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Users size={18} color="#FBBF24" />
+                    <div style={{ fontWeight: 800, fontSize: '0.8rem' }}>Patient Portal</div>
+                    <div style={{ fontSize: '0.625rem', opacity: 0.85 }}>
+                      {patientProfile ? 'Open ABHA' : 'ABHA Login'}
+                    </div>
+                  </button>
                 </div>
-                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Attending doctor portal</div>
-              </div>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (patientProfile) navigate('/patient-portal');
-                else if (onOpenPatientAuth) onOpenPatientAuth();
-                else navigate('/auth/patient');
-              }}
-              style={dropdownItemStyle(isPatientActive)}
-            >
-              Citizen Health Record {patientProfile ? '(Active)' : '(Login / Register)'}
-            </button>
 
-            <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Clinical Simulation Data:</span>
-              <button
-                onClick={() => toggleDemoMode()}
-                style={{
-                  padding: '4px 10px',
-                  borderRadius: 6,
-                  border: '1px solid #cbd5e1',
-                  background: isDemoMode ? '#fef3c7' : '#f1f5f9',
-                  color: isDemoMode ? '#92400e' : '#475569',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  cursor: 'pointer'
-                }}
-              >
-                {isDemoMode ? 'Active (Fixtures)' : 'Disabled (Empty)'}
-              </button>
-            </div>
-          </div>
+                <Link to="/" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/')}>
+                  <div style={{ fontWeight: 750, color: currentPath === '/' ? '#0F4C5C' : '#091E26' }}>🏠 Home Landing</div>
+                </Link>
+                
+                {/* Solutions Section */}
+                <div style={{ fontWeight: 800, fontSize: '0.725rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>Clinical Solutions (5)</span>
+                </div>
+                
+                <Link to="/solutions/opd_ambient_scribe" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}>
+                  <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>OPD Ambient Scribe</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Vernacular consultation drafting</div>
+                  </div>
+                </Link>
+                
+                <Link to="/scanner" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/scanner')}>
+                  <Scan size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Blister Strip Scanner</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>OCR & PMBJP generic pricing</div>
+                  </div>
+                </Link>
+                
+                <Link to="/audio-rx" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/audio-rx')}>
+                  <Volume2 size={18} color="#6366F1" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Vernacular Audio-Rx Studio</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Spoken dosage instructions</div>
+                  </div>
+                </Link>
+                
+                <Link to="/acoustic-lab" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/acoustic-lab')}>
+                  <Activity size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Acoustic Biomarker Lab</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Non-diagnostic audio DSP features</div>
+                  </div>
+                </Link>
+
+                <Link to="/emergency" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isEmergencyActive)}>
+                  <PhoneCall size={18} color="#DC2626" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#DC2626', fontSize: '0.825rem' }}>Sanjivani-108 Emergency GIS</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Live ambulance telemetry & CPR</div>
+                  </div>
+                </Link>
+
+                {/* Technology Section */}
+                <div style={{ fontWeight: 800, fontSize: '0.725rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>Technology & Evidence</span>
+                </div>
+
+                <Link to="/technology" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isTechActive)}>
+                  <Layers size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Technology & Architecture</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Deep-Tech pipeline HLD & terminal</div>
+                  </div>
+                </Link>
+
+                <Link to="/benchmarks" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isImpactActive)}>
+                  <BarChart3 size={18} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Clinical Impact & Validation</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>24 QA test suite & workflow model</div>
+                  </div>
+                </Link>
+
+                {/* Resources Section (2 Things) */}
+                <div style={{ fontWeight: 800, fontSize: '0.725rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>Resources (2 Modules)</span>
+                </div>
+
+                <Link to="/language-matrix" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/language-matrix')}>
+                  <Languages size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Indic Language Matrix</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>22 Scheduled languages & dialects</div>
+                  </div>
+                </Link>
+
+                <Link to="/datasets" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/datasets')}>
+                  <BookOpen size={18} color="#D97706" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Clinical Knowledge & Lexicon</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>ICD-10 taxonomy & colloquial phrases</div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Sidebar Footer */}
+              <div style={{
+                padding: '12px 16px',
+                borderTop: '1px solid #E2E8F0',
+                background: '#FAF8F5',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>Simulation Data:</span>
+                <button
+                  type="button"
+                  onClick={() => toggleDemoMode()}
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: 6,
+                    border: '1px solid #CBD5E1',
+                    background: isDemoMode ? '#FEF3C7' : '#FFFFFF',
+                    color: isDemoMode ? '#92400E' : '#475569',
+                    fontSize: '0.725rem',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  {isDemoMode ? 'Active (Fixtures)' : 'Disabled (Empty)'}
+                </button>
+              </div>
+            </aside>
+          </>
         )}
       </header>
     </>
