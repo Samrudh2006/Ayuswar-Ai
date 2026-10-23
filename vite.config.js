@@ -372,6 +372,73 @@ export default defineConfig(({ mode }) => {
               }
             });
           });
+
+          // 5. Server Triage Boundary Middleware
+          server.middlewares.use('/api/triage', async (req, res) => {
+            if (req.method !== 'POST') {
+              res.statusCode = 405;
+              res.setHeader('Content-Type', 'application/json');
+              return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+            }
+
+            let bodyStr = '';
+            req.on('data', chunk => { bodyStr += chunk; });
+            req.on('end', async () => {
+              try {
+                const body = JSON.parse(bodyStr || '{}');
+                const text = String(body.transcript || '').slice(0, 2000).trim();
+                const panic = Math.min(Math.max(0, parseInt(body.acousticPanicIndex, 10) || 70), 100);
+
+                if (!text) {
+                  res.statusCode = 400;
+                  res.setHeader('Content-Type', 'application/json');
+                  return res.end(JSON.stringify({ error: 'Missing transcript' }));
+                }
+
+                const hasChestPain = /chest\s*pain|chest\s*discomfort|heart\s*pain|angina|pressure\s*in\s*chest|chhati\s*noppi|gundello\s*noppi|ఛాతీ\s*నొప్పి|గుండెల్లో\s*నొప్పి|ఛాతీలో\s*నొప్పి|గుండె\s*నొప్పి|గుండెలో\s*నొప్పి|ఛాతీ|గుండె|seena|chhati|heart/i.test(text);
+                const hasSweating = /sweat|sweating|perspir|cold\s*sweat|diaphoresis|paseena|చెమట|చమట|చెమటలు|చమటలు|చల్లని\s*చెమటలు/i.test(text);
+                const hasBreathless = /breath|breathless|breathlessness|shortness\s*of\s*breath|dyspnea|gasping|cant\s*breathe|can't\s*breathe|saans|oopiri|ఆయాసం|శ్వాస|ఊపిరి|దమ్ము|ఊపిరి\s*ఆడటం\s*లేదు/i.test(text);
+                const isCardiac = (hasChestPain && (hasSweating || hasBreathless)) || /chhati|chest|seena|heart|gir pade|behosh|unconscious|dhadkan|palpitations|stemi|gundello|గుండె|ఛాతీ/i.test(text);
+                const isPediatric = /babu|bachha|child|baby|oopiri|saans|wheez|stridor|chhati lopalki|retraction|pasli chalna|blue lips|neela|ఆయాసం|శ్వాస|పిల్ల/i.test(text);
+                const isTrauma = /accident|crash|lorry|car|bike|vandi|blood|khoon|raktham|fracture|haddi|trapped|sir phat|రక్తం|గాయం/i.test(text);
+
+                let level = 'GREEN';
+                let severity = 'Routine Outpatient Consultation';
+                let suspected = 'Routine Primary Care Query';
+                let icd = 'Z00.0';
+
+                if (isCardiac || isPediatric || isTrauma || panic > 75) {
+                  level = 'RED';
+                  severity = 'Immediate Life Threat (Category 1)';
+                  suspected = isCardiac ? 'Acute Coronary Syndrome / Suspected STEMI' : (isPediatric ? 'Pediatric Airway Emergency / Stridor' : 'Emergency Polytrauma / High Distress');
+                  icd = isCardiac ? 'I21.9' : (isPediatric ? 'J45.901' : 'T07');
+                } else if (/fever|temperature|pain|vomit|headache|weakness|dizzy|nausea|bukhar|dard|बुखार|दर्द|उल्टी|चक्कर|कमजोरी|सिरदर्द|बदन|జ్వరం|నొప్పి/i.test(text) || panic > 45) {
+                  level = 'YELLOW';
+                  severity = 'Moderate Priority Urgent Care';
+                  suspected = 'Acute Medical Condition / Needs Prompt Evaluation';
+                  icd = 'R68.89';
+                }
+
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                return res.end(JSON.stringify({
+                  triageLevel: level,
+                  severity,
+                  ruleBaselineLevel: level,
+                  modelEscalationApplied: false,
+                  suspectedCondition: suspected,
+                  icd10: icd,
+                  executionSource: 'RULES_ONLY',
+                  timestamp: new Date().toISOString(),
+                  prototypeDisclaimer: 'Prototype safety rules. Not a certified medical device. In emergencies dial 112 / 108.'
+                }));
+              } catch (err) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                return res.end(JSON.stringify({ error: 'Server triage processing error' }));
+              }
+            });
+          });
         }
       }
     ]

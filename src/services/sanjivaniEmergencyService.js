@@ -160,6 +160,35 @@ export function extractLandmarksFromSpeech(transcript) {
   return null;
 }
 
+// Asynchronous Server Triage Gateway (/api/triage) with Local Rule Fallback
+export async function fetchServerTriage(transcript, acousticPanicIndex = 70) {
+  try {
+    const res = await fetch('/api/triage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ transcript, acousticPanicIndex })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const localRules = analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex);
+      return {
+        ...localRules,
+        triageLevel: data.triageLevel,
+        severity: data.severity,
+        executionSource: data.executionSource,
+        modelEscalationApplied: Boolean(data.modelEscalationApplied),
+        prototypeDisclaimer: data.prototypeDisclaimer || 'Prototype safeguard rules'
+      };
+    }
+  } catch (err) {
+    console.warn('Server triage fetch failed, falling back to local deterministic rules:', err.message);
+  }
+  return {
+    ...analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex),
+    executionSource: 'LOCAL_RULES_FALLBACK'
+  };
+}
+
 // Indic Clinical Triage Reasoner (Browser speech (Web Speech API). Gnani voice integration: planned.)
 export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 70) {
   const text = transcript.toLowerCase();
@@ -171,7 +200,7 @@ export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 
 
   // Severe Red Triage Triggers (STEMI, Cardiac Arrest, Airway Obstruction, Polytrauma, Hemorrhage)
   const isRedFlagCardiacOverride = (hasChestPain && (hasSweating || hasBreathless)) || (hasChestPain && hasSweating && hasBreathless);
-  const isCardiac = isRedFlagCardiacOverride || /chhati|chest|seena|heart|gir pade|behosh|unconscious|dhadkan|palpitations|stemi|paseena|sweating|gundello|గుండె|ఛాతీ|నొప్పి|చెమట|ఆయాసం|శ్వాస|దమ్ము|స్పృహ/i.test(text);
+  const isCardiac = isRedFlagCardiacOverride || /chhati|chest|seena|heart|gir pade|behosh|unconscious|dhadkan|palpitations|stemi|gundello|గుండె|ఛాతీ|స్పృహ తప్పి|స్పృహ కోల్పో/i.test(text);
   const isPediatricRespiratory = /babu|bachha|child|baby|oopiri|saans|wheez|stridor|chhati lopalki|retraction|pasli chalna|blue lips|neela|ఆయాసం|శ్వాస|పిల్ల/i.test(text);
   const isTrauma = /accident|crash|lorry|car|bike|vandi|blood|khoon|raktham|fracture|haddi|trapped|sir phat|రక్తం|గాయం/i.test(text);
   const isAnaphylaxisOrStroke = /paralysis|bol nahi pa|face drop|slur|lakwa|soojan|throat choke|allerg|పక్షవాతం/i.test(text);
