@@ -1671,4 +1671,103 @@ body {
   }
 }
 
+/* =========================================================================
+   MOBILE RESPONSIVENESS SUITE (SECTIONS 3-8)
+   Strictly scoped to <= 768px and <= 480px. Zero changes to desktop view.
+   ========================================================================= */
+@media (max-width: 768px) {
+  /* Section 3: Closed-Loop Neural Bus & Stepped Pipeline */
+  .hero-pipeline-step-labels {
+    position: static !important;
+    margin-top: 12px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    background: rgba(10, 25, 47, 0.98) !important;
+  }
+
+  .hero-pipeline-step-labels button {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .hero-pipeline-telemetry-hud {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 16px !important;
+  }
+
+  .hero-pipeline-telemetry-hud button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Section 4: 6 Deep-Tech Moats (Bento Architecture Matrix) */
+  .hero-bento-grid-matrix {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Section 5: Dialect Atlas & Karaoke Scrubber */
+  .hero-dialect-atlas-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    padding: 16px !important;
+  }
+
+  .hero-dialect-pills-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  /* Section 6: Clinical Governance & Safety Sentinels */
+  .hero-governance-sim-stage {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 18px 14px !important;
+  }
+
+  .hero-standards-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 18px 14px !important;
+  }
+
+  /* Section 8: FAQ Layout */
+  .hero-faq-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .hero-faq-avatar-card {
+    position: static !important;
+    padding: 18px !important;
+  }
+
+  /* Enterprise Footer */
+  .hero-enterprise-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Global Section Title & Card Padding Adjustments for Mobile */
+  h2 {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-dialect-pills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  h2 {
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+  }
+}
+
+
 

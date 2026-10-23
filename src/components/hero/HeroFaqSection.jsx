@@ -50,14 +50,14 @@ export default function HeroFaqSection({ onSelectModule }) {
         </h2>
       </div>
 
-      <div style={{
+      <div className="hero-faq-layout-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'minmax(320px, 420px) 1fr',
         gap: '32px',
         alignItems: 'start'
       }}>
         {/* Left Column: Doctor Avatar Featuring sec8_faq.png */}
-        <div style={{
+        <div className="hero-faq-avatar-card" style={{
           background: '#ffffff',
           borderRadius: '24px',
           border: '2px solid #94A3B8',

@@ -1273,7 +1273,7 @@ export default function HeroLanding({
                 }}
               />
               {/* HTML Step Labels Overlaid Along Banner */}
-              <div style={{
+              <div className="hero-pipeline-step-labels" style={{
                 position: 'absolute',
                 bottom: '12px',
                 left: '16px',
@@ -1332,7 +1332,7 @@ export default function HeroLanding({
 
 
             {/* Bottom Docked Telemetry HUD for Selected Node */}
-            <div style={{
+            <div className="hero-pipeline-telemetry-hud" style={{
               background: 'rgba(15, 23, 42, 0.95)',
               borderRadius: '18px',
               border: '2px solid #475569',
@@ -1436,7 +1436,7 @@ export default function HeroLanding({
           </div>
 
           {/* Native CSS Responsive Bento Grid (Zero misalignment, crisp, readable 13-14px typography) */}
-          <div style={{
+          <div className="hero-bento-grid-matrix" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
             gap: '18px',
@@ -2413,7 +2413,7 @@ export default function HeroLanding({
           </div>
 
           {/* Interactive Dialect Atlas Console: 2-Column Side-by-Side */}
-          <div style={{
+          <div className="hero-dialect-atlas-grid" style={{
             background: '#ffffff',
             borderRadius: '28px',
             border: '2px solid #94A3B8',
@@ -2451,7 +2451,7 @@ export default function HeroLanding({
                 </div>
 
                 {/* Dialect Selector Pills Grid */}
-                <div style={{
+                <div className="hero-dialect-pills-grid" style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
                   gap: '8px',
@@ -2977,7 +2977,7 @@ export default function HeroLanding({
               </div>
 
               {/* Interactive Simulation Stage */}
-              <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
+              <div className="hero-governance-sim-stage" style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
                 {/* Left: Guardrail Clinical Description */}
                 <div>
                   {governanceTab === 'human_agency' && (
@@ -3346,7 +3346,7 @@ export default function HeroLanding({
               </div>
 
               {/* Standard Detail & Real Payload Terminal */}
-              <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
+              <div className="hero-standards-detail-grid" style={{ padding: '28px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
                 {/* Left Column: Standard Specifications & Institution */}
                 <div>
                   {academicStandardTab === 'acoustic' && (
@@ -3612,7 +3612,7 @@ export default function HeroLanding({
         padding: '60px 24px 30px 24px',
         borderTop: '1px solid rgba(15, 76, 92, 0.25)'
       }}>
-        <div style={{
+        <div className="hero-enterprise-footer-grid" style={{
           maxWidth: '1380px',
           margin: '0 auto',
           display: 'grid',
