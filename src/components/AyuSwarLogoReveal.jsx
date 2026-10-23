@@ -37,17 +37,19 @@ export default function AyuSwarLogoReveal({
   return (
     <div
       onMouseEnter={handleReplay}
+      className="ayuswar-brand-lockup"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: '12px',
         cursor: 'pointer',
-        userSelect: 'none'
+        userSelect: 'none',
+        flexShrink: 0
       }}
       title="AyuSwar AI — Ambient Clinical Voice OS"
     >
       {/* Official Concept #21: Deepam Heartbeat Master Emblem */}
-      <div style={{
+      <div className="ayuswar-emblem-circle" style={{
         width: 54,
         height: 54,
         borderRadius: '50%',
@@ -74,22 +76,23 @@ export default function AyuSwarLogoReveal({
 
       {/* Brand Typography & Pulse Line */}
       {showText && (
-        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
+        <div className="ayuswar-wordmark-column" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, flexShrink: 0 }}>
+          <div className="ayuswar-wordmark-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="ayuswar-brand-name" style={{
               fontSize: '1.35rem',
               fontWeight: 800,
               color: '#091E26',
               letterSpacing: '-0.4px',
               display: 'flex',
               alignItems: 'baseline',
-              gap: '1px'
+              gap: '1px',
+              whiteSpace: 'nowrap'
             }}>
               Ayu<span style={{ color: '#0F4C5C' }}>Swar</span>
             </span>
 
             {/* Zari Gold High-Contrast AI Badge */}
-            <span style={{
+            <span className="ayuswar-ai-badge" style={{
               background: 'linear-gradient(135deg, #D4AF37 0%, #BA9425 100%)',
               color: '#08232C',
               fontSize: '0.78rem',
@@ -98,13 +101,14 @@ export default function AyuSwarLogoReveal({
               borderRadius: '6px',
               letterSpacing: '0.5px',
               border: '1px solid #E8D595',
-              boxShadow: '0 1px 4px rgba(212, 175, 55, 0.35)'
+              boxShadow: '0 1px 4px rgba(212, 175, 55, 0.35)',
+              whiteSpace: 'nowrap'
             }}>
               AI
             </span>
 
             {/* Zari Gold Frequency Waveform Indicator */}
-            <div style={{ width: '38px', height: '16px', display: 'flex', alignItems: 'center' }}>
+            <div className="ayuswar-pulse-wave" style={{ width: '38px', height: '16px', display: 'flex', alignItems: 'center' }}>
               <svg
                 key={animationKey}
                 viewBox="0 0 38 16"
@@ -127,13 +131,14 @@ export default function AyuSwarLogoReveal({
             </div>
           </div>
 
-          <div style={{
+          <div className="ayuswar-subtitle" style={{
             fontSize: '0.68rem',
             fontWeight: 700,
             color: '#64748B',
             textTransform: 'uppercase',
             letterSpacing: '0.8px',
-            marginTop: '2px'
+            marginTop: '2px',
+            whiteSpace: 'nowrap'
           }}>
             Clinical Voice OS
           </div>

@@ -200,7 +200,7 @@ export default function Navbar({
         borderBottom: '1px solid #D1E1E6',
         boxShadow: '0 1px 4px 0 rgba(15, 76, 92, 0.06)'
       }}>
-        <div style={{
+        <div className="navbar-header-inner" style={{
           width: '100%',
           maxWidth: '100%',
           padding: '10px clamp(16px, 2.5vw, 32px)',
@@ -404,10 +404,11 @@ export default function Navbar({
           </nav>
 
           {/* Right Controls: Language Selector, Demo Toggle, Portals, Mobile Hamburger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <div className="navbar-right-controls" style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             {/* Sanjivani-108 Dedicated Emergency GIS Button (Best Vivid Red Color) */}
             <button
               type="button"
+              className="navbar-sanjivani-btn"
               onClick={onOpenSanjivani ? onOpenSanjivani : () => navigate('/sanjivani')}
               style={{
                 display: 'inline-flex',
@@ -438,7 +439,7 @@ export default function Navbar({
             >
               <PhoneCall size={14} style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
               <span className="sanjivani-btn-desktop">🚨 Sanjivani-108</span>
-              <span className="sanjivani-btn-mobile" style={{ display: 'none' }}>🚨 108</span>
+              <span className="sanjivani-btn-mobile">🚨 108</span>
             </button>
 
             {/* Shared Language Selector */}

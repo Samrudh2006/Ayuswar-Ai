@@ -565,6 +565,16 @@ export default function HeroLanding({
           zIndex: 0
         }}></div>
 
+        {/* Dedicated Mobile-Only Doctor Background Visual (Fitted, Clean, Zero Text Mistakes) */}
+        <div className="hero-mobile-doctor-bg" aria-hidden="true">
+          <img
+            src="/assets/mobile_hero_doctor_bg.jpg"
+            alt=""
+            className="hero-mobile-doctor-bg-img"
+          />
+          <div className="hero-mobile-doctor-overlay"></div>
+        </div>
+
         {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual */}
         <div className="hero-doctor-visual-container" style={{
           position: 'absolute',
