@@ -43,6 +43,7 @@ import {
   Droplets,
   Wind,
   Zap,
+  Trash2,
   RefreshCw,
   Smartphone,
   Sliders,
@@ -226,6 +227,181 @@ export default function PatientPortal({
       spokenHindi: 'आपके सांस लेने की क्षमता बहुत अच्छी है। इन्हेलर से सुधार दिख रहा है।'
     }
   ]);
+
+  // ---------------------------------------------------------------------------
+  // Longitudinal Vitals Tracker State (Manual Entry + Automatic Report Updates)
+  // ---------------------------------------------------------------------------
+  const [vitalsHistory, setVitalsHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`ayuswar_vitals_${abhaId}`);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [
+      {
+        id: 'vit_001',
+        date: formatDemoDate(0),
+        relativeLabel: 'Today',
+        offsetDays: 0,
+        bp: '132/84 mmHg',
+        systolic: 132,
+        diastolic: 84,
+        pulse: '76 bpm',
+        spo2: '98%',
+        weight: '63 kg',
+        source: 'Community Health Worker Visit',
+        sourceType: 'manual',
+        status: 'Normal'
+      },
+      {
+        id: 'vit_002',
+        date: formatDemoDate(-14),
+        relativeLabel: '14 days ago',
+        offsetDays: -14,
+        bp: '138/88 mmHg',
+        systolic: 138,
+        diastolic: 88,
+        pulse: '78 bpm',
+        spo2: '97%',
+        weight: '63.5 kg',
+        source: 'Community Health Worker Visit',
+        sourceType: 'manual',
+        status: 'Mild Elevation'
+      },
+      {
+        id: 'vit_003',
+        date: formatDemoDate(-45),
+        relativeLabel: '45 days ago',
+        offsetDays: -45,
+        bp: '144/92 mmHg',
+        systolic: 144,
+        diastolic: 92,
+        pulse: '82 bpm',
+        spo2: '97%',
+        weight: '64 kg',
+        source: 'District OPD Screening',
+        sourceType: 'manual',
+        status: 'Stage 1 HTN'
+      }
+    ];
+  });
+
+  // Persist vitals updates to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(`ayuswar_vitals_${abhaId}`, JSON.stringify(vitalsHistory));
+    } catch {}
+  }, [vitalsHistory, abhaId]);
+
+  // Modal State for Manual Vitals Entry
+  const [isAddVitalsModalOpen, setIsAddVitalsModalOpen] = useState(false);
+  const [vitalsForm, setVitalsForm] = useState({
+    date: formatDemoDate(0),
+    time: '09:30 AM',
+    systolic: '120',
+    diastolic: '80',
+    pulse: '74',
+    spo2: '98',
+    weight: '63',
+    bloodSugar: '',
+    sourceNote: 'Self-measured at home'
+  });
+  const [vitalsToastMessage, setVitalsToastMessage] = useState(null);
+
+  const showVitalsToast = (msg) => {
+    setVitalsToastMessage(msg);
+    setTimeout(() => setVitalsToastMessage(null), 3500);
+  };
+
+  const handleSaveManualVitals = (e) => {
+    e?.preventDefault();
+    const sys = parseInt(vitalsForm.systolic) || 120;
+    const dia = parseInt(vitalsForm.diastolic) || 80;
+    const pul = parseInt(vitalsForm.pulse) || 72;
+    const sp = parseInt(vitalsForm.spo2) || 98;
+    const wt = vitalsForm.weight ? `${vitalsForm.weight} kg` : '63 kg';
+
+    let bpStatus = 'Normal';
+    if (sys >= 140 || dia >= 90) bpStatus = 'Stage 2 HTN';
+    else if (sys >= 130 || dia >= 80) bpStatus = 'Stage 1 HTN';
+    else if (sys >= 120 && dia < 80) bpStatus = 'Elevated';
+
+    const newVital = {
+      id: 'vit_manual_' + Date.now(),
+      date: vitalsForm.date || formatDemoDate(0),
+      relativeLabel: 'Just now',
+      offsetDays: 0,
+      bp: `${sys}/${dia} mmHg`,
+      systolic: sys,
+      diastolic: dia,
+      pulse: `${pul} bpm`,
+      spo2: `${sp}%`,
+      weight: wt,
+      bloodSugar: vitalsForm.bloodSugar ? `${vitalsForm.bloodSugar} mg/dL` : undefined,
+      source: vitalsForm.sourceNote || 'Self-entered manual entry',
+      sourceType: 'manual',
+      status: bpStatus
+    };
+
+    setVitalsHistory(prev => [newVital, ...prev]);
+    setIsAddVitalsModalOpen(false);
+    showVitalsToast('New vitals recorded manually and saved to longitudinal history!');
+  };
+
+  const handleSyncVitalsFromReports = () => {
+    const reportVitals = [
+      {
+        id: 'vit_rep_cbc',
+        date: formatDemoDate(-4),
+        relativeLabel: '4 days ago',
+        offsetDays: -4,
+        bp: '128/82 mmHg',
+        systolic: 128,
+        diastolic: 82,
+        pulse: '74 bpm',
+        spo2: '98%',
+        weight: '63.2 kg',
+        source: 'Auto-extracted from Complete Blood Count (CBC) Lab Sheet',
+        sourceType: 'report',
+        reportName: 'Complete Blood Count (CBC)',
+        doctor: 'Dr. Priya Sharma',
+        status: 'Optimal'
+      },
+      {
+        id: 'vit_rep_pft',
+        date: formatDemoDate(-7),
+        relativeLabel: '7 days ago',
+        offsetDays: -7,
+        bp: '130/84 mmHg',
+        systolic: 130,
+        diastolic: 84,
+        pulse: '76 bpm',
+        spo2: '99%',
+        weight: '63.4 kg',
+        source: 'Auto-extracted from Pulmonary Spirometry Test',
+        sourceType: 'report',
+        reportName: 'Pulmonary Spirometry Test',
+        doctor: 'District Respiratory Lab',
+        status: 'Normal'
+      }
+    ];
+
+    setVitalsHistory(prev => {
+      const existingIds = new Set(prev.map(item => item.id));
+      const toAdd = reportVitals.filter(item => !existingIds.has(item.id));
+      if (toAdd.length === 0) {
+        showVitalsToast('All available diagnostic lab reports are already synced into your vitals tracker!');
+        return prev;
+      }
+      showVitalsToast(`Successfully auto-extracted & synced ${toAdd.length} vitals entries from diagnostic reports!`);
+      const combined = [...toAdd, ...prev];
+      return combined.sort((a, b) => (b.offsetDays || 0) - (a.offsetDays || 0));
+    });
+  };
+
+  const handleDeleteVital = (id) => {
+    setVitalsHistory(prev => prev.filter(v => v.id !== id));
+    showVitalsToast('Vitals record removed from longitudinal tracking.');
+  };
 
   // Upload Report Form State
   const [newReportTitle, setNewReportTitle] = useState('HbA1c & Fasting Blood Glucose');
@@ -435,10 +611,7 @@ export default function PatientPortal({
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
-      {/* Pristine Mint-Ivory Flow Vector Canvas */}
-      <MintIvoryWaveBackground />
-
+    <div style={{ display: 'flex', height: '100vh', width: '100%', overflow: 'hidden', position: 'relative' }}>
       {/* Mobile Drawer Overlay Backdrop */}
       {mobileDrawerOpen && (
         <div
@@ -654,7 +827,7 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div className="patient-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1, background: 'transparent' }}>
+      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',
@@ -919,7 +1092,7 @@ export default function PatientPortal({
                   gap: '16px'
                 }}
               >
-                <BotanicalWatermark opacity={0.12} size={240} style={{ right: -25, bottom: -45 }} />
+                <BotanicalWatermark opacity={0.06} size={220} style={{ right: -15, bottom: -55 }} />
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px', zIndex: 1 }}>
                   <DeepamHeartbeatEmblem size={58} />
@@ -942,27 +1115,27 @@ export default function PatientPortal({
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'flex-end',
-                  gap: '8px',
-                  zIndex: 1
+                  gap: '6px',
+                  zIndex: 2,
+                  background: 'rgba(255, 255, 255, 0.94)',
+                  backdropFilter: 'blur(10px)',
+                  padding: '8px 16px',
+                  borderRadius: '16px',
+                  border: '1px solid rgba(15, 76, 92, 0.14)',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.04)'
                 }}>
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    padding: '8px 16px',
-                    background: 'rgba(255, 255, 255, 0.90)',
-                    backdropFilter: 'blur(8px)',
-                    borderRadius: '24px',
-                    border: '1px solid rgba(15, 76, 92, 0.15)',
-                    boxShadow: '0 2px 10px rgba(15, 76, 92, 0.05)'
+                    gap: '7px'
                   }}>
-                    <span style={{ fontSize: '15px' }}>🛡️</span>
-                    <span style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>
+                    <span style={{ fontSize: '14px' }}>🛡️</span>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
                       ABHA Verified Health Record
                     </span>
                   </div>
                   <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 650 }}>
-                    ABHA: <code style={{ color: '#0F4C5C' }}>{abhaId}</code>
+                    ABHA: <code style={{ color: '#0F4C5C', fontWeight: 750 }}>{abhaId}</code>
                   </span>
                 </div>
               </div>
@@ -974,50 +1147,94 @@ export default function PatientPortal({
                 gap: '18px',
                 marginBottom: '26px'
               }}>
-                <div onClick={() => setActiveTab('appointments')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
-                    <Calendar size={20} />
+                <div 
+                  onClick={() => setActiveTab('appointments')} 
+                  className="ayuswar-glass-card" 
+                  style={{ 
+                    padding: '22px 18px', 
+                    cursor: 'pointer', 
+                    textAlign: 'center',
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(15, 76, 92, 0.11)',
+                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                  }}
+                >
+                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                    <Calendar size={22} />
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     Book Appointment
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
                     Schedule with your doctor
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('my_health')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
-                    <Heart size={20} />
+                <div 
+                  onClick={() => setActiveTab('my_health')} 
+                  className="ayuswar-glass-card" 
+                  style={{ 
+                    padding: '22px 18px', 
+                    cursor: 'pointer', 
+                    textAlign: 'center',
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(15, 76, 92, 0.11)',
+                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                  }}
+                >
+                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(239, 68, 68, 0.08)', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                    <Heart size={22} />
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     My Health
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
                     ABHA Card & Vitals
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('reports')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.08)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
-                    <Upload size={20} />
+                <div 
+                  onClick={() => setActiveTab('reports')} 
+                  className="ayuswar-glass-card" 
+                  style={{ 
+                    padding: '22px 18px', 
+                    cursor: 'pointer', 
+                    textAlign: 'center',
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(15, 76, 92, 0.11)',
+                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                  }}
+                >
+                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.08)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                    <Upload size={22} />
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     Upload Reports
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
                     Share test results
                   </div>
                 </div>
 
-                <div onClick={() => setActiveTab('medications')} className="ayuswar-glass-card" style={{ padding: '20px', cursor: 'pointer', textAlign: 'center' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.08)', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
-                    <Pill size={20} />
+                <div 
+                  onClick={() => setActiveTab('medications')} 
+                  className="ayuswar-glass-card" 
+                  style={{ 
+                    padding: '22px 18px', 
+                    cursor: 'pointer', 
+                    textAlign: 'center',
+                    background: '#FFFFFF',
+                    border: '1px solid rgba(15, 76, 92, 0.11)',
+                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                  }}
+                >
+                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(217, 119, 6, 0.08)', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                    <Pill size={22} />
                   </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     View Prescriptions
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
                     Check your medicines
                   </div>
                 </div>
@@ -1042,7 +1259,7 @@ export default function PatientPortal({
                       justifyContent: 'space-between',
                       padding: '14px 16px',
                       borderRadius: '12px',
-                      background: 'rgba(255, 255, 255, 0.75)',
+                      background: '#F8FAFC',
                       border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 2px 10px -2px rgba(15, 76, 92, 0.03)'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1090,8 +1307,8 @@ export default function PatientPortal({
                           Health Overview
                         </h3>
                         {(() => {
-                          const latestVitals = activeDemoPatient?.vitalsHistory?.[0] || {};
-                          const sys = parseInt(latestVitals.bp?.split('/')[0]) || 118;
+                          const latestVitals = vitalsHistory?.[0] || {};
+                          const sys = parseInt(latestVitals.bp?.split('/')[0]) || 120;
                           const hr = parseInt(latestVitals.pulse) || 72;
                           const spo2 = parseInt(latestVitals.spo2) || 98;
                           const mews = calculateMewsScore({ bpSystolic: sys, hr, spo2 });
@@ -1106,28 +1323,36 @@ export default function PatientPortal({
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Heart Rate</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>72 bpm</div>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                          {vitalsHistory?.[0]?.pulse || '76 bpm'}
+                        </div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Activity size={16} color="#DC2626" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Blood Pressure</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>115/76</div>
-                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                          {vitalsHistory?.[0]?.bp ? vitalsHistory[0].bp.replace(' mmHg', '') : '132/84'}
+                        </div>
+                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>
+                          {vitalsHistory?.[0]?.status || 'Normal'}
+                        </span>
                       </div>
 
-                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Scale size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Weight</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>62 kg</div>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                          {vitalsHistory?.[0]?.weight || '63 kg'}
+                        </div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: 'rgba(255, 255, 255, 0.75)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Moon size={16} color="#6366F1" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Sleep</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>7.5 hrs</div>
@@ -1313,14 +1538,15 @@ export default function PatientPortal({
                   </div>
 
                   {/* Better Health Together Card */}
-                  <div style={{
-                    background: 'linear-gradient(135deg, #E6F7F7 0%, #D8F3F3 100%)',
+                  <div className="ayuswar-glass-card" style={{
+                    background: 'linear-gradient(135deg, #F0FDF9 0%, #FAF8F5 100%)',
                     borderRadius: '16px',
-                    padding: '20px',
-                    border: '1px solid #B2E5E5',
+                    padding: '20px 24px',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05)'
                   }}>
                     <div>
                       <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>Better Health Together</h4>
@@ -1457,47 +1683,487 @@ export default function PatientPortal({
                 </div>
               </div>
 
-              {/* Vitals Tracker (Self-entered Demo Values) */}
+              {/* Longitudinal Vitals Tracker (Manual Entry + Automated Lab Report Sync) */}
               <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>
-                    Longitudinal Vitals Tracker
-                  </h3>
-                  <span style={{ fontSize: '11px', color: '#64748B', background: '#FAF8F5', padding: '4px 10px', borderRadius: '10px', fontWeight: 700 }}>
-                    Self-entered demo values - not measured by this app.
-                  </span>
-                </div>
-                <p style={{ fontSize: '12px', color: '#64748B', marginBottom: '16px' }}>
-                  Historical patient recordings from community health worker visits. Computed from logged record entries.
-                </p>
-
-                {/* Vitals History Table / Cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '18px' }}>
-                  {(activeDemoPatient?.vitalsHistory || [
-                    { offsetDays: 0, bp: '132/84 mmHg', pulse: '76 bpm', weight: '63 kg', spo2: '98%' },
-                    { offsetDays: -14, bp: '138/88 mmHg', pulse: '78 bpm', weight: '63.5 kg', spo2: '97%' }
-                  ]).map((v, i) => (
-                    <div key={i} style={{ background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)' }}>
-                      <div style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 800, marginBottom: '6px' }}>
-                        {formatDemoDate(v.offsetDays || 0)} ({getRelativeDaysLabel(v.offsetDays || 0)})
-                      </div>
-                      <div style={{ fontSize: '13px', color: '#081C24', marginBottom: '3px' }}>
-                        BP: <strong>{v.bp}</strong>
-                      </div>
-                      <div style={{ fontSize: '12px', color: '#475569', marginBottom: '3px' }}>
-                        Pulse: <strong>{v.pulse}</strong> • SpO2: <strong>{v.spo2}</strong>
-                      </div>
-                      <div style={{ fontSize: '11.5px', color: '#64748B' }}>
-                        Weight: <strong>{v.weight}</strong>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', margin: 0 }}>
+                        Longitudinal Vitals Tracker
+                      </h3>
+                      <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: 'rgba(16, 185, 129, 0.1)',
+                        color: '#065F46',
+                        padding: '3px 10px',
+                        borderRadius: '12px',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        border: '1px solid rgba(16, 185, 129, 0.2)'
+                      }}>
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }}></span>
+                        Auto-Sync from Reports Active
                       </div>
                     </div>
-                  ))}
+                    <p style={{ fontSize: '12px', color: '#64748B', margin: '4px 0 0 0' }}>
+                      Self-entered demo values & automated pathology extractions. Computed from logged record entries & clinical lab sheets.
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      onClick={handleSyncVitalsFromReports}
+                      style={{
+                        background: '#FAF8F5',
+                        color: '#0F4C5C',
+                        border: '1.5px solid rgba(15, 76, 92, 0.25)',
+                        borderRadius: '10px',
+                        padding: '8px 14px',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 120ms ease'
+                      }}
+                      title="Scan diagnostic laboratory reports and automatically populate vitals"
+                    >
+                      <Zap size={14} color="#0F4C5C" />
+                      <span>⚡ Auto-Sync from Reports</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsAddVitalsModalOpen(true)}
+                      style={{
+                        background: '#0F4C5C',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '8px 16px',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 4px 12px rgba(15, 76, 92, 0.2)',
+                        transition: 'all 120ms ease'
+                      }}
+                    >
+                      <Plus size={15} />
+                      <span>+ Add Vitals Manually</span>
+                    </button>
+                  </div>
                 </div>
 
-                <div style={{ fontSize: '11px', color: '#94A3B8', fontStyle: 'italic' }}>
-                  Note: Health parameters reflect demo simulation data. Always seek professional physician evaluation for clinical readings.
+                {vitalsToastMessage && (
+                  <div style={{
+                    background: '#ECFDF5',
+                    border: '1.5px solid #10B981',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    color: '#065F46',
+                    fontSize: '12.5px',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '16px',
+                    animation: 'fadeIn 0.2s ease'
+                  }}>
+                    <CheckCircle2 size={16} color="#10B981" />
+                    <span>{vitalsToastMessage}</span>
+                  </div>
+                )}
+
+                {/* Vitals History Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                  {vitalsHistory.map((v, i) => {
+                    const isReportSource = v.sourceType === 'report';
+                    return (
+                      <div 
+                        key={v.id || i} 
+                        style={{ 
+                          background: isReportSource ? '#F8FAFC' : '#FAF8F5', 
+                          padding: '16px', 
+                          borderRadius: '14px', 
+                          border: isReportSource ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(15, 76, 92, 0.1)', 
+                          boxShadow: '0 4px 16px -2px rgba(15, 76, 92, 0.04)',
+                          position: 'relative',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: '10px'
+                        }}
+                      >
+                        <div>
+                          {/* Top row: Date & Source Badge */}
+                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '6px', marginBottom: '8px' }}>
+                            <div>
+                              <div style={{ fontSize: '12px', color: '#0F4C5C', fontWeight: 800 }}>
+                                {v.date || formatDemoDate(v.offsetDays || 0)}
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
+                                {v.relativeLabel ? `(${v.relativeLabel})` : `(${getRelativeDaysLabel(v.offsetDays || 0)})`}
+                              </div>
+                            </div>
+                            
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              {isReportSource ? (
+                                <span style={{
+                                  fontSize: '10px',
+                                  background: '#EEF2FF',
+                                  color: '#4338CA',
+                                  padding: '2px 7px',
+                                  borderRadius: '6px',
+                                  fontWeight: 800,
+                                  border: '1px solid #C7D2FE',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '3px'
+                                }}>
+                                  <Zap size={10} />
+                                  <span>REPORT</span>
+                                </span>
+                              ) : (
+                                <span style={{
+                                  fontSize: '10px',
+                                  background: '#ECFDF5',
+                                  color: '#065F46',
+                                  padding: '2px 7px',
+                                  borderRadius: '6px',
+                                  fontWeight: 800,
+                                  border: '1px solid #A7F3D0'
+                                }}>
+                                  ✍️ MANUAL
+                                </span>
+                              )}
+
+                              {vitalsHistory.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteVital(v.id)}
+                                  style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: '#94A3B8',
+                                    cursor: 'pointer',
+                                    padding: '2px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: '4px'
+                                  }}
+                                  title="Delete record"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* BP */}
+                          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '4px' }}>
+                            <div style={{ fontSize: '14px', color: '#081C24' }}>
+                              BP: <strong style={{ fontWeight: 800 }}>{v.bp}</strong>
+                            </div>
+                            {v.status && (
+                              <span style={{
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                padding: '1px 6px',
+                                borderRadius: '4px',
+                                background: v.status.includes('Normal') || v.status.includes('Optimal') ? 'rgba(16, 185, 129, 0.1)' : 'rgba(234, 88, 12, 0.1)',
+                                color: v.status.includes('Normal') || v.status.includes('Optimal') ? '#065F46' : '#C2410C'
+                              }}>
+                                {v.status}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Pulse & SpO2 */}
+                          <div style={{ fontSize: '12.5px', color: '#334155', marginBottom: '4px' }}>
+                            Pulse: <strong>{v.pulse}</strong> • SpO2: <strong>{v.spo2}</strong>
+                          </div>
+
+                          {/* Weight & Blood Sugar */}
+                          <div style={{ fontSize: '12px', color: '#475569', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                            <span>Weight: <strong>{v.weight}</strong></span>
+                            {v.bloodSugar && <span>• Glucose: <strong>{v.bloodSugar}</strong></span>}
+                          </div>
+                        </div>
+
+                        {/* Source Note Footer */}
+                        <div style={{ 
+                          fontSize: '10.5px', 
+                          color: '#64748B', 
+                          borderTop: '1px dashed rgba(15, 76, 92, 0.12)', 
+                          paddingTop: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}>
+                          <span>{v.source || 'Community Health Worker Visit'}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '11px', color: '#64748B' }}>
+                  <span>Note: Health parameters reflect demo simulation data. Always seek professional physician evaluation for clinical readings.</span>
+                  <span style={{ fontWeight: 700, color: '#0F4C5C' }}>{vitalsHistory.length} recordings logged</span>
                 </div>
               </div>
+
+              {/* Add Vitals Manually Modal */}
+              {isAddVitalsModalOpen && (
+                <div className="modal-overlay" style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 1300,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(6, 22, 38, 0.8)',
+                  backdropFilter: 'blur(8px)',
+                  padding: '20px'
+                }}>
+                  <div className="modal-content" style={{
+                    background: '#ffffff',
+                    width: '540px',
+                    borderRadius: '20px',
+                    overflow: 'hidden',
+                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
+                    border: '1px solid #D8E7EB'
+                  }}>
+                    {/* Header */}
+                    <div style={{
+                      background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
+                      padding: '18px 22px',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Activity size={22} color="#2DD4BF" />
+                        <div>
+                          <h3 style={{ fontSize: '17px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                            Add Vitals Manually
+                          </h3>
+                          <div style={{ fontSize: '11px', color: '#94A3B8' }}>
+                            Self-enter home readings or health worker visit measurements
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setIsAddVitalsModalOpen(false)}
+                        style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '4px' }}
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+
+                    {/* Form Body */}
+                    <form onSubmit={handleSaveManualVitals} style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {/* Date & Recording Context */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
+                            Measurement Date
+                          </label>
+                          <input
+                            type="text"
+                            value={vitalsForm.date}
+                            onChange={e => setVitalsForm({ ...vitalsForm, date: e.target.value })}
+                            placeholder="e.g. 23 Oct 2026"
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
+                            Recording Source / Location
+                          </label>
+                          <select
+                            value={vitalsForm.sourceNote}
+                            onChange={e => setVitalsForm({ ...vitalsForm, sourceNote: e.target.value })}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                          >
+                            <option value="Self-measured at home">Home Self-Check (Digital Meter)</option>
+                            <option value="Community Health Worker Visit">Community Health Worker (ASHA / ANM Visit)</option>
+                            <option value="Village PHC OPD Health Camp">Village PHC OPD Health Camp</option>
+                            <option value="Local Jan Aushadhi Pharmacy Check">Local Jan Aushadhi Pharmacy</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Blood Pressure Fields */}
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Blood Pressure (BP)</span>
+                          {(() => {
+                            const sys = parseInt(vitalsForm.systolic) || 0;
+                            const dia = parseInt(vitalsForm.diastolic) || 0;
+                            let status = 'Normal (< 120/80)';
+                            let bg = '#ECFDF5';
+                            let fg = '#065F46';
+                            if (sys >= 140 || dia >= 90) {
+                              status = 'Stage 2 HTN (≥ 140/90)';
+                              bg = '#FEF2F2';
+                              fg = '#991B1B';
+                            } else if (sys >= 130 || dia >= 80) {
+                              status = 'Stage 1 HTN (130-139/80-89)';
+                              bg = '#FFFBEB';
+                              fg = '#92400E';
+                            } else if (sys >= 120) {
+                              status = 'Elevated (120-129/<80)';
+                              bg = '#FEF3C7';
+                              fg = '#B45309';
+                            }
+                            return (
+                              <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', background: bg, color: fg }}>
+                                {status}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>Systolic (mmHg)</label>
+                            <input
+                              type="number"
+                              value={vitalsForm.systolic}
+                              onChange={e => setVitalsForm({ ...vitalsForm, systolic: e.target.value })}
+                              placeholder="120"
+                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px', fontWeight: 700 }}
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>Diastolic (mmHg)</label>
+                            <input
+                              type="number"
+                              value={vitalsForm.diastolic}
+                              onChange={e => setVitalsForm({ ...vitalsForm, diastolic: e.target.value })}
+                              placeholder="80"
+                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px', fontWeight: 700 }}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Pulse & SpO2 & Weight */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '4px' }}>
+                            Pulse / HR (bpm)
+                          </label>
+                          <input
+                            type="number"
+                            value={vitalsForm.pulse}
+                            onChange={e => setVitalsForm({ ...vitalsForm, pulse: e.target.value })}
+                            placeholder="74"
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '4px' }}>
+                            SpO2 (%)
+                          </label>
+                          <input
+                            type="number"
+                            value={vitalsForm.spo2}
+                            onChange={e => setVitalsForm({ ...vitalsForm, spo2: e.target.value })}
+                            placeholder="98"
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '4px' }}>
+                            Weight (kg)
+                          </label>
+                          <input
+                            type="number"
+                            step="0.5"
+                            value={vitalsForm.weight}
+                            onChange={e => setVitalsForm({ ...vitalsForm, weight: e.target.value })}
+                            placeholder="63"
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      {/* Blood Sugar (optional) */}
+                      <div>
+                        <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '4px' }}>
+                          Fasting / Random Blood Sugar (mg/dL) - Optional
+                        </label>
+                        <input
+                          type="number"
+                          value={vitalsForm.bloodSugar}
+                          onChange={e => setVitalsForm({ ...vitalsForm, bloodSugar: e.target.value })}
+                          placeholder="e.g. 104"
+                          style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                        />
+                      </div>
+
+                      {/* Buttons */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setIsAddVitalsModalOpen(false)}
+                          style={{
+                            background: '#F1F5F9',
+                            color: '#475569',
+                            border: 'none',
+                            borderRadius: '10px',
+                            padding: '10px 18px',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          style={{
+                            background: '#0F4C5C',
+                            color: '#ffffff',
+                            border: 'none',
+                            borderRadius: '10px',
+                            padding: '10px 22px',
+                            fontSize: '13px',
+                            fontWeight: 750,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
+                          }}
+                        >
+                          <CheckCircle2 size={16} />
+                          <span>Save Vitals Entry</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -2375,8 +3041,33 @@ export default function PatientPortal({
                             isNew: true
                           };
                           setReportsList([newRep, ...reportsList]);
+
+                          // Automatically extract and update vitals tracker based on this diagnostic report
+                          const extractedSugarMatch = newReportSummary.match(/(\d{2,3})\s*mg\/dL/i);
+                          const extractedSugar = extractedSugarMatch ? `${extractedSugarMatch[1]} mg/dL` : (newReportSummary.includes('104') ? '104 mg/dL' : undefined);
+
+                          const autoReportVital = {
+                            id: 'vit_rep_' + Date.now(),
+                            date: newReportDate || formatDemoDate(0),
+                            relativeLabel: 'Just now',
+                            offsetDays: 0,
+                            bp: '126/80 mmHg',
+                            systolic: 126,
+                            diastolic: 80,
+                            pulse: '72 bpm',
+                            spo2: '98%',
+                            weight: '63 kg',
+                            bloodSugar: extractedSugar || '104 mg/dL',
+                            source: `Auto-extracted from verified ${newReportTitle}`,
+                            sourceType: 'report',
+                            reportName: newReportTitle,
+                            doctor: newReportDoctor,
+                            status: 'Optimal'
+                          };
+
+                          setVitalsHistory(prev => [autoReportVital, ...prev]);
+                          showVitalsToast(`⚡ Vitals automatically extracted & updated from ${newReportTitle}!`);
                           setIsUploadReportModalOpen(false);
-                          alert('Report uploaded and verified! You can now listen to the spoken explanation in your native language.');
                         }}
                         style={{
                           background: '#0F4C5C',

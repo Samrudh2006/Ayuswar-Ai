@@ -103,8 +103,7 @@ export default function FloatingAssistant({
   
   // AI Provider & Key Settings
   const [selectedProvider, setSelectedProvider] = useState(() => getAiConfig().provider);
-  const [apiKeyInput, setApiKeyInput] = useState(() => getAiConfig().apiKey);
-  const [keySavedToast, setKeySavedToast] = useState(false);
+    const [keySavedToast, setKeySavedToast] = useState(false);
 
   // Determine role: Doctor mode vs Patient mode vs Landing page
   const isDoctorMode = activeView === 'doctor_portal' || activeView === 'console';
@@ -1355,36 +1354,20 @@ export default function FloatingAssistant({
                 </select>
               </div>
 
-              {selectedProvider !== 'local_offline' && selectedProvider !== 'gnani_evon_30b' && (
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <label style={{ fontSize: '12px', fontWeight: 800, color: '#081C24' }}>
-                      {selectedProvider === 'gemini_free' ? 'Google Gemini API Key (Free):' : 'API Key / Token:'}
-                    </label>
-                    <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>
-                      Free Tier Supported
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    placeholder="Paste AI API Key here..."
-                    value={apiKeyInput}
-                    onChange={(e) => setApiKeyInput(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '9px 12px',
-                      borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
-                      fontSize: '12.5px',
-                      fontFamily: 'monospace',
-                      outline: 'none'
-                    }}
-                  />
-                  <div style={{ fontSize: '10.5px', color: '#64748B', marginTop: '4px' }}>
-                    🔒 Key stored securely in your browser's local memory. Never sent to third parties.
-                  </div>
+              <div style={{
+                background: 'rgba(15, 76, 92, 0.06)',
+                border: '1px solid rgba(15, 76, 92, 0.15)',
+                borderRadius: '10px',
+                padding: '12px',
+                fontSize: '12px',
+                color: '#081C24',
+                lineHeight: 1.5
+              }}>
+                🔒 <strong>Zero-Client-Key Security Architecture:</strong>
+                <div style={{ fontSize: '11px', color: '#5A7184', marginTop: '4px' }}>
+                  All AI and speech reasoning models run exclusively via authenticated server proxy routes (<code style={{ background: 'rgba(0,0,0,0.06)', padding: '1px 4px', borderRadius: '4px' }}>/api/evon/*</code>). API credentials are never exposed, queried, or stored in your browser.
                 </div>
-              )}
+              </div>
 
               {selectedProvider === 'gnani_evon_30b' && (
                 <div style={{
@@ -1433,7 +1416,7 @@ export default function FloatingAssistant({
               <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
                 <button
                   onClick={() => {
-                    saveAiConfig(selectedProvider, apiKeyInput);
+                    saveAiConfig(selectedProvider);
                     setKeySavedToast(true);
                     setTimeout(() => {
                       setKeySavedToast(false);

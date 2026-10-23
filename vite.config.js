@@ -190,8 +190,9 @@ export default defineConfig(({ mode }) => {
               return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
             }
 
-            const evonBaseUrl = req.headers['x-evon-base-url'] || env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
-            const evonApiKey = req.headers['x-evon-api-key'] || req.headers['x-api-key'] || env.EVON_API_KEY || process.env.EVON_API_KEY;
+            // Server environment variables ONLY (headers strictly forbidden)
+            const evonBaseUrl = env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
+            const evonApiKey = env.EVON_API_KEY || process.env.EVON_API_KEY;
             const modelName = env.EVON_MODEL_NAME || process.env.EVON_MODEL_NAME || 'gnani/gnani-evon-v3.3-30B-A3B';
 
             res.setHeader('Content-Type', 'application/json');
@@ -277,8 +278,9 @@ export default defineConfig(({ mode }) => {
               return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
             }
 
-            const evonBaseUrl = req.headers['x-evon-base-url'] || env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
-            const evonApiKey = req.headers['x-evon-api-key'] || req.headers['x-api-key'] || env.EVON_API_KEY || process.env.EVON_API_KEY;
+            // Server environment variables ONLY (headers strictly forbidden)
+            const evonBaseUrl = env.EVON_BASE_URL || process.env.EVON_BASE_URL || 'https://router.huggingface.co/v1';
+            const evonApiKey = env.EVON_API_KEY || process.env.EVON_API_KEY;
             const modelName = env.EVON_MODEL_NAME || process.env.EVON_MODEL_NAME || 'gnani/gnani-evon-v3.3-30B-A3B';
 
             res.setHeader('Content-Type', 'application/json');
