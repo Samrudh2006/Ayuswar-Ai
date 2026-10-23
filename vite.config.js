@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
               res.statusCode = 200;
               return res.end(JSON.stringify({
                 available: false,
-                status: 'UNAVAILABLE',
+                status: 'UNCONFIGURED',
                 provider: 'browser_fallback',
                 models: {
                   stt: 'Browser Web SpeechRecognition (Client Fallback)',
@@ -200,12 +200,12 @@ export default defineConfig(({ mode }) => {
             if (!evonBaseUrl || !evonApiKey || evonApiKey.includes('placeholder')) {
               res.statusCode = 200;
               return res.end(JSON.stringify({
-                status: 'UNAVAILABLE',
+                status: 'UNCONFIGURED',
                 available: false,
                 model: modelName,
                 latencyMs: null,
                 lastSuccessTime: evonLastSuccessTime,
-                reason: 'EVON_BASE_URL or EVON_API_KEY unset on server'
+                reason: 'EVON_BASE_URL or EVON_API_KEY unset on server. Using safe rule-based fallback.'
               }));
             }
 

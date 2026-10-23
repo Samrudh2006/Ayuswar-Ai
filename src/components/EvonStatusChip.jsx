@@ -43,6 +43,14 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
   }, []);
 
   const isLive = statusData.status === 'LIVE' && statusData.available;
+  const isUnavailable = statusData.status === 'UNAVAILABLE';
+  const isUnconfigured = statusData.status === 'UNCONFIGURED' || (!statusData.available && !isUnavailable && !isLive);
+
+  const badge = isLive
+    ? { label: 'LIVE (200 OK)', bg: '#10B981', color: '#FFFFFF', dot: '#10B981', text: '● EVON 30B: LIVE' }
+    : isUnavailable
+      ? { label: 'UNAVAILABLE (UPSTREAM ERROR)', bg: '#EF4444', color: '#FFFFFF', dot: '#EF4444', text: '▲ EVON 30B: UNAVAILABLE' }
+      : { label: 'UNCONFIGURED (FALLBACK ACTIVE)', bg: '#475569', color: '#F1F5F9', dot: '#94A3B8', text: '○ EVON 30B: UNCONFIGURED (SAFE FALLBACK)' };
 
   const formatLastSuccess = (isoStr) => {
     if (!isoStr) return 'Never in this session';
@@ -59,7 +67,9 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
         onClick={fetchStatus}
         title={isLive 
           ? `Evon 30B LIVE · Latency: ${statusData.latencyMs}ms · Last Success: ${formatLastSuccess(statusData.lastSuccessTime)}` 
-          : `Evon Offline · Rule-based Fallback Active (Not Evon) · ${statusData.reason || 'Server env vars unset'} · Click to re-check`
+          : isUnavailable
+            ? `Evon Configured but Upstream Error · ${statusData.reason || 'Server error'} · Click to re-check`
+            : `Evon Keys Unset on Server · Rule-based Fallback Active (Not Evon) · Click to re-check`
         }
         style={{
           display: 'inline-flex',
@@ -67,23 +77,23 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           gap: '6px',
           padding: '3px 8px',
           borderRadius: '12px',
-          background: isLive ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.12)',
-          border: `1px solid ${isLive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.3)'}`,
+          background: isLive ? 'rgba(16, 185, 129, 0.15)' : isUnavailable ? 'rgba(239, 68, 68, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+          border: `1px solid ${isLive ? 'rgba(16, 185, 129, 0.4)' : isUnavailable ? 'rgba(239, 68, 68, 0.4)' : 'rgba(100, 116, 139, 0.3)'}`,
           cursor: 'pointer',
           fontSize: '11px',
           fontWeight: 700,
-          color: isLive ? '#10B981' : '#EF4444'
+          color: isLive ? '#10B981' : isUnavailable ? '#EF4444' : '#64748B'
         }}
       >
         <span style={{
           width: '7px',
           height: '7px',
           borderRadius: '50%',
-          background: isLive ? '#10B981' : '#F59E0B',
+          background: badge.dot,
           boxShadow: isLive ? '0 0 6px #10B981' : 'none',
           display: 'inline-block'
         }} />
-        <span>{isLive ? '● EVON 30B: LIVE' : '○ EVON 30B: PLANNED / FALLBACK ACTIVE (Not Evon)'}</span>
+        <span>{badge.text}</span>
         {isChecking && <RefreshCw size={10} style={{ animation: 'spin 1s linear infinite' }} />}
       </div>
     );
@@ -91,9 +101,9 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
 
   return (
     <div style={{
-      background: isLive ? 'rgba(6, 78, 59, 0.35)' : 'rgba(15, 23, 42, 0.65)',
+      background: isLive ? 'rgba(6, 78, 59, 0.35)' : isUnavailable ? 'rgba(69, 10, 10, 0.4)' : 'rgba(15, 23, 42, 0.65)',
       borderRadius: '10px',
-      border: `1px solid ${isLive ? '#059669' : '#334155'}`,
+      border: `1px solid ${isLive ? '#059669' : isUnavailable ? '#991B1B' : '#334155'}`,
       padding: '10px 14px',
       display: 'flex',
       flexDirection: 'column',
@@ -106,7 +116,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
             width: '24px',
             height: '24px',
             borderRadius: '6px',
-            background: isLive ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : '#334155',
+            background: isLive ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : isUnavailable ? '#991B1B' : '#334155',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -122,14 +132,18 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
                 padding: '1px 6px',
                 borderRadius: '4px',
                 fontWeight: 800,
-                background: isLive ? '#10B981' : '#F59E0B',
-                color: isLive ? '#FFFFFF' : '#0A2540'
+                background: badge.bg,
+                color: badge.color
               }}>
-                {isLive ? 'LIVE (200 OK)' : 'PLANNED / FALLBACK ACTIVE (Not Evon)'}
+                {badge.label}
               </span>
             </div>
             <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-              {isLive ? statusData.model : 'Evon host unconfigured — Rule-based FALLBACK (Not Evon) active'}
+              {isLive 
+                ? statusData.model 
+                : isUnavailable 
+                  ? `Upstream Evon unavailable (${statusData.reason || 'Server error'})` 
+                  : 'Evon keys unset on server — Rule-based FALLBACK (Not Evon) active'}
             </div>
           </div>
         </div>

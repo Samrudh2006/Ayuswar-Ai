@@ -36,12 +36,12 @@ export default async function handler(req, res) {
   if (!baseUrl || !apiKey || apiKey.includes('placeholder')) {
     logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime, clientNote: 'Secrets unset' });
     return res.status(200).json({
-      status: 'UNAVAILABLE',
+      status: 'UNCONFIGURED',
       available: false,
       model: modelName,
       latencyMs: null,
       lastSuccessTime: lastSuccessTime,
-      reason: 'EVON_BASE_URL or EVON_API_KEY unset on server'
+      reason: 'EVON_BASE_URL or EVON_API_KEY unset on server. Using safe rule-based fallback.'
     });
   }
 

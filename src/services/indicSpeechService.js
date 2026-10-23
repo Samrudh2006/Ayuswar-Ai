@@ -193,16 +193,24 @@ export class IndicSpeechService {
 
   getProviderInfo() {
     const isLive = Boolean(this.activeProvider === 'gnani_tts_live' || (this.gnaniAvailable && this.lastGnaniSuccessTime));
+    const isUnavailable = Boolean(this.gnaniStatusData && this.gnaniStatusData.status === 'UNAVAILABLE');
+    const isUnconfigured = !this.gnaniAvailable && !isUnavailable;
+
     return {
-      provider: isLive ? 'gnani_live' : 'browser_fallback',
+      provider: isLive ? 'gnani_live' : (isUnavailable ? 'gnani_unavailable' : 'browser_fallback'),
       isGnani: isLive,
+      status: isLive ? 'LIVE' : (isUnavailable ? 'UNAVAILABLE' : 'UNCONFIGURED'),
       hasCredentials: Boolean(this.gnaniAvailable),
       label: isLive
         ? 'Gnani.ai Indic Neural Voice (LIVE via Server)'
-        : 'Browser Web Speech API (Client Fallback - Server Key Unset)',
+        : isUnavailable
+          ? 'Gnani.ai Indic Voice (Configured - Upstream Server Error)'
+          : 'Browser Web Speech API (Client Fallback - Server Key Unset)',
       notes: isLive
         ? 'Real-time Indic neural speech verified from Gnani server.'
-        : 'Server GNANI_API_KEY unset; running safe browser speech fallback.'
+        : isUnavailable
+          ? 'Gnani server credentials configured, but upstream returned an error. Using safe browser speech fallback.'
+          : 'Server GNANI_API_KEY unset; running safe browser speech fallback.'
     };
   }
 

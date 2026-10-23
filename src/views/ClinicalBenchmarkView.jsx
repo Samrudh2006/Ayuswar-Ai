@@ -435,8 +435,8 @@ export default function ClinicalBenchmarkView() {
         if (!status || typeof status.status !== 'string') {
           throw new Error('Invalid status contract returned from checkEvonStatus().');
         }
-        if (status.status !== 'LIVE' && status.status !== 'UNAVAILABLE') {
-          throw new Error(`Expected status to be LIVE or UNAVAILABLE, got ${status.status}`);
+        if (status.status !== 'LIVE' && status.status !== 'UNAVAILABLE' && status.status !== 'UNCONFIGURED') {
+          throw new Error(`Expected status to be LIVE, UNAVAILABLE, or UNCONFIGURED, got ${status.status}`);
         }
         return `Server Status Contract verified: ${status.status} (Model: ${status.model}, Available: ${status.available}).`;
       }

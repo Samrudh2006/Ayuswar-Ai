@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime, clientNote: 'GNANI_API_KEY unset' });
     return res.status(200).json({
       available: false,
-      status: 'UNAVAILABLE',
+      status: 'UNCONFIGURED',
       provider: 'browser_fallback',
       models: {
         stt: 'Browser Web SpeechRecognition (Client Fallback)',
