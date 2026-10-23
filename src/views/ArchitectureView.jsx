@@ -54,9 +54,9 @@ export default function ArchitectureView() {
   ];
 
   return (
-    <div style={{ padding: '36px 24px 64px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="architecture-view-container" style={{ padding: '36px 24px 64px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
@@ -68,15 +68,15 @@ export default function ArchitectureView() {
       </div>
 
       {/* Clean, Modern Header */}
-      <div style={{ marginBottom: '28px' }}>
+      <div className="architecture-header" style={{ marginBottom: '28px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '10px' }}>
           <Layers size={14} />
           <span>SYSTEM ARCHITECTURE & PIPELINE HLD</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '8px', letterSpacing: '-0.4px' }}>
+        <h1 className="page-main-heading" style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '8px', letterSpacing: '-0.4px' }}>
           Technical Architecture & Intake Pipeline
         </h1>
-        <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.5, margin: 0 }}>
+        <p className="page-main-subtext" style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.5, margin: 0 }}>
           Interactive architectural blueprint detailing the 4-stage data pipeline from ambient consultation audio capture to ABDM FHIR R4 interoperability.
         </p>
       </div>
@@ -100,7 +100,7 @@ export default function ArchitectureView() {
           </p>
         </div>
 
-        <div style={{
+        <div className="architecture-standards-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '16px'

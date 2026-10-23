@@ -94,7 +94,7 @@ export default function DatasetExplorerView() {
   };
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 16px' }}>
+    <div className="dataset-explorer-container" style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 16px' }}>
       <div style={{ marginBottom: 20 }}>
         <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--color-navy-700)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600 }}>
           <ChevronLeft size={16} /> Return to Home
@@ -108,7 +108,7 @@ export default function DatasetExplorerView() {
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Clinical Knowledge & Lexicon Reference</h1>
+              <h1 className="page-main-heading" style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Clinical Knowledge & Lexicon Reference</h1>
               <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '3px 8px', borderRadius: 999, fontWeight: 600 }}>
                 Reference Schema
               </span>
@@ -116,7 +116,7 @@ export default function DatasetExplorerView() {
                 IndiaAI AIKosh Repository (aikosh.indiaai.gov.in)
               </span>
             </div>
-            <p style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
+            <p className="page-main-subtext" style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
               Curated from IndiaAI AIKosh (National Data & AI Repository, MeitY), PMBJP Janaushadhi, WHO ICD-10, and ABDM SNOMED-CT clinical ontologies. Note: This dictionary provides ontology mapping for voice transcripts and does not constitute autonomous diagnostic software.
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function DatasetExplorerView() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 8, borderBottom: '2px solid #e2e8f0', marginBottom: 20, overflowX: 'auto', paddingBottom: 2 }}>
+      <div className="dataset-tabs-row" style={{ display: 'flex', gap: 8, borderBottom: '2px solid #e2e8f0', marginBottom: 20, overflowX: 'auto', paddingBottom: 2 }}>
         <button
           onClick={() => setActiveTab('dictionary')}
           style={{

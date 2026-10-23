@@ -560,9 +560,9 @@ export default function ClinicalBenchmarkView() {
   });
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1240px', margin: '0 auto' }}>
+    <div className="clinical-benchmark-container" style={{ padding: '36px 24px', maxWidth: '1240px', margin: '0 auto' }}>
       {/* Breadcrumbs */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
@@ -581,15 +581,15 @@ export default function ClinicalBenchmarkView() {
           <ShieldCheck size={15} />
           <span>AUTOMATED INTEGRATION & CONTRACT AUDIT CENTER</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '10px' }}>
+        <h1 className="page-main-heading" style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '10px' }}>
           Clinical Workflow Design & Verification Center
         </h1>
-        <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '920px', lineHeight: 1.6 }}>
+        <p className="page-main-subtext" style={{ fontSize: '15px', color: '#5A7184', maxWidth: '920px', lineHeight: 1.6 }}>
           Interactive integration test suite evaluating documentation workflow ergonomics, clinical vocabulary crosswalks, acoustic signal processing boundaries, and vernacular patient audio guidance in real time.
         </p>
 
         {/* Dual Mode Switcher Tabs */}
-        <div style={{
+        <div className="benchmark-tab-switcher" style={{
           display: 'flex',
           gap: '8px',
           marginTop: '20px',
@@ -599,6 +599,8 @@ export default function ClinicalBenchmarkView() {
           maxWidth: 'fit-content'
         }}>
           <button
+            type="button"
+            className="benchmark-tab-btn"
             onClick={() => setActiveTab('qa')}
             style={{
               padding: '9px 18px',
@@ -621,6 +623,8 @@ export default function ClinicalBenchmarkView() {
           </button>
 
           <button
+            type="button"
+            className="benchmark-tab-btn"
             onClick={() => setActiveTab('clinical')}
             style={{
               padding: '9px 18px',

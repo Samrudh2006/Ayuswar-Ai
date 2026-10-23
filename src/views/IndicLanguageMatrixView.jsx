@@ -80,9 +80,9 @@ export default function IndicLanguageMatrixView() {
   ];
 
   return (
-    <div style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="indic-matrix-container" style={{ padding: '36px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Breadcrumb Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0F4C5C', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
           <ArrowLeft size={16} />
           <span>Home</span>
@@ -99,10 +99,10 @@ export default function IndicLanguageMatrixView() {
           <Globe size={14} />
           <span>VERNACULAR LANGUAGE CAPABILITY SPECIFICATION</span>
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#0F4C5C', marginBottom: '10px' }}>
+        <h1 className="page-main-heading" style={{ fontSize: '32px', fontWeight: 850, color: '#0F4C5C', marginBottom: '10px' }}>
           Indic Language & Dialect Support Matrix
         </h1>
-        <p style={{ fontSize: '15px', color: '#3D545E', maxWidth: '850px', lineHeight: 1.6 }}>
+        <p className="page-main-subtext" style={{ fontSize: '15px', color: '#3D545E', maxWidth: '850px', lineHeight: 1.6 }}>
           Transparent documentation of Indic language speech recognition (ASR), speech synthesis (TTS), and regional colloquial symptom metaphors supported in this demonstration prototype.
         </p>
       </div>
@@ -124,7 +124,7 @@ export default function IndicLanguageMatrixView() {
       <IndicLanguageMatrixBanner />
 
       {/* Language Matrix Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+      <div className="indic-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
         {SUPPORTED_DIALECT_DOMAINS.map((item) => {
           const isSelected = selectedLanguage === item.code;
           return (

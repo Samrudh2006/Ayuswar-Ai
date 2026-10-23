@@ -804,45 +804,99 @@ export default function Navbar({
               </div>
             </div>
 
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/')}>Home</Link>
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/')}>
+              <div style={{ fontWeight: 750, color: currentPath === '/' ? '#0F4C5C' : '#091E26' }}>🏠 Home Landing</div>
+            </Link>
             
-            <div style={{ fontWeight: 700, fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', marginTop: 4 }}>
-              Solutions
+            {/* Solutions Section */}
+            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Clinical Solutions (5)</span>
             </div>
+            
             <Link to="/solutions/opd_ambient_scribe" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}>
-              OPD Ambient Scribe
+              <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>OPD Ambient Scribe</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Vernacular consultation drafting</div>
+              </div>
             </Link>
+            
             <Link to="/scanner" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/scanner')}>
-              Blister Strip Scanner
+              <Scan size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Blister Strip Scanner</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>OCR & PMBJP generic pricing</div>
+              </div>
             </Link>
+            
             <Link to="/audio-rx" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/audio-rx')}>
-              Vernacular Audio-Rx Studio
+              <Volume2 size={18} color="#6366F1" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Vernacular Audio-Rx Studio</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Spoken dosage instructions</div>
+              </div>
             </Link>
+            
             <Link to="/acoustic-lab" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/acoustic-lab')}>
-              Acoustic Biomarker Lab
+              <Activity size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Acoustic Biomarker Lab</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Non-diagnostic audio DSP features</div>
+              </div>
             </Link>
 
-            <div style={{ fontWeight: 700, fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', marginTop: 4 }}>
-              Technical & Evidence
+            {/* Technology Section */}
+            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Technology & Evidence</span>
             </div>
+
             <Link to="/technology" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isTechActive)}>
-              Technology & Architecture
-            </Link>
-            <Link to="/benchmarks" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isImpactActive)}>
-              Clinical Impact (24 Tests)
-            </Link>
-            <Link to="/language-matrix" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/language-matrix')}>
-              Indic Language Matrix
-            </Link>
-            <Link to="/datasets" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/datasets')}>
-              Knowledge & Lexicon
+              <Layers size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Technology & Architecture</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Deep-Tech pipeline HLD & terminal</div>
+              </div>
             </Link>
 
-            <div style={{ fontWeight: 700, fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', marginTop: 4 }}>
-              Clinical Workspaces & Profiles
+            <Link to="/benchmarks" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isImpactActive)}>
+              <BarChart3 size={18} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Clinical Impact & Validation</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>24 QA test suite & workflow model</div>
+              </div>
+            </Link>
+
+            {/* Resources Section (2 Things) */}
+            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Resources (2 Modules)</span>
+            </div>
+
+            <Link to="/language-matrix" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/language-matrix')}>
+              <Languages size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Indic Language Matrix</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>22 Scheduled languages & dialects</div>
+              </div>
+            </Link>
+
+            <Link to="/datasets" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/datasets')}>
+              <BookOpen size={18} color="#D97706" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>Clinical Knowledge & Lexicon</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>ICD-10 taxonomy & colloquial phrases</div>
+              </div>
+            </Link>
+
+            {/* Clinical Workspaces & Profiles */}
+            <div style={{ fontWeight: 800, fontSize: '0.75rem', color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span>Clinical Emergency & Portals</span>
             </div>
             <Link to="/emergency" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isEmergencyActive)}>
-              Emergency Triage & CPR Metronome
+              <PhoneCall size={18} color="#DC2626" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#DC2626' }}>Emergency Triage & CPR Metronome</div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Rapid distress escalation</div>
+              </div>
             </Link>
             <button
               type="button"
@@ -854,7 +908,13 @@ export default function Navbar({
               }}
               style={dropdownItemStyle(isDoctorActive)}
             >
-              OPD Clinician Console {doctorProfile ? '(Active)' : '(Login / Register)'}
+              <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, color: '#0F172A' }}>
+                  OPD Clinician Console {doctorProfile ? '(Active)' : '(Sign In)'}
+                </div>
+                <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Attending doctor portal</div>
+              </div>
             </button>
             <button
               type="button"
