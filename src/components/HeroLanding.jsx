@@ -576,17 +576,6 @@ export default function HeroLanding({
           zIndex: 0
         }}></div>
 
-        {/* Dedicated Mobile-Only Doctor Background Visual: ONLY rendered on Mobile (<= 900px), NEVER on Laptop/Desktop */}
-        {isMobileView && (
-          <div className="hero-mobile-doctor-bg" aria-hidden="true" style={{ position: 'absolute' }}>
-            <img
-              src="/assets/mobile_hero_doctor_bg.jpg"
-              alt=""
-              className="hero-mobile-doctor-bg-img"
-            />
-            <div className="hero-mobile-doctor-overlay"></div>
-          </div>
-        )}
 
         {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual: Strictly Laptop/Desktop (> 900px) */}
         {!isMobileView && (
@@ -931,6 +920,77 @@ export default function HeroLanding({
                 <span>Prototype Demo</span>
               </div>
             </div>
+
+            {/* Dedicated Mobile Doctor Visual Card — Distinct separated area below text */}
+            {isMobileView && (
+              <div
+                className="hero-mobile-doctor-card"
+                style={{
+                  marginTop: '24px',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
+                  border: '1.5px solid rgba(15, 76, 92, 0.22)',
+                  boxShadow: '0 10px 28px rgba(15, 76, 92, 0.12)',
+                  background: '#FFFFFF',
+                  position: 'relative'
+                }}
+              >
+                <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', background: '#F8F6F0' }}>
+                  <img
+                    src="/assets/sections/sec1_hero.png"
+                    alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center 12%',
+                      display: 'block'
+                    }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: '10px',
+                    background: 'rgba(15, 23, 42, 0.75)',
+                    backdropFilter: 'blur(6px)',
+                    color: '#FEF08A',
+                    fontSize: '10px',
+                    fontWeight: 750,
+                    padding: '3px 8px',
+                    borderRadius: '6px'
+                  }}>
+                    Simulation Demo
+                  </div>
+                </div>
+                <div style={{
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: '#FAF8F5',
+                  borderTop: '1px solid rgba(15, 76, 92, 0.1)'
+                }}>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>
+                      Dr. Ananya Sharma, MD
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 500 }}>
+                      Virtual Attending Physician • AyuSwar AI
+                    </div>
+                  </div>
+                  <span style={{
+                    fontSize: '10px',
+                    fontWeight: 800,
+                    color: '#0D6868',
+                    background: 'rgba(15, 76, 92, 0.1)',
+                    padding: '3px 8px',
+                    borderRadius: '12px'
+                  }}>
+                    180ms Latency
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

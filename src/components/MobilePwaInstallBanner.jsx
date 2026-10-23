@@ -24,9 +24,10 @@ export default function MobilePwaInstallBanner() {
     }
 
     // Check if dismissed
-    const isDismissed = localStorage.getItem('ayuswar_pwa_dismissed') === 'true';
+    const isDismissed = localStorage.getItem('ayuswar_pwa_dismissed') === 'true' || 
+                        sessionStorage.getItem('ayuswar_pwa_dismissed_session') === 'true';
     const dismissedAt = localStorage.getItem('ayuswar_pwa_dismissed_at');
-    if (isDismissed || (dismissedAt && Date.now() - Number(dismissedAt) < 7 * 24 * 60 * 60 * 1000)) {
+    if (isDismissed || (dismissedAt && Date.now() - Number(dismissedAt) < 30 * 24 * 60 * 60 * 1000)) {
       return;
     }
 
@@ -39,22 +40,10 @@ export default function MobilePwaInstallBanner() {
     const handleBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      // Only show banner if install prompt is genuine and available
       setShowBanner(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-
-    // If on mobile iOS Safari, show banner with instructions after 4 seconds
-    if (isIosDevice && typeof window !== 'undefined' && window.innerWidth <= 768) {
-      const timer = setTimeout(() => {
-        setShowBanner(true);
-      }, 4000);
-      return () => {
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-        clearTimeout(timer);
-      };
-    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
@@ -76,6 +65,7 @@ export default function MobilePwaInstallBanner() {
     setShowBanner(false);
     try {
       localStorage.setItem('ayuswar_pwa_dismissed', 'true');
+      sessionStorage.setItem('ayuswar_pwa_dismissed_session', 'true');
       localStorage.setItem('ayuswar_pwa_dismissed_at', String(Date.now()));
     } catch {}
   };
@@ -88,22 +78,23 @@ export default function MobilePwaInstallBanner() {
       aria-label="Install mobile application"
       style={{
         position: 'fixed',
-        top: '12px',
-        left: '12px',
-        right: '12px',
-        maxWidth: '460px',
+        top: '8px',
+        left: '10px',
+        right: '10px',
+        maxWidth: '430px',
         margin: '0 auto',
         zIndex: 1050,
-        background: 'linear-gradient(135deg, #0A2540 0%, #004D40 100%)',
-        borderRadius: '16px',
-        padding: '12px 14px',
-        boxShadow: '0 12px 32px rgba(15, 76, 92, 0.4), 0 2px 6px rgba(0,0,0,0.2)',
-        border: '1.5px solid #D4AF37',
+        background: 'linear-gradient(135deg, rgba(10, 37, 64, 0.96) 0%, rgba(0, 77, 64, 0.96) 100%)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '12px',
+        padding: '6px 10px',
+        boxShadow: '0 8px 24px rgba(15, 76, 92, 0.35)',
+        border: '1px solid rgba(212, 175, 55, 0.8)',
         color: '#ffffff',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
-        animation: 'slideDownBanner 0.35s cubic-bezier(0.16, 1, 0.3, 1)'
+        gap: '8px',
+        animation: 'slideDownBanner 0.3s ease'
       }}
     >
       {/* App Icon */}
@@ -111,80 +102,72 @@ export default function MobilePwaInstallBanner() {
         src="/assets/ayuswar_emblem_mark.png"
         alt="AyuSwar AI App"
         style={{
-          width: '46px',
-          height: '46px',
+          width: '32px',
+          height: '32px',
           borderRadius: '50%',
           background: '#FAF8F5',
-          border: '1.5px solid #D4AF37',
-          padding: '2px',
-          flexShrink: 0,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.25)'
+          border: '1px solid #D4AF37',
+          padding: '1px',
+          flexShrink: 0
         }}
       />
 
       {/* Text Info */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.2px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.2px' }}>
             Install AyuSwar AI
           </span>
           <span style={{
-            fontSize: '9px',
+            fontSize: '8px',
             fontWeight: 800,
             background: 'rgba(212, 175, 55, 0.25)',
             color: '#D4AF37',
-            padding: '1px 5px',
-            borderRadius: '4px'
+            padding: '1px 4px',
+            borderRadius: '3px'
           }}>
             FAST APP
           </span>
         </div>
-        <div style={{ fontSize: '11px', color: '#CBD5E1', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ fontSize: '10px', color: '#CBD5E1', marginTop: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {isIos ? 'Tap Share ⎋ & "Add to Home Screen"' : 'Offline Rx • 1-Tap 108 SOS • Fast OPD'}
         </div>
       </div>
 
       {/* Action CTA */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
         {!isIos && deferredPrompt && (
           <button
-            type="button"
             onClick={handleInstallClick}
             style={{
+              padding: '4px 10px',
+              borderRadius: '6px',
               background: '#D4AF37',
               color: '#081C24',
               border: 'none',
-              borderRadius: '8px',
-              padding: '7px 12px',
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 800,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
-              boxShadow: '0 2px 8px rgba(212, 175, 55, 0.4)'
+              gap: '4px'
             }}
           >
-            <Download size={14} strokeWidth={2.5} />
-            <span>Install</span>
+            <Download size={11} strokeWidth={2.5} />
+            Install
           </button>
         )}
-
         <button
-          type="button"
           onClick={handleDismiss}
-          aria-label="Dismiss install banner"
+          aria-label="Dismiss installation banner"
           style={{
-            background: 'rgba(255, 255, 255, 0.12)',
+            background: 'none',
             border: 'none',
-            borderRadius: '50%',
-            width: '26px',
-            height: '26px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             color: '#CBD5E1',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center'
           }}
         >
           <X size={15} />

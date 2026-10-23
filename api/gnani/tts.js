@@ -105,7 +105,15 @@ export default async function handler(req, res) {
         text: text.trim(),
         voice: defaultVoice,
         model: safeModel,
-        language: safeLang
+        language: safeLang,
+        speed: 1.0,
+        audio_config: {
+          sample_rate: 24000,
+          num_channels: 1,
+          sample_width: 2,
+          encoding: 'linear_pcm',
+          container: 'wav'
+        }
       }),
       signal: controller.signal
     });

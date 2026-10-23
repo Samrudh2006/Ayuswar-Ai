@@ -82,6 +82,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [callerCoords, setCallerCoords] = useState({ lat: 17.6913, lng: 83.0040 });
   const [geoAddress, setGeoAddress] = useState('Detecting live satellite GPS / network location...');
+  const [isLocationOutOfRegion, setIsLocationOutOfRegion] = useState(false);
 
   // Mapbox Geocoding Search State
   const [searchQuery, setSearchQuery] = useState('');
@@ -183,6 +184,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       try {
         const coords = await requestRealDeviceLocation();
         if (!isMounted) return;
+        if (coords.isOutOfRegion) setIsLocationOutOfRegion(true);
         setCallerCoords({ lat: coords.latitude, lng: coords.longitude });
         setAmbulanceData((prev) => ({
           ...prev,
@@ -988,6 +990,24 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               {/* State 1: Before Dispatch */}
               {dispatchState === 1 && selectedHospital && (
                 <div>
+                  {isLocationOutOfRegion && (
+                    <div style={{
+                      background: 'rgba(245, 158, 11, 0.15)',
+                      border: '1px solid rgba(245, 158, 11, 0.4)',
+                      color: '#FDE68A',
+                      padding: '5px 8px',
+                      borderRadius: '6px',
+                      fontSize: '10px',
+                      lineHeight: 1.35,
+                      marginBottom: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}>
+                      <AlertTriangle size={13} color="#F59E0B" style={{ flexShrink: 0 }} />
+                      <span><strong>Reference Simulation:</strong> User GPS outside India. Anchored to Indian 108 Emergency Network (Hyderabad Command Hub).</span>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ fontSize: '9px', background: '#0F2547', border: '1px solid #1E3E6E', color: '#38BDF8', padding: '1px 5px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: 700 }}>
                       HFR: {selectedHospital.hfrId}

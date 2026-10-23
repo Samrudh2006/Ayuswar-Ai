@@ -28,50 +28,51 @@ export default function CookieConsentBanner() {
   return (
     <div style={{
       position: 'fixed',
-      bottom: '16px',
-      left: '16px',
-      right: '16px',
-      maxWidth: '620px',
+      bottom: '10px',
+      left: '10px',
+      right: '10px',
+      maxWidth: '540px',
       margin: '0 auto',
-      background: '#0F172A',
+      background: 'rgba(15, 23, 42, 0.96)',
+      backdropFilter: 'blur(10px)',
       color: '#F8FAFC',
-      padding: '14px 20px',
-      borderRadius: '16px',
-      boxShadow: '0 12px 35px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+      padding: '8px 14px',
+      borderRadius: '12px',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12)',
       zIndex: 99999,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: '16px',
-      flexWrap: 'wrap',
+      gap: '10px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: '1 1 300px' }}>
-        <ShieldCheck size={22} color="#D4AF37" style={{ flexShrink: 0 }} />
-        <div style={{ fontSize: '12.5px', lineHeight: 1.5, color: '#CBD5E1' }}>
-          <span>AyuSwar AI uses local storage strictly for language preferences and ephemeral clinical sessions in compliance with India's <strong>DPDP Act 2023</strong>. Zero third-party ad tracking.</span>{' '}
-          <Link to="/privacy" style={{ color: '#D4AF37', textDecoration: 'underline', fontWeight: 600 }}>
-            Privacy Policy
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+        <ShieldCheck size={18} color="#D4AF37" style={{ flexShrink: 0 }} />
+        <div style={{ fontSize: '11px', lineHeight: 1.35, color: '#CBD5E1', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <span>DPDP Act 2023 compliant: Local storage used for language & sessions. Zero ad tracking.</span>{' '}
+          <Link to="/privacy" style={{ color: '#D4AF37', textDecoration: 'underline', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            Privacy
           </Link>
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
         <button
           onClick={handleAccept}
           style={{
-            padding: '7px 16px',
-            borderRadius: '10px',
+            padding: '5px 12px',
+            borderRadius: '8px',
             background: '#0F4C5C',
             color: '#FFFFFF',
             border: 'none',
-            fontSize: '12px',
-            fontWeight: 800,
+            fontSize: '11px',
+            fontWeight: 700,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.4)'
+            boxShadow: '0 2px 6px rgba(15, 76, 92, 0.3)',
+            whiteSpace: 'nowrap'
           }}
         >
-          Got It
+          Got it
         </button>
 
         <button
@@ -81,11 +82,13 @@ export default function CookieConsentBanner() {
             border: 'none',
             color: '#94A3B8',
             cursor: 'pointer',
-            padding: '4px'
+            padding: '2px',
+            display: 'flex',
+            alignItems: 'center'
           }}
           aria-label="Close banner"
         >
-          <X size={16} />
+          <X size={15} />
         </button>
       </div>
     </div>

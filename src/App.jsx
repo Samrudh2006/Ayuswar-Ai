@@ -281,8 +281,10 @@ export default function App() {
           {/* Deep-Tech Architectural Blueprint */}
           <Route path="/technology" element={<ArchitectureView />} />
 
-          {/* Interactive Medical Vision Scanner */}
+          {/* Interactive Medical Vision Scanner & Aliases */}
           <Route path="/scanner" element={<PrescriptionScannerView />} />
+          <Route path="/scanrx" element={<Navigate to="/scanner" replace />} />
+          <Route path="/scan-rx" element={<Navigate to="/scanner" replace />} />
 
           {/* Spoken Dosage & Karaoke Rx Studio */}
           <Route path="/audio-rx" element={<AudioRxStudioView />} />

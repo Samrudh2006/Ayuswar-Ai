@@ -14,8 +14,28 @@
 
 import { EVON_MODEL_METADATA } from './gnaniEvonService';
 
+export function isWithinIndia(lat, lon) {
+  const nLat = Number(lat);
+  const nLon = Number(lon);
+  return !isNaN(nLat) && !isNaN(nLon) && nLat >= 6.5 && nLat <= 37.5 && nLon >= 68.0 && nLon <= 97.5;
+}
+
 // Reverse geocode real GPS coordinates to human-readable Indian street address
 export async function reverseGeocodeGPS(lat, lon) {
+  // If coordinates are outside Indian territory (e.g. US cloud IP or foreign test browser)
+  if (!isWithinIndia(lat, lon)) {
+    return {
+      displayName: `Simulated 108 Command Hub • Hyderabad, Telangana (Out-of-Region Coordinates: ${lat.toFixed(2)}, ${lon.toFixed(2)})`,
+      road: '108 Emergency Control Center Road',
+      neighborhood: 'Sultan Bazar',
+      city: 'Hyderabad (108 Command Hub)',
+      state: 'Telangana',
+      postcode: '500095',
+      isOutOfRegion: true,
+      raw: null
+    };
+  }
+
   try {
     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`, {
       headers: {
@@ -62,9 +82,23 @@ export function requestRealDeviceLocation() {
         if (res.ok) {
           const data = await res.json();
           if (data.latitude && data.longitude) {
+            const rawLat = Number(data.latitude);
+            const rawLng = Number(data.longitude);
+            if (!isWithinIndia(rawLat, rawLng)) {
+              return {
+                latitude: 17.3850,
+                longitude: 78.4867,
+                accuracy: 100,
+                city: 'Hyderabad (108 Command Hub)',
+                region: 'Telangana',
+                isOutOfRegion: true,
+                isIpGeo: true,
+                timestamp: Date.now()
+              };
+            }
             return {
-              latitude: Number(data.latitude),
-              longitude: Number(data.longitude),
+              latitude: rawLat,
+              longitude: rawLng,
               accuracy: 2500, // City level accuracy
               city: data.cityName || 'Local Area',
               region: data.regionName || 'Andhra Pradesh',
@@ -85,9 +119,23 @@ export function requestRealDeviceLocation() {
         if (res.ok) {
           const data = await res.json();
           if (data.latitude && data.longitude) {
+            const rawLat = Number(data.latitude);
+            const rawLng = Number(data.longitude);
+            if (!isWithinIndia(rawLat, rawLng)) {
+              return {
+                latitude: 17.3850,
+                longitude: 78.4867,
+                accuracy: 100,
+                city: 'Hyderabad (108 Command Hub)',
+                region: 'Telangana',
+                isOutOfRegion: true,
+                isIpGeo: true,
+                timestamp: Date.now()
+              };
+            }
             return {
-              latitude: Number(data.latitude),
-              longitude: Number(data.longitude),
+              latitude: rawLat,
+              longitude: rawLng,
               accuracy: 3000,
               city: data.city || 'Local Area',
               region: data.region || 'Andhra Pradesh',
@@ -119,9 +167,28 @@ export function requestRealDeviceLocation() {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
+        const rawLat = pos.coords.latitude;
+        const rawLng = pos.coords.longitude;
+        if (!isWithinIndia(rawLat, rawLng)) {
+          resolve({
+            latitude: 17.3850,
+            longitude: 78.4867,
+            accuracy: 100,
+            city: 'Hyderabad (108 Command Hub)',
+            region: 'Telangana',
+            isHardwareGps: true,
+            isOutOfRegion: true,
+            originalLat: rawLat,
+            originalLng: rawLng,
+            simulatedContext: 'OUT_OF_REGION_REFERENCE_HUB',
+            timestamp: pos.timestamp
+          });
+          return;
+        }
+
         resolve({
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
+          latitude: rawLat,
+          longitude: rawLng,
           accuracy: Math.round(pos.coords.accuracy || 15),
           altitude: pos.coords.altitude,
           isHardwareGps: true,

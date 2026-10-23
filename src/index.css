@@ -1539,30 +1539,12 @@ body {
   }
 
   .hero-mobile-doctor-bg {
+    display: none !important;
+  }
+
+  .hero-mobile-doctor-card {
     display: block !important;
-  }
-
-  .hero-mobile-doctor-bg-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center 5% !important;
-    opacity: 0.82 !important;
-    filter: saturate(1.15) contrast(1.08) !important;
-  }
-
-  .hero-mobile-doctor-overlay {
-    position: absolute !important;
-    inset: 0 !important;
-    background: linear-gradient(
-      180deg,
-      rgba(250, 249, 246, 0.32) 0%,
-      rgba(250, 249, 246, 0.18) 25%,
-      rgba(250, 249, 246, 0.45) 55%,
-      rgba(250, 249, 246, 0.85) 85%,
-      #FAF9F6 100%
-    ) !important;
-    pointer-events: none !important;
+    animation: fadeIn 0.4s ease;
   }
 
   .hero-kinetic-title {

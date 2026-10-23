@@ -247,9 +247,15 @@ function getRegionalHospitalTemplates(locality = '', lat = 15.8281, lng = 78.037
   ];
 }
 
+export function isCoordinateInIndia(lat, lng) {
+  const nLat = Number(lat);
+  const nLng = Number(lng);
+  return !isNaN(nLat) && !isNaN(nLng) && nLat >= 6.5 && nLat <= 37.5 && nLng >= 68.0 && nLng <= 97.5;
+}
+
 /**
  * Fetch Nearby ABDM HFR Hospitals dynamically anchored around caller coordinates
- * Uses OpenStreetMap Nominatim with live bounded search, falling back to contextual regional templates.
+ * Uses OpenStreetMap Nominatim with live bounded search, strictly bounded to India.
  */
 export async function fetchNearbyHospitalsAPI({
   lat = 15.8281,
@@ -259,10 +265,18 @@ export async function fetchNearbyHospitalsAPI({
 } = {}) {
   let rawList = [];
 
-  // 1. Live OpenStreetMap Nominatim Query around user's coordinates
+  // Enforce Indian territory: If client coordinates are outside India, re-anchor to Indian Emergency Command Hub
+  const outOfRegion = !isCoordinateInIndia(lat, lng);
+  const effectiveLat = outOfRegion ? 17.3850 : Number(lat);
+  const effectiveLng = outOfRegion ? 78.4867 : Number(lng);
+  const effectiveAddress = outOfRegion 
+    ? 'Hyderabad (Indian 108 Emergency Command Hub - Reference Simulation)'
+    : geoAddress;
+
+  // 1. Live OpenStreetMap Nominatim Query around user's coordinates (strictly countrycodes=in)
   try {
     const box = 0.22; // ~22km primary bounding box
-    const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&q=hospital&viewbox=${lng - box},${lat + box},${lng + box},${lat - box}&bounded=1&limit=12`;
+    const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=in&q=hospital&viewbox=${effectiveLng - box},${effectiveLat + box},${effectiveLng + box},${effectiveLat - box}&bounded=1&limit=12`;
     
     let res = await fetch(osmUrl, {
       headers: {
@@ -280,7 +294,7 @@ export async function fetchNearbyHospitalsAPI({
     // 2. If rural / fewer than 2 facilities found, expand search radius to 45km
     if (!Array.isArray(data) || data.length < 2) {
       const wideBox = 0.45; // ~45km broader district perimeter
-      const wideUrl = `https://nominatim.openstreetmap.org/search?format=json&q=hospital&viewbox=${lng - wideBox},${lat + wideBox},${lng + wideBox},${lat - wideBox}&bounded=1&limit=12`;
+      const wideUrl = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=in&q=hospital&viewbox=${effectiveLng - wideBox},${effectiveLat + wideBox},${effectiveLng + wideBox},${effectiveLat - wideBox}&bounded=1&limit=12`;
       const wideRes = await fetch(wideUrl, {
         headers: {
           'Accept': 'application/json',
@@ -303,9 +317,9 @@ export async function fetchNearbyHospitalsAPI({
         .map((item, idx) => {
           const hospLat = parseFloat(item.lat);
           const hospLng = parseFloat(item.lon);
-          const distKm = calculateHaversineDistance(lat, lng, hospLat, hospLng);
+          const distKm = calculateHaversineDistance(effectiveLat, effectiveLng, hospLat, hospLng);
           const etaMinutes = Math.max(3, Math.round((distKm / 32) * 60 + 2));
-          const cleanedName = cleanHospitalName(item.name, item.display_name, geoAddress);
+          const cleanedName = cleanHospitalName(item.name, item.display_name, effectiveAddress);
           
           const lowerName = cleanedName.toLowerCase();
           const isGovt = lowerName.includes('govt') || lowerName.includes('government') || lowerName.includes('chc') || lowerName.includes('phc') || lowerName.includes('ggh') || lowerName.includes('ntr') || lowerName.includes('civil') || lowerName.includes('district');

@@ -69,12 +69,22 @@ export default async function handler(req, res) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    const probeRes = await fetch(upstreamBase, {
-      method: 'GET',
+    // Test genuine synthesis capability on Gnani API rather than simple homepage ping
+    const probeRes = await fetch('https://api.vachana.ai/api/v1/tts/inference', {
+      method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'X-API-Key-ID': apiKey,
         'x-api-key': apiKey
       },
+      body: JSON.stringify({
+        text: 'ఆయుస్వర్',
+        voice: 'Nalini',
+        model: 'timbre-v2.5',
+        language: 'te-IN',
+        speed: 1.0,
+        audio_config: { sample_rate: 16000, num_channels: 1, sample_width: 2, encoding: 'linear_pcm', container: 'wav' }
+      }),
       signal: controller.signal
     }).catch(err => {
       return { ok: false, status: 503, error: err.message };
@@ -85,11 +95,12 @@ export default async function handler(req, res) {
 
     if (probeRes && (probeRes.status === 200 || probeRes.ok)) {
       lastSuccessTime = new Date().toISOString();
-      logSafeApiAccess({ route, method: req.method, status: 200, durationMs: latencyMs, clientNote: 'Live probe verified' });
+      logSafeApiAccess({ route, method: req.method, status: 200, durationMs: latencyMs, clientNote: 'Live inference probe verified' });
       return res.status(200).json({
         available: true,
         status: 'LIVE',
         provider: 'gnani',
+        verifiedCapability: 'SYNTHESIS_AND_KEY_AUTHENTICATED',
         models: {
           stt: 'Gnani Prisma v3 STT',
           tts: 'Gnani Timbre v2.5 / v3.0'
@@ -110,9 +121,9 @@ export default async function handler(req, res) {
         },
         latencyMs,
         lastSuccessTime,
-        reason: status === 401 
+        reason: status === 401 || status === 403
           ? 'Invalid or unauthorized GNANI_API_KEY. Using safe browser speech fallback.'
-          : `Gnani upstream returned HTTP ${status}. Using safe browser speech fallback.`
+          : `Gnani speech service returned HTTP ${status}. Using safe browser speech fallback.`
       });
     }
   } catch (err) {

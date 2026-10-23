@@ -43,9 +43,9 @@ export default async function handler(req, res) {
   }
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const apiKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseUrl || !serviceKey || serviceKey.includes('placeholder')) {
+  if (!supabaseUrl || !apiKey || apiKey.includes('placeholder')) {
     // Graceful unconfigured state
     logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime, clientNote: 'Supabase unconfigured' });
     return res.status(200).json({
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     const response = await fetch(`${supabaseUrl.replace(/\/+$/, '')}/auth/v1/user`, {
       headers: {
         'Authorization': `Bearer ${token}`,
-        'apikey': serviceKey
+        'apikey': apiKey
       }
     });
 
