@@ -1,6 +1,6 @@
-// AyuSwar AI Progressive Web App Service Worker (v2)
-// High-resilience offline clinical cache & mobile runtime acceleration
-const CACHE_NAME = 'ayuswar-ai-v2-cache';
+// AyuSwar AI Progressive Web App Service Worker (v3)
+// High-resilience offline clinical cache with immediate deployment revalidation
+const CACHE_NAME = 'ayuswar-ai-v3-cache';
 
 const STATIC_SHELL = [
   '/',
@@ -11,23 +11,31 @@ const STATIC_SHELL = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_SHELL).catch(() => {});
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+        keys.filter((key) => key !== CACHE_NAME).map((key) => {
+          console.log('[SW] Purging outdated cache:', key);
+          return caches.delete(key);
+        })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', (event) => {
@@ -35,13 +43,13 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Skip caching third-party telemetry or streaming audio sockets
+  // Skip caching third-party telemetry, streaming sockets, or external APIs
   if (url.origin !== self.origin && !url.hostname.includes('fonts.gstatic.com')) {
     return;
   }
 
-  // HTML Navigation: Network first, fall back to cached shell
-  if (event.request.mode === 'navigate') {
+  // HTML Navigation: Network-First to guarantee latest deployed build
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
@@ -56,7 +64,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static Assets (JS, CSS, PNG, SVG, WOFF2): Stale-while-revalidate
+  // Static Assets (Hashed JS, CSS, Media): Stale-While-Revalidate with network background update
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)
