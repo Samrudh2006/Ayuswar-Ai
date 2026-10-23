@@ -1028,55 +1028,55 @@ export default function HeroLanding({
         }}>
           <div className="hero-trust-strip-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '24px',
+            gridTemplateColumns: isMobileView ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: isMobileView ? '16px 12px' : '24px',
             alignItems: 'center',
             marginBottom: '24px',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             paddingBottom: '28px'
           }}>
-            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
-                <Globe2 size={24} />
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+                <Globe2 size={isMobileView ? 20 : 24} />
               </div>
-              <div>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Indic Voices</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
-              </div>
-            </div>
-
-            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24' }}>
-                <Building2 size={24} />
-              </div>
-              <div>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Synthetic Data</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
+              <div style={{ minWidth: 0 }}>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
               </div>
             </div>
 
-            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
-                <Users2 size={24} />
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24' }}>
+                <Building2 size={isMobileView ? 20 : 24} />
               </div>
-              <div>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px' }}>Clinician Agency</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
+              <div style={{ minWidth: 0 }}>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
               </div>
             </div>
 
-            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div className="hero-trust-strip-icon" style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399' }}>
-                <HeartPulse size={24} />
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+                <Users2 size={isMobileView ? 20 : 24} />
               </div>
-              <div>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Assistive Prototype</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
+              <div style={{ minWidth: 0 }}>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
+              </div>
+            </div>
+
+            <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399' }}>
+                <HeartPulse size={isMobileView ? 20 : 24} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
               </div>
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', fontSize: '13.5px', fontWeight: 600, color: '#CBD5E1', letterSpacing: '0.4px' }}>
+          <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#CBD5E1', letterSpacing: '0.4px', lineHeight: 1.4 }}>
             Voice-First Clinical Scribe & CDSS for Bharat. <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Prototype Demo)</span>
           </div>
         </div>
