@@ -12,7 +12,6 @@ import VitalsRppgModal from './components/VitalsRppgModal';
 import PillVisionScannerModal from './components/PillVisionScannerModal';
 import LiveScribeSessionModal from './components/LiveScribeSessionModal';
 import SeoHead from './components/SeoHead';
-import MobileAppBottomNav from './components/MobileAppBottomNav';
 import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 import CookieConsentBanner from './components/CookieConsentBanner';
