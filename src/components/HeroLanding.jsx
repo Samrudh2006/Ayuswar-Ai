@@ -566,7 +566,7 @@ export default function HeroLanding({
         }}></div>
 
         {/* Full-Bleed Right-Side Doctor & High-Tech AI Visual */}
-        <div style={{
+        <div className="hero-doctor-visual-container" style={{
           position: 'absolute',
           top: 0,
           right: 0,
@@ -734,7 +734,7 @@ export default function HeroLanding({
             </div>
 
             {/* Subtitle Description */}
-            <p style={{
+            <p className="hero-intro-text" style={{
               fontSize: '16.5px',
               lineHeight: 1.6,
               color: '#334155',
@@ -746,7 +746,7 @@ export default function HeroLanding({
             </p>
 
             {/* 5 Distinct Feature Pills */}
-            <div style={{
+            <div className="hero-feature-pills-row" style={{
               display: 'flex',
               gap: '10px',
               marginBottom: '32px',
@@ -818,8 +818,9 @@ export default function HeroLanding({
             </div>
 
             {/* CTAs */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <div className="hero-cta-container" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '28px' }}>
               <button
+                className="hero-primary-cta"
                 onClick={() => setIsGoldenStoryOpen(true)}
                 style={{
                   background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
@@ -851,6 +852,7 @@ export default function HeroLanding({
               </button>
 
               <button
+                className="hero-secondary-cta"
                 onClick={() => onOpenAcousticLab && onOpenAcousticLab()}
                 style={{
                   background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
