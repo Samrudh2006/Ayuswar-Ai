@@ -1571,15 +1571,22 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
           isOpen={isCopilotOpen}
           onToggle={() => setIsCopilotOpen(!isCopilotOpen)}
           callerPhone={callerPhone}
+          callerName={callerName}
           geoAddress={geoAddress}
           selectedHospital={selectedHospital}
           ambulanceData={ambulanceData}
+          hospitalsList={hospitalsList}
           liveTranscript={liveTranscript}
           englishTranslation={englishTranslation}
           onUpdateTranscript={(t, tr) => {
             setLiveTranscript(t);
             setEnglishTranslation(tr);
           }}
+          onApplyLocation={applyLocation}
+          onSelectHospital={(hosp) => setSelectedHospital(hosp)}
+          onDispatch={handleOpenDispatchWorkflow}
+          onUpdateCallerName={(name) => setCallerName(name)}
+          onUpdateCallerPhone={(phone) => setCallerPhone(phone)}
           onOpenHandoverModal={() => setIsHandoverModalOpen(true)}
           distressIndex={distressIndex}
           vocalPitchHz={vocalPitchHz}

@@ -74,6 +74,17 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   const { provider } = getAiConfig();
 
+  // Check Groq API Key if provided
+  const groqKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  if (groqKey) {
+    try {
+      const groqReply = await queryGroqApi(cleanPrompt, getSystemPromptForRole(role, enrichedContext));
+      if (groqReply) return groqReply;
+    } catch (err) {
+      console.warn("Groq API unavailable; engaging fallback:", err.message);
+    }
+  }
+
   // 1. Gnani Evon 30B Sovereign Indic Reasoning (Secure Server-Side Route)
   if (provider === 'gnani_evon_30b') {
     try {
@@ -88,6 +99,39 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   // 2. Local heuristic conversational demonstration
   return generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
+}
+
+export async function queryGroqApi(prompt, systemInstruction = '') {
+  const apiKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  if (!apiKey) return null;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.3,
+        max_tokens: 350
+      }),
+      signal: AbortSignal.timeout(8000)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content || null;
+    }
+  } catch (err) {
+    console.warn('Groq query failed:', err.message);
+  }
+  return null;
 }
 
 async function callGnaniEvonApi(prompt, role, context) {

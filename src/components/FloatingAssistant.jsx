@@ -26,6 +26,7 @@ import {
   Globe
 } from 'lucide-react';
 import { askAyuSwarBrain, getAiConfig, saveAiConfig, AI_PROVIDERS } from '../services/aiBrainService';
+import { speakHumanized } from '../utils/speechSanitizer';
 
 /**
  * 4K Sharp Vector Emblem for AyuSwar AI
@@ -156,24 +157,14 @@ export default function FloatingAssistant({
 
   const speakOutLoud = (text) => {
     if (!isAiVoiceEnabled || isMuted) return;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.95;
-      utterance.pitch = 1.0;
-      // Auto detect language
-      if (/[\u0C00-\u0C7F]/.test(text) || speechLanguage === 'te-IN') {
-        utterance.lang = 'te-IN';
-      } else if (/[\u0900-\u097F]/.test(text) || speechLanguage === 'hi-IN') {
-        utterance.lang = 'hi-IN';
-      } else {
-        utterance.lang = 'en-IN';
-      }
-      utterance.onend = () => {
+    speakHumanized(text, {
+      lang: speechLanguage || 'en-IN',
+      rate: 0.94,
+      pitch: 1.0,
+      onEnd: () => {
         setAssistantState('expanded');
-      };
-      window.speechSynthesis.speak(utterance);
-    }
+      }
+    });
   };
 
   // Dedicated Toggle: Me to Speak (starts timer cleanly at 00:00 only when speaking)

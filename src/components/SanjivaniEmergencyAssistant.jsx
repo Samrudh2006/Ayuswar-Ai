@@ -30,6 +30,8 @@ import {
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
 import { queryEvonServer, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
+import { cleanTextForSpeech, speakHumanized } from '../utils/speechSanitizer';
+import { queryGroqApi } from '../services/aiBrainService';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -37,26 +39,33 @@ import { speechService } from '../services/indicSpeechService';
  * Features:
  * - Urgent Red/Crimson High-Acuity Theme
  * - Live Voice Call Audio Stream (Auto Timer, Mute, Real Microphone Web Speech, End Call)
- * - Dynamic CPR Metronome with AHA 110 BPM Audible Clicks & Compression Counter
- * - Fully Functional Autonomous Actions:
- *   • 110 BPM CPR (Sound + Voice + Visual Beat)
- *   • Pre-Alert Cath Lab (Radio Chime + Voice Alert + Token)
- *   • Green Corridor (Real Siren Wail + Voice Alert + Police Clearance Token)
- *   • Handover Form (Instant pop-up of auto-filled ePCR)
- * - Assigned Paramedic Driver Contact & Direct Dial (+91 94401 22108)
- * - Dynamic Real-Time Event Feed (No static dummy data, pluggable for custom LLM)
+ * - Dynamic Voice Intent Execution:
+ *   • Sets Caller Location (Annavaram / Kakinada / Rajahmundry)
+ *   • Selects Nearest Apex Hospital
+ *   • Books Emergency Bed & Dispatches Ambulance A-12
+ *   • Activates 110 BPM CPR Guidance & Metronome
+ *   • Updates Caller Name & Cellular Callback
+ * - Connected with ultra-fast Groq LLaMA-3.3 Reasoning & Gnani Evon
+ * - Clean Human Speech (Strips asterisks, emojis, bullet points)
  */
 export default function SanjivaniEmergencyAssistant({
   isOpen,
   onToggle,
   callerPhone,
+  callerName = 'Emergency Caller',
   geoAddress,
   selectedHospital,
   ambulanceData,
+  hospitalsList = [],
   liveTranscript,
   englishTranslation,
   onUpdateTranscript,
   onOpenHandoverModal,
+  onApplyLocation,
+  onSelectHospital,
+  onDispatch,
+  onUpdateCallerName,
+  onUpdateCallerPhone,
   distressIndex = 89,
   vocalPitchHz = 295,
   respirationRate = 38,
@@ -203,21 +212,8 @@ export default function SanjivaniEmergencyAssistant({
             addCopilotEvent('triage', `🚨 Voice Triage Alert: ${triage.suspectedCondition}`, `Action protocol: ${triage.priorityProtocol}`);
           }
 
-          try {
-            const systemInstruction = 
-              `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
-              `Respond with concise, authoritative life-safety protocol guidance under 35 words so it can be spoken quickly to emergency callers. ` +
-              `Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'}.`;
-
-            const evonResult = await queryEvonServer(userQuestion, systemInstruction, { maxTokens: 120 });
-            const replyText = (evonResult.finalAnswer || evonResult.raw || 'Ambulance is dispatched. Keep patient calm and airway open.').trim();
-            addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', replyText);
-            return replyText;
-          } catch (err) {
-            const fallbackReply = `Emergency Protocol: Keep patient resting with open airway. Ambulance A-12 is en route (${selectedHospital?.etaMinutes || 3} min road ETA).`;
-            addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', fallbackReply);
-            return fallbackReply;
-          }
+          const reply = await processCopilotVoiceCommand(userQuestion);
+          return reply;
         }
       });
     } catch (err) {
@@ -225,6 +221,146 @@ export default function SanjivaniEmergencyAssistant({
       setIsMicListening(false);
       setVoiceState('IDLE');
       addCopilotEvent('error', '⚠️ Microphone Permission Notice', 'Please allow microphone access in your browser to talk live.');
+    }
+  };
+
+  // Process voice intent for setting location, finding nearest hospital, booking beds, guiding CPR, or updating details
+  const processCopilotVoiceCommand = async (rawText) => {
+    if (!rawText || !rawText.trim()) return null;
+    const text = rawText.trim();
+    const lower = text.toLowerCase();
+
+    // 1. LOCATION INTENTS
+    if (lower.includes('annavaram') || lower.includes('అన్నవరం')) {
+      const loc = { lat: 17.2790, lon: 82.4042, address: 'Annavaram, Kakinada District, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Annavaram, AP (17.2790° N, 82.4042° E). Rerouting nearest 108 ALS unit.`);
+      return `Location set to Annavaram. Identifying closest emergency trauma centers and dispatching 108 ambulance.`;
+    }
+
+    if (lower.includes('kakinada') || lower.includes('కాకినాడ')) {
+      const loc = { lat: 16.9891, lon: 82.2475, address: 'Kakinada, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Kakinada, AP (16.9891° N, 82.2475° E).`);
+      return `Location updated to Kakinada. Apex trauma center identified.`;
+    }
+
+    if (lower.includes('rajahmundry') || lower.includes('rajamahendravaram') || lower.includes('రాజమండ్రి')) {
+      const loc = { lat: 17.0005, lon: 81.8040, address: 'Rajahmahendravaram, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Rajahmundry.`);
+      return `Location updated to Rajahmundry.`;
+    }
+
+    // 2. NEAREST HOSPITAL INTENT
+    if (
+      lower.includes('nearest hospital') || 
+      lower.includes('nearby hospital') || 
+      lower.includes('closest hospital') || 
+      lower.includes('hospital daggara') || 
+      lower.includes('ఆసుపత్రి') || 
+      lower.includes('davaakhana') ||
+      (lower.includes('which hospital') || lower.includes('where to go'))
+    ) {
+      const targetHospital = (hospitalsList && hospitalsList.length > 0) 
+        ? hospitalsList[0] 
+        : selectedHospital || { name: 'Apollo Emergency Trauma Center', etaMinutes: 4, bedsAvailable: 8 };
+      
+      onSelectHospital?.(targetHospital);
+      addCopilotEvent('system', `🏥 Nearest Hospital Selected: ${targetHospital.name}`, `Selected ${targetHospital.name} (${targetHospital.etaMinutes || 4} min ETA, ${targetHospital.bedsAvailable || 6} beds open).`);
+      return `Nearest apex center is ${targetHospital.name}. Estimated travel time is ${targetHospital.etaMinutes || 4} minutes with ${targetHospital.bedsAvailable || 6} emergency beds available. Say book bed or dispatch to reserve.`;
+    }
+
+    // 3. BOOK BED / DISPATCH INTENT
+    if (
+      lower.includes('book bed') || 
+      lower.includes('dispatch') || 
+      lower.includes('send ambulance') || 
+      lower.includes('ambulance pampandi') || 
+      lower.includes('ఆంబులెన్స్ పంపండి') || 
+      lower.includes('book cheyyi') ||
+      lower.includes('bed handover')
+    ) {
+      const hosp = selectedHospital || (hospitalsList && hospitalsList[0]) || { name: 'Apex Emergency Center', shortName: 'Apex' };
+      if (onDispatch) {
+        onDispatch(hosp);
+      } else if (onOpenHandoverModal) {
+        onOpenHandoverModal();
+      }
+      handlePreAlertCathLab();
+      return `Ambulance A-12 dispatched and trauma resuscitation bed pre-booked at ${hosp.name || hosp.shortName || 'apex hospital'}. Pre-arrival digital token generated.`;
+    }
+
+    // 4. CPR GUIDANCE INTENT
+    if (
+      lower.includes('cpr') || 
+      lower.includes('chest pain') || 
+      lower.includes('compressions') || 
+      lower.includes('gunde noppi') || 
+      lower.includes('గుండె నొప్పి') ||
+      lower.includes('breathless') ||
+      lower.includes('pulse')
+    ) {
+      if (!isMetronomeActive) {
+        handleTriggerCPR();
+      }
+      return `Activating 110 beats per minute CPR rhythm. Place heels of hands in center of chest and compress 2 inches deep in sync with the beat.`;
+    }
+
+    // 5. CALLER NAME INTENT
+    const nameMatch = text.match(/(?:my name is|i am|peru|naa peru)\s+([a-zA-Z\s]+)/i);
+    if (nameMatch && nameMatch[1]) {
+      const extractedName = nameMatch[1].trim().split(' ')[0];
+      if (extractedName && extractedName.length > 2) {
+        onUpdateCallerName?.(extractedName);
+        addCopilotEvent('system', `👤 Caller Name Updated: ${extractedName}`, `Triage ePCR record updated with patient name.`);
+        return `Noted caller name as ${extractedName}. Details synchronized with ePCR.`;
+      }
+    }
+
+    // 6. CALLER PHONE INTENT
+    const phoneMatch = text.match(/\b([6-9]\d{9})\b/);
+    if (phoneMatch && phoneMatch[1]) {
+      const extractedPhone = phoneMatch[1];
+      onUpdateCallerPhone?.(extractedPhone);
+      addCopilotEvent('system', `📱 Caller Contact Updated: +91 ${extractedPhone}`, `Cellular callback bridge updated.`);
+      return `Updated contact number to ${extractedPhone}.`;
+    }
+
+    // 7. GREEN CORRIDOR / TRAFFIC INTENT
+    if (lower.includes('traffic') || lower.includes('green corridor') || lower.includes('clear road') || lower.includes('siren')) {
+      handleGreenCorridor();
+      return `Traffic police green corridor signal clearance activated along route to ${selectedHospital?.name || 'hospital'}.`;
+    }
+
+    // 8. GENERAL CLINICAL QUERY: Groq or Evon reasoning with humanized speech
+    try {
+      // Try fast Groq API
+      const groqKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+      if (groqKey) {
+        const groqPrompt = `Emergency caller asks: "${text}". Patient location: ${geoAddress}. Target hospital: ${selectedHospital?.name || 'Apex Trauma'}. Provide ultra-concise, authoritative first-aid and dispatch guidance in under 30 words.`;
+        const groqRes = await queryGroqApi(groqPrompt, 'You are Sanjivani-108 Emergency AI Dispatch Copilot. Be calm, decisive, and concise. No markdown, no asterisks, no bullet points.');
+        if (groqRes) {
+          const cleaned = cleanTextForSpeech(groqRes);
+          addCopilotEvent('ai', '⚡ Groq Llama-3.3 70B Fast Response', cleaned);
+          return cleaned;
+        }
+      }
+
+      // Evon reasoning
+      const systemInstruction = 
+        `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
+        `Respond with concise, authoritative life-safety protocol guidance under 30 words. ` +
+        `Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Apex Center'}.`;
+      const evonResult = await queryEvonServer(text, systemInstruction, { maxTokens: 100 });
+      const rawAnswer = evonResult.finalAnswer || evonResult.raw || 'Keep patient resting with open airway. Ambulance A-12 is en route.';
+      const cleaned = cleanTextForSpeech(rawAnswer);
+      addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', cleaned);
+      return cleaned;
+    } catch (err) {
+      const fallback = `Keep patient sitting upright with open airway. Ambulance A-12 is en route with estimated arrival in ${selectedHospital?.etaMinutes || 3} minutes.`;
+      addCopilotEvent('ai', '🛡️ Emergency Field Protocol', fallback);
+      return fallback;
     }
   };
 
@@ -259,7 +395,7 @@ export default function SanjivaniEmergencyAssistant({
         recognition.interimResults = true;
         recognition.lang = 'te-IN'; // Multi-indic capable
         
-        recognition.onresult = (event) => {
+        recognition.onresult = async (event) => {
           const text = Array.from(event.results)
             .map((r) => r[0].transcript)
             .join(' ');
@@ -270,6 +406,19 @@ export default function SanjivaniEmergencyAssistant({
             const triage = analyzeEmergencyClinicalTriage(text);
             if (triage.triageLevel === 'RED') {
               addCopilotEvent('triage', `🚨 Voice Triage Alert: ${triage.suspectedCondition}`, `Identified critical emergency keywords. Action protocol: ${triage.priorityProtocol}`);
+            }
+
+            const isFinal = Array.from(event.results).some(r => r.isFinal);
+            if (isFinal) {
+              const reply = await processCopilotVoiceCommand(text);
+              if (reply && isAiVoiceReplyEnabled && !isAudioMuted) {
+                setVoiceState('SPEAKING');
+                await speechService.speak(reply, {
+                  langCode: 'en-IN',
+                  onStart: () => setVoiceState('SPEAKING'),
+                  onEnd: () => setVoiceState('IDLE')
+                });
+              }
             }
           }
         };
@@ -381,7 +530,7 @@ export default function SanjivaniEmergencyAssistant({
     );
   };
 
-  // 10. INTERACTIVE USER PROMPT IN CHAT (Powered by Gnani Evon 30B Sovereign Model)
+  // 10. INTERACTIVE USER PROMPT IN CHAT (Powered by Groq / Gnani Evon Sovereign Models)
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputQuestion.trim()) return;
@@ -391,32 +540,10 @@ export default function SanjivaniEmergencyAssistant({
     addCopilotEvent('user', '💬 Operator Query', q);
     setVoiceState('THINKING');
 
-    try {
-      const systemInstruction = 
-        `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
-        `Respond with concise, authoritative life-safety protocol guidance under 35 words. ` +
-        `Reference active telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Local Apex Hospital'} with ${selectedHospital?.bedsAvailable || 8} beds.`;
-
-      const evonResult = await queryEvonServer(q, systemInstruction, { maxTokens: 150 });
-
-      let reasoningTrace = evonResult.thoughtTrace ? `\n\n<reasoning>\n${evonResult.thoughtTrace}\n</reasoning>` : '';
-      let replyText = (evonResult.finalAnswer || evonResult.raw || 'Field Protocol: Keep patient resting with open airway.').trim();
-
-      addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', `${replyText}${reasoningTrace}`);
-
-      // Synthesize spoken audio with barge-in support
+    const reply = await processCopilotVoiceCommand(q);
+    if (reply) {
       setVoiceState('SPEAKING');
-      await speechService.speak(replyText, {
-        langCode: 'te-IN',
-        onStart: () => setVoiceState('SPEAKING'),
-        onEnd: () => setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE')
-      });
-    } catch (err) {
-      console.warn('Evon server route unavailable; engaging deterministic safety protocol:', err.message);
-      const fallbackReply = `Field Protocol: Keep patient resting with open airway. Ambulance A-12 is 1.8 km away (${selectedHospital?.etaMinutes || 3} min road ETA).`;
-      addCopilotEvent('ai', '🛡️ [FALLBACK: COPILOT CLINICAL PROTOCOL (Evon Unavailable)]', fallbackReply);
-      setVoiceState('SPEAKING');
-      await speechService.speak(fallbackReply, {
+      await speechService.speak(reply, {
         langCode: 'en-IN',
         onStart: () => setVoiceState('SPEAKING'),
         onEnd: () => setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE')
@@ -1020,77 +1147,7 @@ export default function SanjivaniEmergencyAssistant({
         </button>
       </div>
 
-      {/* SECTION 3B: SANJIVANI 108 SIMULATION & ROAD TELEMETRY CONTROLS */}
-      <div style={{
-        background: '#071325',
-        borderBottom: '1px solid #142845',
-        padding: '6px 14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: '10px',
-        flexShrink: 0
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ color: '#94A3B8', fontWeight: 800, textTransform: 'uppercase' }}>108 Sim:</span>
-          <span style={{
-            fontSize: '9px',
-            background: dispatchState >= 2 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(234, 179, 8, 0.2)',
-            color: dispatchState >= 2 ? '#34D399' : '#FBBF24',
-            padding: '1px 5px',
-            borderRadius: '4px',
-            fontWeight: 800
-          }}>
-            {dispatchState >= 2 ? '🚑 EN ROUTE' : '⚡ READY'}
-          </span>
-          <span style={{ color: '#CBD5E1', fontSize: '9.5px', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            → {selectedHospital?.name || 'Local Hospital'}
-          </span>
-        </div>
 
-        {/* Speed Multipliers & Pause Control */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <button
-            onClick={() => onToggleSim && onToggleSim()}
-            title={isSimRunning ? "Pause ambulance telemetry simulation" : "Resume ambulance simulation"}
-            style={{
-              background: isSimRunning ? '#DC2626' : '#059669',
-              border: 'none',
-              color: '#FFF',
-              borderRadius: '4px',
-              padding: '2px 7px',
-              cursor: 'pointer',
-              fontWeight: 800,
-              fontSize: '9px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '3px'
-            }}
-          >
-            {isSimRunning ? <Pause size={9} /> : <Play size={9} />}
-            <span>{isSimRunning ? 'Pause' : 'Play'}</span>
-          </button>
-          {[1, 2, 5].map((s) => (
-            <button
-              key={s}
-              onClick={() => onChangeSimSpeed && onChangeSimSpeed(s)}
-              title={`Set ambulance simulation to ${s}x speed`}
-              style={{
-                background: simSpeed === s ? '#0284C7' : '#0B172E',
-                border: simSpeed === s ? '1px solid #38BDF8' : '1px solid #1E2D48',
-                color: '#FFF',
-                borderRadius: '4px',
-                padding: '2px 5px',
-                cursor: 'pointer',
-                fontWeight: 800,
-                fontSize: '9px'
-              }}
-            >
-              {s}×
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* SECTION 4: DYNAMIC REAL-TIME EVENT STREAM & OPERATOR INTERACTION FEED */}
       <div style={{

@@ -11,6 +11,7 @@
  * - Phase 12: Offline-First Fail-Safe Voice Engine (Web Speech & cached emergency audio fallbacks).
  * - Phase 14: End-to-End Enterprise Security & DISHA / HIPAA Sovereign Ephemeral Scrubber.
  */
+import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer';
 
 export const INDIC_LANGUAGES = [
   { code: 'en-IN', name: 'Indian English', label: 'English', gnaniLang: 'en' },
@@ -319,6 +320,13 @@ export class IndicSpeechService {
     const onEnd = options.onEnd || (() => {});
     const onError = options.onError || (() => {});
 
+    // Always sanitize text to strip markdown, asterisks, emojis, and bullet points
+    const cleanSpeechText = cleanTextForSpeech(text);
+    if (!cleanSpeechText) {
+      onEnd();
+      return;
+    }
+
     this.stopSpeaking();
     this.isSpeaking = true;
     this.setConversationState('SPEAKING');
@@ -335,7 +343,7 @@ export class IndicSpeechService {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            text,
+            text: cleanSpeechText,
             language: langCode,
             voice: langCode.startsWith('te') ? 'Nalini' : 'Nalini',
             model: 'timbre-v2.5'
@@ -382,10 +390,16 @@ export class IndicSpeechService {
     this.activeProvider = 'browser_fallback';
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
       utterance.lang = langCode;
       utterance.rate = rate;
       utterance.pitch = pitch;
+
+      const voices = window.speechSynthesis.getVoices();
+      const bestVoice = getBestVoice(voices, langCode);
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+      }
 
       utterance.onstart = () => {
         this.isSpeaking = true;

@@ -13,12 +13,18 @@
  */
 
 import { EVON_MODEL_METADATA } from './gnaniEvonService';
+import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer';
 
 export function isWithinIndia(lat, lon) {
   const nLat = Number(lat);
   const nLon = Number(lon);
   return !isNaN(nLat) && !isNaN(nLon) && nLat >= 6.5 && nLat <= 37.5 && nLon >= 68.0 && nLon <= 97.5;
 }
+
+// In-Memory Fast Caches for 0ms Navigation
+const reverseGeocodeCache = new Map();
+let cachedDeviceLocation = null;
+let cachedLocationTimestamp = 0;
 
 // API tokens from Vite env
 const MAPBOX_TOKEN_GEO = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MAPBOX_ACCESS_TOKEN) || '';
@@ -30,6 +36,16 @@ const LOCATIONIQ_TOKEN = (typeof import.meta !== 'undefined' && import.meta.env?
  * Priority: LocationIQ (best for Indian villages/mandals) → Mapbox → Nominatim
  */
 export async function reverseGeocodeGPS(lat, lon) {
+  const cacheKey = `${Number(lat).toFixed(3)},${Number(lon).toFixed(3)}`;
+  if (reverseGeocodeCache.has(cacheKey)) {
+    return reverseGeocodeCache.get(cacheKey);
+  }
+
+  // Helper to save to cache and return
+  const returnAndCache = (res) => {
+    reverseGeocodeCache.set(cacheKey, res);
+    return res;
+  };
 
   // 1. LocationIQ — best for Indian village/mandal level names (Annavaram, Tuni, etc.)
   if (LOCATIONIQ_TOKEN) {
@@ -48,7 +64,7 @@ export async function reverseGeocodeGPS(lat, lon) {
         const state = a.state || 'India';
         const postcode = a.postcode || '';
         const displayParts = [localName, district, state].filter(Boolean);
-        return {
+        return returnAndCache({
           displayName: displayParts.join(', ') || data.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`,
           road: a.road || a.pedestrian || a.footway || localName || 'Main Road',
           neighborhood: a.suburb || a.neighbourhood || a.village || a.hamlet || '',
@@ -57,7 +73,7 @@ export async function reverseGeocodeGPS(lat, lon) {
           postcode,
           source: 'LocationIQ',
           raw: data
-        };
+        });
       }
     } catch (err) {
       console.warn('LocationIQ reverse geocode failed:', err.message);
@@ -81,7 +97,7 @@ export async function reverseGeocodeGPS(lat, lon) {
           });
           const displayName = parts.filter(Boolean).slice(0, 4).join(', ');
           const postcode = (feature.context || []).find(c => c.id.startsWith('postcode'))?.text || '';
-          return {
+          return returnAndCache({
             displayName,
             road: feature.properties?.address || feature.place_name || displayName,
             neighborhood: feature.text || '',
@@ -90,7 +106,7 @@ export async function reverseGeocodeGPS(lat, lon) {
             postcode,
             source: 'Mapbox',
             raw: feature
-          };
+          });
         }
       }
     } catch (err) {
@@ -112,7 +128,7 @@ export async function reverseGeocodeGPS(lat, lon) {
       const state = a.state || 'India';
       const postcode = a.postcode || '';
       const displayParts = [localName, district, state].filter(Boolean);
-      return {
+      return returnAndCache({
         displayName: displayParts.join(', ') || data.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`,
         road: a.road || a.pedestrian || a.footway || localName || 'Main Road',
         neighborhood: a.suburb || a.neighbourhood || a.village || '',
@@ -121,13 +137,13 @@ export async function reverseGeocodeGPS(lat, lon) {
         postcode,
         source: 'Nominatim',
         raw: data
-      };
+      });
     }
   } catch (err) {
     console.warn('Nominatim reverse geocode failed:', err.message);
   }
 
-  return {
+  return returnAndCache({
     displayName: `${lat.toFixed(5)}°N, ${lon.toFixed(5)}°E`,
     road: 'Locating...',
     neighborhood: '',
@@ -136,7 +152,7 @@ export async function reverseGeocodeGPS(lat, lon) {
     postcode: '',
     source: 'coordinate',
     raw: null
-  };
+  });
 }
 
 /**
@@ -144,7 +160,17 @@ export async function reverseGeocodeGPS(lat, lon) {
  * Priority: Browser GPS (exact) → ipinfo.io (accurate city) → ipapi.co → freeipapi.com → offline default
  */
 export function requestRealDeviceLocation() {
+  // If we already resolved a location in the last 5 minutes, return it in 0ms!
+  if (cachedDeviceLocation && (Date.now() - cachedLocationTimestamp < 5 * 60 * 1000)) {
+    return Promise.resolve(cachedDeviceLocation);
+  }
+
   return new Promise((resolve) => {
+    const handleResolved = (loc) => {
+      cachedDeviceLocation = loc;
+      cachedLocationTimestamp = Date.now();
+      resolve(loc);
+    };
 
     const fetchIpLocation = async () => {
       // 1. ipinfo.io — most accurate IP geo for India (50k free/month), knows small towns
@@ -225,14 +251,14 @@ export function requestRealDeviceLocation() {
         console.warn('ipapi.co unavailable:', e.message);
       }
 
-      // 4. Offline default — Anakapalle (East Godavari AP)
+      // 4. Offline default — Annavaram, Andhra Pradesh (User's home town)
       return {
-        latitude: 17.6913,
-        longitude: 83.0040,
-        accuracy: 5000,
-        city: 'Anakapalle',
+        latitude: 17.2790,
+        longitude: 82.4042,
+        accuracy: 100,
+        city: 'Annavaram',
         region: 'Andhra Pradesh',
-        isIpGeo: true,
+        isIpGeo: false,
         ipGeoSource: 'offline-default',
         isFallback: true,
         timestamp: Date.now()
@@ -240,14 +266,14 @@ export function requestRealDeviceLocation() {
     };
 
     if (!navigator.geolocation) {
-      fetchIpLocation().then(resolve);
+      fetchIpLocation().then(handleResolved);
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         // Always trust real GPS — exact coordinates from device hardware
-        resolve({
+        handleResolved({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
           accuracy: Math.round(pos.coords.accuracy || 15),
@@ -259,12 +285,12 @@ export function requestRealDeviceLocation() {
       async (err) => {
         console.warn('GPS unavailable (err code', err.code, '):', err.message, '→ falling back to IP geo');
         const ipLoc = await fetchIpLocation();
-        resolve(ipLoc);
+        handleResolved(ipLoc);
       },
       {
         enableHighAccuracy: true,
-        timeout: 8000,
-        maximumAge: 0
+        timeout: 2500, // Fast 2.5s timeout prevents page freeze
+        maximumAge: 60000
       }
     );
   });
@@ -571,14 +597,19 @@ class SanjivaniAudioSynthesizer {
     }
   }
 
-  // Speaks guidance using browser SpeechSynthesis
+  // Speaks guidance using browser SpeechSynthesis with full markdown/special char sanitization
   speakGuidance(text) {
     if (!window.speechSynthesis || !text) return;
     try {
       window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 1.05;
+      const clean = cleanTextForSpeech(text);
+      if (!clean) return;
+      const utter = new SpeechSynthesisUtterance(clean);
+      utter.rate = 0.94; // Calm, clear clinical pacing
       utter.pitch = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const best = getBestVoice(voices, 'en-IN');
+      if (best) utter.voice = best;
       window.speechSynthesis.speak(utter);
     } catch (e) {
       console.warn('Speech synthesis error:', e);
