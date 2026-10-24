@@ -29,6 +29,22 @@ export const HERO_FAQS = [
   {
     q: 'What happens when the AI is uncertain?',
     a: 'AyuSwar utilizes probabilistic uncertainty thresholding. If acoustic noise obscures a sentence or phoneme confidence drops below 85%, the system never hallucinates or guesses. Instead, it flags the phrase in amber with an explicit "Requires Doctor Clarification" tag and prompts the clinician to confirm before generating prescription orders.'
+  },
+  {
+    q: 'Can patients receive spoken audio instructions in their own language?',
+    a: 'Yes. Through the Spoken Prescription (Audio-Rx) studio, prescriptions are converted into clear spoken dosage instructions with color-coded pill reminders in Telugu, Hindi, or English. Patients and caregivers can replay instructions anytime or receive the audio summary via WhatsApp.'
+  },
+  {
+    q: 'How does Jan Aushadhi generic substitution assist patients?',
+    a: 'When an outpatient prescription or medicine strip is scanned, AyuSwar cross-references the open PMBJP Jan Aushadhi formulary. It surfaces equivalent generic salts, helping families reduce out-of-pocket medication expenses by 70–85%.'
+  },
+  {
+    q: 'What devices and browsers are supported?',
+    a: 'AyuSwar is built as a lightweight progressive web application (PWA). It runs smoothly across Chrome, Edge, Safari, and Firefox on basic Android smartphones, clinic tablets, and rural PHC desktops without requiring specialized hardware.'
+  },
+  {
+    q: 'Can clinicians edit or override AI suggestions before signing?',
+    a: 'Always. Every drafted diagnosis, vital sign, and medication order is completely editable. Under strict Human-in-the-Loop safeguards, nothing is finalized or dispatched to health records without explicit clinician review and digital confirmation.'
   }
 ];
 
@@ -52,7 +68,7 @@ export default function HeroFaqSection({ onSelectModule }) {
 
       <div className="hero-faq-layout-grid" style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+        gridTemplateColumns: 'minmax(320px, 420px) 1fr',
         gap: '32px',
         alignItems: 'start'
       }}>
@@ -113,7 +129,7 @@ export default function HeroFaqSection({ onSelectModule }) {
         </div>
 
         {/* Right Column: Interactive FAQ Accordion */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
           {HERO_FAQS.map((faq, idx) => {
             const isExpanded = expandedFaqIndex === idx;
             return (
@@ -122,7 +138,7 @@ export default function HeroFaqSection({ onSelectModule }) {
                 style={{
                   background: '#ffffff',
                   border: isExpanded ? '2px solid #0F4C5C' : '1.5px solid #94A3B8',
-                  borderRadius: '14px',
+                  borderRadius: '12px',
                   overflow: 'hidden',
                   transition: 'all 200ms ease',
                   boxShadow: isExpanded ? '0 8px 24px rgba(15, 76, 92, 0.12)' : '0 2px 8px rgba(10, 37, 64, 0.04)'
@@ -132,7 +148,7 @@ export default function HeroFaqSection({ onSelectModule }) {
                   onClick={() => setExpandedFaqIndex(isExpanded ? null : idx)}
                   style={{
                     width: '100%',
-                    padding: '18px 24px',
+                    padding: '14px 20px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -141,22 +157,22 @@ export default function HeroFaqSection({ onSelectModule }) {
                     textAlign: 'left',
                     cursor: 'pointer',
                     fontFamily: 'Outfit, sans-serif',
-                    fontSize: '16px',
-                    fontWeight: 750,
+                    fontSize: '15px',
+                    fontWeight: 700,
                     color: isExpanded ? '#0F4C5C' : '#0A2540'
                   }}
                 >
                   <span>{faq.q}</span>
-                  {isExpanded ? <ChevronUp size={18} color="#0F4C5C" /> : <ChevronDown size={18} color="#64748B" />}
+                  {isExpanded ? <ChevronUp size={17} color="#0F4C5C" /> : <ChevronDown size={17} color="#64748B" />}
                 </button>
                 {isExpanded && (
                   <div style={{
-                    padding: '0 24px 20px 24px',
-                    fontSize: '14px',
-                    lineHeight: 1.65,
+                    padding: '0 20px 18px 20px',
+                    fontSize: '13.5px',
+                    lineHeight: 1.6,
                     color: '#475569',
                     borderTop: '1px solid #F1F5F9',
-                    paddingTop: '14px'
+                    paddingTop: '12px'
                   }}>
                     {faq.a}
                   </div>
