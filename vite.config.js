@@ -306,11 +306,13 @@ export default defineConfig(({ mode }) => {
             res.setHeader('Content-Type', 'application/json');
 
             if (!evonBaseUrl || !evonApiKey || evonApiKey.includes('placeholder')) {
-              res.statusCode = 503;
+              res.statusCode = 200;
               return res.end(JSON.stringify({
+                status: 'UNCONFIGURED',
                 error: 'Evon unavailable: EVON_BASE_URL and EVON_API_KEY are not configured on the server.',
                 available: false,
                 fallbackRequired: true,
+                isFallback: true,
                 model: modelName
               }));
             }

@@ -82,7 +82,7 @@ export default function HeroLanding({
   // Dynamic Real-Time Typing Animation Phrases for Bharat Clinical Voice OS
   const typewriterPhrases = [
     'Listens in Telugu, Hindi, Tamil & 15+ Indic Dialects',
-    'Converts 90-sec Rural OPD Dialogues to FHIR R4 in 180 ms',
+    'Converts 90-sec Rural OPD Dialogues to FHIR R4 in Real-Time',
     'Generates Vernacular Audio-Rx for Illiterate Patients',
     'Acoustic Lab: Wheeze, Stridor & Biomarker Detection',
     'Sanjivani-108: Distress Triage Protocol & CPR Metronome',

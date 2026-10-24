@@ -57,11 +57,13 @@ export default async function handler(req, res) {
 
   // Fail closed if secrets are missing or placeholder
   if (!apiKey || apiKey.includes('placeholder') || !baseUrl) {
-    logSafeApiAccess({ route, method: req.method, status: 503, durationMs: Date.now() - startTime, clientNote: 'Unconfigured server secrets' });
-    return res.status(503).json({
+    logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime, clientNote: 'Unconfigured server secrets' });
+    return res.status(200).json({
+      status: 'UNCONFIGURED',
       error: 'Evon service unavailable: Required server environment credentials are not configured.',
       available: false,
       fallbackRequired: true,
+      isFallback: true,
       model: modelName
     });
   }

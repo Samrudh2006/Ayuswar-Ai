@@ -119,8 +119,11 @@ export async function queryEvonServer(prompt, systemInstruction = '', options = 
   }
 
   const data = await response.json();
-  if (!data.text) {
-    throw new Error('Evon server returned empty text output.');
+  if (data.isFallback || data.fallbackRequired || !data.text) {
+    const err = new Error(data.error || 'Evon server returned fallback or unconfigured state.');
+    err.isFallback = true;
+    err.data = data;
+    throw err;
   }
 
   return parseEvonReasoningOutput(data.text, data.model || EVON_MODEL_METADATA.modelId);

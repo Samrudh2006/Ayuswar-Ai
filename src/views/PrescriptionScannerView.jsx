@@ -219,6 +219,19 @@ export default function PrescriptionScannerView() {
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
   const ocrAbortRef = useRef(false);
+  const tesseractWorkerRef = useRef(null);
+
+  // Terminate persistent Tesseract worker on unmount
+  useEffect(() => {
+    return () => {
+      if (tesseractWorkerRef.current) {
+        try {
+          tesseractWorkerRef.current.terminate();
+        } catch {}
+        tesseractWorkerRef.current = null;
+      }
+    };
+  }, []);
 
   const OCR_SAMPLES = [
     {
@@ -442,29 +455,35 @@ export default function PrescriptionScannerView() {
       setMeasuredProgress(null);
       setOcrStatusText('Reading image on your device: Initializing local WASM engine...');
 
-      const result = await Tesseract.recognize(
-        imageToOcr,
-        'eng',
-        {
-          logger: (m) => {
-            if (ocrAbortRef.current) return;
-            // Connect fill ONLY to actual Tesseract recognizing-text progress
-            if (m.status === 'recognizing text') {
-              setOcrPhase('recognizing');
-              const pct = Math.min(99, Math.max(1, Math.round((m.progress || 0) * 100)));
-              setMeasuredProgress(pct);
-              setOcrProgress(pct);
-              setOcrStatusText(`Reading image on your device: Extracting packaging text (${pct}%)...`);
-            } else if (m.status) {
-              setOcrStatusText(`Reading image on your device: ${m.status}...`);
-            }
-          }
+      let result;
+      const progressLogger = (m) => {
+        if (ocrAbortRef.current) return;
+        if (m.status === 'recognizing text') {
+          setOcrPhase('recognizing');
+          const pct = Math.min(99, Math.max(1, Math.round((m.progress || 0) * 100)));
+          setMeasuredProgress(pct);
+          setOcrProgress(pct);
+          setOcrStatusText(`Reading image on your device: Extracting packaging text (${pct}%)...`);
+        } else if (m.status) {
+          setOcrStatusText(`Reading image on your device: ${m.status}...`);
         }
-      );
+      };
+
+      try {
+        if (!tesseractWorkerRef.current) {
+          tesseractWorkerRef.current = await Tesseract.createWorker('eng', 1, {
+            logger: progressLogger
+          });
+        }
+        result = await tesseractWorkerRef.current.recognize(imageToOcr);
+      } catch (workerErr) {
+        console.warn('Persistent worker error, falling back to direct recognize:', workerErr);
+        result = await Tesseract.recognize(imageToOcr, 'eng', { logger: progressLogger });
+      }
 
       if (ocrAbortRef.current) return;
 
-      const rawText = result.data.text ? result.data.text.trim() : '';
+      const rawText = result?.data?.text ? result.data.text.trim() : '';
 
       // On error/empty result: stop animation and offer clearer-image retry, NO success check!
       if (!rawText || rawText.length < 3) {

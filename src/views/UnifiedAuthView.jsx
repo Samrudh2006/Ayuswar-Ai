@@ -453,7 +453,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             WebkitBackdropFilter: 'blur(8px)'
           }}>
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', display: 'inline-block', boxShadow: '0 0 8px #34D399' }} />
-            <span>Live in 1,400+ PHCs</span>
+            <span>Simulated Architecture for 1,400+ PHCs</span>
           </div>
         </div>
 
