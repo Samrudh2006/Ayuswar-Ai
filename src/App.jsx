@@ -15,6 +15,7 @@ import SeoHead from './components/SeoHead';
 import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 import CookieConsentBanner from './components/CookieConsentBanner';
+import FeedbackPopup from './components/FeedbackPopup';
 
 import MintIvoryWaveBackground from './components/MintIvoryWaveBackground';
 import { initAllRoutesPreload } from './utils/routePreloader';
@@ -609,6 +610,9 @@ export default function App() {
 
       {/* Demo Recording Mode Overlay (Active only with ?demo-record=1) */}
       <DemoRecordingOverlay />
+
+      {/* AyuSwar Active-Time Feedback Popup (Banarasi Zari Theme) */}
+      <FeedbackPopup />
     </div>
   );
 }

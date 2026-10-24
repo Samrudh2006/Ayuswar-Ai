@@ -100,6 +100,20 @@ console.log('--- RUNNING PHASE 4: DATABASE & AUTHENTICATION TESTS ---');
   console.log('✓ Test 6 Passed: Server-side token verification endpoint properly configured.');
 }
 
+// 7. Supabase Feedback Table Migration & Anonymous Insert Contract
+{
+  const feedbackMigrationPath = resolve('supabase/migrations/20261024_003_feedback.sql');
+  assert.ok(existsSync(feedbackMigrationPath), '20261024_003_feedback.sql must exist');
+
+  const feedbackSql = readFileSync(feedbackMigrationPath, 'utf8');
+  assert.ok(feedbackSql.includes('create table if not exists public.feedback'), 'Must create public.feedback table');
+  assert.ok(feedbackSql.includes('overall_stars int not null check (overall_stars between 1 and 5)'), 'Must enforce overall_stars constraint');
+  assert.ok(feedbackSql.includes('alter table public.feedback enable row level security;'), 'Must enable RLS on feedback');
+  assert.ok(feedbackSql.includes('on public.feedback for insert to anon with check (true)'), 'Must grant anon insert policy on feedback');
+
+  console.log('✓ Test 7 Passed: Supabase feedback schema migration and anonymous insert policies verified.');
+}
+
 console.log('======================================================================');
-console.log('ALL 6 PHASE 4 DATABASE & AUTHENTICATION TESTS PASSED! 🎉');
+console.log('ALL 7 PHASE 4 DATABASE & AUTHENTICATION TESTS PASSED! 🎉');
 console.log('======================================================================');

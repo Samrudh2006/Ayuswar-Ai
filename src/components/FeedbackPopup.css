@@ -1,0 +1,498 @@
+/* ==========================================================================
+   AyuSwar AI — Feedback Popup (Banarasi Zari Theme)
+   WCAG Compliant · Active Time Triggered · Zero Full-Page Blur
+   ========================================================================== */
+
+/* Dark Scrim — Strictly NO full-page backdrop blur */
+.ayuswar-feedback-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Modal Card */
+.ayuswar-feedback-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FAF8F5;
+  border-radius: 16px;
+  border: 3px double #C9A227;
+  box-shadow: 0 16px 40px rgba(43, 33, 24, 0.22), 0 4px 14px rgba(201, 162, 39, 0.16);
+  color: #2B2118;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+  animation: feedbackCardEnter 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ayuswar-feedback-card.closing {
+  animation: feedbackCardExit 220ms ease forwards;
+}
+
+@keyframes feedbackCardEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes feedbackCardExit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ayuswar-feedback-card,
+  .ayuswar-feedback-card.closing {
+    animation: none !important;
+  }
+}
+
+/* Custom Ivory Scrollbar for small viewports */
+.ayuswar-feedback-card::-webkit-scrollbar {
+  width: 5px;
+}
+.ayuswar-feedback-card::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+.ayuswar-feedback-card::-webkit-scrollbar-thumb {
+  background: #D9CDB4;
+  border-radius: 3px;
+}
+.ayuswar-feedback-card::-webkit-scrollbar-thumb:hover {
+  background: #C9A227;
+}
+
+/* 1. Zari-Stripe Accent Bar across top */
+.ayuswar-feedback-zari-bar {
+  width: 100%;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #C9A227 0px,
+    #C9A227 10px,
+    #6B1F2A 10px,
+    #6B1F2A 20px,
+    #0E5A5A 20px,
+    #0E5A5A 30px,
+    #FAF8F5 30px,
+    #FAF8F5 36px
+  );
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* 2. Close Button */
+.ayuswar-feedback-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #D9CDB4;
+  background: #FAF8F5;
+  color: #6B1F2A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 180ms ease;
+  padding: 0;
+  z-index: 2;
+}
+
+.ayuswar-feedback-close-btn:hover {
+  background: #F4EFE6;
+  border-color: #C9A227;
+  color: #6B1F2A;
+  transform: scale(1.06);
+}
+
+.ayuswar-feedback-close-btn:focus-visible {
+  outline: 2px solid #0E5A5A;
+  outline-offset: 2px;
+}
+
+/* Content Container */
+.ayuswar-feedback-body {
+  padding: 16px 22px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* 3. Illustrations */
+.ayuswar-feedback-header-img {
+  width: 86px;
+  max-width: 90px;
+  height: auto;
+  margin: 0 auto 6px auto;
+  display: block;
+  user-select: none;
+}
+
+.ayuswar-feedback-thankyou-img {
+  width: 118px;
+  max-width: 124px;
+  height: auto;
+  margin: 12px auto 10px auto;
+  display: block;
+  user-select: none;
+}
+
+/* 4. Title & Subtitle */
+.ayuswar-feedback-title {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  color: #6B1F2A;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.ayuswar-feedback-subtitle {
+  font-size: 12px;
+  color: #7A6F64;
+  text-align: center;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+/* 6. Star Rows */
+.ayuswar-feedback-stars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ayuswar-feedback-star-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ayuswar-feedback-star-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2B2118;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ayuswar-feedback-required-dot {
+  color: #C9A227;
+  font-weight: 700;
+}
+
+.ayuswar-feedback-star-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ayuswar-feedback-star-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 140ms ease;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.ayuswar-feedback-star-btn:hover {
+  transform: scale(1.18);
+}
+
+.ayuswar-feedback-star-btn:focus-visible {
+  outline: 2px solid #0E5A5A;
+}
+
+.ayuswar-feedback-star-svg {
+  width: 19px;
+  height: 19px;
+  transition: fill 150ms ease, stroke 150ms ease;
+}
+
+.ayuswar-feedback-star-svg.filled {
+  fill: #C9A227;
+  stroke: #C9A227;
+}
+
+.ayuswar-feedback-star-svg.empty {
+  fill: transparent;
+  stroke: #D9CDB4;
+}
+
+/* 7. Selectable Chips */
+.ayuswar-feedback-chips-section {
+  border-top: 1px dashed #D9CDB4;
+  padding-top: 12px;
+  margin-bottom: 14px;
+}
+
+.ayuswar-feedback-section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5A4D41;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.ayuswar-feedback-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ayuswar-feedback-chip {
+  background: #FAF8F5;
+  border: 1px solid #0E5A5A;
+  color: #0E5A5A;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 180ms ease;
+  user-select: none;
+  font-family: inherit;
+}
+
+.ayuswar-feedback-chip:hover {
+  background: rgba(14, 90, 90, 0.08);
+}
+
+.ayuswar-feedback-chip.selected {
+  background: #0E5A5A;
+  color: #FFFFFF;
+  border-color: #0E5A5A;
+  box-shadow: 0 2px 6px rgba(14, 90, 90, 0.25);
+}
+
+/* 8. Textarea & 9. Name Input */
+.ayuswar-feedback-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ayuswar-feedback-textarea-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ayuswar-feedback-textarea {
+  width: 100%;
+  min-height: 72px;
+  max-height: 140px;
+  resize: vertical;
+  background: #FFFFFF;
+  border: 1px solid #D9CDB4;
+  border-radius: 8px;
+  padding: 10px 12px 24px 12px;
+  font-size: 12.5px;
+  color: #2B2118;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.ayuswar-feedback-textarea::placeholder,
+.ayuswar-feedback-name-input::placeholder {
+  color: #9E9182;
+  font-size: 12px;
+}
+
+.ayuswar-feedback-textarea:focus,
+.ayuswar-feedback-name-input:focus {
+  outline: none;
+  border-color: #0E5A5A;
+  box-shadow: 0 0 0 3px rgba(14, 90, 90, 0.12);
+}
+
+.ayuswar-feedback-counter {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 10px;
+  color: #9E9182;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.ayuswar-feedback-name-input {
+  width: 100%;
+  height: 38px;
+  background: #FFFFFF;
+  border: 1px solid #D9CDB4;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  color: #2B2118;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+/* 10. Honeypot */
+.ayuswar-feedback-honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  tabindex: -1;
+}
+
+/* 11. Submit Button */
+.ayuswar-feedback-submit-btn {
+  width: 100%;
+  height: 42px;
+  background: #0E5A5A;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 180ms ease;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(14, 90, 90, 0.22);
+}
+
+.ayuswar-feedback-submit-btn:hover:not(:disabled) {
+  background: #094040;
+  box-shadow: 0 4px 12px rgba(14, 90, 90, 0.32);
+  transform: translateY(-1px);
+}
+
+.ayuswar-feedback-submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Inline Error */
+.ayuswar-feedback-error-msg {
+  color: #B91C1C;
+  font-size: 11.5px;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* 12. "Maybe later" Link */
+.ayuswar-feedback-later-link {
+  background: transparent;
+  border: none;
+  color: #6B1F2A;
+  font-size: 11.5px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px;
+}
+
+.ayuswar-feedback-later-link:hover {
+  text-decoration: underline;
+  color: #4A121A;
+}
+
+/* 13. Banarasi Zari Footer Caption */
+.ayuswar-feedback-footer-caption {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #9C7C1C;
+  text-align: center;
+  margin-top: 14px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Thank You State Styles */
+.ayuswar-feedback-thankyou-body {
+  padding: 24px 24px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ayuswar-feedback-thankyou-title {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  color: #6B1F2A;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 6px 0 8px 0;
+}
+
+.ayuswar-feedback-thankyou-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4A3E36;
+  max-width: 320px;
+  margin: 0 auto 12px auto;
+}
+
+.ayuswar-feedback-thankyou-auto-close {
+  font-size: 11px;
+  color: #7A6F64;
+  margin-bottom: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .ayuswar-feedback-card {
+    max-width: 100%;
+    margin: 0 8px;
+  }
+  .ayuswar-feedback-body {
+    padding: 14px 16px 18px 16px;
+  }
+  .ayuswar-feedback-star-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .ayuswar-feedback-star-group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

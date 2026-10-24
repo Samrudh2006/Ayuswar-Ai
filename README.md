@@ -15,7 +15,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-ayuswar--ai.vercel.app-0F4C5C?style=for-the-badge&logo=vercel&logoColor=white)](https://ayuswar-ai.vercel.app/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Test Suite](https://img.shields.io/badge/Automated%20Tests-50%2F50%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![Test Suite](https://img.shields.io/badge/Automated%20Tests-51%2F51%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![E2E Suite](https://img.shields.io/badge/Puppeteer%20E2E-5%2F5%20PASSING-0F4C5C?style=for-the-badge&logo=puppeteer&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![CodeRabbit](https://img.shields.io/badge/CodeRabbit-REVIEW%20CLEAN-34D399?style=for-the-badge&logo=githubactions&logoColor=black)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Acoustic Engine](https://img.shields.io/badge/Acoustic%20AI-Earshot%20AST%2BCLAP-D4AF37?style=for-the-badge&logo=soundcharts&logoColor=08232C)](https://github.com/Leonxlnx/earshot)
@@ -167,7 +167,7 @@ npm test
 - ✔️ **Phase 1: API Boundary Security (5 Tests):** Upstream host allowlist strictly enforced, in-memory rate limiting, error trace sanitization, zero header credentials.
 - ✔️ **Phase 2: Server Triage Boundary Safeguards (5 Tests):** Multilingual (Telugu, Hindi, English) severity mapping, deterministic RED triage floor invariant.
 - ✔️ **Phase 3: Voice Integration & Honest Status (5 Tests):** Honest 3-state schema (`LIVE` / `UNAVAILABLE` / `UNCONFIGURED`), browser fallback verification.
-- ✔️ **Phase 4: Database & Authentication Security (6 Tests):** Row-Level Security (RLS) constraints, zero service-role keys bundled, demo OTP verification.
+- ✔️ **Phase 4: Database & Authentication Security (7 Tests):** Row-Level Security (RLS) constraints, zero service-role keys bundled, demo OTP verification, and Supabase feedback schema & anonymous insert policy.
 - ✔️ **Phase 5: Mobile UI/UX & Safe Area (5 Tests):** Responsive viewport hooks, safe bottom nav spacing, accessibility contracts.
 - ✔️ **Phase 6: Static Code Contract Assertions (22 Tests):** Zero client-side API secret leakage (`VITE_GNANI_*` strictly banned), honest proxy telemetry, zero fabricated AI reasoning traces.
 - ✔️ **Phase 7: Clinical Safety Sentinel (7 Tests):** Pharmacovigilance DDI detection (Warfarin + Ciprofloxacin, Dual RAAS blockade), MEWS physiological risk scoring, PMBJP Jan Aushadhi 70-85% savings calculations, Indic colloquial to ICD-10 crosswalk, and ABDM FHIR R4 JSON serialization.

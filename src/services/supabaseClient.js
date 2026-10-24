@@ -71,7 +71,42 @@ class SafeSupabaseProxy {
         eq: () => Promise.resolve({ data: [], error: null }),
         order: () => Promise.resolve({ data: [], error: null })
       }),
-      insert: (data) => Promise.resolve({ data, error: null }),
+      insert: async (records) => {
+        if (isSupabaseConfigured) {
+          try {
+            const url = `${supabaseUrl}/rest/v1/${tableName}`;
+            const payload = Array.isArray(records) ? records : [records];
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'apikey': supabaseAnonKey,
+                'Authorization': `Bearer ${supabaseAnonKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
+              },
+              body: JSON.stringify(payload)
+            });
+            if (!res.ok) {
+              const errText = await res.text();
+              let parsedErr;
+              try { parsedErr = JSON.parse(errText); } catch {}
+              return { data: null, error: new Error(parsedErr?.message || errText || 'Supabase insert failed') };
+            }
+            const data = await res.json().catch(() => payload);
+            return { data, error: null };
+          } catch (err) {
+            return { data: null, error: err };
+          }
+        }
+        // Local demo persistence fallback when Supabase is unconfigured
+        try {
+          const key = `ayuswar_local_${tableName}`;
+          const existing = JSON.parse(localStorage.getItem(key) || '[]');
+          const toAdd = Array.isArray(records) ? records : [records];
+          localStorage.setItem(key, JSON.stringify([...existing, ...toAdd]));
+        } catch {}
+        return { data: records, error: null, isDemo: true };
+      },
       update: (data) => ({
         eq: () => Promise.resolve({ data, error: null })
       })
