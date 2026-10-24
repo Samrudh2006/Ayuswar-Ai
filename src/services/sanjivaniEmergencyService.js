@@ -20,60 +20,162 @@ export function isWithinIndia(lat, lon) {
   return !isNaN(nLat) && !isNaN(nLon) && nLat >= 6.5 && nLat <= 37.5 && nLon >= 68.0 && nLon <= 97.5;
 }
 
-// Reverse geocode real GPS coordinates to human-readable Indian street address
+// API tokens from Vite env
+const MAPBOX_TOKEN_GEO = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MAPBOX_ACCESS_TOKEN) || '';
+const IPINFO_TOKEN = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_IPINFO_TOKEN) || '';
+const LOCATIONIQ_TOKEN = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_LOCATIONIQ_TOKEN) || '';
+
+/**
+ * Reverse geocode GPS coordinates to a human-readable place name.
+ * Priority: LocationIQ (best for Indian villages/mandals) → Mapbox → Nominatim
+ */
 export async function reverseGeocodeGPS(lat, lon) {
-  // If coordinates are outside Indian territory (e.g. US cloud IP or foreign test browser)
-  if (!isWithinIndia(lat, lon)) {
-    return {
-      displayName: `Simulated 108 Command Hub • Hyderabad, Telangana (Out-of-Region Coordinates: ${lat.toFixed(2)}, ${lon.toFixed(2)})`,
-      road: '108 Emergency Control Center Road',
-      neighborhood: 'Sultan Bazar',
-      city: 'Hyderabad (108 Command Hub)',
-      state: 'Telangana',
-      postcode: '500095',
-      isOutOfRegion: true,
-      raw: null
-    };
+
+  // 1. LocationIQ — best for Indian village/mandal level names (Annavaram, Tuni, etc.)
+  if (LOCATIONIQ_TOKEN) {
+    try {
+      const url = `https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_TOKEN}&lat=${lat}&lon=${lon}&format=json&zoom=16&addressdetails=1`;
+      const res = await fetch(url, {
+        headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(5000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const a = data.address || {};
+        // Village > town > suburb > city — most granular first
+        const localName = a.village || a.hamlet || a.town || a.suburb || a.city_district || a.city || a.county || '';
+        const district = a.county || a.state_district || a.district || '';
+        const state = a.state || 'India';
+        const postcode = a.postcode || '';
+        const displayParts = [localName, district, state].filter(Boolean);
+        return {
+          displayName: displayParts.join(', ') || data.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`,
+          road: a.road || a.pedestrian || a.footway || localName || 'Main Road',
+          neighborhood: a.suburb || a.neighbourhood || a.village || a.hamlet || '',
+          city: a.city || a.town || a.county || localName || 'Local',
+          state,
+          postcode,
+          source: 'LocationIQ',
+          raw: data
+        };
+      }
+    } catch (err) {
+      console.warn('LocationIQ reverse geocode failed:', err.message);
+    }
   }
 
-  try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`, {
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'AyuSwar-Sanjivani108-EmergencyAgent/1.0'
+  // 2. Mapbox — good for towns and districts
+  if (MAPBOX_TOKEN_GEO) {
+    try {
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?types=place,locality,neighborhood,address&language=en&access_token=${MAPBOX_TOKEN_GEO}`;
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (res.ok) {
+        const data = await res.json();
+        const feature = data.features?.[0];
+        if (feature) {
+          const parts = [feature.text];
+          (feature.context || []).forEach(ctx => {
+            if (ctx.id.startsWith('place') || ctx.id.startsWith('region') || ctx.id.startsWith('district')) {
+              parts.push(ctx.text);
+            }
+          });
+          const displayName = parts.filter(Boolean).slice(0, 4).join(', ');
+          const postcode = (feature.context || []).find(c => c.id.startsWith('postcode'))?.text || '';
+          return {
+            displayName,
+            road: feature.properties?.address || feature.place_name || displayName,
+            neighborhood: feature.text || '',
+            city: (feature.context || []).find(c => c.id.startsWith('place'))?.text || '',
+            state: (feature.context || []).find(c => c.id.startsWith('region'))?.text || 'India',
+            postcode,
+            source: 'Mapbox',
+            raw: feature
+          };
+        }
       }
-    });
+    } catch (err) {
+      console.warn('Mapbox reverse geocode failed:', err.message);
+    }
+  }
+
+  // 3. OSM Nominatim — free fallback
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=16&addressdetails=1`,
+      { headers: { 'Accept': 'application/json', 'User-Agent': 'AyuSwar-Sanjivani108-EmergencyAgent/2.0' }, signal: AbortSignal.timeout(5000) }
+    );
     if (res.ok) {
       const data = await res.json();
+      const a = data.address || {};
+      const localName = a.village || a.hamlet || a.town || a.suburb || a.city_district || a.city || a.county || '';
+      const district = a.county || a.state_district || '';
+      const state = a.state || 'India';
+      const postcode = a.postcode || '';
+      const displayParts = [localName, district, state].filter(Boolean);
       return {
-        displayName: data.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`,
-        road: data.address?.road || data.address?.suburb || 'Main Road',
-        neighborhood: data.address?.suburb || data.address?.neighbourhood || data.address?.village || '',
-        city: data.address?.city || data.address?.town || data.address?.county || 'Current City',
-        state: data.address?.state || 'India',
-        postcode: data.address?.postcode || '',
+        displayName: displayParts.join(', ') || data.display_name || `${lat.toFixed(5)}, ${lon.toFixed(5)}`,
+        road: a.road || a.pedestrian || a.footway || localName || 'Main Road',
+        neighborhood: a.suburb || a.neighbourhood || a.village || '',
+        city: a.city || a.town || a.county || localName || 'Local',
+        state,
+        postcode,
+        source: 'Nominatim',
         raw: data
       };
     }
   } catch (err) {
-    console.warn('Reverse geocoding network fallback:', err);
+    console.warn('Nominatim reverse geocode failed:', err.message);
   }
+
   return {
-    displayName: `Lat: ${lat.toFixed(5)}, Lon: ${lon.toFixed(5)} (GPS Verified)`,
-    road: 'Locating nearby landmark...',
+    displayName: `${lat.toFixed(5)}°N, ${lon.toFixed(5)}°E`,
+    road: 'Locating...',
     neighborhood: '',
     city: 'Local Emergency Sector',
     state: 'India',
     postcode: '',
+    source: 'coordinate',
     raw: null
   };
 }
 
-// Request real browser geolocation with high accuracy, falling back to real IP geolocation
+/**
+ * Request real device location.
+ * Priority: Browser GPS (exact) → ipinfo.io (accurate city) → ipapi.co → freeipapi.com → offline default
+ */
 export function requestRealDeviceLocation() {
   return new Promise((resolve) => {
-    // Helper to fetch real location via IP if GPS is blocked or unavailable
+
     const fetchIpLocation = async () => {
+      // 1. ipinfo.io — most accurate IP geo for India (50k free/month), knows small towns
+      try {
+        const url = IPINFO_TOKEN
+          ? `https://ipinfo.io/json?token=${IPINFO_TOKEN}`
+          : 'https://ipinfo.io/json';
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' }, signal: AbortSignal.timeout(4500) });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.loc) {
+            const [rawLat, rawLng] = data.loc.split(',').map(Number);
+            if (!isNaN(rawLat) && !isNaN(rawLng)) {
+              return {
+                latitude: rawLat,
+                longitude: rawLng,
+                accuracy: 1500,
+                city: data.city || 'Local Area',
+                region: data.region || 'Andhra Pradesh',
+                isIpGeo: true,
+                ipGeoSource: 'ipinfo.io',
+                timestamp: Date.now()
+              };
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('ipinfo.io unavailable:', e.message);
+      }
+
+      // 2. freeipapi.com fallback
       try {
         const res = await fetch('https://freeipapi.com/api/json', {
           headers: { 'Accept': 'application/json' },
@@ -82,35 +184,23 @@ export function requestRealDeviceLocation() {
         if (res.ok) {
           const data = await res.json();
           if (data.latitude && data.longitude) {
-            const rawLat = Number(data.latitude);
-            const rawLng = Number(data.longitude);
-            if (!isWithinIndia(rawLat, rawLng)) {
-              return {
-                latitude: 17.3850,
-                longitude: 78.4867,
-                accuracy: 100,
-                city: 'Hyderabad (108 Command Hub)',
-                region: 'Telangana',
-                isOutOfRegion: true,
-                isIpGeo: true,
-                timestamp: Date.now()
-              };
-            }
             return {
-              latitude: rawLat,
-              longitude: rawLng,
-              accuracy: 2500, // City level accuracy
+              latitude: Number(data.latitude),
+              longitude: Number(data.longitude),
+              accuracy: 2500,
               city: data.cityName || 'Local Area',
               region: data.regionName || 'Andhra Pradesh',
               isIpGeo: true,
+              ipGeoSource: 'freeipapi.com',
               timestamp: Date.now()
             };
           }
         }
       } catch (e) {
-        console.warn('Primary IP geo unavailable, trying secondary:', e.message);
+        console.warn('freeipapi.com unavailable:', e.message);
       }
 
+      // 3. ipapi.co fallback
       try {
         const res = await fetch('https://ipapi.co/json/', {
           headers: { 'Accept': 'application/json' },
@@ -119,42 +209,31 @@ export function requestRealDeviceLocation() {
         if (res.ok) {
           const data = await res.json();
           if (data.latitude && data.longitude) {
-            const rawLat = Number(data.latitude);
-            const rawLng = Number(data.longitude);
-            if (!isWithinIndia(rawLat, rawLng)) {
-              return {
-                latitude: 17.3850,
-                longitude: 78.4867,
-                accuracy: 100,
-                city: 'Hyderabad (108 Command Hub)',
-                region: 'Telangana',
-                isOutOfRegion: true,
-                isIpGeo: true,
-                timestamp: Date.now()
-              };
-            }
             return {
-              latitude: rawLat,
-              longitude: rawLng,
+              latitude: Number(data.latitude),
+              longitude: Number(data.longitude),
               accuracy: 3000,
               city: data.city || 'Local Area',
               region: data.region || 'Andhra Pradesh',
               isIpGeo: true,
+              ipGeoSource: 'ipapi.co',
               timestamp: Date.now()
             };
           }
         }
       } catch (e) {
-        console.warn('Secondary IP geo unavailable:', e.message);
+        console.warn('ipapi.co unavailable:', e.message);
       }
 
-      // Safe default if offline completely
+      // 4. Offline default — Anakapalle (East Godavari AP)
       return {
         latitude: 17.6913,
         longitude: 83.0040,
         accuracy: 5000,
         city: 'Anakapalle',
         region: 'Andhra Pradesh',
+        isIpGeo: true,
+        ipGeoSource: 'offline-default',
         isFallback: true,
         timestamp: Date.now()
       };
@@ -167,28 +246,10 @@ export function requestRealDeviceLocation() {
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const rawLat = pos.coords.latitude;
-        const rawLng = pos.coords.longitude;
-        if (!isWithinIndia(rawLat, rawLng)) {
-          resolve({
-            latitude: 17.3850,
-            longitude: 78.4867,
-            accuracy: 100,
-            city: 'Hyderabad (108 Command Hub)',
-            region: 'Telangana',
-            isHardwareGps: true,
-            isOutOfRegion: true,
-            originalLat: rawLat,
-            originalLng: rawLng,
-            simulatedContext: 'OUT_OF_REGION_REFERENCE_HUB',
-            timestamp: pos.timestamp
-          });
-          return;
-        }
-
+        // Always trust real GPS — exact coordinates from device hardware
         resolve({
-          latitude: rawLat,
-          longitude: rawLng,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
           accuracy: Math.round(pos.coords.accuracy || 15),
           altitude: pos.coords.altitude,
           isHardwareGps: true,
@@ -196,13 +257,13 @@ export function requestRealDeviceLocation() {
         });
       },
       async (err) => {
-        console.warn('Hardware GNSS unavailable, querying live network location:', err.message);
+        console.warn('GPS unavailable (err code', err.code, '):', err.message, '→ falling back to IP geo');
         const ipLoc = await fetchIpLocation();
         resolve(ipLoc);
       },
       {
         enableHighAccuracy: true,
-        timeout: 6000,
+        timeout: 8000,
         maximumAge: 0
       }
     );

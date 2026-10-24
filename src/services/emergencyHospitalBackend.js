@@ -265,13 +265,9 @@ export async function fetchNearbyHospitalsAPI({
 } = {}) {
   let rawList = [];
 
-  // Enforce Indian territory: If client coordinates are outside India, re-anchor to Indian Emergency Command Hub
-  const outOfRegion = !isCoordinateInIndia(lat, lng);
-  const effectiveLat = outOfRegion ? 17.3850 : Number(lat);
-  const effectiveLng = outOfRegion ? 78.4867 : Number(lng);
-  const effectiveAddress = outOfRegion 
-    ? 'Hyderabad (Indian 108 Emergency Command Hub - Reference Simulation)'
-    : geoAddress;
+  const effectiveLat = Number(lat);
+  const effectiveLng = Number(lng);
+  const effectiveAddress = geoAddress;
 
   // 1. Live OpenStreetMap Nominatim Query around user's coordinates (strictly countrycodes=in)
   try {

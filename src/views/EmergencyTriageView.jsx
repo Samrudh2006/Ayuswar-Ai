@@ -56,6 +56,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   // Live Geo-Locational Telemetry & Dynamic Hospital Discovery
   const [userCoords, setUserCoords] = useState({ latitude: 17.6913, longitude: 83.0040, accuracy: 15 });
   const [detectedLocationName, setDetectedLocationName] = useState('Resolving device GPS / IP location...');
+  const [locationSource, setLocationSource] = useState(null); // 'gps' | 'ip' | 'manual'
 
   // Leonxlnx/Earshot Acoustic Background Distress Reasoning (AST / CLAP)
   const earshotDistress = React.useMemo(() => {
@@ -98,6 +99,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     try {
       const loc = await requestRealDeviceLocation();
       setUserCoords({ latitude: loc.latitude, longitude: loc.longitude, accuracy: loc.accuracy || 15 });
+      setLocationSource(loc.isHardwareGps ? 'gps' : (loc.isFallback ? 'fallback' : 'ip'));
       const addr = await reverseGeocodeGPS(loc.latitude, loc.longitude);
       const locName = addr.displayName || (loc.city ? `${loc.city}, ${loc.region}` : `${loc.latitude.toFixed(4)}°N, ${loc.longitude.toFixed(4)}°E`);
       setDetectedLocationName(locName);
@@ -161,6 +163,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const handleSelectSearchResult = (item) => {
     setUserCoords({ latitude: item.lat, longitude: item.lng, accuracy: 25 });
     setDetectedLocationName(item.placeName);
+    setLocationSource('manual');
     setSearchLocationQuery('');
     setSearchResults([]);
     loadHospitalsForCoords(item.lat, item.lng, item.placeName, hospitalFilter);
@@ -776,16 +779,55 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
           </button>
         </div>
 
+        {/* IP location warning banner */}
+        {locationSource && locationSource !== 'gps' && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '10px',
+            background: '#FFFBEB', border: '1px solid #F59E0B',
+            borderRadius: '10px', padding: '10px 14px', marginBottom: '10px',
+            fontSize: '12.5px', color: '#92400E'
+          }}>
+            <span style={{ fontSize: '16px' }}>⚠️</span>
+            <span>
+              <strong>IP Location Active</strong> — approximate accuracy ±10–50 km.
+              Location may show nearby district town instead of your exact area.
+              <strong style={{ color: '#B45309' }}> Click "Allow" when browser asks for GPS</strong> for precise Annavaram-level location,
+              or type your location in the search box below.
+            </span>
+            <button
+              onClick={detectLiveLocation}
+              style={{ marginLeft: 'auto', padding: '5px 12px', borderRadius: '6px', border: '1px solid #F59E0B', background: '#FEF3C7', color: '#92400E', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              🛰️ Try GPS Again
+            </button>
+          </div>
+        )}
+
         {/* Location & Search Bar */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', background: '#FAF8F5', border: `1px solid ${locationSource === 'gps' ? '#22C55E' : '#E2E8F0'}`, borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: '1 1 320px' }}>
-            <MapPin size={18} color="#DC2626" style={{ flexShrink: 0 }} />
+            <MapPin size={18} color={locationSource === 'gps' ? '#16A34A' : '#DC2626'} style={{ flexShrink: 0 }} />
             <div style={{ fontSize: '13px', color: '#081C24', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               <span style={{ color: '#64748B', fontWeight: 600 }}>Active Location: </span>
               {detectedLocationName}
               <span style={{ marginLeft: '8px', fontSize: '11px', color: '#94A3B8', fontFamily: 'monospace' }}>
                 ({userCoords.latitude.toFixed(4)}°N, {userCoords.longitude.toFixed(4)}°E)
               </span>
+              {locationSource === 'gps' && (
+                <span style={{ marginLeft: '8px', background: '#DCFCE7', color: '#16A34A', fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
+                  🛰️ GPS Precise
+                </span>
+              )}
+              {locationSource === 'ip' && (
+                <span style={{ marginLeft: '8px', background: '#FEF3C7', color: '#B45309', fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
+                  📡 IP Location (~approx)
+                </span>
+              )}
+              {locationSource === 'manual' && (
+                <span style={{ marginLeft: '8px', background: '#EFF6FF', color: '#1D4ED8', fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: '999px' }}>
+                  ✏️ Manual
+                </span>
+              )}
             </div>
           </div>
 

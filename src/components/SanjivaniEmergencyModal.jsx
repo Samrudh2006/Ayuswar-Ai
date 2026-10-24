@@ -772,10 +772,10 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: '#0C1C36',
-              border: '1px solid #1E3760',
+              background: '#0F2040',
+              border: '1.5px solid #38BDF8',
               borderRadius: '8px',
-              padding: '5px 10px',
+              padding: '7px 12px',
               flex: 1
             }}>
               <Search size={14} color="#38BDF8" style={{ flexShrink: 0 }} />
@@ -788,13 +788,14 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
-                  color: '#FFFFFF',
-                  fontSize: '11px',
+                  color: '#F1F5F9',
+                  fontSize: '12.5px',
+                  caretColor: '#38BDF8',
                   width: '100%'
                 }}
               />
               {isSearching && (
-                <span style={{ fontSize: '9px', color: '#94A3B8' }}>Searching...</span>
+                <span style={{ fontSize: '10px', color: '#94A3B8', whiteSpace: 'nowrap' }}>Searching...</span>
               )}
             </div>
 
