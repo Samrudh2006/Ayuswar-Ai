@@ -9,6 +9,7 @@ import {
   X,
   Stethoscope,
   Users,
+  User,
   PhoneCall,
   Sparkles,
   Bot,
@@ -46,10 +47,12 @@ export default function Navbar({
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   const solutionsRef = useRef(null);
   const resourcesRef = useRef(null);
   const langRef = useRef(null);
+  const loginRef = useRef(null);
 
   // Close dropdowns on outside click or escape
   useEffect(() => {
@@ -63,6 +66,9 @@ export default function Navbar({
       if (langRef.current && !langRef.current.contains(event.target)) {
         setLangMenuOpen(false);
       }
+      if (loginRef.current && !loginRef.current.contains(event.target)) {
+        setLoginOpen(false);
+      }
     }
     function handleKeyDown(e) {
       if (e.key === 'Escape') {
@@ -70,6 +76,7 @@ export default function Navbar({
         setResourcesOpen(false);
         setLangMenuOpen(false);
         setMobileMenuOpen(false);
+        setLoginOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -86,6 +93,7 @@ export default function Navbar({
     setResourcesOpen(false);
     setLangMenuOpen(false);
     setMobileMenuOpen(false);
+    setLoginOpen(false);
   }, [location.pathname]);
 
   // Lock body scroll when mobile menu is open
@@ -490,7 +498,7 @@ export default function Navbar({
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
               <PhoneCall size={14} style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
-              <span>{isMobileNavbar ? '🚨 108' : '🚨 Sanjivani-108'}</span>
+              <span>{isMobileNavbar ? '108' : 'Sanjivani-108'}</span>
             </button>
 
             {/* Shared Language Selector */}
@@ -540,71 +548,76 @@ export default function Navbar({
               )}
             </div>
 
-            {/* Doctor Login Quick Action (Visible on desktop) */}
-            <button
-              type="button"
-              className="navbar-doctor-pill desktop-only-pill"
-              onMouseEnter={() => preloadModule('/doctor')}
-              onFocus={() => preloadModule('/doctor')}
-              onClick={() => {
-                if (doctorProfile) navigate('/doctor-portal');
-                else if (onOpenDoctorAuth) onOpenDoctorAuth();
-                else navigate('/auth/doctor');
-              }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '6px 10px',
-                borderRadius: 8,
-                background: isDoctorActive ? '#0F4C5C' : '#FAF8F5',
-                color: isDoctorActive ? '#ffffff' : '#0F4C5C',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                border: '1px solid',
-                borderColor: isDoctorActive ? '#0F4C5C' : '#D1E1E6',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                whiteSpace: 'nowrap'
-              }}
-              title="Doctor Clinical Login & OPD Workspace"
-            >
-              <Stethoscope size={14} color={isDoctorActive ? '#ffffff' : '#0F4C5C'} />
-              <span>{doctorProfile ? 'Doctor (Active)' : 'Doctor'}</span>
-            </button>
+            {/* Unified Login Dropdown (Ensures desktop navbar fits cleanly on 1 line) */}
+            <div ref={loginRef} className="desktop-only-pill" style={{ position: 'relative' }}>
+              <button
+                type="button"
+                onClick={() => setLoginOpen(!loginOpen)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '6px 12px',
+                  borderRadius: 8,
+                  background: (isDoctorActive || isPatientActive) ? '#0F4C5C' : '#FAF8F5',
+                  color: (isDoctorActive || isPatientActive) ? '#ffffff' : '#0F4C5C',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  border: '1px solid',
+                  borderColor: (isDoctorActive || isPatientActive) ? '#0F4C5C' : '#D1E1E6',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  whiteSpace: 'nowrap'
+                }}
+                aria-expanded={loginOpen}
+                aria-haspopup="true"
+                title="Login to Doctor OPD Workspace or Patient ABHA Portal"
+              >
+                <User size={14} color={(isDoctorActive || isPatientActive) ? '#ffffff' : '#0F4C5C'} />
+                <span>{doctorProfile ? 'Doctor (Active)' : (patientProfile ? 'Patient (Active)' : 'Login')}</span>
+                <ChevronDown size={12} style={{ transform: loginOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
+              </button>
 
-            {/* Patient Login Quick Action (Visible on desktop) */}
-            <button
-              type="button"
-              className="navbar-patient-pill desktop-only-pill"
-              onMouseEnter={() => preloadModule('/patient')}
-              onFocus={() => preloadModule('/patient')}
-              onClick={() => {
-                if (patientProfile) navigate('/patient-portal');
-                else if (onOpenPatientAuth) onOpenPatientAuth();
-                else navigate('/auth/patient');
-              }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '6px 10px',
-                borderRadius: 8,
-                background: isPatientActive ? '#0F4C5C' : '#FAF8F5',
-                color: isPatientActive ? '#ffffff' : '#0F4C5C',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                border: '1px solid',
-                borderColor: isPatientActive ? '#0F4C5C' : '#D1E1E6',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                whiteSpace: 'nowrap'
-              }}
-              title="Patient ABHA Citizen Login"
-            >
-              <Users size={14} color={isPatientActive ? '#ffffff' : '#0F4C5C'} />
-              <span>{patientProfile ? 'Patient (ABHA)' : 'Patient'}</span>
-            </button>
+              {loginOpen && (
+                <div style={{ ...dropdownMenuStyle, minWidth: 200, right: 0, left: 'auto' }} role="menu">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginOpen(false);
+                      if (doctorProfile) navigate('/doctor-portal');
+                      else if (onOpenDoctorAuth) onOpenDoctorAuth();
+                      else navigate('/auth/doctor');
+                    }}
+                    style={{ ...dropdownItemStyle(isDoctorActive), width: '100%', textAlign: 'left', border: 'none', background: 'transparent' }}
+                    role="menuitem"
+                  >
+                    <Stethoscope size={16} color="#0F4C5C" style={{ flexShrink: 0 }} />
+                    <div>
+                      <div style={{ fontWeight: 650, color: '#0f172a' }}>Doctor Login</div>
+                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Clinical OPD workspace</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginOpen(false);
+                      if (patientProfile) navigate('/patient-portal');
+                      else if (onOpenPatientAuth) onOpenPatientAuth();
+                      else navigate('/auth/patient');
+                    }}
+                    style={{ ...dropdownItemStyle(isPatientActive), width: '100%', textAlign: 'left', border: 'none', background: 'transparent' }}
+                    role="menuitem"
+                  >
+                    <Users size={16} color="#0F4C5C" style={{ flexShrink: 0 }} />
+                    <div>
+                      <div style={{ fontWeight: 650, color: '#0f172a' }}>Patient Login</div>
+                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>ABHA Citizen Portal</div>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Mobile Hamburger Button */}
             <button
