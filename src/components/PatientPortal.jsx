@@ -699,7 +699,10 @@ export default function PatientPortal({
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100%', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative' }}>
+      {/* Pristine Mint-Ivory Flow Vector Canvas (Matching Doctor Portal) */}
+      <MintIvoryWaveBackground />
+
       {/* Mobile Drawer Overlay Backdrop */}
       {mobileDrawerOpen && (
         <div
@@ -915,7 +918,7 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1 }}>
+      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',
@@ -2024,22 +2027,23 @@ export default function PatientPortal({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: 'rgba(6, 22, 38, 0.8)',
-                  backdropFilter: 'blur(8px)',
+                  background: 'rgba(8, 28, 36, 0.7)',
+                  backdropFilter: 'blur(4px)',
                   padding: '20px'
                 }}>
                   <div className="modal-content" style={{
                     background: '#ffffff',
-                    width: '540px',
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
-                    border: '1px solid #D8E7EB'
+                    width: '100%',
+                    maxWidth: '520px',
+                    borderRadius: '18px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    overflow: 'hidden'
                   }}>
                     {/* Header */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
-                      padding: '18px 22px',
+                      background: '#0F4C5C',
+                      padding: '18px 24px',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
@@ -2048,24 +2052,36 @@ export default function PatientPortal({
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Activity size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '17px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
                             Add Vitals Manually
                           </h3>
-                          <div style={{ fontSize: '11px', color: '#94A3B8' }}>
+                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
                             Self-enter home readings or health worker visit measurements
                           </div>
                         </div>
                       </div>
                       <button
                         onClick={() => setIsAddVitalsModalOpen(false)}
-                        style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '4px' }}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: '#ffffff',
+                          fontSize: '18px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
-                        <X size={20} />
+                        ×
                       </button>
                     </div>
 
                     {/* Form Body */}
-                    <form onSubmit={handleSaveManualVitals} style={{ padding: '22px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <form onSubmit={handleSaveManualVitals} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {/* Date & Recording Context */}
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                         <div>
@@ -2212,17 +2228,18 @@ export default function PatientPortal({
                         />
                       </div>
 
-                      {/* Buttons */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
+                      {/* Action Buttons */}
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                         <button
                           type="button"
                           onClick={() => setIsAddVitalsModalOpen(false)}
                           style={{
-                            background: '#F1F5F9',
-                            color: '#475569',
-                            border: 'none',
+                            flex: 1,
+                            padding: '10px',
                             borderRadius: '10px',
-                            padding: '10px 18px',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            background: '#FAF8F5',
+                            color: '#475569',
                             fontSize: '13px',
                             fontWeight: 700,
                             cursor: 'pointer'
@@ -2233,18 +2250,20 @@ export default function PatientPortal({
                         <button
                           type="submit"
                           style={{
+                            flex: 2,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: 'none',
                             background: '#0F4C5C',
                             color: '#ffffff',
-                            border: 'none',
-                            borderRadius: '10px',
-                            padding: '10px 22px',
                             fontSize: '13px',
                             fontWeight: 750,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
+                            justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
+                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
                           }}
                         >
                           <CheckCircle2 size={16} />
@@ -2329,43 +2348,56 @@ export default function PatientPortal({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: 'rgba(6, 22, 38, 0.8)',
-                  backdropFilter: 'blur(8px)',
+                  background: 'rgba(8, 28, 36, 0.7)',
+                  backdropFilter: 'blur(4px)',
                   padding: '20px'
                 }}>
                   <div className="modal-content" style={{
                     background: '#ffffff',
-                    width: '560px',
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
-                    border: '1px solid #D8E7EB'
+                    width: '100%',
+                    maxWidth: '520px',
+                    borderRadius: '18px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    overflow: 'hidden'
                   }}>
                     {/* Header */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
-                      padding: '20px 24px',
+                      background: '#0F4C5C',
+                      padding: '18px 24px',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Calendar size={22} color="#2DD4BF" />
                         <div>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
                             Book Clinical Consultation
                           </h3>
-                          <div style={{ fontSize: '11.5px', color: '#CCFBF1' }}>
+                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
                             Kurnool District Hospital • ABDM Health Facility #1402
                           </div>
                         </div>
                       </div>
                       <button
                         onClick={() => setIsBookConsultationModalOpen(false)}
-                        style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px' }}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: '#ffffff',
+                          fontSize: '18px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
-                        ✕
+                        ×
                       </button>
                     </div>
 
@@ -2494,51 +2526,70 @@ export default function PatientPortal({
                         />
                       </div>
 
-                      {/* Submit Booking Button */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (onBookAppointment) {
-                            onBookAppointment({
-                              patientName: patientName,
-                              vernacular: selectedLanguage === 'Telugu' ? 'అనన్య రావు' : 'अनन्या राव',
-                              phone: emergencyPhone || '+91 98480 22334',
-                              age: patientProfile?.age || 28,
-                              gender: patientProfile?.gender || 'Female',
-                              language: selectedLanguage,
-                              abhaId: abhaId,
-                              doctorName: bookingDoctor,
-                              specialty: bookingSpecialty,
-                              date: bookingDate,
-                              time: bookingTime,
-                              mode: bookingMode,
-                              reason: bookingReason
-                            });
-                          }
-                          setIsBookConsultationModalOpen(false);
-                          setBookingSuccessToast(true);
-                          setTimeout(() => setBookingSuccessToast(false), 5000);
-                        }}
-                        style={{
-                          background: 'linear-gradient(135deg, #0F4C5C 0%, #065F46 100%)',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '12px',
-                          padding: '13px',
-                          fontSize: '14px',
-                          fontWeight: 800,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)',
-                          marginTop: '6px'
-                        }}
-                      >
-                        <CheckCircle2 size={18} />
-                        <span>Confirm & Send Booking Request to Doctor</span>
-                      </button>
+                      {/* Action Buttons */}
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setIsBookConsultationModalOpen(false)}
+                          style={{
+                            flex: 1,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            background: '#FAF8F5',
+                            color: '#475569',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onBookAppointment) {
+                              onBookAppointment({
+                                patientName: patientName,
+                                vernacular: selectedLanguage === 'Telugu' ? 'అనన్య రావు' : 'अनन्या राव',
+                                phone: emergencyPhone || '+91 98480 22334',
+                                age: patientProfile?.age || 28,
+                                gender: patientProfile?.gender || 'Female',
+                                language: selectedLanguage,
+                                abhaId: abhaId,
+                                doctorName: bookingDoctor,
+                                specialty: bookingSpecialty,
+                                date: bookingDate,
+                                time: bookingTime,
+                                mode: bookingMode,
+                                reason: bookingReason
+                              });
+                            }
+                            setIsBookConsultationModalOpen(false);
+                            setBookingSuccessToast(true);
+                            setTimeout(() => setBookingSuccessToast(false), 5000);
+                          }}
+                          style={{
+                            flex: 2,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: '#0F4C5C',
+                            color: '#ffffff',
+                            fontSize: '13px',
+                            fontWeight: 750,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                          }}
+                        >
+                          <CheckCircle2 size={16} />
+                          <span>Confirm & Book Consultation</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2943,43 +2994,58 @@ export default function PatientPortal({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  background: 'rgba(8, 28, 36, 0.7)',
+                  backdropFilter: 'blur(4px)',
                   padding: '20px'
                 }}>
                   <div className="modal-content" style={{
                     background: '#ffffff',
-                    width: '540px',
-                    borderRadius: '20px',
+                    width: '100%',
+                    maxWidth: '520px',
+                    borderRadius: '18px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
                     overflow: 'hidden',
-                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
-                    border: '1px solid #D8E7EB',
                     maxHeight: '90vh',
                     overflowY: 'auto'
                   }}>
                     {/* Modal Header */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #0A2540 0%, #0F4C5C 100%)',
-                      padding: '20px 24px',
+                      background: '#0F4C5C',
+                      padding: '18px 24px',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <UploadCloud size={22} color="#D4AF37" />
+                        <UploadCloud size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '17px', fontWeight: 800, margin: 0 }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
                             Upload Diagnostic / Lab Report
                           </h3>
-                          <div style={{ fontSize: '11px', color: '#E0F2FE', opacity: 0.9 }}>
+                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
                             Automated AI OCR & Vernacular Voiceover (Browser speech)
                           </div>
                         </div>
                       </div>
                       <button
                         onClick={() => setIsUploadReportModalOpen(false)}
-                        style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px' }}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: '#ffffff',
+                          fontSize: '18px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
-                        ✕
+                        ×
                       </button>
                     </div>
 
@@ -3323,69 +3389,93 @@ export default function PatientPortal({
                         />
                       </div>
 
-                      {/* Submit */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newRep = {
-                            id: Date.now(),
-                            title: newReportTitle,
-                            date: newReportDate,
-                            icon: '🧪',
-                            doctor: newReportDoctor,
-                            summary: newReportSummary,
-                            spokenTelugu: newReportTelugu,
-                            spokenHindi: newReportHindi,
-                            isNew: true
-                          };
-                          setReportsList([newRep, ...reportsList]);
+                      {/* Action Buttons */}
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUploadedReportFile(null);
+                            setIsUploadReportModalOpen(false);
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            background: '#FAF8F5',
+                            color: '#475569',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newRep = {
+                              id: Date.now(),
+                              title: newReportTitle,
+                              date: newReportDate,
+                              icon: '🧪',
+                              doctor: newReportDoctor,
+                              summary: newReportSummary,
+                              spokenTelugu: newReportTelugu,
+                              spokenHindi: newReportHindi,
+                              isNew: true
+                            };
+                            setReportsList([newRep, ...reportsList]);
 
-                          // Automatically extract and update vitals tracker based on this diagnostic report
-                          const extractedSugarMatch = newReportSummary.match(/(\d{2,3})\s*mg\/dL/i);
-                          const extractedSugar = extractedSugarMatch ? `${extractedSugarMatch[1]} mg/dL` : (newReportSummary.includes('104') ? '104 mg/dL' : undefined);
+                            // Automatically extract and update vitals tracker based on this diagnostic report
+                            const extractedSugarMatch = newReportSummary.match(/(\d{2,3})\s*mg\/dL/i);
+                            const extractedSugar = extractedSugarMatch ? `${extractedSugarMatch[1]} mg/dL` : (newReportSummary.includes('104') ? '104 mg/dL' : undefined);
 
-                          const autoReportVital = {
-                            id: 'vit_rep_' + Date.now(),
-                            date: newReportDate || formatDemoDate(0),
-                            relativeLabel: 'Just now',
-                            offsetDays: 0,
-                            bp: '126/80 mmHg',
-                            systolic: 126,
-                            diastolic: 80,
-                            pulse: '72 bpm',
-                            spo2: '98%',
-                            weight: '63 kg',
-                            bloodSugar: extractedSugar || '104 mg/dL',
-                            source: `Auto-extracted from verified ${newReportTitle}`,
-                            sourceType: 'report',
-                            reportName: newReportTitle,
-                            doctor: newReportDoctor,
-                            status: 'Optimal'
-                          };
+                            const autoReportVital = {
+                              id: 'vit_rep_' + Date.now(),
+                              date: newReportDate || formatDemoDate(0),
+                              relativeLabel: 'Just now',
+                              offsetDays: 0,
+                              bp: '126/80 mmHg',
+                              systolic: 126,
+                              diastolic: 80,
+                              pulse: '72 bpm',
+                              spo2: '98%',
+                              weight: '63 kg',
+                              bloodSugar: extractedSugar || '104 mg/dL',
+                              source: `Auto-extracted from verified ${newReportTitle}`,
+                              sourceType: 'report',
+                              reportName: newReportTitle,
+                              doctor: newReportDoctor,
+                              status: 'Optimal'
+                            };
 
-                          setVitalsHistory(prev => [autoReportVital, ...prev]);
-                          showVitalsToast(`⚡ Vitals automatically extracted & updated from ${newReportTitle}!`);
-                          setUploadedReportFile(null);
-                          setIsUploadReportModalOpen(false);
-                        }}
-                        style={{
-                          background: '#0F4C5C',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '12px',
-                          padding: '12px',
-                          fontSize: '13.5px',
-                          fontWeight: 750,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px'
-                        }}
-                      >
-                        <CheckCircle2 size={16} />
-                        <span>Verify & Add to My Reports</span>
-                      </button>
+                            setVitalsHistory(prev => [autoReportVital, ...prev]);
+                            showVitalsToast(`⚡ Vitals automatically extracted & updated from ${newReportTitle}!`);
+                            setUploadedReportFile(null);
+                            setIsUploadReportModalOpen(false);
+                          }}
+                          style={{
+                            flex: 2,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: '#0F4C5C',
+                            color: '#ffffff',
+                            fontSize: '13px',
+                            fontWeight: 750,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                          }}
+                        >
+                          <CheckCircle2 size={16} />
+                          <span>Verify & Add to My Reports</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3523,40 +3613,55 @@ export default function PatientPortal({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  background: 'rgba(8, 28, 36, 0.7)',
+                  backdropFilter: 'blur(4px)',
                   padding: '20px'
                 }}>
                   <div className="modal-content" style={{
                     background: '#ffffff',
-                    width: '500px',
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
-                    border: '1px solid #D8E7EB'
+                    width: '100%',
+                    maxWidth: '520px',
+                    borderRadius: '18px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    overflow: 'hidden'
                   }}>
                     <div style={{
-                      background: 'linear-gradient(135deg, #0A2540 0%, #D97706 100%)',
-                      padding: '20px 24px',
+                      background: '#0F4C5C',
+                      padding: '18px 24px',
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Pill size={22} color="#FDE047" />
+                        <Pill size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '17px', fontWeight: 800, margin: 0 }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
                             Add Medication Manually
                           </h3>
-                          <div style={{ fontSize: '11px', color: '#FEF3C7', opacity: 0.9 }}>
+                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
                             Set meal timing, dosage & auto-generate voice instructions
                           </div>
                         </div>
                       </div>
                       <button
                         onClick={() => setIsAddMedicationModalOpen(false)}
-                        style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '18px' }}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '32px',
+                          height: '32px',
+                          color: '#ffffff',
+                          fontSize: '18px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
-                        ✕
+                        ×
                       </button>
                     </div>
 
@@ -3632,44 +3737,65 @@ export default function PatientPortal({
                         />
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newSlotItem = {
-                            id: `manual_${Date.now()}`,
-                            label: manualSlot.replace('_', ' ').toUpperCase(),
-                            time: manualSlot === 'early_morning' ? '06:30 AM' : (manualSlot === 'morning' ? '08:30 AM' : (manualSlot === 'afternoon' ? '01:30 PM' : '08:30 PM')),
-                            mealContext: manualMealContext,
-                            medicine: manualMedName,
-                            purpose: manualPurpose,
-                            color: '#0F4C5C',
-                            bg: 'rgba(15, 76, 92, 0.1)',
-                            teluguAudioText: manualTeluguAudio,
-                            hindiAudioText: manualHindiAudio
-                          };
-                          setChronotherapySchedule([...chronotherapySchedule, newSlotItem]);
-                          setIsAddMedicationModalOpen(false);
-                          alert(`${manualMedName} added to your chronotherapy schedule!`);
-                        }}
-                        style={{
-                          background: '#D97706',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '12px',
-                          padding: '12px',
-                          fontSize: '13.5px',
-                          fontWeight: 750,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          marginTop: '6px'
-                        }}
-                      >
-                        <CheckCircle2 size={16} />
-                        <span>Add to Smart Chronotherapy Pillbox</span>
-                      </button>
+                      {/* Action Buttons */}
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setIsAddMedicationModalOpen(false)}
+                          style={{
+                            flex: 1,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            background: '#FAF8F5',
+                            color: '#475569',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSlotItem = {
+                              id: `manual_${Date.now()}`,
+                              label: manualSlot.replace('_', ' ').toUpperCase(),
+                              time: manualSlot === 'early_morning' ? '06:30 AM' : (manualSlot === 'morning' ? '08:30 AM' : (manualSlot === 'afternoon' ? '01:30 PM' : '08:30 PM')),
+                              mealContext: manualMealContext,
+                              medicine: manualMedName,
+                              purpose: manualPurpose,
+                              color: '#0F4C5C',
+                              bg: 'rgba(15, 76, 92, 0.1)',
+                              teluguAudioText: manualTeluguAudio,
+                              hindiAudioText: manualHindiAudio
+                            };
+                            setChronotherapySchedule([...chronotherapySchedule, newSlotItem]);
+                            setIsAddMedicationModalOpen(false);
+                            alert(`${manualMedName} added to your chronotherapy schedule!`);
+                          }}
+                          style={{
+                            flex: 2,
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: 'none',
+                            background: '#0F4C5C',
+                            color: '#ffffff',
+                            fontSize: '13px',
+                            fontWeight: 750,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                          }}
+                        >
+                          <CheckCircle2 size={16} />
+                          <span>Add to Chronotherapy Pillbox</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
