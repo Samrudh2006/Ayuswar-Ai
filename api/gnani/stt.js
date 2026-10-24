@@ -99,9 +99,29 @@ export default async function handler(req, res) {
       return res.status(413).json({ error: 'Audio file exceeds 10MB limit' });
     }
 
+    // Ensure valid RIFF WAV container for Gnani STT backend ffmpeg decoder
+    let validWavBuffer = audioBuffer;
+    if (audioBuffer.length < 4 || audioBuffer.toString('ascii', 0, 4) !== 'RIFF') {
+      const header = Buffer.alloc(44);
+      header.write('RIFF', 0);
+      header.writeUInt32LE(36 + audioBuffer.length, 4);
+      header.write('WAVE', 8);
+      header.write('fmt ', 12);
+      header.writeUInt32LE(16, 16);
+      header.writeUInt16LE(1, 20); // PCM
+      header.writeUInt16LE(1, 22); // mono
+      header.writeUInt32LE(16000, 24); // 16kHz
+      header.writeUInt32LE(32000, 28); // byte rate (16000 * 2)
+      header.writeUInt16LE(2, 32); // block align
+      header.writeUInt16LE(16, 34); // 16 bits
+      header.write('data', 36);
+      header.writeUInt32LE(audioBuffer.length, 40);
+      validWavBuffer = Buffer.concat([header, audioBuffer]);
+    }
+
     // Build standard multipart form data as required by Gnani v3 STT
     const formData = new FormData();
-    const audioBlob = new Blob([audioBuffer], { type: 'audio/wav' });
+    const audioBlob = new Blob([validWavBuffer], { type: 'audio/wav' });
     formData.append('audio_file', audioBlob, 'audio.wav');
     formData.append('language_code', languageCode);
 

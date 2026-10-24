@@ -149,7 +149,9 @@ export function getGroqApiKey() {
       if (stored && stored.trim()) return stored.trim();
     } catch {}
   }
-  return (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  const viteKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  const nodeKey = (typeof process !== 'undefined' && (process.env?.VITE_GROQ_API_KEY || process.env?.GROQ_API_KEY)) || '';
+  return viteKey || nodeKey || '';
 }
 
 /**
