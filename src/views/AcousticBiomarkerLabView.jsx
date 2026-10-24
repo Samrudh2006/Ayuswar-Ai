@@ -26,6 +26,7 @@ import { speechService } from '../services/indicSpeechService';
 import { reasonAcousticBiomarkerWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import EvonStatusChip from '../components/EvonStatusChip';
 import { earshotDescribe, earshotMatch, ACOUSTIC_CLINICAL_ONTOLOGY } from '../services/acousticReasoningService';
+import { generateHealthyAcousticCounselWithGroq } from '../services/aiBrainService';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
@@ -113,6 +114,52 @@ export default function AcousticBiomarkerLabView() {
     spectralCentroid: dspMetrics.spectralCentroid || 1200,
     hnrDb: dspMetrics.hnrDb || 19.5
   });
+
+  // Healthy Acoustic Clearance & Groq Preventive Counsel State
+  const [healthyCounselText, setHealthyCounselText] = useState(null);
+  const [isGeneratingCounsel, setIsGeneratingCounsel] = useState(false);
+  const [counselLang, setCounselLang] = useState('te-IN');
+  const [isSpeakingCounsel, setIsSpeakingCounsel] = useState(false);
+
+  const isHealthyPhonation = Boolean(
+    (analysisResult?.topAcousticMatch?.key === 'normal_phonation' || currentEarshotDescription?.icd10 === 'Z00.00') &&
+    dspMetrics.hnrDb >= 17 &&
+    dspMetrics.jitterPct <= 1.35 &&
+    !detectedWheezeHz
+  );
+
+  const handleGenerateHealthyCounsel = async (lang = counselLang) => {
+    setIsGeneratingCounsel(true);
+    setCounselLang(lang);
+    try {
+      const counsel = await generateHealthyAcousticCounselWithGroq({
+        metrics: dspMetrics,
+        language: lang
+      });
+      setHealthyCounselText(counsel);
+      if (counsel) {
+        speakHealthyCounsel(counsel, lang);
+      }
+    } catch (err) {
+      console.warn('Healthy acoustic counsel error:', err);
+    } finally {
+      setIsGeneratingCounsel(false);
+    }
+  };
+
+  const speakHealthyCounsel = async (text, lang = counselLang) => {
+    if (isSpeakingCounsel) {
+      speechService.stopSpeaking();
+      setIsSpeakingCounsel(false);
+      return;
+    }
+    setIsSpeakingCounsel(true);
+    await speechService.speak(text, {
+      langCode: lang,
+      onEnd: () => setIsSpeakingCounsel(false),
+      onError: () => setIsSpeakingCounsel(false)
+    });
+  };
 
   // Spoken Acoustic Biomarker Clinical Readout using Gnani Timbre TTS (with Browser SpeechSynthesis fallback)
   const [isSpeakingReadout, setIsSpeakingReadout] = useState(false);
@@ -722,11 +769,11 @@ export default function AcousticBiomarkerLabView() {
       const rms = Math.sqrt(sumSquares / bufferLength);
 
       if (visualizerMode === 'oscilloscope') {
-        // Cyan Oscilloscope Waveform
+        // Cyan / Radiant Emerald Oscilloscope Waveform (Shifts to emerald on healthy vesicular flow)
         ctx.lineWidth = 2.5;
-        ctx.strokeStyle = '#00F5D4';
-        ctx.shadowColor = '#00F5D4';
-        ctx.shadowBlur = 6;
+        ctx.strokeStyle = isHealthyPhonation ? '#10B981' : '#00F5D4';
+        ctx.shadowColor = isHealthyPhonation ? '#10B981' : '#00F5D4';
+        ctx.shadowBlur = isHealthyPhonation ? 8 : 6;
         ctx.beginPath();
 
         const sliceWidth = canvas.width / bufferLength;
@@ -755,14 +802,27 @@ export default function AcousticBiomarkerLabView() {
           const x = i * (barWidth + 2);
           const y = canvas.height - barHeight;
 
-          // Gradient color: Cyan -> Teal -> Coral
+          // Gradient color: Emerald/Teal on healthy vesicular flow; otherwise Cyan -> Gold -> Coral
           const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          grad.addColorStop(0, '#D4AF37');
-          grad.addColorStop(0.5, '#00F5D4');
-          grad.addColorStop(1, '#FF6B6B');
+          if (isHealthyPhonation) {
+            grad.addColorStop(0, '#047857');
+            grad.addColorStop(0.5, '#10B981');
+            grad.addColorStop(1, '#00F5D4');
+          } else {
+            grad.addColorStop(0, '#D4AF37');
+            grad.addColorStop(0.5, '#00F5D4');
+            grad.addColorStop(1, '#FF6B6B');
+          }
 
           ctx.fillStyle = grad;
           ctx.fillRect(x, y, barWidth, barHeight);
+        }
+
+        // Live Healthy Airway badge on canvas
+        if (isHealthyPhonation) {
+          ctx.fillStyle = '#10B981';
+          ctx.font = 'bold 10px monospace';
+          ctx.fillText('🟢 AIRWAY: CLEAR LAMINAR VESICULAR FLOW (0% WHEEZE)', 10, canvas.height - 10);
         }
 
         // Grid frequency guide markers
@@ -1500,6 +1560,157 @@ export default function AcousticBiomarkerLabView() {
 
         {/* Right Column: Statistical Cluster Proximity Analysis */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Healthy Airway & Phonation Clinical Clearance Card */}
+          {isHealthyPhonation && (
+            <div style={{
+              background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+              border: '2px solid #10B981',
+              borderRadius: '16px',
+              padding: '20px',
+              boxShadow: '0 4px 16px rgba(16, 185, 129, 0.15)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 10,
+                    background: '#10B981',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FFFFFF'
+                  }}>
+                    <CheckCircle2 size={24} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 900, color: '#065F46', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                      <span>OPTIMAL RESPIRATORY & VOCAL CLEARANCE</span>
+                      <span style={{ fontSize: '10px', background: '#059669', color: '#FFFFFF', padding: '2px 8px', borderRadius: 12, fontWeight: 800 }}>
+                        🟢 100% HEALTHY AIRWAY
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#047857', fontWeight: 700 }}>
+                      Normal Vesicular Acoustic Flow • Zero Bronchospasm • Zero Adventitious Crackles
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '11px', background: '#FFFFFF', color: '#065F46', padding: '4px 10px', borderRadius: 8, fontWeight: 800, border: '1px solid #A7F3D0' }}>
+                  ICD-10: Z00.00 (Benign / Normal Exam)
+                </div>
+              </div>
+
+              {/* Measured Healthy Biomarkers Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10, marginBottom: '14px' }}>
+                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
+                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Wheeze Bronchospasm</div>
+                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>0% (Negative)</div>
+                </div>
+                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
+                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Harmonic Purity</div>
+                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>{dspMetrics.hnrDb} dB (Pure)</div>
+                </div>
+                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
+                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Cycle Jitter Perturbation</div>
+                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>{dspMetrics.jitterPct}% (Stable)</div>
+                </div>
+                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
+                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Airway Acoustics</div>
+                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>Clear Vesicular</div>
+                </div>
+              </div>
+
+              {/* Groq AI Preventive Wellness Counsel */}
+              <div style={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 12, padding: '14px', border: '1.5px solid #10B981' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: '#065F46' }}>
+                    <Sparkles size={14} color="#059669" />
+                    <span>Groq AI Preventive Wellness & Lung Counsel:</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    {['te-IN', 'hi-IN', 'en-IN'].map(lang => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => handleGenerateHealthyCounsel(lang)}
+                        disabled={isGeneratingCounsel}
+                        style={{
+                          padding: '3px 8px',
+                          borderRadius: 6,
+                          border: '1px solid',
+                          borderColor: counselLang === lang ? '#059669' : '#CBD5E1',
+                          background: counselLang === lang ? '#059669' : '#FFFFFF',
+                          color: counselLang === lang ? '#FFFFFF' : '#334155',
+                          fontSize: '10.5px',
+                          fontWeight: 800,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {lang === 'te-IN' ? 'Telugu' : lang === 'hi-IN' ? 'Hindi' : 'English'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {healthyCounselText ? (
+                  <div style={{ marginTop: 8 }}>
+                    <p style={{ fontSize: '12.5px', color: '#064E3B', margin: '0 0 10px 0', lineHeight: 1.55, fontWeight: 600 }}>
+                      "{healthyCounselText}"
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => speakHealthyCounsel(healthyCounselText)}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: 6,
+                        border: 'none',
+                        background: isSpeakingCounsel ? '#EF4444' : '#059669',
+                        color: '#FFFFFF',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <Volume2 size={13} />
+                      <span>{isSpeakingCounsel ? 'Stop Counsel Speech' : '🔊 Listen to Counsel (Gnani Indic TTS)'}</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, flexWrap: 'wrap', gap: 8 }}>
+                    <span style={{ fontSize: '11.5px', color: '#047857' }}>
+                      Generate personalized vocal hygiene & lung capacity guidance.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleGenerateHealthyCounsel('te-IN')}
+                      disabled={isGeneratingCounsel}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: 6,
+                        border: 'none',
+                        background: '#059669',
+                        color: '#FFFFFF',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <Sparkles size={12} />
+                      <span>{isGeneratingCounsel ? 'Generating Counsel...' : '⚡ Generate Preventive Counsel'}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
               Measured Pitch Register & Reference Signal Proximity

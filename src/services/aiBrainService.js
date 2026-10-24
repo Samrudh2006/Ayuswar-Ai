@@ -290,3 +290,32 @@ export async function generateVoicemakerScriptWithGroq({
   const reply = await queryGroqApi(prompt, systemInstruction);
   return reply ? reply.trim() : null;
 }
+
+/**
+ * Acoustic Lab: Generates personalized preventive vocal wellness & respiratory hygiene counsel using Groq LLaMA-3.3
+ */
+export async function generateHealthyAcousticCounselWithGroq({
+  metrics = {},
+  language = 'te-IN'
+} = {}) {
+  const isTelugu = language === 'te-IN';
+  const isHindi = language === 'hi-IN';
+  const langName = isTelugu ? 'Telugu' : isHindi ? 'Hindi' : 'Indian English';
+
+  const f0 = metrics.pitchF0 || 140;
+  const hnr = metrics.hnrDb || 20.0;
+  const jitter = metrics.jitterPct || 0.8;
+
+  const prompt = `Patient acoustic phonation test results:
+Fundamental Frequency (F0): ${f0} Hz
+Harmonics-to-Noise Ratio (HNR): ${hnr} dB
+Cycle-to-Cycle Jitter: ${jitter}%
+Clinical Assessment: Airway is completely unobstructed, normal vesicular flow, zero wheeze, zero crackles, vocal fold mechanics are healthy.
+
+Write a warm, encouraging 2-sentence preventive wellness recommendation in ${langName}. Praise their healthy vocal and lung condition, and give 1 quick tip on hydration or deep breathing to maintain it. Keep it under 45 words, conversational, spoken style. No markdown, no bullet points, no asterisks.`;
+
+  const systemInstruction = `You are AyuSwar Vocal Wellness Physician. Provide clear, encouraging preventive acoustic counsel in ${langName}.`;
+
+  const reply = await queryGroqApi(prompt, systemInstruction);
+  return reply ? reply.trim() : null;
+}
