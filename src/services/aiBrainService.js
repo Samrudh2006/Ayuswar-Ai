@@ -74,9 +74,10 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 
   const { provider } = getAiConfig();
 
-  // Check Groq API Key if provided
+  // Groq API Key is connected exclusively for Sanjivani, OPD, and Voicemaker (Bypassed for Floating Assistant)
+  const isFloatingAssistant = context?.source === 'floating_assistant' || context?.skipGroq === true;
   const groqKey = getGroqApiKey();
-  if (groqKey) {
+  if (groqKey && !isFloatingAssistant) {
     try {
       const groqReply = await queryGroqApi(cleanPrompt, getSystemPromptForRole(role, enrichedContext));
       if (groqReply) return groqReply;
@@ -214,4 +215,28 @@ function generateSafeDemonstrationResponse(prompt, role, context) {
   }
 
   return `🏥 Namaste! Thank you for reaching out to AyuSwar AI.\n• OPD consultations are held Monday to Saturday, 9:00 AM – 2:00 PM at your local PHC.\n• Spoken voice prescriptions in Telugu and Hindi are accessible in your Patient Portal.\n• For urgent symptoms, dial 112 / 108 immediately.`;
+}
+
+/**
+ * Voicemaker: Generates crystal-clear vernacular spoken dosage instructions using Groq LLaMA-3.3
+ */
+export async function generateVoicemakerScriptWithGroq({
+  patientName = 'Patient',
+  medications = [],
+  language = 'te-IN'
+} = {}) {
+  const isTelugu = language === 'te-IN';
+  const isHindi = language === 'hi-IN';
+  const langName = isTelugu ? 'Telugu' : isHindi ? 'Hindi' : 'Indian English';
+
+  const medList = medications.length > 0 
+    ? medications.map(m => `- ${m.name || m.drug || 'Medicine'} (${m.colorLabel || m.color || ''}): ${m.timing || m.schedule || ''}, ${m.meal || ''}`).join('\n')
+    : `- Pantoprazole 40mg (Yellow pill): Morning, before breakfast\n- Metformin 500mg (Pink pill): Night, after dinner`;
+
+  const prompt = `Patient Name: ${patientName}. Medications:\n${medList}\n\nCreate a warm, respectful conversational spoken prescription script in ${langName} that an elderly or rural patient can listen to. Mention pill colors clearly. Keep it under 50 words. No asterisks, no bullet points, no markdown.`;
+
+  const systemInstruction = `You are AyuSwar Voicemaker, an Indic clinical speech engineer. Write pure spoken conversational audio scripts in ${langName}. No asterisks, no emojis.`;
+
+  const reply = await queryGroqApi(prompt, systemInstruction);
+  return reply ? reply.trim() : null;
 }

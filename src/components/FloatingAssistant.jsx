@@ -137,7 +137,12 @@ export default function FloatingAssistant({
     setAssistantState('speaking');
     
     try {
-      const answer = await askAyuSwarBrain(queryText, effectiveRole, { patientProfile, doctorProfile });
+      const answer = await askAyuSwarBrain(queryText, effectiveRole, { 
+        patientProfile, 
+        doctorProfile,
+        skipGroq: true,
+        source: 'floating_assistant'
+      });
       setCurrentAiReply(answer);
       if (isAiVoiceEnabled && !isMuted) {
         speakOutLoud(answer);

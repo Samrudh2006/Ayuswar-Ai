@@ -28,6 +28,8 @@ import {
 import { useApp } from '../context/AppContext';
 import { speechService } from '../services/indicSpeechService';
 import { analyzeAcousticSample } from '../services/acousticCoughAnalyzer';
+import { generateVoicemakerScriptWithGroq } from '../services/aiBrainService';
+import { cleanTextForSpeech } from '../utils/speechSanitizer';
 
 export default function AudioRxStudioView() {
   const { selectedLanguage, setSelectedLanguage, isDemoMode } = useApp();
@@ -41,6 +43,8 @@ export default function AudioRxStudioView() {
   const [copiedToast, setCopiedToast] = useState(false);
   const [isExportingWav, setIsExportingWav] = useState(false);
   const [wavExportedToast, setWavExportedToast] = useState(false);
+  const [customGroqScript, setCustomGroqScript] = useState(null);
+  const [isGeneratingGroqScript, setIsGeneratingGroqScript] = useState(false);
 
   // Feature 1: JAMA Teach-Back Adherence Protocol State
   const [teachBackModalOpen, setTeachBackModalOpen] = useState(false);
@@ -180,7 +184,38 @@ export default function AudioRxStudioView() {
     }
   };
 
-  const currentScript = SCRIPTS[activeLang] || SCRIPTS['en-IN'];
+  const handleGenerateWithGroq = async () => {
+    setIsGeneratingGroqScript(true);
+    try {
+      const generated = await generateVoicemakerScriptWithGroq({
+        patientName: 'Narayana Rao',
+        medications: [
+          { name: 'Pantoprazole 40mg', colorLabel: 'Yellow tablet (పసుపు గోళీ)', timing: 'Morning', meal: 'before breakfast' },
+          { name: 'Metformin 500mg SR', colorLabel: 'Pink tablet (గులాబీ గోళీ)', timing: 'Night', meal: 'after dinner' }
+        ],
+        language: activeLang
+      });
+      if (generated) {
+        const cleaned = cleanTextForSpeech(generated);
+        const words = cleaned.split(' ');
+        const tokens = words.map(w => ({ 
+          text: w, 
+          pill: w.includes('పసుపు') || w.includes('पीली') || w.includes('yellow') ? 'morning' : (w.includes('గులాబీ') || w.includes('गुलाबी') || w.includes('pink') ? 'night' : null) 
+        }));
+        setCustomGroqScript({
+          title: `Groq AI Spoken Prescription (${activeLang})`,
+          tokens,
+          fullText: cleaned
+        });
+      }
+    } catch (err) {
+      console.warn('Groq Voicemaker error:', err);
+    } finally {
+      setIsGeneratingGroqScript(false);
+    }
+  };
+
+  const currentScript = customGroqScript || SCRIPTS[activeLang] || SCRIPTS['en-IN'];
 
   // -------------------------------------------------------------
   // Live Microphone 60 FPS Visualizer & Recording Pipeline
@@ -1002,7 +1037,30 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           {/* Karaoke Telemetry Box */}
           <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Synthesized Mother Tongue Readout:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Synthesized Mother Tongue Readout:</span>
+                <button
+                  onClick={handleGenerateWithGroq}
+                  disabled={isGeneratingGroqScript}
+                  title="Generate dynamic vernacular spoken prescription with Groq LLaMA-3.3"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '3px 8px',
+                    borderRadius: '7px',
+                    border: '1px solid #F59E0B',
+                    background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+                    color: '#92400E',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    cursor: isGeneratingGroqScript ? 'wait' : 'pointer'
+                  }}
+                >
+                  <Sparkles size={12} color="#D97706" />
+                  <span>{isGeneratingGroqScript ? 'Generating...' : '⚡ Groq Voicemaker AI'}</span>
+                </button>
+              </div>
               <div style={{ display: 'flex', gap: '6px' }}>
                 {[
                   { code: 'te-IN', label: 'తెలుగు (Telugu)' },

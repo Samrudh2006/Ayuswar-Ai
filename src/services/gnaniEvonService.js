@@ -21,6 +21,8 @@
  * 6. Non-Diagnostic Guardrail: No autonomous diagnosis or drug dosing advice; maintains research prototype disclaimer.
  */
 
+import { queryGroqApi, getGroqApiKey } from './aiBrainService';
+
 export const EVON_MODEL_METADATA = {
   modelId: 'gnani/gnani-evon-v3.3-30B-A3B',
   organization: 'Gnani.ai',
@@ -203,6 +205,35 @@ export async function reasonClinicalNoteWithEvon(transcriptOrNotes, patient = {}
     `Synthesize a structured clinical SOAP note (Subjective, Objective, Assessment, Plan) ` +
     `and provide a spoken prescription script in the patient's native Indian language (Telugu/Hindi). ` +
     `Do not prescribe unverified drug dosages. Prototype guidance only.`;
+
+  // OPD Clinical Mode: Connect Groq LLaMA-3.3 for sub-300ms clinical SOAP & ICD-10 notes
+  const groqKey = getGroqApiKey();
+  if (groqKey) {
+    try {
+      const groqPrompt = 
+        `Synthesize a structured clinical encounter SOAP note and native Indian language spoken prescription:\n` +
+        `Patient: ${patient.name || 'Patient'}, Age: ${patient.age || 'Adult'}, Known Conditions: ${patient.condition || 'None'}\n` +
+        `Clinical Dialogue / Transcription:\n${transcriptOrNotes}\n\n` +
+        `Format clearly:\n` +
+        `[S - SUBJECTIVE]\n[O - OBJECTIVE]\n[A - ASSESSMENT with ICD-10]\n[P - PLAN]\n[VERNACULAR SPOKEN RX]`;
+      const groqRes = await queryGroqApi(groqPrompt, systemInstruction);
+      if (groqRes) {
+        return {
+          raw: groqRes,
+          finalAnswer: groqRes,
+          thoughtTrace: 'Groq LLaMA-3.3 70B Clinical Reasoner (OPD Scribe Mode)',
+          model: 'llama-3.3-70b-versatile',
+          modelName: 'Groq LLaMA-3.3 70B (OPD Ambient Scribe)',
+          modelId: 'groq/llama-3.3-70b',
+          isGroqLive: true,
+          isEvonLive: false,
+          isFallback: false
+        };
+      }
+    } catch (err) {
+      console.warn('Groq OPD Scribe error, attempting Evon server:', err.message);
+    }
+  }
 
   try {
     const reasoningResult = await queryEvonServer(
