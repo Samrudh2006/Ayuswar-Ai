@@ -11,15 +11,37 @@
  * - Phase 12: Offline-First Fail-Safe Voice Engine (Web Speech & cached emergency audio fallbacks).
  * - Phase 14: End-to-End Enterprise Security & DISHA / HIPAA Sovereign Ephemeral Scrubber.
  */
-import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer';
+import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer.js';
+
+export const GNANI_TIMBRE_V2_VOICES = [
+  'Nalini', 'Bhavna', 'Yashvi', 'Urmila', 'Jwala', 'Chitra', 'Ambuja', 'Deepak', 'Roopesh', 'Vikrant', 
+  'Hemraj', 'Jalaj', 'Omkar', 'Aarohi', 'Bhavini', 'Charvi', 'Eishani', 'Falguni', 'Gauri', 'Iravati', 
+  'Janaki', 'Kamakshi', 'Madhuri', 'Radhika', 'Shweta', 'Tanvi', 'Vidya', 'Wamika', 'Yamini', 'Abhimanyu', 
+  'Chirag', 'Deven', 'Farhan', 'Jatin', 'Kartik', 'Kaveri', 'Trupti', 'Devika', 'Pranav', 'Shlok', 
+  'Girish', 'Asmita', 'Trisha', 'Brinda', 'Vedika', 'Noopur', 'Oviya', 'Parvati', 'Suhana', 'Lehara', 
+  'Lavanya', 'Yukti', 'Varuni', 'Saanvi', 'Kavin', 'Hansika', 'Reshma', 'Riyaan', 'Zahira', 'Ishaan', 
+  'Kirra', 'Dhruva', 'Damini', 'Urvashi', 'Falak', 'Veera', 'Lalita', 'Nayana', 'Gaurav', 'Harshit', 
+  'Mehuli', 'Zayan', 'Poorvi'
+];
+
+export const GNANI_TIMBRE_V3_VOICES = [
+  'Avinash', 'Shivani', 'Lakshmi', 'Kalpana', 'Shubham', 'Prakash', 'Devansh', 'Yashraj', 'Chetana', 
+  'Vasudha', 'Harshad', 'Riyaa', 'Tarika'
+];
 
 export const INDIC_LANGUAGES = [
-  { code: 'en-IN', name: 'Indian English', label: 'English', gnaniLang: 'en' },
-  { code: 'te-IN', name: 'Telugu (తెలుగు)', label: 'Telugu', gnaniLang: 'te' },
-  { code: 'hi-IN', name: 'Hindi (हिन्दी)', label: 'Hindi', gnaniLang: 'hi' },
-  { code: 'ta-IN', name: 'Tamil (தமிழ்)', label: 'Tamil', gnaniLang: 'ta' },
-  { code: 'kn-IN', name: 'Kannada (ಕನ್ನಡ)', label: 'Kannada', gnaniLang: 'kn' },
-  { code: 'mr-IN', name: 'Marathi (मराठी)', label: 'Marathi', gnaniLang: 'mr' }
+  { code: 'te-IN', name: 'Telugu (తెలుగు)', label: 'Telugu', gnaniLang: 'te', defaultVoice: 'Nalini' },
+  { code: 'hi-IN', name: 'Hindi (हिन्दी)', label: 'Hindi', gnaniLang: 'hi', defaultVoice: 'Bhavna' },
+  { code: 'en-IN', name: 'Indian English', label: 'English', gnaniLang: 'en', defaultVoice: 'Nalini' },
+  { code: 'ta-IN', name: 'Tamil (தமிழ்)', label: 'Tamil', gnaniLang: 'ta', defaultVoice: 'Oviya' },
+  { code: 'kn-IN', name: 'Kannada (ಕನ್ನಡ)', label: 'Kannada', gnaniLang: 'kn', defaultVoice: 'Kaveri' },
+  { code: 'mr-IN', name: 'Marathi (मराठी)', label: 'Marathi', gnaniLang: 'mr', defaultVoice: 'Gauri' },
+  { code: 'gu-IN', name: 'Gujarati (ગુજરાતી)', label: 'Gujarati', gnaniLang: 'gu', defaultVoice: 'Falguni' },
+  { code: 'bn-IN', name: 'Bengali (বাংলা)', label: 'Bengali', gnaniLang: 'bn', defaultVoice: 'Mehuli' },
+  { code: 'ml-IN', name: 'Malayalam (മലയാളം)', label: 'Malayalam', gnaniLang: 'ml', defaultVoice: 'Lavanya' },
+  { code: 'pa-IN', name: 'Punjabi (ਪੰਜਾਬੀ)', label: 'Punjabi', gnaniLang: 'pa', defaultVoice: 'Harshit' },
+  { code: 'as-IN', name: 'Assamese (অসমీয়া)', label: 'Assamese', gnaniLang: 'as', defaultVoice: 'Nalini' },
+  { code: 'indic-auto', name: 'Indic Auto-Detect', label: 'Auto-Detect', gnaniLang: 'auto', defaultVoice: 'Nalini' }
 ];
 
 /**
@@ -339,16 +361,20 @@ export class IndicSpeechService {
     // 1. Attempt Gnani Timbre Server Proxy if server is configured
     if (this.gnaniAvailable) {
       try {
+        const langObj = INDIC_LANGUAGES.find(l => l.code === langCode);
+        const voiceName = options.voice || langObj?.defaultVoice || 'Nalini';
+        const modelName = options.model || (GNANI_TIMBRE_V3_VOICES.includes(voiceName) ? 'timbre-v3.0' : 'timbre-v2.5');
+
         const response = await fetch('/api/gnani/tts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             text: cleanSpeechText,
             language: langCode,
-            voice: langCode.startsWith('te') ? 'Nalini' : 'Nalini',
-            model: 'timbre-v2.5'
+            voice: voiceName,
+            model: modelName
           }),
-          signal: AbortSignal.timeout(6000)
+          signal: AbortSignal.timeout(8000)
         });
 
         if (response.ok) {

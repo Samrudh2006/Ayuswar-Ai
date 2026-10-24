@@ -17,7 +17,7 @@ import {
   UserCheck,
   Check
 } from 'lucide-react';
-import { sanjivaniAudio } from '../services/sanjivaniEmergencyService';
+import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
 
 /**
  * Sanjivani-108 ABDM Pre-Arrival Notification (PAN) & Bed Booking Handover Modal
@@ -40,17 +40,20 @@ export default function SanjivaniTransferModal({
   onConfirmHandshake
 }) {
   // Form State (Auto-filled from live conversation & GIS telemetry)
-  const [formData, setFormData] = useState({
-    patientName: 'Unidentified Male Citizen (~58y)',
-    callerPhone: callerPhone || '+91 98490 22108',
-    location: geoAddress || 'Incident Site (GPS Verified)',
-    chiefComplaint: 'Acute retrosternal crushing chest pain, dyspnea, cold diaphoresis, radiating left arm pain',
-    triageCategory: 'RED — Category 1 Immediate Life Threat (Acute STEMI)',
-    icd10: 'I21.0 / I46.9 (Acute Transmural Myocardial Infarction / Cardiac Arrest Risk)',
-    assignedBay: hospital?.resuscitationBayAssigned || 'Bay #02 (Cath Lab Resuscitation Bay)',
-    assignedAmbulance: `${ambulanceData?.id || 'A-12'} (ALS Unit • Defibrillator, Ventilator, 12-Lead ECG)`,
-    driverContact: `${ambulanceData?.driver || 'Rajesh Meena (Senior EMT)'} • +91 94401 22108`,
-    clinicalNotes: `Acoustic Panic: ${distressIndex}% | Vocal Tremor: ${vocalPitchHz} Hz | Respiration: ${respirationRate}/min. Caller speech ingested: "${liveTranscript}". CPR metronome advised.`
+  const [formData, setFormData] = useState(() => {
+    const triage = analyzeEmergencyClinicalTriage(liveTranscript || englishTranslation || '', distressIndex);
+    return {
+      patientName: 'Emergency Citizen (Live Call)',
+      callerPhone: callerPhone || '+91 98490 22108',
+      location: geoAddress || 'Incident Site (GPS Verified)',
+      chiefComplaint: liveTranscript || englishTranslation || 'Acute emergency symptoms reported via cellular bridge',
+      triageCategory: `${triage.triageLevel} — ${triage.severity}`,
+      icd10: `${triage.icd10 || 'R68.89'} (${triage.suspectedCondition})`,
+      assignedBay: hospital?.resuscitationBayAssigned || 'Bay #01 (Emergency Critical Care)',
+      assignedAmbulance: `${ambulanceData?.id || 'A-12'} (ALS Unit • Defibrillator, Ventilator, 12-Lead ECG)`,
+      driverContact: `${ambulanceData?.driver || 'Rajesh Meena (Senior EMT)'} • +91 94401 22108`,
+      clinicalNotes: `Acoustic Distress: ${distressIndex}% | Vocal Pitch: ${vocalPitchHz} Hz | Respiration: ${respirationRate}/min. Live speech: "${liveTranscript || 'Active audio stream'}". Protocol: ${triage.priorityProtocol}`
+    };
   });
 
   const [isTransmitting, setIsTransmitting] = useState(false);

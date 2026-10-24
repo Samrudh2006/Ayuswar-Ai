@@ -50,7 +50,7 @@ export default async function handler(req, res) {
   }
 
   // 4. Server-side credentials check (Fail closed)
-  const apiKey = process.env.GNANI_API_KEY;
+  const apiKey = process.env.GNANI_TTS_KEY || process.env.GNANI_API_KEY;
   if (!apiKey || apiKey.includes('placeholder')) {
     logSafeApiAccess({ route, method: req.method, status: 503, durationMs: Date.now() - startTime, clientNote: 'GNANI_API_KEY unset' });
     return res.status(503).json({

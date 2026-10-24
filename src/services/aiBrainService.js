@@ -11,8 +11,8 @@
  *   • Directs emergency symptoms (chest pain, breathlessness, trauma) immediately to official 112 / 108.
  */
 
-import { queryEvonServer, EVON_MODEL_METADATA } from './gnaniEvonService';
-import { retrieveGroundedClinicalKnowledge } from '../data/clinicalRagKnowledgeBase';
+import { queryEvonServer, EVON_MODEL_METADATA } from './gnaniEvonService.js';
+import { retrieveGroundedClinicalKnowledge } from '../data/clinicalRagKnowledgeBase.js';
 
 // Immediately purge legacy secret fields from localStorage without touching unrelated user state
 try {
@@ -60,7 +60,7 @@ export function saveAiConfig(provider) {
 }
 
 /**
- * Main query processor with non-diagnostic fallback
+ * Main query processor with strict RAG grounding and Groq clinical reasoning
  */
 export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {}) {
   const cleanPrompt = prompt?.trim();
@@ -68,16 +68,44 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
     return "Please ask a question regarding hospital navigation, doctor appointment timings, or spoken prescription features.";
   }
 
+  const isTelugu = /[\u0C00-\u0C7F]/.test(cleanPrompt);
+  const isHindi = /[\u0900-\u097F]/.test(cleanPrompt);
+
   // Pre-fetch Grounded RAG Knowledge
   const ragMatch = retrieveGroundedClinicalKnowledge(cleanPrompt, role);
+
+  // Strict RAG enforcement for Floating Assistant & Conversational QA
+  if (context?.source === 'floating_assistant' || context?.strictRag === true) {
+    if (!ragMatch || !ragMatch.answer) {
+      if (isTelugu) {
+        return "క్షమించండి, ఈ సమాచారం ఆయుస్వర్ ధృవీకరించిన క్లినికల్ మెమరీ లో అందుబాటులో లేదు. వివరాల కోసం దయచేసి సంబంధిత వైద్యులను లేదా హాస్పిటల్ డెస్క్‌ను సంప్రదించండి.";
+      }
+      if (isHindi) {
+        return "माफ़ कीजिये, यह सवाल आयुस्वर सत्यापित क्लिनिकल ज्ञानकोष में नहीं मिला। कृपया अस्पताल रिसेप्शन या डॉक्टर से संपर्क करें।";
+      }
+      return "This question is outside the verified AyuSwar clinical memory store. The answer was not found in the hospital knowledge base. Please consult the attending physician or front desk.";
+    }
+
+    // Grounded match found: If Groq is available, synthesize a natural answer strictly from RAG context
+    const groqKey = getGroqApiKey();
+    if (groqKey) {
+      try {
+        const langName = isTelugu ? 'Telugu' : isHindi ? 'Hindi' : 'English';
+        const groqPrompt = `User question: "${cleanPrompt}"\n\nGrounded Clinical Knowledge:\n${ragMatch.answer}\n\nDeliver a direct, helpful, compassionate answer in ${langName} strictly grounded in the knowledge above. Keep it concise. No markdown, no bullet points, no asterisks.`;
+        const groqReply = await queryGroqApi(groqPrompt, `You are AyuSwar Assistant. Only use provided knowledge. Language: ${langName}.`);
+        if (groqReply) return groqReply;
+      } catch (err) {
+        console.warn("Groq RAG synthesis error:", err.message);
+      }
+    }
+    return ragMatch.answer;
+  }
+
   const enrichedContext = ragMatch?.answer ? { ...context, ragKnowledge: ragMatch.answer } : context;
-
-  const { provider } = getAiConfig();
-
-  // Groq API Key is connected exclusively for Sanjivani, OPD, and Voicemaker (Bypassed for Floating Assistant)
-  const isFloatingAssistant = context?.source === 'floating_assistant' || context?.skipGroq === true;
   const groqKey = getGroqApiKey();
-  if (groqKey && !isFloatingAssistant) {
+
+  // Groq API Key as primary LLM brain for OPD, Sanjivani, Voicemaker
+  if (groqKey) {
     try {
       const groqReply = await queryGroqApi(cleanPrompt, getSystemPromptForRole(role, enrichedContext));
       if (groqReply) return groqReply;
@@ -86,6 +114,8 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
     }
   }
 
+  const { provider } = getAiConfig();
+
   // 1. Gnani Evon 30B Sovereign Indic Reasoning (Secure Server-Side Route)
   if (provider === 'gnani_evon_30b') {
     try {
@@ -93,12 +123,17 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
       if (response) return response;
     } catch (err) {
       console.warn("Gnani Evon server route unreachable; using honest fallback guidance:", err.message);
-      const fallback = generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
-      return `🛡️ [FALLBACK: DETERMINISTIC GUIDANCE (Evon Unavailable)]\n\n${fallback}`;
     }
   }
 
-  // 2. Local heuristic conversational demonstration
+  // 2. Safe deterministic fallback if network unavailable
+  if (ragMatch?.answer) {
+    return ragMatch.answer;
+  }
+
+  if (isTelugu) {
+    return "క్షమించండి, సర్వర్ అందుబాటులో లేదు మరియు ఈ సమాచారం క్లినికల్ మెమరీ లో దొరకలేదు. దయచేసి హెల్ప్‌లైన్ 108 / 112 ను సంప్రదించండి.";
+  }
   return generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
 }
 
@@ -135,35 +170,48 @@ export function setGroqApiKey(key) {
   return false;
 }
 
-export async function queryGroqApi(prompt, systemInstruction = '') {
+export async function queryGroqApi(prompt, systemInstruction = '', preferredModel = 'qwen/qwen3.8-27b') {
   const apiKey = getGroqApiKey();
   if (!apiKey) return null;
 
-  try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.3,
-        max_tokens: 350
-      }),
-      signal: AbortSignal.timeout(8000)
-    });
+  const candidateModels = [
+    preferredModel,
+    'qwen/qwen3.8-27b',
+    'openai/gpt-oss-120b',
+    'llama-3.3-70b-versatile',
+    'llama-3.1-70b-versatile'
+  ];
 
-    if (res.ok) {
-      const data = await res.json();
-      return data.choices?.[0]?.message?.content || null;
+  for (const model of [...new Set(candidateModels)]) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.2,
+          max_tokens: 450
+        }),
+        signal: AbortSignal.timeout(8000)
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content && content.trim()) {
+          return content.trim();
+        }
+      }
+    } catch (err) {
+      console.warn(`Groq query attempt for ${model} failed:`, err.message);
     }
-  } catch (err) {
-    console.warn('Groq query failed:', err.message);
   }
   return null;
 }

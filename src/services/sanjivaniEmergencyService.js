@@ -12,8 +12,8 @@
  *   • W3C Geolocation API (Real GPS coordinates + reverse geocoding via OpenStreetMap Nominatim)
  */
 
-import { EVON_MODEL_METADATA } from './gnaniEvonService';
-import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer';
+import { EVON_MODEL_METADATA } from './gnaniEvonService.js';
+import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer.js';
 
 export function isWithinIndia(lat, lon) {
   const nLat = Number(lat);

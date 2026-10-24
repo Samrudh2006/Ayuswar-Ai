@@ -26,7 +26,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { speechService } from '../services/indicSpeechService';
+import { speechService, INDIC_LANGUAGES, GNANI_TIMBRE_V2_VOICES, GNANI_TIMBRE_V3_VOICES } from '../services/indicSpeechService';
 import { analyzeAcousticSample } from '../services/acousticCoughAnalyzer';
 import { generateVoicemakerScriptWithGroq } from '../services/aiBrainService';
 import { cleanTextForSpeech } from '../utils/speechSanitizer';
@@ -45,6 +45,7 @@ export default function AudioRxStudioView() {
   const [wavExportedToast, setWavExportedToast] = useState(false);
   const [customGroqScript, setCustomGroqScript] = useState(null);
   const [isGeneratingGroqScript, setIsGeneratingGroqScript] = useState(false);
+  const [selectedGnaniVoice, setSelectedGnaniVoice] = useState('Nalini');
 
   // Feature 1: JAMA Teach-Back Adherence Protocol State
   const [teachBackModalOpen, setTeachBackModalOpen] = useState(false);
@@ -433,6 +434,7 @@ export default function AudioRxStudioView() {
     // Trigger Speech via Unified Service
     speechService.speak(currentScript.fullText, {
       langCode: activeLang,
+      voice: selectedGnaniVoice,
       rate: 0.92,
       onEnd: () => handleStopAudio(),
       onError: () => handleStopAudio()
@@ -1061,7 +1063,37 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   <span>{isGeneratingGroqScript ? 'Generating...' : '⚡ Groq Voicemaker AI'}</span>
                 </button>
               </div>
-              <div style={{ display: 'flex', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#64748B' }}>🎙️ Gnani Voice:</span>
+                  <select
+                    value={selectedGnaniVoice}
+                    onChange={(e) => { setSelectedGnaniVoice(e.target.value); handleStopAudio(); }}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '7px',
+                      border: '1.5px solid #CBD5E1',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      color: '#081C24',
+                      background: '#FFFFFF',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <optgroup label="Timbre v2.5 Voices (73 voices)">
+                      {GNANI_TIMBRE_V2_VOICES.map(v => (
+                        <option key={v} value={v}>{v}</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Timbre v3.0 Voices (13 voices)">
+                      {GNANI_TIMBRE_V3_VOICES.map(v => (
+                        <option key={v} value={v}>{v} (v3)</option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </div>
+                <div style={{ display: 'flex', gap: '6px' }}>
                 {[
                   { code: 'te-IN', label: 'తెలుగు (Telugu)' },
                   { code: 'hi-IN', label: 'हिन्दी (Hindi)' },
@@ -1090,6 +1122,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 ))}
               </div>
             </div>
+          </div>
 
             <div style={{
               background: 'linear-gradient(135deg, #0A2540 0%, #0F172A 100%)',

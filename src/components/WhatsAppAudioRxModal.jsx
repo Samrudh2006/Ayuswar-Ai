@@ -21,6 +21,8 @@ import {
   Info
 } from 'lucide-react';
 import { speechService } from '../services/indicSpeechService';
+import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
+import { cleanTextForSpeech } from '../utils/speechSanitizer';
 
 /**
  * WhatsAppAudioRxModal Component
@@ -195,7 +197,59 @@ export default function WhatsAppAudioRxModal({
     }
   };
 
-  const currentRx = rxContent[selectedLanguage] || rxContent.te;
+  const [isGeneratingGroqRx, setIsGeneratingGroqRx] = useState(false);
+  const [customSpokenText, setCustomSpokenText] = useState(null);
+  const [customWhatsappText, setCustomWhatsappText] = useState(null);
+
+  const handleGenerateGroqVoiceNote = async () => {
+    setIsGeneratingGroqRx(true);
+    try {
+      const langName = selectedLanguage === 'te' ? 'Telugu' : (selectedLanguage === 'hi' ? 'Hindi' : 'English');
+      const medPrompt = `Patient: ${patient.name}, Doctor: ${doctorName}.
+Medications:
+- Morning (${morningTime}): ${morningDoseText}, ${selectedLanguage === 'te' ? morningMealTelugu : (selectedLanguage === 'hi' ? morningMealHindi : morningMealEnglish)}
+- Night (${nightTime}): ${nightDoseText}, ${selectedLanguage === 'te' ? nightMealTelugu : (selectedLanguage === 'hi' ? nightMealHindi : nightMealEnglish)}
+
+Create:
+1. SPOKEN_NOTE: A compassionate, clear 2-3 sentence spoken voice prescription in ${langName} for the patient. Mention pill colors clearly. No asterisks, no emojis.
+2. WHATSAPP_SUMMARY: A WhatsApp message with medication instructions and patient advice.
+
+Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
+
+      const res = await queryGroqApi(medPrompt, `You are AyuSwar Clinical WhatsApp Audio-Rx generator. Generate spoken notes in ${langName}. Output JSON only.`);
+      if (res) {
+        try {
+          const cleaned = res.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(cleaned);
+          if (parsed.spokenNote) {
+            setCustomSpokenText(parsed.spokenNote);
+          }
+          if (parsed.whatsappSummary) {
+            setCustomWhatsappText(parsed.whatsappSummary);
+          }
+        } catch {
+          setCustomSpokenText(cleanTextForSpeech(res));
+        }
+      }
+    } catch (err) {
+      console.warn('Groq WhatsApp summarization error:', err);
+    } finally {
+      setIsGeneratingGroqRx(false);
+    }
+  };
+
+  const baseRx = rxContent[selectedLanguage] || rxContent.te;
+  const currentRx = {
+    ...baseRx,
+    speechText: customSpokenText || baseRx.speechText,
+    whatsappSummary: customWhatsappText || baseRx.whatsappSummary,
+    karaokeTokens: customSpokenText 
+      ? customSpokenText.split(' ').map(w => ({
+          word: w,
+          pill: w.includes('పసుపు') || w.includes('पीली') || w.includes('yellow') ? 'morning' : (w.includes('గులాబీ') || w.includes('गुलाबी') || w.includes('pink') ? 'night' : null)
+        }))
+      : baseRx.karaokeTokens
+  };
 
   // Clean phone number for wa.me redirect
   const sanitizePhone = (num) => {
@@ -542,6 +596,33 @@ export default function WhatsAppAudioRxModal({
                     <span>{lang.label}</span>
                   </button>
                 ))}
+              </div>
+
+              <div style={{ marginTop: '4px', marginBottom: '10px' }}>
+                <button
+                  type="button"
+                  onClick={handleGenerateGroqVoiceNote}
+                  disabled={isGeneratingGroqRx}
+                  style={{
+                    width: '100%',
+                    padding: '9px 14px',
+                    borderRadius: '10px',
+                    background: isGeneratingGroqRx ? '#94A3B8' : 'linear-gradient(135deg, #0F4C5C 0%, #0A2540 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '12px',
+                    fontWeight: 800,
+                    cursor: isGeneratingGroqRx ? 'wait' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
+                  }}
+                >
+                  <Sparkles size={14} color="#00F5D4" />
+                  <span>{isGeneratingGroqRx ? 'Summarizing with Groq LLM...' : '⚡ AI Check & Summarize Voice Note with Groq'}</span>
+                </button>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px', color: '#64748B' }}>

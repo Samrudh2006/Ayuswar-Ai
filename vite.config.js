@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
               return res.end(JSON.stringify({ error: 'Method Not Allowed' }));
             }
 
-            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            const apiKey = env.GNANI_TTS_KEY || env.GNANI_STT_KEY || env.GNANI_API_KEY || process.env.GNANI_TTS_KEY || process.env.GNANI_STT_KEY || process.env.GNANI_API_KEY;
             res.setHeader('Content-Type', 'application/json');
 
             if (!apiKey || apiKey.includes('placeholder')) {
@@ -54,7 +54,7 @@ export default defineConfig(({ mode }) => {
               return res.end('Method Not Allowed');
             }
 
-            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            const apiKey = env.GNANI_TTS_KEY || env.GNANI_API_KEY || process.env.GNANI_TTS_KEY || process.env.GNANI_API_KEY;
             if (!apiKey || apiKey.includes('placeholder')) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');
@@ -106,7 +106,7 @@ export default defineConfig(({ mode }) => {
 
           // 2. Gnani Prisma STT Proxy Endpoints
           const handleSttProxy = async (req, res) => {
-            const apiKey = env.GNANI_API_KEY || process.env.GNANI_API_KEY;
+            const apiKey = env.GNANI_STT_KEY || env.GNANI_API_KEY || process.env.GNANI_STT_KEY || process.env.GNANI_API_KEY;
             if (!apiKey || apiKey.includes('placeholder')) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');

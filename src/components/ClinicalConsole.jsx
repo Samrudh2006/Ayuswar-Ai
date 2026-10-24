@@ -41,6 +41,7 @@ import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { speechService } from '../services/indicSpeechService';
 import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import { generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
+import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
 
 /**
  * ClinicalConsole Component — Complete Step-by-Step OPD Consultation Suite
@@ -316,25 +317,60 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   // =========================================================================
   // STEP 2: FINISH RECORDING & PROCESS WITH AI (SOAP + BEST MATTER SYNTHESIS)
   // =========================================================================
-  const handleProceedToAiProcessing = () => {
+  const handleProceedToAiProcessing = async () => {
     pauseRecordingSession();
     setActiveStep(2);
     setMaxCompletedStep(prev => Math.max(prev, 2));
     setIsAiProcessing(true);
+    setAiProcessingStage('Live Groq Reasoning: Extracting SOAP & ICD-10 ontologies from clinical dialogue...');
 
-    setAiProcessingStage('1/4: Transcribing dual-speaker dialogue & acoustic stream...');
-    setTimeout(() => {
-      setAiProcessingStage('2/4: Resolving colloquial dialect metaphors into WHO ICD-10 ontologies...');
-    }, 600);
+    try {
+      const fullDialogueText = dialogueTurns.map(d => `${d.speaker}: ${d.text}`).join('\n');
+      const targetLang = selectedLanguage.startsWith('te') ? 'Telugu' : (selectedLanguage.startsWith('hi') ? 'Hindi' : 'English');
 
-    setTimeout(() => {
-      setAiProcessingStage('3/4: Structuring HL7 FHIR R4 Clinical SOAP Dossier...');
-    }, 1200);
+      const prompt = `Patient: ${currentEncounter.patient.name}, Age: ${currentEncounter.patient.age}, Gender: ${currentEncounter.patient.gender}, Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}
+Clinical Encounter Dialogue:
+${fullDialogueText}
 
-    setTimeout(() => {
-      setAiProcessingStage('4/4: Synthesizing Best-Matter Spoken Vernacular Prescription Note...');
+Please synthesize an objective clinical assessment:
+1. SUBJECTIVE: Chief complaint, history of presenting illness.
+2. OBJECTIVE: Vitals, physical examination observations.
+3. ASSESSMENT: Primary and differential diagnoses with valid WHO ICD-10 codes.
+4. PLAN: Pharmacological and non-pharmacological regimen, emergency warnings.
+5. BEST_MATTER_SPOKEN_RX: A clear, compassionate 3-4 sentence spoken vernacular prescription in ${targetLang} explaining medicines and pill colors (e.g. yellow tablet morning, pink tablet night) for the patient.
+
+Format your response strictly as JSON with keys: "subjective", "objective", "assessment", "plan", "bestMatterVernacular". Do not wrap in markdown or backticks.`;
+
+      const aiResponse = await queryGroqApi(prompt, "You are AyuSwar Clinical Scribe AI. Output valid JSON only.");
+      if (aiResponse) {
+        try {
+          const cleanedJson = aiResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(cleanedJson);
+          if (parsed.subjective) {
+            setEditableSoapNote({
+              subjective: parsed.subjective,
+              objective: parsed.objective || `Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}.`,
+              assessment: parsed.assessment || 'Clinical Assessment pending review.',
+              plan: parsed.plan || 'Prescription regimen as advised.'
+            });
+          }
+          if (parsed.bestMatterVernacular) {
+            setEditableBestMatter(parsed.bestMatterVernacular);
+          }
+        } catch {
+          // If JSON parse fails, populate assessment and vernacular matter directly
+          setEditableSoapNote(prev => ({
+            ...prev,
+            assessment: `Clinical dialogue parsed: ${aiResponse.slice(0, 180)}...`
+          }));
+        }
+      }
+    } catch (err) {
+      console.warn('Real AI processing error in OPD Step 2:', err);
+    } finally {
       setIsAiProcessing(false);
-    }, 1800);
+      setAiProcessingStage('');
+    }
   };
 
   // =========================================================================

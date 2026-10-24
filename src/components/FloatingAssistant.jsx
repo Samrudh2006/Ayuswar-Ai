@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { askAyuSwarBrain, getAiConfig, saveAiConfig, AI_PROVIDERS } from '../services/aiBrainService';
 import { speakHumanized } from '../utils/speechSanitizer';
+import { speechService } from '../services/indicSpeechService';
 
 /**
  * 4K Sharp Vector Emblem for AyuSwar AI
@@ -162,11 +163,14 @@ export default function FloatingAssistant({
 
   const speakOutLoud = (text) => {
     if (!isAiVoiceEnabled || isMuted) return;
-    speakHumanized(text, {
-      lang: speechLanguage || 'en-IN',
+    speechService.speak(text, {
+      langCode: speechLanguage || 'en-IN',
       rate: 0.94,
       pitch: 1.0,
       onEnd: () => {
+        setAssistantState('expanded');
+      },
+      onError: () => {
         setAssistantState('expanded');
       }
     });

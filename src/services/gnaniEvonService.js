@@ -21,7 +21,7 @@
  * 6. Non-Diagnostic Guardrail: No autonomous diagnosis or drug dosing advice; maintains research prototype disclaimer.
  */
 
-import { queryGroqApi, getGroqApiKey } from './aiBrainService';
+import { queryGroqApi, getGroqApiKey } from './aiBrainService.js';
 
 export const EVON_MODEL_METADATA = {
   modelId: 'gnani/gnani-evon-v3.3-30B-A3B',

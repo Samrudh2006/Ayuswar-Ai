@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Rate limit exceeded for status probes.' });
   }
 
-  const apiKey = process.env.GNANI_API_KEY;
+  const apiKey = process.env.GNANI_TTS_KEY || process.env.GNANI_STT_KEY || process.env.GNANI_API_KEY;
   const upstreamBase = 'https://api.vachana.ai';
 
   if (!apiKey || apiKey.includes('placeholder')) {

@@ -596,25 +596,21 @@ export default function PatientPortal({
 
   const handlePlayVoicePrescription = (customText) => {
     if (isPlayingAudio) {
+      speechService.stopAudio();
       setIsPlayingAudio(false);
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     } else {
       setIsPlayingAudio(true);
       const textToSpeak = customText || (selectedLanguage === 'Telugu' 
         ? currentPill.teluguAudioText 
         : currentPill.hindiAudioText);
+      const langCode = selectedLanguage === 'Telugu' ? 'te-IN' : (selectedLanguage === 'Hindi' ? 'hi-IN' : 'en-IN');
 
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = selectedLanguage === 'Telugu' ? 'te-IN' : 'hi-IN';
-        utterance.rate = 0.92;
-        utterance.onend = () => setIsPlayingAudio(false);
-        utterance.onerror = () => setIsPlayingAudio(false);
-        window.speechSynthesis.speak(utterance);
-      } else {
-        setTimeout(() => setIsPlayingAudio(false), 4000);
-      }
+      speechService.speak(textToSpeak, {
+        langCode,
+        rate: 0.92,
+        onEnd: () => setIsPlayingAudio(false),
+        onError: () => setIsPlayingAudio(false)
+      });
     }
   };
 
