@@ -492,6 +492,34 @@ export default function PrescriptionScannerView() {
         console.warn('Groq clinical OCR reconstruction error:', err);
       }
 
+      // If Groq determined this is NOT a medicine (e.g. fruits, vegetables, food, household item)
+      if (groqRecon && groqRecon.isMedicine === false) {
+        setLiveOcrResult({
+          isLiveExtraction: true,
+          isNonMedicine: true,
+          brand: `⚠️ ${groqRecon.detectedItem || 'Non-Medical Object Detected'}`,
+          genericSalt: 'No pharmaceutical medicine or doctor prescription found in this image.',
+          nfiCode: 'NOT-A-MEDICINE',
+          dosageForm: 'Non-Pharmaceutical',
+          realImageUrl: imageToOcr,
+          janAushadhiGeneric: 'Please scan a valid medicine packaging strip or prescription slip.',
+          brandedPrice: 'N/A',
+          janAushadhiPrice: 'N/A',
+          savingsPct: 'No Medicine Detected',
+          extractedText: rawText,
+          reconstructedPrescription: null,
+          batchNumber: 'None',
+          expiryDate: 'None',
+          vernacularTe: groqRecon.vernacularMessage || 'ఇది ఔషధం లేదా ప్రిస్క్రిప్షన్ కాదని గుర్తించబడింది. దయచేసి సరైన మందుల ప్యాకింగ్ లేదా ప్రిస్క్రిప్షన్ కాగితాన్ని స్కాన్ చేయండి.',
+          ddiConflict: null,
+          pillColor: '#DC2626',
+          imagePlaceholderColor: '#FEF2F2'
+        });
+        setIsScanning(false);
+        setOcrPhase('idle');
+        return;
+      }
+
       if (groqRecon && groqRecon.medications && groqRecon.medications.length > 0) {
         const topMed = groqRecon.medications[0];
         setLiveOcrResult({

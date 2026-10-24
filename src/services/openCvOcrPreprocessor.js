@@ -286,10 +286,21 @@ export class OpenCvOcrPreprocessor {
     if (!rawOcrText || rawOcrText.trim().length < 3) return null;
 
     const prompt = 
-      `Act as an expert clinical pharmacologist. The following text was extracted by camera OCR from a doctor handwritten prescription or blister packaging and contains character noise, typos, or abbreviated doctor shorthand:\n\n` +
+      `Act as an expert clinical pharmacologist. The following text was extracted by camera OCR from an image:\n\n` +
       `"""\n${rawOcrText.trim()}\n"""\n\n` +
-      `Carefully reconstruct the exact intended prescription. Return STRICTLY valid JSON with these keys:\n` +
+      `STEP 1 - MEDICAL VALIDATION:\n` +
+      `Determine if this text represents a pharmaceutical medication, tablet/capsule strip, syrup bottle, or clinical doctor prescription.\n` +
+      `CRITICAL GUARDRAIL: If this text describes food, fruits, vegetables, animals, general household products, books, or non-medical noise, you MUST return strictly:\n` +
       `{\n` +
+      `  "isMedicine": false,\n` +
+      `  "detectedItem": "Concise label of what was detected (e.g. Fresh Fruits / Vegetables / Non-medical Item)",\n` +
+      `  "reason": "This is not a pharmaceutical medicine or prescription",\n` +
+      `  "vernacularMessage": "ఇది ఔషధం లేదా ప్రిస్క్రిప్షన్ కాదని గుర్తించబడింది. దయచేసి సరైన మందుల ప్యాకింగ్ లేదా ప్రిస్క్రిప్షన్ కాగితాన్ని స్కాన్ చేయండి."\n` +
+      `}\n\n` +
+      `STEP 2 - PHARMACEUTICAL RECONSTRUCTION:\n` +
+      `Only if it IS a legitimate medication or clinical prescription, return strictly:\n` +
+      `{\n` +
+      `  "isMedicine": true,\n` +
       `  "doctorName": "Extracted doctor name or null",\n` +
       `  "diagnosis": "Clinical condition suspected (e.g., GERD, Type 2 Diabetes, Hypertension)",\n` +
       `  "icd10": ["Primary ICD-10 codes, e.g. K21.9, E11.9"],\n` +

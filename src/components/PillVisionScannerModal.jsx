@@ -227,6 +227,31 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
       if (!matched && raw.length > 4) {
         try {
           const groqRecon = await openCvPreprocessor.reconstructPrescriptionWithGroq(raw, 'te-IN');
+          if (groqRecon && groqRecon.isMedicine === false) {
+            setDetectedResult({
+              brandName: `⚠️ ${groqRecon.detectedItem || 'Non-Medical Item Detected'}`,
+              color: '🚫 Non-Pharmaceutical',
+              shape: 'Item is not a medicine or prescription',
+              imprint: 'NO-MEDICINE-DETECTED',
+              imageUrl: imageToScan,
+              brandPrice: 'N/A',
+              genericName: 'No pharmaceutical medicine found in this image.',
+              genericBrand: 'AyuSwar Anti-Hallucination Guardrail Active',
+              genericPrice: 'N/A',
+              savingsPct: 'No Medicine Detected',
+              vernacularTe: groqRecon.vernacularMessage || 'ఇది ఔషధం కాదని గుర్తించబడింది (పండ్లు, కూరగాయలు లేదా ఇతర వస్తువులు). దయచేసి సరైన టాబ్లెట్ స్ట్రిప్ స్కాన్ చేయండి.',
+              vernacularHi: 'यह कोई दवा नहीं है। कृपया दवा की पट्टी या डॉक्टर का पर्चा स्कैन करें।',
+              verified: false,
+              isNonMedicine: true,
+              rawExtracted: raw,
+              batchNo: 'N/A',
+              expDate: 'N/A',
+              isLiveOcr: true,
+              cvEnhanced: useCvEnhancement
+            });
+            return;
+          }
+
           if (groqRecon && groqRecon.medications && groqRecon.medications.length > 0) {
             const topMed = groqRecon.medications[0];
             matched = {
