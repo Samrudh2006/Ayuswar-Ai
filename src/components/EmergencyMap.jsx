@@ -73,6 +73,7 @@ export default function EmergencyMap({
   const callerMarkerRef = useRef(null);
   const ambulanceMarkerRef = useRef(null);
   const hospitalMarkersRef = useRef([]);
+  const latestCallerCoordsRef = useRef(callerCoords);
 
   // Layer & Camera Toggles
   const [showHospitals, setShowHospitals] = useState(true);
@@ -240,13 +241,16 @@ export default function EmergencyMap({
             box-shadow: 0 4px 14px rgba(0,0,0,0.85);
             margin-top: 2px;
           ">
-            🚨 PATIENT DISTRESS ANCHOR (±6m)
+            🚨 PATIENT DISTRESS ANCHOR
           </div>
         </div>
       `;
+      const initialLng = latestCallerCoordsRef.current?.lng ?? callerCoords.lng;
+      const initialLat = latestCallerCoordsRef.current?.lat ?? callerCoords.lat;
       callerMarkerRef.current = new maplibregl.Marker({ element: callerEl })
-        .setLngLat([callerCoords.lng, callerCoords.lat])
+        .setLngLat([initialLng, initialLat])
         .addTo(map);
+      map.setCenter([initialLng, initialLat]);
 
       // 4. CREATE HIGH-CONTRAST DUAL-STROBE AMBULANCE MARKER
       const ambulanceEl = document.createElement('div');
@@ -315,18 +319,20 @@ export default function EmergencyMap({
 
   // 2. Update Caller Marker and Center Map when GPS resolves
   useEffect(() => {
-    if (callerMarkerRef.current && callerCoords) {
+    if (!callerCoords?.lat || !callerCoords?.lng) return;
+    latestCallerCoordsRef.current = callerCoords;
+    if (callerMarkerRef.current) {
       callerMarkerRef.current.setLngLat([callerCoords.lng, callerCoords.lat]);
-      if (mapRef.current && !followAmbulance) {
-        mapRef.current.flyTo({
-          center: [callerCoords.lng, callerCoords.lat],
-          zoom: 14.3,
-          essential: true,
-          duration: 1000
-        });
-      }
     }
-  }, [callerCoords.lat, callerCoords.lng]);
+    if (mapRef.current && !followAmbulance) {
+      mapRef.current.flyTo({
+        center: [callerCoords.lng, callerCoords.lat],
+        zoom: 14.3,
+        essential: true,
+        duration: 800
+      });
+    }
+  }, [callerCoords?.lat, callerCoords?.lng, followAmbulance]);
 
   // 3. Render High-Visibility HTML Markers for ALL 12 Hospitals
   useEffect(() => {

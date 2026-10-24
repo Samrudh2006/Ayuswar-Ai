@@ -80,8 +80,41 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   const [callerPhone, setCallerPhone] = useState('+91 98490 22108');
   const [callerName, setCallerName] = useState('Live Caller (Verified Device)');
   const [isEditingPhone, setIsEditingPhone] = useState(false);
-  const [callerCoords, setCallerCoords] = useState({ lat: 17.6913, lng: 83.0040 });
-  const [geoAddress, setGeoAddress] = useState('Detecting live satellite GPS / network location...');
+  // Dynamic timestamp helper (HH:MM:SS)
+  const getNowTimeStr = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  };
+
+  // Dynamic Initial Location: Prefer saved user location, default to Annavaram (User's location)
+  const getInitialCallerLocation = () => {
+    try {
+      const raw = localStorage.getItem('ayuswar_user_location');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.lat && parsed.lng) {
+          return {
+            lat: Number(parsed.lat),
+            lng: Number(parsed.lng),
+            name: parsed.name || 'Annavaram, Sankhavaram Mandal, Kakinada District',
+            source: parsed.source || 'preset'
+          };
+        }
+      }
+    } catch {}
+    return {
+      lat: 17.2790,
+      lng: 82.4042,
+      name: 'Annavaram, Sankhavaram Mandal, Kakinada District',
+      source: 'preset'
+    };
+  };
+
+  const initialLoc = getInitialCallerLocation();
+  const [callerCoords, setCallerCoords] = useState({ lat: initialLoc.lat, lng: initialLoc.lng });
+  const [geoAddress, setGeoAddress] = useState(initialLoc.name);
+  const [locationSource, setLocationSource] = useState(initialLoc.source);
   const [isLocationOutOfRegion, setIsLocationOutOfRegion] = useState(false);
 
   // Mapbox Geocoding Search State
@@ -185,22 +218,46 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
         const coords = await requestRealDeviceLocation();
         if (!isMounted) return;
         if (coords.isOutOfRegion) setIsLocationOutOfRegion(true);
+
+        const hasSavedLocation = (() => {
+          try { return Boolean(localStorage.getItem('ayuswar_user_location')); } catch { return false; }
+        })();
+
+        // If user already has a saved specific location (e.g. Annavaram),
+        // and background detection is just the coarse ISP gateway (Rajahmundry),
+        // do not overwrite the user's specific town with coarse ISP IP!
+        if (coords.isIpGeo && (hasSavedLocation || geoAddress.includes('Annavaram'))) {
+          const nowStr = getNowTimeStr();
+          setAuditLogs((prev) => [
+            { time: nowStr, event: `Using active verified location: ${geoAddress}` },
+            { time: nowStr, event: `ISP Gateway detected at ${coords.city || 'Rajahmundry'} (±${coords.accuracy || 1500}m) - Browser GPS blocked` },
+            ...prev
+          ]);
+          return;
+        }
+
         setCallerCoords({ lat: coords.latitude, lng: coords.longitude });
+        setLocationSource(coords.isHardwareGps ? 'gps' : 'ip');
         setAmbulanceData((prev) => ({
           ...prev,
           lat: Number((coords.latitude - 0.005).toFixed(5)),
           lng: Number((coords.longitude - 0.004).toFixed(5))
         }));
+
         const addr = await reverseGeocodeGPS(coords.latitude, coords.longitude);
         if (!isMounted) return;
-        if (addr.displayName) {
-          setGeoAddress(addr.displayName);
-          const nowStr = '14:28:10';
-          setAuditLogs((prev) => [
-            { time: nowStr, event: `Live GPS locked: ${addr.displayName} (±${coords.accuracy || 15}m)` },
-            ...prev
-          ]);
-        }
+        const name = addr.displayName || (coords.city ? `${coords.city}, ${coords.region}` : `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
+        setGeoAddress(name);
+
+        const nowStr = getNowTimeStr();
+        const eventText = coords.isHardwareGps
+          ? `🛰️ Hardware GPS locked: ${name} (±${coords.accuracy || 6}m accuracy)`
+          : `🌐 Network ISP Gateway: ${name} (Est. ±${coords.accuracy || 1500}m - Device GPS denied)`;
+
+        setAuditLogs((prev) => [
+          { time: nowStr, event: eventText },
+          ...prev
+        ]);
       } catch (e) {
         // Desktop browsers without GNSS use active coordinates smoothly
       } finally {
@@ -317,31 +374,46 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     }
   };
 
-  // Select search result: fly map, update caller pin, reload REAL hospitals
-  const handleSelectSearchResult = (result) => {
-    setSearchQuery('');
-    setSearchResults([]);
-    const newCoords = { lat: result.lat, lng: result.lng };
+  const applyLocation = (lat, lng, placeName, source = 'manual') => {
+    const newCoords = { lat, lng };
     setCallerCoords(newCoords);
-    setGeoAddress(result.placeName);
+    setGeoAddress(placeName);
+    setLocationSource(source);
     setAmbulanceData((prev) => ({
       ...prev,
-      lat: Number((result.lat - 0.005).toFixed(5)),
-      lng: Number((result.lng - 0.004).toFixed(5)),
+      lat: Number((lat - 0.005).toFixed(5)),
+      lng: Number((lng - 0.004).toFixed(5)),
       status: 'STANDBY'
     }));
 
-    const nowStr = '14:28:10';
+    try {
+      localStorage.setItem('ayuswar_user_location', JSON.stringify({
+        lat,
+        lng,
+        name: placeName,
+        source,
+        timestamp: Date.now()
+      }));
+    } catch {}
+
+    const nowStr = getNowTimeStr();
     setAuditLogs((prev) => [
-      { time: nowStr, event: `Caller location updated to: ${result.placeName}` },
+      { time: nowStr, event: `📍 Location anchored: ${placeName}` },
       ...prev
     ]);
 
     setToastNotification({
       title: 'Location Anchored',
-      message: `Operational map centered on ${result.text}. Discovering nearby ABDM facilities.`
+      message: `Operational map centered on ${placeName}. Discovering nearby ABDM facilities.`
     });
     setTimeout(() => setToastNotification(null), 4000);
+  };
+
+  // Select search result: fly map, update caller pin, reload REAL hospitals
+  const handleSelectSearchResult = (result) => {
+    setSearchQuery('');
+    setSearchResults([]);
+    applyLocation(result.lat, result.lng, result.placeName, 'manual');
   };
 
   // Explicit Live GPS Detection trigger
@@ -351,6 +423,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       const coords = await requestRealDeviceLocation();
       const newCoords = { lat: coords.latitude, lng: coords.longitude };
       setCallerCoords(newCoords);
+      setLocationSource(coords.isHardwareGps ? 'gps' : 'ip');
       setAmbulanceData((prev) => ({
         ...prev,
         lat: Number((coords.latitude - 0.005).toFixed(5)),
@@ -359,18 +432,36 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       }));
 
       const addr = await reverseGeocodeGPS(coords.latitude, coords.longitude);
-      const name = addr.displayName || `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`;
+      const name = addr.displayName || (coords.city ? `${coords.city}, ${coords.region}` : `${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
       setGeoAddress(name);
 
-      const nowStr = '14:28:10';
+      const nowStr = getNowTimeStr();
+      const eventText = coords.isHardwareGps
+        ? `🛰️ Hardware GPS locked: ${name} (±${coords.accuracy || 6}m accuracy)`
+        : `🌐 Network ISP Gateway: ${name} (Est. ±${coords.accuracy || 1500}m - Device GPS denied)`;
+
       setAuditLogs((prev) => [
-        { time: nowStr, event: `Hardware GPS locked: ${name} (±6m accuracy)` },
+        { time: nowStr, event: eventText },
         ...prev
       ]);
 
+      if (coords.isHardwareGps) {
+        try {
+          localStorage.setItem('ayuswar_user_location', JSON.stringify({
+            lat: coords.latitude,
+            lng: coords.longitude,
+            name,
+            source: 'gps',
+            timestamp: Date.now()
+          }));
+        } catch {}
+      }
+
       setToastNotification({
-        title: 'Live GPS Locked',
-        message: `Position verified at ${name}. Nearby facilities updated!`
+        title: coords.isHardwareGps ? 'Live GPS Locked' : 'ISP Gateway Located',
+        message: coords.isHardwareGps
+          ? `Position verified at ${name}. Nearby facilities updated!`
+          : `Browser denied device GPS. Using nearest network routing center (${name}).`
       });
     } catch (err) {
       setToastNotification({
@@ -402,7 +493,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     setDispatchState(2);
     setHospitalAlertSecondsAgo(2);
 
-    const nowStr = '14:28:10';
+    const nowStr = getNowTimeStr();
     setAuditLogs((prev) => [
       { time: nowStr, event: `Dispatcher approved dispatch ➔ Ambulance A-12 routed to ${selectedHospital.name}` },
       { time: nowStr, event: `ABDM Pre-Arrival Handshake transmitted: [${generatedToken}]` },
@@ -840,6 +931,56 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
             )}
           </div>
 
+          {/* Quick Town Presets */}
+          <div style={{ display: 'flex', gap: '5px', alignItems: 'center', flexShrink: 0 }}>
+            <button
+              onClick={() => applyLocation(17.2790, 82.4042, 'Annavaram, Sankhavaram Mandal, Kakinada District', 'preset')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: geoAddress.includes('Annavaram') ? '#0284C7' : '#0F2040',
+                border: geoAddress.includes('Annavaram') ? '1px solid #38BDF8' : '1px solid #1E3A68',
+                color: '#FFFFFF',
+                borderRadius: '6px',
+                padding: '5px 9px',
+                fontSize: '10.5px',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              ⭐ Annavaram (Home)
+            </button>
+            <button
+              onClick={() => applyLocation(16.9891, 82.2475, 'Kakinada, Andhra Pradesh', 'preset')}
+              style={{
+                background: geoAddress.includes('Kakinada') ? '#0284C7' : '#0B172E',
+                border: geoAddress.includes('Kakinada') ? '1px solid #38BDF8' : '1px solid #1E293B',
+                color: '#CBD5E1',
+                borderRadius: '6px',
+                padding: '5px 8px',
+                fontSize: '10.5px',
+                cursor: 'pointer'
+              }}
+            >
+              Kakinada
+            </button>
+            <button
+              onClick={() => applyLocation(17.0052, 81.7778, 'Rajamahendravaram, Andhra Pradesh', 'preset')}
+              style={{
+                background: geoAddress.includes('Rajamahendravaram') ? '#0284C7' : '#0B172E',
+                border: geoAddress.includes('Rajamahendravaram') ? '1px solid #38BDF8' : '1px solid #1E293B',
+                color: '#CBD5E1',
+                borderRadius: '6px',
+                padding: '5px 8px',
+                fontSize: '10.5px',
+                cursor: 'pointer'
+              }}
+            >
+              Rajahmundry
+            </button>
+          </div>
+
           {/* Detect Live GPS Button */}
           <button
             onClick={handleDetectLiveGPS}
@@ -863,24 +1004,75 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
             <span>{isDetectingGps ? 'Acquiring GPS...' : '📍 Detect My Live GPS'}</span>
           </button>
 
-          {/* Active Anchor Feedback */}
+          {/* Active Anchor Feedback & Source Badge */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            fontSize: '10px',
+            gap: '8px',
+            fontSize: '10.5px',
             color: '#94A3B8',
-            maxWidth: '420px',
+            maxWidth: '380px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}>
-            <MapPin size={12} color="#10B981" style={{ flexShrink: 0 }} />
-            <span>
-              Anchor: <strong style={{ color: '#F1F5F9' }}>{geoAddress}</strong>
+            <span style={{
+              background: locationSource === 'gps' ? '#065F46' : (locationSource === 'ip' ? '#78350F' : '#0284C7'),
+              color: locationSource === 'gps' ? '#6EE7B7' : (locationSource === 'ip' ? '#FDE68A' : '#E0F2FE'),
+              border: `1px solid ${locationSource === 'gps' ? '#10B981' : (locationSource === 'ip' ? '#F59E0B' : '#38BDF8')}`,
+              padding: '2px 6px',
+              borderRadius: '5px',
+              fontSize: '9.5px',
+              fontWeight: 800,
+              flexShrink: 0
+            }}>
+              {locationSource === 'gps' ? '🛰️ Hardware GPS' : (locationSource === 'ip' ? '🌐 Jio IP Hub' : '📍 Selected Location')}
+            </span>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <strong style={{ color: '#F1F5F9' }}>{geoAddress}</strong>
             </span>
           </div>
         </div>
+
+        {/* IP Geolocation Warning Strip */}
+        {locationSource === 'ip' && (
+          <div style={{
+            background: 'rgba(245, 158, 11, 0.12)',
+            borderBottom: '1px solid rgba(245, 158, 11, 0.35)',
+            padding: '5px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '11px',
+            color: '#FDE68A',
+            flexShrink: 0
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <AlertTriangle size={13} color="#F59E0B" />
+              <span>
+                <strong>Device GPS not granted in browser:</strong> Showing nearest Reliance Jio telecom routing hub (Rajamahendravaram).
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span>In Annavaram?</span>
+              <button
+                onClick={() => applyLocation(17.2790, 82.4042, 'Annavaram, Sankhavaram Mandal, Kakinada District', 'preset')}
+                style={{
+                  background: '#D97706',
+                  color: '#FFF',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '2px 8px',
+                  fontSize: '10.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                Switch to Annavaram (Home)
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ========================================================
             2. MAIN OPERATIONAL WORKSPACE (FULL HEIGHT MAP + DECISION PANEL)

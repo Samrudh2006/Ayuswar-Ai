@@ -94,15 +94,57 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     };
   }, []);
 
-  const detectLiveLocation = async () => {
+  const detectLiveLocation = async (forceGps = false) => {
     setIsLocating(true);
     try {
+      // Check saved location first unless forceGps is requested
+      if (!forceGps) {
+        try {
+          const raw = localStorage.getItem('ayuswar_user_location');
+          if (raw) {
+            const saved = JSON.parse(raw);
+            if (saved.lat && saved.lng) {
+              setUserCoords({ latitude: saved.lat, longitude: saved.lng, accuracy: 25 });
+              setLocationSource(saved.source || 'preset');
+              setDetectedLocationName(saved.name);
+              loadHospitalsForCoords(saved.lat, saved.lng, saved.name, hospitalFilter);
+              setIsLocating(false);
+              return;
+            }
+          }
+        } catch {}
+      }
+
       const loc = await requestRealDeviceLocation();
+
+      // If user had a saved location and detection is only coarse IP geo, keep saved location
+      const hasSaved = (() => {
+        try { return Boolean(localStorage.getItem('ayuswar_user_location')); } catch { return false; }
+      })();
+
+      if (loc.isIpGeo && hasSaved && !forceGps) {
+        setIsLocating(false);
+        return;
+      }
+
       setUserCoords({ latitude: loc.latitude, longitude: loc.longitude, accuracy: loc.accuracy || 15 });
       setLocationSource(loc.isHardwareGps ? 'gps' : (loc.isFallback ? 'fallback' : 'ip'));
       const addr = await reverseGeocodeGPS(loc.latitude, loc.longitude);
       const locName = addr.displayName || (loc.city ? `${loc.city}, ${loc.region}` : `${loc.latitude.toFixed(4)}°N, ${loc.longitude.toFixed(4)}°E`);
       setDetectedLocationName(locName);
+
+      if (loc.isHardwareGps) {
+        try {
+          localStorage.setItem('ayuswar_user_location', JSON.stringify({
+            lat: loc.latitude,
+            lng: loc.longitude,
+            name: locName,
+            source: 'gps',
+            timestamp: Date.now()
+          }));
+        } catch {}
+      }
+
       loadHospitalsForCoords(loc.latitude, loc.longitude, locName, hospitalFilter);
     } catch (err) {
       console.warn('Geolocation detection error:', err);
@@ -166,6 +208,15 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
     setLocationSource('manual');
     setSearchLocationQuery('');
     setSearchResults([]);
+    try {
+      localStorage.setItem('ayuswar_user_location', JSON.stringify({
+        lat: item.lat,
+        lng: item.lng,
+        name: item.placeName,
+        source: 'manual',
+        timestamp: Date.now()
+      }));
+    } catch {}
     loadHospitalsForCoords(item.lat, item.lng, item.placeName, hospitalFilter);
   };
 

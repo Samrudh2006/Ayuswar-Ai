@@ -79,22 +79,27 @@ export default function SanjivaniEmergencyAssistant({
   const [compressionCount, setCompressionCount] = useState(0);
 
   // Dynamic Real-Time Copilot Event Feed (No static dummy chat, strictly real-time events)
-  const [copilotEvents, setCopilotEvents] = useState([
-    {
-      id: 1,
-      time: '14:28:10',
-      type: 'system',
-      title: '🚨 Sanjivani-108 Copilot Live Stream Active',
-      text: `Monitoring live cellular SIP audio stream (+91 98490 22334) at ${geoAddress}. Acoustic panic analysis active.`
-    },
-    {
-      id: 2,
-      time: '14:28:10',
-      type: 'triage',
-      title: '⚡ Critical Acoustic Distress Detected',
-      text: `Biomarkers: ${distressIndex}% Panic Index, ${vocalPitchHz} Hz F0 vocal spike, ${respirationRate}/min tachypnea. Recommended: Immediate ALS Unit A-12 dispatch with 12-lead ECG.`
-    }
-  ]);
+  const [copilotEvents, setCopilotEvents] = useState(() => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const tNow = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    return [
+      {
+        id: 1,
+        time: tNow,
+        type: 'system',
+        title: '🚨 Sanjivani-108 Copilot Live Stream Active',
+        text: `Monitoring live cellular SIP audio stream (+91 98490 22334) at ${geoAddress}. Acoustic panic analysis active.`
+      },
+      {
+        id: 2,
+        time: tNow,
+        type: 'triage',
+        title: '⚡ Critical Acoustic Distress Detected',
+        text: `Biomarkers: ${distressIndex}% Panic Index, ${vocalPitchHz} Hz F0 vocal spike, ${respirationRate}/min tachypnea. Recommended: Immediate ALS Unit A-12 dispatch with 12-lead ECG.`
+      }
+    ];
+  });
 
   const [inputQuestion, setInputQuestion] = useState('');
   const recognitionRef = useRef(null);
