@@ -1074,7 +1074,12 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 </div>
 
                 {/* 2-Column Sign Up Form */}
-                <form onSubmit={handleProceedToOtp} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <form 
+                  onSubmit={handleProceedToOtp} 
+                  autoComplete="off" 
+                  data-lpignore="true"
+                  style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
+                >
                   {/* Row 1: Full Name & License */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
@@ -1085,6 +1090,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type="text"
                           required
+                          autoComplete="off"
+                          data-lpignore="true"
                           value={signupForm.fullName}
                           onChange={(e) => setSignupForm({ ...signupForm, fullName: e.target.value })}
                           placeholder={userType === 'doctor' ? 'e.g. Dr. Ananya Rao' : (userType === 'hospital' ? 'e.g. Kurnool PHC Facility' : 'e.g. Lakshmi Amma')}
@@ -1115,6 +1122,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type="text"
                           required
+                          autoComplete="off"
+                          data-lpignore="true"
                           value={signupForm.licenseNumber}
                           onChange={(e) => setSignupForm({ ...signupForm, licenseNumber: e.target.value })}
                           placeholder={userType === 'doctor' ? 'e.g. APMC-2018-88421' : (userType === 'hospital' ? 'e.g. HFR-ABDM-104928' : 'e.g. 91-8842-1920-5511')}
@@ -1148,6 +1157,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type="email"
                           required
+                          autoComplete="off"
+                          data-lpignore="true"
                           value={signupForm.email}
                           onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
                           placeholder="your.email@domain.com"
@@ -1178,6 +1189,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type="tel"
                           required
+                          autoComplete="off"
+                          data-lpignore="true"
                           value={signupForm.mobile}
                           onChange={(e) => setSignupForm({ ...signupForm, mobile: e.target.value })}
                           placeholder="+91 98480 22338"
@@ -1211,6 +1224,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type={showSignupPassword ? 'text' : 'password'}
                           required
+                          autoComplete="new-password"
+                          data-lpignore="true"
                           value={signupForm.password}
                           onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
                           placeholder="Create a strong password"
@@ -1256,6 +1271,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <input
                           type={showConfirmPassword ? 'text' : 'password'}
                           required
+                          autoComplete="new-password"
+                          data-lpignore="true"
                           value={signupForm.confirmPassword}
                           onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
                           placeholder="Confirm your password"
