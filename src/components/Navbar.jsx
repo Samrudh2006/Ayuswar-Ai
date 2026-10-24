@@ -17,14 +17,11 @@ import {
   Cpu,
   BarChart3,
   BookOpen,
-  Scan,
-  Volume2,
-  VolumeX
+  Scan
 } from 'lucide-react';
 import { useApp, SUPPORTED_LANGUAGES } from '../context/AppContext';
 import AyuSwarLogoReveal from './AyuSwarLogoReveal';
 import { preloadModule } from '../utils/routePreloader';
-import { isSoundMuted, toggleSoundMute, playClickSound } from '../utils/soundEffects';
 
 export default function Navbar({ 
   onOpenSanjivani, 
@@ -49,7 +46,6 @@ export default function Navbar({
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [soundMuted, setSoundMutedState] = useState(() => isSoundMuted());
 
   const solutionsRef = useRef(null);
   const resourcesRef = useRef(null);
@@ -543,36 +539,6 @@ export default function Navbar({
                 </div>
               )}
             </div>
-
-            {/* Tactile Audio Feedback Toggle Button */}
-            <button
-              type="button"
-              className="navbar-sound-toggle-btn"
-              onClick={() => {
-                const nextMute = toggleSoundMute();
-                setSoundMutedState(nextMute);
-                if (!nextMute) {
-                  playClickSound({ variant: 'action' });
-                }
-              }}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 32,
-                height: 32,
-                borderRadius: 7,
-                border: '1px solid #D1E1E6',
-                background: soundMuted ? '#F3F4F6' : '#FAF8F5',
-                color: soundMuted ? '#94A3B8' : '#0F4C5C',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-              title={soundMuted ? "UI Haptic Sounds: Muted (Click to enable gentle click tones)" : "UI Haptic Sounds: Active (Soft tactile feedback on click)"}
-              aria-label={soundMuted ? "Enable UI click sounds" : "Mute UI click sounds"}
-            >
-              {soundMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-            </button>
 
             {/* Doctor Login Quick Action (Visible on desktop) */}
             <button
