@@ -40,7 +40,8 @@ import {
   RotateCcw,
   VolumeX,
   Terminal,
-  Eye
+  Eye,
+  Download
 } from 'lucide-react';
 import FeatureDetailModal from './FeatureDetailModal';
 import MeshGradientBackground from './MeshGradientBackground';
@@ -888,6 +889,41 @@ export default function HeroLanding({
                 <span style={{ fontSize: '15px' }}>🎙️</span>
                 <span>Vocal Biomarker AI Lab</span>
                 <span style={{ fontSize: '10px', background: '#D4AF37', color: '#081C24', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>DEMO</span>
+              </button>
+
+              <button
+                className="hero-pwa-cta"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('ayuswar:open-pwa-install'));
+                }}
+                style={{
+                  background: 'linear-gradient(135deg, #FAF8F5 0%, #FFFFFF 100%)',
+                  color: '#0F4C5C',
+                  border: '1.5px solid #0F4C5C',
+                  borderRadius: '30px',
+                  padding: '13px 22px',
+                  fontSize: '14.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.12)',
+                  transition: 'all 160ms ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(15, 76, 92, 0.22)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(15, 76, 92, 0.12)';
+                }}
+                title="Install AyuSwar AI PWA (Progressive Web App) on your device"
+              >
+                <Download size={15} color="#0F4C5C" />
+                <span>Install PWA App</span>
+                <span style={{ fontSize: '10px', background: 'rgba(15, 76, 92, 0.12)', color: '#0F4C5C', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>FAST</span>
               </button>
             </div>
 

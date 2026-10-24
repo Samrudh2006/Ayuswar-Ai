@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Home, 
   Heart, 
@@ -40,6 +40,7 @@ import {
   Menu,
   FileCheck,
   UploadCloud,
+  FolderOpen,
   Droplets,
   Wind,
   Zap,
@@ -403,7 +404,10 @@ export default function PatientPortal({
     showVitalsToast('Vitals record removed from longitudinal tracking.');
   };
 
-  // Upload Report Form State
+  // Upload Report Form State & File Handling
+  const reportFileInputRef = useRef(null);
+  const [uploadedReportFile, setUploadedReportFile] = useState(null);
+  const [isReportDraggingOver, setIsReportDraggingOver] = useState(false);
   const [newReportTitle, setNewReportTitle] = useState('HbA1c & Fasting Blood Glucose');
   const [newReportDoctor, setNewReportDoctor] = useState('Dr. Priya Sharma');
   const [newReportDate, setNewReportDate] = useState(formatDemoDate(0));
@@ -411,6 +415,94 @@ export default function PatientPortal({
   const [newReportTelugu, setNewReportTelugu] = useState('మీ రక్తంలో చక్కెర స్థాయిలు అదుపులో ఉన్నాయి. హెచ్‌బీఏ1సి 6.4 శాతం ఉంది.');
   const [newReportHindi, setNewReportHindi] = useState('आपके खून में शुगर का स्तर नियंत्रण में है। दवाएं ठीक से काम कर रही हैं।');
   const [isAiScanningReport, setIsAiScanningReport] = useState(false);
+
+  const handleReportFileChosen = (file) => {
+    if (!file) return;
+    const isImg = file.type?.startsWith('image/');
+    let previewUrl = null;
+    if (isImg) {
+      try {
+        previewUrl = URL.createObjectURL(file);
+      } catch {}
+    }
+    const cleanName = file.name ? file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ') : 'Diagnostic Lab Report';
+    
+    setUploadedReportFile({
+      name: file.name,
+      size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+      type: file.type || 'application/pdf',
+      previewUrl
+    });
+
+    setNewReportTitle(cleanName);
+
+    // Run simulated OCR extraction automatically
+    setIsAiScanningReport(true);
+    setTimeout(() => {
+      setIsAiScanningReport(false);
+      const lower = file.name.toLowerCase();
+      if (lower.includes('xray') || lower.includes('chest') || lower.includes('radiograph') || lower.includes('dcm')) {
+        setNewReportTitle('Chest Radiograph (PA Digital View)');
+        setNewReportDoctor('Dr. V. Rajesh (Radiology)');
+        setNewReportSummary('Bilateral clear lung fields. No consolidation, pleural effusion, or acute cardiopulmonary abnormalities detected.');
+        setNewReportTelugu('మీ ఛాతీ ఎక్స్-రే లో ఊపిరితిత్తులు మరియు గుండె పనితీరు సాధారణంగా ఉన్నాయి.');
+        setNewReportHindi('छाती के एक्स-रे में फेफड़े पूरी तरह साफ हैं और कोई संक्रमण नहीं है।');
+      } else if (lower.includes('lipid') || lower.includes('cholesterol') || lower.includes('serum')) {
+        setNewReportTitle('Lipid Panel & Serum Cholesterol');
+        setNewReportDoctor('Dr. K. Srinivas (Cardiology)');
+        setNewReportSummary('Total Cholesterol: 182 mg/dL. Triglycerides: 140 mg/dL. HDL: 48 mg/dL. LDL: 106 mg/dL. Cardiovascular risk: Low.');
+        setNewReportTelugu('మీ కొలెస్ట్రాల్ పరీక్ష ఫలితాలు ఆరోగ్యకరమైన పరిమితుల్లో ఉన్నాయి. గుండె ప్రమాదం తక్కువగా ఉంది.');
+        setNewReportHindi('कोलेस्ट्रॉल का स्तर सामान्य है और दिल का स्वास्थ्य अच्छा है।');
+      } else {
+        setNewReportSummary(`AI OCR Extracted: HbA1c: 6.4% (Optimal Glycemic Control). Fasting Blood Glucose: 104 mg/dL. Liver & renal panels within normal baseline.`);
+        setNewReportTelugu('మీ రక్తంలో చక్కెర స్థాయిలు అదుపులో ఉన్నాయి. హెచ్‌బీఏ1సి 6.4 శాతం ఉంది.');
+        setNewReportHindi('आपके खून में शुगर का स्तर नियंत्रण में है। दवाएं ठीक से काम कर रही हैं।');
+      }
+    }, 600);
+  };
+
+  const handleSelectSampleReport = (sampleKey) => {
+    if (sampleKey === 'hba1c') {
+      setUploadedReportFile({
+        name: 'Apollo_Diagnostics_HbA1c_Blood_Panel.pdf',
+        size: '1.45 MB',
+        type: 'application/pdf',
+        previewUrl: null
+      });
+      setNewReportTitle('HbA1c & Fasting Blood Glucose Panel');
+      setNewReportDoctor('Dr. Priya Sharma (Endocrinology)');
+      setNewReportDate(formatDemoDate(0));
+      setNewReportSummary('HbA1c: 6.4% (Good Glycemic Control). Fasting Glucose: 104 mg/dL. Estimated Average Glucose: 137 mg/dL.');
+      setNewReportTelugu('మీ రక్తంలో చక్కెర స్థాయిలు అదుపులో ఉన్నాయి. హెచ్‌బీఏ1సి 6.4 శాతం ఉంది.');
+      setNewReportHindi('आपके खून में शुगर का स्तर नियंत्रण में है। दवाएं ठीक से काम कर रही हैं।');
+    } else if (sampleKey === 'xray') {
+      setUploadedReportFile({
+        name: 'Govt_General_Hospital_Chest_PA.dcm',
+        size: '14.2 MB',
+        type: 'application/dicom',
+        previewUrl: null
+      });
+      setNewReportTitle('Chest Radiograph (PA View)');
+      setNewReportDoctor('Dr. V. Rajesh (Radiology)');
+      setNewReportDate(formatDemoDate(-2));
+      setNewReportSummary('Clear bronchovascular markings. Normal cardiac apex. No signs of active tuberculosis, infiltrate, or pneumonia.');
+      setNewReportTelugu('ఛాతీ ఎక్స్-రే లో ఎలాంటి నిమోనియా లేదా ఇన్ఫెక్షన్ లేదు. ఊపిరితిత్తులు ఆరోగ్యంగా ఉన్నాయి.');
+      setNewReportHindi('छाती के एक्स-रे में कोई संक्रमण या निमोनिया नहीं है। फेफड़े बिल्कुल स्वस्थ हैं।');
+    } else if (sampleKey === 'lipid') {
+      setUploadedReportFile({
+        name: 'Thyrocare_Lipid_Profile_Scan.png',
+        size: '890 KB',
+        type: 'image/png',
+        previewUrl: null
+      });
+      setNewReportTitle('Complete Fasting Lipid Profile');
+      setNewReportDoctor('Dr. K. Srinivas (Cardiology)');
+      setNewReportDate(formatDemoDate(-5));
+      setNewReportSummary('Total Cholesterol: 178 mg/dL. HDL: 49 mg/dL. LDL: 101 mg/dL. Triglycerides: 135 mg/dL. Optimal heart risk score.');
+      setNewReportTelugu('మీ కొలెస్ట్రాల్ మరియు రక్త నాళాల కొవ్వు స్థాయిలు సాధారణంగా ఉన్నాయి.');
+      setNewReportHindi('कोलेस्ट्रॉल का स्तर बिल्कुल सामान्य है और हृदय स्वास्थ्य अच्छा है।');
+    }
+  };
 
   // Dynamic Reactive Chronotherapy Medications Schedule
   const [chronotherapySchedule, setChronotherapySchedule] = useState([
@@ -2897,23 +2989,230 @@ export default function PatientPortal({
 
                     {/* Modal Form */}
                     <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                      {/* Dropzone */}
-                      <div style={{
-                        border: '2px dashed #0F4C5C',
-                        borderRadius: '14px',
-                        padding: '24px 16px',
-                        textAlign: 'center',
-                        background: 'rgba(15, 76, 92, 0.04)',
-                        cursor: 'pointer'
-                      }}>
-                        <UploadCloud size={32} color="#0F4C5C" style={{ margin: '0 auto 8px auto' }} />
-                        <div style={{ fontSize: '13px', fontWeight: 750, color: '#081C24' }}>
-                          Drag & drop diagnostic PDF, DICOM, or scan image
+                      {/* Hidden File Input for Native File Browser Selection */}
+                      <input
+                        type="file"
+                        ref={reportFileInputRef}
+                        onChange={e => {
+                          if (e.target.files && e.target.files[0]) {
+                            handleReportFileChosen(e.target.files[0]);
+                          }
+                        }}
+                        accept=".pdf,.png,.jpg,.jpeg,.dcm,.dicom,.webp,image/*"
+                        style={{ display: 'none' }}
+                      />
+
+                      {/* Interactive Dropzone & File Selector */}
+                      {!uploadedReportFile ? (
+                        <div
+                          onDragOver={e => {
+                            e.preventDefault();
+                            setIsReportDraggingOver(true);
+                          }}
+                          onDragLeave={e => {
+                            e.preventDefault();
+                            setIsReportDraggingOver(false);
+                          }}
+                          onDrop={e => {
+                            e.preventDefault();
+                            setIsReportDraggingOver(false);
+                            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                              handleReportFileChosen(e.dataTransfer.files[0]);
+                            }
+                          }}
+                          onClick={() => reportFileInputRef.current?.click()}
+                          style={{
+                            border: isReportDraggingOver ? '2px solid #0F4C5C' : '2px dashed #0F4C5C',
+                            borderRadius: '16px',
+                            padding: '24px 18px',
+                            textAlign: 'center',
+                            background: isReportDraggingOver ? 'rgba(15, 76, 92, 0.12)' : 'rgba(15, 76, 92, 0.04)',
+                            cursor: 'pointer',
+                            transition: 'all 0.18s ease',
+                            boxShadow: isReportDraggingOver ? '0 0 16px rgba(15, 76, 92, 0.2)' : 'none'
+                          }}
+                        >
+                          <UploadCloud size={34} color="#0F4C5C" style={{ margin: '0 auto 8px auto', display: 'block' }} />
+                          <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
+                            Drag & drop diagnostic PDF, DICOM, or scan image
+                          </div>
+                          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '3px', marginBottom: '14px' }}>
+                            Supports PDF, JPEG, PNG, DICOM, WebP up to 25 MB
+                          </div>
+
+                          {/* Explicit Manual Upload Button */}
+                          <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                reportFileInputRef.current?.click();
+                              }}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                background: '#0F4C5C',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '10px',
+                                padding: '8px 16px',
+                                fontSize: '12px',
+                                fontWeight: 750,
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
+                              }}
+                            >
+                              <FolderOpen size={15} />
+                              <span>Browse Files to Upload Manually</span>
+                            </button>
+                          </div>
+
+                          {/* Quick One-Click Sample Reports */}
+                          <div style={{ marginTop: '16px', borderTop: '1px solid rgba(15, 76, 92, 0.12)', paddingTop: '12px' }}>
+                            <div style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', marginBottom: '8px' }}>
+                              Or quickly test with a sample clinical report:
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectSampleReport('hba1c');
+                                }}
+                                style={{
+                                  background: '#ffffff',
+                                  border: '1px solid #D1E1E6',
+                                  borderRadius: '8px',
+                                  padding: '4px 10px',
+                                  fontSize: '11px',
+                                  fontWeight: 650,
+                                  color: '#0F4C5C',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                🧪 HbA1c Lab PDF
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectSampleReport('xray');
+                                }}
+                                style={{
+                                  background: '#ffffff',
+                                  border: '1px solid #D1E1E6',
+                                  borderRadius: '8px',
+                                  padding: '4px 10px',
+                                  fontSize: '11px',
+                                  fontWeight: 650,
+                                  color: '#0F4C5C',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                🩻 Chest X-Ray DICOM
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectSampleReport('lipid');
+                                }}
+                                style={{
+                                  background: '#ffffff',
+                                  border: '1px solid #D1E1E6',
+                                  borderRadius: '8px',
+                                  padding: '4px 10px',
+                                  fontSize: '11px',
+                                  fontWeight: 650,
+                                  color: '#0F4C5C',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                🩸 Fasting Lipid Scan
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                        <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
-                          Supports PDF, JPEG, PNG, DICOM up to 25 MB
+                      ) : (
+                        <div style={{
+                          background: '#F0FDFA',
+                          border: '1.5px solid #0F4C5C',
+                          borderRadius: '16px',
+                          padding: '16px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '12px'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                            {uploadedReportFile.previewUrl ? (
+                              <img
+                                src={uploadedReportFile.previewUrl}
+                                alt="Report Preview"
+                                style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #D1E1E6' }}
+                              />
+                            ) : (
+                              <div style={{
+                                width: '46px',
+                                height: '46px',
+                                borderRadius: '10px',
+                                background: '#0F4C5C',
+                                color: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                              }}>
+                                <FileCheck size={24} />
+                              </div>
+                            )}
+                            <div style={{ minWidth: 0 }}>
+                              <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {uploadedReportFile.name}
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#065F46', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                                <span>{uploadedReportFile.size}</span>
+                                <span>•</span>
+                                <span style={{ fontWeight: 700 }}>✓ Attached & AI OCR Parsed</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                            <button
+                              type="button"
+                              onClick={() => reportFileInputRef.current?.click()}
+                              style={{
+                                background: '#ffffff',
+                                border: '1px solid #D1E1E6',
+                                borderRadius: '8px',
+                                padding: '6px 12px',
+                                fontSize: '11.5px',
+                                fontWeight: 700,
+                                color: '#0F4C5C',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Change File
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setUploadedReportFile(null)}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                color: '#DC2626',
+                                cursor: 'pointer',
+                                padding: '6px'
+                              }}
+                              title="Remove attached file"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {/* Title & Date */}
                       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '12px' }}>
@@ -3070,6 +3369,7 @@ export default function PatientPortal({
 
                           setVitalsHistory(prev => [autoReportVital, ...prev]);
                           showVitalsToast(`⚡ Vitals automatically extracted & updated from ${newReportTitle}!`);
+                          setUploadedReportFile(null);
                           setIsUploadReportModalOpen(false);
                         }}
                         style={{
