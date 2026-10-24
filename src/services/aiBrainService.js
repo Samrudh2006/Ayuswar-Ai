@@ -75,7 +75,7 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
   const { provider } = getAiConfig();
 
   // Check Groq API Key if provided
-  const groqKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  const groqKey = getGroqApiKey();
   if (groqKey) {
     try {
       const groqReply = await queryGroqApi(cleanPrompt, getSystemPromptForRole(role, enrichedContext));
@@ -101,8 +101,41 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
   return generateSafeDemonstrationResponse(cleanPrompt, role, enrichedContext);
 }
 
+/**
+ * Retrieves Groq API Key from environment variable or browser localStorage
+ */
+export function getGroqApiKey() {
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('ayuswar_groq_api_key') || 
+                     localStorage.getItem('groq_api_key') || 
+                     localStorage.getItem('VITE_GROQ_API_KEY');
+      if (stored && stored.trim()) return stored.trim();
+    } catch {}
+  }
+  return (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+}
+
+/**
+ * Saves Groq API Key into local browser storage for persistence
+ */
+export function setGroqApiKey(key) {
+  if (typeof window !== 'undefined') {
+    try {
+      if (key && key.trim()) {
+        localStorage.setItem('ayuswar_groq_api_key', key.trim());
+        return true;
+      } else {
+        localStorage.removeItem('ayuswar_groq_api_key');
+        return false;
+      }
+    } catch {}
+  }
+  return false;
+}
+
 export async function queryGroqApi(prompt, systemInstruction = '') {
-  const apiKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+  const apiKey = getGroqApiKey();
   if (!apiKey) return null;
 
   try {

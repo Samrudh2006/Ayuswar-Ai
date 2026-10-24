@@ -11,6 +11,9 @@ import { ABDM_HFR_FACILITIES } from '../data/abdmHospitalRegistry.js';
 
 export const MAPBOX_TOKEN = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_MAPBOX_ACCESS_TOKEN) || '';
 
+// High-performance in-memory hospital discovery cache (0ms instant return for same area)
+const hospitalsCache = new Map();
+
 // Helper to compute Haversine distance in km
 export function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -263,6 +266,11 @@ export async function fetchNearbyHospitalsAPI({
   geoAddress = '',
   filterOption = 'ALL'
 } = {}) {
+  const cacheKey = `${Math.round(Number(lat) * 100) / 100}_${Math.round(Number(lng) * 100) / 100}_${filterOption}`;
+  if (hospitalsCache.has(cacheKey)) {
+    return hospitalsCache.get(cacheKey);
+  }
+
   let rawList = [];
 
   const effectiveLat = Number(lat);
@@ -473,13 +481,15 @@ export async function fetchNearbyHospitalsAPI({
     filteredList.sort((a, b) => a.etaMinutes - b.etaMinutes);
   }
 
-  return {
+  const output = {
     success: true,
     callerLocation: { lat, lng },
     totalFound: filteredList.length,
     recommendedHospital,
     hospitals: filteredList
   };
+  hospitalsCache.set(cacheKey, output);
+  return output;
 }
 
 /**

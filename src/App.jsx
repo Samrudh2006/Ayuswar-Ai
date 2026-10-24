@@ -17,6 +17,7 @@ import DemoRecordingOverlay from './components/DemoRecordingOverlay';
 import CookieConsentBanner from './components/CookieConsentBanner';
 
 import MintIvoryWaveBackground from './components/MintIvoryWaveBackground';
+import { initAllRoutesPreload } from './utils/routePreloader';
 
 // Route-Level Code-Split Components (Lazy loaded on demand to minimize initial bundle size)
 const DetailedModuleView = React.lazy(() => import('./components/DetailedModuleView'));
@@ -127,6 +128,11 @@ export default function App() {
       window.removeEventListener('touchstart', unlockAudio);
       window.removeEventListener('click', unlockAudio);
     };
+  }, []);
+
+  // Preload route chunks during idle time for instantaneous 0ms page navigation
+  React.useEffect(() => {
+    initAllRoutesPreload();
   }, []);
 
   // Mobile Hardware Back Button Handling for Active Full-Screen Modals

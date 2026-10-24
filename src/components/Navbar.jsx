@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useApp, SUPPORTED_LANGUAGES } from '../context/AppContext';
 import AyuSwarLogoReveal from './AyuSwarLogoReveal';
+import { preloadModule } from '../utils/routePreloader';
 
 export default function Navbar({ 
   onOpenSanjivani, 
@@ -288,6 +289,8 @@ export default function Navbar({
                   <Link
                     to="/solutions/opd_ambient_scribe"
                     onClick={() => setSolutionsOpen(false)}
+                    onMouseEnter={() => preloadModule('/solutions/opd_ambient_scribe')}
+                    onFocus={() => preloadModule('/solutions/opd_ambient_scribe')}
                     style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}
                     role="menuitem"
                   >
@@ -301,6 +304,8 @@ export default function Navbar({
                   <Link
                     to="/scanner"
                     onClick={() => setSolutionsOpen(false)}
+                    onMouseEnter={() => preloadModule('/scanner')}
+                    onFocus={() => preloadModule('/scanner')}
                     style={dropdownItemStyle(currentPath === '/scanner')}
                     role="menuitem"
                   >
@@ -314,6 +319,8 @@ export default function Navbar({
                   <Link
                     to="/audio-rx"
                     onClick={() => setSolutionsOpen(false)}
+                    onMouseEnter={() => preloadModule('/audio-rx')}
+                    onFocus={() => preloadModule('/audio-rx')}
                     style={dropdownItemStyle(currentPath === '/audio-rx')}
                     role="menuitem"
                   >
@@ -327,6 +334,8 @@ export default function Navbar({
                   <Link
                     to="/acoustic-lab"
                     onClick={() => setSolutionsOpen(false)}
+                    onMouseEnter={() => preloadModule('/acoustic-lab')}
+                    onFocus={() => preloadModule('/acoustic-lab')}
                     style={dropdownItemStyle(currentPath === '/acoustic-lab')}
                     role="menuitem"
                   >
@@ -340,6 +349,14 @@ export default function Navbar({
                   <Link
                     to="/emergency"
                     onClick={() => setSolutionsOpen(false)}
+                    onMouseEnter={() => {
+                      preloadModule('/emergency');
+                      preloadModule('sanjivani_modal');
+                    }}
+                    onFocus={() => {
+                      preloadModule('/emergency');
+                      preloadModule('sanjivani_modal');
+                    }}
                     style={dropdownItemStyle(currentPath === '/emergency')}
                     role="menuitem"
                   >
@@ -356,6 +373,8 @@ export default function Navbar({
             {/* Technology */}
             <Link
               to="/technology"
+              onMouseEnter={() => preloadModule('/architecture')}
+              onFocus={() => preloadModule('/architecture')}
               style={navItemStyle(isTechActive)}
               aria-current={isTechActive ? 'page' : undefined}
             >
@@ -365,6 +384,8 @@ export default function Navbar({
             {/* Clinical Impact / Benchmarks */}
             <Link
               to="/benchmarks"
+              onMouseEnter={() => preloadModule('/benchmark')}
+              onFocus={() => preloadModule('/benchmark')}
               style={navItemStyle(isImpactActive)}
               aria-current={isImpactActive ? 'page' : undefined}
             >
@@ -378,6 +399,10 @@ export default function Navbar({
                 onClick={() => {
                   setResourcesOpen(!resourcesOpen);
                   setSolutionsOpen(false);
+                }}
+                onMouseEnter={() => {
+                  preloadModule('/languages');
+                  preloadModule('/dataset');
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowDown') setResourcesOpen(true);
@@ -396,6 +421,8 @@ export default function Navbar({
                   <Link
                     to="/language-matrix"
                     onClick={() => setResourcesOpen(false)}
+                    onMouseEnter={() => preloadModule('/languages')}
+                    onFocus={() => preloadModule('/languages')}
                     style={dropdownItemStyle(currentPath === '/language-matrix')}
                     role="menuitem"
                   >
@@ -409,6 +436,8 @@ export default function Navbar({
                   <Link
                     to="/datasets"
                     onClick={() => setResourcesOpen(false)}
+                    onMouseEnter={() => preloadModule('/dataset')}
+                    onFocus={() => preloadModule('/dataset')}
                     style={dropdownItemStyle(currentPath === '/datasets')}
                     role="menuitem"
                   >
@@ -450,6 +479,8 @@ export default function Navbar({
                 whiteSpace: 'nowrap'
               }}
               onMouseEnter={(e) => {
+                preloadModule('sanjivani_modal');
+                preloadModule('/emergency');
                 e.currentTarget.style.transform = 'translateY(-1px)';
                 e.currentTarget.style.boxShadow = '0 4px 16px rgba(214, 69, 80, 0.55)';
               }}
@@ -514,6 +545,8 @@ export default function Navbar({
             <button
               type="button"
               className="navbar-doctor-pill desktop-only-pill"
+              onMouseEnter={() => preloadModule('/doctor')}
+              onFocus={() => preloadModule('/doctor')}
               onClick={() => {
                 if (doctorProfile) navigate('/doctor-portal');
                 else if (onOpenDoctorAuth) onOpenDoctorAuth();
@@ -545,6 +578,8 @@ export default function Navbar({
             <button
               type="button"
               className="navbar-patient-pill desktop-only-pill"
+              onMouseEnter={() => preloadModule('/patient')}
+              onFocus={() => preloadModule('/patient')}
               onClick={() => {
                 if (patientProfile) navigate('/patient-portal');
                 else if (onOpenPatientAuth) onOpenPatientAuth();

@@ -31,7 +31,7 @@ import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanj
 import { queryEvonServer, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
 import { cleanTextForSpeech, speakHumanized } from '../utils/speechSanitizer';
-import { queryGroqApi } from '../services/aiBrainService';
+import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -336,7 +336,7 @@ export default function SanjivaniEmergencyAssistant({
     // 8. GENERAL CLINICAL QUERY: Groq or Evon reasoning with humanized speech
     try {
       // Try fast Groq API
-      const groqKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
+      const groqKey = getGroqApiKey();
       if (groqKey) {
         const groqPrompt = `Emergency caller asks: "${text}". Patient location: ${geoAddress}. Target hospital: ${selectedHospital?.name || 'Apex Trauma'}. Provide ultra-concise, authoritative first-aid and dispatch guidance in under 30 words.`;
         const groqRes = await queryGroqApi(groqPrompt, 'You are Sanjivani-108 Emergency AI Dispatch Copilot. Be calm, decisive, and concise. No markdown, no asterisks, no bullet points.');

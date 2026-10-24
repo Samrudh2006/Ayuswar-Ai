@@ -54,7 +54,7 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const [showEvonTrace, setShowEvonTrace] = useState(true);
 
   // Live Geo-Locational Telemetry & Dynamic Hospital Discovery
-  const [userCoords, setUserCoords] = useState({ latitude: 17.6913, longitude: 83.0040, accuracy: 15 });
+  const [userCoords, setUserCoords] = useState({ latitude: 17.2790, longitude: 82.4042, accuracy: 15 });
   const [detectedLocationName, setDetectedLocationName] = useState('Resolving device GPS / IP location...');
   const [locationSource, setLocationSource] = useState(null); // 'gps' | 'ip' | 'manual'
 
