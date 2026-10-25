@@ -291,43 +291,18 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             const trimmed = finalStr.trim();
             const lower = trimmed.toLowerCase();
 
-            // Intelligent Clinical Diarization:
-            // Check semantic cues to see if speech explicitly belongs to patient or doctor
-            let inferredSpeaker = activeLiveSpeakerRef.current;
-            
-            // Patient cues: addressing doctor, stating personal symptoms/complaints/duration
-            const isPatientCue = lower.includes('నమస్తే డాక్టర్') || lower.includes('డాక్టర్ గారు') || 
-                                 lower.includes('డాక్టర్') || lower.includes('doctor') ||
-                                 lower.includes('నొప్పి') || lower.includes('జ్వరం') || lower.includes('ఫీవర్') || 
-                                 lower.includes('దగ్గు') || lower.includes('జలుబు') || lower.includes('నుండి') || 
-                                 lower.includes('నుంచి') || lower.includes('అనిపిస్తుంది') || lower.includes('తీసుకుంటున్నాను');
-
-            // Doctor cues: addressing patient politely, clinical examination questions, medication instructions
-            const isDoctorCue = lower.includes('లక్ష్మి గారు') || lower.includes('గారు') || 
-                                lower.includes('ఏమి ప్రాబ్లం') || lower.includes('ఎలా ఉంది') || 
-                                lower.includes('చూద్దాం') || lower.includes('నోరు తెరవండి') || 
-                                lower.includes('మందులు') || lower.includes('టాబ్లెట్స్');
-
-            if (isPatientCue && !isDoctorCue) {
-              inferredSpeaker = 'Patient (Live Mic)';
-            } else if (isDoctorCue && !isPatientCue) {
-              inferredSpeaker = 'Doctor (Live Mic)';
-            }
+            // Speaker attribution: Strictly follows current active speaker chosen by user (no automatic switching)
+            const currentSpeaker = activeLiveSpeakerRef.current;
 
             setDialogueTurns(prev => [
               ...prev,
               {
-                speaker: inferredSpeaker,
+                speaker: currentSpeaker,
                 text: trimmed,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
               }
             ]);
             setLiveTranscriptionText('');
-
-            // Automatically switch active speaker for the NEXT turn!
-            const nextSpeaker = inferredSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
-            activeLiveSpeakerRef.current = nextSpeaker;
-            setActiveLiveSpeaker(nextSpeaker);
           } else if (interim.trim()) {
             setLiveTranscriptionText(interim.trim());
           }
@@ -1061,37 +1036,43 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <span>+ Add Turn</span>
                 </button>
 
-                {/* Live Mic Auto-Switch Speaker Badge & Manual Toggle */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  background: activeLiveSpeaker.includes('Doctor') ? 'rgba(45, 212, 191, 0.15)' : 'rgba(251, 191, 36, 0.15)',
-                  border: `1.5px solid ${activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FBBF24'}`,
-                  borderRadius: '10px',
-                  padding: '5px 12px',
-                  fontSize: '11.5px',
-                  fontWeight: 800,
-                  color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047'
-                }}>
-                  <span>Now Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
-                  <button
-                    onClick={handleSwitchActiveSpeaker}
-                    title="Click to manually toggle current speaker (also automatically switches when you stop speaking)"
-                    style={{
-                      background: 'rgba(255,255,255,0.2)',
-                      border: 'none',
-                      color: '#ffffff',
-                      borderRadius: '6px',
-                      padding: '2px 8px',
-                      fontSize: '10.5px',
-                      fontWeight: 750,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    ⇄ Switch
-                  </button>
-                </div>
+                {/* Speaker Toggle Button — Click Only */}
+                <button
+                  onClick={handleSwitchActiveSpeaker}
+                  title="Click to switch speaker between Doctor and Patient"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: activeLiveSpeaker.includes('Doctor') 
+                      ? 'linear-gradient(135deg, rgba(45, 212, 191, 0.22) 0%, rgba(15, 76, 92, 0.45) 100%)' 
+                      : 'linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(180, 83, 9, 0.45) 100%)',
+                    border: `2px solid ${activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FBBF24'}`,
+                    borderRadius: '12px',
+                    padding: '8px 14px',
+                    fontSize: '12.5px',
+                    fontWeight: 850,
+                    color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047',
+                    cursor: 'pointer',
+                    boxShadow: activeLiveSpeaker.includes('Doctor') 
+                      ? '0 0 14px rgba(45, 212, 191, 0.3)' 
+                      : '0 0 14px rgba(251, 191, 36, 0.3)',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <span>Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.22)',
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    color: '#ffffff',
+                    border: '1px solid rgba(255,255,255,0.25)'
+                  }}>
+                    ⇄ Click to Switch to {activeLiveSpeaker.includes('Doctor') ? '👵 Patient' : '🩺 Doctor'}
+                  </span>
+                </button>
               </div>
 
               {/* Timer & Live Signal Status */}
