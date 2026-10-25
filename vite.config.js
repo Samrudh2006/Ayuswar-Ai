@@ -87,7 +87,15 @@ export default defineConfig(({ mode }) => {
                     text: (body.text || '').trim(),
                     voice: body.voice || 'Nalini',
                     model: body.model || 'timbre-v2.5',
-                    language: body.language || 'te-IN'
+                    language: body.language || 'te-IN',
+                    speed: 1.0,
+                    audio_config: {
+                      sample_rate: 24000,
+                      num_channels: 1,
+                      sample_width: 2,
+                      encoding: 'linear_pcm',
+                      container: 'wav'
+                    }
                   })
                 });
 

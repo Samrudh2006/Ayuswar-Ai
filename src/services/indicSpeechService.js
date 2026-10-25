@@ -379,7 +379,15 @@ export class IndicSpeechService {
             text: cleanSpeechText,
             language: langCode,
             voice: voiceName,
-            model: modelName
+            model: modelName,
+            speed: 1.0,
+            audio_config: {
+              sample_rate: 24000,
+              num_channels: 1,
+              sample_width: 2,
+              encoding: 'linear_pcm',
+              container: 'wav'
+            }
           }),
           signal: AbortSignal.timeout(8000)
         });
@@ -559,8 +567,18 @@ export class IndicSpeechService {
         this.lastVoiceRms = rms;
         onRMS(rms);
 
+        // Acoustic Barge-In: If assistant is speaking and user speaks into mic, stop immediately
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          // Acoustic echo protection: Ignore speaker sound while assistant speaks
+          if (rms >= 0.058) {
+            consecutiveSpeechFrames++;
+            if (consecutiveSpeechFrames >= 2) {
+              consecutiveSpeechFrames = 0;
+              this.interruptAssistant('vad_energy');
+            }
+          } else {
+            consecutiveSpeechFrames = 0;
+          }
+        } else {
           consecutiveSpeechFrames = 0;
         }
       }, 50);
@@ -589,6 +607,39 @@ export class IndicSpeechService {
     }
     this.analyser = null;
     this.lastVoiceRms = 0;
+  }
+
+  /**
+   * Immediately stops any speech synthesis or active audio stream playback
+   */
+  stopSpeaking() {
+    this.isSpeaking = false;
+    if (this.currentAudio) {
+      try {
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
+        this.currentAudio.src = '';
+      } catch {}
+      this.currentAudio = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch {}
+    }
+  }
+
+  /**
+   * Instantly interrupts the assistant speaking when user speaks (Barge-In)
+   */
+  interruptAssistant(reason = 'user_bargein') {
+    if (!this.isSpeaking && this.conversationState !== 'SPEAKING') return;
+    this.stopSpeaking();
+    this.isSpeaking = false;
+    this.setConversationState('LISTENING');
+    if (this.activeSessionCallbacks?.onBargeIn) {
+      this.activeSessionCallbacks.onBargeIn({ reason, rms: this.lastVoiceRms });
+    }
   }
 
   /**
@@ -640,8 +691,12 @@ export class IndicSpeechService {
           }
         }
 
+        // Voice Barge-In: If assistant is speaking and user interrupts, immediately halt assistant!
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          // Acoustic echo protection: drop speech recognition while assistant is speaking out loud
+          const spoken = (interim || final).trim();
+          if (spoken.length >= 2) {
+            this.interruptAssistant('user_voice_bargein');
+          }
           return;
         }
 
@@ -712,6 +767,47 @@ export class IndicSpeechService {
     };
     this.setConversationState('LISTENING');
 
+    let turnSilenceTimer = null;
+    let pendingUtterance = '';
+    let isProcessingTurn = false;
+
+    const commitTurn = async (rawUtterance) => {
+      const text = (rawUtterance || '').trim();
+      if (!text || isProcessingTurn || this.isSpeaking) return;
+      isProcessingTurn = true;
+      if (turnSilenceTimer) {
+        clearTimeout(turnSilenceTimer);
+        turnSilenceTimer = null;
+      }
+      pendingUtterance = '';
+
+      this.setConversationState('THINKING');
+
+      try {
+        const reply = await onRequestAssistantReply(text);
+        if (reply && typeof reply === 'string') {
+          onAssistantSpeak(reply);
+          await this.speak(reply, {
+            langCode: language,
+            onStart: () => this.setConversationState('SPEAKING'),
+            onEnd: () => {
+              isProcessingTurn = false;
+              if (this.conversationState === 'SPEAKING') {
+                this.setConversationState('LISTENING');
+              }
+            }
+          });
+        } else {
+          isProcessingTurn = false;
+          this.setConversationState('LISTENING');
+        }
+      } catch (err) {
+        console.warn('Conversational query failed:', err);
+        isProcessingTurn = false;
+        this.setConversationState('LISTENING');
+      }
+    };
+
     await this.startAudioPipeline({
       onRMS: (rms) => onVolumeChange(rms),
       onBargeIn: (info) => {
@@ -726,35 +822,50 @@ export class IndicSpeechService {
       onResult: async ({ finalTranscript, interimTranscript }) => {
         onTranscript({ finalTranscript, interimTranscript });
 
-        if (finalTranscript.trim()) {
-          this.setConversationState('THINKING');
-
-          try {
-            const reply = await onRequestAssistantReply(finalTranscript.trim());
-            if (reply && typeof reply === 'string') {
-              onAssistantSpeak(reply);
-              await this.speak(reply, {
-                langCode: language,
-                onStart: () => this.setConversationState('SPEAKING'),
-                onEnd: () => {
-                  if (this.conversationState === 'SPEAKING') {
-                    this.setConversationState('LISTENING');
-                  }
-                }
-              });
-            } else {
-              this.setConversationState('LISTENING');
-            }
-          } catch (err) {
-            console.warn('Conversational query failed:', err);
-            this.setConversationState('LISTENING');
+        // If assistant is currently speaking and user speaks, trigger barge-in!
+        if (this.isSpeaking || this.conversationState === 'SPEAKING') {
+          const userSpoke = (interimTranscript && interimTranscript.trim().length >= 2) || (finalTranscript && finalTranscript.trim().length >= 2);
+          if (userSpoke) {
+            this.interruptAssistant('user_voice_bargein');
           }
+          return;
+        }
+
+        if (isProcessingTurn) return;
+
+        const currentText = (finalTranscript || interimTranscript || '').trim();
+        if (!currentText) return;
+
+        pendingUtterance = currentText;
+
+        if (turnSilenceTimer) {
+          clearTimeout(turnSilenceTimer);
+          turnSilenceTimer = null;
+        }
+
+        // Turn-Taking Silence Detection:
+        // When user finishes speaking, answer automatically without waiting for Chrome finalizer!
+        if (finalTranscript && finalTranscript.trim().length >= 3) {
+          turnSilenceTimer = setTimeout(() => {
+            commitTurn(finalTranscript.trim());
+          }, 300);
+        } else if (interimTranscript && interimTranscript.trim().length >= 3) {
+          // 850ms silence after user stops speaking = commit turn!
+          turnSilenceTimer = setTimeout(() => {
+            if (!isProcessingTurn && !this.isSpeaking && pendingUtterance.length >= 3) {
+              commitTurn(pendingUtterance);
+            }
+          }, 850);
         }
       },
       onError: (err) => {
         console.warn('Conversational ASR warning:', err);
       },
       onStatusChange: (status) => {
+        // If recognition stopped but user had spoken an utterance, commit it immediately!
+        if (!status.isListening && pendingUtterance.length >= 3 && !isProcessingTurn && !this.isSpeaking) {
+          commitTurn(pendingUtterance);
+        }
         if (!status.isListening && this.activeSessionCallbacks && !this.isSpeaking) {
           setTimeout(() => {
             if (this.activeSessionCallbacks && !this.isSpeaking && this.currentRecognition) {
