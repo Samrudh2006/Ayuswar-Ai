@@ -400,31 +400,41 @@ export class IndicSpeechService {
           const audio = new Audio(audioUrl);
           this.currentAudio = audio;
 
-          audio.onplay = () => {
-            this.isSpeaking = true;
-            this.setConversationState('SPEAKING');
-            onStart({ provider: 'gnani_live' });
-          };
-          audio.onended = () => {
-            // Echo settling cooldown: wait 350ms before allowing mic to listen again
-            setTimeout(() => {
+          return new Promise((resolve) => {
+            audio.onplay = () => {
+              this.isSpeaking = true;
+              this.setConversationState('SPEAKING');
+              onStart({ provider: 'gnani_live' });
+            };
+            audio.onended = () => {
+              // Echo settling cooldown: wait 200ms before allowing mic to listen again
+              setTimeout(() => {
+                this.isSpeaking = false;
+                if (this.conversationState === 'SPEAKING') {
+                  this.setConversationState('LISTENING');
+                }
+                onEnd();
+                this.ensureRecognitionActive();
+                resolve();
+              }, 200);
+            };
+            audio.onerror = () => {
+              console.warn('Gnani audio playback failed, falling back to browser speech');
               this.isSpeaking = false;
               if (this.conversationState === 'SPEAKING') {
                 this.setConversationState('LISTENING');
               }
+              onError('Gnani audio playback failed');
+              this.ensureRecognitionActive();
+              resolve();
+            };
+            audio.play().catch((err) => {
+              console.warn('Audio play error:', err);
+              this.isSpeaking = false;
               onEnd();
-            }, 350);
-          };
-          audio.onerror = () => {
-            console.warn('Gnani audio playback failed, falling back to browser speech');
-            this.isSpeaking = false;
-            if (this.conversationState === 'SPEAKING') {
-              this.setConversationState('LISTENING');
-            }
-            onError('Gnani audio playback failed');
-          };
-          await audio.play();
-          return;
+              resolve();
+            });
+          });
         }
       } catch (err) {
         console.warn('Gnani TTS unavailable, switching to browser speech fallback:', err);
@@ -446,59 +456,41 @@ export class IndicSpeechService {
         utterance.voice = bestVoice;
       }
 
-      utterance.onstart = () => {
-        this.isSpeaking = true;
-        this.setConversationState('SPEAKING');
-        onStart({ provider: 'browser_fallback' });
-      };
+      return new Promise((resolve) => {
+        utterance.onstart = () => {
+          this.isSpeaking = true;
+          this.setConversationState('SPEAKING');
+          onStart({ provider: 'browser_fallback' });
+        };
 
-      utterance.onend = () => {
-        // Echo settling cooldown
-        setTimeout(() => {
+        utterance.onend = () => {
+          // Echo settling cooldown
+          setTimeout(() => {
+            this.isSpeaking = false;
+            if (this.conversationState === 'SPEAKING') {
+              this.setConversationState('LISTENING');
+            }
+            onEnd();
+            this.ensureRecognitionActive();
+            resolve();
+          }, 200);
+        };
+
+        utterance.onerror = (e) => {
           this.isSpeaking = false;
           if (this.conversationState === 'SPEAKING') {
             this.setConversationState('LISTENING');
           }
-          onEnd();
-        }, 350);
-      };
+          onError(e?.error || 'Speech synthesis error');
+          this.ensureRecognitionActive();
+          resolve();
+        };
 
-      utterance.onerror = (e) => {
-        this.isSpeaking = false;
-        if (this.conversationState === 'SPEAKING') {
-          this.setConversationState('LISTENING');
-        }
-        onError(e?.error || 'Speech synthesis error');
-      };
-
-      window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(utterance);
+      });
     } else {
       this.isSpeaking = false;
       onError('Web Speech Synthesis is not supported in this browser.');
-    }
-  }
-
-  stopSpeaking() {
-    this.isSpeaking = false;
-    if (this.currentAudio) {
-      try {
-        this.currentAudio.pause();
-        this.currentAudio.currentTime = 0;
-      } catch {}
-      this.currentAudio = null;
-    }
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
-
-  interruptAssistant(source = 'barge_in') {
-    if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-      this.stopSpeaking();
-      this.setConversationState('LISTENING');
-      if (this.activeSessionCallbacks?.onBargeIn) {
-        this.activeSessionCallbacks.onBargeIn({ source, time: Date.now() });
-      }
     }
   }
 
@@ -627,6 +619,7 @@ export class IndicSpeechService {
         window.speechSynthesis.cancel();
       } catch {}
     }
+    if (this.turnResetFn) this.turnResetFn();
   }
 
   /**
@@ -637,8 +630,25 @@ export class IndicSpeechService {
     this.stopSpeaking();
     this.isSpeaking = false;
     this.setConversationState('LISTENING');
+    if (this.turnResetFn) this.turnResetFn();
     if (this.activeSessionCallbacks?.onBargeIn) {
       this.activeSessionCallbacks.onBargeIn({ reason, rms: this.lastVoiceRms });
+    }
+    setTimeout(() => {
+      this.ensureRecognitionActive();
+    }, 60);
+  }
+
+  ensureRecognitionActive() {
+    if (!this.activeSessionCallbacks || this.isSpeaking) return;
+    if (this.isRecognitionRunning) return;
+
+    if (this.activeLiveRecognitionConfig) {
+      try {
+        this.startLiveRecognition(this.activeLiveRecognitionConfig);
+      } catch (e) {
+        console.warn('ensureRecognitionActive restart error:', e);
+      }
     }
   }
 
@@ -658,6 +668,7 @@ export class IndicSpeechService {
     onStatusChange = () => {}
   }) {
     this.stopLiveRecognition();
+    this.activeLiveRecognitionConfig = { langCode, onResult, onError, onStatusChange };
 
     const SpeechRecognition = typeof window !== 'undefined'
       ? (window.SpeechRecognition || window.webkitSpeechRecognition)
@@ -676,6 +687,7 @@ export class IndicSpeechService {
       this.currentLanguage = langCode;
 
       recognition.onstart = () => {
+        this.isRecognitionRunning = true;
         onStatusChange({ isListening: true, langCode, provider: 'browser_fallback' });
       };
 
@@ -712,6 +724,7 @@ export class IndicSpeechService {
       };
 
       recognition.onerror = (event) => {
+        this.isRecognitionRunning = false;
         let userMessage = event.error;
         if (event.error === 'not-allowed') {
           userMessage = 'Microphone permission denied. Please grant microphone access in browser settings.';
@@ -724,21 +737,32 @@ export class IndicSpeechService {
       };
 
       recognition.onend = () => {
+        this.isRecognitionRunning = false;
         onStatusChange({ isListening: false, langCode });
+        // In active conversational session, revive recognition as long as assistant is not speaking
+        if (this.activeSessionCallbacks && !this.isSpeaking) {
+          setTimeout(() => {
+            this.ensureRecognitionActive();
+          }, 80);
+        }
       };
 
       recognition.start();
       this.currentRecognition = recognition;
       return recognition;
     } catch (err) {
+      this.isRecognitionRunning = false;
       onError(`Failed to start recognition: ${err.message}`);
       return null;
     }
   }
 
   stopLiveRecognition() {
+    this.isRecognitionRunning = false;
     if (this.currentRecognition) {
       try {
+        this.currentRecognition.onend = null;
+        this.currentRecognition.onerror = null;
         this.currentRecognition.stop();
       } catch {}
       this.currentRecognition = null;
@@ -770,6 +794,20 @@ export class IndicSpeechService {
     let turnSilenceTimer = null;
     let pendingUtterance = '';
     let isProcessingTurn = false;
+    let turnSafetyWatchdog = null;
+
+    this.turnResetFn = () => {
+      isProcessingTurn = false;
+      pendingUtterance = '';
+      if (turnSilenceTimer) {
+        clearTimeout(turnSilenceTimer);
+        turnSilenceTimer = null;
+      }
+      if (turnSafetyWatchdog) {
+        clearTimeout(turnSafetyWatchdog);
+        turnSafetyWatchdog = null;
+      }
+    };
 
     const commitTurn = async (rawUtterance) => {
       const text = (rawUtterance || '').trim();
@@ -780,6 +818,16 @@ export class IndicSpeechService {
         turnSilenceTimer = null;
       }
       pendingUtterance = '';
+
+      // Turn Safety Watchdog: Unstick if processing takes more than 6 seconds
+      if (turnSafetyWatchdog) clearTimeout(turnSafetyWatchdog);
+      turnSafetyWatchdog = setTimeout(() => {
+        if (isProcessingTurn) {
+          isProcessingTurn = false;
+          this.setConversationState('LISTENING');
+          this.ensureRecognitionActive();
+        }
+      }, 6000);
 
       this.setConversationState('THINKING');
 
@@ -792,19 +840,25 @@ export class IndicSpeechService {
             onStart: () => this.setConversationState('SPEAKING'),
             onEnd: () => {
               isProcessingTurn = false;
+              if (turnSafetyWatchdog) clearTimeout(turnSafetyWatchdog);
               if (this.conversationState === 'SPEAKING') {
                 this.setConversationState('LISTENING');
               }
+              setTimeout(() => this.ensureRecognitionActive(), 100);
             }
           });
         } else {
           isProcessingTurn = false;
+          if (turnSafetyWatchdog) clearTimeout(turnSafetyWatchdog);
           this.setConversationState('LISTENING');
+          this.ensureRecognitionActive();
         }
       } catch (err) {
         console.warn('Conversational query failed:', err);
         isProcessingTurn = false;
+        if (turnSafetyWatchdog) clearTimeout(turnSafetyWatchdog);
         this.setConversationState('LISTENING');
+        this.ensureRecognitionActive();
       }
     };
 
@@ -843,19 +897,18 @@ export class IndicSpeechService {
           turnSilenceTimer = null;
         }
 
-        // Turn-Taking Silence Detection:
-        // When user finishes speaking, answer automatically without waiting for Chrome finalizer!
+        // Fast Turn-Taking: Natural, instant response without long pauses!
         if (finalTranscript && finalTranscript.trim().length >= 3) {
           turnSilenceTimer = setTimeout(() => {
             commitTurn(finalTranscript.trim());
-          }, 300);
+          }, 250);
         } else if (interimTranscript && interimTranscript.trim().length >= 3) {
-          // 850ms silence after user stops speaking = commit turn!
+          // 550ms silence detection: Responsive and human-like
           turnSilenceTimer = setTimeout(() => {
             if (!isProcessingTurn && !this.isSpeaking && pendingUtterance.length >= 3) {
               commitTurn(pendingUtterance);
             }
-          }, 850);
+          }, 550);
         }
       },
       onError: (err) => {
@@ -868,24 +921,33 @@ export class IndicSpeechService {
         }
         if (!status.isListening && this.activeSessionCallbacks && !this.isSpeaking) {
           setTimeout(() => {
-            if (this.activeSessionCallbacks && !this.isSpeaking && this.currentRecognition) {
-              try {
-                this.currentRecognition.start();
-              } catch {}
-            }
-          }, 120);
+            this.ensureRecognitionActive();
+          }, 100);
         }
       }
     });
+
+    // Session Watchdog: Guarantees continuous live listening during the call
+    if (this.sessionWatchdog) clearInterval(this.sessionWatchdog);
+    this.sessionWatchdog = setInterval(() => {
+      if (this.activeSessionCallbacks && !this.isSpeaking && !this.isRecognitionRunning) {
+        this.ensureRecognitionActive();
+      }
+    }, 600);
   }
 
   stopConversationalSession() {
+    if (this.sessionWatchdog) {
+      clearInterval(this.sessionWatchdog);
+      this.sessionWatchdog = null;
+    }
     this.stopSpeaking();
     this.stopLiveRecognition();
     this.stopAudioPipeline();
     this.scrubEphemeralAudioBuffers();
     this.setConversationState('IDLE');
     this.activeSessionCallbacks = null;
+    this.activeLiveRecognitionConfig = null;
   }
 
   updateLanguage(newLangCode, callbacks = {}) {

@@ -264,8 +264,8 @@ export default function SanjivaniEmergencyAssistant({
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Rajahmundry.`);
       return isTelugu
-        ? `లొకేషన్ రాజమండ్రి గా నమోదైంది. ఆంబులెన్స్ బయలుదేరింది.`
-        : `Location updated to Rajahmundry. Nearest unit alerted.`;
+        ? `లొకేషన్ రాజమండ్రి గా నమోదైంది. అడ్వాన్స్డ్ లైఫ్ సపోర్ట్ ఆంబులెన్స్ A-12 ని మీ వద్దకు పంపుతున్నాము. రోగిని విశ్రాంతిగా కూర్చోబెట్టి, బట్టలు వదులు చేయండి. రోగి స్పృహలో ఉన్నారా? మాట్లాడగలుగుతున్నారా?`
+        : `Location registered as Rajahmundry. Advanced Life Support Ambulance A-12 is en route. Keep patient resting upright with open airway. Is the patient conscious and able to speak?`;
     }
 
     if (lower.includes('visakhapatnam') || lower.includes('vizag') || lower.includes('విశాఖపట్నం')) {
@@ -273,8 +273,8 @@ export default function SanjivaniEmergencyAssistant({
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Visakhapatnam.`);
       return isTelugu
-        ? `లొకేషన్ విశాఖపట్నం గా అప్‌డేట్ చేసాము. కింగ్ జార్జ్ హాస్పిటల్ అపెక్స్ ట్రామా సెంటర్ గుర్తించాము.`
-        : `Location updated to Visakhapatnam. KGH Apex Trauma Center alerted.`;
+        ? `లొకేషన్ విశాఖపట్నం గా అప్‌డేట్ చేసాము. కింగ్ జార్జ్ హాస్పిటల్ అపెక్స్ ట్రామా సెంటర్ సిద్ధం చేసాము మరియు ఆంబులెన్స్ A-12 వస్తోంది. రోగి శ్వాస తీసుకోవడం ఎలా ఉందో చెప్పండి.`
+        : `Location updated to Visakhapatnam. KGH Apex Trauma Center pre-alerted and Ambulance A-12 is on the way. How is the patient breathing? Tell me.`;
     }
 
     if (lower.includes('vijayawada') || lower.includes('విజయవాడ')) {
@@ -282,8 +282,8 @@ export default function SanjivaniEmergencyAssistant({
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Vijayawada.`);
       return isTelugu
-        ? `లొకేషన్ విజయవాడ గా నమోదైంది. ప్రభుత్వ జనరల్ ఆసుపత్రి ఎమర్జెన్సీ ట్రామా సిద్ధంగా ఉంది.`
-        : `Location set to Vijayawada. GGH Apex Trauma alerted.`;
+        ? `లొకేషన్ విజయవాడ గా నమోదైంది. ప్రభుత్వ జనరల్ ఆసుపత్రి ఎమర్జెన్సీ ట్రామా సిద్ధంగా ఉంది, ఆంబులెన్స్ A-12 బయలుదేరింది. రోగికి ఛాతీలో లేదా శరీరంలో ఎక్కడైనా తీవ్రమైన నొప్పి ఉందా?`
+        : `Location set to Vijayawada. GGH Apex Trauma alerted and Ambulance A-12 is en route. Does the patient have severe pain or distress?`;
     }
 
     if (lower.includes('hyderabad') || lower.includes('హైదరాబాద్')) {
@@ -291,8 +291,8 @@ export default function SanjivaniEmergencyAssistant({
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Hyderabad.`);
       return isTelugu
-        ? `లొకేషన్ హైదరాబాద్ గా నమోదైంది. నిమ్స్ అపెక్స్ ట్రామా సెంటర్ సిద్ధంగా ఉంది.`
-        : `Location set to Hyderabad. NIMS Apex Trauma center ready.`;
+        ? `లొకేషన్ హైదరాబాద్ గా నమోదైంది. నిమ్స్ అపెక్స్ ఎమర్జెన్సీ సెంటర్ మరియు ఆంబులెన్స్ A-12 సిద్ధంగా ఉన్నాయి. రోగిని పడుకోబెట్టకుండా తల ఎత్తుగా ఉంచండి. రోగి స్పృహ ఎలా ఉంది?`
+        : `Location set to Hyderabad. NIMS Apex Trauma center alerted and Ambulance A-12 is rolling. Keep patient's head elevated. Is the patient awake and conscious?`;
     }
 
     if (lower.includes('tirupati') || lower.includes('తిరుపతి')) {
@@ -300,8 +300,8 @@ export default function SanjivaniEmergencyAssistant({
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Tirupati.`);
       return isTelugu
-        ? `లొకేషన్ తిరుపతి గా నమోదైంది. స్విమ్స్ సూపర్ స్పెషాలిటీ ట్రామా సెంటర్ సిద్ధంగా ఉంది.`
-        : `Location set to Tirupati. SVIMS Apex Trauma ready.`;
+        ? `లొకేషన్ తిరుపతి గా నమోదైంది. స్విమ్స్ సూపర్ స్పెషాలిటీ ట్రామా సెంటర్ మరియు ఆంబులెన్స్ A-12 సిద్ధంగా ఉన్నాయి. రోగి పరిస్థితి ఎలా ఉంది? శ్వాస సరిగ్గా ఆడుతోందా?`
+        : `Location set to Tirupati. SVIMS Apex Trauma alerted and Ambulance A-12 dispatched. How is the patient breathing right now?`;
     }
 
     // 2. REAL-TIME ROAD ROUTE & NAVIGATION TO HOSPITAL INTENT
@@ -336,8 +336,8 @@ export default function SanjivaniEmergencyAssistant({
       );
 
       return isTelugu
-        ? `${targetHospital.name} ఆసుపత్రికి గ్రీన్ కారిడార్ నావిగేషన్ రూట్ మ్యాప్‌పై ప్రత్యక్షంగా లైవ్ చేసాము. దూరం ${targetHospital.distanceKm || '3.4'} కిలోమీటర్లు, ప్రయాణ సమయం సుమారు ${targetHospital.etaMinutes || '5'} నిమిషాలు. ఆంబులెన్స్ సైరన్ ఆన్ లో ఉంది.`
-        : `Real-time road navigation route to ${targetHospital.name} active on operational map. Distance: ${targetHospital.distanceKm || '3.4'} km, ETA: ${targetHospital.etaMinutes || '5'} minutes. Traffic green corridor signals pre-empted.`;
+        ? `${targetHospital.name} ఆసుపత్రికి గ్రీన్ కారిడార్ నావిగేషన్ రూట్ మ్యాప్‌పై ప్రత్యక్షంగా లైవ్ చేసాము. దూరం ${targetHospital.distanceKm || '3.4'} కిలోమీటర్లు, ప్రయాణ సమయం సుమారు ${targetHospital.etaMinutes || '5'} నిమిషాలు. ఆంబులెన్స్ సైరన్ ఆన్ లో ఉంది. రోగి పరిస్థితి ఎలా ఉంది?`
+        : `Real-time road navigation route to ${targetHospital.name} active on operational map. Distance: ${targetHospital.distanceKm || '3.4'} km, ETA: ${targetHospital.etaMinutes || '5'} minutes. Traffic green corridor signals pre-empted. How is the patient doing?`;
     }
 
     // 3. NEAREST HOSPITAL INTENT
@@ -357,8 +357,8 @@ export default function SanjivaniEmergencyAssistant({
       onSelectHospital?.(targetHospital);
       addCopilotEvent('system', `🏥 Nearest Hospital Selected: ${targetHospital.name}`, `Selected ${targetHospital.name} (${targetHospital.etaMinutes || 4} min ETA, ${targetHospital.bedsAvailable || 6} beds open).`);
       return isTelugu
-        ? `దగ్గరలోని అత్యవసర ఆసుపత్రి ${targetHospital.name}. ప్రయాణ సమయం ${targetHospital.etaMinutes || 4} నిమిషాలు, ${targetHospital.bedsAvailable || 8} ఐసీయూ బెడ్స్ అందుబాటులో ఉన్నాయి. బెడ్ బుక్ చేయమంటారా?`
-        : `Nearest trauma center is ${targetHospital.name}. Travel time is ${targetHospital.etaMinutes || 4} minutes with ${targetHospital.bedsAvailable || 6} emergency beds available. Say book bed to reserve.`;
+        ? `దగ్గరలోని అత్యవసర ఆసుపత్రి ${targetHospital.name}. ప్రయాణ సమయం ${targetHospital.etaMinutes || 4} నిమిషాలు, ${targetHospital.bedsAvailable || 8} ఐసీయూ బెడ్స్ అందుబాటులో ఉన్నాయి. ఆంబులెన్స్ మరియు ఎమర్జెన్సీ బెడ్ బుక్ చేయమంటారా? అవును లేదా లేదు చెప్పండి.`
+        : `Nearest trauma center is ${targetHospital.name}. Travel time is ${targetHospital.etaMinutes || 4} minutes with ${targetHospital.bedsAvailable || 6} emergency beds available. Shall I book the resuscitation bed and dispatch ambulance? Please say yes or no.`;
     }
 
     // 3. BOOK BED / DISPATCH INTENT
@@ -379,8 +379,8 @@ export default function SanjivaniEmergencyAssistant({
       if (onOpenHandoverModal) onOpenHandoverModal();
       handlePreAlertCathLab();
       return isTelugu
-        ? `ఆంబులెన్స్ A-12 బయలుదేరింది! ${hosp.name || 'హాస్పిటల్'} లో ABDM ePCR ఫారం ఆటోమేటిక్‌గా నింపి, ఎమర్జెన్సీ బెడ్ రిజర్వ్ చేసాము.`
-        : `Ambulance A-12 dispatched and trauma resuscitation bed pre-booked at ${hosp.name || 'hospital'}. Keep patient lying still with open airway.`;
+        ? `ఆంబులెన్స్ A-12 బయలుదేరింది! ${hosp.name || 'హాస్పిటల్'} లో ABDM ePCR ఫారం ఆటోమేటిక్‌గా నింపి, ఎమర్జెన్సీ బెడ్ రిజర్వ్ చేసాము. రోగిని విశ్రాంతిగా ఉంచండి, నడవనివ్వవద్దు. రోగి మాట్లాడగలుగుతున్నారా?`
+        : `Ambulance A-12 dispatched and trauma resuscitation bed pre-booked at ${hosp.name || 'hospital'}. ABDM ePCR filed. Keep patient resting still. Can the patient speak?`;
     }
 
     // 4. CARDIAC ARREST / CPR METRONOME INTENT (PULSE ABSENT / UNCONSCIOUS)
@@ -398,8 +398,8 @@ export default function SanjivaniEmergencyAssistant({
       }
       if (onOpenHandoverModal) onOpenHandoverModal();
       return isTelugu
-        ? `110 BPM CPR రిథమ్ ప్రారంభించాను! రోగిని గట్టి నేలపై పడుకోబెట్టి, ఛాతీ మధ్యలో రెండు చేతులు ఉంచి బీట్ కి తగ్గట్టు గట్టిగా నొక్కండి. ఆగవద్దు, ఆంబులెన్స్ వస్తోంది!`
-        : `Activating 110 beats per minute CPR rhythm! Place heels of hands in center of chest and compress 2 inches deep in sync with the beat. Do not stop, ambulance is rolling!`;
+        ? `110 BPM CPR రిథమ్ ప్రారంభించాను! రోగిని గట్టి నేలపై పడుకోబెట్టి, ఛాతీ మధ్యలో రెండు చేతులు ఉంచి బీట్ కి తగ్గట్టు గట్టిగా నొక్కండి. ఆగవద్దు, ఆంబులెన్స్ వస్తోంది! మీరు కంప్రెషన్స్ చేస్తున్నారా?`
+        : `Activating 110 beats per minute CPR rhythm! Place heels of hands in center of chest and compress 2 inches deep in sync with the beat. Do not stop, ambulance is rolling! Are you doing compressions now?`;
     }
 
     // 5. CHEST PAIN / SUSPECTED STEMI HEART ATTACK (CONSCIOUS PATIENT FIRST AID)
@@ -416,8 +416,8 @@ export default function SanjivaniEmergencyAssistant({
       if (onOpenHandoverModal) onOpenHandoverModal();
 
       return isTelugu
-        ? `ప్రశాంతంగా ఉండండి. రోగిని వెంటనే 45 డిగ్రీల కోణంలో కూర్చోబెట్టి, బట్టలు వదులు చేయండి. నడవనివ్వకండి, ఆహారం లేదా నీరు ఇవ్వకండి. ఆంబులెన్స్ A-12 వస్తోంది. రోగి మాట్లాడగలుగుతున్నారా?`
-        : `Stay calm. Sit the patient upright at a 45-degree angle and loosen tight collar. Do not let them walk. Ambulance A-12 is rolling and Cath Lab is pre-alerted. Is the patient able to speak?`;
+        ? `ప్రశాంతంగా ఉండండి. రోగిని వెంటనే 45 డిగ్రీల కోణంలో కూర్చోబెట్టి, బట్టలు వదులు చేయండి. నడవనివ్వకండి, ఆహారం లేదా నీరు ఇవ్వకండి. ఆంబులెన్స్ A-12 వస్తోంది. రోగి మాట్లాడగలుగుతున్నారా? నొప్పి ఎడమ చేతికి వ్యాపిస్తోందా?`
+        : `Stay calm. Sit the patient upright at a 45-degree angle and loosen tight collar. Do not let them walk. Ambulance A-12 is rolling and Cath Lab is pre-alerted. Is the pain radiating to the left arm or jaw?`;
     }
 
     // 6. ACCIDENT / SEVERE BLEEDING / TRAUMA
@@ -433,8 +433,8 @@ export default function SanjivaniEmergencyAssistant({
       if (onDispatch) onDispatch(hosp);
       if (onOpenHandoverModal) onOpenHandoverModal();
       return isTelugu
-        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ క్లియర్ చేసాము. గాయంపై శుభ్రమైన గుడ్డతో గట్టిగా అదిమి పట్టి రక్తస్రావం ఆపండి. గాయపడిన భాగాన్ని ఎత్తులో ఉంచండి. రోగికి మత్తుగా ఉందా?`
-        : `Traffic green corridor activated! Apply firm, continuous direct pressure to the wound with a clean cloth. Elevate the injured limb. Ambulance A-12 is en route.`;
+        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ క్లియర్ చేసాము. గాయంపై శుభ్రమైన గుడ్డతో గట్టిగా అదిమి పట్టి రక్తస్రావం ఆపండి. గాయపడిన భాగాన్ని ఎత్తులో ఉంచండి. ఆంబులెన్స్ A-12 వస్తోంది. రోగి స్పృహలో ఉన్నారా లేదా మత్తుగా ఉందా?`
+        : `Traffic green corridor activated! Apply firm continuous direct pressure to the wound with a clean cloth and elevate the limb. Ambulance A-12 is en route. Is the patient conscious or feeling dizzy?`;
     }
 
     // 7. CALLER NAME INTENT
@@ -444,7 +444,7 @@ export default function SanjivaniEmergencyAssistant({
       if (extractedName && extractedName.length > 2) {
         onUpdateCallerName?.(extractedName);
         addCopilotEvent('system', `👤 Caller Name Updated: ${extractedName}`, `Triage ePCR record updated with patient name.`);
-        return isTelugu ? `కాలర్ పేరు ${extractedName} గా నమోదైంది.` : `Noted caller name as ${extractedName}. Details synchronized with ePCR.`;
+        return isTelugu ? `కాలర్ పేరు ${extractedName} గా నమోదైంది. ఆంబులెన్స్ A-12 వస్తోంది. రోగికి ప్రధాన సమస్య ఏమిటి?` : `Noted caller name as ${extractedName}. Details synchronized with ePCR. Tell me what symptoms the patient has right now.`;
       }
     }
 
@@ -454,15 +454,15 @@ export default function SanjivaniEmergencyAssistant({
       const extractedPhone = phoneMatch[1];
       onUpdateCallerPhone?.(extractedPhone);
       addCopilotEvent('system', `📱 Caller Contact Updated: +91 ${extractedPhone}`, `Cellular callback bridge updated.`);
-      return isTelugu ? `ఫోన్ నంబర్ ${extractedPhone} అప్‌డేట్ అయ్యింది.` : `Updated contact number to ${extractedPhone}.`;
+      return isTelugu ? `ఫోన్ నంబర్ ${extractedPhone} అప్‌డేట్ అయ్యింది. అత్యవసర కంట్రోల్ రూమ్ కనెక్ట్ అయ్యింది. రోగి స్పృహలో ఉన్నారా?` : `Updated contact number to ${extractedPhone}. Control room connected. Is the patient conscious?`;
     }
 
     // 9. GREEN CORRIDOR / TRAFFIC INTENT
     if (lower.includes('traffic') || lower.includes('green corridor') || lower.includes('clear road') || lower.includes('siren')) {
       handleGreenCorridor();
       return isTelugu
-        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ సిగ్నల్ క్లియరెన్స్ ఆక్టివేట్ అయ్యింది.`
-        : `Traffic police green corridor signal clearance activated along route to ${selectedHospital?.name || 'hospital'}.`;
+        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ సిగ్నల్ క్లియరెన్స్ ఆక్టివేట్ అయ్యింది. ఆంబులెన్స్ A-12 వేగంగా చేరుకుంటోంది. రోగి పరిస్థితి ఎలా ఉందో చెప్పండి.`
+        : `Traffic police green corridor signal clearance activated along route to ${selectedHospital?.name || 'hospital'}. Ambulance A-12 is rolling. Tell me how the patient is doing.`;
     }
 
     // 10. GENERAL CLINICAL QUERY: Interactive, Life-Saving Tele-Triage Guidance via Groq
@@ -475,13 +475,13 @@ export default function SanjivaniEmergencyAssistant({
           `Target emergency center: ${selectedHospital?.name || 'Apex Emergency Trauma Center'} (${selectedHospital?.etaMinutes || 4} min ETA).\n` +
           `Assigned ALS unit: Ambulance A-12 (Paramedic Rajesh, en route).\n\n` +
           `You are Dr. Sanjivani, the senior 108 emergency tele-triage doctor and ALS dispatcher.\n` +
-          `Respond in ${callerLang} in 35 to 45 words:\n` +
-          `1. Provide immediate, step-by-step life-saving first aid instructions (posture, airway, what to avoid).\n` +
-          `2. Reassure the caller that Ambulance A-12 is en route.\n` +
-          `3. Ask 1 vital diagnostic question to assess condition (e.g. consciousness, breathing, chest tightness, speech clarity).\n` +
-          `Strict rules: Speak with medical calm and authority. No markdown, no asterisks, no bullet points, no numbered lists.`;
+          `Respond in ${callerLang} in 25 to 35 words:\n` +
+          `1. Give immediate step-by-step physical first aid and airway posture instructions.\n` +
+          `2. Reassure that Ambulance A-12 is en route.\n` +
+          `3. End with exactly 1 vital diagnostic question to assess condition (consciousness, breathing, pain) and continue the call.\n` +
+          `Strict rules: Speak with medical calm and warmth. No markdown, no asterisks, no bullet points, no numbered lists.`;
 
-        const systemInstruction = `You are Dr. Sanjivani, senior 108 emergency lead doctor. Respond authoritatively in ${callerLang}.`;
+        const systemInstruction = `You are Dr. Sanjivani, senior 108 emergency lead doctor. Respond authoritatively in ${callerLang} with immediate first aid and always end with 1 follow-up triage question to continue the call.`;
         const groqRes = await queryGroqApi(groqPrompt, systemInstruction);
         if (groqRes) {
           const cleaned = cleanTextForSpeech(groqRes);
@@ -493,10 +493,10 @@ export default function SanjivaniEmergencyAssistant({
       // Evon reasoning fallback
       const systemInstruction = 
         `You are Dr. Sanjivani, emergency medical dispatch copilot for Sanjivani-108. ` +
-        `Respond with step-by-step life-safety protocol guidance under 40 words in ${callerLang}. ` +
-        `Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Apex Center'}.`;
-      const evonResult = await queryEvonServer(text, systemInstruction, { maxTokens: 120 });
-      const rawAnswer = evonResult.finalAnswer || evonResult.raw || 'Keep patient resting upright with open airway. Ambulance A-12 is en route.';
+        `Respond with step-by-step life-safety protocol guidance under 35 words in ${callerLang}. ` +
+        `Always end with 1 diagnostic question to caller. Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Apex Center'}.`;
+      const evonResult = await queryEvonServer(text, systemInstruction, { maxTokens: 100 });
+      const rawAnswer = evonResult.finalAnswer || evonResult.raw || 'Keep patient resting upright with open airway. Ambulance A-12 is en route. Is the patient conscious?';
       const cleaned = cleanTextForSpeech(rawAnswer);
       addCopilotEvent('ai', '🧠 Dr. Sanjivani (Gnani Evon)', cleaned);
       return cleaned;

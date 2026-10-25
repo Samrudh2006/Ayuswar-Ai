@@ -177,11 +177,9 @@ export async function queryGroqApi(prompt, systemInstruction = '', preferredMode
   if (!apiKey) return null;
 
   const candidateModels = [
-    preferredModel,
+    preferredModel || 'qwen/qwen3.8-27b',
     'qwen/qwen3.8-27b',
-    'openai/gpt-oss-120b',
-    'llama-3.3-70b-versatile',
-    'llama-3.1-70b-versatile'
+    'openai/gpt-oss-20b'
   ];
 
   for (const model of [...new Set(candidateModels)]) {
@@ -198,10 +196,10 @@ export async function queryGroqApi(prompt, systemInstruction = '', preferredMode
             ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
             { role: 'user', content: prompt }
           ],
-          temperature: 0.2,
-          max_tokens: 450
+          temperature: 0.25,
+          max_tokens: 180
         }),
-        signal: AbortSignal.timeout(8000)
+        signal: AbortSignal.timeout(6000)
       });
 
       if (res.ok) {
