@@ -69,6 +69,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   // Step 1: Dialogue Recording State
   const [recordingMode, setRecordingMode] = useState('live_mic'); // 'ambient_sim' | 'live_mic'
   const [isRecording, setIsRecording] = useState(false);
+  const [activeLiveSpeaker, setActiveLiveSpeaker] = useState('Doctor (Live Mic)');
+  const activeLiveSpeakerRef = useRef('Doctor (Live Mic)');
+  const isRecordingRef = useRef(false);
   const [recordedSeconds, setRecordedSeconds] = useState(0);
   const [dialogueTurns, setDialogueTurns] = useState([]);
   const [newSpeakerRole, setNewSpeakerRole] = useState('Doctor');
@@ -172,6 +175,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   // =========================================================================
   const startRecordingSession = () => {
     setIsRecording(true);
+    isRecordingRef.current = true;
     setMicStatusMsg('Consultation recording in progress...');
 
     // Live elapsed timer
@@ -205,6 +209,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
   const pauseRecordingSession = () => {
     setIsRecording(false);
+    isRecordingRef.current = false;
     if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
     if (simIntervalRef.current) clearInterval(simIntervalRef.current);
     stopPhysicalMicPipeline();
@@ -217,6 +222,25 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
     setDialogueTurns([]);
     setLiveTranscriptionText('');
     setMicVolume(15);
+    setActiveLiveSpeaker('Doctor (Live Mic)');
+    activeLiveSpeakerRef.current = 'Doctor (Live Mic)';
+  };
+
+  const handleSwitchActiveSpeaker = () => {
+    const next = activeLiveSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
+    activeLiveSpeakerRef.current = next;
+    setActiveLiveSpeaker(next);
+  };
+
+  const handleToggleTurnSpeaker = (turnIndex) => {
+    setDialogueTurns(prev => prev.map((t, idx) => {
+      if (idx !== turnIndex) return t;
+      const isDoc = t.speaker.includes('Doctor');
+      return {
+        ...t,
+        speaker: isDoc ? 'Patient (Live Mic)' : 'Doctor (Live Mic)'
+      };
+    }));
   };
 
   const startPhysicalMicPipeline = async () => {
@@ -245,7 +269,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       };
       updateVolume();
 
-      // Continuous Speech Recognition
+      // Continuous Speech Recognition with Auto-Switching Speaker Diarization
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRec) {
         const rec = new SpeechRec();
@@ -262,15 +286,46 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             else interim += transcript;
           }
           if (finalStr.trim()) {
+            const trimmed = finalStr.trim();
+            const lower = trimmed.toLowerCase();
+
+            // Intelligent Clinical Diarization:
+            // Check semantic cues to see if speech explicitly belongs to patient or doctor
+            let inferredSpeaker = activeLiveSpeakerRef.current;
+            
+            // Patient cues: addressing doctor, stating personal symptoms/complaints/duration
+            const isPatientCue = lower.includes('నమస్తే డాక్టర్') || lower.includes('డాక్టర్ గారు') || 
+                                 lower.includes('డాక్టర్') || lower.includes('doctor') ||
+                                 lower.includes('నొప్పి') || lower.includes('జ్వరం') || lower.includes('ఫీవర్') || 
+                                 lower.includes('దగ్గు') || lower.includes('జలుబు') || lower.includes('నుండి') || 
+                                 lower.includes('నుంచి') || lower.includes('అనిపిస్తుంది') || lower.includes('తీసుకుంటున్నాను');
+
+            // Doctor cues: addressing patient politely, clinical examination questions, medication instructions
+            const isDoctorCue = lower.includes('లక్ష్మి గారు') || lower.includes('గారు') || 
+                                lower.includes('ఏమి ప్రాబ్లం') || lower.includes('ఎలా ఉంది') || 
+                                lower.includes('చూద్దాం') || lower.includes('నోరు తెరవండి') || 
+                                lower.includes('మందులు') || lower.includes('టాబ్లెట్స్');
+
+            if (isPatientCue && !isDoctorCue) {
+              inferredSpeaker = 'Patient (Live Mic)';
+            } else if (isDoctorCue && !isPatientCue) {
+              inferredSpeaker = 'Doctor (Live Mic)';
+            }
+
             setDialogueTurns(prev => [
               ...prev,
               {
-                speaker: 'Doctor (Live Mic)',
-                text: finalStr.trim(),
+                speaker: inferredSpeaker,
+                text: trimmed,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
               }
             ]);
             setLiveTranscriptionText('');
+
+            // Automatically switch active speaker for the NEXT turn!
+            const nextSpeaker = inferredSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
+            activeLiveSpeakerRef.current = nextSpeaker;
+            setActiveLiveSpeaker(nextSpeaker);
           } else if (interim.trim()) {
             setLiveTranscriptionText(interim.trim());
           }
@@ -278,7 +333,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
         rec.onerror = (err) => console.warn('SpeechRecognition warning:', err);
         rec.onend = () => {
-          if (isRecording && mediaStreamRef.current && speechRecognitionRef.current) {
+          if (isRecordingRef.current && mediaStreamRef.current && speechRecognitionRef.current) {
             try { speechRecognitionRef.current.start(); } catch {}
           }
         };
@@ -947,6 +1002,38 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <Edit3 size={13} />
                   <span>+ Add Turn</span>
                 </button>
+
+                {/* Live Mic Auto-Switch Speaker Badge & Manual Toggle */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: activeLiveSpeaker.includes('Doctor') ? 'rgba(45, 212, 191, 0.15)' : 'rgba(251, 191, 36, 0.15)',
+                  border: `1.5px solid ${activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FBBF24'}`,
+                  borderRadius: '10px',
+                  padding: '5px 12px',
+                  fontSize: '11.5px',
+                  fontWeight: 800,
+                  color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047'
+                }}>
+                  <span>Now Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
+                  <button
+                    onClick={handleSwitchActiveSpeaker}
+                    title="Click to manually toggle current speaker (also automatically switches when you stop speaking)"
+                    style={{
+                      background: 'rgba(255,255,255,0.2)',
+                      border: 'none',
+                      color: '#ffffff',
+                      borderRadius: '6px',
+                      padding: '2px 8px',
+                      fontSize: '10.5px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    ⇄ Switch
+                  </button>
+                </div>
               </div>
 
               {/* Timer & Live Signal Status */}
@@ -1101,9 +1188,34 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: isDoc ? '#0F4C5C' : '#B45309' }}>
-                        {isDoc ? '🩺 Doctor' : '👵 Patient'}: {turn.speaker}
-                      </span>
+                      <button
+                        onClick={() => handleToggleTurnSpeaker(i)}
+                        title="Click to toggle speaker between Doctor and Patient"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          color: isDoc ? '#0F4C5C' : '#B45309'
+                        }}
+                      >
+                        <span>{isDoc ? '🩺 Doctor' : '👵 Patient'}: {turn.speaker}</span>
+                        <span style={{
+                          fontSize: '9.5px',
+                          padding: '1px 5px',
+                          borderRadius: '4px',
+                          background: isDoc ? 'rgba(15, 76, 92, 0.1)' : 'rgba(217, 119, 6, 0.1)',
+                          color: isDoc ? '#0F4C5C' : '#B45309',
+                          fontWeight: 700
+                        }}>
+                          ⇄ switch
+                        </span>
+                      </button>
                       <span style={{ fontSize: '10px', color: '#94A3B8' }}>{turn.time || 'Live'}</span>
                     </div>
                     <p style={{ fontSize: '13.5px', color: '#091E26', lineHeight: 1.5, margin: 0, fontWeight: 550 }}>
@@ -1117,13 +1229,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 <div style={{
                   padding: '10px 14px',
                   borderRadius: '10px',
-                  background: '#FEF2F2',
-                  border: '1.5px dashed #EF4444',
+                  background: activeLiveSpeaker.includes('Doctor') ? '#F0FDFA' : '#FFFDF5',
+                  border: `1.5px dashed ${activeLiveSpeaker.includes('Doctor') ? '#0F4C5C' : '#D97706'}`,
                   fontSize: '13px',
-                  color: '#991B1B',
+                  color: activeLiveSpeaker.includes('Doctor') ? '#0F4C5C' : '#B45309',
                   fontWeight: 650
                 }}>
-                  🎙️ Live Speaking: "{liveTranscriptionText}..."
+                  🎙️ {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'} speaking: "{liveTranscriptionText}..."
                 </div>
               )}
             </div>
