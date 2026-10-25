@@ -186,6 +186,52 @@ export class IndicSpeechService {
     this.gnaniAvailable = null;
     this.gnaniStatusData = null;
     this.lastGnaniSuccessTime = null;
+
+    // Acoustic Echo Cancellation & Loopback Suppressor State
+    this.currentlySpeakingText = '';
+    this.currentlySpeakingWords = [];
+    this.lastSpeechEndTime = 0;
+  }
+
+  /**
+   * Acoustic Echo Suppressor:
+   * Prevents microphone from picking up the assistant's own voice from device speakers.
+   * Compares incoming transcript against the assistant's currently spoken or recently spoken text.
+   */
+  isAcousticEcho(rawTranscript) {
+    if (!rawTranscript) return false;
+    const incoming = String(rawTranscript).toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/gu, ' ').trim();
+    if (!incoming || incoming.length < 2) return false;
+
+    // Check if within speaking window or within 1500ms post-speech echo window
+    const inEchoWindow = this.isSpeaking || 
+                         this.conversationState === 'SPEAKING' || 
+                         (Date.now() - this.lastSpeechEndTime < 1500);
+
+    if (!inEchoWindow || !this.currentlySpeakingText) {
+      return false;
+    }
+
+    const assistantText = this.currentlySpeakingText.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/gu, ' ').trim();
+
+    // 1. Direct inclusion (substring or vice-versa)
+    if (assistantText.includes(incoming) || (incoming.length >= 8 && incoming.includes(assistantText.slice(0, 30)))) {
+      return true;
+    }
+
+    // 2. Tokenized word overlap check
+    const incomingWords = incoming.split(/\s+/).filter(w => w.length >= 2);
+    if (incomingWords.length === 0) return false;
+
+    let matchCount = 0;
+    for (const w of incomingWords) {
+      if (this.currentlySpeakingWords.includes(w) || assistantText.includes(w)) {
+        matchCount++;
+      }
+    }
+
+    // If 40% or more of words in this utterance match what the assistant said:
+    return (matchCount / incomingWords.length) >= 0.4;
   }
 
   /**
@@ -358,6 +404,11 @@ export class IndicSpeechService {
 
     this.stopSpeaking();
     this.isSpeaking = true;
+    this.currentlySpeakingText = String(cleanSpeechText).toLowerCase();
+    this.currentlySpeakingWords = this.currentlySpeakingText
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()]/gu, ' ')
+      .split(/\s+/)
+      .filter(w => w.length >= 2);
     this.setConversationState('SPEAKING');
 
     // Check Gnani operational status if uninitialized
@@ -407,6 +458,7 @@ export class IndicSpeechService {
               onStart({ provider: 'gnani_live' });
             };
             audio.onended = () => {
+              this.lastSpeechEndTime = Date.now();
               // Echo settling cooldown: wait 200ms before allowing mic to listen again
               setTimeout(() => {
                 this.isSpeaking = false;
@@ -417,10 +469,17 @@ export class IndicSpeechService {
                 this.ensureRecognitionActive();
                 resolve();
               }, 200);
+              setTimeout(() => {
+                if (!this.isSpeaking) {
+                  this.currentlySpeakingText = '';
+                  this.currentlySpeakingWords = [];
+                }
+              }, 1500);
             };
             audio.onerror = () => {
               console.warn('Gnani audio playback failed, falling back to browser speech');
               this.isSpeaking = false;
+              this.lastSpeechEndTime = Date.now();
               if (this.conversationState === 'SPEAKING') {
                 this.setConversationState('LISTENING');
               }
@@ -431,6 +490,7 @@ export class IndicSpeechService {
             audio.play().catch((err) => {
               console.warn('Audio play error:', err);
               this.isSpeaking = false;
+              this.lastSpeechEndTime = Date.now();
               onEnd();
               resolve();
             });
@@ -464,6 +524,7 @@ export class IndicSpeechService {
         };
 
         utterance.onend = () => {
+          this.lastSpeechEndTime = Date.now();
           // Echo settling cooldown
           setTimeout(() => {
             this.isSpeaking = false;
@@ -474,10 +535,17 @@ export class IndicSpeechService {
             this.ensureRecognitionActive();
             resolve();
           }, 200);
+          setTimeout(() => {
+            if (!this.isSpeaking) {
+              this.currentlySpeakingText = '';
+              this.currentlySpeakingWords = [];
+            }
+          }, 1500);
         };
 
         utterance.onerror = (e) => {
           this.isSpeaking = false;
+          this.lastSpeechEndTime = Date.now();
           if (this.conversationState === 'SPEAKING') {
             this.setConversationState('LISTENING');
           }
@@ -490,6 +558,7 @@ export class IndicSpeechService {
       });
     } else {
       this.isSpeaking = false;
+      this.lastSpeechEndTime = Date.now();
       onError('Web Speech Synthesis is not supported in this browser.');
     }
   }
@@ -559,13 +628,16 @@ export class IndicSpeechService {
         this.lastVoiceRms = rms;
         onRMS(rms);
 
-        // Acoustic Barge-In: If assistant is speaking and user speaks into mic, stop immediately
+        // Acoustic Barge-In via RMS:
+        // Do NOT trigger on normal speaker bleed while assistant is speaking.
+        // True caller interruption will be detected by SpeechRecognition comparing non-echo words.
+        // Only trigger acoustic energy barge-in if caller shouts loudly over speakers (RMS >= 0.22).
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (rms >= 0.058) {
+          if (rms >= 0.22) {
             consecutiveSpeechFrames++;
             if (consecutiveSpeechFrames >= 2) {
               consecutiveSpeechFrames = 0;
-              this.interruptAssistant('vad_energy');
+              this.interruptAssistant('vad_energy_shout');
             }
           } else {
             consecutiveSpeechFrames = 0;
@@ -606,6 +678,7 @@ export class IndicSpeechService {
    */
   stopSpeaking() {
     this.isSpeaking = false;
+    this.lastSpeechEndTime = Date.now();
     if (this.currentAudio) {
       try {
         this.currentAudio.pause();
@@ -620,6 +693,12 @@ export class IndicSpeechService {
       } catch {}
     }
     if (this.turnResetFn) this.turnResetFn();
+    setTimeout(() => {
+      if (!this.isSpeaking) {
+        this.currentlySpeakingText = '';
+        this.currentlySpeakingWords = [];
+      }
+    }, 1500);
   }
 
   /**
@@ -703,12 +782,28 @@ export class IndicSpeechService {
           }
         }
 
-        // Voice Barge-In: If assistant is speaking and user interrupts, immediately halt assistant!
+        const spoken = (interim || final).trim();
+        if (!spoken) return;
+
+        // Acoustic Echo Filter: Ignore speaker feedback of assistant's own voice
+        const isEcho = this.isAcousticEcho(spoken);
+
+        // Voice Barge-In:
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          const spoken = (interim || final).trim();
+          if (isEcho) {
+            // Discard speaker echo: do not interrupt assistant, do not display on screen
+            return;
+          }
+
+          // Genuine caller interruption: user spoke words that differ from the assistant's speech!
           if (spoken.length >= 2) {
             this.interruptAssistant('user_voice_bargein');
           }
+          return;
+        }
+
+        // Post-speech echo window: discard trailing reverberations of assistant voice
+        if (Date.now() - this.lastSpeechEndTime < 1500 && isEcho) {
           return;
         }
 
@@ -812,6 +907,12 @@ export class IndicSpeechService {
     const commitTurn = async (rawUtterance) => {
       const text = (rawUtterance || '').trim();
       if (!text || isProcessingTurn || this.isSpeaking) return;
+
+      // Final safeguard: Never commit an acoustic echo of what the assistant just spoke!
+      if (this.isAcousticEcho(text)) {
+        return;
+      }
+
       isProcessingTurn = true;
       if (turnSilenceTimer) {
         clearTimeout(turnSilenceTimer);
@@ -874,21 +975,38 @@ export class IndicSpeechService {
     this.startLiveRecognition({
       langCode: language,
       onResult: async ({ finalTranscript, interimTranscript }) => {
-        onTranscript({ finalTranscript, interimTranscript });
+        const currentText = (finalTranscript || interimTranscript || '').trim();
+        if (!currentText) return;
 
-        // If assistant is currently speaking and user speaks, trigger barge-in!
+        // Acoustic Echo Suppression:
+        const isEcho = this.isAcousticEcho(currentText);
+
+        // If assistant is currently speaking:
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
+          if (isEcho) {
+            // Discard speaker echo! Do NOT display on screen and do NOT interrupt assistant!
+            return;
+          }
+
+          // User spoke genuine words to interrupt the assistant!
           const userSpoke = (interimTranscript && interimTranscript.trim().length >= 2) || (finalTranscript && finalTranscript.trim().length >= 2);
           if (userSpoke) {
             this.interruptAssistant('user_voice_bargein');
+            onTranscript({ finalTranscript, interimTranscript });
+            pendingUtterance = currentText;
           }
           return;
         }
 
-        if (isProcessingTurn) return;
+        // Discard post-speech reverberations of assistant voice
+        if (Date.now() - this.lastSpeechEndTime < 1500 && isEcho) {
+          return;
+        }
 
-        const currentText = (finalTranscript || interimTranscript || '').trim();
-        if (!currentText) return;
+        // Display caller's valid speech on screen
+        onTranscript({ finalTranscript, interimTranscript });
+
+        if (isProcessingTurn) return;
 
         pendingUtterance = currentText;
 
@@ -915,8 +1033,8 @@ export class IndicSpeechService {
         console.warn('Conversational ASR warning:', err);
       },
       onStatusChange: (status) => {
-        // If recognition stopped but user had spoken an utterance, commit it immediately!
-        if (!status.isListening && pendingUtterance.length >= 3 && !isProcessingTurn && !this.isSpeaking) {
+        // If recognition stopped but user had spoken an utterance, commit it if not echo!
+        if (!status.isListening && pendingUtterance.length >= 3 && !isProcessingTurn && !this.isSpeaking && !this.isAcousticEcho(pendingUtterance)) {
           commitTurn(pendingUtterance);
         }
         if (!status.isListening && this.activeSessionCallbacks && !this.isSpeaking) {
