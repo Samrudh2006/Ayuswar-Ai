@@ -238,7 +238,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
       onLoginSuccess(finalizedPatientSession);
       onClose();
-    }, 700);
+    }, 40);
   };
 
   return (

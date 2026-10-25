@@ -217,7 +217,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
         setCurrentPatient(patientObj);
         navigate('/patient-portal');
       }
-    }, 600);
+    }, 40);
   };
 
   // Sign-Up Step 1 -> Step 2
@@ -236,7 +236,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
       setResendCooldown(45);
       setToastMessage('Demo OTP sent: 884210');
       setTimeout(() => setToastMessage(null), 3000);
-    }, 500);
+    }, 40);
   };
 
   // Autofill OTP helper
@@ -264,7 +264,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
       setSignupStep(3);
       setToastMessage('Account verified successfully!');
       setTimeout(() => setToastMessage(null), 2000);
-    }, 600);
+    }, 40);
   };
 
   // Sign-Up Step 3 Complete -> Enter Role Dashboard
@@ -310,7 +310,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
         setCurrentPatient(DEMO_PATIENTS[0]);
         navigate('/patient-portal');
       }
-    }, 700);
+    }, 40);
   };
 
   return (

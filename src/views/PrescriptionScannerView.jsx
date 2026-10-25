@@ -16,7 +16,6 @@ import {
   X,
   Info
 } from 'lucide-react';
-import Tesseract from 'tesseract.js';
 import { useApp } from '../context/AppContext';
 import { openCvPreprocessor } from '../services/openCvOcrPreprocessor';
 import { evaluatePharmacovigilanceSafety } from '../services/pharmacovigilanceSentinel';
@@ -470,6 +469,7 @@ export default function PrescriptionScannerView() {
       };
 
       try {
+        const { default: Tesseract } = await import('tesseract.js');
         if (!tesseractWorkerRef.current) {
           tesseractWorkerRef.current = await Tesseract.createWorker('eng', 1, {
             logger: progressLogger
@@ -478,7 +478,12 @@ export default function PrescriptionScannerView() {
         result = await tesseractWorkerRef.current.recognize(imageToOcr);
       } catch (workerErr) {
         console.warn('Persistent worker error, falling back to direct recognize:', workerErr);
-        result = await Tesseract.recognize(imageToOcr, 'eng', { logger: progressLogger });
+        try {
+          const { default: Tesseract } = await import('tesseract.js');
+          result = await Tesseract.recognize(imageToOcr, 'eng', { logger: progressLogger });
+        } catch (recErr) {
+          console.warn('Direct recognize also failed:', recErr);
+        }
       }
 
       if (ocrAbortRef.current) return;

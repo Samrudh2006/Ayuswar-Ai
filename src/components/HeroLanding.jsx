@@ -46,6 +46,7 @@ import {
 import FeatureDetailModal from './FeatureDetailModal';
 import MeshGradientBackground from './MeshGradientBackground';
 import HeroFaqSection from './hero/HeroFaqSection';
+import { preloadModule } from '../utils/routePreloader';
 
 /**
  * HeroLanding Component
@@ -869,6 +870,8 @@ export default function HeroLanding({
               <button
                 className="hero-secondary-cta"
                 onClick={() => onOpenAcousticLab && onOpenAcousticLab()}
+                onMouseEnter={() => preloadModule('/acoustic-lab')}
+                onTouchStart={() => preloadModule('/acoustic-lab')}
                 style={{
                   background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
                   color: '#ffffff',

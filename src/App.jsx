@@ -18,29 +18,29 @@ import CookieConsentBanner from './components/CookieConsentBanner';
 import FeedbackPopup from './components/FeedbackPopup';
 
 import MintIvoryWaveBackground from './components/MintIvoryWaveBackground';
-import { initAllRoutesPreload } from './utils/routePreloader';
+import { initAllRoutesPreload, lazyWithRetry, preloadModule } from './utils/routePreloader';
 import { initGlobalClickSounds } from './utils/soundEffects';
 
-// Route-Level Code-Split Components (Lazy loaded on demand to minimize initial bundle size)
-const DetailedModuleView = React.lazy(() => import('./components/DetailedModuleView'));
-const DoctorPortal = React.lazy(() => import('./components/DoctorPortal'));
-const ClinicalConsole = React.lazy(() => import('./components/ClinicalConsole'));
-const PatientPortal = React.lazy(() => import('./components/PatientPortal'));
-const SanjivaniEmergencyModal = React.lazy(() => import('./components/SanjivaniEmergencyModal'));
-const ArchitectureView = React.lazy(() => import('./views/ArchitectureView'));
-const PrescriptionScannerView = React.lazy(() => import('./views/PrescriptionScannerView'));
-const AudioRxStudioView = React.lazy(() => import('./views/AudioRxStudioView'));
-const AcousticBiomarkerLabView = React.lazy(() => import('./views/AcousticBiomarkerLabView'));
-const ClinicalBenchmarkView = React.lazy(() => import('./views/ClinicalBenchmarkView'));
-const IndicLanguageMatrixView = React.lazy(() => import('./views/IndicLanguageMatrixView'));
-const DatasetExplorerView = React.lazy(() => import('./views/DatasetExplorerView'));
-const EmergencyTriageView = React.lazy(() => import('./views/EmergencyTriageView'));
-const EmergencyHandoverView = React.lazy(() => import('./views/EmergencyHandoverView'));
-const PrescriptionPreviewView = React.lazy(() => import('./views/PrescriptionPreviewView'));
-const PrivacyPolicyView = React.lazy(() => import('./views/PrivacyPolicyView'));
-const TermsOfServiceView = React.lazy(() => import('./views/TermsOfServiceView'));
-const NotFoundView = React.lazy(() => import('./views/NotFoundView'));
-const UnifiedAuthView = React.lazy(() => import('./views/UnifiedAuthView'));
+// Route-Level Code-Split Components with resilient automatic retry
+const DetailedModuleView = lazyWithRetry(() => import('./components/DetailedModuleView'));
+const DoctorPortal = lazyWithRetry(() => import('./components/DoctorPortal'));
+const ClinicalConsole = lazyWithRetry(() => import('./components/ClinicalConsole'));
+const PatientPortal = lazyWithRetry(() => import('./components/PatientPortal'));
+const SanjivaniEmergencyModal = lazyWithRetry(() => import('./components/SanjivaniEmergencyModal'));
+const ArchitectureView = lazyWithRetry(() => import('./views/ArchitectureView'));
+const PrescriptionScannerView = lazyWithRetry(() => import('./views/PrescriptionScannerView'));
+const AudioRxStudioView = lazyWithRetry(() => import('./views/AudioRxStudioView'));
+const AcousticBiomarkerLabView = lazyWithRetry(() => import('./views/AcousticBiomarkerLabView'));
+const ClinicalBenchmarkView = lazyWithRetry(() => import('./views/ClinicalBenchmarkView'));
+const IndicLanguageMatrixView = lazyWithRetry(() => import('./views/IndicLanguageMatrixView'));
+const DatasetExplorerView = lazyWithRetry(() => import('./views/DatasetExplorerView'));
+const EmergencyTriageView = lazyWithRetry(() => import('./views/EmergencyTriageView'));
+const EmergencyHandoverView = lazyWithRetry(() => import('./views/EmergencyHandoverView'));
+const PrescriptionPreviewView = lazyWithRetry(() => import('./views/PrescriptionPreviewView'));
+const PrivacyPolicyView = lazyWithRetry(() => import('./views/PrivacyPolicyView'));
+const TermsOfServiceView = lazyWithRetry(() => import('./views/TermsOfServiceView'));
+const NotFoundView = lazyWithRetry(() => import('./views/NotFoundView'));
+const UnifiedAuthView = lazyWithRetry(() => import('./views/UnifiedAuthView'));
 
 function RouteLoadingFallback() {
   return (
@@ -158,9 +158,11 @@ export default function App() {
   React.useEffect(() => {
     if (!anyModalOpen) return;
 
+    let isPopped = false;
     window.history.pushState({ modalOpen: true }, '');
 
     const handlePopState = () => {
+      isPopped = true;
       setIsSanjivaniModalOpen(false);
       setIsDoctorAuthModalOpen(false);
       setIsPatientAuthModalOpen(false);
@@ -175,6 +177,9 @@ export default function App() {
     window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      if (!isPopped && window.history.state?.modalOpen) {
+        window.history.back();
+      }
     };
   }, [anyModalOpen]);
 
@@ -391,7 +396,7 @@ export default function App() {
               currentDoctor ? (
                 <DoctorPortal 
                   doctorProfile={currentDoctor} 
-                  onSelectEncounterAndLaunch={() => navigate('/clinical-console')}
+                  onSelectEncounterAndLaunch={(idx) => navigate(idx !== undefined ? `/clinical-console?encounter=${idx}` : '/clinical-console')}
                   onOpenTechModal={() => navigate('/technology')}
                   onOpenDatasetModal={() => navigate('/datasets')}
                   onLogoutDoctor={() => {
@@ -474,7 +479,34 @@ export default function App() {
 
       {/* Sanjivani-108 Masterclass Operational GIS Console Modal */}
       {isSanjivaniModalOpen && (
-        <React.Suspense fallback={null}>
+        <React.Suspense fallback={
+          <div style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1200,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(6, 22, 38, 0.85)',
+            backdropFilter: 'blur(8px)',
+            color: '#ffffff',
+            gap: 16,
+            fontFamily: 'Outfit, sans-serif'
+          }}>
+            <div style={{
+              width: 44,
+              height: 44,
+              border: '3px solid rgba(239, 68, 68, 0.25)',
+              borderTopColor: '#EF4444',
+              borderRadius: '50%',
+              animation: 'ayuswar-spin 0.7s linear infinite'
+            }} />
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#FEE2E2', letterSpacing: '0.02em' }}>
+              Launching Sanjivani 108 Emergency System...
+            </div>
+          </div>
+        }>
           <SanjivaniEmergencyModal 
             isOpen={isSanjivaniModalOpen}
             onClose={() => setIsSanjivaniModalOpen(false)}

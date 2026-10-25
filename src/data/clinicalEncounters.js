@@ -217,5 +217,302 @@ export const CLINICAL_ENCOUNTERS = [
       { word: 'బీపీ చెక్ చేయించుకోండి.', start: 6800, end: 8500 }
     ],
     drugInteractionNotice: 'Renal panel check recommended after 4 weeks of Telmisartan therapy.'
+  },
+  {
+    id: 'tamil_geriatric',
+    title: 'Rural Tamil Nadu — Diabetic Neuropathy & Joint Care',
+    language: 'Tamil (தமிழ்)',
+    langCode: 'ta-IN',
+    patient: {
+      name: 'Thirunavukkarasu (திருநாவுக்கரசு)',
+      age: 62,
+      gender: 'Male',
+      abhaId: '91-6632-1198-4421',
+      location: 'Madurai Rural PHC, Tamil Nadu',
+    },
+    audioDuration: '22s',
+    dialogue: [
+      { speaker: 'Patient', text: 'டாக்டர் ஐயா, ரெண்டு மாசமா முழங்கால் வலி அதிகமா இருக்கு. ராத்திரியில் பாதத்தில் சுளீர்னு ஊசி குத்துற மாதிரி எரிச்சல் இருக்கு.', time: '0:02' },
+      { speaker: 'Doctor', text: 'திருநாவுக்கரசு அவர்களே, சர்க்கரை அளவு 192 இருக்கு. நரம்பு பலவீனத்தால் இந்த எரிச்சல் வருது. பிரிகபாலின் மற்றும் மெட்ஃபார்மின் மாத்திரை மாற்றித் தருகிறேன்.', time: '0:12' },
+      { speaker: 'Patient', text: 'இந்த மாத்திரையை எப்படி சாப்பிடணும் ஐயா? மறதி அதிகமா இருக்கு.', time: '0:19' }
+    ],
+    acousticBiomarkers: {
+      respiratoryEffort: 'Normal (22%)',
+      coughType: 'None detected',
+      vocalTremor: 'Mild Geriatric Frailty (29%)',
+      spectralCentroid: '1820 Hz',
+      jitterPercent: '1.24%',
+      shimmerDb: '0.34 dB',
+      riskCategory: 'Chronic Vigilance'
+    },
+    vernacularMappings: [
+      { dialect: 'முழங்கால் வலி (Muzhangal Vali)', clinicalTerm: 'Bilateral Knee Arthralgia', icd10: 'M25.561', snomed: '239720000' },
+      { dialect: 'பாதத்தில் எரிச்சல் (Padhathil Erichal)', clinicalTerm: 'Diabetic Peripheral Neuropathy', icd10: 'E11.42', snomed: '230572002' }
+    ],
+    vitals: {
+      bp: '136/84 mmHg',
+      heartRate: '78 bpm',
+      spo2: '98%',
+      temp: '98.4 °F',
+      bloodSugar: '192 mg/dL'
+    },
+    medications: [
+      {
+        name: 'Pregabalin 75mg',
+        type: 'Neuropathic Analgesic',
+        color: '#6366F1',
+        colorLabel: 'நீல மாத்திரை (Blue Pill)',
+        timing: 'Night before sleep',
+        slot: 'night',
+        dose: '1 capsule',
+        duration: '30 days',
+        audioInstructionTelugu: 'இந்த நீல நிற மாத்திரையை இரவு தூங்குவதற்கு முன் ஒரு மாத்திரை போட வேண்டும்.'
+      },
+      {
+        name: 'Metformin 500mg SR',
+        type: 'Antidiabetic Biguanide',
+        color: '#10B981',
+        colorLabel: 'பச்சை மாத்திரை (Green Pill)',
+        timing: 'Morning after breakfast',
+        slot: 'morning',
+        dose: '1 tablet',
+        duration: '30 days',
+        audioInstructionTelugu: 'இந்த பச்சை நிற மாத்திரையை காலை உணவு சாப்பிட்ட பின் ஒன்று போட வேண்டும்.'
+      }
+    ],
+    fullAudioRxTelugu: 'திருநாவுக்கரசு அவர்களே, கவனமாகக் கேளுங்கள்: இந்த பச்சை மாத்திரை காலையில் சாப்பிட வேண்டும். இந்த நீல மாத்திரை இரவில் படுக்கும் போது போட வேண்டும். இனிப்பு உணவுகளைக் குறைக்கவும்.',
+    karaokeWordsTelugu: [
+      { word: 'திருநாவுக்கரசு அவர்களே,', start: 0, end: 900 },
+      { word: 'கவனமாகக் கேளுங்கள்:', start: 900, end: 1900 },
+      { word: 'இந்த பச்சை மாத்திரை', start: 1900, end: 3200 },
+      { word: 'காலையில் சாப்பிட வேண்டும்.', start: 3200, end: 4700 },
+      { word: 'இந்த நீல மாத்திரை', start: 4700, end: 6000 },
+      { word: 'இரவில் படுக்கும் போது போடவும்.', start: 6000, end: 7800 },
+      { word: 'இனிப்பு உணவுகளைக் குறைக்கவும்.', start: 7800, end: 9800 }
+    ],
+    drugInteractionNotice: 'No critical CYP450 interactions detected between Metformin and Pregabalin.'
+  },
+  {
+    id: 'kannada_maternal',
+    title: 'Rural Karnataka — Maternal Antenatal & Anemia Triage',
+    language: 'Kannada (ಕನ್ನಡ)',
+    langCode: 'kn-IN',
+    patient: {
+      name: 'Lakshmi Gowda (ಲಕ್ಷ್ಮಿ ಗೌಡ)',
+      age: 26,
+      gender: 'Female',
+      abhaId: '91-7741-2091-8833',
+      location: 'Mandya Rural CHC, Karnataka',
+    },
+    audioDuration: '24s',
+    dialogue: [
+      { speaker: 'Patient', text: 'ಡಾಕ್ಟರೇ, ಐದು ತಿಂಗಳ ಗರ್ಭಿಣಿ. ಬೆಳಗ್ಗೆ ಎದ್ದಾಗ ತುಂಬಾ ಸುಸ್ತು ಮತ್ತು ತಲೆತಿರುಗುವಿಕೆ ಬರುತ್ತೆ. ಊಟ ಸೇರುತ್ತಿಲ್ಲ.', time: '0:02' },
+      { speaker: 'Doctor', text: 'ಲಕ್ಷ್ಮಿ ಅವರೇ, ರಕ್ತ ಪರೀಕ್ಷೆಯಲ್ಲಿ ಹಿಮೋಗ್ಲೋಬಿನ್ 9.4 ಬಂದಿದೆ. ಸ್ವಲ್ಪ ರಕ್ತಹೀನತೆ ಇದೆ. ಕಬ್ಬಿಣದ ಅಂಶದ ಕೆಂಪು ಮಾತ್ರೆ ಮತ್ತು ವಾಂತಿ ನಿಲ್ಲಲು ಮಾತ್ರೆ ಬರೆಯುತ್ತಿದ್ದೇನೆ.', time: '0:12' },
+      { speaker: 'Patient', text: 'ಹಾಲಿನ ಜೊತೆ ತಗೋಬೇಕಾ ಡಾಕ್ಟರೇ ಅಥವಾ ನೀರಿನ ಜೊತೆನಾ?', time: '0:20' }
+    ],
+    acousticBiomarkers: {
+      respiratoryEffort: 'Normal (16%)',
+      coughType: 'None detected',
+      vocalTremor: 'Mild Gestational Fatigue (24%)',
+      spectralCentroid: '2150 Hz',
+      jitterPercent: '0.98%',
+      shimmerDb: '0.26 dB',
+      riskCategory: 'Antenatal Monitored'
+    },
+    vernacularMappings: [
+      { dialect: 'ಸುಸ್ತು ಮತ್ತು ತಲೆತಿರುಗುವಿಕೆ (Susthu & Thale)', clinicalTerm: 'Gestational Anemia / Presyncope', icd10: 'O99.012', snomed: '271737000' },
+      { dialect: 'ಊಟ ಸೇರುತ್ತಿಲ್ಲ (Oota Seruttilla)', clinicalTerm: 'Hyperemesis / Morning Sickness', icd10: 'O21.0', snomed: '267029007' }
+    ],
+    vitals: {
+      bp: '110/70 mmHg',
+      heartRate: '82 bpm',
+      spo2: '99%',
+      temp: '98.6 °F',
+      bloodSugar: '96 mg/dL (Hb: 9.4 g/dL)'
+    },
+    medications: [
+      {
+        name: 'Ferrous Ascorbate + Folic Acid 100mg',
+        type: 'Hematinic Supplement',
+        color: '#DC2626',
+        colorLabel: 'ಕೆಂಪು ಮಾತ್ರೆ (Red Tablet)',
+        timing: 'Afternoon after lunch',
+        slot: 'afternoon',
+        dose: '1 tablet',
+        duration: '90 days',
+        audioInstructionTelugu: 'ಈ ಕೆಂಪು ಗುಳಿಗೆಯನ್ನು ಮಧ್ಯಾಹ್ನ ಊಟದ ನಂತರ ನಿಂಬೆ ನೀರಿನ ಜೊತೆ ತೆಗೆದುಕೊಳ್ಳಿ.'
+      },
+      {
+        name: 'Doxylamine + Pyridoxine 10mg/10mg',
+        type: 'Antiemetic Antihistamine',
+        color: '#F59E0B',
+        colorLabel: 'ಹಳದಿ ಮಾತ್ರೆ (Yellow Tablet)',
+        timing: 'Night before bedtime',
+        slot: 'night',
+        dose: '1 tablet',
+        duration: '14 days',
+        audioInstructionTelugu: 'ಈ ಹಳದಿ ಗುಳಿಗೆಯನ್ನು ರಾತ್ರಿ ಮಲಗುವ ಮುಂಚೆ ತೆಗೆದುಕೊಳ್ಳಿ.'
+      }
+    ],
+    fullAudioRxTelugu: 'ಲಕ್ಷ್ಮಿ ಅವರೇ, ಗಮನವಿಟ್ಟು ಕೇಳಿ: ಈ ಕೆಂಪು ಗುಳಿಗೆಯನ್ನು ಮಧ್ಯಾಹ್ನ ಊಟದ ನಂತರ ನೀರಿನ ಜೊತೆ ತೆಗೆದುಕೊಳ್ಳಿ, ಹಾಲಿನ ಜೊತೆ ಬೇಡ. ಹಳದಿ ಗುಳಿಗೆಯನ್ನು ರಾತ್ರಿ ಮಲಗುವ ಮುಂಚೆ ತೆಗೆದುಕೊಳ್ಳಿ.',
+    karaokeWordsTelugu: [
+      { word: 'ಲಕ್ಷ್ಮಿ ಅವರೇ,', start: 0, end: 700 },
+      { word: 'ಗಮನವಿಟ್ಟು ಕೇಳಿ:', start: 700, end: 1500 },
+      { word: 'ಈ ಕೆಂಪು ಗುಳಿಗೆಯನ್ನು', start: 1500, end: 2800 },
+      { word: 'ಮಧ್ಯಾಹ್ನ ಊಟದ ನಂತರ', start: 2800, end: 4100 },
+      { word: 'ನೀರಿನ ಜೊತೆ ತೆಗೆದುಕೊಳ್ಳಿ.', start: 4100, end: 5400 },
+      { word: 'ಹಳದಿ ಗುಳಿಗೆಯನ್ನು', start: 5400, end: 6700 },
+      { word: 'ರಾತ್ರಿ ಮಲಗುವ ಮುಂಚೆ ತೆಗೆದುಕೊಳ್ಳಿ.', start: 6700, end: 8900 }
+    ],
+    drugInteractionNotice: 'Safe Antenatal Protocol: Take Iron with Vitamin C (Lemon Water) for 4x absorption.'
+  },
+  {
+    id: 'marathi_pulmonary',
+    title: 'Rural Maharashtra — Chronic Pulmonary Bronchitis',
+    language: 'Marathi (मराठी)',
+    langCode: 'mr-IN',
+    patient: {
+      name: 'Dattatray Shinde (दत्तात्रय शिंदे)',
+      age: 54,
+      gender: 'Male',
+      abhaId: '91-3319-8802-5147',
+      location: 'Pune Rural PHC, Maharashtra',
+    },
+    audioDuration: '26s',
+    dialogue: [
+      { speaker: 'Patient', text: 'डॉक्टर साहेब, शेतात काम करताना छातीत घरघर आवाज होतो आणि खूप दम भरतो. खोकल्यातून पिवळा कफ पडतो.', time: '0:02' },
+      { speaker: 'Doctor', text: 'दत्तात्रय काका, स्टेथॉस्कोप तपासणीत श्वासनलिकेत सूज (Wheezing) जाणवते आहे. मी इनहेलर आणि कफ सिरप लिहून देत आहे. शेतात जाताना मास्क वापरा.', time: '0:13' },
+      { speaker: 'Patient', text: 'हा पंप कसा ओढायचा साहेब? मला नीट समजावून सांगा.', time: '0:21' }
+    ],
+    acousticBiomarkers: {
+      respiratoryEffort: 'High Strain (72%)',
+      coughType: 'Productive Chronic Wheeze',
+      vocalTremor: 'Exertional Tremor (41%)',
+      spectralCentroid: '2680 Hz',
+      jitterPercent: '2.10%',
+      shimmerDb: '0.55 dB',
+      riskCategory: 'High Vigilance'
+    },
+    vernacularMappings: [
+      { dialect: 'छातीत घरघर (Chhatit Gharghar)', clinicalTerm: 'Bilateral Expiratory Wheeze / Ronchi', icd10: 'R06.2', snomed: '56018004' },
+      { dialect: 'दम भरतो (Dam Bharto)', clinicalTerm: 'Exertional Dyspnea (COPD Phenotype)', icd10: 'R06.02', snomed: '282845006' }
+    ],
+    vitals: {
+      bp: '128/82 mmHg',
+      heartRate: '86 bpm',
+      spo2: '95%',
+      temp: '98.6 °F',
+      bloodSugar: '110 mg/dL'
+    },
+    medications: [
+      {
+        name: 'Salbutamol Inhaler 100mcg',
+        type: 'Beta-2 Bronchodilator',
+        color: '#0284C7',
+        colorLabel: 'निळा पंप (Blue Inhaler)',
+        timing: 'Twice daily (Morning & Evening)',
+        slot: 'morning',
+        dose: '2 puffs',
+        duration: '30 days',
+        audioInstructionTelugu: 'हा निळा पंप दिवसातून दोनदा दोन पफ तोंडातून खोल श्वास घेऊन ओढायचा आहे.'
+      },
+      {
+        name: 'Ambroxol + Levocetirizine Syrup',
+        type: 'Mucolytic Expectorant',
+        color: '#D97706',
+        colorLabel: 'केशरी बाटली (Orange Syrup)',
+        timing: 'Morning & Night after meals',
+        slot: 'night',
+        dose: '10ml twice daily',
+        duration: '7 days',
+        audioInstructionTelugu: 'हे केशरी औषध जेवणानंतर दहा मिली सकाळी आणि रात्री घ्यावे.'
+      }
+    ],
+    fullAudioRxTelugu: 'दत्तात्रय काका, लक्ष देऊन ऐका: हा निळा इनहेलर पंप दिवसातून दोनदा दोन पफ ओढायचा आहे. हे केशरी सिरप जेवणानंतर दहा मिली घ्या. शेतात जाताना नाकाला रुमाल किंवा मास्क नक्की लावा.',
+    karaokeWordsTelugu: [
+      { word: 'दत्तात्रय काका,', start: 0, end: 700 },
+      { word: 'लक्ष देऊन ऐका:', start: 700, end: 1500 },
+      { word: 'हा निळा इनहेलर पंप', start: 1500, end: 2900 },
+      { word: 'दिवसातून दोनदा दोन पफ ओढा.', start: 2900, end: 4600 },
+      { word: 'केशरी सिरप जेवणानंतर', start: 4600, end: 6000 },
+      { word: 'दहा मिली घ्यावे.', start: 6000, end: 7200 },
+      { word: 'मास्क नक्की लावा.', start: 7200, end: 8800 }
+    ],
+    drugInteractionNotice: 'Inhaler Technique Verified: Rinse mouth with warm water after inhalation.'
+  },
+  {
+    id: 'bengali_gi',
+    title: 'Rural West Bengal — Acid Peptic Disease & Dyspepsia',
+    language: 'Bengali (বাংলা)',
+    langCode: 'bn-IN',
+    patient: {
+      name: 'Debabrata Ghosh (দেবব্রত ঘোষ)',
+      age: 48,
+      gender: 'Male',
+      abhaId: '91-4412-9981-6723',
+      location: 'Burdwan Rural Hospital, West Bengal',
+    },
+    audioDuration: '23s',
+    dialogue: [
+      { speaker: 'Patient', text: 'ডাক্তারবাবু, এক মাস ধরে বুকে প্রচণ্ড জ্বালা আর পেট ফাঁপা লাগছে। তেল-ঝাল খেলে টক ঢেকুর ওঠে।', time: '0:02' },
+      { speaker: 'Doctor', text: 'দেবব্রত বাবু, আপনার গ্যাস্ট্রাইটিসের সমস্যা হয়েছে। আমি সকালে খালি পেটে খাওয়ার জন্য রাবেপ্রাজল এবং রাতে এন্টাসিড সিরাপ লিখে দিচ্ছি। চা ও তেলেভাজা বন্ধ করুন।', time: '0:12' },
+      { speaker: 'Patient', text: 'ওষুধগুলো খাওয়ার নিয়মটা বাংলায় একটু বলে দেবেন ডাক্তারবাবু?', time: '0:19' }
+    ],
+    acousticBiomarkers: {
+      respiratoryEffort: 'Normal (14%)',
+      coughType: 'None detected',
+      vocalTremor: 'Slight Discomfort (18%)',
+      spectralCentroid: '1910 Hz',
+      jitterPercent: '0.88%',
+      shimmerDb: '0.22 dB',
+      riskCategory: 'Controlled'
+    },
+    vernacularMappings: [
+      { dialect: 'বুকে জ্বালা (Buke Jwala)', clinicalTerm: 'Pyrosis / Acid Reflux', icd10: 'K21.9', snomed: '698065002' },
+      { dialect: 'পেট ফাঁপা (Pet Phapa)', clinicalTerm: 'Abdominal Meteorism / Dyspepsia', icd10: 'R14.0', snomed: '236077008' }
+    ],
+    vitals: {
+      bp: '124/80 mmHg',
+      heartRate: '74 bpm',
+      spo2: '98%',
+      temp: '98.4 °F',
+      bloodSugar: '130 mg/dL'
+    },
+    medications: [
+      {
+        name: 'Rabeprazole 20mg + Domperidone 30mg SR',
+        type: 'Proton Pump Inhibitor + Prokinetic',
+        color: '#EAB308',
+        colorLabel: 'হলুদ ক্যাপসুল (Yellow Capsule)',
+        timing: 'Early morning 30 mins before breakfast',
+        slot: 'morning',
+        dose: '1 capsule',
+        duration: '14 days',
+        audioInstructionTelugu: 'এই হলুদ ক্যাপসুলটি প্রতিদিন সকালে ঘুম থেকে উঠে খালি পেটে জল দিয়ে খাবেন।'
+      },
+      {
+        name: 'Oxetacaine + Aluminium Hydroxide Gel',
+        type: 'Antacid Gel',
+        color: '#EC4899',
+        colorLabel: 'গোলাপি সিরাপ (Pink Gel)',
+        timing: 'Night 1 hour after dinner',
+        slot: 'night',
+        dose: '10ml',
+        duration: '10 days',
+        audioInstructionTelugu: 'এই গোলাপি জেলটি রাতে খাওয়ার এক ঘণ্টা পরে দশ মিলি খাবেন।'
+      }
+    ],
+    fullAudioRxTelugu: 'দেবব্রত বাবু, মন দিয়ে শুনুন: এই হলুদ ক্যাপসুলটি রোজ সকালে খালি পেটে এক গ্লাস জল দিয়ে খাবেন। আর গোলাপি সিরাপটি রাতে শোওয়ার আগে খাবেন। অতিরিক্ত চা ও তেলেভাজা খাবেন না।',
+    karaokeWordsTelugu: [
+      { word: 'দেবব্রত বাবু,', start: 0, end: 700 },
+      { word: 'মন দিয়ে শুনুন:', start: 700, end: 1500 },
+      { word: 'এই হলুদ ক্যাপসুলটি', start: 1500, end: 2800 },
+      { word: 'সকালে খালি পেটে খাবেন।', start: 2800, end: 4300 },
+      { word: 'গোলাপি সিরাপটি রাতে', start: 4300, end: 5700 },
+      { word: 'শোওয়ার আগে খাবেন।', start: 5700, end: 7100 },
+      { word: 'তেলেভাজা খাবেন না।', start: 7100, end: 8700 }
+    ],
+    drugInteractionNotice: 'No interaction risk: Generic Rabeprazole + Domperidone matches Jan Aushadhi generic guidelines.'
   }
 ];
+

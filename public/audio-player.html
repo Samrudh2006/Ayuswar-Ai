@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyuSwar AI — Real Gnani.ai Timbre Audio-Rx Player</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #061626;
+      color: #ffffff;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #091E26;
+      border: 1.5px solid rgba(45, 212, 191, 0.3);
+      border-radius: 18px;
+      padding: 24px;
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.45);
+    }
+    h1 {
+      color: #2DD4BF;
+      font-size: 26px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .status-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10B981;
+      color: #34D399;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 750;
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .badge-gnani { background: rgba(212, 175, 55, 0.2); color: #FCD34D; border: 1px solid #FCD34D; }
+    .badge-telugu { background: rgba(56, 189, 248, 0.2); color: #38BDF8; border: 1px solid #38BDF8; margin-left: 6px; }
+    .badge-hindi { background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid #F59E0B; margin-left: 6px; }
+    .quote {
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid #2DD4BF;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 14px 0;
+    }
+    audio {
+      width: 100%;
+      margin-top: 10px;
+      outline: none;
+    }
+    .download-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: rgba(45, 212, 191, 0.15);
+      color: #2DD4BF;
+      border: 1px solid #2DD4BF;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .download-btn:hover {
+      background: #2DD4BF;
+      color: #061626;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎙️ AyuSwar AI — Voice Prescriptions</h1>
+  <div class="status-banner">
+    <span>✅ Live Operational: Generated with Genuine Gnani.ai Timbre API Keys</span>
+  </div>
+
+  <!-- Telugu Gnani Player -->
+  <div class="card">
+    <div>
+      <span class="badge badge-gnani">⚡ REAL GNANI.AI TIMBRE TTS</span>
+      <span class="badge badge-telugu">🇮🇳 Telugu • Narayana Rao</span>
+    </div>
+    <h3 style="margin: 4px 0 6px 0; color: #E2E8F0;">నారాయణ రావు గారి డిజిటల్ ఆడియో ప్రిస్క్రిప్షన్</h3>
+    <div class="quote">
+      "నారాయణ రావు గారు, వినండి: ఈ ఆకుపచ్చ రంగు మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి. ఈ నీలం రంగు మాత్ర రాత్రి భోజనం తర్వాత ఒకటి వేసుకోవాలి. కూరల్లో ఉప్పు బాగా తగ్గించండి."
+    </div>
+    <audio controls preload="auto" src="/audio/gnani_telugu_rx_narayana_rao.wav">
+      Your browser does not support the audio element.
+    </audio>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+      <span style="font-size: 11px; color: #94A3B8;">
+        Voice: Nalini • Model: timbre-v2.5 • Size: 599 KB (WAV)
+      </span>
+      <a class="download-btn" href="/audio/gnani_telugu_rx_narayana_rao.wav" download="gnani_telugu_rx_narayana_rao.wav">
+        ⬇ Download WAV
+      </a>
+    </div>
+  </div>
+
+  <!-- Hindi Gnani Player -->
+  <div class="card">
+    <div>
+      <span class="badge badge-gnani">⚡ REAL GNANI.AI TIMBRE TTS</span>
+      <span class="badge badge-hindi">🇮🇳 Hindi • Aarav Kumar</span>
+    </div>
+    <h3 style="margin: 4px 0 6px 0; color: #E2E8F0;">आरव कुमार (माता जी: अनीता देवी) डिजिटल ऑडियो प्रिस्क्रिप्शन</h3>
+    <div class="quote">
+      "आरव की माता जी, ध्यान से सुनें: यह पीला सिरप रोज सुबह 5ml देना है, 3 दिन तक। और यह लाल सिरप सिर्फ तब देना है जब बुखार आए। बच्चे को गुनगुने पानी की पट्टी दें।"
+    </div>
+    <audio controls preload="auto" src="/audio/gnani_hindi_rx_aarav_kumar.wav">
+      Your browser does not support the audio element.
+    </audio>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+      <span style="font-size: 11px; color: #94A3B8;">
+        Voice: Nalini • Model: timbre-v2.5 • Size: 560 KB (WAV)
+      </span>
+      <a class="download-btn" href="/audio/gnani_hindi_rx_aarav_kumar.wav" download="gnani_hindi_rx_aarav_kumar.wav">
+        ⬇ Download WAV
+      </a>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="/clinical-console" style="color: #2DD4BF; text-decoration: none; font-weight: 700; font-size: 14px;">
+      ← Return to Clinical Console
+    </a>
+  </div>
+</body>
+</html>

@@ -88,7 +88,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
       }
 
       onClose();
-    }, 650);
+    }, 40);
   };
 
   return (

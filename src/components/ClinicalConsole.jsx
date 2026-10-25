@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Play, 
   Pause, 
@@ -33,7 +33,8 @@ import {
   Sliders,
   RefreshCw,
   Layers,
-  Edit3
+  Edit3,
+  Globe
 } from 'lucide-react';
 import AuthenticQrCode from './AuthenticQrCode';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
@@ -54,18 +55,22 @@ import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
  */
 export default function ClinicalConsole({ doctorProfile, initialEncounterIndex = 0 }) {
   const navigate = useNavigate();
-  const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(initialEncounterIndex);
-  const currentEncounter = CLINICAL_ENCOUNTERS[selectedEncounterIndex];
+  const [searchParams] = useSearchParams();
+  const queryEncounter = searchParams.get('encounter');
+  const parsedIdx = queryEncounter !== null ? parseInt(queryEncounter, 10) : initialEncounterIndex;
+  const validInitialIdx = Number.isInteger(parsedIdx) && parsedIdx >= 0 && parsedIdx < CLINICAL_ENCOUNTERS.length ? parsedIdx : 0;
+  const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(validInitialIdx);
+  const currentEncounter = CLINICAL_ENCOUNTERS[selectedEncounterIndex] || CLINICAL_ENCOUNTERS[0];
 
   // 4-Step Guided OPD Workflow: 1 = Record, 2 = AI Processing, 3 = Voice Note, 4 = Dispatch
   const [activeStep, setActiveStep] = useState(1);
   const [maxCompletedStep, setMaxCompletedStep] = useState(1);
 
   // Step 1: Dialogue Recording State
-  const [recordingMode, setRecordingMode] = useState('ambient_sim'); // 'ambient_sim' | 'live_mic'
+  const [recordingMode, setRecordingMode] = useState('live_mic'); // 'ambient_sim' | 'live_mic'
   const [isRecording, setIsRecording] = useState(false);
   const [recordedSeconds, setRecordedSeconds] = useState(0);
-  const [dialogueTurns, setDialogueTurns] = useState(currentEncounter.dialogue.slice(0, 3));
+  const [dialogueTurns, setDialogueTurns] = useState([]);
   const [newSpeakerRole, setNewSpeakerRole] = useState('Doctor');
   const [newSpeakerText, setNewSpeakerText] = useState('');
   const [showAddTurnModal, setShowAddTurnModal] = useState(false);
@@ -118,9 +123,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
     }).catch(() => {});
   }, []);
 
-  // Update default matter and dialogue when switching scenario
+  // Update default matter when switching scenario
   useEffect(() => {
-    setDialogueTurns(currentEncounter.dialogue.slice(0, 3));
+    setDialogueTurns([]);
     setEditableBestMatter(currentEncounter.fullAudioRxTelugu);
     setSelectedLanguage(currentEncounter.langCode.startsWith('te') ? 'te-IN' : 'hi-IN');
     setIsPlayingAudioRx(false);
@@ -176,8 +181,12 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
     }, 1000);
 
     if (recordingMode === 'ambient_sim') {
-      // Simulate real-time streaming of remaining dialogue turns
+      // Simulate real-time streaming of dialogue turns
       let nextTurnIndex = dialogueTurns.length;
+      if (dialogueTurns.length === 0 && currentEncounter.dialogue.length > 0) {
+        setDialogueTurns([currentEncounter.dialogue[0]]);
+        nextTurnIndex = 1;
+      }
       if (simIntervalRef.current) clearInterval(simIntervalRef.current);
       simIntervalRef.current = setInterval(() => {
         if (nextTurnIndex < currentEncounter.dialogue.length) {
@@ -205,7 +214,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const resetRecordingSession = () => {
     pauseRecordingSession();
     setRecordedSeconds(0);
-    setDialogueTurns(currentEncounter.dialogue.slice(0, 2));
+    setDialogueTurns([]);
     setLiveTranscriptionText('');
     setMicVolume(15);
   };
@@ -576,28 +585,75 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </div>
           </div>
 
-          {/* Quick Scenario Selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '11.5px', fontWeight: 750, color: '#64748B' }}>OPD Encounter:</span>
-            {CLINICAL_ENCOUNTERS.map((enc, idx) => (
-              <button
-                key={enc.id}
-                onClick={() => setSelectedEncounterIndex(idx)}
+          {/* Asymmetric Cross-Lingual Language Bridge */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap',
+            background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.05) 0%, rgba(212, 175, 55, 0.08) 100%)',
+            padding: '10px 16px',
+            borderRadius: '12px',
+            border: '1.5px solid rgba(15, 76, 92, 0.15)'
+          }}>
+            {/* Input: Auto-Detect Dialect */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#ffffff',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                border: '1px solid #CBD5E1',
+                fontSize: '11.5px',
+                fontWeight: 750,
+                color: '#0F4C5C'
+              }}>
+                <Sparkles size={13} color="#D97706" />
+                <span>Doctor & Patient Input:</span>
+                <span style={{
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: '#047857',
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                  fontWeight: 800,
+                  fontSize: '11px'
+                }}>
+                  ✨ Auto-Detect Dialect Active
+                </span>
+              </div>
+            </div>
+
+            <ArrowRight size={14} color="#64748B" />
+
+            {/* Output: Patient Vernacular Mother Tongue */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569' }}>
+                🔊 Patient Audio-Rx Language:
+              </span>
+              <select
+                value={selectedEncounterIndex}
+                onChange={(e) => setSelectedEncounterIndex(Number(e.target.value))}
                 style={{
-                  padding: '7px 14px',
-                  borderRadius: '10px',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  border: '1.5px solid #0F4C5C',
+                  background: '#ffffff',
+                  color: '#0F4C5C',
                   fontSize: '12px',
-                  fontWeight: 750,
-                  border: selectedEncounterIndex === idx ? '2px solid #0F4C5C' : '1px solid #CBD5E1',
-                  background: selectedEncounterIndex === idx ? 'rgba(15, 76, 92, 0.1)' : '#ffffff',
-                  color: selectedEncounterIndex === idx ? '#0F4C5C' : '#475569',
+                  fontWeight: 800,
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease'
+                  outline: 'none'
                 }}
               >
-                {enc.language}
-              </button>
-            ))}
+                {CLINICAL_ENCOUNTERS.map((enc, idx) => (
+                  <option key={enc.id} value={idx}>
+                    {enc.language} ({enc.patient.name.split('(')[0].trim()})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -961,6 +1017,76 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               overflowY: 'auto',
               paddingRight: '6px'
             }}>
+              {dialogueTurns.length === 0 && !liveTranscriptionText && (
+                <div style={{
+                  padding: '36px 20px',
+                  textAlign: 'center',
+                  background: '#FAF8F5',
+                  borderRadius: '14px',
+                  border: '2px dashed #CBD5E1',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  margin: 'auto 0'
+                }}>
+                  <div style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    background: 'rgba(15, 76, 92, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Mic size={22} color="#0F4C5C" />
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#091E26' }}>
+                    No Spoken Dialogue Recorded Yet
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#64748B', maxWidth: '380px', lineHeight: 1.5 }}>
+                    {recordingMode === 'live_mic'
+                      ? (isRecording 
+                          ? '🎙️ Listening live to your laptop microphone... Speak clearly and turns will appear here!'
+                          : 'Click "▶ Start OPD Recording" above and speak into your microphone to record doctor & patient.')
+                      : 'Click "▶ Start OPD Recording" to stream the consultation, or click below to load the full scenario demo.'}
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <button
+                      onClick={() => setDialogueTurns(currentEncounter.dialogue)}
+                      style={{
+                        background: '#ffffff',
+                        color: '#0F4C5C',
+                        border: '1.5px solid #0F4C5C',
+                        padding: '6px 14px',
+                        borderRadius: '8px',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ⚡ Load Scenario Simulation
+                    </button>
+                    <button
+                      onClick={() => setShowAddTurnModal(true)}
+                      style={{
+                        background: '#F1F5F9',
+                        color: '#475569',
+                        border: '1px solid #CBD5E1',
+                        padding: '6px 14px',
+                        borderRadius: '8px',
+                        fontSize: '11.5px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      + Add Manual Turn
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {dialogueTurns.map((turn, i) => {
                 const isDoc = turn.speaker.includes('Doctor');
                 return (

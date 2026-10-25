@@ -19,9 +19,13 @@ import {
   AlertTriangle,
   Smartphone,
   ExternalLink,
-  Download
+  Download,
+  Layers,
+  Globe,
+  ArrowRight
 } from 'lucide-react';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
@@ -43,7 +47,8 @@ export default function LiveScribeSessionModal({
   onClose,
   patientData,
   doctorName = 'Dr. Priya Sharma, MD',
-  onCompleteEncounter
+  onCompleteEncounter,
+  onSwitchToWizard
 }) {
   const safePatient = patientData || {
     name: 'Narayana Rao',
@@ -55,8 +60,8 @@ export default function LiveScribeSessionModal({
     domain: 'cardiometabolic'
   };
 
-  const [isRecording, setIsRecording] = useState(true);
-  const [micMode, setMicMode] = useState('ambient_sim'); // 'ambient_sim' | 'physical_mic'
+  const [isRecording, setIsRecording] = useState(false);
+  const [micMode, setMicMode] = useState('physical_mic'); // Default to live mic on standby
   const [currentStep, setCurrentStep] = useState(0);
   const [dialogueList, setDialogueList] = useState([]);
   const [micVolume, setMicVolume] = useState(35);
@@ -133,15 +138,55 @@ export default function LiveScribeSessionModal({
     }
   };
 
+  const encFromList = (safePatient?.encounterIndex !== undefined && CLINICAL_ENCOUNTERS[safePatient.encounterIndex])
+    ? CLINICAL_ENCOUNTERS[safePatient.encounterIndex]
+    : CLINICAL_ENCOUNTERS.find(e => safePatient?.language && e.language.toLowerCase().includes(safePatient.language.toLowerCase()));
+
+  const dynamicEncounterData = encFromList ? {
+    dialogueSequence: encFromList.dialogue.map(d => ({
+      speaker: d.speaker,
+      lang: encFromList.language,
+      text: d.text
+    })),
+    vitals: {
+      bp: encFromList.vitals.bp,
+      hr: encFromList.vitals.heartRate,
+      spo2: encFromList.vitals.spo2,
+      temp: encFromList.vitals.temp,
+      rbs: encFromList.vitals.bloodSugar
+    },
+    biomarkers: {
+      coughIndex: encFromList.acousticBiomarkers?.coughType || '0.12 (Normal)',
+      dyspneaScore: encFromList.acousticBiomarkers?.respiratoryEffort || 'Grade-1 Mild',
+      wheezeDetection: encFromList.acousticBiomarkers?.vocalTremor || 'None'
+    },
+    icdMappings: encFromList.vernacularMappings.map(v => ({
+      colloquial: v.dialect,
+      clinical: v.clinicalTerm,
+      icd10: v.icd10,
+      snomed: v.snomed
+    })),
+    prescriptions: encFromList.medications.map(m => ({
+      name: m.name,
+      type: m.type,
+      color: m.color,
+      colorLabel: m.colorLabel,
+      timing: m.timing,
+      meal: m.dose,
+      days: m.duration
+    })),
+    spokenTeluguRx: encFromList.fullAudioRxTelugu
+  } : null;
+
   const domainKey = safePatient?.domain || ((safePatient?.age || 0) < 15 ? 'respiratory' : 'cardiometabolic');
-  const encounterData = encounterPresets[domainKey] || encounterPresets.cardiometabolic;
+  const encounterData = dynamicEncounterData || encounterPresets[domainKey] || encounterPresets.cardiometabolic;
 
   // Helper to send recorded audio chunk to serverless Gnani STT endpoint
   const sendChunkToGnani = async (blob) => {
     if (!blob || blob.size < 500) return;
     setIsTranscribingChunk(true);
     setLastSttError(null);
-    const targetLang = safePatient?.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN';
+    const targetLang = encFromList?.langCode || (safePatient?.language?.toLowerCase().includes('hindi') ? 'hi-IN' : 'te-IN');
     try {
       const res = await speechService.transcribeAudioWithGnani(blob, targetLang);
       if (res && res.transcript && res.transcript.trim()) {
@@ -518,6 +563,35 @@ export default function LiveScribeSessionModal({
               <span>{isRecording ? 'Pause' : 'Resume'}</span>
             </button>
 
+            {/* Switch to 4-Step Master Clinical Wizard */}
+            <button
+              onClick={() => {
+                if (onSwitchToWizard) {
+                  onSwitchToWizard(safePatient?.encounterIndex ?? 0);
+                } else {
+                  window.location.href = `/clinical-console?encounter=${safePatient?.encounterIndex ?? 0}`;
+                }
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(15, 76, 92, 0.5) 100%)',
+                border: '1px solid #FDE047',
+                color: '#FDE047',
+                fontSize: '11.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              title="Switch to Sequential 4-Step Master Wizard View"
+            >
+              <Layers size={13} />
+              <span>4-Step Wizard View</span>
+            </button>
+
             <button
               onClick={onClose}
               style={{
@@ -535,6 +609,72 @@ export default function LiveScribeSessionModal({
             >
               <X size={20} />
             </button>
+          </div>
+        </div>
+
+        {/* Asymmetric Cross-Lingual Language Bridge */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '8px 20px',
+          background: 'rgba(15, 76, 92, 0.25)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              padding: '4px 10px',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              fontSize: '11px',
+              fontWeight: 700,
+              color: '#94A3B8'
+            }}>
+              <Sparkles size={13} color="#F59E0B" />
+              <span>Doctor & Patient Input:</span>
+              <span style={{
+                background: 'rgba(16, 185, 129, 0.2)',
+                color: '#34D399',
+                padding: '2px 8px',
+                borderRadius: '6px',
+                fontWeight: 800,
+                fontSize: '11px'
+              }}>
+                ✨ Auto-Detect Dialect Active
+              </span>
+            </div>
+            <ArrowRight size={14} color="#64748B" />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '11px',
+              color: '#E2E8F0',
+              fontWeight: 700
+            }}>
+              <Volume2 size={13} color="#38BDF8" />
+              <span>Patient Vernacular Voice-Rx:</span>
+              <span style={{
+                background: 'rgba(56, 189, 248, 0.18)',
+                color: '#38BDF8',
+                padding: '2px 10px',
+                borderRadius: '6px',
+                fontWeight: 800,
+                border: '1px solid rgba(56, 189, 248, 0.35)'
+              }}>
+                {safePatient.language || 'Telugu / Mother Tongue'}
+              </span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94A3B8' }}>
+            <span style={{ color: '#D4AF37', fontWeight: 700 }}>⚡ Asymmetric Translation:</span>
+            <span>Doctor speaks English/clinical jargon; patient receives audio in native mother tongue</span>
           </div>
         </div>
 
@@ -657,6 +797,88 @@ export default function LiveScribeSessionModal({
               minHeight: '360px',
               maxHeight: '440px'
             }}>
+              {dialogueList.length === 0 && !liveTranscriptInterim && (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '36px 20px',
+                  textAlign: 'center',
+                  background: '#ffffff',
+                  borderRadius: '14px',
+                  border: '2px dashed #CBD5E1',
+                  margin: 'auto 0',
+                  gap: '10px'
+                }}>
+                  <div style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    background: 'rgba(15, 76, 92, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Mic size={24} color="#0F4C5C" />
+                  </div>
+                  <h3 style={{ fontSize: '14.5px', fontWeight: 800, color: '#091E26', margin: 0 }}>
+                    Consultation Room on Standby
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#64748B', maxWidth: '320px', margin: 0, lineHeight: 1.5 }}>
+                    {micMode === 'physical_mic'
+                      ? (isRecording 
+                          ? '🎙️ Listening to your microphone... Speak clearly and live doctor-patient turns will appear here in real-time!'
+                          : 'Microphone is ready. Click "Resume" or "Start Recording" and speak into your laptop mic.')
+                      : 'Click "Start Recording" to stream the simulated encounter, or switch to "🎙️ Live Laptop Mic" above to speak live.'}
+                  </p>
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+                    <button
+                      onClick={() => {
+                        setMicMode('physical_mic');
+                        setIsRecording(true);
+                      }}
+                      style={{
+                        background: '#0F4C5C',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <Mic size={14} />
+                      <span>Start Live Laptop Mic</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMicMode('ambient_sim');
+                        setIsRecording(true);
+                        setDialogueList([encounterData.dialogueSequence[0]]);
+                        setCurrentStep(1);
+                      }}
+                      style={{
+                        background: '#FAF8F5',
+                        color: '#475569',
+                        border: '1px solid #CBD5E1',
+                        padding: '8px 14px',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        fontWeight: 750,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ⚡ Load Demo Simulation
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {dialogueList.map((item, idx) => {
                 const isDoc = typeof item.speaker === 'string' && item.speaker.startsWith('Doctor');
                 return (
@@ -701,6 +923,26 @@ export default function LiveScribeSessionModal({
                   </div>
                 );
               })}
+
+              {liveTranscriptInterim && (
+                <div style={{
+                  alignSelf: 'flex-start',
+                  maxWidth: '88%',
+                  background: 'rgba(15, 76, 92, 0.08)',
+                  color: '#0F4C5C',
+                  borderRadius: '14px 14px 14px 2px',
+                  padding: '10px 14px',
+                  border: '1.5px dashed #0F4C5C',
+                  fontSize: '12.5px',
+                  fontStyle: 'italic',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#EF4444', animation: 'pulse 1s infinite' }} />
+                  <span>{liveTranscriptInterim}...</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -743,15 +985,22 @@ export default function LiveScribeSessionModal({
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {encounterData.icdMappings.map((icd, i) => (
-                  <div key={i} style={{ background: '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>{icd.colloquial}</div>
-                    <div style={{ fontSize: '11px', color: '#1E293B', fontWeight: 600 }}>{icd.clinical}</div>
-                    <div style={{ fontSize: '10px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
-                      <code>{icd.icd10}</code> • <code>SNOMED: {icd.snomed}</code>
-                    </div>
+                {dialogueList.length === 0 ? (
+                  <div style={{ padding: '18px 12px', textAlign: 'center', background: '#FAF8F5', borderRadius: '8px', border: '1px dashed #CBD5E1', color: '#64748B', fontSize: '11px', lineHeight: 1.5 }}>
+                    <Sparkles size={16} color="#D97706" style={{ margin: '0 auto 6px auto', display: 'block' }} />
+                    Awaiting live speech input... Regional symptom idioms will resolve to ICD-10 & SNOMED-CT as spoken.
                   </div>
-                ))}
+                ) : (
+                  encounterData.icdMappings.map((icd, i) => (
+                    <div key={i} style={{ background: '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>{icd.colloquial}</div>
+                      <div style={{ fontSize: '11px', color: '#1E293B', fontWeight: 600 }}>{icd.clinical}</div>
+                      <div style={{ fontSize: '10px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
+                        <code>{icd.icd10}</code> • <code>SNOMED: {icd.snomed}</code>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -769,28 +1018,35 @@ export default function LiveScribeSessionModal({
 
             {/* Prescribed Items Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {encounterData.prescriptions.map((p, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    padding: '12px 14px',
-                    borderRadius: '12px',
-                    background: '#FAF8F5',
-                    border: `1.5px solid ${p.color}33`
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{p.name}</span>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: p.color }}>{p.colorLabel}</span>
-                  </div>
-                  <div style={{ fontSize: '11.5px', color: '#0F4C5C', fontWeight: 700 }}>
-                    ⏰ {p.timing} • {p.days}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
-                    Instructions: {p.meal}
-                  </div>
+              {dialogueList.length === 0 ? (
+                <div style={{ padding: '24px 14px', textAlign: 'center', background: '#FAF8F5', borderRadius: '10px', border: '1px dashed #CBD5E1', color: '#64748B', fontSize: '11.5px', lineHeight: 1.5 }}>
+                  <Pill size={18} color="#0F4C5C" style={{ margin: '0 auto 6px auto', display: 'block' }} />
+                  Awaiting consultation recording... Prescription items formulate automatically as the doctor concludes verbal orders.
                 </div>
-              ))}
+              ) : (
+                encounterData.prescriptions.map((p, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: '12px',
+                      background: '#FAF8F5',
+                      border: `1.5px solid ${p.color}33`
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{p.name}</span>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: p.color }}>{p.colorLabel}</span>
+                    </div>
+                    <div style={{ fontSize: '11.5px', color: '#0F4C5C', fontWeight: 700 }}>
+                      ⏰ {p.timing} • {p.days}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
+                      Instructions: {p.meal}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* DDI Clinical Safety Sentinel Banner */}
@@ -817,7 +1073,7 @@ export default function LiveScribeSessionModal({
 
               <button
                 onClick={handleSignPrescription}
-                disabled={isSynthesizingRx}
+                disabled={isSynthesizingRx || dialogueList.length === 0}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -826,16 +1082,18 @@ export default function LiveScribeSessionModal({
                   gap: '10px',
                   padding: '12px',
                   borderRadius: '12px',
-                  background: isRxSigned ? '#10B981' : 'linear-gradient(135deg, #0F4C5C 0%, #065F46 100%)',
+                  background: dialogueList.length === 0 ? '#94A3B8' : (isRxSigned ? '#10B981' : 'linear-gradient(135deg, #0F4C5C 0%, #065F46 100%)'),
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '13.5px',
                   fontWeight: 800,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(15, 76, 92, 0.3)'
+                  cursor: dialogueList.length === 0 ? 'not-allowed' : 'pointer',
+                  boxShadow: dialogueList.length === 0 ? 'none' : '0 4px 16px rgba(15, 76, 92, 0.3)'
                 }}
               >
-                {isSynthesizingRx ? (
+                {dialogueList.length === 0 ? (
+                  <span>Record Consultation to Sign e-Rx</span>
+                ) : isSynthesizingRx ? (
                   <span>Synthesizing Doctor's Spoken Audio-Rx...</span>
                 ) : isRxSigned ? (
                   <>

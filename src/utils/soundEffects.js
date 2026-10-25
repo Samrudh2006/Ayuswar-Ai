@@ -301,13 +301,22 @@ export function initGlobalClickSounds() {
 
     if (!interactiveEl) return;
 
+    const triggerSound = (variant) => {
+      // Execute asynchronously so pointerdown handler returns immediately (0ms latency for clicks)
+      if (typeof requestAnimationFrame !== 'undefined') {
+        requestAnimationFrame(() => playClickSound({ variant }));
+      } else {
+        setTimeout(() => playClickSound({ variant }), 0);
+      }
+    };
+
     // 1. Emergency buttons (Sanjivani 108 / SOS)
     if (
       interactiveEl.hasAttribute('data-emergency') ||
       interactiveEl.classList.contains('emergency-btn') ||
       (interactiveEl.textContent && (interactiveEl.textContent.includes('108') || interactiveEl.textContent.includes('Emergency') || interactiveEl.textContent.includes('Sanjivani')))
     ) {
-      playClickSound({ variant: 'emergency' });
+      triggerSound('emergency');
       return;
     }
 
@@ -317,7 +326,7 @@ export function initGlobalClickSounds() {
       interactiveEl.classList.contains('modal-close') ||
       interactiveEl.querySelector('.lucide-x')
     ) {
-      playClickSound({ variant: 'close' });
+      triggerSound('close');
       return;
     }
 
@@ -329,7 +338,7 @@ export function initGlobalClickSounds() {
       interactiveEl.classList.contains('tab-btn') ||
       interactiveEl.classList.contains('nav-link')
     ) {
-      playClickSound({ variant: 'tab' });
+      triggerSound('tab');
       return;
     }
 
@@ -338,7 +347,7 @@ export function initGlobalClickSounds() {
       interactiveEl.tagName.toLowerCase() === 'input' &&
       interactiveEl.getAttribute('type') === 'checkbox'
     ) {
-      playClickSound({ variant: interactiveEl.checked ? 'toggle-off' : 'toggle-on' });
+      triggerSound(interactiveEl.checked ? 'toggle-off' : 'toggle-on');
       return;
     }
 
@@ -347,12 +356,12 @@ export function initGlobalClickSounds() {
       interactiveEl.classList.contains('btn-primary') ||
       interactiveEl.classList.contains('action-btn')
     ) {
-      playClickSound({ variant: 'action' });
+      triggerSound('action');
       return;
     }
 
     // 6. Default tactile tap for all other buttons & interactive cards
-    playClickSound({ variant: 'tap' });
+    triggerSound('tap');
   };
 
   // Use capture phase on pointerdown for fastest physical response before default click handlers

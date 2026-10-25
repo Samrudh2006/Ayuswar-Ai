@@ -135,6 +135,70 @@ const INITIAL_DASHBOARD_APPOINTMENTS = [
     statusColor: '#6366F1',
     statusBg: 'rgba(99, 102, 241, 0.1)',
     encounterIndex: 0
+  },
+  {
+    id: 4,
+    patientName: 'Thirunavukkarasu',
+    name: 'Thirunavukkarasu',
+    vernacular: 'திருநாவுக்கரசு',
+    token: 'OPD-105',
+    age: 62,
+    gender: 'Male',
+    language: 'Tamil',
+    time: '12:15 PM',
+    type: 'Consultation (Diabetic Neuropathy)',
+    status: 'Upcoming',
+    statusColor: '#0F4C5C',
+    statusBg: 'rgba(15, 76, 92, 0.1)',
+    encounterIndex: 3
+  },
+  {
+    id: 5,
+    patientName: 'Lakshmi Gowda',
+    name: 'Lakshmi Gowda',
+    vernacular: 'ಲಕ್ಷ್ಮಿ ಗೌಡ',
+    token: 'OPD-106',
+    age: 26,
+    gender: 'Female',
+    language: 'Kannada',
+    time: '12:45 PM',
+    type: 'Antenatal Checkup (Anemia)',
+    status: 'Upcoming',
+    statusColor: '#D97706',
+    statusBg: 'rgba(217, 119, 6, 0.1)',
+    encounterIndex: 4
+  },
+  {
+    id: 6,
+    patientName: 'Dattatray Shinde',
+    name: 'Dattatray Shinde',
+    vernacular: 'दत्तात्रय शिंदे',
+    token: 'OPD-107',
+    age: 54,
+    gender: 'Male',
+    language: 'Marathi',
+    time: '01:15 PM',
+    type: 'Consultation (Bronchitis & Wheeze)',
+    status: 'Upcoming',
+    statusColor: '#EF4444',
+    statusBg: 'rgba(239, 68, 68, 0.1)',
+    encounterIndex: 5
+  },
+  {
+    id: 7,
+    patientName: 'Debabrata Ghosh',
+    name: 'Debabrata Ghosh',
+    vernacular: 'দেবব্রত ঘোষ',
+    token: 'OPD-108',
+    age: 48,
+    gender: 'Male',
+    language: 'Bengali',
+    time: '01:45 PM',
+    type: 'Consultation (Gastritis & Dyspepsia)',
+    status: 'Upcoming',
+    statusColor: '#8B5CF6',
+    statusBg: 'rgba(139, 92, 246, 0.1)',
+    encounterIndex: 6
   }
 ];
 
@@ -5575,6 +5639,15 @@ export default function DoctorPortal({
           onClose={() => setActiveScribeSessionPatient(null)}
           patientData={activeScribeSessionPatient}
           doctorName={doctorName}
+          onSwitchToWizard={(encounterIdx) => {
+            const idx = encounterIdx !== undefined ? encounterIdx : (activeScribeSessionPatient?.encounterIndex ?? 0);
+            setActiveScribeSessionPatient(null);
+            if (onSelectEncounterAndLaunch) {
+              onSelectEncounterAndLaunch(idx);
+            } else {
+              window.location.href = `/clinical-console?encounter=${idx}`;
+            }
+          }}
         />
       )}
 

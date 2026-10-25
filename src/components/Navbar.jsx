@@ -18,7 +18,8 @@ import {
   Cpu,
   BarChart3,
   BookOpen,
-  Scan
+  Scan,
+  Volume2
 } from 'lucide-react';
 import { useApp, SUPPORTED_LANGUAGES } from '../context/AppContext';
 import AyuSwarLogoReveal from './AyuSwarLogoReveal';
@@ -380,8 +381,8 @@ export default function Navbar({
             {/* Technology */}
             <Link
               to="/technology"
-              onMouseEnter={() => preloadModule('/architecture')}
-              onFocus={() => preloadModule('/architecture')}
+              onMouseEnter={() => preloadModule('/technology')}
+              onFocus={() => preloadModule('/technology')}
               style={navItemStyle(isTechActive)}
               aria-current={isTechActive ? 'page' : undefined}
             >
@@ -391,8 +392,8 @@ export default function Navbar({
             {/* Clinical Impact / Benchmarks */}
             <Link
               to="/benchmarks"
-              onMouseEnter={() => preloadModule('/benchmark')}
-              onFocus={() => preloadModule('/benchmark')}
+              onMouseEnter={() => preloadModule('/benchmarks')}
+              onFocus={() => preloadModule('/benchmarks')}
               style={navItemStyle(isImpactActive)}
               aria-current={isImpactActive ? 'page' : undefined}
             >
@@ -408,8 +409,8 @@ export default function Navbar({
                   setSolutionsOpen(false);
                 }}
                 onMouseEnter={() => {
-                  preloadModule('/languages');
-                  preloadModule('/dataset');
+                  preloadModule('/language-matrix');
+                  preloadModule('/datasets');
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowDown') setResourcesOpen(true);
@@ -428,8 +429,8 @@ export default function Navbar({
                   <Link
                     to="/language-matrix"
                     onClick={() => setResourcesOpen(false)}
-                    onMouseEnter={() => preloadModule('/languages')}
-                    onFocus={() => preloadModule('/languages')}
+                    onMouseEnter={() => preloadModule('/language-matrix')}
+                    onFocus={() => preloadModule('/language-matrix')}
                     style={dropdownItemStyle(currentPath === '/language-matrix')}
                     role="menuitem"
                   >
@@ -443,8 +444,8 @@ export default function Navbar({
                   <Link
                     to="/datasets"
                     onClick={() => setResourcesOpen(false)}
-                    onMouseEnter={() => preloadModule('/dataset')}
-                    onFocus={() => preloadModule('/dataset')}
+                    onMouseEnter={() => preloadModule('/datasets')}
+                    onFocus={() => preloadModule('/datasets')}
                     style={dropdownItemStyle(currentPath === '/datasets')}
                     role="menuitem"
                   >
@@ -569,6 +570,12 @@ export default function Navbar({
                   transition: 'all 0.15s ease',
                   whiteSpace: 'nowrap'
                 }}
+                onMouseEnter={() => {
+                  preloadModule('/auth/doctor');
+                  preloadModule('/auth/patient');
+                  preloadModule('/doctor-portal');
+                  preloadModule('/patient-portal');
+                }}
                 aria-expanded={loginOpen}
                 aria-haspopup="true"
                 title="Login to Doctor OPD Workspace or Patient ABHA Portal"
@@ -582,6 +589,10 @@ export default function Navbar({
                 <div style={{ ...dropdownMenuStyle, minWidth: 200, right: 0, left: 'auto' }} role="menu">
                   <button
                     type="button"
+                    onMouseEnter={() => {
+                      preloadModule('/doctor-portal');
+                      preloadModule('/auth/doctor');
+                    }}
                     onClick={() => {
                       setLoginOpen(false);
                       if (doctorProfile) navigate('/doctor-portal');
@@ -600,6 +611,10 @@ export default function Navbar({
 
                   <button
                     type="button"
+                    onMouseEnter={() => {
+                      preloadModule('/patient-portal');
+                      preloadModule('/auth/patient');
+                    }}
                     onClick={() => {
                       setLoginOpen(false);
                       if (patientProfile) navigate('/patient-portal');
