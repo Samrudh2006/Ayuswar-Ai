@@ -8,28 +8,28 @@ import {
   Volume2, 
   VolumeX,
   AlertCircle, 
-  Download, 
-  Play, 
-  Pause,
-  Upload,
-  Sliders,
-  Sparkles,
-  BarChart2,
-  Key,
-  CheckCircle2,
-  FileAudio,
-  Cpu
+  Upload, 
+  Sliders, 
+  Sparkles, 
+  CheckCircle2, 
+  FileAudio, 
+  Cpu,
+  RotateCcw
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
 import { speechService } from '../services/indicSpeechService';
-import { reasonAcousticBiomarkerWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
+import { reasonAcousticBiomarkerWithEvon } from '../services/gnaniEvonService';
 import EvonStatusChip from '../components/EvonStatusChip';
-import { earshotDescribe, earshotMatch, ACOUSTIC_CLINICAL_ONTOLOGY } from '../services/acousticReasoningService';
-import { generateHealthyAcousticCounselWithGroq } from '../services/aiBrainService';
+import { earshotDescribe, earshotMatch } from '../services/acousticReasoningService';
+import { computeAcousticDspMetrics, LAB_STATES } from '../services/acousticDspEngine';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
+
+  // Explicit State Machine: AWAITING_AUDIO | RECORDING | ANALYSING | SUCCESS | ERROR
+  const [labState, setLabState] = useState(LAB_STATES.AWAITING_AUDIO);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const [visualizerMode, setVisualizerMode] = useState('spectrum'); // 'oscilloscope' | 'spectrum'
   const [isRecordingMic, setIsRecordingMic] = useState(false);
@@ -38,22 +38,14 @@ export default function AcousticBiomarkerLabView() {
   const [liveToneHz, setLiveToneHz] = useState(220);
   const [isToneActive, setIsToneActive] = useState(false);
 
-  // Real-time Audio Diagnostics & Sampler State (User-Controlled Duration, No Forced Cutoff)
+  // Real-time Audio Diagnostics & Sampler State
   const [vuLevel, setVuLevel] = useState(0);
   const [detectedWheezeHz, setDetectedWheezeHz] = useState(null);
   const [isSamplingAudio, setIsSamplingAudio] = useState(false);
-  const [isAnalyzingSample, setIsAnalyzingSample] = useState(false);
-  const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [analyzedFrameIndex, setAnalyzedFrameIndex] = useState(0);
-  const [totalVoicedFrames, setTotalVoicedFrames] = useState(0);
-  const [dspAnalysisStage, setDspAnalysisStage] = useState('');
-  const [samplingError, setSamplingError] = useState(null);
-  const [isAiVoiceReplyEnabled, setIsAiVoiceReplyEnabled] = useState(true);
-  const [isAiSpeakingAnalysis, setIsAiSpeakingAnalysis] = useState(false);
   const [samplingDuration, setSamplingDuration] = useState(0);
   const [sampleSummary, setSampleSummary] = useState(null);
   const samplingStartTimeRef = useRef(0);
-  
+
   // Gnani Speech Services Server Status (Server-side keys only)
   const [gnaniSpeechStatus, setGnaniSpeechStatus] = useState(null);
 
@@ -64,18 +56,14 @@ export default function AcousticBiomarkerLabView() {
       .catch(() => setGnaniSpeechStatus({ available: false, status: 'UNAVAILABLE' }));
   }, []);
 
-  const [dspMetrics, setDspMetrics] = useState({
-    pitchF0: 142,
-    jitterPct: 0.85,
-    shimmerPct: 1.70,
-    hnrDb: 19.5,
-    spectralCentroid: 1200
-  });
-  const [analysisResult, setAnalysisResult] = useState(() => analyzeAcousticSignals(dspMetrics));
+  // Measured DSP Metrics: null on initial load (no placeholders, no default fake values)
+  const [dspMetrics, setDspMetrics] = useState(null);
+  const [analysisResult, setAnalysisResult] = useState(null);
   const [evonAcousticResult, setEvonAcousticResult] = useState(null);
   const [isEvonAcousticReasoning, setIsEvonAcousticReasoning] = useState(false);
 
   const handleRunEvonAcousticReasoning = async () => {
+    if (!dspMetrics) return;
     setIsEvonAcousticReasoning(true);
     try {
       const res = await reasonAcousticBiomarkerWithEvon(dspMetrics, 'Patient phonation test');
@@ -87,17 +75,12 @@ export default function AcousticBiomarkerLabView() {
     }
   };
 
-  // Leonxlnx/Earshot Local Acoustic Reasoning State (AST + CLAP Zero-Shot Matching)
+  // Earshot Local Acoustic Reasoning State (Zero-Shot Matching on measured features)
   const [earshotSemanticQuery, setEarshotSemanticQuery] = useState('respiratory wheeze');
-  const [earshotMatchResult, setEarshotMatchResult] = useState(() => 
-    earshotMatch({
-      dominantFreqHz: 440,
-      spectralCentroid: 1200,
-      hnrDb: 12
-    }, 'respiratory wheeze')
-  );
+  const [earshotMatchResult, setEarshotMatchResult] = useState(null);
 
   const handleTestEarshotSemanticMatch = (query) => {
+    if (!dspMetrics) return;
     const q = query || earshotSemanticQuery;
     setEarshotSemanticQuery(q);
     const res = earshotMatch({
@@ -108,60 +91,14 @@ export default function AcousticBiomarkerLabView() {
     setEarshotMatchResult(res);
   };
 
-  // Live acoustic description from Earshot AST grounding
-  const currentEarshotDescription = earshotDescribe({
+  // Live acoustic description from Earshot AST grounding (computed only when dspMetrics exist)
+  const currentEarshotDescription = dspMetrics ? earshotDescribe({
     dominantFreqHz: detectedWheezeHz || dspMetrics.pitchF0 || 220,
     spectralCentroid: dspMetrics.spectralCentroid || 1200,
     hnrDb: dspMetrics.hnrDb || 19.5
-  });
+  }) : null;
 
-  // Healthy Acoustic Clearance & Groq Preventive Counsel State
-  const [healthyCounselText, setHealthyCounselText] = useState(null);
-  const [isGeneratingCounsel, setIsGeneratingCounsel] = useState(false);
-  const [counselLang, setCounselLang] = useState('te-IN');
-  const [isSpeakingCounsel, setIsSpeakingCounsel] = useState(false);
-
-  const isHealthyPhonation = Boolean(
-    (analysisResult?.topAcousticMatch?.key === 'normal_phonation' || currentEarshotDescription?.icd10 === 'Z00.00') &&
-    dspMetrics.hnrDb >= 17 &&
-    dspMetrics.jitterPct <= 1.35 &&
-    !detectedWheezeHz
-  );
-
-  const handleGenerateHealthyCounsel = async (lang = counselLang) => {
-    setIsGeneratingCounsel(true);
-    setCounselLang(lang);
-    try {
-      const counsel = await generateHealthyAcousticCounselWithGroq({
-        metrics: dspMetrics,
-        language: lang
-      });
-      setHealthyCounselText(counsel);
-      if (counsel) {
-        speakHealthyCounsel(counsel, lang);
-      }
-    } catch (err) {
-      console.warn('Healthy acoustic counsel error:', err);
-    } finally {
-      setIsGeneratingCounsel(false);
-    }
-  };
-
-  const speakHealthyCounsel = async (text, lang = counselLang) => {
-    if (isSpeakingCounsel) {
-      speechService.stopSpeaking();
-      setIsSpeakingCounsel(false);
-      return;
-    }
-    setIsSpeakingCounsel(true);
-    await speechService.speak(text, {
-      langCode: lang,
-      onEnd: () => setIsSpeakingCounsel(false),
-      onError: () => setIsSpeakingCounsel(false)
-    });
-  };
-
-  // Spoken Acoustic Biomarker Clinical Readout using Gnani Timbre TTS (with Browser SpeechSynthesis fallback)
+  // Spoken Acoustic Biomarker Telemetry Readout
   const [isSpeakingReadout, setIsSpeakingReadout] = useState(false);
   const [readoutProvider, setReadoutProvider] = useState(null);
 
@@ -172,9 +109,19 @@ export default function AcousticBiomarkerLabView() {
       return;
     }
 
-    const registerText = dspMetrics.pitchF0 < 165 ? 'Low Register' : dspMetrics.pitchF0 > 260 ? 'High Register' : 'Mid Register';
-    const topMatch = analysisResult?.topAcousticMatch?.label || 'Baseline Phonation';
-    const readoutText = `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb} decibels. Reference signal match is ${topMatch}.`;
+    if (!dspMetrics) return;
+
+    const registerText = dspMetrics.pitchF0 === null
+      ? 'Aperiodic or unvoiced signal'
+      : dspMetrics.pitchF0 < 165
+        ? 'Low Register'
+        : dspMetrics.pitchF0 > 260
+          ? 'High Register'
+          : 'Mid Register';
+
+    const readoutText = dspMetrics.pitchF0 !== null
+      ? `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb || 'unavailable'} decibels.`
+      : `Acoustic Phonation Telemetry. Audio is unvoiced with spectral centroid of ${dspMetrics.spectralCentroid || 'unavailable'} Hertz. Fundamental pitch frequency is unavailable.`;
 
     setIsSpeakingReadout(true);
     await speechService.speak(readoutText, {
@@ -199,17 +146,19 @@ export default function AcousticBiomarkerLabView() {
   const activeOscillatorRef = useRef(null);
   const activeSourceRef = useRef(null);
   const fileInputRef = useRef(null);
-  const lastDspUpdateRef = useRef(0);
-  const sampleBufferRef = useRef([]);
   const samplingTimerRef = useRef(null);
+  const processorRef = useRef(null);
+  const recordedPcmChunksRef = useRef([]);
 
   // Stop audio on unmount
   useEffect(() => {
     return () => {
       if (samplingTimerRef.current) clearInterval(samplingTimerRef.current);
       if (mediaStreamRef.current) mediaStreamRef.current.getTracks().forEach(t => t.stop());
+      if (processorRef.current) { try { processorRef.current.disconnect(); } catch {} }
       if (activeOscillatorRef.current) { try { activeOscillatorRef.current.stop(); } catch {} }
       if (activeSourceRef.current) { try { activeSourceRef.current.stop(); } catch {} }
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
   }, []);
 
@@ -234,6 +183,10 @@ export default function AcousticBiomarkerLabView() {
     if (samplingTimerRef.current) {
       clearInterval(samplingTimerRef.current);
       samplingTimerRef.current = null;
+    }
+    if (processorRef.current) {
+      try { processorRef.current.disconnect(); } catch {}
+      processorRef.current = null;
     }
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach(t => t.stop());
@@ -260,7 +213,34 @@ export default function AcousticBiomarkerLabView() {
   };
 
   // -------------------------------------------------------------
-  // Live Microphone Capture
+  // RESET ACTION: Clears all previous results and returns to AWAITING_AUDIO
+  // -------------------------------------------------------------
+  const handleReset = () => {
+    stopAllAudio();
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    setLabState(LAB_STATES.AWAITING_AUDIO);
+    setErrorMessage(null);
+    setDspMetrics(null);
+    setAnalysisResult(null);
+    setSampleSummary(null);
+    setDetectedWheezeHz(null);
+    setSamplingDuration(0);
+    setEarshotMatchResult(null);
+    setEvonAcousticResult(null);
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    // Redraw empty canvas
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#061626';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  // -------------------------------------------------------------
+  // Live Continuous Microphone Capture (Monitoring only)
   // -------------------------------------------------------------
   const handleToggleLiveMic = async () => {
     if (isRecordingMic) {
@@ -286,7 +266,7 @@ export default function AcousticBiomarkerLabView() {
   };
 
   // -------------------------------------------------------------
-  // 5-Second Phonation & Wheeze Sampler
+  // Microphone Phonation Recording (Direct PCM capture into DSP pipeline)
   // -------------------------------------------------------------
   const handleTogglePhonationSampling = async () => {
     if (isSamplingAudio) {
@@ -295,10 +275,7 @@ export default function AcousticBiomarkerLabView() {
     }
 
     stopAllAudio();
-    setSampleSummary(null);
-    setSamplingError(null);
-    sampleBufferRef.current = [];
-    setSamplingDuration(0);
+    handleReset();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -308,23 +285,37 @@ export default function AcousticBiomarkerLabView() {
       const source = ctx.createMediaStreamSource(stream);
       source.connect(analyser);
 
+      // Raw PCM accumulation via ScriptProcessorNode
+      const processor = ctx.createScriptProcessor(2048, 1, 1);
+      recordedPcmChunksRef.current = [];
+      processor.onaudioprocess = (e) => {
+        const input = e.inputBuffer.getChannelData(0);
+        recordedPcmChunksRef.current.push(new Float32Array(input));
+      };
+      source.connect(processor);
+
+      const silentGain = ctx.createGain();
+      silentGain.gain.setValueAtTime(0, ctx.currentTime);
+      processor.connect(silentGain);
+      silentGain.connect(ctx.destination);
+      processorRef.current = processor;
+
       setIsRecordingMic(true);
       setIsSamplingAudio(true);
+      setLabState(LAB_STATES.RECORDING);
       samplingStartTimeRef.current = Date.now();
       startVisualizerLoop();
 
-      // Count elapsed seconds without any artificial automatic cutoff
       samplingTimerRef.current = setInterval(() => {
         const elapsed = Math.floor((Date.now() - samplingStartTimeRef.current) / 1000);
         setSamplingDuration(elapsed);
-
-        // Safety boundary at 120s
         if (elapsed >= 120) {
           handleStopPhonationSampling();
         }
       }, 500);
     } catch (err) {
-      alert('Microphone access unavailable or denied: ' + err.message);
+      setLabState(LAB_STATES.ERROR);
+      setErrorMessage('Microphone access unavailable or denied: ' + err.message);
     }
   };
 
@@ -337,259 +328,147 @@ export default function AcousticBiomarkerLabView() {
     setIsSamplingAudio(false);
     setIsRecordingMic(false);
 
+    if (processorRef.current) {
+      try { processorRef.current.disconnect(); } catch {}
+      processorRef.current = null;
+    }
+
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach(t => t.stop());
       mediaStreamRef.current = null;
     }
 
-    const elapsedSec = Math.max(1, Math.round((Date.now() - (samplingStartTimeRef.current || Date.now())) / 1000));
-    const rawFrames = [...sampleBufferRef.current];
+    // Explicit Transition: ANALYSING
+    setLabState(LAB_STATES.ANALYSING);
 
-    // Filter voiced frames (speech activity with valid fundamental frequency)
-    const voicedFrames = rawFrames.filter(f => f.f0 && f.f0 >= 80 && f.f0 <= 420 && f.rms > 0.015);
-
-    if (voicedFrames.length < 4) {
-      setSamplingError("No sustained vocal phonation detected in sample (" + rawFrames.length + " ambient noise frames). Please sustain an 'Aaah' vowel into the microphone and record again.");
+    const chunks = recordedPcmChunksRef.current;
+    if (!chunks || chunks.length === 0) {
+      setLabState(LAB_STATES.ERROR);
+      setErrorMessage('Could not analyse this audio: no audio frames were captured.');
       return;
     }
 
-    // Begin multi-stage realistic clinical DSP computation pipeline with real-time frame convergence
-    setIsAnalyzingSample(true);
-    setAnalysisProgress(0);
-    setAnalyzedFrameIndex(1);
-    setTotalVoicedFrames(voicedFrames.length);
-    setSamplingError(null);
-
-    // 1. Compute target mathematical metrics beforehand
-    const pitchList = voicedFrames.map(f => f.f0).sort((a,b) => a - b);
-    const medianF0 = pitchList[Math.floor(pitchList.length / 2)];
-
-    let periodDiffSum = 0;
-    let totalPeriod = 0;
-    const periods = voicedFrames.map(f => 1000.0 / f.f0);
-    for (let i = 0; i < periods.length - 1; i++) {
-      periodDiffSum += Math.abs(periods[i + 1] - periods[i]);
-      totalPeriod += periods[i];
+    let totalLen = 0;
+    for (const c of chunks) totalLen += c.length;
+    const concatenatedPcm = new Float32Array(totalLen);
+    let offset = 0;
+    for (const c of chunks) {
+      concatenatedPcm.set(c, offset);
+      offset += c.length;
     }
-    totalPeriod += periods[periods.length - 1];
-    const avgPeriod = totalPeriod / periods.length;
-    const finalJitter = periods.length > 1 && avgPeriod > 0
-      ? Number(Math.min(9.8, Math.max(0.35, ((periodDiffSum / (periods.length - 1)) / avgPeriod) * 100)).toFixed(2))
-      : 0.82;
 
-    let ampDiffSum = 0;
-    let totalAmp = 0;
-    const amplitudes = voicedFrames.map(f => Math.max(0.001, f.rms));
-    for (let i = 0; i < amplitudes.length - 1; i++) {
-      ampDiffSum += Math.abs(amplitudes[i + 1] - amplitudes[i]);
-      totalAmp += amplitudes[i];
-    }
-    totalAmp += amplitudes[amplitudes.length - 1];
-    const avgAmp = totalAmp / amplitudes.length;
-    const finalShimmer = amplitudes.length > 1 && avgAmp > 0
-      ? Number(Math.min(14.5, Math.max(1.1, ((ampDiffSum / (amplitudes.length - 1)) / avgAmp) * 100)).toFixed(2))
-      : 1.84;
+    const { ctx } = getOrCreateAudioContext();
+    const sampleRate = ctx.sampleRate || 44100;
 
-    const hnrList = voicedFrames.map(f => f.hnr).filter(h => typeof h === 'number' && !isNaN(h)).sort((a,b) => a - b);
-    const finalHnr = hnrList.length > 0 ? Number(hnrList[Math.floor(hnrList.length / 2)].toFixed(1)) : 19.5;
-
-    const centroidList = voicedFrames.map(f => f.centroid).filter(c => typeof c === 'number' && !isNaN(c)).sort((a,b) => a - b);
-    const finalCentroid = centroidList.length > 0 ? Math.round(centroidList[Math.floor(centroidList.length / 2)]) : 1220;
-
-    const verifiedDspMetrics = {
-      pitchF0: medianF0,
-      jitterPct: finalJitter,
-      shimmerPct: finalShimmer,
-      hnrDb: finalHnr,
-      spectralCentroid: finalCentroid
-    };
-
-    // 2. Real-Time Progressive Convergence Loop (50 frames over ~4.0 seconds)
-    let currentStep = 0;
-    const totalSteps = 48;
-    const stepIntervalMs = 85; // 48 * 85ms = ~4.08 seconds
-
-    const dspConvergenceTimer = setInterval(() => {
-      currentStep++;
-      const progress = Math.min(100, Math.round((currentStep / totalSteps) * 100));
-      setAnalysisProgress(progress);
-
-      const frameIdx = Math.min(voicedFrames.length, Math.max(1, Math.floor((currentStep / totalSteps) * voicedFrames.length)));
-      setAnalyzedFrameIndex(frameIdx);
-
-      const factor = currentStep / totalSteps;
-      const currentVoiced = voicedFrames[Math.min(voicedFrames.length - 1, frameIdx - 1)];
-
-      // Live metrics dynamically moving and converging on-screen
-      const jitterWobble = (Math.random() - 0.5) * 0.25 * (1 - factor);
-      const shimmerWobble = (Math.random() - 0.5) * 0.35 * (1 - factor);
-      const hnrWobble = (Math.random() - 0.5) * 0.8 * (1 - factor);
-      const f0Wobble = Math.round((Math.random() - 0.5) * 8 * (1 - factor));
-
-      const liveF0 = factor > 0.85 ? medianF0 : Math.round(currentVoiced.f0 * (1 - factor * 0.7) + medianF0 * (factor * 0.7)) + f0Wobble;
-      const liveJitter = factor > 0.85 ? finalJitter : Number(Math.max(0.3, 0.5 + (finalJitter - 0.5) * factor + jitterWobble).toFixed(2));
-      const liveShimmer = factor > 0.85 ? finalShimmer : Number(Math.max(0.9, 1.3 + (finalShimmer - 1.3) * factor + shimmerWobble).toFixed(2));
-      const liveHnr = factor > 0.85 ? finalHnr : Number(Math.max(6.0, 14.5 + (finalHnr - 14.5) * factor + hnrWobble).toFixed(1));
-      const liveCentroid = factor > 0.85 ? finalCentroid : Math.round(980 + (finalCentroid - 980) * factor + (Math.random() - 0.5) * 45 * (1 - factor));
-
-      const intermediateMetrics = {
-        pitchF0: Math.max(80, liveF0),
-        jitterPct: liveJitter,
-        shimmerPct: liveShimmer,
-        hnrDb: liveHnr,
-        spectralCentroid: liveCentroid
-      };
-      setDspMetrics(intermediateMetrics);
-
-      // Periodically update cluster proximity during analysis
-      if (currentStep % 4 === 0 || factor > 0.7) {
-        setAnalysisResult(analyzeAcousticSignals(intermediateMetrics));
-      }
-
-      if (progress < 25) {
-        setDspAnalysisStage(`Stage 1/4: Decomposing 1024-pt FFT Spectrum (Window ${frameIdx}/${voicedFrames.length})...`);
-      } else if (progress < 50) {
-        setDspAnalysisStage(`Stage 2/4: Autocorrelation Voicing Lag & Fundamental Frequency (F0: ${liveF0} Hz)...`);
-      } else if (progress < 75) {
-        setDspAnalysisStage(`Stage 3/4: Cycle-to-Cycle Perturbation (Jitter ${liveJitter}%, Shimmer ${liveShimmer}%)...`);
+    try {
+      const metrics = computeAcousticDspMetrics(concatenatedPcm, sampleRate);
+      setDspMetrics(metrics);
+      if (metrics.isVoiced) {
+        setAnalysisResult(analyzeAcousticSignals({
+          pitchF0: metrics.pitchF0,
+          jitterPct: metrics.jitterPct,
+          shimmerPct: metrics.shimmerPct,
+          hnrDb: metrics.hnrDb,
+          spectralCentroid: metrics.spectralCentroid
+        }));
       } else {
-        setDspAnalysisStage(`Stage 4/4: Scoring Multivariate Gaussian Distance across 7 Disease Clusters (${progress}%)...`);
+        setAnalysisResult(null);
       }
-
-      if (currentStep >= totalSteps) {
-        clearInterval(dspConvergenceTimer);
-
-        // Lock in final mathematically verified results
-        setDspMetrics(verifiedDspMetrics);
-        const finalClinicalAnalysis = analyzeAcousticSignals(verifiedDspMetrics);
-        setAnalysisResult(finalClinicalAnalysis);
-        setIsAnalyzingSample(false);
-        setDspAnalysisStage('');
-        setAnalysisProgress(100);
-
-        setSampleSummary({
-          durationSec: elapsedSec,
-          totalFrames: rawFrames.length,
-          voicedFrames: voicedFrames.length,
-          metrics: verifiedDspMetrics,
-          topMatch: finalClinicalAnalysis.primaryAcousticCluster
-        });
-
-        // Trigger AI Voice Reply with Verified Findings
-        const vocalSummary = `Acoustic Biomarker Analysis completed on ${elapsedSec} second voice sample. Measured fundamental frequency is ${medianF0} Hertz, and Harmonics to Noise Ratio is ${finalHnr} decibels. Reference cluster match is ${finalClinicalAnalysis.primaryAcousticCluster}. Vocal acoustic stability is verified.`;
-        speakVoiceDiagnosis(vocalSummary);
-      }
-    }, stepIntervalMs);
+      setSampleSummary({
+        fileName: 'Microphone Phonation Recording',
+        durationSec: metrics.durationSec,
+        totalFrames: metrics.totalFrames,
+        voicedFrames: metrics.voicedFrames,
+        isVoiced: metrics.isVoiced,
+        metrics: metrics
+      });
+      setLabState(LAB_STATES.SUCCESS);
+    } catch (err) {
+      setLabState(LAB_STATES.ERROR);
+      setErrorMessage(err.message || 'Could not analyse this audio. Please try again.');
+    }
   };
 
   // -------------------------------------------------------------
-  // File Upload Decoder
+  // File Upload Decoder & Real DSP Analysis
   // -------------------------------------------------------------
   const handleAudioFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input value so re-selecting same file triggers onChange
+    e.target.value = '';
+
     stopAllAudio();
+    handleReset();
+
+    // Transition immediately to ANALYSING (tied strictly to real decode & compute promise)
+    setLabState(LAB_STATES.ANALYSING);
 
     try {
       const { ctx, analyser } = getOrCreateAudioContext();
       const arrayBuffer = await file.arrayBuffer();
-      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
 
+      let audioBuffer;
+      try {
+        audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+      } catch {
+        setLabState(LAB_STATES.ERROR);
+        setErrorMessage('Could not analyse this audio: unsupported format or corrupt audio file.');
+        return;
+      }
+
+      if (!audioBuffer || audioBuffer.length === 0 || audioBuffer.duration === 0) {
+        setLabState(LAB_STATES.ERROR);
+        setErrorMessage('Could not analyse this audio: audio file contains no samples.');
+        return;
+      }
+
+      const channelData = audioBuffer.getChannelData(0);
+      const sampleRate = audioBuffer.sampleRate;
+
+      let metrics;
+      try {
+        metrics = computeAcousticDspMetrics(channelData, sampleRate);
+      } catch (dspErr) {
+        setLabState(LAB_STATES.ERROR);
+        setErrorMessage(dspErr.message || 'Could not analyse this audio. Please try again.');
+        return;
+      }
+
+      // Success: store verified physical measurements
+      setDspMetrics(metrics);
+      if (metrics.isVoiced) {
+        setAnalysisResult(analyzeAcousticSignals({
+          pitchF0: metrics.pitchF0,
+          jitterPct: metrics.jitterPct,
+          shimmerPct: metrics.shimmerPct,
+          hnrDb: metrics.hnrDb,
+          spectralCentroid: metrics.spectralCentroid
+        }));
+      } else {
+        setAnalysisResult(null);
+      }
+
+      setSampleSummary({
+        fileName: file.name,
+        durationSec: metrics.durationSec,
+        totalFrames: metrics.totalFrames,
+        voicedFrames: metrics.voicedFrames,
+        isVoiced: metrics.isVoiced,
+        metrics: metrics
+      });
+
+      setLabState(LAB_STATES.SUCCESS);
+
+      // Play audio through Web Audio graph for live canvas visualizer feedback
       const source = ctx.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(analyser);
       analyser.connect(ctx.destination);
-
       activeSourceRef.current = source;
       setIsPlayingSound(true);
       setActiveSoundName(file.name);
-
-      // Compute physical DSP metrics via voicing-gated autocorrelation
-      const channelData = audioBuffer.getChannelData(0);
-      const sampleRate = audioBuffer.sampleRate;
-      const frameSize = 2048;
-      const hopSize = 1024;
-      const numFrames = Math.min(1200, Math.floor((channelData.length - frameSize) / hopSize));
-      const pitchEstimates = [];
-      const hnrEstimates = [];
-      let totalCentroid = 0;
-      let validFrames = 0;
-
-      const minLag = Math.floor(sampleRate / 380); // 380 Hz upper voice pitch limit
-      const maxLag = Math.floor(sampleRate / 80);  // 80 Hz lower voice pitch limit
-
-      for (let i = 0; i < numFrames; i++) {
-        const start = i * hopSize;
-        const frame = channelData.subarray(start, start + frameSize);
-        
-        let r0 = 0;
-        for (let j = 0; j < frameSize; j++) r0 += frame[j] * frame[j];
-        if (r0 < 0.005) continue; // silence / noise gate
-
-        let maxCorr = -1;
-        let bestLag = 0;
-        for (let lag = minLag; lag < maxLag; lag++) {
-          let corr = 0;
-          for (let j = 0; j < frameSize - lag; j += 2) {
-            corr += frame[j] * frame[j + lag];
-          }
-          if (corr > maxCorr) {
-            maxCorr = corr;
-            bestLag = lag;
-          }
-        }
-
-        if (bestLag > 0 && r0 > 0) {
-          const normCorr = (maxCorr * 2) / r0;
-          // Harmonicity & Voicing gate: require autocorrelation clarity > 0.45
-          if (normCorr > 0.45) {
-            const f0Candidate = Math.round(sampleRate / bestLag);
-            if (f0Candidate >= 80 && f0Candidate <= 380) {
-              pitchEstimates.push(f0Candidate);
-              const safeNorm = Math.min(0.98, Math.max(0.05, normCorr));
-              const hnr = 10 * Math.log10(safeNorm / (1.0001 - safeNorm));
-              hnrEstimates.push(hnr);
-            }
-          }
-        }
-
-        let num = 0, den = 0;
-        for (let j = 0; j < frameSize; j++) {
-          const mag = Math.abs(frame[j]);
-          num += j * mag;
-          den += mag;
-        }
-        if (den > 0) {
-          totalCentroid += ((num / den) * (sampleRate / 2)) / frameSize;
-          validFrames++;
-        }
-      }
-
-      const calculatedF0 = pitchEstimates.length > 0
-        ? Math.round(pitchEstimates.sort((a,b)=>a-b)[Math.floor(pitchEstimates.length / 2)])
-        : 145;
-      const calculatedHnr = hnrEstimates.length > 0
-        ? Number((hnrEstimates.reduce((a,b)=>a+b, 0) / hnrEstimates.length).toFixed(1))
-        : 18.5;
-      const calculatedCentroid = validFrames > 0
-        ? Math.round(totalCentroid / validFrames)
-        : 1250;
-
-      const fileMetrics = {
-        pitchF0: calculatedF0,
-        hnrDb: calculatedHnr,
-        spectralCentroid: calculatedCentroid
-      };
-      const fileAnalysis = analyzeAcousticSignals(fileMetrics);
-      setDspMetrics(fileMetrics);
-      setAnalysisResult(fileAnalysis);
-      setSampleSummary({
-        durationSec: Number(audioBuffer.duration.toFixed(1)),
-        totalFrames: validFrames,
-        metrics: fileMetrics,
-        topMatch: fileAnalysis.primaryAcousticCluster
-      });
 
       source.onended = () => {
         setIsPlayingSound(false);
@@ -599,12 +478,114 @@ export default function AcousticBiomarkerLabView() {
       source.start(0);
       startVisualizerLoop();
     } catch (err) {
-      alert('Failed to decode audio file: ' + err.message);
+      setLabState(LAB_STATES.ERROR);
+      setErrorMessage(err.message || 'Could not analyse this audio. Please try again.');
     }
   };
 
   // -------------------------------------------------------------
-  // Synthetic Breath / Vocal Biomarker Tone Synthesizer
+  // Sample Audio: 1-Click Reference Voice Signal Analysis (F0 = 120 Hz)
+  // -------------------------------------------------------------
+  const handleLoadSampleVoice = async () => {
+    stopAllAudio();
+    setLabState(LAB_STATES.ANALYSING);
+    setErrorMessage(null);
+
+    try {
+      let arrayBuffer;
+      try {
+        const res = await fetch('/audio/sample_synthetic_vowel_120hz.wav');
+        if (!res.ok) throw new Error('Fetch status ' + res.status);
+        arrayBuffer = await res.arrayBuffer();
+      } catch (fetchErr) {
+        // Fallback: generate pure harmonic vowel at known F0 = 120 Hz in memory
+        const sampleRate = 44100;
+        const duration = 2.0;
+        const totalSamples = Math.floor(sampleRate * duration);
+        const buffer = new ArrayBuffer(44 + totalSamples * 2);
+        const view = new DataView(buffer);
+        const writeString = (offset, str) => {
+          for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+        };
+        writeString(0, 'RIFF');
+        view.setUint32(4, 36 + totalSamples * 2, true);
+        writeString(8, 'WAVE');
+        writeString(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeString(36, 'data');
+        view.setUint32(40, totalSamples * 2, true);
+        for (let i = 0; i < totalSamples; i++) {
+          const t = i / sampleRate;
+          const s = 0.55 * Math.sin(2 * Math.PI * 120 * t) +
+                    0.25 * Math.sin(2 * Math.PI * 240 * t) +
+                    0.12 * Math.sin(2 * Math.PI * 360 * t) +
+                    0.06 * Math.sin(2 * Math.PI * 480 * t);
+          const val = Math.max(-1, Math.min(1, s)) * 32767;
+          view.setInt16(44 + i * 2, val, true);
+        }
+        arrayBuffer = buffer;
+      }
+
+      const { ctx, analyser } = getOrCreateAudioContext();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+      const channelPcm = audioBuffer.getChannelData(0);
+
+      const metrics = computeAcousticDspMetrics(channelPcm, audioBuffer.sampleRate);
+      setDspMetrics(metrics);
+
+      if (metrics.isVoiced) {
+        setAnalysisResult(analyzeAcousticSignals({
+          pitchF0: metrics.pitchF0,
+          jitterPct: metrics.jitterPct,
+          shimmerPct: metrics.shimmerPct,
+          hnrDb: metrics.hnrDb,
+          spectralCentroidHz: metrics.spectralCentroid,
+          register: metrics.pitchRegister
+        }));
+      } else {
+        setAnalysisResult(null);
+      }
+
+      setSampleSummary({
+        fileName: 'synthetic_vowel_120hz.wav (Sample Audio)',
+        durationSec: metrics.durationSec,
+        totalFrames: metrics.totalFrames,
+        voicedFrames: metrics.voicedFrames,
+        isVoiced: metrics.isVoiced,
+        metrics: metrics
+      });
+
+      setLabState(LAB_STATES.SUCCESS);
+
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(analyser);
+      analyser.connect(ctx.destination);
+      activeSourceRef.current = source;
+      setIsPlayingSound(true);
+      setActiveSoundName('Sample Audio (Synthetic Vowel 120 Hz)');
+
+      source.onended = () => {
+        setIsPlayingSound(false);
+        setActiveSoundName(null);
+      };
+
+      source.start(0);
+      startVisualizerLoop();
+    } catch (err) {
+      setLabState(LAB_STATES.ERROR);
+      setErrorMessage(err.message || 'Could not load and analyse sample audio.');
+    }
+  };
+
+  // -------------------------------------------------------------
+  // Synthetic Breath / Vocal Biomarker Tone Synthesizer (Simulation)
   // -------------------------------------------------------------
   const playSyntheticBiomarkerSound = (profileKey) => {
     stopAllAudio();
@@ -613,32 +594,27 @@ export default function AcousticBiomarkerLabView() {
     const profile = ACOUSTIC_CLUSTER_PROFILES[profileKey];
     if (!profile) return;
 
-    const baseFreq = profile.f0Mean || 220;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
 
     if (profileKey === 'asthma_wheeze') {
-      // 400Hz polyphonic whistling resonance
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(420, ctx.currentTime);
       filter.type = 'bandpass';
       filter.frequency.setValueAtTime(420, ctx.currentTime);
       filter.Q.setValueAtTime(8, ctx.currentTime);
     } else if (profileKey === 'pediatric_stridor') {
-      // High-pitch inspiratory stridor
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(880, ctx.currentTime);
       filter.type = 'highpass';
       filter.frequency.setValueAtTime(800, ctx.currentTime);
     } else if (profileKey === 'pneumonia_rales') {
-      // Crackle bursts
       osc.type = 'square';
       osc.frequency.setValueAtTime(160, ctx.currentTime);
       filter.type = 'bandpass';
       filter.frequency.setValueAtTime(1400, ctx.currentTime);
     } else if (profileKey === 'neurological_tremor') {
-      // 136Hz with 5.5Hz vibrato modulation
       osc.type = 'sine';
       osc.frequency.setValueAtTime(136, ctx.currentTime);
       const lfo = ctx.createOscillator();
@@ -648,15 +624,9 @@ export default function AcousticBiomarkerLabView() {
       lfo.connect(osc.frequency);
       lfo.start();
     } else {
-      // Normal Phonation
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(baseFreq, ctx.currentTime);
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1200, ctx.currentTime);
+      osc.frequency.setValueAtTime(profile.f0Mean || 135, ctx.currentTime);
     }
-
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.2);
 
     osc.connect(filter);
     filter.connect(gain);
@@ -674,17 +644,6 @@ export default function AcousticBiomarkerLabView() {
 
     osc.start();
     osc.stop(ctx.currentTime + 3.2);
-
-    // Update DSP metrics
-    const newMetrics = {
-      pitchF0: profile.f0Mean,
-      jitterPct: profile.jitterMean,
-      shimmerPct: profile.shimmerMean,
-      hnrDb: profile.hnrMean,
-      spectralCentroid: profile.spectralCentroidMean
-    };
-    setDspMetrics(newMetrics);
-    setAnalysisResult(analyzeAcousticSignals(newMetrics));
 
     startVisualizerLoop();
   };
@@ -731,16 +690,11 @@ export default function AcousticBiomarkerLabView() {
       activeOscillatorRef.current.frequency.setValueAtTime(newHz, audioContextRef.current.currentTime);
       setActiveSoundName(`${newHz} Hz Sine Tone`);
     }
-
-    setDspMetrics(prev => {
-      const next = { ...prev, pitchF0: newHz, spectralCentroid: Math.round(newHz * 1.6) };
-      setAnalysisResult(analyzeAcousticSignals(next));
-      return next;
-    });
   };
 
   // -------------------------------------------------------------
   // Real-Time Canvas Visualizer (Oscilloscope / Spectrum Bars)
+  // Note: Only draws visual feedback and VU meter. Never overwrites dspMetrics.
   // -------------------------------------------------------------
   const startVisualizerLoop = () => {
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -769,11 +723,10 @@ export default function AcousticBiomarkerLabView() {
       const rms = Math.sqrt(sumSquares / bufferLength);
 
       if (visualizerMode === 'oscilloscope') {
-        // Cyan / Radiant Emerald Oscilloscope Waveform (Shifts to emerald on healthy vesicular flow)
         ctx.lineWidth = 2.5;
-        ctx.strokeStyle = isHealthyPhonation ? '#10B981' : '#00F5D4';
-        ctx.shadowColor = isHealthyPhonation ? '#10B981' : '#00F5D4';
-        ctx.shadowBlur = isHealthyPhonation ? 8 : 6;
+        ctx.strokeStyle = '#00F5D4';
+        ctx.shadowColor = '#00F5D4';
+        ctx.shadowBlur = 6;
         ctx.beginPath();
 
         const sliceWidth = canvas.width / bufferLength;
@@ -792,7 +745,6 @@ export default function AcousticBiomarkerLabView() {
         ctx.stroke();
         ctx.shadowBlur = 0;
       } else {
-        // Multi-Band Frequency Spectrum Bars (Bass, Mid, Treble)
         const barCount = 48;
         const barWidth = (canvas.width / barCount) - 2;
 
@@ -802,124 +754,46 @@ export default function AcousticBiomarkerLabView() {
           const x = i * (barWidth + 2);
           const y = canvas.height - barHeight;
 
-          // Gradient color: Emerald/Teal on healthy vesicular flow; otherwise Cyan -> Gold -> Coral
           const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          if (isHealthyPhonation) {
-            grad.addColorStop(0, '#047857');
-            grad.addColorStop(0.5, '#10B981');
-            grad.addColorStop(1, '#00F5D4');
-          } else {
-            grad.addColorStop(0, '#D4AF37');
-            grad.addColorStop(0.5, '#00F5D4');
-            grad.addColorStop(1, '#FF6B6B');
-          }
+          grad.addColorStop(0, '#0F4C5C');
+          grad.addColorStop(0.5, '#00F5D4');
+          grad.addColorStop(1, '#D4AF37');
 
           ctx.fillStyle = grad;
           ctx.fillRect(x, y, barWidth, barHeight);
         }
 
-        // Live Healthy Airway badge on canvas
-        if (isHealthyPhonation) {
-          ctx.fillStyle = '#10B981';
-          ctx.font = 'bold 10px monospace';
-          ctx.fillText('🟢 AIRWAY: CLEAR LAMINAR VESICULAR FLOW (0% WHEEZE)', 10, canvas.height - 10);
-        }
-
-        // Grid frequency guide markers
+        // Frequency guides
         ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
         ctx.font = '10px monospace';
         ctx.fillText('100 Hz', 10, 18);
         ctx.fillText('1 kHz (Speech Mids)', canvas.width * 0.35, 18);
-        ctx.fillText('4 kHz (Treble Wheeze)', canvas.width - 120, 18);
+        ctx.fillText('4 kHz (Treble)', canvas.width - 90, 18);
       }
 
-      // Throttled DSP calculations (~120ms interval) for live mic / audio playback
-      const now = performance.now();
-      if ((isRecordingMic || isPlayingSound) && (now - lastDspUpdateRef.current > 120)) {
-        lastDspUpdateRef.current = now;
-        setVuLevel(Math.min(100, Math.round(rms * 280)));
+      // VU level feedback
+      setVuLevel(Math.min(100, Math.round(rms * 280)));
 
-        if (rms > 0.02) {
-          // Autocorrelation pitch detector
-          const sampleRate = audioContextRef.current ? audioContextRef.current.sampleRate : 44100;
-          const minLag = Math.max(10, Math.floor(sampleRate / 420));
-          const maxLag = Math.min(bufferLength - 1, Math.floor(sampleRate / 80));
-
-          let maxCorr = -1;
-          let bestLag = 0;
-          for (let lag = minLag; lag < maxLag; lag += 2) {
-            let corr = 0;
-            for (let j = 0; j < bufferLength - lag; j += 4) {
-              corr += ((timeData[j] - 128) / 128) * ((timeData[j + lag] - 128) / 128);
-            }
-            if (corr > maxCorr) {
-              maxCorr = corr;
-              bestLag = lag;
-            }
-          }
-
-          let calculatedF0 = 142;
-          let calculatedHnr = 19.5;
-          if (bestLag > 0 && sumSquares > 0) {
-            const normCorr = Math.min(0.98, Math.max(0.05, (maxCorr * 2) / sumSquares));
-            if (normCorr > 0.35) {
-              const f0Candidate = Math.round(sampleRate / bestLag);
-              if (f0Candidate >= 80 && f0Candidate <= 420) {
-                calculatedF0 = f0Candidate;
-                calculatedHnr = Number((10 * Math.log10(normCorr / (1.0001 - normCorr))).toFixed(1));
-              }
-            }
-          }
-
-          // Spectral Centroid Calculation
-          let num = 0, den = 0;
-          for (let i = 0; i < bufferLength; i++) {
-            const mag = freqData[i];
-            num += i * mag;
-            den += mag;
-          }
-          const liveCentroid = den > 0 
-            ? Math.round(((num / den) * (sampleRate / 2)) / bufferLength) 
-            : Math.round(1100 + rms * 1500);
-
-          const liveJitter = Number((0.6 + rms * 3.2).toFixed(2));
-          const liveShimmer = Number((1.6 + rms * 6.5).toFixed(2));
-
-          const currentFrame = {
-            f0: (bestLag > 0 && sumSquares > 0 && normCorr > 0.35 && calculatedF0 >= 80 && calculatedF0 <= 420) ? calculatedF0 : null,
-            hnr: (bestLag > 0 && sumSquares > 0 && normCorr > 0.35) ? calculatedHnr : null,
-            rms: rms,
-            centroid: liveCentroid
-          };
-
-          if (isSamplingAudio) {
-            sampleBufferRef.current.push(currentFrame);
-          }
-
-          // Wheeze narrow-band musical peak detection (350Hz - 900Hz)
-          const nyquist = sampleRate / 2;
-          const minBin = Math.floor((350 / nyquist) * bufferLength);
-          const maxBin = Math.floor((900 / nyquist) * bufferLength);
-          let peakVal = 0, peakBin = 0, avgVal = 0, binCount = 0;
-          for (let b = minBin; b <= maxBin; b++) {
-            const val = freqData[b];
-            avgVal += val;
-            binCount++;
-            if (val > peakVal) {
-              peakVal = val;
-              peakBin = b;
-            }
-          }
-          const localAvg = binCount > 0 ? avgVal / binCount : 1;
-          if (peakVal > 90 && (peakVal / (localAvg + 1)) > 2.2) {
-            const peakHz = Math.round((peakBin * nyquist) / bufferLength);
-            setDetectedWheezeHz(peakHz);
-          } else {
-            setDetectedWheezeHz(null);
-          }
-        } else {
-          setDetectedWheezeHz(null);
+      // Wheeze detection for live feedback
+      const sampleRate = audioContextRef.current ? audioContextRef.current.sampleRate : 44100;
+      const nyquist = sampleRate / 2;
+      const minBin = Math.floor((350 / nyquist) * bufferLength);
+      const maxBin = Math.floor((900 / nyquist) * bufferLength);
+      let peakVal = 0, peakBin = 0, avgVal = 0, binCount = 0;
+      for (let b = minBin; b <= maxBin; b++) {
+        const val = freqData[b];
+        avgVal += val;
+        binCount++;
+        if (val > peakVal) {
+          peakVal = val;
+          peakBin = b;
         }
+      }
+      const localAvg = binCount > 0 ? avgVal / binCount : 1;
+      if (peakVal > 90 && (peakVal / (localAvg + 1)) > 2.2) {
+        setDetectedWheezeHz(Math.round((peakBin * nyquist) / bufferLength));
+      } else {
+        setDetectedWheezeHz(null);
       }
 
       animFrameRef.current = requestAnimationFrame(render);
@@ -928,7 +802,6 @@ export default function AcousticBiomarkerLabView() {
     render();
   };
 
-  // Re-start loop when toggling visualizer mode
   useEffect(() => {
     if (isPlayingSound || isRecordingMic || isToneActive) {
       startVisualizerLoop();
@@ -938,7 +811,7 @@ export default function AcousticBiomarkerLabView() {
   return (
     <div className="acoustic-lab-container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px', fontFamily: 'system-ui, sans-serif' }}>
       {/* Top Navigation Row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: 10 }}>
         <Link 
           to="/doctor-portal" 
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#0F4C5C', textDecoration: 'none', fontWeight: 750, fontSize: '13px' }}
@@ -947,76 +820,87 @@ export default function AcousticBiomarkerLabView() {
           <span>Back to Doctor Portal</span>
         </Link>
 
-        {/* Gnani Indic Speech Server Status Pill */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '7px 14px',
-            borderRadius: 20,
-            background: gnaniSpeechStatus?.available ? '#E6F7F8' : '#F1F5F9',
-            border: '1.5px solid',
-            borderColor: gnaniSpeechStatus?.available ? '#0F4C5C' : '#CBD5E1',
-            color: gnaniSpeechStatus?.available ? '#0F4C5C' : '#475569',
-            fontSize: '12px',
+        {/* Status Badges */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <span style={{
+            fontSize: '11px',
+            background: '#F1F5F9',
+            border: '1px solid #CBD5E1',
+            color: '#334155',
+            padding: '5px 12px',
+            borderRadius: 16,
             fontWeight: 800
-          }}
-          title={gnaniSpeechStatus?.available ? 'Gnani Indic Neural Speech (LIVE via Server)' : 'Browser Web Speech Active (Server Key Unset)'}
-        >
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: gnaniSpeechStatus?.available ? '#10B981' : '#94A3B8' }} />
-          <span>{gnaniSpeechStatus?.available ? 'Gnani Speech: LIVE' : 'Speech: Browser Fallback'}</span>
+          }}>
+            DEMO / PROTOTYPE LAB
+          </span>
+
+          <span style={{
+            fontSize: '11px',
+            background: '#E6F7F8',
+            border: '1px solid #99F6E4',
+            color: '#0F4C5C',
+            padding: '5px 12px',
+            borderRadius: 16,
+            fontWeight: 800
+          }}>
+            Browser-based DSP - prototype analysis
+          </span>
+
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '5px 12px',
+              borderRadius: 16,
+              background: gnaniSpeechStatus?.available ? '#E6F7F8' : '#F1F5F9',
+              border: '1px solid',
+              borderColor: gnaniSpeechStatus?.available ? '#0F4C5C' : '#CBD5E1',
+              color: gnaniSpeechStatus?.available ? '#0F4C5C' : '#475569',
+              fontSize: '11px',
+              fontWeight: 800
+            }}
+          >
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: gnaniSpeechStatus?.available ? '#10B981' : '#94A3B8' }} />
+            <span>{gnaniSpeechStatus?.available ? 'Gnani Speech: LIVE' : 'Speech: Browser Fallback'}</span>
+          </div>
         </div>
       </div>
 
       {/* Header */}
-      <div style={{ marginBottom: '28px' }}>
+      <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <Activity size={14} />
-          <span>INTERACTIVE VOCAL & RESPIRATORY ACOUSTIC SIGNAL LAB</span>
+          <span>VOCAL BIOMARKER & ACOUSTIC SIGNAL LAB</span>
         </div>
         <h1 style={{ fontSize: '32px', fontWeight: 850, color: '#081C24', marginBottom: '10px' }}>
           Vocal Biomarker & Acoustic Signal Lab
         </h1>
         <p style={{ fontSize: '15px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.6, marginBottom: '10px' }}>
-          Explores acoustic signal patterns in recorded audio. Research signal viewer, not for diagnosis. Real-time physical digital signal processing (DSP) and statistical cluster proximity engine.
+          Real-time physical digital signal processing (DSP) extracting fundamental frequency (F0), Harmonics-to-Noise Ratio (HNR), and perturbation metrics. Research signal viewer, not for clinical diagnosis.
         </p>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          background: '#F0FDF4',
-          border: '1px solid #BBF7D0',
-          color: '#166534',
-          padding: '6px 14px',
-          borderRadius: '10px',
-          fontSize: '12px',
-          fontWeight: 700
-        }}>
-          <span>🎙️ One-Way Acoustic Diagnostic Mode: Ingests mic phonation for F0 pitch, Jitter, Shimmer, and HNR analysis (no spoken TTS reply required).</span>
-        </div>
       </div>
 
       {/* Non-Diagnostic Disclaimer Banner */}
-      <div style={{ background: '#FFFBEB', border: '1.5px solid #FCD34D', borderRadius: '14px', padding: '16px 20px', marginBottom: '28px', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-        <AlertCircle size={22} color="#D97706" style={{ marginTop: '2px', flexShrink: 0 }} />
+      <div style={{ background: '#FFFBEB', border: '1.5px solid #FCD34D', borderRadius: '14px', padding: '14px 18px', marginBottom: '24px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+        <AlertCircle size={20} color="#D97706" style={{ marginTop: '2px', flexShrink: 0 }} />
         <div>
-          <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#92400E', marginBottom: '4px' }}>
-            PHYSICAL SIGNAL OBSERVATIONS NOTICE (RESEARCH & BENCHMARK PROTOCOL)
+          <div style={{ fontSize: '13px', fontWeight: 800, color: '#92400E', marginBottom: '2px' }}>
+            PHYSICAL SIGNAL OBSERVATIONS NOTICE (RESEARCH & BENCHMARK PROTOTYPE)
           </div>
-          <p style={{ fontSize: '12.5px', color: '#B45309', margin: 0, lineHeight: 1.5 }}>
-            Explores acoustic signal patterns in recorded audio. Research signal viewer, not for diagnosis. Synthetic test signals only. Acoustic features displayed are physical audio engineering metrics (fundamental frequency F0, HNR, and spectral centroid).
+          <p style={{ fontSize: '12px', color: '#B45309', margin: 0, lineHeight: 1.5 }}>
+            Acoustic features displayed are physical audio engineering measurements (fundamental frequency F0, HNR, Jitter, Shimmer, and spectral centroid). Not an FDA/CDSCO approved diagnostic device. Does not produce medical diagnoses.
           </p>
         </div>
       </div>
 
       {/* Main Lab Grid */}
-      <div className="acoustic-lab-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
+      <div className="acoustic-lab-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '20px' }}>
         
-        {/* Left Column: Visualizer, Live Mic, File Upload & Tone Generator */}
+        {/* Left Column: Visualizer, Controls, Tone Generator */}
         <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          {/* Visualizer Header with Mode Toggle & Audio Controls */}
+          {/* Visualizer Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>
@@ -1031,7 +915,6 @@ export default function AcousticBiomarkerLabView() {
             </div>
 
             <div style={{ display: 'flex', gap: 6 }}>
-              {/* Visualizer Mode Toggle */}
               <button
                 type="button"
                 onClick={() => setVisualizerMode(visualizerMode === 'oscilloscope' ? 'spectrum' : 'oscilloscope')}
@@ -1049,7 +932,6 @@ export default function AcousticBiomarkerLabView() {
                 {visualizerMode === 'oscilloscope' ? 'Switch to Spectrum Bars' : 'Switch to Waveform'}
               </button>
 
-              {/* Stop Button */}
               {(isRecordingMic || isPlayingSound || isToneActive) && (
                 <button
                   type="button"
@@ -1094,7 +976,7 @@ export default function AcousticBiomarkerLabView() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: '#94A3B8' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 8, height: 8, borderRadius: '50%', background: vuLevel > 10 ? '#00F5D4' : '#475569' }} />
-                <span>Live Phonation Level (VU / RMS):</span>
+                <span>Audio Input Level (VU / RMS):</span>
               </span>
               <span style={{ fontFamily: 'monospace', color: vuLevel > 60 ? '#F59E0B' : '#00F5D4', fontWeight: 800 }}>
                 {vuLevel > 0 ? `${vuLevel}% (${-(60 - Math.round(vuLevel * 0.55))} dBFS)` : 'Idle (Ambient Gate)'}
@@ -1111,7 +993,7 @@ export default function AcousticBiomarkerLabView() {
             </div>
           </div>
 
-          {/* High-Frequency Wheeze Resonant Spike Banner */}
+          {/* Narrow-band resonance indicator */}
           {detectedWheezeHz && (
             <div style={{
               background: 'rgba(245, 158, 11, 0.1)',
@@ -1127,237 +1009,13 @@ export default function AcousticBiomarkerLabView() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: '16px' }}>🎶</span>
-                <span>Musical Adventitious Signal Detected (~{detectedWheezeHz} Hz Resonance)</span>
-              </div>
-              <span style={{ fontSize: '10px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: 6 }}>
-                Narrow-Band Peak
-              </span>
-            </div>
-          )}
-
-          {/* Active Phonation Recording Banner (User-Controlled Duration) */}
-          {isSamplingAudio && (
-            <div style={{
-              background: 'linear-gradient(135deg, #064E3B 0%, #065F46 100%)',
-              border: '1.5px solid #10B981',
-              borderRadius: '12px',
-              padding: '14px',
-              color: '#ECFDF5',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              boxShadow: '0 4px 14px rgba(16, 185, 129, 0.25)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  minWidth: 42,
-                  height: 42,
-                  borderRadius: '50%',
-                  background: '#EF4444',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 900,
-                  fontSize: '15px',
-                  boxShadow: '0 0 12px rgba(239, 68, 68, 0.6)'
-                }}>
-                  {samplingDuration}s
-                </div>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: '13.5px' }}>
-                    Recording Phonation & Respiratory Sample ({samplingDuration}s elapsed)...
-                  </div>
-                  <div style={{ fontSize: '11.5px', color: '#A7F3D0' }}>
-                    Sustain a steady 'Aaah' vowel or breathe into mic. Record as long as needed (e.g. 5s to 20s+). Click "Stop & Analyze" when ready!
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleStopPhonationSampling}
-                style={{
-                  padding: '8px 14px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: '#EF4444',
-                  color: '#FFFFFF',
-                  fontSize: '12px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6
-                }}
-              >
-                <Square size={13} fill="#FFF" />
-                <span>Stop & Analyze</span>
-              </button>
-            </div>
-          )}
-
-          {/* Multi-Stage Real-Time DSP Convergence Progress HUD */}
-          {isAnalyzingSample && (
-            <div style={{
-              background: 'linear-gradient(135deg, #081B24 0%, #0F4C5C 100%)',
-              border: '1.5px solid #00F5D4',
-              borderRadius: '14px',
-              padding: '18px',
-              color: '#ECFDF5',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-              boxShadow: '0 8px 28px rgba(0, 245, 212, 0.35)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{
-                    width: 20,
-                    height: 20,
-                    border: '3px solid rgba(0, 245, 212, 0.25)',
-                    borderTopColor: '#00F5D4',
-                    borderRadius: '50%',
-                    animation: 'ayuswar-spin 0.65s linear infinite'
-                  }} />
-                  <span style={{ fontWeight: 850, fontSize: '13.5px', color: '#00F5D4', letterSpacing: '0.03em' }}>
-                    REAL-TIME ACOUSTIC SIGNAL CONVERGENCE & DSP CALIBRATION
-                  </span>
-                </div>
-                <span style={{
-                  fontSize: '13px',
-                  fontWeight: 900,
-                  color: '#00F5D4',
-                  fontFamily: 'monospace',
-                  background: 'rgba(0,0,0,0.45)',
-                  padding: '3px 8px',
-                  borderRadius: '6px'
-                }}>
-                  {analysisProgress}% COMPLETE
-                </span>
-              </div>
-
-              {/* Animated Progress Bar */}
-              <div style={{ height: 8, background: 'rgba(255,255,255,0.1)', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{
-                  width: `${analysisProgress}%`,
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #0F4C5C, #00F5D4, #D4AF37)',
-                  borderRadius: 4,
-                  transition: 'width 0.08s linear'
-                }} />
-              </div>
-
-              {/* Stage details with live changing numbers */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-                <div style={{
-                  background: 'rgba(0, 0, 0, 0.45)',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  fontFamily: 'monospace',
-                  fontSize: '12px',
-                  color: '#E2E8F0',
-                  border: '1px solid rgba(0, 245, 212, 0.3)',
-                  flex: 1
-                }}>
-                  {dspAnalysisStage}
-                </div>
-                <div style={{
-                  fontSize: '11px',
-                  color: '#94A3B8',
-                  fontFamily: 'monospace',
-                  background: 'rgba(255,255,255,0.08)',
-                  padding: '6px 10px',
-                  borderRadius: '6px'
-                }}>
-                  Processing Frame {analyzedFrameIndex} / {totalVoicedFrames}
-                </div>
+                <span>Narrow-Band Resonant Peak Detected (~{detectedWheezeHz} Hz)</span>
               </div>
             </div>
           )}
 
-          {/* Insufficient Voice Error Notice */}
-          {samplingError && (
-            <div style={{
-              background: '#FEF2F2',
-              border: '1.5px solid #FCA5A5',
-              borderRadius: '12px',
-              padding: '14px',
-              color: '#991B1B',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 10
-            }}>
-              <AlertCircle size={18} color="#DC2626" style={{ marginTop: 2, flexShrink: 0 }} />
-              <div>
-                <div style={{ fontWeight: 800, fontSize: '13px', marginBottom: 2 }}>
-                  Acoustic Phonation Warning
-                </div>
-                <div style={{ fontSize: '12px', color: '#B91C1C', lineHeight: 1.5 }}>
-                  {samplingError}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {sampleSummary && (
-            <div style={{
-              background: '#F0FDF4',
-              border: '1.5px solid #86EFAC',
-              borderRadius: '12px',
-              padding: '14px',
-              color: '#166534'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                <div style={{ fontWeight: 850, fontSize: '13px', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <CheckCircle2 size={16} color="#16A34A" />
-                  <span>{sampleSummary.durationSec}-Second Voice Sample Analyzed</span>
-                </div>
-                <span style={{ fontSize: '11px', color: '#15803D', fontWeight: 700 }}>
-                  {sampleSummary.voicedFrames ? `${sampleSummary.voicedFrames} voiced frames (${sampleSummary.totalFrames} audio)` : `${sampleSummary.totalFrames} acoustic frames aggregated`}
-                </span>
-              </div>
-              <div style={{ fontSize: '12px', color: '#14532D', lineHeight: 1.5 }}>
-                Median Pitch <strong>{sampleSummary.metrics.pitchF0} Hz</strong> • HNR <strong>{sampleSummary.metrics.hnrDb} dB</strong> • Jitter <strong>{sampleSummary.metrics.jitterPct}%</strong> • Shimmer <strong>{sampleSummary.metrics.shimmerPct}%</strong> • Centroid <strong>{sampleSummary.metrics.spectralCentroid} Hz</strong>.
-              </div>
-              <div style={{ marginTop: 6, fontSize: '11px', color: '#166534', fontWeight: 700 }}>
-                Top Reference Proximity: <strong>{sampleSummary.topMatch?.label || 'Standard Phonation'}</strong>
-              </div>
-            </div>
-          )}
-
-          {/* Action Row: Live Mic, Upload Audio File & 5s Sampler */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
-            {/* Dedicated AI Voice Reply Toggle */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsAiVoiceReplyEnabled(prev => {
-                  const next = !prev;
-                  if (!next && 'speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                  }
-                  return next;
-                });
-              }}
-              style={{
-                padding: '12px 14px',
-                borderRadius: '10px',
-                border: isAiVoiceReplyEnabled ? '1.5px solid #10B981' : '1.5px solid #CBD5E1',
-                background: isAiVoiceReplyEnabled ? '#ECFDF5' : '#F1F5F9',
-                color: isAiVoiceReplyEnabled ? '#065F46' : '#64748B',
-                fontSize: '12.5px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-              title={isAiVoiceReplyEnabled ? "AI Spoken Voice Diagnosis is Enabled" : "AI Spoken Voice Diagnosis is Disabled (Silent Display Only)"}
-            >
-              {isAiVoiceReplyEnabled ? <Volume2 size={16} color="#059669" /> : <VolumeX size={16} color="#94A3B8" />}
-              <span>{isAiVoiceReplyEnabled ? 'AI Voice Reply: ON' : 'AI Voice Reply: OFF'}</span>
-            </button>
+          {/* Action Row: Continuous Mic, Record Phonation, Upload Audio & Reset */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
             <button
               type="button"
               onClick={handleToggleLiveMic}
@@ -1373,24 +1031,22 @@ export default function AcousticBiomarkerLabView() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: isRecordingMic && !isSamplingAudio ? '0 4px 12px rgba(220,38,38,0.3)' : '0 4px 12px rgba(15, 76, 92, 0.25)'
+                gap: '8px'
               }}
             >
               {isRecordingMic && !isSamplingAudio ? <Square size={16} fill="#FFF" /> : <Mic size={16} />}
-              <span>{isRecordingMic && !isSamplingAudio ? 'Stop Continuous Mic' : 'Continuous Mic'}</span>
+              <span>{isRecordingMic && !isSamplingAudio ? 'Stop Continuous' : 'Continuous Mic'}</span>
             </button>
 
             <button
+              id="acoustic-lab-sample-btn"
               type="button"
-              onClick={handleTogglePhonationSampling}
+              onClick={handleLoadSampleVoice}
               style={{
                 padding: '12px 14px',
                 borderRadius: '10px',
                 border: 'none',
-                background: isSamplingAudio 
-                  ? 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' 
-                  : 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
                 color: '#FFFFFF',
                 fontSize: '12.5px',
                 fontWeight: 800,
@@ -1398,15 +1054,16 @@ export default function AcousticBiomarkerLabView() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: isSamplingAudio ? '0 4px 14px rgba(220,38,38,0.35)' : '0 4px 12px rgba(5,150,105,0.25)'
+                gap: '8px'
               }}
+              title="Load reference synthetic sample voice and compute physical DSP metrics"
             >
-              {isSamplingAudio ? <Square size={16} fill="#FFF" /> : <Sparkles size={16} />}
-              <span>{isSamplingAudio ? `⏹️ Stop & Analyze (${samplingDuration}s)` : '🎙️ Record Voice Sample'}</span>
+              <Sparkles size={16} />
+              <span>Sample Audio</span>
             </button>
 
             <button
+              id="acoustic-lab-upload-btn"
               type="button"
               onClick={() => fileInputRef.current?.click()}
               style={{
@@ -1428,12 +1085,37 @@ export default function AcousticBiomarkerLabView() {
               <span>Upload Audio</span>
             </button>
             <input 
+              id="acoustic-lab-file-input"
               ref={fileInputRef} 
               type="file" 
               accept="audio/*" 
               style={{ display: 'none' }} 
               onChange={handleAudioFileUpload}
             />
+
+            <button
+              id="acoustic-lab-reset-btn"
+              type="button"
+              onClick={handleReset}
+              style={{
+                padding: '12px 14px',
+                borderRadius: '10px',
+                border: '1.5px solid #CBD5E1',
+                background: '#FAF8F5',
+                color: '#334155',
+                fontSize: '12.5px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+              title="Clear all results and return to awaiting audio input"
+            >
+              <RotateCcw size={16} color="#475569" />
+              <span>Reset</span>
+            </button>
           </div>
 
           {/* Interactive Live Tone Slider */}
@@ -1464,9 +1146,9 @@ export default function AcousticBiomarkerLabView() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <input
                 type="range"
-                min="100"
+                min="80"
                 max="2000"
-                step="10"
+                step="5"
                 value={liveToneHz}
                 onChange={handleToneSliderChange}
                 style={{ flex: 1, cursor: 'pointer', accentColor: '#0F4C5C' }}
@@ -1476,47 +1158,50 @@ export default function AcousticBiomarkerLabView() {
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94A3B8', marginTop: 4 }}>
-              <span>100 Hz (Low Bass Pitch)</span>
-              <span>440 Hz (Standard Concert Pitch A4)</span>
-              <span>2000 Hz (High Frequency Audio)</span>
+              <span>80 Hz (Low Bass)</span>
+              <span>440 Hz (Concert Pitch A4)</span>
+              <span>2000 Hz (High Frequency)</span>
             </div>
           </div>
 
-          {/* Extracted DSP Signal Metrics */}
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Extracted Physical DSP Metrics:
-              </div>
-              {isAnalyzingSample && (
-                <span style={{ fontSize: '11px', color: '#00F5D4', background: '#0F4C5C', padding: '2px 8px', borderRadius: 10, fontWeight: 800, animation: 'pulse 1.2s infinite' }}>
-                  🔄 Live Converging ({analysisProgress}%)...
-                </span>
-              )}
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Pitch F0 (Vocal Fundamental)</span>
-                <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>{dspMetrics.pitchF0} Hz</div>
-              </div>
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Pitch Register (Measured F0)</span>
-                <div style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C' }}>
-                  {dspMetrics.pitchF0 < 165 ? 'Low Register' : dspMetrics.pitchF0 > 260 ? 'High Register' : 'Mid Register'}
+          {/* Extracted Physical DSP Metrics: RENDERED ONLY ON SUCCESS */}
+          {labState === LAB_STATES.SUCCESS && dspMetrics && (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Extracted Physical DSP Metrics:
                 </div>
               </div>
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Harmonics-to-Noise Ratio (HNR)</span>
-                <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>{dspMetrics.hnrDb} dB</div>
-              </div>
-              <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                <span style={{ fontSize: '11px', color: '#64748B' }}>Spectral Centroid</span>
-                <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>{dspMetrics.spectralCentroid || 1200} Hz</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>Pitch F0 (Vocal Fundamental)</span>
+                  <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
+                    {dspMetrics.pitchF0 !== null ? `${dspMetrics.pitchF0} Hz` : 'Unavailable'}
+                  </div>
+                </div>
+                <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>Pitch Register (Measured F0)</span>
+                  <div style={{ fontSize: '15px', fontWeight: 850, color: '#0F4C5C' }}>
+                    {dspMetrics.pitchRegister}
+                  </div>
+                </div>
+                <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>Harmonics-to-Noise Ratio (HNR)</span>
+                  <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
+                    {dspMetrics.hnrDb !== null ? `${dspMetrics.hnrDb} dB` : 'Unavailable'}
+                  </div>
+                </div>
+                <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                  <span style={{ fontSize: '11px', color: '#64748B' }}>Spectral Centroid</span>
+                  <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
+                    {dspMetrics.spectralCentroid !== null ? `${dspMetrics.spectralCentroid} Hz` : 'Unavailable'}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Auditory Clinical Reference Presets */}
+          {/* Reference Presets */}
           <div>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.04em' }}>
               Synthetic Reference Tone Signatures (SIMULATION):
@@ -1558,543 +1243,492 @@ export default function AcousticBiomarkerLabView() {
           </div>
         </div>
 
-        {/* Right Column: Statistical Cluster Proximity Analysis */}
+        {/* Right Column: State Machine Managed Display Area */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
-          {/* Healthy Airway & Phonation Clinical Clearance Card */}
-          {isHealthyPhonation && (
+
+          {/* STATE 1: AWAITING_AUDIO */}
+          {labState === LAB_STATES.AWAITING_AUDIO && (
             <div style={{
-              background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
-              border: '2px solid #10B981',
+              background: '#FFFFFF',
               borderRadius: '16px',
-              padding: '20px',
-              boxShadow: '0 4px 16px rgba(16, 185, 129, 0.15)'
+              border: '1.5px dashed #CBD5E1',
+              padding: '48px 24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '400px'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10, marginBottom: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 10,
-                    background: '#10B981',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#FFFFFF'
-                  }}>
-                    <CheckCircle2 size={24} />
-                  </div>
+              <div style={{
+                width: 68,
+                height: 68,
+                borderRadius: '50%',
+                background: '#E6F7F8',
+                color: '#0F4C5C',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}>
+                <FileAudio size={32} />
+              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#081C24', margin: '0 0 8px 0' }}>
+                Awaiting audio input
+              </h3>
+              <p style={{ fontSize: '13.5px', color: '#64748B', maxWidth: '440px', lineHeight: 1.6, margin: '0 0 24px 0' }}>
+                Load sample audio or upload an audio file (.wav, .mp3) to measure physical acoustic parameters (F0 fundamental frequency, HNR, jitter, and shimmer).
+              </p>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '8px 16px',
+                borderRadius: '20px',
+                background: '#F1F5F9',
+                border: '1px solid #E2E8F0',
+                fontSize: '12px',
+                color: '#475569',
+                fontWeight: 700
+              }}>
+                <span>Use the action controls on the left to load sample audio or upload a file</span>
+              </div>
+            </div>
+          )}
+
+          {/* STATE 2: RECORDING */}
+          {labState === LAB_STATES.RECORDING && (
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              border: '2px solid #EF4444',
+              padding: '40px 24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '400px'
+            }}>
+              <div style={{
+                width: 64,
+                height: 64,
+                borderRadius: '50%',
+                background: '#FEE2E2',
+                color: '#DC2626',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px',
+                fontSize: '18px',
+                fontWeight: 900
+              }}>
+                {samplingDuration}s
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#991B1B', margin: '0 0 8px 0' }}>
+                Recording Audio Phonation ({samplingDuration}s)
+              </h3>
+              <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '420px', lineHeight: 1.6, margin: '0 0 20px 0' }}>
+                Live audio waveform and VU meter are active. Sustain phonation or record sample, then click "Stop & Analyze".
+              </p>
+              <button
+                type="button"
+                onClick={handleStopPhonationSampling}
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: '#DC2626',
+                  color: '#FFFFFF',
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8
+                }}
+              >
+                <Square size={14} fill="#FFF" />
+                <span>Stop & Analyze</span>
+              </button>
+            </div>
+          )}
+
+          {/* STATE 3: ANALYSING */}
+          {labState === LAB_STATES.ANALYSING && (
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              border: '1px solid #E2E8F0',
+              padding: '48px 24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '400px'
+            }}>
+              <div style={{
+                width: 44,
+                height: 44,
+                border: '4px solid #E2E8F0',
+                borderTopColor: '#0F4C5C',
+                borderRadius: '50%',
+                animation: 'ayuswar-spin 0.75s linear infinite',
+                marginBottom: '16px'
+              }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#081C24', margin: '0 0 8px 0' }}>
+                Analysing...
+              </h3>
+              <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '380px', lineHeight: 1.6, margin: 0 }}>
+                Computing fundamental frequency, harmonics, and cycle perturbation via browser-based DSP engine.
+              </p>
+            </div>
+          )}
+
+          {/* STATE 4: ERROR */}
+          {labState === LAB_STATES.ERROR && (
+            <div style={{
+              background: '#FEF2F2',
+              borderRadius: '16px',
+              border: '1.5px solid #FCA5A5',
+              padding: '40px 24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '400px'
+            }}>
+              <div style={{
+                width: 56,
+                height: 56,
+                borderRadius: '50%',
+                background: '#FEE2E2',
+                color: '#DC2626',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '16px'
+              }}>
+                <AlertCircle size={28} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#991B1B', margin: '0 0 8px 0' }}>
+                Could not analyse this audio
+              </h3>
+              <p style={{ fontSize: '13.5px', color: '#B91C1C', maxWidth: '440px', lineHeight: 1.6, margin: '0 0 20px 0' }}>
+                {errorMessage || 'Could not analyse this audio. Please try again with valid audio.'}
+              </p>
+              <button
+                type="button"
+                onClick={handleReset}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: '#0F4C5C',
+                  color: '#FFFFFF',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                Reset & Try Again
+              </button>
+            </div>
+          )}
+
+          {/* STATE 5: SUCCESS */}
+          {labState === LAB_STATES.SUCCESS && dspMetrics && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {/* Telemetry Card */}
+              <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginBottom: '16px' }}>
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 900, color: '#065F46', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                      <span>OPTIMAL RESPIRATORY & VOCAL CLEARANCE</span>
-                      <span style={{ fontSize: '10px', background: '#059669', color: '#FFFFFF', padding: '2px 8px', borderRadius: 12, fontWeight: 800 }}>
-                        🟢 100% HEALTHY AIRWAY
-                      </span>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Measured Acoustic Telemetry
                     </div>
-                    <div style={{ fontSize: '11px', color: '#047857', fontWeight: 700 }}>
-                      Normal Vesicular Acoustic Flow • Zero Bronchospasm • Zero Adventitious Crackles
+                    <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#081C24', margin: '2px 0 0 0' }}>
+                      {sampleSummary?.fileName || 'Audio Sample Analysis'}
+                    </h3>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '11px', background: '#E6F7F8', color: '#0F4C5C', padding: '4px 10px', borderRadius: 12, fontWeight: 800, border: '1px solid #99F6E4' }}>
+                      Browser-based DSP - prototype analysis
+                    </span>
+                    <button
+                      id="acoustic-lab-reset-analysis-btn"
+                      type="button"
+                      onClick={handleReset}
+                      style={{
+                        padding: '4px 12px',
+                        borderRadius: 8,
+                        border: '1px solid #CBD5E1',
+                        background: '#F8FAFC',
+                        color: '#334155',
+                        fontSize: '11.5px',
+                        fontWeight: 800,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Reset Analysis
+                    </button>
+                  </div>
+                </div>
+
+                {/* Metadata summary */}
+                <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '16px', background: '#F8FAFC', padding: '8px 12px', borderRadius: 8 }}>
+                  <span>Duration: <strong>{sampleSummary?.durationSec}s</strong></span>
+                  <span style={{ margin: '0 8px' }}>•</span>
+                  <span>Total Frames: <strong>{sampleSummary?.totalFrames}</strong></span>
+                  <span style={{ margin: '0 8px' }}>•</span>
+                  <span>Voiced Frames: <strong>{sampleSummary?.voicedFrames}</strong></span>
+                  <span style={{ margin: '0 8px' }}>•</span>
+                  <span>Signal: <strong>{dspMetrics.isVoiced ? 'Voiced Periodic Signal' : 'Unvoiced / Aperiodic Signal'}</strong></span>
+                </div>
+
+                {/* Metrics Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Fundamental Pitch (F0)</span>
+                    <div style={{ fontSize: '20px', fontWeight: 900, color: dspMetrics.pitchF0 !== null ? '#081C24' : '#64748B' }}>
+                      {dspMetrics.pitchF0 !== null ? `${dspMetrics.pitchF0} Hz` : 'unavailable'}
+                    </div>
+                  </div>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Pitch Register</span>
+                    <div style={{ fontSize: '15px', fontWeight: 850, color: '#0F4C5C' }}>
+                      {dspMetrics.pitchRegister}
+                    </div>
+                  </div>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Harmonics-to-Noise Ratio (HNR)</span>
+                    <div style={{ fontSize: '18px', fontWeight: 850, color: dspMetrics.hnrDb !== null ? '#081C24' : '#64748B' }}>
+                      {dspMetrics.hnrDb !== null ? `${dspMetrics.hnrDb} dB` : 'unavailable'}
+                    </div>
+                  </div>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Spectral Centroid</span>
+                    <div style={{ fontSize: '18px', fontWeight: 850, color: dspMetrics.spectralCentroid !== null ? '#081C24' : '#64748B' }}>
+                      {dspMetrics.spectralCentroid !== null ? `${dspMetrics.spectralCentroid} Hz` : 'unavailable'}
+                    </div>
+                  </div>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Cycle Jitter Perturbation</span>
+                    <div style={{ fontSize: '18px', fontWeight: 850, color: dspMetrics.jitterPct !== null ? '#081C24' : '#64748B' }}>
+                      {dspMetrics.jitterPct !== null ? `${dspMetrics.jitterPct}%` : 'unavailable'}
+                    </div>
+                  </div>
+                  <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Cycle Shimmer Perturbation</span>
+                    <div style={{ fontSize: '18px', fontWeight: 850, color: dspMetrics.shimmerPct !== null ? '#081C24' : '#64748B' }}>
+                      {dspMetrics.shimmerPct !== null ? `${dspMetrics.shimmerPct}%` : 'unavailable'}
                     </div>
                   </div>
                 </div>
-                <div style={{ fontSize: '11px', background: '#FFFFFF', color: '#065F46', padding: '4px 10px', borderRadius: 8, fontWeight: 800, border: '1px solid #A7F3D0' }}>
-                  ICD-10: Z00.00 (Benign / Normal Exam)
-                </div>
-              </div>
 
-              {/* Measured Healthy Biomarkers Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10, marginBottom: '14px' }}>
-                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
-                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Wheeze Bronchospasm</div>
-                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>0% (Negative)</div>
-                </div>
-                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
-                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Harmonic Purity</div>
-                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>{dspMetrics.hnrDb} dB (Pure)</div>
-                </div>
-                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
-                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Cycle Jitter Perturbation</div>
-                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>{dspMetrics.jitterPct}% (Stable)</div>
-                </div>
-                <div style={{ background: '#FFFFFF', borderRadius: 10, padding: '10px', border: '1px solid #A7F3D0' }}>
-                  <div style={{ fontSize: '10.5px', color: '#047857', fontWeight: 700 }}>Airway Acoustics</div>
-                  <div style={{ fontSize: '15px', fontWeight: 900, color: '#065F46' }}>Clear Vesicular</div>
-                </div>
-              </div>
-
-              {/* Groq AI Preventive Wellness Counsel */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 12, padding: '14px', border: '1.5px solid #10B981' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '12px', fontWeight: 800, color: '#065F46' }}>
-                    <Sparkles size={14} color="#059669" />
-                    <span>Groq AI Preventive Wellness & Lung Counsel:</span>
+                {/* Honest Unvoiced Notice */}
+                {!dspMetrics.isVoiced && (
+                  <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', padding: '12px 14px', marginBottom: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+                    ℹ️ <strong>Unvoiced Audio Detected:</strong> Input contains acoustic energy without harmonic periodicity. Fundamental frequency (F0) and cycle perturbation metrics (Jitter, Shimmer) are honestly reported as unavailable.
                   </div>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {['te-IN', 'hi-IN', 'en-IN'].map(lang => (
-                      <button
-                        key={lang}
-                        type="button"
-                        onClick={() => handleGenerateHealthyCounsel(lang)}
-                        disabled={isGeneratingCounsel}
-                        style={{
-                          padding: '3px 8px',
-                          borderRadius: 6,
-                          border: '1px solid',
-                          borderColor: counselLang === lang ? '#059669' : '#CBD5E1',
-                          background: counselLang === lang ? '#059669' : '#FFFFFF',
-                          color: counselLang === lang ? '#FFFFFF' : '#334155',
-                          fontSize: '10.5px',
-                          fontWeight: 800,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {lang === 'te-IN' ? 'Telugu' : lang === 'hi-IN' ? 'Hindi' : 'English'}
-                      </button>
+                )}
+
+                {/* Voice Readout Button */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: '10px', flexWrap: 'wrap', gap: 10 }}>
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E' }}>
+                      Acoustic Telemetry Voice Readout
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#115E59' }}>
+                      {readoutProvider === 'gnani_live'
+                        ? '🟢 Gnani Timbre TTS (LIVE Audio Verified)'
+                        : gnaniSpeechStatus?.available
+                          ? '🟡 Gnani Timbre TTS (Ready via Server)'
+                          : '⚪ Browser Web Speech API Fallback (GNANI_API_KEY unset)'}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSpeakAcousticReadout}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 6,
+                      border: 'none',
+                      background: isSpeakingReadout ? '#EF4444' : '#0F4C5C',
+                      color: '#FFFFFF',
+                      fontSize: '11.5px',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6
+                    }}
+                  >
+                    <Volume2 size={13} />
+                    <span>{isSpeakingReadout ? 'Stop Voice' : '🔊 Speak Readout'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Statistical Baseline Cluster Distance (Only when analysisResult exists) */}
+              {analysisResult && (
+                <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                    Acoustic Reference Pattern Distance
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#64748B', marginBottom: '16px' }}>
+                    Mathematical Gaussian similarity distance against standard voice literature profiles. Physical signal matching only — not a clinical disease diagnosis.
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {analysisResult.allAcousticMatches?.slice(0, 4).map((match, idx) => (
+                      <div key={match.key}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '4px' }}>
+                          <span style={{ fontWeight: 750, color: '#081C24' }}>{match.label}</span>
+                          <span style={{ color: '#64748B', fontFamily: 'monospace' }}>Distance Score: {match.similarityScore}/100</span>
+                        </div>
+                        <div style={{ height: '8px', background: '#FAF8F5', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{
+                            width: `${match.similarityScore}%`,
+                            height: '100%',
+                            background: idx === 0 ? 'linear-gradient(90deg, #0F4C5C 0%, #00F5D4 100%)' : '#94A3B8',
+                            borderRadius: '4px',
+                            transition: 'width 0.4s ease'
+                          }} />
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
+              )}
 
-                {healthyCounselText ? (
-                  <div style={{ marginTop: 8 }}>
-                    <p style={{ fontSize: '12.5px', color: '#064E3B', margin: '0 0 10px 0', lineHeight: 1.55, fontWeight: 600 }}>
-                      "{healthyCounselText}"
-                    </p>
+              {/* Gnani Evon Sovereign Indic Voice Physics Synthesis */}
+              <div style={{
+                background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+                borderRadius: '16px',
+                border: '1.5px solid #00F5D4',
+                padding: '20px',
+                color: '#F8FAFC'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, #00F5D4 0%, #0F4C5C 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#081C24'
+                    }}>
+                      <Cpu size={18} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span>Gnani Evon (30B-A3B)</span>
+                        <span style={{ fontSize: '9px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
+                          ACOUSTIC REASONER
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
+                        Mixture-of-Experts Voice Physics Synthesis (/api/evon/chat)
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <EvonStatusChip compact={true} />
                     <button
-                      type="button"
-                      onClick={() => speakHealthyCounsel(healthyCounselText)}
+                      onClick={handleRunEvonAcousticReasoning}
+                      disabled={isEvonAcousticReasoning}
                       style={{
-                        padding: '6px 12px',
-                        borderRadius: 6,
+                        background: 'linear-gradient(135deg, #00F5D4 0%, #0F4C5C 100%)',
                         border: 'none',
-                        background: isSpeakingCounsel ? '#EF4444' : '#059669',
-                        color: '#FFFFFF',
-                        fontSize: '11px',
+                        borderRadius: '8px',
+                        color: '#081C24',
+                        padding: '7px 14px',
+                        fontSize: '11.5px',
                         fontWeight: 800,
                         cursor: 'pointer',
-                        display: 'inline-flex',
+                        display: 'flex',
                         alignItems: 'center',
-                        gap: 6
+                        gap: '6px'
                       }}
                     >
-                      <Volume2 size={13} />
-                      <span>{isSpeakingCounsel ? 'Stop Counsel Speech' : '🔊 Listen to Counsel (Gnani Indic TTS)'}</span>
+                      <Sparkles size={13} />
+                      <span>{isEvonAcousticReasoning ? 'Synthesizing...' : 'Synthesize Evon 30B'}</span>
                     </button>
                   </div>
+                </div>
+
+                {evonAcousticResult ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
+                    {evonAcousticResult.isFallback ? (
+                      <div style={{
+                        background: '#FFFBEB',
+                        border: '1px solid #FCD34D',
+                        borderRadius: '10px',
+                        padding: '12px 14px',
+                        fontSize: '11.5px',
+                        color: '#92400E'
+                      }}>
+                        <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
+                          🛡️ [Rule-based Fallback (Not Evon)]
+                        </div>
+                        <div>
+                          Evon server route unavailable ({evonAcousticResult.error || 'Server env vars unset'}). 
+                          Showing deterministic physical acoustic observations without LLM inference.
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {evonAcousticResult.isEvonLive && evonAcousticResult.thoughtTrace && (
+                          <div style={{
+                            background: 'rgba(0, 0, 0, 0.4)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '8px',
+                            padding: '10px 12px',
+                            fontFamily: 'monospace',
+                            fontSize: '11px',
+                            color: '#93C5FD',
+                            lineHeight: '1.5'
+                          }}>
+                            <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '2px', fontSize: '9.5px', textTransform: 'uppercase' }}>
+                              LIVE EVON Reasoning Trace:
+                            </div>
+                            {evonAcousticResult.thoughtTrace}
+                          </div>
+                        )}
+                        <div style={{
+                          background: 'rgba(255, 255, 255, 0.04)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '10px',
+                          padding: '12px 14px',
+                          fontSize: '12px',
+                          color: '#E2E8F0',
+                          lineHeight: '1.55'
+                        }}>
+                          {evonAcousticResult.finalAnswer}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 ) : (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, flexWrap: 'wrap', gap: 8 }}>
-                    <span style={{ fontSize: '11.5px', color: '#047857' }}>
-                      Generate personalized vocal hygiene & lung capacity guidance.
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleGenerateHealthyCounsel('te-IN')}
-                      disabled={isGeneratingCounsel}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 6,
-                        border: 'none',
-                        background: '#059669',
-                        color: '#FFFFFF',
-                        fontSize: '11px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 6
-                      }}
-                    >
-                      <Sparkles size={12} />
-                      <span>{isGeneratingCounsel ? 'Generating Counsel...' : '⚡ Generate Preventive Counsel'}</span>
-                    </button>
+                  <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '6px', lineHeight: '1.5' }}>
+                    Tap "Synthesize Evon 30B" to reason across measured physical parameters (F0: {dspMetrics.pitchF0 ? dspMetrics.pitchF0 + 'Hz' : 'unavailable'}, HNR: {dspMetrics.hnrDb ? dspMetrics.hnrDb + 'dB' : 'unavailable'}).
                   </div>
                 )}
               </div>
             </div>
           )}
 
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
-              Measured Pitch Register & Reference Signal Proximity
-            </div>
-            
-            <div style={{ background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: 12, padding: '16px', marginBottom: 20 }}>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#0D9488', textTransform: 'uppercase', marginBottom: 4 }}>
-                Pitch Register:
-              </div>
-              <h3 style={{ fontSize: '18px', fontWeight: 850, color: '#0F766E', margin: '0 0 6px 0' }}>
-                {dspMetrics.pitchF0 < 165 ? 'Low Register (< 165 Hz)' : dspMetrics.pitchF0 > 260 ? 'High Register (> 260 Hz)' : 'Mid Register (165–260 Hz)'}
-              </h3>
-              <p style={{ fontSize: '13px', color: '#115E59', margin: 0, lineHeight: 1.5 }}>
-                Derived strictly from measured fundamental frequency ({dspMetrics.pitchF0} Hz). Research signal viewer, not for diagnosis. Synthetic test signals only.
-              </p>
-            </div>
-
-            {/* Proximity Ranking Bars */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {analysisResult.allAcousticMatches.slice(0, 5).map((match, idx) => (
-                <div key={match.key}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '4px' }}>
-                    <span style={{ fontWeight: 750, color: '#081C24' }}>{match.label}</span>
-                    <span style={{ color: '#64748B', fontFamily: 'monospace' }}>Proximity: {match.similarityScore}/100</span>
-                  </div>
-                  <div style={{ height: '8px', background: '#FAF8F5', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{
-                      width: `${match.similarityScore}%`,
-                      height: '100%',
-                      background: idx === 0 ? 'linear-gradient(90deg, #0F4C5C 0%, #00F5D4 100%)' : '#94A3B8',
-                      borderRadius: '4px',
-                      transition: 'width 0.4s ease'
-                    }} />
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#94A3B8', marginTop: '2px' }}>
-                    synthetic reference signal, not a medical assessment
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Spoken Acoustic Biomarker Voice Readout (Gnani Timbre TTS / Fallback) */}
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            border: '1px solid #E2E8F0',
-            padding: '16px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 12
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: isSpeakingReadout ? '#EF4444' : '#E6F7F8',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: isSpeakingReadout ? '#FFFFFF' : '#0F4C5C'
-              }}>
-                <Volume2 size={20} />
-              </div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>
-                  Acoustic Biomarker Voice Readout
-                </div>
-                <div style={{ fontSize: '11px', color: '#64748B' }}>
-                  {readoutProvider === 'gnani_live'
-                    ? '🟢 Gnani Timbre TTS (LIVE Audio Verified)'
-                    : gnaniSpeechStatus?.available
-                      ? '🟡 Gnani Timbre TTS (Ready via Server)'
-                      : '⚪ Browser Web Speech API Fallback (GNANI_API_KEY unset)'}
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSpeakAcousticReadout}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
-                border: 'none',
-                background: isSpeakingReadout ? '#EF4444' : 'linear-gradient(135deg, #0F4C5C 0%, #006666 100%)',
-                color: '#FFFFFF',
-                fontSize: '12px',
-                fontWeight: 750,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                boxShadow: '0 2px 8px rgba(15, 76, 92, 0.2)'
-              }}
-            >
-              <Volume2 size={14} />
-              <span>{isSpeakingReadout ? 'Stop Voice Readout' : '🔊 Speak Acoustic Readout'}</span>
-            </button>
-          </div>
-
-          {/* Gnani Evon (30B-A3B) Acoustic-Clinical Correlation Reasoner */}
-          <div style={{
-            background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-            borderRadius: '16px',
-            border: '1.5px solid #00F5D4',
-            padding: '20px',
-            color: '#F8FAFC',
-            boxShadow: '0 8px 24px rgba(0, 245, 212, 0.12)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  background: 'linear-gradient(135deg, #00F5D4 0%, #0F4C5C 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#081C24'
-                }}>
-                  <Cpu size={18} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>Gnani Evon (30B-A3B)</span>
-                    <span style={{ fontSize: '9px', background: 'rgba(0,245,212,0.2)', color: '#00F5D4', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,245,212,0.4)', fontWeight: 800 }}>
-                      ACOUSTIC-CLINICAL REASONER
-                    </span>
-                  </div>
-                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>
-                    Mixture-of-Experts Sovereign Indic Voice Physics Synthesis (/api/evon/chat)
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <EvonStatusChip compact={true} />
-                <button
-                  onClick={handleRunEvonAcousticReasoning}
-                  disabled={isEvonAcousticReasoning}
-                  style={{
-                    background: 'linear-gradient(135deg, #00F5D4 0%, #0F4C5C 100%)',
-                    border: 'none',
-                    borderRadius: '8px',
-                    color: '#081C24',
-                    padding: '7px 14px',
-                    fontSize: '11.5px',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  <Sparkles size={13} />
-                  <span>{isEvonAcousticReasoning ? 'Synthesizing...' : 'Synthesize Evon 30B'}</span>
-                </button>
-              </div>
-            </div>
-
-            {evonAcousticResult ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
-                {evonAcousticResult.isFallback ? (
-                  <div style={{
-                    background: '#FFFBEB',
-                    border: '1px solid #FCD34D',
-                    borderRadius: '10px',
-                    padding: '12px 14px',
-                    fontSize: '11.5px',
-                    color: '#92400E'
-                  }}>
-                    <div style={{ fontWeight: 800, marginBottom: '2px', color: '#B45309' }}>
-                      🛡️ [Rule-based FALLBACK (Not Evon)]
-                    </div>
-                    <div>
-                      Evon server route unavailable ({evonAcousticResult.error || 'Server env vars unset'}). 
-                      Showing deterministic physical acoustic observations without LLM inference.
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    {evonAcousticResult.isEvonLive && evonAcousticResult.thoughtTrace && (
-                      <div style={{
-                        background: 'rgba(0, 0, 0, 0.4)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: '8px',
-                        padding: '10px 12px',
-                        fontFamily: 'monospace',
-                        fontSize: '11px',
-                        color: '#93C5FD',
-                        lineHeight: '1.5'
-                      }}>
-                        <div style={{ color: '#38BDF8', fontWeight: 700, marginBottom: '2px', fontSize: '9.5px', textTransform: 'uppercase' }}>
-                          LIVE EVON &lt;reasoning&gt; Acoustic Chain-of-Thought:
-                        </div>
-                        {evonAcousticResult.thoughtTrace}
-                      </div>
-                    )}
-                    <div style={{
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '10px',
-                      padding: '12px 14px',
-                      fontSize: '12px',
-                      color: '#E2E8F0',
-                      lineHeight: '1.55'
-                    }}>
-                      {evonAcousticResult.finalAnswer}
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '6px', lineHeight: '1.5' }}>
-                Tap "Synthesize Evon 30B" to query the server-side Evon endpoint across current physical metrics (F0: {dspMetrics.pitchF0}Hz, Jitter: {dspMetrics.jitterPct}%, Shimmer: {dspMetrics.shimmerPct}%, HNR: {dspMetrics.hnrDb}dB).
-              </div>
-            )}
-          </div>
-
-          {/* Leonxlnx/Earshot Local Acoustic Reasoning Engine (AST + CLAP Architecture) */}
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '16px',
-            border: '2px solid #0F4C5C',
-            padding: '20px',
-            boxShadow: '0 4px 16px rgba(15, 76, 92, 0.08)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '18px' }}>🎧</span>
-                <div>
-                  <div style={{ fontSize: '13.5px', fontWeight: 850, color: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>Earshot Acoustic Reasoning</span>
-                    <span style={{
-                      fontSize: '9.5px',
-                      background: '#0F4C5C',
-                      color: '#FAF8F5',
-                      padding: '2px 7px',
-                      borderRadius: '4px',
-                      fontWeight: 800
-                    }}>
-                      LOCAL AST + CLAP
-                    </span>
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#3D545E' }}>
-                    Real-time CPU-only audio spectrogram reasoning • Zero cloud dependency (14ms latency)
-                  </div>
-                </div>
-              </div>
-              <span style={{
-                background: '#FAF8F5',
-                border: '1px solid #D4AF37',
-                color: '#0F4C5C',
-                padding: '4px 10px',
-                borderRadius: '8px',
-                fontSize: '11px',
-                fontWeight: 800
-              }}>
-                ⚡ 100% On-Device
-              </span>
-            </div>
-
-            {/* Top Acoustic Classification Result */}
-            <div style={{
-              background: '#FAF8F5',
-              border: '1px solid #D1E1E6',
-              borderRadius: '12px',
-              padding: '14px',
-              marginBottom: '14px'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-                <div>
-                  <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase' }}>
-                    Detected Acoustic Phenotype (AST Classification)
-                  </div>
-                  <div style={{ fontSize: '14.5px', fontWeight: 850, color: '#091E26', marginTop: '2px' }}>
-                    {currentEarshotDescription.topClass}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '10px', color: '#64748B', fontWeight: 700 }}>CLAP MATCH</div>
-                  <div style={{ fontSize: '16px', fontWeight: 850, color: '#0F4C5C', fontFamily: 'monospace' }}>
-                    {currentEarshotDescription.confidencePercentage}%
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ height: '6px', background: '#E2E8F0', borderRadius: '3px', overflow: 'hidden', marginBottom: '8px' }}>
-                <div style={{
-                  width: `${currentEarshotDescription.confidencePercentage}%`,
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #0F4C5C 0%, #D4AF37 100%)',
-                  borderRadius: '3px',
-                  transition: 'width 0.3s ease'
-                }} />
-              </div>
-
-              <div style={{ fontSize: '11.5px', color: '#334155', lineHeight: 1.5 }}>
-                {currentEarshotDescription.clinicalDescription}
-              </div>
-
-              <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: '#FFFFFF', border: '1px solid #D1E1E6', color: '#0F4C5C', fontWeight: 750 }}>
-                  ICD-10: {currentEarshotDescription.icd10}
-                </span>
-                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: currentEarshotDescription.severity === 'CRITICAL' ? '#FEE2E2' : '#FEF3C7', color: currentEarshotDescription.severity === 'CRITICAL' ? '#991B1B' : '#92400E', fontWeight: 750 }}>
-                  Severity: {currentEarshotDescription.severity}
-                </span>
-                <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: '#FFFFFF', border: '1px solid #D1E1E6', color: '#475569', fontFamily: 'monospace' }}>
-                  Dominant: {currentEarshotDescription.acousticGrounding.dominantFreqHz} Hz
-                </span>
-              </div>
-            </div>
-
-            {/* Zero-Shot Semantic Audio Query Search (CLAP-style) */}
-            <div>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px', textTransform: 'uppercase' }}>
-                Zero-Shot Semantic Audio Probe (Query Spectral Features):
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                {[
-                  { label: 'High-Pitch Wheeze', query: 'respiratory wheeze' },
-                  { label: 'Harsh Stridor', query: 'inspiratory stridor' },
-                  { label: 'Barking Cough', query: 'croup barking cough' },
-                  { label: 'Fine Crackles', query: 'crepitations fine' }
-                ].map((item) => (
-                  <button
-                    key={item.query}
-                    type="button"
-                    onClick={() => handleTestEarshotSemanticMatch(item.query)}
-                    style={{
-                      padding: '5px 10px',
-                      borderRadius: '6px',
-                      border: '1px solid',
-                      borderColor: earshotSemanticQuery === item.query ? '#0F4C5C' : '#CBD5E1',
-                      background: earshotSemanticQuery === item.query ? '#0F4C5C' : '#FAF8F5',
-                      color: earshotSemanticQuery === item.query ? '#FAF8F5' : '#0F4C5C',
-                      fontSize: '11px',
-                      fontWeight: 750,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-
-              {earshotMatchResult && (
-                <div style={{
-                  background: '#F0FDFA',
-                  border: '1px solid #99F6E4',
-                  borderRadius: '8px',
-                  padding: '10px 12px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F766E' }}>
-                      Semantic Match Verdict: <strong>{earshotMatchResult.matchVerdict}</strong> ({earshotMatchResult.matchScore}%)
-                    </span>
-                    <div style={{ fontSize: '10px', color: '#115E59' }}>
-                      Query: "{earshotMatchResult.query}" vs Spectrogram Profile
-                    </div>
-                  </div>
-                  <span style={{ fontSize: '10px', color: '#0D9488', fontFamily: 'monospace', fontWeight: 750 }}>
-                    ⚡ {earshotMatchResult.latencyMs}ms local CPU
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ background: '#FAF8F5', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '18px', fontSize: '12px', color: '#475569', lineHeight: 1.6 }}>
-            <strong>Clinical Safety Protocol:</strong> Quantitative physical acoustics vary with patient effort, distance to microphone, ambient acoustics, and phonation duration. Features serve as digital decision aids and cannot substitute for physical auscultation, stethoscopy, or spirometry.
+          {/* Clinical Safety Protocol Footer */}
+          <div style={{ background: '#FAF8F5', borderRadius: '14px', border: '1px solid #E2E8F0', padding: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.6 }}>
+            <strong>Clinical Safety Protocol:</strong> Quantitative physical acoustics vary with recording equipment, microphone distance, ambient noise, and vocal technique. Features serve as digital engineering aids and cannot substitute for physical auscultation, stethoscopy, or spirometry.
           </div>
         </div>
       </div>
-
     </div>
   );
 }

@@ -336,8 +336,6 @@ export class IndicSpeechService {
   async speak(text, options = {}) {
     if (!text || typeof window === 'undefined') return;
 
-    const langCode = options.langCode || this.currentLanguage || 'en-IN';
-    const { rate, pitch } = this.calculateAdaptiveProsody(options.rate || 0.95, options.pitch || 1.0);
     const onStart = options.onStart || (() => {});
     const onEnd = options.onEnd || (() => {});
     const onError = options.onError || (() => {});
@@ -348,6 +346,15 @@ export class IndicSpeechService {
       onEnd();
       return;
     }
+
+    let langCode = options.langCode || this.currentLanguage || 'en-IN';
+    if (/[\u0C00-\u0C7F]/.test(cleanSpeechText)) {
+      langCode = 'te-IN';
+    } else if (/[\u0900-\u097F]/.test(cleanSpeechText)) {
+      langCode = 'hi-IN';
+    }
+
+    const { rate, pitch } = this.calculateAdaptiveProsody(options.rate || 0.95, options.pitch || 1.0);
 
     this.stopSpeaking();
     this.isSpeaking = true;
@@ -391,13 +398,17 @@ export class IndicSpeechService {
             onStart({ provider: 'gnani_live' });
           };
           audio.onended = () => {
-            this.isSpeaking = false;
-            if (this.conversationState === 'SPEAKING') {
-              this.setConversationState('LISTENING');
-            }
-            onEnd();
+            // Echo settling cooldown: wait 350ms before allowing mic to listen again
+            setTimeout(() => {
+              this.isSpeaking = false;
+              if (this.conversationState === 'SPEAKING') {
+                this.setConversationState('LISTENING');
+              }
+              onEnd();
+            }, 350);
           };
           audio.onerror = () => {
+            console.warn('Gnani audio playback failed, falling back to browser speech');
             this.isSpeaking = false;
             if (this.conversationState === 'SPEAKING') {
               this.setConversationState('LISTENING');
@@ -434,11 +445,14 @@ export class IndicSpeechService {
       };
 
       utterance.onend = () => {
-        this.isSpeaking = false;
-        if (this.conversationState === 'SPEAKING') {
-          this.setConversationState('LISTENING');
-        }
-        onEnd();
+        // Echo settling cooldown
+        setTimeout(() => {
+          this.isSpeaking = false;
+          if (this.conversationState === 'SPEAKING') {
+            this.setConversationState('LISTENING');
+          }
+          onEnd();
+        }, 350);
       };
 
       utterance.onerror = (e) => {
@@ -546,16 +560,8 @@ export class IndicSpeechService {
         onRMS(rms);
 
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (rms > this.bargeInThreshold) {
-            consecutiveSpeechFrames++;
-            if (consecutiveSpeechFrames >= 2) {
-              consecutiveSpeechFrames = 0;
-              this.interruptAssistant('vad_speech_detected');
-              onBargeIn({ rms });
-            }
-          } else {
-            consecutiveSpeechFrames = 0;
-          }
+          // Acoustic echo protection: Ignore speaker sound while assistant speaks
+          consecutiveSpeechFrames = 0;
         }
       }, 50);
 
@@ -635,9 +641,8 @@ export class IndicSpeechService {
         }
 
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (final.trim() || interim.trim()) {
-            this.interruptAssistant('stt_speech_detected');
-          }
+          // Acoustic echo protection: drop speech recognition while assistant is speaking out loud
+          return;
         }
 
         const normalizedFinal = normalizeCodeMixedClinicalText(final);
@@ -723,9 +728,6 @@ export class IndicSpeechService {
 
         if (finalTranscript.trim()) {
           this.setConversationState('THINKING');
-          
-          // Phase 2: Instant Latency Masking Filler
-          this.playConversationalFiller(language);
 
           try {
             const reply = await onRequestAssistantReply(finalTranscript.trim());
@@ -753,10 +755,14 @@ export class IndicSpeechService {
         console.warn('Conversational ASR warning:', err);
       },
       onStatusChange: (status) => {
-        if (!status.isListening && this.conversationState === 'LISTENING') {
-          try {
-            this.currentRecognition?.start();
-          } catch {}
+        if (!status.isListening && this.activeSessionCallbacks && !this.isSpeaking) {
+          setTimeout(() => {
+            if (this.activeSessionCallbacks && !this.isSpeaking && this.currentRecognition) {
+              try {
+                this.currentRecognition.start();
+              } catch {}
+            }
+          }, 120);
         }
       }
     });

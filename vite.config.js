@@ -93,9 +93,32 @@ export default defineConfig(({ mode }) => {
 
                 if (gnaniRes.ok) {
                   const audioBuffer = await gnaniRes.arrayBuffer();
+                  let outBuf = Buffer.from(audioBuffer);
+                  if (outBuf.length < 4 || outBuf.toString('ascii', 0, 4) !== 'RIFF') {
+                    const sampleRate = 24000;
+                    const numChannels = 1;
+                    const bitDepth = 16;
+                    const byteRate = sampleRate * numChannels * (bitDepth / 8);
+                    const blockAlign = numChannels * (bitDepth / 8);
+                    const header = Buffer.alloc(44);
+                    header.write('RIFF', 0);
+                    header.writeUInt32LE(36 + outBuf.length, 4);
+                    header.write('WAVE', 8);
+                    header.write('fmt ', 12);
+                    header.writeUInt32LE(16, 16);
+                    header.writeUInt16LE(1, 20);
+                    header.writeUInt16LE(numChannels, 22);
+                    header.writeUInt32LE(sampleRate, 24);
+                    header.writeUInt32LE(byteRate, 28);
+                    header.writeUInt16LE(blockAlign, 32);
+                    header.writeUInt16LE(bitDepth, 34);
+                    header.write('data', 36);
+                    header.writeUInt32LE(outBuf.length, 40);
+                    outBuf = Buffer.concat([header, outBuf]);
+                  }
                   res.statusCode = 200;
-                  res.setHeader('Content-Type', gnaniRes.headers.get('content-type') || 'audio/wav');
-                  return res.end(Buffer.from(audioBuffer));
+                  res.setHeader('Content-Type', 'audio/wav');
+                  return res.end(outBuf);
                 } else {
                   res.statusCode = gnaniRes.status;
                   return res.end(await gnaniRes.text());

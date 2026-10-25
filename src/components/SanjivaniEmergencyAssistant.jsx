@@ -210,6 +210,7 @@ export default function SanjivaniEmergencyAssistant({
           const triage = analyzeEmergencyClinicalTriage(userQuestion);
           if (triage.triageLevel === 'RED') {
             addCopilotEvent('triage', `🚨 Voice Triage Alert: ${triage.suspectedCondition}`, `Action protocol: ${triage.priorityProtocol}`);
+            if (onOpenHandoverModal) onOpenHandoverModal();
           }
 
           const reply = await processCopilotVoiceCommand(userQuestion);
@@ -224,35 +225,122 @@ export default function SanjivaniEmergencyAssistant({
     }
   };
 
-  // Process voice intent for setting location, finding nearest hospital, booking beds, guiding CPR, or updating details
+  // Process voice intent for setting location, finding nearest hospital, booking beds, guiding CPR, or clinical first-aid
   const processCopilotVoiceCommand = async (rawText) => {
     if (!rawText || !rawText.trim()) return null;
     const text = rawText.trim();
     const lower = text.toLowerCase();
 
-    // 1. LOCATION INTENTS
+    // Detect language: Telugu, Hindi, or English
+    const isTelugu = /[\u0C00-\u0C7F]/.test(text) || 
+      lower.includes('noppi') || lower.includes('ayasam') || lower.includes('pampandi') || 
+      lower.includes('daggara') || lower.includes('gunde') || lower.includes('raktham') || 
+      lower.includes('unaru') || lower.includes('ledu') || lower.includes('undi') || lower.includes('cheppandi');
+    const isHindi = /[\u0900-\u097F]/.test(text) || 
+      lower.includes('dard') || lower.includes('bhejo') || lower.includes('saans') || lower.includes('aspataal');
+    const callerLang = isTelugu ? 'Telugu' : isHindi ? 'Hindi' : 'English';
+
+    // 1. LOCATION INTENTS (REAL-TIME MAP ANCHORING)
     if (lower.includes('annavaram') || lower.includes('అన్నవరం')) {
       const loc = { lat: 17.2790, lon: 82.4042, address: 'Annavaram, Kakinada District, Andhra Pradesh' };
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Annavaram, AP (17.2790° N, 82.4042° E). Rerouting nearest 108 ALS unit.`);
-      return `Location set to Annavaram. Identifying closest emergency trauma centers and dispatching 108 ambulance.`;
+      return isTelugu 
+        ? `లొకేషన్ అన్నవరం గా గుర్తించాము. అడ్వాన్స్డ్ లైఫ్ సపోర్ట్ ఆంబులెన్స్ A-12 ని మీ వద్దకు పంపుతున్నాము. రోగి పరిస్థితి ఎలా ఉందో చెప్పండి.`
+        : `Location set to Annavaram. ALS Ambulance A-12 dispatched to your coordinates. Tell me the patient's current condition.`;
     }
 
     if (lower.includes('kakinada') || lower.includes('కాకినాడ')) {
       const loc = { lat: 16.9891, lon: 82.2475, address: 'Kakinada, Andhra Pradesh' };
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Kakinada, AP (16.9891° N, 82.2475° E).`);
-      return `Location updated to Kakinada. Apex trauma center identified.`;
+      return isTelugu
+        ? `లొకేషన్ కాకినాడ గా అప్‌డేట్ చేసాము. అపోలో ఎమర్జెన్సీ ట్రామా సెంటర్ సిద్ధంగా ఉంది. రోగి శ్వాస తీసుకుంటున్నారా?`
+        : `Location updated to Kakinada. Apex trauma center identified. Is the patient breathing normally?`;
     }
 
     if (lower.includes('rajahmundry') || lower.includes('rajamahendravaram') || lower.includes('రాజమండ్రి')) {
       const loc = { lat: 17.0005, lon: 81.8040, address: 'Rajahmahendravaram, Andhra Pradesh' };
       onApplyLocation?.(loc);
       addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Rajahmundry.`);
-      return `Location updated to Rajahmundry.`;
+      return isTelugu
+        ? `లొకేషన్ రాజమండ్రి గా నమోదైంది. ఆంబులెన్స్ బయలుదేరింది.`
+        : `Location updated to Rajahmundry. Nearest unit alerted.`;
     }
 
-    // 2. NEAREST HOSPITAL INTENT
+    if (lower.includes('visakhapatnam') || lower.includes('vizag') || lower.includes('విశాఖపట్నం')) {
+      const loc = { lat: 17.6868, lon: 83.2185, address: 'Visakhapatnam, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Visakhapatnam.`);
+      return isTelugu
+        ? `లొకేషన్ విశాఖపట్నం గా అప్‌డేట్ చేసాము. కింగ్ జార్జ్ హాస్పిటల్ అపెక్స్ ట్రామా సెంటర్ గుర్తించాము.`
+        : `Location updated to Visakhapatnam. KGH Apex Trauma Center alerted.`;
+    }
+
+    if (lower.includes('vijayawada') || lower.includes('విజయవాడ')) {
+      const loc = { lat: 16.5062, lon: 80.6480, address: 'Vijayawada, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Vijayawada.`);
+      return isTelugu
+        ? `లొకేషన్ విజయవాడ గా నమోదైంది. ప్రభుత్వ జనరల్ ఆసుపత్రి ఎమర్జెన్సీ ట్రామా సిద్ధంగా ఉంది.`
+        : `Location set to Vijayawada. GGH Apex Trauma alerted.`;
+    }
+
+    if (lower.includes('hyderabad') || lower.includes('హైదరాబాద్')) {
+      const loc = { lat: 17.3850, lon: 78.4867, address: 'Hyderabad, Telangana' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Hyderabad.`);
+      return isTelugu
+        ? `లొకేషన్ హైదరాబాద్ గా నమోదైంది. నిమ్స్ అపెక్స్ ట్రామా సెంటర్ సిద్ధంగా ఉంది.`
+        : `Location set to Hyderabad. NIMS Apex Trauma center ready.`;
+    }
+
+    if (lower.includes('tirupati') || lower.includes('తిరుపతి')) {
+      const loc = { lat: 13.6288, lon: 79.4192, address: 'Tirupati, Andhra Pradesh' };
+      onApplyLocation?.(loc);
+      addCopilotEvent('system', '📍 Caller Location Locked via Voice', `Coordinates set to Tirupati.`);
+      return isTelugu
+        ? `లొకేషన్ తిరుపతి గా నమోదైంది. స్విమ్స్ సూపర్ స్పెషాలిటీ ట్రామా సెంటర్ సిద్ధంగా ఉంది.`
+        : `Location set to Tirupati. SVIMS Apex Trauma ready.`;
+    }
+
+    // 2. REAL-TIME ROAD ROUTE & NAVIGATION TO HOSPITAL INTENT
+    if (
+      lower.includes('route to hospital') ||
+      lower.includes('navigate to hospital') ||
+      lower.includes('navigate') ||
+      lower.includes('navigation') ||
+      lower.includes('hospital route') ||
+      lower.includes('show route') ||
+      lower.includes('hospital ki route') ||
+      lower.includes('hospital ki daari') ||
+      lower.includes('దారి') ||
+      lower.includes('రూట్') ||
+      lower.includes('రహదారి') ||
+      lower.includes('rasta') ||
+      lower.includes('directions') ||
+      lower.includes('how to reach')
+    ) {
+      const targetHospital = (hospitalsList && hospitalsList.length > 0)
+        ? hospitalsList[0]
+        : selectedHospital || { name: 'Apollo Emergency Trauma Center', etaMinutes: 5, distanceKm: 3.4 };
+
+      onSelectHospital?.(targetHospital);
+      if (onDispatch) onDispatch(targetHospital);
+      handleGreenCorridor();
+
+      addCopilotEvent(
+        'system',
+        `🗺️ Active Road Navigation Route: ${targetHospital.name}`,
+        `Calculated traffic-aware road corridor to ${targetHospital.name}. Distance: ${targetHospital.distanceKm || '3.4'} km, Live ETA: ${targetHospital.etaMinutes || '5'} min. Green corridor signals preempted.`
+      );
+
+      return isTelugu
+        ? `${targetHospital.name} ఆసుపత్రికి గ్రీన్ కారిడార్ నావిగేషన్ రూట్ మ్యాప్‌పై ప్రత్యక్షంగా లైవ్ చేసాము. దూరం ${targetHospital.distanceKm || '3.4'} కిలోమీటర్లు, ప్రయాణ సమయం సుమారు ${targetHospital.etaMinutes || '5'} నిమిషాలు. ఆంబులెన్స్ సైరన్ ఆన్ లో ఉంది.`
+        : `Real-time road navigation route to ${targetHospital.name} active on operational map. Distance: ${targetHospital.distanceKm || '3.4'} km, ETA: ${targetHospital.etaMinutes || '5'} minutes. Traffic green corridor signals pre-empted.`;
+    }
+
+    // 3. NEAREST HOSPITAL INTENT
     if (
       lower.includes('nearest hospital') || 
       lower.includes('nearby hospital') || 
@@ -268,7 +356,9 @@ export default function SanjivaniEmergencyAssistant({
       
       onSelectHospital?.(targetHospital);
       addCopilotEvent('system', `🏥 Nearest Hospital Selected: ${targetHospital.name}`, `Selected ${targetHospital.name} (${targetHospital.etaMinutes || 4} min ETA, ${targetHospital.bedsAvailable || 6} beds open).`);
-      return `Nearest apex center is ${targetHospital.name}. Estimated travel time is ${targetHospital.etaMinutes || 4} minutes with ${targetHospital.bedsAvailable || 6} emergency beds available. Say book bed or dispatch to reserve.`;
+      return isTelugu
+        ? `దగ్గరలోని అత్యవసర ఆసుపత్రి ${targetHospital.name}. ప్రయాణ సమయం ${targetHospital.etaMinutes || 4} నిమిషాలు, ${targetHospital.bedsAvailable || 8} ఐసీయూ బెడ్స్ అందుబాటులో ఉన్నాయి. బెడ్ బుక్ చేయమంటారా?`
+        : `Nearest trauma center is ${targetHospital.name}. Travel time is ${targetHospital.etaMinutes || 4} minutes with ${targetHospital.bedsAvailable || 6} emergency beds available. Say book bed to reserve.`;
     }
 
     // 3. BOOK BED / DISPATCH INTENT
@@ -279,87 +369,142 @@ export default function SanjivaniEmergencyAssistant({
       lower.includes('ambulance pampandi') || 
       lower.includes('ఆంబులెన్స్ పంపండి') || 
       lower.includes('book cheyyi') ||
-      lower.includes('bed handover')
+      lower.includes('bed handover') ||
+      lower.includes('form') ||
+      lower.includes('ఫారం') ||
+      lower.includes('handover')
     ) {
-      const hosp = selectedHospital || (hospitalsList && hospitalsList[0]) || { name: 'Apex Emergency Center', shortName: 'Apex' };
-      if (onDispatch) {
-        onDispatch(hosp);
-      } else if (onOpenHandoverModal) {
-        onOpenHandoverModal();
-      }
+      const hosp = selectedHospital || (hospitalsList && hospitalsList[0]) || { name: 'Apollo Emergency Center', shortName: 'Apollo' };
+      if (onDispatch) onDispatch(hosp);
+      if (onOpenHandoverModal) onOpenHandoverModal();
       handlePreAlertCathLab();
-      return `Ambulance A-12 dispatched and trauma resuscitation bed pre-booked at ${hosp.name || hosp.shortName || 'apex hospital'}. Pre-arrival digital token generated.`;
+      return isTelugu
+        ? `ఆంబులెన్స్ A-12 బయలుదేరింది! ${hosp.name || 'హాస్పిటల్'} లో ABDM ePCR ఫారం ఆటోమేటిక్‌గా నింపి, ఎమర్జెన్సీ బెడ్ రిజర్వ్ చేసాము.`
+        : `Ambulance A-12 dispatched and trauma resuscitation bed pre-booked at ${hosp.name || 'hospital'}. Keep patient lying still with open airway.`;
     }
 
-    // 4. CPR GUIDANCE INTENT
+    // 4. CARDIAC ARREST / CPR METRONOME INTENT (PULSE ABSENT / UNCONSCIOUS)
     if (
       lower.includes('cpr') || 
-      lower.includes('chest pain') || 
       lower.includes('compressions') || 
-      lower.includes('gunde noppi') || 
-      lower.includes('గుండె నొప్పి') ||
-      lower.includes('breathless') ||
-      lower.includes('pulse')
+      lower.includes('pulse ledu') || 
+      lower.includes('pulse లేదు') || 
+      lower.includes('unconscious') || 
+      lower.includes('స్పృహ లేదు') ||
+      lower.includes('spruha ledu')
     ) {
       if (!isMetronomeActive) {
         handleTriggerCPR();
       }
-      return `Activating 110 beats per minute CPR rhythm. Place heels of hands in center of chest and compress 2 inches deep in sync with the beat.`;
+      if (onOpenHandoverModal) onOpenHandoverModal();
+      return isTelugu
+        ? `110 BPM CPR రిథమ్ ప్రారంభించాను! రోగిని గట్టి నేలపై పడుకోబెట్టి, ఛాతీ మధ్యలో రెండు చేతులు ఉంచి బీట్ కి తగ్గట్టు గట్టిగా నొక్కండి. ఆగవద్దు, ఆంబులెన్స్ వస్తోంది!`
+        : `Activating 110 beats per minute CPR rhythm! Place heels of hands in center of chest and compress 2 inches deep in sync with the beat. Do not stop, ambulance is rolling!`;
     }
 
-    // 5. CALLER NAME INTENT
+    // 5. CHEST PAIN / SUSPECTED STEMI HEART ATTACK (CONSCIOUS PATIENT FIRST AID)
+    if (
+      lower.includes('chest pain') || 
+      lower.includes('gunde noppi') || 
+      lower.includes('గుండె నొప్పి') || 
+      lower.includes('heart attack') || 
+      lower.includes('గుండెపోటు')
+    ) {
+      handlePreAlertCathLab();
+      const hosp = selectedHospital || (hospitalsList && hospitalsList[0]) || { name: 'Apollo Emergency Center' };
+      if (onDispatch) onDispatch(hosp);
+      if (onOpenHandoverModal) onOpenHandoverModal();
+
+      return isTelugu
+        ? `ప్రశాంతంగా ఉండండి. రోగిని వెంటనే 45 డిగ్రీల కోణంలో కూర్చోబెట్టి, బట్టలు వదులు చేయండి. నడవనివ్వకండి, ఆహారం లేదా నీరు ఇవ్వకండి. ఆంబులెన్స్ A-12 వస్తోంది. రోగి మాట్లాడగలుగుతున్నారా?`
+        : `Stay calm. Sit the patient upright at a 45-degree angle and loosen tight collar. Do not let them walk. Ambulance A-12 is rolling and Cath Lab is pre-alerted. Is the patient able to speak?`;
+    }
+
+    // 6. ACCIDENT / SEVERE BLEEDING / TRAUMA
+    if (
+      lower.includes('accident') || 
+      lower.includes('debba') || 
+      lower.includes('రక్తం') || 
+      lower.includes('raktham') || 
+      lower.includes('bleeding')
+    ) {
+      handleGreenCorridor();
+      const hosp = selectedHospital || (hospitalsList && hospitalsList[0]) || { name: 'Apollo Emergency Center' };
+      if (onDispatch) onDispatch(hosp);
+      if (onOpenHandoverModal) onOpenHandoverModal();
+      return isTelugu
+        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ క్లియర్ చేసాము. గాయంపై శుభ్రమైన గుడ్డతో గట్టిగా అదిమి పట్టి రక్తస్రావం ఆపండి. గాయపడిన భాగాన్ని ఎత్తులో ఉంచండి. రోగికి మత్తుగా ఉందా?`
+        : `Traffic green corridor activated! Apply firm, continuous direct pressure to the wound with a clean cloth. Elevate the injured limb. Ambulance A-12 is en route.`;
+    }
+
+    // 7. CALLER NAME INTENT
     const nameMatch = text.match(/(?:my name is|i am|peru|naa peru)\s+([a-zA-Z\s]+)/i);
     if (nameMatch && nameMatch[1]) {
       const extractedName = nameMatch[1].trim().split(' ')[0];
       if (extractedName && extractedName.length > 2) {
         onUpdateCallerName?.(extractedName);
         addCopilotEvent('system', `👤 Caller Name Updated: ${extractedName}`, `Triage ePCR record updated with patient name.`);
-        return `Noted caller name as ${extractedName}. Details synchronized with ePCR.`;
+        return isTelugu ? `కాలర్ పేరు ${extractedName} గా నమోదైంది.` : `Noted caller name as ${extractedName}. Details synchronized with ePCR.`;
       }
     }
 
-    // 6. CALLER PHONE INTENT
+    // 8. CALLER PHONE INTENT
     const phoneMatch = text.match(/\b([6-9]\d{9})\b/);
     if (phoneMatch && phoneMatch[1]) {
       const extractedPhone = phoneMatch[1];
       onUpdateCallerPhone?.(extractedPhone);
       addCopilotEvent('system', `📱 Caller Contact Updated: +91 ${extractedPhone}`, `Cellular callback bridge updated.`);
-      return `Updated contact number to ${extractedPhone}.`;
+      return isTelugu ? `ఫోన్ నంబర్ ${extractedPhone} అప్‌డేట్ అయ్యింది.` : `Updated contact number to ${extractedPhone}.`;
     }
 
-    // 7. GREEN CORRIDOR / TRAFFIC INTENT
+    // 9. GREEN CORRIDOR / TRAFFIC INTENT
     if (lower.includes('traffic') || lower.includes('green corridor') || lower.includes('clear road') || lower.includes('siren')) {
       handleGreenCorridor();
-      return `Traffic police green corridor signal clearance activated along route to ${selectedHospital?.name || 'hospital'}.`;
+      return isTelugu
+        ? `ట్రాఫిక్ పోలీస్ గ్రీన్ కారిడార్ సిగ్నల్ క్లియరెన్స్ ఆక్టివేట్ అయ్యింది.`
+        : `Traffic police green corridor signal clearance activated along route to ${selectedHospital?.name || 'hospital'}.`;
     }
 
-    // 8. GENERAL CLINICAL QUERY: Groq or Evon reasoning with humanized speech
+    // 10. GENERAL CLINICAL QUERY: Interactive, Life-Saving Tele-Triage Guidance via Groq
     try {
-      // Try fast Groq API
       const groqKey = getGroqApiKey();
       if (groqKey) {
-        const groqPrompt = `Emergency caller asks: "${text}". Patient location: ${geoAddress}. Target hospital: ${selectedHospital?.name || 'Apex Trauma'}. Provide ultra-concise, authoritative first-aid and dispatch guidance in under 30 words.`;
-        const groqRes = await queryGroqApi(groqPrompt, 'You are Sanjivani-108 Emergency AI Dispatch Copilot. Be calm, decisive, and concise. No markdown, no asterisks, no bullet points.');
+        const groqPrompt = 
+          `Emergency caller says: "${text}".\n` +
+          `Patient location: ${geoAddress}.\n` +
+          `Target emergency center: ${selectedHospital?.name || 'Apex Emergency Trauma Center'} (${selectedHospital?.etaMinutes || 4} min ETA).\n` +
+          `Assigned ALS unit: Ambulance A-12 (Paramedic Rajesh, en route).\n\n` +
+          `You are Dr. Sanjivani, the senior 108 emergency tele-triage doctor and ALS dispatcher.\n` +
+          `Respond in ${callerLang} in 35 to 45 words:\n` +
+          `1. Provide immediate, step-by-step life-saving first aid instructions (posture, airway, what to avoid).\n` +
+          `2. Reassure the caller that Ambulance A-12 is en route.\n` +
+          `3. Ask 1 vital diagnostic question to assess condition (e.g. consciousness, breathing, chest tightness, speech clarity).\n` +
+          `Strict rules: Speak with medical calm and authority. No markdown, no asterisks, no bullet points, no numbered lists.`;
+
+        const systemInstruction = `You are Dr. Sanjivani, senior 108 emergency lead doctor. Respond authoritatively in ${callerLang}.`;
+        const groqRes = await queryGroqApi(groqPrompt, systemInstruction);
         if (groqRes) {
           const cleaned = cleanTextForSpeech(groqRes);
-          addCopilotEvent('ai', '⚡ Groq Llama-3.3 70B Fast Response', cleaned);
+          addCopilotEvent('ai', '⚡ Dr. Sanjivani (108 Clinical Triage Lead)', cleaned);
           return cleaned;
         }
       }
 
-      // Evon reasoning
+      // Evon reasoning fallback
       const systemInstruction = 
-        `You are Gnani Evon (v3.3-30B-A3B), emergency medical dispatch copilot for Sanjivani-108. ` +
-        `Respond with concise, authoritative life-safety protocol guidance under 30 words. ` +
+        `You are Dr. Sanjivani, emergency medical dispatch copilot for Sanjivani-108. ` +
+        `Respond with step-by-step life-safety protocol guidance under 40 words in ${callerLang}. ` +
         `Telemetry: Ambulance A-12 (${ambulanceData?.driver || 'EMT Rajesh'}), ${selectedHospital?.name || 'Apex Center'}.`;
-      const evonResult = await queryEvonServer(text, systemInstruction, { maxTokens: 100 });
-      const rawAnswer = evonResult.finalAnswer || evonResult.raw || 'Keep patient resting with open airway. Ambulance A-12 is en route.';
+      const evonResult = await queryEvonServer(text, systemInstruction, { maxTokens: 120 });
+      const rawAnswer = evonResult.finalAnswer || evonResult.raw || 'Keep patient resting upright with open airway. Ambulance A-12 is en route.';
       const cleaned = cleanTextForSpeech(rawAnswer);
-      addCopilotEvent('ai', '🧠 Gnani Evon 30B Live Reasoning', cleaned);
+      addCopilotEvent('ai', '🧠 Dr. Sanjivani (Gnani Evon)', cleaned);
       return cleaned;
     } catch (err) {
-      const fallback = `Keep patient sitting upright with open airway. Ambulance A-12 is en route with estimated arrival in ${selectedHospital?.etaMinutes || 3} minutes.`;
-      addCopilotEvent('ai', '🛡️ Emergency Field Protocol', fallback);
+      const fallback = isTelugu
+        ? `ప్రశాంతంగా ఉండండి. రోగిని విశ్రాంతిగా కూర్చోబెట్టి శ్వాస మార్గాన్ని తెరిచి ఉంచండి. ఆంబులెన్స్ A-12 వస్తోంది. రోగి స్పృహలో ఉన్నారా చెప్పండి.`
+        : `Stay calm. Keep patient sitting upright with open airway. Ambulance A-12 is en route arriving shortly. Is the patient conscious?`;
+      addCopilotEvent('ai', '🛡️ Dr. Sanjivani Emergency Guidance', fallback);
       return fallback;
     }
   };
@@ -459,13 +604,65 @@ export default function SanjivaniEmergencyAssistant({
     addCopilotEvent('call', '🔴 108 Emergency Call Disconnected', `Voice session terminated. Final Call Duration: ${formatElapsed(elapsedSec)}. Disconnect tone played.`);
   };
 
-  // 4. START LIVE CALL ACTION
-  const handleStartCall = () => {
+  // 4. START LIVE CALL ACTION (REAL-TIME CONVERSATIONAL 108 TELE-TRAUMA BRIDGE)
+  const handleStartCall = async () => {
     setCallStatus('connected');
     setElapsedSec(0);
     setIsAudioMuted(false);
+    setIsHandsFreeLiveTalk(true);
+    setIsMicListening(true);
     sanjivaniAudio.playRadioChime();
-    addCopilotEvent('call', '🟢 New 108 Emergency Call Connected', `Direct audio stream connected to caller (${callerPhone}). Auto golden timer running from 00:00.`);
+    addCopilotEvent('call', '🟢 108 Emergency Call Connected', `Direct cellular audio stream connected to caller (${callerPhone}). Real-time hands-free speech active.`);
+
+    const greeting = "108 Sanjivani Emergency. What is your medical emergency? చెప్పండి మీ సమస్య ఏమిటి?";
+    addCopilotEvent('ai', '🔊 Dr. Sanjivani (108 Dispatch Lead)', greeting);
+    setVoiceState('SPEAKING');
+
+    await speechService.speak(greeting, {
+      langCode: 'te-IN',
+      onStart: () => setVoiceState('SPEAKING'),
+      onEnd: () => {
+        setVoiceState('LISTENING');
+      }
+    });
+
+    try {
+      await speechService.startConversationalSession({
+        language: 'te-IN',
+        onStateChange: (st) => {
+          setVoiceState(st);
+        },
+        onTranscript: ({ finalTranscript, interimTranscript }) => {
+          const t = finalTranscript || interimTranscript;
+          if (t) {
+            onUpdateTranscript(t, `Live Audio Ingested: "${t}"`);
+          }
+        },
+        onBargeIn: () => {
+          addCopilotEvent('audio', '🛑 Caller Speaking', 'Assistant paused talking to hear caller.');
+        },
+        onVolumeChange: (rms) => {
+          setVoiceRms(rms);
+        },
+        onRequestAssistantReply: async (userQuestion) => {
+          addCopilotEvent('user', '💬 Caller', userQuestion);
+
+          // Dynamic Emergency Triage check
+          const triage = analyzeEmergencyClinicalTriage(userQuestion);
+          if (triage.triageLevel === 'RED') {
+            addCopilotEvent('triage', `🚨 Voice Triage Alert: ${triage.suspectedCondition}`, `Action protocol: ${triage.priorityProtocol}`);
+            if (onOpenHandoverModal) onOpenHandoverModal();
+          }
+
+          setVoiceState('THINKING');
+          const reply = await processCopilotVoiceCommand(userQuestion);
+          return reply;
+        }
+      });
+    } catch (err) {
+      console.warn('Conversational session launch error:', err);
+      addCopilotEvent('error', '⚠️ Microphone Permission Notice', 'Please allow microphone access in your browser to speak live.');
+    }
   };
 
   // 5. 110 BPM CPR ACTION (SOUND + VOICE + BEAT ANIMATION)
@@ -737,186 +934,140 @@ export default function SanjivaniEmergencyAssistant({
             </div>
           </div>
 
-          {/* Call Controls, Two Explicit Voice Buttons & Timer */}
+          {/* Real-Time 108 Emergency Calling Interface */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            {callStatus === 'ready' && (
+            {callStatus !== 'connected' ? (
               <button
                 onClick={handleStartCall}
                 style={{
                   background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                   color: '#FFFFFF',
                   border: 'none',
-                  borderRadius: '20px',
-                  padding: '6px 14px',
-                  fontSize: '11.5px',
+                  borderRadius: '24px',
+                  padding: '8px 18px',
+                  fontSize: '12.5px',
                   fontWeight: 900,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
-                  boxShadow: '0 0 12px rgba(16, 185, 129, 0.45)',
+                  gap: '8px',
+                  boxShadow: '0 0 16px rgba(16, 185, 129, 0.55)',
                   animation: 'pulse 2s infinite'
                 }}
-                title="Connect 108 Emergency Voice Stream & Start Call Timer"
+                title="Connect 108 Emergency Call • Two-way real-time voice with Dr. Sanjivani"
               >
-                <PhoneCall size={14} />
-                <span>🟢 Connect 108 Call & Speak</span>
+                <PhoneCall size={16} />
+                <span>🟢 Connect 108 Emergency Call</span>
               </button>
-            )}
-
-            {/* Dedicated AI Voice Reply Toggle */}
-            <button
-              onClick={() => {
-                setIsAiVoiceReplyEnabled(prev => !prev);
-                handleToggleMute();
-              }}
-              style={{
-                background: isAiVoiceReplyEnabled && !isAudioMuted ? '#064E3B' : '#1E293B',
-                color: isAiVoiceReplyEnabled && !isAudioMuted ? '#6EE7B7' : '#94A3B8',
-                border: isAiVoiceReplyEnabled && !isAudioMuted ? '1px solid #10B981' : '1px solid #475569',
-                borderRadius: '20px',
-                padding: '6px 10px',
-                fontSize: '11px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-              title={isAiVoiceReplyEnabled && !isAudioMuted ? "AI Voice Reply Enabled" : "AI Voice Reply Muted"}
-            >
-              {isAiVoiceReplyEnabled && !isAudioMuted ? <Volume2 size={13} /> : <VolumeX size={13} />}
-              <span>{isAiVoiceReplyEnabled && !isAudioMuted ? 'AI Voice: ON' : 'AI Voice: OFF'}</span>
-            </button>
-            <div style={{
-              background: '#0F172A',
-              border: '1px solid #334155',
-              padding: '5px 12px',
-              borderRadius: '20px',
-              color: '#38BDF8',
-              fontSize: '12px',
-              fontFamily: 'monospace',
-              fontWeight: 800
-            }}>
-              ⏱️ {String(Math.floor(elapsedSec / 60)).padStart(2, '0')}:{String(elapsedSec % 60).padStart(2, '0')}
-            </div>
-
-            {/* FULL-DUPLEX HANDS-FREE LIVE TALK BUTTON */}
-            <button
-              onClick={toggleHandsFreeLiveTalk}
-              style={{
-                background: isHandsFreeLiveTalk 
-                  ? (voiceState === 'SPEAKING' ? '#8B5CF6' : voiceState === 'THINKING' ? '#D97706' : '#059669') 
-                  : '#1E293B',
-                color: '#FFFFFF',
-                border: isHandsFreeLiveTalk ? '1px solid #A7F3D0' : '1px solid #475569',
-                borderRadius: '20px',
-                padding: '6px 12px',
-                fontSize: '11px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                boxShadow: isHandsFreeLiveTalk ? '0 0 15px rgba(16, 185, 129, 0.45)' : 'none',
-                transition: 'all 0.2s ease'
-              }}
-              title="Toggle Hands-Free Two-Way Voice (Speak naturally, assistant stops if you talk in middle)"
-            >
-              <Mic size={14} className={isHandsFreeLiveTalk ? 'animate-pulse' : ''} />
-              <span>
-                {isHandsFreeLiveTalk 
-                  ? (voiceState === 'SPEAKING' ? '🟣 Speaking (Barge-In Active)' : voiceState === 'THINKING' ? '🟡 Thinking...' : '🟢 Live Talk Active') 
-                  : '🎙️ Hands-Free Live Talk'}
-              </span>
-            </button>
-
-            {/* BARGE-IN INTERRUPTION BUTTON (Visible when assistant is speaking) */}
-            {voiceState === 'SPEAKING' && (
-              <button
-                onClick={handleInterruptAssistant}
-                style={{
-                  background: '#DC2626',
-                  color: '#FFFFFF',
-                  border: '1px solid #FCA5A5',
+            ) : (
+              <>
+                {/* 108 Call Live Indicator */}
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  border: '1.5px solid #EF4444',
+                  padding: '5px 11px',
                   borderRadius: '20px',
-                  padding: '6px 10px',
+                  color: '#FCA5A5',
                   fontSize: '11px',
                   fontWeight: 900,
-                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px',
-                  boxShadow: '0 0 12px rgba(220, 38, 38, 0.7)',
-                  animation: 'pulse 1.5s infinite'
-                }}
-                title="Interrupt Assistant (Barge-In) & Resume Listening"
-              >
-                <span>🛑 Stop Talking</span>
-              </button>
+                  gap: '6px'
+                }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444', display: 'inline-block', boxShadow: '0 0 8px #EF4444' }} />
+                  <span>108 CALL LIVE</span>
+                </div>
+
+                {/* Call Timer */}
+                <div style={{
+                  background: '#0F172A',
+                  border: '1px solid #334155',
+                  padding: '5px 10px',
+                  borderRadius: '20px',
+                  color: '#38BDF8',
+                  fontSize: '12px',
+                  fontFamily: 'monospace',
+                  fontWeight: 800
+                }}>
+                  ⏱️ {String(Math.floor(elapsedSec / 60)).padStart(2, '0')}:{String(elapsedSec % 60).padStart(2, '0')}
+                </div>
+
+                {/* Live Voice Status Pill */}
+                <div style={{
+                  background: voiceState === 'SPEAKING' ? 'rgba(139, 92, 246, 0.2)' : voiceState === 'THINKING' ? 'rgba(217, 119, 6, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                  border: voiceState === 'SPEAKING' ? '1px solid #8B5CF6' : voiceState === 'THINKING' ? '1px solid #D97706' : '1px solid #10B981',
+                  color: voiceState === 'SPEAKING' ? '#DDD6FE' : voiceState === 'THINKING' ? '#FDE68A' : '#A7F3D0',
+                  padding: '5px 12px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  {voiceState === 'SPEAKING' ? (
+                    <>
+                      <Volume2 size={13} />
+                      <span>🔊 Dr. Sanjivani Speaking (Gnani Voice)</span>
+                    </>
+                  ) : voiceState === 'THINKING' ? (
+                    <>
+                      <Activity size={13} />
+                      <span>⚡ Triage Reasoning (Groq AI)...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Mic size={13} />
+                      <span>🎙️ Listening to Caller (Speak naturally)</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Mic Mute / Unmute Button */}
+                <button
+                  onClick={handleToggleMute}
+                  style={{
+                    background: isAudioMuted ? '#EF4444' : '#1E293B',
+                    color: '#FFFFFF',
+                    border: isAudioMuted ? 'none' : '1px solid #475569',
+                    borderRadius: '50%',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: isAudioMuted ? '0 0 10px rgba(239, 68, 68, 0.5)' : 'none'
+                  }}
+                  title={isAudioMuted ? "Unmute Microphone" : "Mute Microphone"}
+                >
+                  {isAudioMuted ? <MicOff size={14} /> : <Mic size={14} />}
+                </button>
+
+                {/* Red End Call Button */}
+                <button
+                  onClick={handleEndCall}
+                  style={{
+                    background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '20px',
+                    padding: '6px 14px',
+                    fontSize: '11.5px',
+                    fontWeight: 900,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    boxShadow: '0 0 12px rgba(220, 38, 38, 0.5)'
+                  }}
+                  title="Disconnect 108 Emergency Call"
+                >
+                  <PhoneOff size={13} />
+                  <span>End Call</span>
+                </button>
+              </>
             )}
-
-            {/* Basic Mic Toggle */}
-            <button
-              onClick={toggleSpeechRecognition}
-              style={{
-                background: isMicListening ? '#EF4444' : '#1E293B',
-                color: '#FFFFFF',
-                border: isMicListening ? 'none' : '1px solid #475569',
-                borderRadius: '50%',
-                width: '36px',
-                height: '36px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: isMicListening ? '0 0 12px rgba(239, 68, 68, 0.5)' : 'none'
-              }}
-              title={isMicListening ? "Microphone Active (Listening)" : "Unmute Microphone"}
-            >
-              {isMicListening ? <Mic size={16} /> : <MicOff size={16} />}
-            </button>
-
-            {/* Speaker Mute */}
-            <button
-              onClick={handleToggleMute}
-              style={{
-                background: isAudioMuted ? '#EF4444' : '#1E293B',
-                color: '#FFFFFF',
-                border: isAudioMuted ? 'none' : '1px solid #475569',
-                borderRadius: '50%',
-                width: '36px',
-                height: '36px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }}
-              title={isAudioMuted ? "Speaker Muted" : "Mute Speaker"}
-            >
-              {isAudioMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-            </button>
-
-            {/* End Call */}
-            <button
-              onClick={handleEndCall}
-              style={{
-                background: '#EF4444',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '20px',
-                padding: '6px 14px',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px'
-              }}
-            >
-              <PhoneOff size={13} />
-              <span>End Call</span>
-            </button>
           </div>
         </div>
 
@@ -942,10 +1093,10 @@ export default function SanjivaniEmergencyAssistant({
               }}></span>
               <span style={{ color: '#E2E8F0', fontWeight: 700 }}>
                 {voiceState === 'SPEAKING' 
-                  ? '🔊 Assistant Speaking (Timbre TTS) • Talk anytime to interrupt' 
+                  ? '🔊 Dr. Sanjivani Speaking (Gnani Timbre Voice)' 
                   : voiceState === 'THINKING' 
-                  ? '🧠 Gnani Evon 30B Reasoning in progress...' 
-                  : '🎙️ Listening (Prisma v2.5 ASR ready) • Speak naturally'}
+                  ? '⚡ Groq AI Real-Time Triage Reasoning...' 
+                  : '🎙️ 108 Emergency Call Active • Speak naturally (Telugu / Hindi / English)'}
               </span>
             </div>
 

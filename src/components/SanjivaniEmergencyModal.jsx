@@ -271,20 +271,19 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   // =========================================================================
   // 3. FETCH REAL ABDM HFR HOSPITALS AROUND CURRENT CALLER COORDINATES
   // =========================================================================
-  const loadHospitals = async (filter = hospitalFilter) => {
+  const loadHospitals = async (coords = callerCoords, addr = geoAddress, filter = hospitalFilter) => {
     try {
       const res = await fetchNearbyHospitalsAPI({
-        lat: callerCoords.lat,
-        lng: callerCoords.lng,
-        geoAddress: geoAddress,
+        lat: coords.lat,
+        lng: coords.lng,
+        geoAddress: addr,
         filterOption: filter
       });
       if (res.success && res.hospitals.length > 0) {
         setHospitalsList(res.hospitals);
-        setRecommendedHospital(res.recommendedHospital);
-        if (!selectedHospital || !res.hospitals.find((h) => h.id === selectedHospital.id)) {
-          setSelectedHospital(res.recommendedHospital || res.hospitals[0]);
-        }
+        const best = res.recommendedHospital || res.hospitals[0];
+        setRecommendedHospital(best);
+        setSelectedHospital(best);
       }
     } catch (err) {
       console.warn('Error loading hospitals:', err);
@@ -292,7 +291,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
   };
 
   useEffect(() => {
-    loadHospitals(hospitalFilter);
+    loadHospitals(callerCoords, geoAddress, hospitalFilter);
   }, [callerCoords.lat, callerCoords.lng, geoAddress, hospitalFilter]);
 
   // Helper: Calculate forward bearing between two coordinates
@@ -325,7 +324,15 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       if (route.trafficStatus) setTrafficStatus(route.trafficStatus);
     }
     updateRoute();
-  }, [selectedHospital?.id]);
+  }, [
+    selectedHospital?.id,
+    selectedHospital?.lat,
+    selectedHospital?.lng,
+    ambulanceData.lat,
+    ambulanceData.lng,
+    callerCoords.lat,
+    callerCoords.lng
+  ]);
 
   // =========================================================================
   // 5. LIVE MOVING AMBULANCE SIMULATION ALONG ROAD NETWORK
@@ -374,7 +381,22 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
     }
   };
 
-  const applyLocation = (lat, lng, placeName, source = 'manual') => {
+  const applyLocation = (arg1, arg2, arg3, arg4 = 'manual') => {
+    let lat, lng, placeName, source;
+    if (typeof arg1 === 'object' && arg1 !== null) {
+      lat = Number(arg1.lat ?? arg1.latitude);
+      lng = Number(arg1.lng ?? arg1.lon ?? arg1.longitude);
+      placeName = arg1.placeName || arg1.address || arg1.name || 'Emergency Coordinates';
+      source = arg1.source || arg2 || 'voice';
+    } else {
+      lat = Number(arg1);
+      lng = Number(arg2);
+      placeName = arg3 || 'Emergency Coordinates';
+      source = arg4 || 'manual';
+    }
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
     const newCoords = { lat, lng };
     setCallerCoords(newCoords);
     setGeoAddress(placeName);
@@ -396,15 +418,18 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
       }));
     } catch {}
 
+    // Immediately discover ABDM facilities around the new coordinates
+    loadHospitals(newCoords, placeName, hospitalFilter);
+
     const nowStr = getNowTimeStr();
     setAuditLogs((prev) => [
-      { time: nowStr, event: `📍 Location anchored: ${placeName}` },
+      { time: nowStr, event: `📍 Location anchored in real time: ${placeName} (${lat.toFixed(4)}, ${lng.toFixed(4)})` },
       ...prev
     ]);
 
     setToastNotification({
-      title: 'Location Anchored',
-      message: `Operational map centered on ${placeName}. Discovering nearby ABDM facilities.`
+      title: 'Location & Map Updated',
+      message: `Operational map anchored to ${placeName}. Recalculating nearby ABDM facilities and road route.`
     });
     setTimeout(() => setToastNotification(null), 4000);
   };
@@ -1102,6 +1127,9 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               onSelectHospital={(hosp) => setSelectedHospital(hosp)}
               ambulanceData={ambulanceData}
               routeCoordinates={routeCoordinates}
+              routeDistanceKm={routeDistanceKm}
+              routeEtaMinutes={routeEtaMinutes}
+              trafficStatus={trafficStatus}
               isDispatched={dispatchState >= 2}
             />
 
@@ -1581,6 +1609,18 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
           onUpdateTranscript={(t, tr) => {
             setLiveTranscript(t);
             setEnglishTranslation(tr);
+            if (t) {
+              const triage = analyzeEmergencyClinicalTriage(t);
+              if (triage.triageLevel === 'RED') {
+                setDistressIndex(94);
+                setVocalPitchHz(315);
+                setRespirationRate(38);
+              } else if (triage.triageLevel === 'YELLOW') {
+                setDistressIndex(68);
+                setVocalPitchHz(240);
+                setRespirationRate(26);
+              }
+            }
           }}
           onApplyLocation={applyLocation}
           onSelectHospital={(hosp) => setSelectedHospital(hosp)}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Siren, 
   CheckCircle2, 
@@ -15,9 +15,11 @@ import {
   Heart,
   AlertTriangle,
   UserCheck,
-  Check
+  Check,
+  Zap
 } from 'lucide-react';
 import { sanjivaniAudio, analyzeEmergencyClinicalTriage } from '../services/sanjivaniEmergencyService';
+import { speechService } from '../services/indicSpeechService';
 
 /**
  * Sanjivani-108 ABDM Pre-Arrival Notification (PAN) & Bed Booking Handover Modal
@@ -58,6 +60,40 @@ export default function SanjivaniTransferModal({
 
   const [isTransmitting, setIsTransmitting] = useState(false);
   const [transmissionStep, setTransmissionStep] = useState(0); // 0: Idle, 1: Packaging, 2: Handshaking, 3: Confirmed
+  const [autoSubmitCountdown, setAutoSubmitCountdown] = useState(5);
+  const [isAutoSubmitActive, setIsAutoSubmitActive] = useState(true);
+
+  // Sync formData with incoming props in real time as symptoms are spoken
+  useEffect(() => {
+    const textToUse = liveTranscript || englishTranslation || '';
+    const triage = analyzeEmergencyClinicalTriage(textToUse, distressIndex);
+    setFormData(prev => ({
+      ...prev,
+      callerPhone: callerPhone || prev.callerPhone,
+      location: geoAddress || prev.location,
+      chiefComplaint: textToUse || prev.chiefComplaint,
+      triageCategory: `${triage.triageLevel} — ${triage.severity}`,
+      icd10: `${triage.icd10 || 'R68.89'} (${triage.suspectedCondition})`,
+      assignedBay: hospital?.resuscitationBayAssigned || prev.assignedBay,
+      assignedAmbulance: `${ambulanceData?.id || 'A-12'} (ALS Unit • Defibrillator, Ventilator, 12-Lead ECG)`,
+      driverContact: `${ambulanceData?.driver || 'Rajesh Meena (Senior EMT)'} • +91 94401 22108`,
+      clinicalNotes: `Acoustic Distress: ${distressIndex}% | Vocal Pitch: ${vocalPitchHz} Hz | Respiration: ${respirationRate}/min. Live speech: "${textToUse || 'Active audio stream'}". Protocol: ${triage.priorityProtocol}`
+    }));
+  }, [liveTranscript, englishTranslation, geoAddress, callerPhone, hospital, ambulanceData, distressIndex, vocalPitchHz, respirationRate]);
+
+  // Automated Transmission Timer (Submits automatically after 5s if user does not cancel)
+  useEffect(() => {
+    if (!isOpen || isTransmitting || !isAutoSubmitActive) return;
+
+    if (autoSubmitCountdown > 0) {
+      const timer = setTimeout(() => {
+        setAutoSubmitCountdown(c => c - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (autoSubmitCountdown === 0 && !isTransmitting && transmissionStep === 0) {
+      handleTransmitHandshake();
+    }
+  }, [isOpen, autoSubmitCountdown, isTransmitting, isAutoSubmitActive, transmissionStep]);
 
   const handleTransmitHandshake = () => {
     setIsTransmitting(true);
@@ -75,15 +111,12 @@ export default function SanjivaniTransferModal({
       setTransmissionStep(3);
       sanjivaniAudio.playRadioChime();
 
-      if (window.speechSynthesis) {
-        const utter = new SpeechSynthesisUtterance(
-          `Handshake confirmed. Emergency resuscitation bay locked at ${hospital.shortName || hospital.name}.`
-        );
-        utter.rate = 1.05;
-        window.speechSynthesis.speak(utter);
-      }
+      speechService.speak(
+        `Handshake confirmed. Emergency resuscitation bay locked at ${hospital?.shortName || hospital?.name || 'hospital'}.`,
+        { langCode: 'en-IN' }
+      );
 
-      // Step 3: Complete Handshake & Close after brief celebration
+      // Step 3: Complete Handshake & Close after celebration
       setTimeout(() => {
         setIsTransmitting(false);
         const panToken = `ABDM-PAN-AP-2026-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -420,24 +453,46 @@ export default function SanjivaniTransferModal({
           padding: '12px 20px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '10px'
         }}>
-          <button
-            onClick={onClose}
-            disabled={isTransmitting}
-            style={{
-              background: '#0B172E',
-              border: '1px solid #1E3456',
-              color: '#94A3B8',
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontSize: '11.5px',
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
-          >
-            Cancel Handover
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={onClose}
+              disabled={isTransmitting}
+              style={{
+                background: '#0B172E',
+                border: '1px solid #1E3456',
+                color: '#94A3B8',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              Cancel Handover
+            </button>
+
+            {isAutoSubmitActive && !isTransmitting && autoSubmitCountdown > 0 && (
+              <span style={{
+                fontSize: '11px',
+                color: '#38BDF8',
+                background: 'rgba(56, 189, 248, 0.1)',
+                border: '1px solid #0284C7',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}>
+                <Zap size={13} className="animate-pulse" />
+                Auto-Submitting in {autoSubmitCountdown}s...
+              </span>
+            )}
+          </div>
 
           <button
             onClick={handleTransmitHandshake}
@@ -458,7 +513,7 @@ export default function SanjivaniTransferModal({
             }}
           >
             <Send size={15} />
-            <span>{isTransmitting ? 'Transmitting to Hospital ER...' : `Confirm Handshake & Lock Bed at ${hospital.shortName || hospital.name}`}</span>
+            <span>{isTransmitting ? 'Transmitting to Hospital ER...' : `Confirm Handshake & Lock Bed at ${hospital?.shortName || hospital?.name || 'Hospital'}`}</span>
           </button>
         </div>
       </div>

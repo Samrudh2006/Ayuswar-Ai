@@ -125,10 +125,33 @@ export default async function handler(req, res) {
 
     if (upstreamRes.ok) {
       const audioBuffer = await upstreamRes.arrayBuffer();
-      res.setHeader('Content-Type', upstreamRes.headers.get('content-type') || 'audio/wav');
+      let outBuf = Buffer.from(audioBuffer);
+      if (outBuf.length < 4 || outBuf.toString('ascii', 0, 4) !== 'RIFF') {
+        const sampleRate = 24000;
+        const numChannels = 1;
+        const bitDepth = 16;
+        const byteRate = sampleRate * numChannels * (bitDepth / 8);
+        const blockAlign = numChannels * (bitDepth / 8);
+        const header = Buffer.alloc(44);
+        header.write('RIFF', 0);
+        header.writeUInt32LE(36 + outBuf.length, 4);
+        header.write('WAVE', 8);
+        header.write('fmt ', 12);
+        header.writeUInt32LE(16, 16);
+        header.writeUInt16LE(1, 20);
+        header.writeUInt16LE(numChannels, 22);
+        header.writeUInt32LE(sampleRate, 24);
+        header.writeUInt32LE(byteRate, 28);
+        header.writeUInt16LE(blockAlign, 32);
+        header.writeUInt16LE(bitDepth, 34);
+        header.write('data', 36);
+        header.writeUInt32LE(outBuf.length, 40);
+        outBuf = Buffer.concat([header, outBuf]);
+      }
+      res.setHeader('Content-Type', 'audio/wav');
       res.setHeader('Cache-Control', 'public, max-age=3600');
       logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime });
-      return res.status(200).send(Buffer.from(audioBuffer));
+      return res.status(200).send(outBuf);
     } else {
       logSafeApiAccess({ route, method: req.method, status: upstreamRes.status, durationMs: Date.now() - startTime, clientNote: `Upstream HTTP ${upstreamRes.status}` });
       return res.status(502).json({

@@ -65,6 +65,9 @@ export default function EmergencyMap({
   onSelectHospital = () => {},
   ambulanceData = { id: 'A-12', lat: 15.8210, lng: 78.0320, heading: 52, speed: 54, status: 'EN_ROUTE' },
   routeCoordinates = [],
+  routeDistanceKm = 0,
+  routeEtaMinutes = 0,
+  trafficStatus = 'Traffic 🟢 Normal Flow',
   callerAmbulanceRoute = [],
   isDispatched = false
 }) {
@@ -438,7 +441,7 @@ export default function EmergencyMap({
     }
   }, [callerCoords.lat, callerCoords.lng, ambulanceData.lat, ambulanceData.lng]);
 
-  // 5. Update Route 2 (Ambulance ══════ Selected Hospital)
+  // 5. Update Route 2 (Ambulance ══════ Selected Hospital) & Auto-Fit Navigation Corridor
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded()) return;
@@ -459,11 +462,29 @@ export default function EmergencyMap({
             }
           ]
         });
+
+        // Auto-fit camera to encompass the full road corridor to the hospital
+        if (routeCoordinates.length >= 2 && !followAmbulance && !is3DCockpitView) {
+          try {
+            const bounds = new maplibregl.LngLatBounds(routeCoordinates[0], routeCoordinates[0]);
+            routeCoordinates.forEach((pt) => bounds.extend(pt));
+            if (callerCoords?.lng && callerCoords?.lat) {
+              bounds.extend([callerCoords.lng, callerCoords.lat]);
+            }
+            map.fitBounds(bounds, {
+              padding: { top: 85, bottom: 85, left: 70, right: 70 },
+              maxZoom: 15.5,
+              duration: 900
+            });
+          } catch (e) {
+            // fallback gracefully
+          }
+        }
       } else {
         source.setData({ type: 'FeatureCollection', features: [] });
       }
     }
-  }, [routeCoordinates]);
+  }, [routeCoordinates, followAmbulance, is3DCockpitView, callerCoords?.lng, callerCoords?.lat]);
 
   // 6. Smooth Vehicle Movement Interpolation with 3D Camera Follow
   useEffect(() => {
@@ -673,6 +694,89 @@ export default function EmergencyMap({
           <span>GREEN CORRIDOR (SIMULATION): {trafficOverrideCount} SIGNALS PREEMPTED</span>
         </div>
       </div>
+
+      {/* REAL-TIME ROAD NAVIGATION TO HOSPITAL BANNER (FLOATING HUD) */}
+      {selectedHospital && (
+        <div style={{
+          position: 'absolute',
+          top: '56px',
+          left: '12px',
+          zIndex: 22,
+          background: 'rgba(5, 12, 28, 0.95)',
+          backdropFilter: 'blur(16px)',
+          border: '1.5px solid #0284C7',
+          borderRadius: '12px',
+          padding: '8px 14px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          boxShadow: '0 12px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(2, 132, 199, 0.3)',
+          maxWidth: '520px'
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '8px',
+            background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            boxShadow: '0 0 12px rgba(56, 189, 248, 0.6)'
+          }}>
+            <Navigation size={17} color="#FFFFFF" />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '9px', fontWeight: 900, background: '#DC2626', color: '#FFF', padding: '1px 5px', borderRadius: '4px', letterSpacing: '0.5px' }}>
+                LIVE ROUTE
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 850, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {selectedHospital.name}
+              </span>
+            </div>
+            <div style={{ fontSize: '10px', color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px', flexWrap: 'wrap' }}>
+              <span>ETA: <strong style={{ color: '#10B981', fontSize: '11px' }}>{routeEtaMinutes || selectedHospital.etaMinutes || 6} mins</strong></span>
+              <span>•</span>
+              <span>Dist: <strong style={{ color: '#38BDF8', fontSize: '11px' }}>{routeDistanceKm || selectedHospital.distanceKm || 3.8} km</strong></span>
+              <span>•</span>
+              <span style={{ color: '#34D399', fontWeight: 700 }}>{trafficStatus || 'Traffic 🟢 Normal Flow'}</span>
+            </div>
+          </div>
+
+          {/* Quick Center Route Button */}
+          <button
+            onClick={() => {
+              if (mapRef.current && routeCoordinates && routeCoordinates.length >= 2) {
+                const bounds = new maplibregl.LngLatBounds(routeCoordinates[0], routeCoordinates[0]);
+                routeCoordinates.forEach((pt) => bounds.extend(pt));
+                if (callerCoords?.lng && callerCoords?.lat) bounds.extend([callerCoords.lng, callerCoords.lat]);
+                mapRef.current.fitBounds(bounds, { padding: { top: 85, bottom: 85, left: 70, right: 70 }, duration: 800 });
+              }
+            }}
+            title="Center Route Corridor on Map"
+            style={{
+              background: '#0F2744',
+              border: '1px solid #1C4472',
+              color: '#38BDF8',
+              borderRadius: '6px',
+              padding: '4px 8px',
+              fontSize: '10px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              flexShrink: 0
+            }}
+          >
+            <Compass size={12} />
+            <span>Center</span>
+          </button>
+        </div>
+      )}
 
       {/* FLOATING ACTION TOOLBAR (TOP RIGHT) */}
       <div style={{
