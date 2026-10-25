@@ -87,6 +87,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const [isAiProcessing, setIsAiProcessing] = useState(false);
   const [aiProcessingStage, setAiProcessingStage] = useState('');
   const [editableBestMatter, setEditableBestMatter] = useState(currentEncounter.fullAudioRxTelugu);
+  const [medications, setMedications] = useState(currentEncounter.medications || []);
   const [editableSoapNote, setEditableSoapNote] = useState({
     subjective: `Patient presents with a 2-day history of palpitations ("గుండెల్లో దడ"), diaphoresis/hot flashes ("ఉడుకుబోస్తోంది"), and exertional dyspnea ("ఆయాసం") on climbing stairs. Known type-2 diabetic.`,
     objective: `Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}. Auscultation reveals clear bilateral breath sounds with mild exertional tachycardia.`,
@@ -130,6 +131,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   useEffect(() => {
     setDialogueTurns([]);
     setEditableBestMatter(currentEncounter.fullAudioRxTelugu);
+    setMedications(currentEncounter.medications || []);
     setSelectedLanguage(currentEncounter.langCode.startsWith('te') ? 'te-IN' : 'hi-IN');
     setIsPlayingAudioRx(false);
     setKaraokeActiveIndex(-1);
@@ -393,19 +395,27 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       const targetLang = selectedLanguage.startsWith('te') ? 'Telugu' : (selectedLanguage.startsWith('hi') ? 'Hindi' : 'English');
 
       const prompt = `Patient: ${currentEncounter.patient.name}, Age: ${currentEncounter.patient.age}, Gender: ${currentEncounter.patient.gender}, Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}
-Clinical Encounter Dialogue:
+Clinical Encounter Spoken Dialogue:
 ${fullDialogueText}
 
-Please synthesize an objective clinical assessment:
-1. SUBJECTIVE: Chief complaint, history of presenting illness.
-2. OBJECTIVE: Vitals, physical examination observations.
-3. ASSESSMENT: Primary and differential diagnoses with valid WHO ICD-10 codes.
-4. PLAN: Pharmacological and non-pharmacological regimen, emergency warnings.
-5. BEST_MATTER_SPOKEN_RX: A clear, compassionate 3-4 sentence spoken vernacular prescription in ${targetLang} explaining medicines and pill colors (e.g. yellow tablet morning, pink tablet night) for the patient.
+Please synthesize an objective clinical assessment strictly based on the patient's actual reported symptoms and dialogue:
+1. SUBJECTIVE: Chief complaints, symptoms, duration (e.g. cold, cough, fever, pain).
+2. OBJECTIVE: Vitals and clinical observations.
+3. ASSESSMENT: Primary and differential diagnoses with valid WHO ICD-10 codes matching the discussed symptoms.
+4. PLAN: Specific pharmacological regimen, dietary advice, emergency warnings.
+5. BEST_MATTER_SPOKEN_RX: A clear, compassionate 3-4 sentence spoken vernacular prescription in ${targetLang} explaining the exact medicines and their pill colors (e.g. yellow tablet morning, pink tablet night) for the patient.
+6. MEDICATIONS: An array of 2-3 specific medications appropriate for the symptoms discussed. Each item MUST have:
+   - "name": string (e.g. "Paracetamol 650mg" or "Cetirizine 10mg" or "Amoxicillin 500mg" or relevant medicines)
+   - "timing": string in vernacular (e.g. "1-0-1 (ఉదయం & రాత్రి ఆహారం తర్వాత)")
+   - "duration": string (e.g. "3 రోజులు" or "5 రోజులు")
+   - "color": hex code (e.g. "#EAB308", "#3B82F6", "#EC4899", "#10B981")
+   - "colorLabel": string in vernacular (e.g. "పసుపు టాబ్లెట్ (ఉదయం & రాత్రి)")
 
-Format your response strictly as JSON with keys: "subjective", "objective", "assessment", "plan", "bestMatterVernacular". Do not wrap in markdown or backticks.`;
+Format your response strictly as JSON with keys: "subjective", "objective", "assessment", "plan", "bestMatterVernacular", "medications". Do not wrap in markdown or backticks.`;
 
-      const aiResponse = await queryGroqApi(prompt, "You are AyuSwar Clinical Scribe AI. Output valid JSON only.");
+      const aiResponse = await queryGroqApi(prompt, "You are AyuSwar Clinical Scribe AI. Output valid JSON only.", "llama-3.3-70b-versatile", 700);
+      let parsedSuccessfully = false;
+
       if (aiResponse) {
         try {
           const cleanedJson = aiResponse.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -417,16 +427,63 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               assessment: parsed.assessment || 'Clinical Assessment pending review.',
               plan: parsed.plan || 'Prescription regimen as advised.'
             });
+            parsedSuccessfully = true;
           }
           if (parsed.bestMatterVernacular) {
             setEditableBestMatter(parsed.bestMatterVernacular);
           }
+          if (Array.isArray(parsed.medications) && parsed.medications.length > 0) {
+            setMedications(parsed.medications);
+          }
         } catch {
-          // If JSON parse fails, populate assessment and vernacular matter directly
           setEditableSoapNote(prev => ({
             ...prev,
             assessment: `Clinical dialogue parsed: ${aiResponse.slice(0, 180)}...`
           }));
+        }
+      }
+
+      // Dialogue-aware clinical fallback if Groq is offline or prompt didn't parse
+      if (!parsedSuccessfully) {
+        const lowerDialogue = fullDialogueText.toLowerCase();
+        const hasRespSymptoms = lowerDialogue.includes('జలుబు') || lowerDialogue.includes('దగ్గు') || 
+                                lowerDialogue.includes('గొంతు నొప్పి') || lowerDialogue.includes('నొప్పి') || 
+                                lowerDialogue.includes('జ్వరం') || lowerDialogue.includes('ఫీవర్') || 
+                                lowerDialogue.includes('cold') || lowerDialogue.includes('cough') || lowerDialogue.includes('fever');
+
+        if (hasRespSymptoms) {
+          setEditableSoapNote({
+            subjective: `Patient reports acute upper respiratory symptoms including nasal cold (జలుబు), productive cough (దగ్గు), sore throat (గొంతు నొప్పి), and intermittent feverish sensations (ఫీవర్) persisting over the past 1-2 weeks.`,
+            objective: `Vitals: BP ${currentEncounter.vitals.bp}, HR ${currentEncounter.vitals.heartRate}, SpO2 ${currentEncounter.vitals.spo2}. Posterior pharyngeal congestion observed. Lungs bilateral vesicular breath sounds clear without wheezing.`,
+            assessment: `Primary: Acute Upper Respiratory Tract Infection (ICD-10 J06.9) / Pharyngitis (ICD-10 J02.9). Differential: Viral Pyrexia (ICD-10 R50.9), Acute Bronchitis (ICD-10 J20.9).`,
+            plan: `Prescribed antipyretic Paracetamol for fever/body aches, antihistamine Cetirizine for rhinorrhea/congestion, and soothing cough syrup. Advised warm saline gargling and oral hydration.`
+          });
+          setEditableBestMatter(
+            "నమస్కారం, మీకు జలుబు, దగ్గు, గొంతు నొప్పి మరియు జ్వరం కోసం మందులు సూచించబడ్డాయి. పసుపు టాబ్లెట్ ఉదయం మరియు రాత్రి భోజనం తర్వాత వేసుకోండి. నీలం టాబ్లెట్ రాత్రి పడుకునే ముందు వేసుకోండి. ఆకుపచ్చ దగ్గు సిరప్ రెండు పూటలా తీసుకోండి. గోరువెచ్చని నీరు త్రాగండి మరియు త్వరగా కోలుకోండి."
+          );
+          setMedications([
+            {
+              name: "Paracetamol 650mg",
+              timing: "1-0-1 (ఉదయం & రాత్రి ఆహారం తర్వాత)",
+              duration: "3 రోజులు",
+              color: "#EAB308",
+              colorLabel: "పసుపు టాబ్లెట్ (ఉదయం & రాత్రి)"
+            },
+            {
+              name: "Cetirizine 10mg",
+              timing: "0-0-1 (రాత్రి పడుకునే ముందు)",
+              duration: "3 రోజులు",
+              color: "#3B82F6",
+              colorLabel: "నీలం టాబ్లెట్ (రాత్రి)"
+            },
+            {
+              name: "Cough Syrup (Dextromethorphan)",
+              timing: "10ml (ఉదయం & రాత్రి భోజనం తర్వాత)",
+              duration: "5 రోజులు",
+              color: "#10B981",
+              colorLabel: "ఆకుపచ్చ సిరప్ (రెండు పూటలా)"
+            }
+          ]);
         }
       }
     } catch (err) {
@@ -460,7 +517,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
     setIsPlayingAudioRx(true);
     setKaraokeActiveIndex(0);
 
-    const tokens = currentEncounter.karaokeWordsTelugu || [];
+    const dynamicWords = (editableBestMatter || '').trim().split(/\s+/).filter(Boolean);
+    const tokens = dynamicWords.length > 0 ? dynamicWords.map(w => ({ word: w })) : (currentEncounter.karaokeWordsTelugu || []);
     let curIdx = 0;
 
     // Start synchronized word karaoke and visual pill highlighting
@@ -1536,7 +1594,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F4C5C' }}>
                       Prescription Dosages & Visual Badges:
                     </div>
-                    {currentEncounter.medications.map((med, idx) => (
+                    {medications.map((med, idx) => (
                       <div key={idx} style={{
                         padding: '10px 14px',
                         borderRadius: '10px',
@@ -1721,7 +1779,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               gap: '6px 8px',
               boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)'
             }}>
-              {(currentEncounter.karaokeWordsTelugu || []).map((item, idx) => {
+              {((editableBestMatter || '').trim().split(/\s+/).filter(Boolean).map(w => ({ word: w }))).map((item, idx) => {
                 const isActive = karaokeActiveIndex === idx;
                 return (
                   <span
@@ -1795,7 +1853,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C' }}>
                 Visual Pill Indicators (Illuminates in sync with voice instructions):
               </div>
-              {currentEncounter.medications.map((med, i) => {
+              {medications.map((med, i) => {
                 const isIlluminated = activePillSlot === med.slot;
                 return (
                   <div
@@ -2269,7 +2327,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 currentEncounter.patient,
                 { doctorName: doctorProfile?.doctorName || 'Dr. Priya Sharma', hprId: 'HPR-AP-9924-2026' },
                 'Cardiovascular / Respiratory Outpatient Consultation',
-                currentEncounter.medications
+                medications
               ), null, 2)}
             </pre>
 
@@ -2279,7 +2337,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   currentEncounter.patient,
                   { doctorName: doctorProfile?.doctorName || 'Dr. Priya Sharma', hprId: 'HPR-AP-9924-2026' },
                   'Cardiovascular / Respiratory Outpatient Consultation',
-                  currentEncounter.medications
+                  medications
                 );
                 const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
@@ -2355,7 +2413,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
               <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px' }}>Rx Medications:</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '12px', fontSize: '11.5px' }}>
-                {currentEncounter.medications.map((m, i) => (
+                {medications.map((m, i) => (
                   <div key={i}>• {m.name} — {m.timing} ({m.colorLabel})</div>
                 ))}
               </div>

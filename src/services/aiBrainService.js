@@ -172,12 +172,14 @@ export function setGroqApiKey(key) {
   return false;
 }
 
-export async function queryGroqApi(prompt, systemInstruction = '', preferredModel = 'qwen/qwen3.8-27b') {
+export async function queryGroqApi(prompt, systemInstruction = '', preferredModel = 'llama-3.3-70b-versatile', maxTokens = 650) {
   const apiKey = getGroqApiKey();
   if (!apiKey) return null;
 
   const candidateModels = [
-    preferredModel || 'qwen/qwen3.8-27b',
+    preferredModel || 'llama-3.3-70b-versatile',
+    'llama-3.3-70b-versatile',
+    'llama-3.1-8b-instant',
     'qwen/qwen3.8-27b',
     'openai/gpt-oss-20b'
   ];
@@ -197,9 +199,9 @@ export async function queryGroqApi(prompt, systemInstruction = '', preferredMode
             { role: 'user', content: prompt }
           ],
           temperature: 0.25,
-          max_tokens: 180
+          max_tokens: maxTokens || 650
         }),
-        signal: AbortSignal.timeout(6000)
+        signal: AbortSignal.timeout(8000)
       });
 
       if (res.ok) {
