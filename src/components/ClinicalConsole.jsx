@@ -71,6 +71,8 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const [isRecording, setIsRecording] = useState(false);
   const [activeLiveSpeaker, setActiveLiveSpeaker] = useState('Doctor (Live Mic)');
   const activeLiveSpeakerRef = useRef('Doctor (Live Mic)');
+  const [autoSwitchOnPause, setAutoSwitchOnPause] = useState(true);
+  const autoSwitchOnPauseRef = useRef(true);
   const isRecordingRef = useRef(false);
   const [recordedSeconds, setRecordedSeconds] = useState(0);
   const [dialogueTurns, setDialogueTurns] = useState([]);
@@ -291,7 +293,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
             const trimmed = finalStr.trim();
             const lower = trimmed.toLowerCase();
 
-            // Speaker attribution: Strictly follows current active speaker chosen by user (no automatic switching)
+            // Current speaker attribution
             const currentSpeaker = activeLiveSpeakerRef.current;
 
             setDialogueTurns(prev => [
@@ -303,6 +305,13 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
               }
             ]);
             setLiveTranscriptionText('');
+
+            // Automatically switch active speaker for next turn when you stop speaking!
+            if (autoSwitchOnPauseRef.current) {
+              const nextSpeaker = currentSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
+              activeLiveSpeakerRef.current = nextSpeaker;
+              setActiveLiveSpeaker(nextSpeaker);
+            }
           } else if (interim.trim()) {
             setLiveTranscriptionText(interim.trim());
           }
@@ -1036,10 +1045,10 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <span>+ Add Turn</span>
                 </button>
 
-                {/* Speaker Toggle Button — Click Only */}
+                {/* Speaker Indicator & Manual Switch */}
                 <button
                   onClick={handleSwitchActiveSpeaker}
-                  title="Click to switch speaker between Doctor and Patient"
+                  title="Click to manually toggle current speaker between Doctor and Patient"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1070,7 +1079,43 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     color: '#ffffff',
                     border: '1px solid rgba(255,255,255,0.25)'
                   }}>
-                    ⇄ Click to Switch to {activeLiveSpeaker.includes('Doctor') ? '👵 Patient' : '🩺 Doctor'}
+                    ⇄ Switch
+                  </span>
+                </button>
+
+                {/* Auto-Switch on Stop / Pause Toggle */}
+                <button
+                  onClick={() => {
+                    const nextState = !autoSwitchOnPause;
+                    setAutoSwitchOnPause(nextState);
+                    autoSwitchOnPauseRef.current = nextState;
+                  }}
+                  title="When ON: Automatically switches speaker role to the other person whenever you finish speaking a phrase"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 12px',
+                    borderRadius: '12px',
+                    background: autoSwitchOnPause ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                    border: `1.5px solid ${autoSwitchOnPause ? '#10B981' : 'rgba(255, 255, 255, 0.2)'}`,
+                    color: autoSwitchOnPause ? '#10B981' : '#94A3B8',
+                    fontSize: '12px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <span>⚡ Auto-Switch on Stop:</span>
+                  <span style={{
+                    background: autoSwitchOnPause ? '#10B981' : '#64748B',
+                    color: '#ffffff',
+                    padding: '2px 7px',
+                    borderRadius: '5px',
+                    fontSize: '10.5px',
+                    fontWeight: 900
+                  }}>
+                    {autoSwitchOnPause ? 'ON' : 'OFF'}
                   </span>
                 </button>
               </div>
