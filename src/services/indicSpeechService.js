@@ -446,20 +446,33 @@ export class IndicSpeechService {
         if (response.ok) {
           this.activeProvider = 'gnani_tts_live';
           this.lastGnaniSuccessTime = Date.now();
-          const blob = await response.blob();
+          const arrayBuffer = await response.arrayBuffer();
+
+          // Ensure WAV RIFF ChunkSize & DataSize are valid (fixing 0xFFFFFFFF stream placeholder)
+          if (arrayBuffer.byteLength >= 44) {
+            const view = new DataView(arrayBuffer);
+            if (String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3)) === 'RIFF') {
+              view.setUint32(4, arrayBuffer.byteLength - 8, true);
+              for (let offset = 12; offset < Math.min(128, arrayBuffer.byteLength - 8); offset++) {
+                if (String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2), view.getUint8(offset+3)) === 'data') {
+                  view.setUint32(offset + 4, arrayBuffer.byteLength - (offset + 8), true);
+                  break;
+                }
+              }
+            }
+          }
+
+          const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
           const audioUrl = URL.createObjectURL(blob);
           const audio = new Audio(audioUrl);
           this.currentAudio = audio;
 
           return new Promise((resolve) => {
-            audio.onplay = () => {
-              this.isSpeaking = true;
-              this.setConversationState('SPEAKING');
-              onStart({ provider: 'gnani_live' });
-            };
-            audio.onended = () => {
+            let hasResolved = false;
+            const completePlayback = () => {
+              if (hasResolved) return;
+              hasResolved = true;
               this.lastSpeechEndTime = Date.now();
-              // Echo settling cooldown: wait 200ms before allowing mic to listen again
               setTimeout(() => {
                 this.isSpeaking = false;
                 if (this.conversationState === 'SPEAKING') {
@@ -476,23 +489,48 @@ export class IndicSpeechService {
                 }
               }, 1500);
             };
-            audio.onerror = () => {
-              console.warn('Gnani audio playback failed, falling back to browser speech');
-              this.isSpeaking = false;
-              this.lastSpeechEndTime = Date.now();
-              if (this.conversationState === 'SPEAKING') {
-                this.setConversationState('LISTENING');
+
+            const fallbackToWebAudio = async () => {
+              try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                if (ctx.state === 'suspended') await ctx.resume();
+                const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+                const source = ctx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(ctx.destination);
+                source.onended = () => {
+                  completePlayback();
+                  ctx.close().catch(() => {});
+                };
+                this.isSpeaking = true;
+                this.setConversationState('SPEAKING');
+                onStart({ provider: 'gnani_live' });
+                source.start(0);
+              } catch (webAudioErr) {
+                console.warn('WebAudio decode failed:', webAudioErr);
+                completePlayback();
               }
-              onError('Gnani audio playback failed');
-              this.ensureRecognitionActive();
-              resolve();
             };
+
+            audio.onplay = () => {
+              this.isSpeaking = true;
+              this.setConversationState('SPEAKING');
+              onStart({ provider: 'gnani_live' });
+            };
+
+            audio.onended = () => {
+              completePlayback();
+            };
+
+            audio.onerror = () => {
+              console.warn('HTML5 Audio failed, falling back to WebAudio decoder...');
+              fallbackToWebAudio();
+            };
+
             audio.play().catch((err) => {
-              console.warn('Audio play error:', err);
-              this.isSpeaking = false;
-              this.lastSpeechEndTime = Date.now();
-              onEnd();
-              resolve();
+              console.warn('Audio.play() error, attempting WebAudio playback:', err);
+              fallbackToWebAudio();
             });
           });
         }

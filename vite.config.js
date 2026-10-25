@@ -123,9 +123,18 @@ export default defineConfig(({ mode }) => {
                     header.write('data', 36);
                     header.writeUInt32LE(outBuf.length, 40);
                     outBuf = Buffer.concat([header, outBuf]);
+                  } else {
+                    // Gnani returns RIFF with 0xFFFFFFFF (unfinalized stream size).
+                    // Chrome HTML5 Audio requires accurate ChunkSize and DataSize to decode!
+                    outBuf.writeUInt32LE(outBuf.length - 8, 4);
+                    const dataIdx = outBuf.indexOf('data');
+                    if (dataIdx !== -1 && dataIdx + 8 <= outBuf.length) {
+                      outBuf.writeUInt32LE(outBuf.length - (dataIdx + 8), dataIdx + 4);
+                    }
                   }
                   res.statusCode = 200;
                   res.setHeader('Content-Type', 'audio/wav');
+                  res.setHeader('Content-Length', String(outBuf.length));
                   return res.end(outBuf);
                 } else {
                   res.statusCode = gnaniRes.status;

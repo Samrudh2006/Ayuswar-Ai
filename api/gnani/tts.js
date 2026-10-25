@@ -147,8 +147,17 @@ export default async function handler(req, res) {
         header.write('data', 36);
         header.writeUInt32LE(outBuf.length, 40);
         outBuf = Buffer.concat([header, outBuf]);
+      } else {
+        // Gnani returns RIFF with 0xFFFFFFFF (unfinalized stream size).
+        // Chrome / Safari HTML5 Audio requires accurate ChunkSize and DataSize!
+        outBuf.writeUInt32LE(outBuf.length - 8, 4);
+        const dataIdx = outBuf.indexOf('data');
+        if (dataIdx !== -1 && dataIdx + 8 <= outBuf.length) {
+          outBuf.writeUInt32LE(outBuf.length - (dataIdx + 8), dataIdx + 4);
+        }
       }
       res.setHeader('Content-Type', 'audio/wav');
+      res.setHeader('Content-Length', String(outBuf.length));
       res.setHeader('Cache-Control', 'public, max-age=3600');
       logSafeApiAccess({ route, method: req.method, status: 200, durationMs: Date.now() - startTime });
       return res.status(200).send(outBuf);
