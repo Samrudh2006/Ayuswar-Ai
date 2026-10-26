@@ -68,16 +68,46 @@ export const CONVERSATIONAL_FILLERS = {
 };
 
 /**
- * Phase 5: Code-Mixed Clinical Normalizer (Tanglish / Hinglish / Regional Lexicon)
+ * Phase 5: Code-Mixed Clinical Normalizer (Tenglish / Hinglish / Regional Lexicon)
+ * Standardizes informal phonetics and colloquial drug names to National Formulary of India (NFI) & ICD-10 ontologies.
  */
 export const CODE_MIXED_CLINICAL_LEXICON = [
-  { pattern: /\b(chest\s*(lo\s*)?pain|gunde\s*noppi)\b/gi, standard: 'ఛాతీ నొప్పి (Chest Pain)' },
-  { pattern: /\b(bp\s*high|rakthapotu\s*ekkuva)\b/gi, standard: 'అధిక రక్తపోటు (Hypertension)' },
-  { pattern: /\b(sugar\s*low|sugar\s*padipoyindi)\b/gi, standard: 'తక్కువ చక్కెర (Hypoglycemia)' },
-  { pattern: /\b(breath\s*andatle|swasa\s*kastam|ayasam)\b/gi, standard: 'తీవ్ర శ్వాస ఇబ్బంది (Acute Dyspnea)' },
-  { pattern: /\b(fits|murcha|seizures)\b/gi, standard: 'మూర్ఛ లక్షణాలు (Seizures)' },
-  { pattern: /\b(heart\s*attack|gunde\s*potu)\b/gi, standard: 'గుండెపోటు (Suspected STEMI)' },
-  { pattern: /\b(accident|debba|raktham)\b/gi, standard: 'తీవ్ర గాయం & రక్తస్రావం (Trauma & Bleeding)' }
+  // 1. Common Indian & NFI Prescription Drugs & Phonetic Slangs
+  { pattern: /\b(పాంటో\s*(40|డి|d)?|పాంటోప్|పాంటోసిడ్|panto\s*(40|d)?|pantop|pantocid|pantoprazole)\b/gi, standard: 'Pantoprazole 40mg (పాంటోప్ 40mg)' },
+  { pattern: /\b(ఎకో\s*స్పిరిన్|eko\s*sprin|eco\s*sprin|aspirin|disprin)\b/gi, standard: 'Ecosprin 75mg (ఎకోస్పిరిన్ 75mg)' },
+  { pattern: /\b(షుగరు\s*(టాబ్లెట్|గోలీ)|షుగర్\s*మందు|metformin|glycomet|గ్లైకోమెట్)\b/gi, standard: 'Metformin 500mg (మెట్‌ఫార్మిన్ 500mg)' },
+  { pattern: /\b(బీపీ\s*(గోలీ|టాబ్లెట్)|telmisartan|telma\s*(40|am)?|టెల్మా|టెల్మిసార్టాన్)\b/gi, standard: 'Telmisartan 40mg (టెల్మిసార్టాన్ 40mg)' },
+  { pattern: /\b(డోలో\s*(650)?|dolo\s*(650)?|calpol|పారాసిటమాల్|paracetamol)\b/gi, standard: 'Paracetamol 650mg / Dolo 650 (డోలో 650)' },
+  { pattern: /\b(ఆమోక్సి|amox\s*(500)?|amoxicillin|moxikind|augmentin|ఆగ్మెంటిన్)\b/gi, standard: 'Amoxicillin 500mg (అమోక్సిసిలిన్ 500mg)' },
+  { pattern: /\b(సిట్రిజన్|సెట్రిజిన్|cetrizine|cetirizine|cetzine|జలుబు\s*గోలీ)\b/gi, standard: 'Cetirizine 10mg (సెటిరిజిన్ 10mg)' },
+  { pattern: /\b(అజిత్రో|azithro|azithromycin|azithral)\b/gi, standard: 'Azithromycin 500mg (అజిత్రోమైసిన్ 500mg)' },
+  { pattern: /\b(యాంటాసిడ్|జెలుసిల్|డైజీన్|gelusil|digene|antacid)\b/gi, standard: 'Antacid Gel / Digene (యాంటాసిడ్ సిరప్)' },
+  { pattern: /\b(రాంటాక్|జింటాక్|rantac|zantac|ranitidine)\b/gi, standard: 'Ranitidine 150mg (రాంటాక్ 150mg)' },
+  { pattern: /\b(అటోర్వా|atorvastatin|atorva|లిపిటార్)\b/gi, standard: 'Atorvastatin 10mg (అటోర్వాస్టాటిన్)' },
+  { pattern: /\b(క్లోపిడోగ్రల్|clopidogrel|clopilet)\b/gi, standard: 'Clopidogrel 75mg (క్లోపిడోగ్రెల్)' },
+
+  // 2. Cardiac, Vascular & Emergency Ontologies
+  { pattern: /\b(గుండెల్లో\s*దడ|dada|gundelo\s*dada|palpitation[s]?)\b/gi, standard: 'గుండెల్లో దడ (Palpitations - ICD-10 R00.2)' },
+  { pattern: /\b(chest\s*(lo\s*)?pain|gunde\s*noppi|ఛాతీ\s*నొప్పి)\b/gi, standard: 'ఛాతీ నొప్పి (Chest Pain - ICD-10 R07.9)' },
+  { pattern: /\b(heart\s*attack|gunde\s*potu|గుండెపోటు)\b/gi, standard: 'గుండెపోటు (Suspected STEMI - ICD-10 I21.9)' },
+  { pattern: /\b(bp\s*high|rakthapotu\s*ekkuva|హై\s*బీపీ|అధిక\s*రక్తపోటు)\b/gi, standard: 'అధిక రక్తపోటు (Hypertension - ICD-10 I10)' },
+  { pattern: /\b(sugar\s*low|sugar\s*padipoyindi|లో\s*షుగర్)\b/gi, standard: 'తక్కువ చక్కెర (Hypoglycemia - ICD-10 E16.2)' },
+  { pattern: /\b(sugar\s*ekkuva|high\s*sugar|మధుమేహం)\b/gi, standard: 'మధుమేహం (Type-2 Diabetes - ICD-10 E11)' },
+
+  // 3. Respiratory & ENT Symptoms
+  { pattern: /\b(breath\s*andatle|swasa\s*kastam|ayasam|ఆయాసం|శ్వాస\s*తీసుకోవడం\s*కష్టం)\b/gi, standard: 'తీవ్ర ఆయాసం (Acute Dyspnea - ICD-10 R06.0)' },
+  { pattern: /\b(jalubu|daggulu?|cold\s*and\s*cough|దగ్గు\s*మరియు\s*జలుబు|జలుబు)\b/gi, standard: 'జలుబు & దగ్గు (URTI / Cough & Cold - ICD-10 J06.9)' },
+  { pattern: /\b(gonthu\s*noppi|sore\s*throat|గొంతు\s*నొప్పి)\b/gi, standard: 'గొంతు నొప్పి (Pharyngitis - ICD-10 J02.9)' },
+  { pattern: /\b(jwaram|fever|vediga\s*undi|జ్వరం|ontlo\s*jwaram)\b/gi, standard: 'తీవ్ర జ్వరం (Pyrexia/Fever - ICD-10 R50.9)' },
+
+  // 4. GI, Neuro & General Clinical Symptoms
+  { pattern: /\b(vomiting[s]?|vanthulu|వాంతులు|motions|virochanalu|విరేచనాలు)\b/gi, standard: 'వాంతులు & విరేచనాలు (Acute Gastroenteritis - ICD-10 A09)' },
+  { pattern: /\b(kallu\s*tiragadam|giddiness|dizziness|తలతిరగడం)\b/gi, standard: 'తలతిరగడం (Dizziness/Vertigo - ICD-10 R42)' },
+  { pattern: /\b(tala\s*noppi|headache|తలనొప్పి)\b/gi, standard: 'తలనొప్పి (Cephalea/Headache - ICD-10 R51)' },
+  { pattern: /\b(kadupu\s*noppi|stomach\s*pain|కడుపు\s*నొప్పి)\b/gi, standard: 'కడుపు నొప్పి (Abdominal Pain - ICD-10 R10.9)' },
+  { pattern: /\b(fits|murcha|seizures|మూర్ఛ)\b/gi, standard: 'మూర్ఛ లక్షణాలు (Seizures - ICD-10 R56.9)' },
+  { pattern: /\b(uduku\s*bostondi|hot\s*flashes|చెమటలు|chematalu)\b/gi, standard: 'విపరీతమైన చెమటలు (Diaphoresis - ICD-10 R61)' },
+  { pattern: /\b(accident|debba|raktham|గాయం|రక్తస్రావం)\b/gi, standard: 'తీవ్ర గాయం & రక్తస్రావం (Trauma & Bleeding - ICD-10 T14.9)' }
 ];
 
 export function normalizeCodeMixedClinicalText(inputText = '') {
@@ -87,6 +117,97 @@ export function normalizeCodeMixedClinicalText(inputText = '') {
     normalized = normalized.replace(item.pattern, item.standard);
   }
   return normalized;
+}
+
+/**
+ * Linguistic NLP Role Classifier:
+ * Evaluates whether an utterance originates from the Doctor or Patient based on conversational clinical markers.
+ */
+export function classifyClinicalRoleLinguistically(text = '') {
+  if (!text || typeof text !== 'string') return null;
+  const clean = text.toLowerCase().trim();
+
+  // Doctor speech patterns: queries, physical exam, prescription directions
+  const doctorPatterns = [
+    /ఎప్పటి\s*నుంచి/i, /ఎలా\s*ఉంది/i, /ఎక్కడ\s*నొప్పి/i, /ఎంతకాలం/i, /చూస్తాను/i, /పరిశీలిస్తాను/i,
+    /నాలుక\s*చూపించండి/i, /బీపీ\s*చూస్తా/i, /రక్తపోటు\s*కొలుస్తా/i, /స్టెతస్కోప్/i,
+    /ఈ\s*గోలీ/i, /ఈ\s*టాబ్లెట్/i, /ఈ\s*మందు/i, /రాత్రి\s*వేసుకోండి/i, /ఉదయం\s*వేసుకోండి/i,
+    /ఆహారం\s*తర్వాత/i, /భోజనం\s*ముందు/i, /గోరువెచ్చని\s*నీరు/i, /రెస్ట్\s*తీసుకోండి/i,
+    /పరీక్ష\s*చేయించాలి/i, /బ్లడ్\s*టెస్ట్/i, /రాస్తున్నాను/i, /ప్రిస్క్రిప్షన్/i,
+    /how long/i, /since when/i, /where does it hurt/i, /let me check/i, /take this/i,
+    /after food/i, /before food/i, /twice daily/i, /prescribing/i, /blood pressure/i, /breathe in/i
+  ];
+
+  // Patient speech patterns: honorifics addressed to doctor, complaints, symptom descriptions
+  const patientPatterns = [
+    /సార్/i, /డాక్టర్\s*గారు/i, /నొప్పిగా\s*ఉంది/i, /బాధగా\s*ఉంది/i, /లాగుతోంది/i,
+    /నిన్నటి\s*నుంచి/i, /వారం\s*నుంచి/i, /రెండు\s*రోజులు/i, /వాంతులు/i, /విరేచనాలు/i,
+    /ఆయాసంగా\s*ఉంది/i, /దడగా\s*ఉంది/i, /మంటగా\s*ఉంది/i, /పడుకోలేకపోతున్నా/i,
+    /ఆకలి\s*వేయట్లేదు/i, /నిద్ర\s*పట్టట్లేదు/i, /చేతులు\s*వణుకుతున్నాయి/i, /మందులు\s*అయిపోయాయి/i,
+    /భయంగా\s*ఉంది/i, /తగ్గట్లేదు/i, /తీవ్రంగా\s*ఉంది/i,
+    /doctor/i, /sir/i, /it hurts/i, /i have pain/i, /feeling dizzy/i, /vomiting/i,
+    /cannot sleep/i, /fever since/i, /weakness/i, /i feel/i, /yesterday/i
+  ];
+
+  let docScore = 0;
+  let patScore = 0;
+
+  for (const p of doctorPatterns) {
+    if (p.test(clean)) docScore += 1;
+  }
+  for (const p of patientPatterns) {
+    if (p.test(clean)) patScore += 1;
+  }
+
+  // Question mark strongly points to Doctor asking questions in clinical consultation
+  if (clean.endsWith('?') || clean.includes('?')) {
+    docScore += 1.5;
+  }
+
+  if (docScore > patScore && docScore >= 1) return 'Doctor';
+  if (patScore > docScore && patScore >= 1) return 'Patient';
+  return null;
+}
+
+/**
+ * Autocorrelation Fundamental Frequency (F0) Pitch Estimator:
+ * Estimates pitch of speech frames in real-time WebAudio DSP.
+ * Human vocal range: 60Hz - 500Hz.
+ */
+export function estimateFundamentalFrequency(timeDomainBuffer, sampleRate = 44100) {
+  if (!timeDomainBuffer || timeDomainBuffer.length === 0) return -1;
+  const SIZE = timeDomainBuffer.length;
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) {
+    const val = timeDomainBuffer[i];
+    rms += val * val;
+  }
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.015) return -1; // Silent or non-voiced frame
+
+  const minPeriod = Math.floor(sampleRate / 500); // 500 Hz upper limit
+  const maxPeriod = Math.floor(sampleRate / 60);  // 60 Hz lower limit
+
+  let bestPeriod = -1;
+  let bestCorrelation = 0;
+
+  for (let period = minPeriod; period <= maxPeriod; period++) {
+    let correlation = 0;
+    for (let i = 0; i < SIZE - period; i++) {
+      correlation += timeDomainBuffer[i] * timeDomainBuffer[i + period];
+    }
+    correlation = correlation / (SIZE - period);
+
+    if (correlation > bestCorrelation) {
+      bestCorrelation = correlation;
+      bestPeriod = period;
+    }
+  }
+
+  if (bestPeriod > 0 && bestCorrelation > 0.005) {
+    return Math.round(sampleRate / bestPeriod);
+  }
+  return -1;
 }
 
 /**

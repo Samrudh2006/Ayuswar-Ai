@@ -319,3 +319,48 @@ Write a warm, encouraging 2-sentence preventive wellness recommendation in ${lan
   const reply = await queryGroqApi(prompt, systemInstruction);
   return reply ? reply.trim() : null;
 }
+
+/**
+ * Groq Whisper STT: High-accuracy Indian English, Telugu & Hindi Clinical Speech-to-Text
+ * Powered by whisper-large-v3-turbo on Groq's high-speed LPU infrastructure
+ */
+export async function transcribeAudioWithGroqWhisper(audioBlob, language = 'te') {
+  const apiKey = getGroqApiKey();
+  if (!apiKey) {
+    throw new Error('Groq API Key not found. Please provide or verify your Groq API key.');
+  }
+
+  const formData = new FormData();
+  // Groq requires a filename with valid extension for Whisper
+  const file = new File([audioBlob], 'clinical_consultation.webm', { type: audioBlob.type || 'audio/webm' });
+  formData.append('file', file);
+  formData.append('model', 'whisper-large-v3-turbo');
+  if (language && language !== 'auto') {
+    const shortLang = language.split('-')[0]; // 'te', 'hi', 'en'
+    formData.append('language', shortLang);
+  }
+  formData.append('response_format', 'verbose_json');
+  formData.append('temperature', '0.0');
+  formData.append('prompt', 'AyuSwar clinical consultation. Medications: Pantoprazole 40mg, Metformin 500mg, Ecosprin 75mg, Telmisartan 40mg, Paracetamol 650mg, Cetirizine 10mg, Amoxicillin 500mg. Symptoms: గుండెల్లో దడ, ఛాతీ నొప్పి, ఆయాసం, జ్వరం, దగ్గు, జలుబు, తలనొప్పి, వాంతులు.');
+
+  const res = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: formData
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Groq Whisper STT failed (${res.status}): ${errText}`);
+  }
+
+  const data = await res.json();
+  return {
+    text: (data.text || '').trim(),
+    segments: data.segments || [],
+    duration: data.duration || 0,
+    language: data.language || language
+  };
+}
