@@ -25,8 +25,11 @@ export const CLINICAL_RAG_CORPUS = [
       'ओपीडी का समय क्या है और डॉक्टर कब बैठते हैं?'
     ],
     answerEn: "🏥 **AyuSwar Hospital OPD Schedule:**\n• **Morning General OPD:** Monday – Saturday, 08:30 AM – 01:30 PM\n• **Specialist Clinics (Cardio, Pulmo, Endo):** 02:00 PM – 05:00 PM\n• **Sanjivani 24x7 Emergency & Trauma:** Open 24 Hours, All Days\n• **Sunday OPD:** Emergency & In-Patient rounds only (09:00 AM – 12:00 PM)\n*Please arrive 20 minutes prior to your allocated token time.*",
+    shortAnswerEn: "🏥 **OPD Timings:** Monday – Saturday, 08:30 AM – 01:30 PM (Specialists: 02:00 PM – 05:00 PM). Sanjivani Emergency is open 24x7.",
     answerTe: "🏥 **ఆయుస్వర్ హాస్పిటల్ OPD వేళలు:**\n• **ఉదయం జనరల్ OPD:** సోమవారం – శనివారం, ఉదయం 08:30 నుండి మధ్యాహ్నం 01:30 వరకు\n• **స్పెషలిస్ట్ విభాగాలు (గుండె, ఊపిరితిత్తులు, షుగర్):** మధ్యాహ్నం 02:00 నుండి సాయంత్రం 05:00 వరకు\n• **సంజీవని ఎమర్జెన్సీ & ట్రామా:** 24 గంటలు నిరంతరం అందుబాటులో ఉంటుంది\n*మీ టోకెన్ సమయానికి 20 నిమిషాల ముందే దయచేసి రిజిస్ట్రేషన్ డెస్క్ వద్దకు చేరుకోండి.*",
-    answerHi: "🏥 **आयुस्वर अस्पताल ओपीडी समय सारणी:**\n• **सामान्य ओपीडी:** सोमवार – शनिवार, सुबह 08:30 से दोपहर 01:30 बजे तक\n• **विशेषज्ञ क्लीनिक (हृदय, फेफड़े, मधुमेह):** दोपहर 02:00 से शाम 05:00 बजे तक\n• **संजीवनी 24x7 आपातकालीन सेवा:** 24 घंटे, सातों दिन खुली रहती है\n*कृपया अपने टोकन समय से 20 मिनट पहले पंजीकरण काउंटर पर पहुंचें।*"
+    shortAnswerTe: "🏥 **OPD వేళలు:** సోమవారం – శనివారం, ఉదయం 08:30 నుండి మధ్యాహ్నం 01:30 వరకు. సంజీవని ఎమర్జెన్సీ 24 గంటలు అందుబాటులో ఉంటుంది.",
+    answerHi: "🏥 **आयुस्वर अस्पताल ओपीडी समय सारणी:**\n• **सामान्य ओपीडी:** सोमवार – शनिवार, सुबह 08:30 से दोपहर 01:30 बजे तक\n• **विशेषज्ञ क्लीनिक (हृदय, फेफड़े, मधुमेह):** दोपहर 02:00 से शाम 05:00 बजे तक\n• **संजीवनी 24x7 आपातकालीन सेवा:** 24 घंटे, सातों दिन खुली रहती है\n*कृपया अपने टोकन समय से 20 मिनट पहले पंजीकरण काउंटर पर पहुंचें।*",
+    shortAnswerHi: "🏥 **ओपीडी समय:** सोमवार – शनिवार, सुबह 08:30 से दोपहर 01:30 बजे तक। संजीवनी आपातकालीन सेवा 24 घंटे उपलब्ध है।"
   },
   {
     id: 'rag_hosp_02',
@@ -265,8 +268,9 @@ export const CLINICAL_RAG_CORPUS = [
  * - 'doctor' role prioritizes clinical DDI, MEWS, FHIR, and ICD-10 protocols.
  * - 'patient' role prioritizes vernacular meal-timing, lab report interpretation, and diet.
  * - 'landing' / 'receptionist' role prioritizes hospital navigation, tokens, and general overviews.
+ * Supports options.concise (defaults to true for fast voice & demo video pacing).
  */
-export function retrieveGroundedClinicalKnowledge(queryText = '', role = 'patient') {
+export function retrieveGroundedClinicalKnowledge(queryText = '', role = 'patient', options = { concise: true }) {
   if (!queryText || typeof queryText !== 'string') return null;
 
   const normalized = queryText.toLowerCase().trim();
@@ -274,6 +278,7 @@ export function retrieveGroundedClinicalKnowledge(queryText = '', role = 'patien
   const isHindi = /[\u0900-\u097F]/.test(queryText);
   const preferredLang = isTelugu ? 'te' : (isHindi ? 'hi' : 'en');
   const effectiveRole = role === 'doctor' ? 'doctor' : (role === 'patient' ? 'patient' : 'landing');
+  const useConcise = options?.concise !== false;
 
   let bestEntry = null;
   let highestScore = -999;
@@ -319,12 +324,25 @@ export function retrieveGroundedClinicalKnowledge(queryText = '', role = 'patien
 
   // Minimum threshold for confident retrieval match
   if (bestEntry && highestScore >= 6) {
-    let formattedAnswer = bestEntry.answerEn;
+    let fullAnswer = bestEntry.answerEn;
+    let shortAnswer = bestEntry.shortAnswerEn;
     if (preferredLang === 'te') {
-      formattedAnswer = bestEntry.answerTe;
+      fullAnswer = bestEntry.answerTe;
+      shortAnswer = bestEntry.shortAnswerTe;
     } else if (preferredLang === 'hi') {
-      formattedAnswer = bestEntry.answerHi;
+      fullAnswer = bestEntry.answerHi;
+      shortAnswer = bestEntry.shortAnswerHi;
     }
+
+    // If shortAnswer is not explicitly defined on this entry, extract first 1-2 punchy sentences
+    if (!shortAnswer && fullAnswer) {
+      const lines = fullAnswer.split('\n').filter(l => l.trim().length > 0);
+      const header = lines[0] || '';
+      const firstBullet = lines.find(l => l.includes('•') || l.includes('1.')) || lines[1] || '';
+      shortAnswer = (header + ' ' + firstBullet.replace(/^[•\d\.\s*]+/, '')).trim();
+    }
+
+    const formattedAnswer = (useConcise && shortAnswer) ? shortAnswer : fullAnswer;
 
     return {
       matchFound: true,
@@ -334,6 +352,8 @@ export function retrieveGroundedClinicalKnowledge(queryText = '', role = 'patien
       confidenceScore: highestScore,
       language: preferredLang,
       answer: formattedAnswer,
+      fullAnswer,
+      shortAnswer: shortAnswer || formattedAnswer,
       groundedSource: 'AyuSwar NHA & PMBJP Clinical Knowledge Base'
     };
   }

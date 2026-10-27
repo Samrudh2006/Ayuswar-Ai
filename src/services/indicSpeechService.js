@@ -292,6 +292,9 @@ export class IndicSpeechService {
     this.proxyEndpoint = '/api/gnani';
     this.isSpeaking = false;
     this.currentAudio = null;
+    this.currentAudioUrl = null;
+    this.currentWebAudioSource = null;
+    this.currentWebAudioCtx = null;
 
     // Real-Time Audio Pipeline & VAD State
     this.audioContext = null;
@@ -561,7 +564,7 @@ export class IndicSpeechService {
               container: 'wav'
             }
           }),
-          signal: AbortSignal.timeout(8000)
+          signal: AbortSignal.timeout(25000)
         });
 
         if (response.ok) {
@@ -585,14 +588,39 @@ export class IndicSpeechService {
 
           const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
           const audioUrl = URL.createObjectURL(blob);
+          this.currentAudioUrl = audioUrl;
           const audio = new Audio(audioUrl);
           this.currentAudio = audio;
 
           return new Promise((resolve) => {
             let hasResolved = false;
+            let fallbackInvoked = false;
+
+            const cleanupPlayback = () => {
+              if (audio) {
+                audio.onplay = null;
+                audio.onended = null;
+                audio.onerror = null;
+              }
+              if (this.currentAudio === audio) {
+                this.currentAudio = null;
+              }
+              if (this.currentWebAudioSource) {
+                this.currentWebAudioSource = null;
+              }
+              if (this.currentWebAudioCtx) {
+                this.currentWebAudioCtx = null;
+              }
+              if (this.currentAudioUrl) {
+                try { URL.revokeObjectURL(this.currentAudioUrl); } catch {}
+                this.currentAudioUrl = null;
+              }
+            };
+
             const completePlayback = () => {
               if (hasResolved) return;
               hasResolved = true;
+              cleanupPlayback();
               this.lastSpeechEndTime = Date.now();
               setTimeout(() => {
                 this.isSpeaking = false;
@@ -612,12 +640,29 @@ export class IndicSpeechService {
             };
 
             const fallbackToWebAudio = async () => {
+              if (fallbackInvoked || hasResolved) return;
+              fallbackInvoked = true;
+
+              // Immediately silence HTML5 audio and detach its listeners to prevent duplicate play or errors
+              if (audio) {
+                audio.onplay = null;
+                audio.onended = null;
+                audio.onerror = null;
+                try {
+                  audio.pause();
+                  audio.currentTime = 0;
+                  audio.src = '';
+                } catch {}
+              }
+
               try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 const ctx = new AudioCtx();
+                this.currentWebAudioCtx = ctx;
                 if (ctx.state === 'suspended') await ctx.resume();
                 const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
                 const source = ctx.createBufferSource();
+                this.currentWebAudioSource = source;
                 source.buffer = audioBuffer;
                 source.connect(ctx.destination);
                 source.onended = () => {
@@ -645,15 +690,19 @@ export class IndicSpeechService {
             };
 
             audio.onerror = () => {
+              if (hasResolved || fallbackInvoked) return;
               console.warn('HTML5 Audio failed, falling back to WebAudio decoder...');
               fallbackToWebAudio();
             };
 
             audio.play().catch((err) => {
+              if (hasResolved || fallbackInvoked) return;
               console.warn('Audio.play() error, attempting WebAudio playback:', err);
               fallbackToWebAudio();
             });
           });
+        } else {
+          console.warn(`Gnani TTS endpoint returned HTTP ${response.status}`);
         }
       } catch (err) {
         console.warn('Gnani TTS unavailable, switching to browser speech fallback:', err);
@@ -661,6 +710,17 @@ export class IndicSpeechService {
     }
 
     // 2. Visible Browser Web Speech Fallback
+    if (options.strictGnani) {
+      console.warn('Strict Gnani mode active: suppressing Edge browser voice fallback.');
+      this.isSpeaking = false;
+      this.lastSpeechEndTime = Date.now();
+      if (this.conversationState === 'SPEAKING') {
+        this.setConversationState('LISTENING');
+      }
+      onError('Gnani TTS did not complete; Edge browser voice suppressed per strict Gnani setting.');
+      return;
+    }
+
     this.activeProvider = 'browser_fallback';
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -840,11 +900,34 @@ export class IndicSpeechService {
     this.lastSpeechEndTime = Date.now();
     if (this.currentAudio) {
       try {
+        // Crucial: Detach all listeners BEFORE modifying src/pause to prevent synthetic error event from triggering fallbackToWebAudio duplicate playback!
+        this.currentAudio.onplay = null;
+        this.currentAudio.onended = null;
+        this.currentAudio.onerror = null;
         this.currentAudio.pause();
         this.currentAudio.currentTime = 0;
         this.currentAudio.src = '';
       } catch {}
       this.currentAudio = null;
+    }
+    if (this.currentWebAudioSource) {
+      try {
+        this.currentWebAudioSource.stop();
+        this.currentWebAudioSource.disconnect();
+      } catch {}
+      this.currentWebAudioSource = null;
+    }
+    if (this.currentWebAudioCtx) {
+      try {
+        this.currentWebAudioCtx.close().catch(() => {});
+      } catch {}
+      this.currentWebAudioCtx = null;
+    }
+    if (this.currentAudioUrl) {
+      try {
+        URL.revokeObjectURL(this.currentAudioUrl);
+      } catch {}
+      this.currentAudioUrl = null;
     }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       try {

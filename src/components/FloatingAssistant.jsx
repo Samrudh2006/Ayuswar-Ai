@@ -119,23 +119,29 @@ export default function FloatingAssistant({
   const timerRef = useRef(null);
   const handleProcessQuestionRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const speechSessionDispatchedRef = useRef(false);
+  const activeSpeechGenRef = useRef(0);
 
-  // Clean speech synthesis on unmount
+  // Clean speech synthesis and active audio playback on unmount
   useEffect(() => {
     return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      speechService.stopSpeaking();
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, []);
 
   // Process question via AyuSwar Brain (API / Open-Source / Local Indic NLP)
   const handleProcessQuestion = async (queryText) => {
+    if (!queryText || isProcessingQuery) return;
     handleProcessQuestionRef.current = handleProcessQuestion;
     setLastUserQuery(queryText);
     setIsProcessingQuery(true);
     setAssistantState('speaking');
+    
+    // Ensure any previously playing speech is halted before generating new reply
+    speechService.stopSpeaking();
+    const currentGen = ++activeSpeechGenRef.current;
     
     try {
       const answer = await askAyuSwarBrain(queryText, effectiveRole, { 
@@ -144,34 +150,42 @@ export default function FloatingAssistant({
         skipGroq: true,
         source: 'floating_assistant'
       });
+      if (activeSpeechGenRef.current !== currentGen) return;
       setCurrentAiReply(answer);
       if (isAiVoiceEnabled && !isMuted) {
-        speakOutLoud(answer);
+        speakOutLoud(answer, currentGen);
       }
     } catch {
+      if (activeSpeechGenRef.current !== currentGen) return;
       const fallback = effectiveRole === 'receptionist' 
         ? "Namaste! Welcome to AyuSwar Hospital. Token #14 assigned with Dr. Ananya Sharma. Wait time ~8 mins."
         : "I have recorded your symptom. Dr. Priya has been notified and your vitals are stable.";
       setCurrentAiReply(fallback);
       if (isAiVoiceEnabled && !isMuted) {
-        speakOutLoud(fallback);
+        speakOutLoud(fallback, currentGen);
       }
     } finally {
       setIsProcessingQuery(false);
     }
   };
 
-  const speakOutLoud = (text) => {
+  const speakOutLoud = (text, genId = activeSpeechGenRef.current) => {
     if (!isAiVoiceEnabled || isMuted) return;
     speechService.speak(text, {
       langCode: speechLanguage || 'en-IN',
-      rate: 0.94,
+      strictGnani: true,
+      rate: 1.02,
       pitch: 1.0,
       onEnd: () => {
-        setAssistantState('expanded');
+        if (activeSpeechGenRef.current === genId) {
+          setAssistantState('expanded');
+        }
       },
-      onError: () => {
-        setAssistantState('expanded');
+      onError: (err) => {
+        console.warn('Gnani voice notification:', err);
+        if (activeSpeechGenRef.current === genId) {
+          setAssistantState('expanded');
+        }
       }
     });
   };
@@ -197,9 +211,37 @@ export default function FloatingAssistant({
         cleaned.startsWith('हिन्दी में') || 
         cleaned.startsWith('Tap');
 
+      let dispatched = false;
       if (!isPlaceholder && cleaned.length > 1) {
+        dispatched = true;
+        speechSessionDispatchedRef.current = true;
         handleProcessQuestion(cleaned);
-      } else {
+      }
+
+      // Check MediaRecorder for Gnani Prisma STT transcription if speech recognition missed it
+      if (mediaRecorderRef.current) {
+        const { recorder, chunks, stream } = mediaRecorderRef.current;
+        mediaRecorderRef.current = null;
+        recorder.onstop = async () => {
+          try { stream?.getTracks?.().forEach(t => t.stop()); } catch {}
+          if (!dispatched && !speechSessionDispatchedRef.current && chunks.length > 0) {
+            const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+            if (audioBlob.size > 800) {
+              setLiveTranscript('Transcribing speech with Gnani Prisma STT...');
+              const sttRes = await speechService.transcribeAudioWithGnani(audioBlob, speechLanguage);
+              if (!speechSessionDispatchedRef.current && sttRes && sttRes.transcript && sttRes.transcript.trim().length > 1) {
+                speechSessionDispatchedRef.current = true;
+                setLiveTranscript(sttRes.transcript);
+                handleProcessQuestion(sttRes.transcript);
+                return;
+              }
+            }
+          }
+        };
+        try { recorder.stop(); } catch {}
+      }
+
+      if (!dispatched) {
         const noSpeechMsg = speechLanguage === 'te-IN'
           ? "మీ మాటలు స్పష్టంగా రికార్డ్ కాలేదు. దయచేసి 'Me to Speak' బటన్ నొక్కి మళ్లీ మాట్లాడండి."
           : (speechLanguage === 'hi-IN'
@@ -210,6 +252,7 @@ export default function FloatingAssistant({
       }
     } else {
       // User initiates speaking -> timer starts at 00:00
+      speechSessionDispatchedRef.current = false;
       setIsMeSpeaking(true);
       setAssistantState('listening');
       setElapsedVoiceSec(0);
@@ -224,6 +267,23 @@ export default function FloatingAssistant({
       timerRef.current = setInterval(() => {
         setElapsedVoiceSec(prev => prev + 1);
       }, 1000);
+
+      // Start MediaRecorder for high-fidelity Gnani Prisma STT
+      if (typeof window !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            try {
+              const rec = new MediaRecorder(stream);
+              const chunks = [];
+              rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+              rec.start();
+              mediaRecorderRef.current = { recorder: rec, chunks, stream };
+            } catch (recErr) {
+              console.warn('Gnani STT recorder init:', recErr);
+            }
+          })
+          .catch(micErr => console.warn('Microphone permission:', micErr));
+      }
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
@@ -265,7 +325,7 @@ export default function FloatingAssistant({
   };
 
   const handleEndCall = () => {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    speechService.stopSpeaking();
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -277,6 +337,13 @@ export default function FloatingAssistant({
     if (speechRecognitionRef.current) {
       try { speechRecognitionRef.current.stop(); } catch {}
       speechRecognitionRef.current = null;
+    }
+    if (mediaRecorderRef.current) {
+      try {
+        mediaRecorderRef.current.stream?.getTracks?.().forEach(t => t.stop());
+        mediaRecorderRef.current.recorder?.stop();
+      } catch {}
+      mediaRecorderRef.current = null;
     }
     setIsMeSpeaking(false);
     setElapsedVoiceSec(0);
@@ -341,7 +408,7 @@ export default function FloatingAssistant({
 
   const handleSendText = (e) => {
     e?.preventDefault();
-    if (!textInputValue.trim()) return;
+    if (!textInputValue.trim() || isProcessingQuery) return;
     const query = textInputValue.trim();
     setTextInputValue('');
     setShowTextInput(false);
@@ -557,7 +624,7 @@ export default function FloatingAssistant({
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Sparkles size={13} color="#0F4C5C" />
                     <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F766E' }}>
-                      Indic Multi-Dialect Scribe (Auto-Detect)
+                      ⚡ Gnani Timbre Neural Voice (Active)
                     </span>
                   </div>
 
@@ -565,7 +632,7 @@ export default function FloatingAssistant({
                   <button
                     onClick={() => {
                       setIsMuted(prev => !prev);
-                      if (!isMuted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+                      if (!isMuted) speechService.stopSpeaking();
                     }}
                     style={{
                       background: 'none',
@@ -691,7 +758,7 @@ export default function FloatingAssistant({
                     <span>
                       {isMeSpeaking 
     ? `Recording Live Speech (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})...` 
-    : (assistantState === 'speaking' ? 'AyuSwar AI Speaking' : 'Ready · Standby (00:00)')}
+    : (assistantState === 'speaking' ? 'AyuSwar AI Speaking (Gnani Timbre Neural Voice)' : 'Ready · Standby (00:00)')}
                     </span>
                   </div>
                 </div>
