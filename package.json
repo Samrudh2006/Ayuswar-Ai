@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint --quiet",
-    "test": "node test/api_security.test.js && node test/server_triage.test.js && node test/voice_integration.test.js && node test/database_auth.test.js && node test/mobile_ui.test.js && node test/audit_assertions.test.js && node test/clinical_workflow.test.js",
+    "test": "node test/api_security.test.js && node test/server_triage.test.js && node test/voice_integration.test.js && node test/gnani_pipeline.test.js && node test/stage2_acoustic_verify.test.js && node test/database_auth.test.js && node test/mobile_ui.test.js && node test/audit_assertions.test.js && node test/clinical_workflow.test.js",
     "test:e2e": "node test/e2e_browser.test.js"
   },
   "dependencies": {
