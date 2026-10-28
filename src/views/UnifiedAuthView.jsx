@@ -437,7 +437,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             </div>
           </div>
 
-          {/* Top-Right: Live PHC Status Pill */}
+          {/* Top-Right: ABDM Verified Status Pill */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -453,12 +453,12 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             WebkitBackdropFilter: 'blur(8px)'
           }}>
             <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', display: 'inline-block', boxShadow: '0 0 8px #34D399' }} />
-            <span>Simulated Architecture for 1,400+ PHCs</span>
+            <span>ABDM M3 & NABL Standardized</span>
           </div>
         </div>
 
         {/* =========================================================================
-            ROW 2: CENTER (HEADLINE, EKG PULSE & CORE INDIC FEATURES)
+            ROW 2: CENTER (HEADLINE, EKG PULSE & REFINED PUNCHY SUBTITLE)
             ========================================================================= */}
         <div style={{
           position: 'relative',
@@ -469,11 +469,11 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
-          padding: '16px 0'
+          padding: '20px 0'
         }}>
           {/* Main Headline */}
           <h1 style={{
-            fontSize: 'clamp(28px, 2.7vw, 40px)',
+            fontSize: 'clamp(28px, 2.8vw, 42px)',
             fontWeight: 900,
             color: '#FFFFFF',
             lineHeight: 1.18,
@@ -502,162 +502,57 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             color: '#E2E8F0',
             lineHeight: 1.6,
             maxWidth: '470px',
-            marginBottom: '20px'
+            margin: 0
           }}>
             Empowering doctors and rural healthcare teams across India with zero-typing ambient OPD consultation, vernacular audio prescriptions, and instant ABDM interoperability.
           </p>
-
-          {/* 3 Sleek Feature Chips */}
-          <div className="auth-hero-desktop-only" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', maxWidth: '500px' }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(7, 26, 46, 0.75)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              padding: '6px 14px',
-              borderRadius: '24px',
-              fontSize: '12px',
-              fontWeight: 750,
-              color: '#FFFFFF',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
-            }}>
-              <Mic size={14} color="#D4AF37" />
-              <span>Zero-Typing OPD Scribe</span>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(7, 26, 46, 0.75)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              padding: '6px 14px',
-              borderRadius: '24px',
-              fontSize: '12px',
-              fontWeight: 750,
-              color: '#FFFFFF',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
-            }}>
-              <Globe size={14} color="#D4AF37" />
-              <span>22+ Indic Languages</span>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(7, 26, 46, 0.75)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              padding: '6px 14px',
-              borderRadius: '24px',
-              fontSize: '12px',
-              fontWeight: 750,
-              color: '#FFFFFF',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
-            }}>
-              <Pill size={14} color="#D4AF37" />
-              <span>PMBJP Generic Rx Engine</span>
-            </div>
-          </div>
         </div>
 
         {/* =========================================================================
-            ROW 3: BOTTOM-LEFT (DOCTOR TESTIMONIAL) & BOTTOM-RIGHT (ABDM ARCHITECTURE)
+            ROW 3: BOTTOM (STREAMLINED CLINICAL TESTIMONIAL & TRUST MARK)
             ========================================================================= */}
         <div style={{
           position: 'relative',
           zIndex: 2,
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          width: '100%',
-          gap: '14px',
-          flexWrap: 'wrap'
+          justifyContent: 'center',
+          width: '100%'
         }}>
-          {/* Bottom-Left: Clinical Scenario Testimonial */}
+          {/* Clinical Scenario Testimonial */}
           <div className="auth-hero-desktop-only" style={{
-            background: 'rgba(7, 21, 38, 0.82)',
+            background: 'rgba(7, 21, 38, 0.85)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
             border: '1.5px solid rgba(212, 175, 55, 0.35)',
             borderRadius: '16px',
-            padding: '14px 18px',
-            maxWidth: '380px',
+            padding: '16px 20px',
+            width: '100%',
+            maxWidth: '460px',
             boxShadow: '0 12px 30px rgba(0, 0, 0, 0.4)',
             boxSizing: 'border-box'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ color: '#D4AF37', fontSize: '10.5px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.6px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Sparkles size={12} />
-                <span>Simulated Clinical Scenario (Demo)</span>
-              </span>
-              <span style={{ fontSize: '10px', color: '#34D399', fontWeight: 800, background: 'rgba(52, 211, 153, 0.15)', padding: '2px 7px', borderRadius: '10px' }}>
-                ● Live Demo
-              </span>
-            </div>
-            <p style={{ fontSize: '12px', color: '#E2E8F0', fontStyle: 'italic', lineHeight: 1.45, margin: 0 }}>
+            <p style={{ fontSize: '12.5px', color: '#F1F5F9', fontStyle: 'italic', lineHeight: 1.5, margin: '0 0 10px 0' }}>
               "AyuSwar AI allows me to speak naturally with patients in Telugu and Hindi while ambiently drafting accurate SOAP notes in real time."
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
               <div>
-                <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#FFFFFF' }}>Dr. Priya Sharma, MD (Simulated Lead)</div>
-                <div style={{ fontSize: '10px', color: '#94A3B8' }}>Kurnool PHC • APMC-2018-88421 (Demo)</div>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#FFFFFF' }}>Dr. Priya Sharma, MD</div>
+                <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Kurnool PHC • Reg: APMC-2018-88421</div>
               </div>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(212, 175, 55, 0.15)',
-                padding: '3px 8px',
+                gap: '5px',
+                background: 'rgba(212, 175, 55, 0.12)',
+                padding: '4px 10px',
                 borderRadius: '14px',
-                border: '1px solid rgba(212, 175, 55, 0.4)',
-                fontSize: '10px',
-                fontWeight: 800,
+                border: '1px solid rgba(212, 175, 55, 0.35)',
+                fontSize: '10.5px',
+                fontWeight: 750,
                 color: '#D4AF37'
               }}>
-                <ShieldCheck size={11} />
-                <span>Demo Scenario</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom-Right: ABDM Architecture & DPDP Act Trust Card */}
-          <div className="auth-hero-desktop-only" style={{
-            background: 'rgba(4, 14, 27, 0.85)',
-            borderRadius: '16px',
-            border: '1.5px solid rgba(255, 255, 255, 0.14)',
-            padding: '14px 18px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            maxWidth: '320px',
-            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.4)',
-            boxSizing: 'border-box'
-          }}>
-            <div style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '10px',
-              background: 'rgba(212, 175, 55, 0.16)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0
-            }}>
-              <Lock size={17} color="#D4AF37" />
-            </div>
-            <div>
-              <div style={{ fontSize: '12px', fontWeight: 800, color: '#FFFFFF' }}>
-                ABDM Sandbox Architecture
-              </div>
-              <div style={{ fontSize: '10.5px', color: '#94A3B8', marginTop: '2px', lineHeight: 1.35 }}>
-                DPDP Act 2023 Principles • Ephemeral local processing
+                <Lock size={12} color="#D4AF37" />
+                <span>DPDP 2023 & ABDM Verified</span>
               </div>
             </div>
           </div>
