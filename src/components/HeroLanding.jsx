@@ -280,7 +280,8 @@ export default function HeroLanding({
     audioPurged: false,
     noiseDb: 52,
     hallucinationTested: false
-                        });
+  });
+  const [isGovAutoPaused, setIsGovAutoPaused] = useState(false);
 
   // Section 6 & 7 Unified: Trust, Safety & Academic Standards State
   const [trustDomainMode, setTrustDomainMode] = useState('governance'); // 'governance' | 'standards'
@@ -3057,7 +3058,7 @@ export default function HeroLanding({
                           audioPurged: false,
                           noiseDb: tab.id === 'uncertainty_sentinel' ? 76 : 52,
                           hallucinationTested: false
-                        });
+  });
                       }}
                       style={{
                         display: 'inline-flex',
