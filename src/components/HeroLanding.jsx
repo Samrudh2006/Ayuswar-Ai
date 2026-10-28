@@ -2593,7 +2593,8 @@ export default function HeroLanding({
                     fontSize: '20px',
                     fontWeight: 900,
                     color: '#081C24',
-                    lineHeight: 1.45,
+                    lineHeight: 1.55,
+                    fontFamily: 'var(--font-indic), system-ui, sans-serif',
                     marginBottom: '10px',
                     letterSpacing: '-0.2px'
                   }}>
@@ -2864,7 +2865,8 @@ export default function HeroLanding({
                         fontWeight: 800,
                         color: isHighlighted ? '#ffffff' : isPast ? '#5EEAD4' : '#E2E8F0',
                         textAlign: 'center',
-                        fontFamily: 'system-ui, -apple-system, sans-serif'
+                        fontFamily: 'var(--font-indic), system-ui, sans-serif',
+                        lineHeight: 1.55
                       }}>
                         {token.word}
                       </div>

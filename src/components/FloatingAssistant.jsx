@@ -128,6 +128,23 @@ export default function FloatingAssistant({
     return () => {
       speechService.stopSpeaking();
       if (timerRef.current) clearInterval(timerRef.current);
+      if (sessionTimerRef.current) clearInterval(sessionTimerRef.current);
+      if (speechRecognitionRef.current) {
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onend = null;
+        try { speechRecognitionRef.current.abort(); } catch {}
+        speechRecognitionRef.current = null;
+      }
+      if (mediaRecorderRef.current) {
+        try {
+          mediaRecorderRef.current.stream?.getTracks?.().forEach(t => {
+            try { t.stop(); t.enabled = false; } catch {}
+          });
+          mediaRecorderRef.current.recorder?.stop();
+        } catch {}
+        mediaRecorderRef.current = null;
+      }
     };
   }, []);
 
@@ -264,6 +281,23 @@ export default function FloatingAssistant({
       setLiveTranscript(promptText);
 
       if (timerRef.current) clearInterval(timerRef.current);
+      if (sessionTimerRef.current) clearInterval(sessionTimerRef.current);
+      if (speechRecognitionRef.current) {
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onend = null;
+        try { speechRecognitionRef.current.abort(); } catch {}
+        speechRecognitionRef.current = null;
+      }
+      if (mediaRecorderRef.current) {
+        try {
+          mediaRecorderRef.current.stream?.getTracks?.().forEach(t => {
+            try { t.stop(); t.enabled = false; } catch {}
+          });
+          mediaRecorderRef.current.recorder?.stop();
+        } catch {}
+        mediaRecorderRef.current = null;
+      }
       timerRef.current = setInterval(() => {
         setElapsedVoiceSec(prev => prev + 1);
       }, 1000);

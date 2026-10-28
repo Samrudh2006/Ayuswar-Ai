@@ -191,13 +191,23 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(t => t.stop());
+        mediaStreamRef.current.getTracks().forEach(t => { try { t.stop(); t.enabled = false; } catch {} });
+        mediaStreamRef.current = null;
       }
       if (audioContextRef.current) {
-        try { audioContextRef.current.close(); } catch {}
+        try {
+          if (audioContextRef.current.state !== 'closed') {
+            audioContextRef.current.close().catch(() => {});
+          }
+        } catch {}
+        audioContextRef.current = null;
       }
       if (speechRecognitionRef.current) {
-        try { speechRecognitionRef.current.stop(); } catch {}
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onend = null;
+        try { speechRecognitionRef.current.abort(); } catch {}
+        speechRecognitionRef.current = null;
       }
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       speechService.stopSpeaking();

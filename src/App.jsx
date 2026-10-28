@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import HeroLanding from './components/HeroLanding';
+const HeroLanding = lazyWithRetry(() => import('./components/HeroLanding'));
 import FloatingAssistant from './components/FloatingAssistant';
 // Lazy-loaded on-demand modals for ultra-fast initial page load
 const DoctorAuthModal = lazyWithRetry(() => import('./components/DoctorAuthModal'));

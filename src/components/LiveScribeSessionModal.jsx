@@ -256,11 +256,14 @@ export default function LiveScribeSessionModal({
         try { mediaRecorderRef.current.stop(); } catch(e){}
       }
       if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach(t => t.stop());
+        audioStreamRef.current.getTracks().forEach(t => { try { t.stop(); t.enabled = false; } catch {} });
         audioStreamRef.current = null;
       }
       if (speechRecognizerRef.current) {
-        try { speechRecognizerRef.current.stop(); } catch(e){}
+        speechRecognizerRef.current.onresult = null;
+        speechRecognizerRef.current.onerror = null;
+        speechRecognizerRef.current.onend = null;
+        try { speechRecognizerRef.current.abort(); } catch(e){}
         speechRecognizerRef.current = null;
       }
       return;
@@ -363,11 +366,14 @@ export default function LiveScribeSessionModal({
         try { mediaRecorderRef.current.stop(); } catch(e){}
       }
       if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach(t => t.stop());
+        audioStreamRef.current.getTracks().forEach(t => { try { t.stop(); t.enabled = false; } catch {} });
         audioStreamRef.current = null;
       }
       if (speechRecognizerRef.current) {
-        try { speechRecognizerRef.current.stop(); } catch(e){}
+        speechRecognizerRef.current.onresult = null;
+        speechRecognizerRef.current.onerror = null;
+        speechRecognizerRef.current.onend = null;
+        try { speechRecognizerRef.current.abort(); } catch(e){}
         speechRecognizerRef.current = null;
       }
     };

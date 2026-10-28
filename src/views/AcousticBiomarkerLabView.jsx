@@ -152,15 +152,31 @@ export default function AcousticBiomarkerLabView() {
   const processorRef = useRef(null);
   const recordedPcmChunksRef = useRef([]);
 
-  // Stop audio on unmount
+  // Stop audio and release hardware handles on unmount
   useEffect(() => {
     return () => {
       if (samplingTimerRef.current) clearInterval(samplingTimerRef.current);
-      if (mediaStreamRef.current) mediaStreamRef.current.getTracks().forEach(t => t.stop());
-      if (processorRef.current) { try { processorRef.current.disconnect(); } catch {} }
-      if (activeOscillatorRef.current) { try { activeOscillatorRef.current.stop(); } catch {} }
-      if (activeSourceRef.current) { try { activeSourceRef.current.stop(); } catch {} }
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(t => {
+          try { t.stop(); t.enabled = false; } catch {}
+        });
+        mediaStreamRef.current = null;
+      }
+      if (processorRef.current) { try { processorRef.current.disconnect(); } catch {} processorRef.current = null; }
+      if (activeOscillatorRef.current) { try { activeOscillatorRef.current.stop(); } catch {} activeOscillatorRef.current = null; }
+      if (activeSourceRef.current) { try { activeSourceRef.current.stop(); } catch {} activeSourceRef.current = null; }
+      if (animFrameRef.current) { cancelAnimationFrame(animFrameRef.current); animFrameRef.current = null; }
+      if (audioContextRef.current) {
+        try {
+          if (audioContextRef.current.state !== 'closed') {
+            audioContextRef.current.close().catch(() => {});
+          }
+        } catch {}
+        audioContextRef.current = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch {}
+      }
     };
   }, []);
 
