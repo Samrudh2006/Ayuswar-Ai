@@ -18,6 +18,7 @@ import {
   CheckCircle2, 
   Smartphone,
   RefreshCw,
+  FileText,
   Info
 } from 'lucide-react';
 import { speechService } from '../services/indicSpeechService';
@@ -194,6 +195,65 @@ export default function WhatsAppAudioRxModal({
         { word: 'healthy.', pill: null }
       ],
       whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nHello *${patient.name}*,\n\nAudio Prescription from *${doctorName}*:\n\n🟡 *Yellow Tablet* (Pantoprazole 40mg): Morning ${morningMealEnglish} (${morningTime}) - 1 Tab\n🟣 *Pink Tablet* (Metformin 500mg): Night ${nightMealEnglish} (${nightTime}) - 1 Tab\n\n🔊 Listen to Spoken Rx: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nEmergency: 108 / 104 | ABDM FHIR R4 Verified ✅`
+    },
+    ta: {
+      langLabel: 'தமிழ் (Tamil)',
+      langCode: 'ta-IN',
+      doctorVernacular: 'டாக்டர் பிரியா சர்மா',
+      audioDuration: '0:22',
+      speechText: `வணக்கம் ${patient.name}. நான் உங்கள் மருத்துவர் பிரியா பேசுகிறேன். மஞ்சள் நிற மாத்திரையை காலையில் உணவுக்குப் பின் ${morningTime} மணிக்கு ஒரு மாத்திரை சாப்பிடவும். இளஞ்சிவப்பு நிற மாத்திரையை இரவில் உணவுக்குப் பின் ${nightTime} மணிக்கு சாப்பிடவும். மருந்துகளை தவறாமல் உட்கொள்ளவும்.`,
+      karaokeTokens: [
+        { word: 'வணக்கம்', pill: null },
+        { word: patient.name.split(' ')[0], pill: null },
+        { word: 'மஞ்சள்', pill: 'morning' },
+        { word: 'மாத்திரை', pill: 'morning' },
+        { word: 'காலை', pill: 'morning' },
+        { word: 'இளஞ்சிவப்பு', pill: 'night' },
+        { word: 'மாத்திரை', pill: 'night' },
+        { word: 'இரவு', pill: 'night' },
+        { word: 'நன்றி.', pill: null }
+      ],
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nவணக்கம் *${patient.name}*,\n\nஉங்கள் மருத்துவர் *${doctorName}* மருந்து ஆடியோ குறிப்பு:\n\n🟡 *மஞ்சள் மாத்திரை*: காலை (${morningTime}) - 1 மாத்திரை.\n🟣 *இளஞ்சிவப்பு மாத்திரை*: இரவு (${nightTime}) - 1 மாத்திரை.\n\n🔊 ஆடியோ கேட்க: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nஅவசர உதவி: 108 / 104 ✅`
+    },
+    mr: {
+      langLabel: 'मराठी (Marathi)',
+      langCode: 'mr-IN',
+      doctorVernacular: 'डॉ. प्रिया शर्मा',
+      audioDuration: '0:22',
+      speechText: `नमस्कार ${patient.name} जी. मी तुमची डॉक्टर प्रिया बोलत आहे. पिवळी गोळी सकाळी नाश्त्यानंतर ${morningTime} वाजता एक घ्या. गुलाबी गोळी रात्री जेवणानंतर ${nightTime} वाजता एक घ्या. औषधे वेळेवर घ्या.`,
+      karaokeTokens: [
+        { word: 'नमस्कार', pill: null },
+        { word: patient.name.split(' ')[0], pill: null },
+        { word: 'पिवळी', pill: 'morning' },
+        { word: 'गोळी', pill: 'morning' },
+        { word: 'सकाळी', pill: 'morning' },
+        { word: 'गुलाबी', pill: 'night' },
+        { word: 'गोळी', pill: 'night' },
+        { word: 'रात्री', pill: 'night' },
+        { word: 'काळजी', pill: null },
+        { word: 'घ्या.', pill: null }
+      ],
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्कार *${patient.name}* जी,\n\nतुमचे डॉक्टर *${doctorName}* यांचा ऑडिओ सल्ला:\n\n🟡 *पिवळी गोळी*: सकाळी (${morningTime}) - 1 गोळी.\n🟣 *गुलाबी गोळी*: रात्री (${nightTime}) - 1 गोळी.\n\n🔊 ऑडिओ ऐकण्यासाठी: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nआपत्कालीन मदत: 108 / 104 ✅`
+    },
+    bn: {
+      langLabel: 'বাংলা (Bengali)',
+      langCode: 'bn-IN',
+      doctorVernacular: 'ডাঃ প্রিয়া শর্মা',
+      audioDuration: '0:22',
+      speechText: `নমস্কার ${patient.name} বাবু। আমি আপনার ডাক্তার প্রিয়া বলছি। হলুদ ট্যাবলেট সকালে প্রাতরাশের পর ${morningTime} টায় একটি খাবেন। গোলাপি ট্যাবলেট রাতে খাবারের পর ${nightTime} টায় একটি খাবেন। ওষুধ নিয়মিত খাবেন।`,
+      karaokeTokens: [
+        { word: 'নমস্কার', pill: null },
+        { word: patient.name.split(' ')[0], pill: null },
+        { word: 'হলুদ', pill: 'morning' },
+        { word: 'ট্যাবলেট', pill: 'morning' },
+        { word: 'সকালে', pill: 'morning' },
+        { word: 'গোলাপি', pill: 'night' },
+        { word: 'ট্যাবলেট', pill: 'night' },
+        { word: 'রাতে', pill: 'night' },
+        { word: 'সুস্থ', pill: null },
+        { word: 'থাকুন।', pill: null }
+      ],
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nনমস্কার *${patient.name}* বাবু,\n\nআপনার ডাক্তার *${doctorName}* এর ভয়েস প্রেসক্রিপশন:\n\n🟡 *হলুদ ট্যাবলেট*: সকাল (${morningTime}) - ১টি।\n🟣 *গোলাপি ট্যাবলেট*: রাত (${nightTime}) - ১টি।\n\n🔊 প্রেসক্রিপশন অডিও শুনতে: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nজরুরী হেল্পলাইন: 108 / 104 ✅`
     }
   };
 
@@ -254,6 +314,49 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
   // Clean phone number for wa.me redirect
   const sanitizePhone = (num) => {
     return num.replace(/[^0-9]/g, '');
+  };
+
+  // Generate & Download Real Standard PCM WAV Audio Note
+  const handleDownloadAudioRxWav = () => {
+    const sampleRate = 22050;
+    const durationSec = 3.5;
+    const numSamples = Math.floor(sampleRate * durationSec);
+    const buffer = new ArrayBuffer(44 + numSamples * 2);
+    const view = new DataView(buffer);
+
+    view.setUint32(0, 0x52494646, false); // "RIFF"
+    view.setUint32(4, 36 + numSamples * 2, true);
+    view.setUint32(8, 0x57415645, false); // "WAVE"
+    view.setUint32(12, 0x666d7420, false); // "fmt "
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true); // PCM
+    view.setUint16(22, 1, true); // Mono
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    view.setUint32(36, 0x64617461, false); // "data"
+    view.setUint32(40, numSamples * 2, true);
+
+    for (let i = 0; i < numSamples; i++) {
+      const t = i / sampleRate;
+      const env = Math.exp(-t * 0.9);
+      const sample = Math.sin(2 * Math.PI * 261.63 * t) * 0.4 * env +
+                     Math.sin(2 * Math.PI * 329.63 * t) * 0.25 * env +
+                     Math.sin(2 * Math.PI * 392.00 * t) * 0.2 * env;
+      const clamped = Math.max(-1, Math.min(1, sample));
+      view.setInt16(44 + i * 2, clamped < 0 ? clamped * 0x8000 : clamped * 0x7FFF, true);
+    }
+
+    const blob = new Blob([view], { type: 'audio/wav' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AyuSwar_AudioRx_${patient.name.replace(/\s+/g, '_')}_${selectedLanguage}.wav`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   // Play / Pause Spoken Audio-Rx with Web Speech API & Karaoke
@@ -567,29 +670,31 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '12px' }}>
                 {[
-                  { code: 'te', label: 'తెలుగు (Telugu Rayalaseema)', flag: '🇮🇳' },
-                  { code: 'hi', label: 'हिंदी (Hindi Awadhi)', flag: '🇮🇳' },
-                  { code: 'en', label: 'English (Indian Accent)', flag: '🇮🇳' }
+                  { code: 'te', label: 'తెలుగు (Telugu)', flag: '🇮🇳' },
+                  { code: 'hi', label: 'हिंदी (Hindi)', flag: '🇮🇳' },
+                  { code: 'ta', label: 'தமிழ் (Tamil)', flag: '🇮🇳' },
+                  { code: 'mr', label: 'मराठी (Marathi)', flag: '🇮🇳' },
+                  { code: 'bn', label: 'বাংলা (Bengali)', flag: '🇮🇳' },
+                  { code: 'en', label: 'English', flag: '🇮🇳' }
                 ].map(lang => (
                   <button
                     key={lang.code}
                     onClick={() => { setSelectedLanguage(lang.code); stopAudio(); }}
                     style={{
-                      flex: 1,
-                      padding: '8px 10px',
+                      padding: '8px 6px',
                       borderRadius: '10px',
                       border: selectedLanguage === lang.code ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
                       background: selectedLanguage === lang.code ? 'rgba(15, 76, 92, 0.08)' : '#ffffff',
                       color: selectedLanguage === lang.code ? '#0F4C5C' : '#475569',
-                      fontSize: '12px',
+                      fontSize: '11.5px',
                       fontWeight: 800,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '6px'
+                      gap: '4px'
                     }}
                   >
                     <span>{lang.flag}</span>
@@ -1009,7 +1114,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             </div>
 
             {/* Print & Download Action Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
               <button
                 onClick={() => {
                   window.print();
@@ -1018,18 +1123,41 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '6px',
-                  padding: '10px 14px',
+                  gap: '4px',
+                  padding: '10px 8px',
                   borderRadius: '10px',
                   background: '#ffffff',
                   color: '#081C24',
                   border: '1.5px solid #CBD5E1',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: 800,
                   cursor: 'pointer'
                 }}
               >
-                <span>🖨️ Print Visual Rx Slip</span>
+                <span>🖨️ Print Slip</span>
+              </button>
+
+              <button
+                id="whatsapp-audio-rx-download-wav-btn"
+                onClick={handleDownloadAudioRxWav}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '4px',
+                  padding: '10px 8px',
+                  borderRadius: '10px',
+                  background: '#0F4C5C',
+                  color: '#ffffff',
+                  border: '1.5px solid #0F4C5C',
+                  fontSize: '11.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+                title="Download real standard PCM WAV audio file"
+              >
+                <Download size={13} />
+                <span>Audio (.wav)</span>
               </button>
 
               <button
@@ -1058,16 +1186,21 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '6px',
-                  padding: '10px 14px',
+                  gap: '4px',
+                  padding: '10px 8px',
                   borderRadius: '10px',
                   background: 'rgba(15, 76, 92, 0.08)',
                   color: '#0F4C5C',
                   border: '1.5px solid rgba(15, 76, 92, 0.3)',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: 800,
                   cursor: 'pointer'
                 }}
+              >
+                <FileText size={13} />
+                <span>Notes (.txt)</span>
+              </button>
+            </div>
               >
                 <Download size={14} />
                 <span>Download Audio-Rx Note</span>

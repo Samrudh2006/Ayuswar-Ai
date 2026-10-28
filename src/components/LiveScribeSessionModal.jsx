@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   X, 
   Mic, 
@@ -29,6 +29,7 @@ import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import { checkDrugInteractions, generateAbdmFhirR4Bundle } from '../data/clinicalSafetySentinel';
 import { reasonClinicalNoteWithEvon, EVON_MODEL_METADATA } from '../services/gnaniEvonService';
 import { speechService } from '../services/indicSpeechService';
+import { resolveIndicVernacular } from '../data/indicVernacularOntology';
 import EvonStatusChip from './EvonStatusChip';
 
 /**
@@ -180,6 +181,34 @@ export default function LiveScribeSessionModal({
 
   const domainKey = safePatient?.domain || ((safePatient?.age || 0) < 15 ? 'respiratory' : 'cardiometabolic');
   const encounterData = dynamicEncounterData || encounterPresets[domainKey] || encounterPresets.cardiometabolic;
+
+  // Live dynamic Indic ontology extraction from spoken dialogue
+  const allSpokenText = dialogueList.map(d => d.text).join(' ') + ' ' + (liveTranscriptInterim || '');
+  const dynamicallyResolvedOntology = useMemo(() => {
+    if (!allSpokenText.trim()) return [];
+    const matches = resolveIndicVernacular(allSpokenText);
+    return matches.map(m => ({
+      colloquial: `${m.vernacular} (${m.transliteration})`,
+      clinical: m.clinicalTerm,
+      icd10: m.icd10,
+      snomed: m.snomed,
+      severity: m.severity,
+      guideline: m.guideline,
+      isLiveExtracted: true
+    }));
+  }, [allSpokenText]);
+
+  // Combined with presets so both live spoken terms and encounter mappings are available
+  const displayIcdMappings = useMemo(() => {
+    const list = [...dynamicallyResolvedOntology];
+    const presets = encounterData?.icdMappings || [];
+    presets.forEach(preset => {
+      if (!list.some(item => item.icd10 === preset.icd10)) {
+        list.push(preset);
+      }
+    });
+    return list;
+  }, [dynamicallyResolvedOntology, encounterData]);
 
   // Helper to send recorded audio chunk to serverless Gnani STT endpoint
   const sendChunkToGnani = async (blob) => {
@@ -991,9 +1020,16 @@ export default function LiveScribeSessionModal({
                     Awaiting live speech input... Regional symptom idioms will resolve to ICD-10 & SNOMED-CT as spoken.
                   </div>
                 ) : (
-                  encounterData.icdMappings.map((icd, i) => (
-                    <div key={i} style={{ background: '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>{icd.colloquial}</div>
+                  displayIcdMappings.map((icd, i) => (
+                    <div key={i} style={{ background: icd.isLiveExtracted ? '#F0FDF4' : '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: icd.isLiveExtracted ? '1px solid #86EFAC' : '1px solid #E2E8F0', transition: 'all 0.3s ease' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 750, color: '#0F4C5C' }}>{icd.colloquial}</div>
+                        {icd.isLiveExtracted && (
+                          <span style={{ fontSize: '9px', fontWeight: 800, background: '#DCFCE7', color: '#166534', padding: '2px 6px', borderRadius: '4px' }}>
+                            ⚡ LIVE EXTRACTED
+                          </span>
+                        )}
+                      </div>
                       <div style={{ fontSize: '11px', color: '#1E293B', fontWeight: 600 }}>{icd.clinical}</div>
                       <div style={{ fontSize: '10px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
                         <code>{icd.icd10}</code> • <code>SNOMED: {icd.snomed}</code>
