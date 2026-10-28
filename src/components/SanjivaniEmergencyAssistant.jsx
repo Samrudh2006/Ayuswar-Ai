@@ -32,6 +32,9 @@ import { queryEvonServer, EVON_MODEL_METADATA } from '../services/gnaniEvonServi
 import { speechService } from '../services/indicSpeechService';
 import { cleanTextForSpeech, speakHumanized } from '../utils/speechSanitizer';
 import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
+import { telephonySipGateway } from '../services/telephonySipGateway';
+import { clinicalVad } from '../services/clinicalVadEngine';
+import { gnaniStreaming } from '../services/gnaniStreamingClient';
 
 /**
  * Sanjivani-108 Dedicated Emergency AI Dispatch & Clinical Copilot
@@ -83,6 +86,8 @@ export default function SanjivaniEmergencyAssistant({
   const [isHandsFreeLiveTalk, setIsHandsFreeLiveTalk] = useState(false);
   const [voiceState, setVoiceState] = useState('IDLE'); // 'IDLE' | 'LISTENING' | 'THINKING' | 'SPEAKING'
   const [voiceRms, setVoiceRms] = useState(0);
+  const [vadConfidence, setVadConfidence] = useState(94);
+  const [sipQoS, setSipQoS] = useState({ rttMs: 24, jitterMs: 1.8, packetLossPercent: 0.0 });
   const [isMetronomeActive, setIsMetronomeActive] = useState(false);
   const [metronomeBeat, setMetronomeBeat] = useState(1);
   const [compressionCount, setCompressionCount] = useState(0);
@@ -200,8 +205,11 @@ export default function SanjivaniEmergencyAssistant({
         onBargeIn: ({ rms }) => {
           addCopilotEvent('audio', '🛑 Barge-In Interruption Detected', 'Assistant voice stopped immediately because you spoke. Listening to your voice...');
         },
-        onVolumeChange: (rms) => {
+        onVolumeChange: (rms, vadScore) => {
           setVoiceRms(rms);
+          if (vadScore?.speechProbability) {
+            setVadConfidence(Math.round(vadScore.speechProbability * 100));
+          }
         },
         onRequestAssistantReply: async (userQuestion) => {
           addCopilotEvent('user', '💬 Voice Query', userQuestion);
@@ -594,6 +602,8 @@ export default function SanjivaniEmergencyAssistant({
     setCallStatus('ended');
     sanjivaniAudio.playCallEndBeep();
     speechService.stopConversationalSession();
+    telephonySipGateway.terminateCall();
+    gnaniStreaming.stopStreaming();
     setIsHandsFreeLiveTalk(false);
     setIsMicListening(false);
     setVoiceState('IDLE');
@@ -613,6 +623,11 @@ export default function SanjivaniEmergencyAssistant({
     setIsHandsFreeLiveTalk(true);
     setIsMicListening(true);
     sanjivaniAudio.playRadioChime();
+    telephonySipGateway.initiateCall({ callerPhone, callerLocation: geoAddress });
+    telephonySipGateway.onQoSUpdate = (qos) => {
+      setSipQoS(qos);
+    };
+    addCopilotEvent('network', '📡 WebRTC SIP Cellular Bridge Connected', `SIP Call-ID: sip:108@${telephonySipGateway.operatorDomain} | Codec: Opus 16kHz | RTT: ${sipQoS.rttMs}ms | Jitter: ${sipQoS.jitterMs}ms | Loss: 0.0%`);
     addCopilotEvent('call', '🟢 108 Emergency Call Connected', `Direct cellular audio stream connected to caller (${callerPhone}). Real-time hands-free speech active.`);
 
     const greeting = "108 Sanjivani Emergency. What is your medical emergency? చెప్పండి మీ సమస్య ఏమిటి?";
@@ -1103,16 +1118,24 @@ export default function SanjivaniEmergencyAssistant({
               </span>
             </div>
 
-            {/* Audio RMS Level Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ color: '#64748B', fontSize: '9.5px', fontFamily: 'monospace' }}>MIC LEVEL</span>
-              <div style={{ width: '60px', height: '6px', background: '#1E293B', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{
-                  width: `${Math.min(100, Math.round(voiceRms * 400))}%`,
-                  height: '100%',
-                  background: voiceRms > 0.04 ? '#EF4444' : '#10B981',
-                  transition: 'width 0.05s linear'
-                }}></div>
+            {/* Audio RMS & Clinical VAD / WebRTC SIP Telemetry */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: '#38BDF8', fontSize: '9.5px', fontFamily: 'monospace', background: 'rgba(56, 189, 248, 0.12)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(56, 189, 248, 0.25)' }}>
+                SIP 108: {sipQoS.rttMs}ms
+              </span>
+              <span style={{ color: '#10B981', fontSize: '9.5px', fontFamily: 'monospace', background: 'rgba(16, 185, 129, 0.12)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
+                VAD: {vadConfidence}%
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ color: '#64748B', fontSize: '9.5px', fontFamily: 'monospace' }}>MIC LEVEL</span>
+                <div style={{ width: '48px', height: '6px', background: '#1E293B', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{
+                    width: `${Math.min(100, Math.round(voiceRms * 400))}%`,
+                    height: '100%',
+                    background: voiceRms > 0.04 ? '#EF4444' : '#10B981',
+                    transition: 'width 0.05s linear'
+                  }}></div>
+                </div>
               </div>
             </div>
           </div>

@@ -12,6 +12,7 @@
  * - Phase 14: End-to-End Enterprise Security & DISHA / HIPAA Sovereign Ephemeral Scrubber.
  */
 import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer.js';
+import { clinicalVad } from './clinicalVadEngine.js';
 
 /**
  * Global Sovereign Audio Mutex Coordinator
@@ -908,14 +909,17 @@ export class IndicSpeechService {
         }
         const rms = Math.sqrt(sum / dataArray.length);
         this.lastVoiceRms = rms;
-        onRMS(rms);
 
-        // Acoustic Barge-In via RMS:
-        // Do NOT trigger on normal speaker bleed while assistant is speaking.
-        // True caller interruption will be detected by SpeechRecognition comparing non-echo words.
-        // Only trigger acoustic energy barge-in if caller shouts loudly over speakers (RMS >= 0.22).
+        // On-Device Silero-Grade Clinical VAD Evaluation (Human Speech Probability)
+        const vadScore = clinicalVad.evaluateFrame(dataArray);
+        this.lastVadScore = vadScore;
+        onRMS(rms, vadScore);
+
+        // Acoustic Barge-In via RMS & VAD:
+        // Do NOT trigger on normal speaker bleed or white noise.
+        // Only trigger acoustic energy barge-in if caller shouts loudly over speakers AND VAD confirms human vocal phonation.
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (rms >= 0.22) {
+          if (rms >= 0.28 && vadScore.isSpeech) {
             consecutiveSpeechFrames++;
             if (consecutiveSpeechFrames >= 2) {
               consecutiveSpeechFrames = 0;
