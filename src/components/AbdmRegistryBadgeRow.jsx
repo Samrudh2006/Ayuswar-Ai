@@ -180,3 +180,4 @@ export default function AbdmRegistryBadgeRow({
     </div>
   );
 }
+

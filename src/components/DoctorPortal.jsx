@@ -63,6 +63,7 @@ import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
+import LiveTelemetryBadge from './LiveTelemetryBadge';
 
 /**
  * DoctorPortal Component — Complete Enterprise Physician Operating System
@@ -2273,6 +2274,7 @@ export default function DoctorPortal({
                 </div>
               </div>
 
+              <LiveTelemetryBadge location="kurnool" style={{ marginBottom: '16px' }} />
               {/* KPI Counters */}
               {(() => {
                 const todayAppts = allAppointmentsList.filter(a => a.offsetDays === 0);

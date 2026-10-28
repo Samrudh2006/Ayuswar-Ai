@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Sparkles, Volume2, BookOpen, X } from 'lucide-react';
 import { INDIC_VERNACULAR_ONTOLOGY, resolveIndicVernacular } from '../../data/indicVernacularOntology';
+import { fetchLiveIcd10Codes } from '../../services/liveMedicalDataService';
 
 /**
  * DoctorClinicalLibraryTab — WHO ICD-10 & Indic Vernacular Clinical Ontology Explorer
@@ -12,6 +13,24 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
   const [ontologySystemFilter, setOntologySystemFilter] = useState('all');
   const [liveResolverInput, setLiveResolverInput] = useState('');
   const [selectedOntologyTerm, setSelectedOntologyTerm] = useState(null);
+  const [nlmLiveResults, setNlmLiveResults] = useState(null);
+  const [nlmLoading, setNlmLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (!ontologySearchTerm || ontologySearchTerm.trim().length < 2) {
+      setNlmLiveResults(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setNlmLoading(true);
+      try {
+        const res = await fetchLiveIcd10Codes(ontologySearchTerm, 3);
+        setNlmLiveResults(res);
+      } catch (_) {}
+      setNlmLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [ontologySearchTerm]);
 
   const filteredOntology = INDIC_VERNACULAR_ONTOLOGY.filter(item => {
     const matchesLang = ontologyLangFilter === 'all' || item.language.toLowerCase() === ontologyLangFilter.toLowerCase();
@@ -81,11 +100,43 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
           />
           {ontologySearchTerm && (
             <button
-              onClick={() => setOntologySearchTerm('')}
+              onClick={() => { setOntologySearchTerm(''); setNlmLiveResults(null); }}
               style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontSize: '13px' }}
             >
               ✕
             </button>
+          )}
+          {nlmLiveResults && nlmLiveResults.results && nlmLiveResults.results.length > 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '42px',
+              left: 0,
+              right: 0,
+              background: '#ffffff',
+              borderRadius: '10px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+              border: '1px solid #93C5FD',
+              padding: '8px 12px',
+              zIndex: 100,
+              fontSize: '11px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px', color: '#1E40AF', fontWeight: 800 }}>
+                <span>🌐 NLM NLM ICD-10 Server ({nlmLiveResults.latencyMs}ms):</span>
+                <span style={{ fontSize: '10px', color: '#16A34A' }}>✓ Live Stream</span>
+              </div>
+              {nlmLiveResults.results.map((item, i) => (
+                <div 
+                  key={i}
+                  onClick={() => { setOntologySearchTerm(item.code); setNlmLiveResults(null); }}
+                  style={{ padding: '3px 4px', borderRadius: '4px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', gap: '6px' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#EFF6FF'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <strong style={{ color: '#0F4C5C' }}>{item.code}</strong>
+                  <span style={{ color: '#475569', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }}>{item.name}</span>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
