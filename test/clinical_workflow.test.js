@@ -48,7 +48,16 @@ assert.strictEqual(teluguPalpitation[0].icd10, 'R00.2', 'Must map to Palpitation
 const hindiRetraction = resolveIndicVernacular('पसली चलना');
 assert.ok(Array.isArray(hindiRetraction) && hindiRetraction.length > 0, 'Hindi retraction phrase must resolve');
 assert.strictEqual(hindiRetraction[0].snomed, '267036007', 'Must map to SNOMED 267036007');
-console.log('✓ Test 5 Passed: Indic Vernacular Ontology translates regional metaphors directly to ICD-10 / SNOMED-CT.');
+
+const bengaliChestTightness = resolveIndicVernacular('বুকে চাপ আর শ্বাসকষ্ট');
+assert.ok(Array.isArray(bengaliChestTightness) && bengaliChestTightness.length > 0, 'Bengali phrase must resolve');
+assert.strictEqual(bengaliChestTightness[0].icd10, 'R07.89', 'Must map to ICD-10 R07.89');
+
+const marathiChestPain = resolveIndicVernacular('छातीत दुखणे आणि धाप लागणे');
+assert.ok(Array.isArray(marathiChestPain) && marathiChestPain.length > 0, 'Marathi phrase must resolve');
+assert.strictEqual(marathiChestPain[0].icd10, 'I20.9', 'Must map to ICD-10 I20.9');
+
+console.log('✓ Test 5 Passed: Indic Vernacular Ontology translates regional metaphors directly to ICD-10 / SNOMED-CT (Telugu, Hindi, Bengali, Marathi).');
 
 // 5. ABDM FHIR R4 JSON Serialization Format
 const mockPatient = {

@@ -1,0 +1,72 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+5 0 obj
+<< /Length 1933 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+50 780 Td
+(AYUSWAR AI \(/A8M50\) - CLINICAL ACOUSTIC REPORT) '
+(=======================================================) '
+(Report ID: AS-2026-OCT-8842    Date: 28-Oct-2026) '
+(ABDM Facility: #1402          Standard: ABDM M3 / NABL) '
+() '
+(PATIENT DEMOGRAPHICS) '
+(Name: Lakshmi Amma \(2M7M.? .M.\)) '
+(ABHA Address: 91-4521-8932-1049@abdm) '
+(Age / Gender: 56 Y / Female) '
+(Primary Language: Telugu \(Rayalaseema Dialect\)) '
+() '
+(INDIC VERNACULAR NARRATIVE & ONTOLOGY RESOLUTION) '
+(Chief Complaint: Gundello dadaga undi, raatri poota baaga dammu vastondi.) '
+(Mapped Findings:) '
+(  * Gundello Dada \(Palpitations\): WHO ICD-10 R00.2 | SNOMED-CT 80313002) '
+(  * Dammu / Aayasam \(Bronchial Dyspnea\): WHO ICD-10 J45.901 | SNOMED-CT 267036007) '
+() '
+(PHYSICAL ACOUSTIC TELEMETRY \(2048-pt FFT DSP ENGINE\)) '
+(-------------------------------------------------------) '
+(Biomarker Parameter          Measured Value    Clinical Baseline) '
+(-------------------------------------------------------) '
+(Fundamental Pitch \(F0\)       120.4 Hz          85 - 255 Hz) '
+(Pitch Jitter \(Relative\)      2.42%             < 1.04% [ELEVATED]) '
+(Amplitude Shimmer \(Relative\) 5.18%             < 3.81% [ELEVATED]) '
+(Harmonics-to-Noise \(HNR\)     14.2 dB           > 20.0 dB [TURBULENT]) '
+(Acoustic Distress Index      64 / 100          < 30 \(Normal\)) '
+(-------------------------------------------------------) '
+() '
+(PHARMACOVIGILANCE & PMBJP JAN AUSHADHI FORMULARY) '
+(Prescription: Budesonide 200mcg + Formoterol 6mcg Inhaler) '
+(Jan Aushadhi Substitution: PMBJP Code #1842) '
+(Cost Comparison: Brand Rs. 640.00 vs Jan Aushadhi Rs. 120.00 \(81.2% Savings\)) '
+(Drug-Drug Interactions: None detected against hypertensive baseline.) '
+() '
+(Attending Physician: Dr. K. S. Venkatesh, MD \(Pulmonology\)) '
+(NMC Reg No: 48921-AP | Signature: Verified Digital E-Sign) '
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000309 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2293
+%%EOF
