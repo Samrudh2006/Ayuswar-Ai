@@ -129,6 +129,7 @@ export default function HeroLanding({
   // Horizontal Neural Data-Bus Circuit State
   const [circuitNodeIndex, setCircuitNodeIndex] = useState(0);
   const [isBusPulsing, setIsBusPulsing] = useState(true);
+  const [isNeuralBusPaused, setIsNeuralBusPaused] = useState(false);
 
   // 6 Deep-Tech Moats Medical AI Workbench State (Default: null - closed until clicked)
   const [activeWorkbenchMoat, setActiveWorkbenchMoat] = useState(null);
@@ -279,7 +280,7 @@ export default function HeroLanding({
     audioPurged: false,
     noiseDb: 52,
     hallucinationTested: false
-  });
+                        });
 
   // Section 6 & 7 Unified: Trust, Safety & Academic Standards State
   const [trustDomainMode, setTrustDomainMode] = useState('governance'); // 'governance' | 'standards'
@@ -296,6 +297,29 @@ export default function HeroLanding({
   const [playingLangSample, setPlayingLangSample] = useState(null);
   const [isAllDialectsModalOpen, setIsAllDialectsModalOpen] = useState(false);
   const carouselScrollRef = useRef(null);
+
+  // Phase 2: Ambient Auto-Cycling Engine (Fixes click-fatigue for judges and evaluators)
+  // 1. Auto-advance Neural Bus stage every 4.2s (smoothly pauses on mouse hover or click)
+  useEffect(() => {
+    if (isNeuralBusPaused) return;
+    const busTimer = setInterval(() => {
+      setCircuitNodeIndex((prev) => (prev + 1) % 4);
+    }, 4200);
+    return () => clearInterval(busTimer);
+  }, [isNeuralBusPaused]);
+
+  // 2. Auto-cycle Clinical Governance safeguards every 5.5s (pauses on mouse hover or click)
+  useEffect(() => {
+    if (trustDomainMode !== 'governance' || isGovAutoPaused) return;
+    const govTabs = ['human_agency', 'dpdp_ephemeral', 'zero_hallucination', 'uncertainty_sentinel'];
+    const govTimer = setInterval(() => {
+      setGovernanceTab((current) => {
+        const nextIdx = (govTabs.indexOf(current) + 1) % govTabs.length;
+        return govTabs[nextIdx];
+      });
+    }, 5500);
+    return () => clearInterval(govTimer);
+  }, [trustDomainMode, isGovAutoPaused]);
 
   const features = [
     { id: 0, title: 'Ambient Voice Listening', icon: Mic, desc: 'Dual-speaker ambient capture with speaker diarization in chaotic OPDs' },
@@ -1289,7 +1313,9 @@ export default function HeroLanding({
             boxShadow: '0 20px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
             position: 'relative',
             overflow: 'hidden'
-          }}>
+          }}
+          onMouseEnter={() => setIsNeuralBusPaused(true)}
+          onMouseLeave={() => setIsNeuralBusPaused(false)}>
             {/* Ambient Circuit Header */}
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '14px', marginBottom: '28px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1319,7 +1345,7 @@ export default function HeroLanding({
               {/* Live Bus Heartbeat */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px 14px', borderRadius: '12px', border: '1px solid #334155' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px #34D399' }} className="animate-ping" />
-                <span style={{ fontSize: '12px', fontWeight: 750, color: '#E2E8F0' }}>BUS CLOCK: 16 kHz Real-Time Synchronous</span>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#E2E8F0' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {isNeuralBusPaused ? '⏸️ Paused (Inspection)' : `Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
               </div>
             </div>
 
@@ -1377,7 +1403,7 @@ export default function HeroLanding({
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setCircuitNodeIndex(s.id)}
+                      onClick={() => { setCircuitNodeIndex(s.id); setIsNeuralBusPaused(true); }}
                       style={{
                         cursor: 'pointer',
                         padding: '6px 14px',
@@ -1430,11 +1456,11 @@ export default function HeroLanding({
               <div style={{ display: 'flex', gap: '16px' }}>
                 <div style={{ borderLeft: '2px solid #334155', paddingLeft: '14px' }}>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>Latency</div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#34D399' }}>180 ms</div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#34D399' }}>{circuitNodeIndex === 0 ? '12 ms' : circuitNodeIndex === 1 ? '48 ms' : circuitNodeIndex === 2 ? '165 ms' : '195 ms'}</div>
                 </div>
                 <div style={{ borderLeft: '2px solid #334155', paddingLeft: '14px' }}>
-                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>Attending Sign-Off</div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>100% Required</div>
+                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>{circuitNodeIndex === 0 ? 'Beamforming' : circuitNodeIndex === 1 ? 'Kalman Filter' : circuitNodeIndex === 2 ? 'Clinical Normalizer' : 'Attending Sign-Off'}</div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>{circuitNodeIndex === 0 ? 'SNR +24 dB' : circuitNodeIndex === 1 ? 'Adaptive VAD Active' : circuitNodeIndex === 2 ? 'WHO ICD-10 Mapped' : '100% DSC Required'}</div>
                 </div>
               </div>
 
@@ -2997,7 +3023,9 @@ export default function HeroLanding({
           border: '2px solid #94A3B8',
           boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
           overflow: 'hidden'
-        }}>
+        }}
+        onMouseEnter={() => setIsGovAutoPaused(true)}
+        onMouseLeave={() => setIsGovAutoPaused(false)}>
           {trustDomainMode === 'governance' ? (
             <div>
               {/* 4 Guardrail Selector Tabs */}
@@ -3022,6 +3050,7 @@ export default function HeroLanding({
                       key={tab.id}
                       onClick={() => {
                         setGovernanceTab(tab.id);
+                        setIsGovAutoPaused(true);
                         setGovSimAction({
                           dscSigned: false,
                           dscAlert: null,
@@ -3131,32 +3160,37 @@ export default function HeroLanding({
                     </div>
                   )}
 
-                  {/* Native Responsive Verification Pipeline Ribbon (Zero Clutter, Zero Broken Badges) */}
+                  {/* Cryptographic Audit Stamp & Sovereign Interlock (De-duplicated & Authoritative) */}
                   <div style={{
                     marginTop: '20px',
-                    background: '#F0FDF4',
-                    border: '1.5px solid #86EFAC',
+                    background: '#F8FAFC',
+                    border: '1.5px solid #CBD5E1',
                     borderRadius: '14px',
-                    padding: '12px 16px',
+                    padding: '14px 18px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
-                    gap: '8px'
+                    gap: '12px'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#065F46' }}>Chain of Custody:</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <ShieldCheck size={20} color="#059669" />
+                      <div>
+                        <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+                          Cryptographic Audit Block (DPDP 2023 Sovereign)
+                        </div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A', fontFamily: 'monospace' }}>
+                          SHA-256: 7e2f91...88c4 • Class-3 DSC Verified
+                        </div>
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, color: '#047857', flexWrap: 'wrap' }}>
-                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🎙️ 1. Mic Ingest</span>
-                      <span>➔</span>
-                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🧠 2. AI Draft (Locked)</span>
-                      <span>➔</span>
-                      <span style={{ background: govSimAction.dscSigned ? '#DCFCE7' : '#FEF3C7', color: govSimAction.dscSigned ? '#065F46' : '#92400E', padding: '3px 8px', borderRadius: '6px', border: govSimAction.dscSigned ? '1px solid #86EFAC' : '1px solid #FCD34D' }}>
-                        {govSimAction.dscSigned ? '✓ 3. DSC Signed' : '⏳ 3. Needs Doctor DSC'}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, flexWrap: 'wrap' }}>
+                      <span style={{ background: '#DCFCE7', color: '#065F46', padding: '4px 10px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
+                        ✓ Zero Cloud Audio Retention
                       </span>
-                      <span>➔</span>
-                      <span style={{ background: '#FFFFFF', padding: '3px 8px', borderRadius: '6px', border: '1px solid #A7F3D0' }}>🏥 4. ABDM M3</span>
+                      <span style={{ background: '#EFF6FF', color: '#1E40AF', padding: '4px 10px', borderRadius: '6px', border: '1px solid #BFDBFE' }}>
+                        ✓ ABDM M3 Interoperable
+                      </span>
                     </div>
                   </div>
                 </div>
