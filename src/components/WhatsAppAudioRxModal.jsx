@@ -1201,11 +1201,6 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 <span>Notes (.txt)</span>
               </button>
             </div>
-              >
-                <Download size={14} />
-                <span>Download Audio-Rx Note</span>
-              </button>
-            </div>
 
             {sendSuccessToast && (
               <div style={{
