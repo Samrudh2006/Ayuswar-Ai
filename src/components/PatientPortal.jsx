@@ -65,6 +65,7 @@ import BotanicalWatermark from './BotanicalWatermark';
 import MintIvoryWaveBackground from './MintIvoryWaveBackground';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
+import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 
 /**
  * PatientPortal Component — Complete Enterprise Citizen Healthcare Operating System
@@ -1199,9 +1200,23 @@ export default function PatientPortal({
                         🌿 ఆయురారోగ్యాలు (Ayur-Arogya)
                       </span>
                     </div>
-                    <p style={{ fontSize: '13.5px', color: '#475569', marginTop: '5px', fontWeight: 500 }}>
+                    <p style={{ fontSize: '13.5px', color: '#475569', marginTop: '5px', fontWeight: 500, marginBottom: '6px' }}>
                       Your personalized citizen health locker & vernacular ambient care companion.
                     </p>
+                    <AbdmRegistryBadgeRow
+                      abhaNumber={activeDemoPatient?.abhaNumber || abhaId}
+                      abhaAddress={activeDemoPatient?.abhaAddress}
+                      hprId={activeDemoPatient?.hprId || assignedDoctor?.hprId || 'HPR-IN-2024-99824'}
+                      doctorName={activeDemoPatient?.doctorName || assignedDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+                      hfrId={activeDemoPatient?.hfrId || 'HFR-AP-KRN-0042'}
+                      facilityName={activeDemoPatient?.facilityName || assignedDoctor?.facility || 'Kurnool Model Rural PHC'}
+                      icd10={activeDemoPatient?.icd10}
+                      icd10Desc={activeDemoPatient?.icd10Desc}
+                      snomedCt={activeDemoPatient?.snomedCt}
+                      snomedDesc={activeDemoPatient?.snomedDesc}
+                      compact={false}
+                      style={{ marginTop: '6px' }}
+                    />
                   </div>
                 </div>
 

@@ -37,6 +37,7 @@ import {
   Globe
 } from 'lucide-react';
 import AuthenticQrCode from './AuthenticQrCode';
+import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import { 
@@ -863,20 +864,34 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </div>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <h1 style={{ fontSize: '18px', color: '#091E26', fontWeight: 850, margin: 0 }}>
                   {currentEncounter.patient.name}
                 </h1>
                 <span style={{ fontSize: '11.5px', background: '#F1F5F9', color: '#475569', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
                   {currentEncounter.patient.gender}, {currentEncounter.patient.age}y
                 </span>
-                <span style={{ fontSize: '11px', background: 'rgba(212, 175, 55, 0.15)', color: '#854D0E', border: '1px solid #FDE047', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>
-                  ABHA: {currentEncounter.patient.abhaId}
+                <span style={{ fontSize: '11px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '10px', fontWeight: 750 }}>
+                  OPD Token #{101 + selectedEncounterIndex}
                 </span>
               </div>
-              <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 0 0' }}>
-                OPD Token #{101 + selectedEncounterIndex} • Facility: {currentEncounter.patient.location} • Attending: <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}</strong>
+              <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 4px 0' }}>
+                Facility: {currentEncounter.patient.location} • Attending: <strong>{doctorProfile?.doctorName || currentEncounter.patient.doctorName || 'Dr. Priya Sharma, MD'}</strong>
               </p>
+              <AbdmRegistryBadgeRow
+                abhaNumber={currentEncounter.patient.abhaNumber || currentEncounter.patient.abhaId}
+                abhaAddress={currentEncounter.patient.abhaAddress}
+                hprId={doctorProfile?.hprId || currentEncounter.patient.hprId || 'HPR-IN-2024-99824'}
+                doctorName={doctorProfile?.doctorName || currentEncounter.patient.doctorName || 'Dr. Priya Sharma, MD'}
+                hfrId={currentEncounter.patient.hfrId || 'HFR-AP-KRN-0042'}
+                facilityName={currentEncounter.patient.facilityName || currentEncounter.patient.location}
+                icd10={currentEncounter.patient.icd10 || currentEncounter.vernacularMappings?.[0]?.icd10}
+                icd10Desc={currentEncounter.patient.icd10Desc || currentEncounter.vernacularMappings?.[0]?.clinicalTerm}
+                snomedCt={currentEncounter.patient.snomedCt || currentEncounter.vernacularMappings?.[0]?.snomed}
+                snomedDesc={currentEncounter.patient.snomedDesc || currentEncounter.vernacularMappings?.[0]?.clinicalTerm}
+                compact={true}
+                style={{ marginTop: '2px' }}
+              />
             </div>
           </div>
 

@@ -62,6 +62,7 @@ import PatientAnalyticsCard from './PatientAnalyticsCard';
 import { DIAGNOSTIC_REPORTS_DATABASE } from '../data/diagnosticReportsDataset';
 import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
+import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 
 /**
  * DoctorPortal Component — Complete Enterprise Physician Operating System
@@ -384,6 +385,16 @@ export default function DoctorPortal({
       phone: dp.phone,
       village: dp.village,
       abhaId: dp.abhaId,
+      abhaNumber: dp.abhaNumber || dp.abhaId,
+      abhaAddress: dp.abhaAddress || (dp.abhaId ? `${dp.abhaId.slice(-4)}@abdm` : 'citizen@abdm'),
+      hprId: dp.hprId || 'HPR-IN-2024-99824',
+      doctorName: dp.doctorName || 'Dr. Priya Sharma, MD',
+      hfrId: dp.hfrId || 'HFR-AP-KRN-0042',
+      facilityName: dp.facilityName || 'Kurnool Model Rural PHC',
+      icd10: dp.icd10,
+      icd10Desc: dp.icd10Desc,
+      snomedCt: dp.snomedCt,
+      snomedDesc: dp.snomedDesc,
       chiefComplaint: latestComplaint,
       conditions: dp.conditions || [],
       primaryCondition: dp.primaryCondition,
@@ -418,7 +429,17 @@ export default function DoctorPortal({
     language: rp.language || 'Telugu',
     phone: rp.phone || '+91-9XXX-XXX-099',
     village: rp.village || 'Primary Health Centre',
-    abhaId: rp.abhaId || `DEMO-ABHA-91-${2000 + idx}`,
+    abhaId: rp.abhaId || `91-${2000 + idx}-8842-1049`,
+    abhaNumber: rp.abhaNumber || rp.abhaId || `91-${2000 + idx}-8842-1049`,
+    abhaAddress: rp.abhaAddress || `citizen${idx + 1}@abdm`,
+    hprId: 'HPR-IN-2024-99824',
+    doctorName: 'Dr. Priya Sharma, MD',
+    hfrId: 'HFR-AP-KRN-0042',
+    facilityName: 'Kurnool Model Rural PHC',
+    icd10: 'Z00.00',
+    icd10Desc: 'General adult medical examination',
+    snomedCt: '308335008',
+    snomedDesc: 'Patient encounter (procedure)',
     chiefComplaint: `${rp.condition || 'Consultation'} (${rp.relation || 'Registered Citizen'})`,
     conditions: [rp.condition || 'General OPD Consultation'],
     primaryCondition: rp.condition || 'Consultation',
@@ -2535,11 +2556,26 @@ export default function DoctorPortal({
                                   </span>
                                 </div>
                                 <div style={{ fontSize: '12px', color: '#64748B', marginTop: '3px' }}>
-                                  ABHA: <code>{pat.abhaId}</code> • {pat.age} y • {pat.gender} • {pat.language}
+                                  {pat.age} y • {pat.gender} • {pat.language} • {pat.village}
                                 </div>
-                                <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '4px' }}>
+                                <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '3px' }}>
                                   Chief Complaint: {appt.complaint}
                                 </div>
+                                <AbdmRegistryBadgeRow
+                                  abhaNumber={pat.abhaNumber || pat.abhaId}
+                                  abhaAddress={pat.abhaAddress}
+                                  hprId={pat.hprId}
+                                  doctorName={pat.doctorName}
+                                  hfrId={pat.hfrId}
+                                  facilityName={pat.facilityName}
+                                  icd10={pat.icd10}
+                                  icd10Desc={pat.icd10Desc}
+                                  snomedCt={pat.snomedCt}
+                                  snomedDesc={pat.snomedDesc}
+                                  compact={true}
+                                  onToast={setFhirToast}
+                                  style={{ marginTop: '5px' }}
+                                />
                               </div>
                             </div>
 
@@ -2707,6 +2743,21 @@ export default function DoctorPortal({
                               <div style={{ fontSize: '12.5px', color: '#475569', marginTop: '3px' }}>
                                 <strong>{formatDemoDate(item.offsetDays)} at {item.time}</strong> • {item.complaint}
                               </div>
+                              <AbdmRegistryBadgeRow
+                                abhaNumber={matchedPatient.abhaNumber || matchedPatient.abhaId}
+                                abhaAddress={matchedPatient.abhaAddress}
+                                hprId={matchedPatient.hprId}
+                                doctorName={matchedPatient.doctorName}
+                                hfrId={matchedPatient.hfrId}
+                                facilityName={matchedPatient.facilityName}
+                                icd10={matchedPatient.icd10}
+                                icd10Desc={matchedPatient.icd10Desc}
+                                snomedCt={matchedPatient.snomedCt}
+                                snomedDesc={matchedPatient.snomedDesc}
+                                compact={true}
+                                onToast={setFhirToast}
+                                style={{ marginTop: '5px' }}
+                              />
                             </div>
                           </div>
 
@@ -2862,11 +2913,26 @@ export default function DoctorPortal({
                               </span>
                             </div>
                             <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
-                              ABHA: <code>{pat.abhaId}</code> • {pat.age} y • {pat.gender} • {pat.language}
+                              {pat.age} y • {pat.gender} • {pat.language} • {pat.village}
                             </div>
-                            <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '4px' }}>
+                            <div style={{ fontSize: '12.5px', color: '#1E293B', fontWeight: 600, marginTop: '3px' }}>
                               Chief Complaint: {pat.chiefComplaint}
                             </div>
+                            <AbdmRegistryBadgeRow
+                              abhaNumber={pat.abhaNumber || pat.abhaId}
+                              abhaAddress={pat.abhaAddress}
+                              hprId={pat.hprId}
+                              doctorName={pat.doctorName}
+                              hfrId={pat.hfrId}
+                              facilityName={pat.facilityName}
+                              icd10={pat.icd10}
+                              icd10Desc={pat.icd10Desc}
+                              snomedCt={pat.snomedCt}
+                              snomedDesc={pat.snomedDesc}
+                              compact={false}
+                              onToast={setFhirToast}
+                              style={{ marginTop: '6px' }}
+                            />
                           </div>
                         </div>
 
@@ -4951,11 +5017,23 @@ export default function DoctorPortal({
                   <SampleDataChip />
                 </div>
                 <div style={{ fontSize: '12.5px', color: '#64748B', marginTop: '4px' }}>
-                  ID: <code style={{ fontWeight: 800, color: '#0F4C5C' }}>{selectedPatientModal.id}</code> • Token: <strong>{selectedPatientModal.token}</strong> • {selectedPatientModal.age} y • {selectedPatientModal.gender} • {selectedPatientModal.language}
+                  ID: <code style={{ fontWeight: 800, color: '#0F4C5C' }}>{selectedPatientModal.id}</code> • Token: <strong>{selectedPatientModal.token}</strong> • {selectedPatientModal.age} y • {selectedPatientModal.gender} • {selectedPatientModal.language} • {selectedPatientModal.village}
                 </div>
-                <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
-                  Health ID: <code>{selectedPatientModal.abhaId}</code> • {selectedPatientModal.village}
-                </div>
+                <AbdmRegistryBadgeRow
+                  abhaNumber={selectedPatientModal.abhaNumber || selectedPatientModal.abhaId}
+                  abhaAddress={selectedPatientModal.abhaAddress}
+                  hprId={selectedPatientModal.hprId}
+                  doctorName={selectedPatientModal.doctorName}
+                  hfrId={selectedPatientModal.hfrId}
+                  facilityName={selectedPatientModal.facilityName}
+                  icd10={selectedPatientModal.icd10}
+                  icd10Desc={selectedPatientModal.icd10Desc}
+                  snomedCt={selectedPatientModal.snomedCt}
+                  snomedDesc={selectedPatientModal.snomedDesc}
+                  compact={false}
+                  onToast={setFhirToast}
+                  style={{ marginTop: '8px' }}
+                />
               </div>
               <button 
                 onClick={() => setSelectedPatientModal(null)} 

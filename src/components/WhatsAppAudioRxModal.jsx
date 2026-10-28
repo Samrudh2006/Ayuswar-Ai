@@ -24,6 +24,7 @@ import {
 import { speechService } from '../services/indicSpeechService';
 import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
 import { cleanTextForSpeech } from '../utils/speechSanitizer';
+import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 
 /**
  * WhatsAppAudioRxModal Component
@@ -605,6 +606,20 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   <div style={{ fontSize: '11px', color: '#64748B' }}>
                     ABHA: {patient.abhaId} • {patient.age}y {patient.gender}
                   </div>
+                  <AbdmRegistryBadgeRow
+                    abhaNumber={patient.abhaNumber || patient.abhaId}
+                    abhaAddress={patient.abhaAddress}
+                    hprId={patient.hprId || 'HPR-IN-2024-99824'}
+                    doctorName={doctorName || patient.doctorName || 'Dr. Priya Sharma, MD'}
+                    hfrId={patient.hfrId || 'HFR-AP-KRN-0042'}
+                    facilityName={patient.facilityName || 'Kurnool Model Rural PHC'}
+                    icd10={patient.icd10}
+                    icd10Desc={patient.icd10Desc}
+                    snomedCt={patient.snomedCt}
+                    snomedDesc={patient.snomedDesc}
+                    compact={true}
+                    style={{ marginTop: '4px' }}
+                  />
                 </div>
 
                 <div>
