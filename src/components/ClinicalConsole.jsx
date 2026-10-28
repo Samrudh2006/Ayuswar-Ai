@@ -706,6 +706,11 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       return;
     }
 
+    // Force stop any active microphone recording to prevent loopback
+    if (isRecording) {
+      handleStopRecording();
+    }
+
     setIsPlayingAudioRx(true);
     setKaraokeActiveIndex(0);
 
@@ -736,6 +741,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
     // Synthesize voice note using speechService (Routes to /api/gnani/tts with GNANI_API_KEY)
     try {
       await speechService.speak(editableBestMatter, {
+        channel: 'opd_audio_rx',
         langCode: selectedLanguage,
         rate: playbackSpeed,
         onStart: (info) => {

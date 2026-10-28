@@ -559,6 +559,7 @@ export default function SanjivaniEmergencyAssistant({
               if (reply && isAiVoiceReplyEnabled && !isAudioMuted) {
                 setVoiceState('SPEAKING');
                 await speechService.speak(reply, {
+                  channel: 'sanjivani_emergency',
                   langCode: 'en-IN',
                   onStart: () => setVoiceState('SPEAKING'),
                   onEnd: () => setVoiceState('IDLE')
@@ -619,6 +620,7 @@ export default function SanjivaniEmergencyAssistant({
     setVoiceState('SPEAKING');
 
     await speechService.speak(greeting, {
+      channel: 'sanjivani_emergency',
       langCode: 'te-IN',
       onStart: () => setVoiceState('SPEAKING'),
       onEnd: () => {
@@ -741,6 +743,7 @@ export default function SanjivaniEmergencyAssistant({
     if (reply) {
       setVoiceState('SPEAKING');
       await speechService.speak(reply, {
+        channel: 'sanjivani_emergency',
         langCode: 'en-IN',
         onStart: () => setVoiceState('SPEAKING'),
         onEnd: () => setVoiceState(isHandsFreeLiveTalk ? 'LISTENING' : 'IDLE')

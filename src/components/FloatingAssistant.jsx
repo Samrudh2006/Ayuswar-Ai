@@ -189,17 +189,22 @@ export default function FloatingAssistant({
   const speakOutLoud = (text, genId = activeSpeechGenRef.current) => {
     if (!isAiVoiceEnabled || isMuted) return;
     speechService.speak(text, {
+      channel: 'floating_assistant',
       langCode: speechLanguage || 'en-IN',
-      strictGnani: true,
       rate: 1.02,
       pitch: 1.0,
+      onStart: () => {
+        if (activeSpeechGenRef.current === genId) {
+          setAssistantState('speaking');
+        }
+      },
       onEnd: () => {
         if (activeSpeechGenRef.current === genId) {
           setAssistantState('expanded');
         }
       },
       onError: (err) => {
-        console.warn('Gnani voice notification:', err);
+        console.warn('Voice notification:', err);
         if (activeSpeechGenRef.current === genId) {
           setAssistantState('expanded');
         }
@@ -269,6 +274,7 @@ export default function FloatingAssistant({
       }
     } else {
       // User initiates speaking -> timer starts at 00:00
+      speechService.stopSpeaking();
       speechSessionDispatchedRef.current = false;
       setIsMeSpeaking(true);
       setAssistantState('listening');

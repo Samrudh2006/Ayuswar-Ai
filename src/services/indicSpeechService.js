@@ -13,6 +13,63 @@
  */
 import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer.js';
 
+/**
+ * Global Sovereign Audio Mutex Coordinator
+ * Enforces a single active voice/sound channel across AyuSwar AI:
+ * - 'sanjivani_emergency': 108 emergency telephony and live guidance
+ * - 'opd_audio_rx': OPD Clinical Console voice note & WhatsApp Audio-Rx
+ * - 'floating_assistant': Global AI Assistant voice
+ * - 'acoustic_lab': 48kHz physical phonation DSP analysis & telemetry readout
+ */
+class GlobalAudioCoordinator {
+  constructor() {
+    this.activeChannel = null;
+    this.channelStopCallbacks = new Map();
+  }
+
+  registerChannel(channelName, stopCallback) {
+    if (channelName && typeof stopCallback === 'function') {
+      this.channelStopCallbacks.set(channelName, stopCallback);
+    }
+  }
+
+  unregisterChannel(channelName) {
+    this.channelStopCallbacks.delete(channelName);
+  }
+
+  acquireLock(channelName = 'speech_service') {
+    for (const [name, stopFn] of this.channelStopCallbacks.entries()) {
+      if (name !== channelName && typeof stopFn === 'function') {
+        try {
+          stopFn();
+        } catch (err) {
+          console.warn(`[AudioCoordinator] Error stopping channel ${name}:`, err);
+        }
+      }
+    }
+    this.activeChannel = channelName;
+  }
+
+  releaseLock(channelName = 'speech_service') {
+    if (this.activeChannel === channelName) {
+      this.activeChannel = null;
+    }
+  }
+
+  stopAll() {
+    for (const [name, stopFn] of this.channelStopCallbacks.entries()) {
+      try {
+        stopFn();
+      } catch (err) {
+        console.warn(`[AudioCoordinator] Error stopping channel ${name}:`, err);
+      }
+    }
+    this.activeChannel = null;
+  }
+}
+
+export const globalAudioCoordinator = new GlobalAudioCoordinator();
+
 export const GNANI_TIMBRE_V2_VOICES = [
   'Nalini', 'Bhavna', 'Yashvi', 'Urmila', 'Jwala', 'Chitra', 'Ambuja', 'Deepak', 'Roopesh', 'Vikrant', 
   'Hemraj', 'Jalaj', 'Omkar', 'Aarohi', 'Bhavini', 'Charvi', 'Eishani', 'Falguni', 'Gauri', 'Iravati', 
@@ -315,6 +372,9 @@ export class IndicSpeechService {
     this.currentlySpeakingText = '';
     this.currentlySpeakingWords = [];
     this.lastSpeechEndTime = 0;
+
+    // Register with Global Audio Coordinator for single-channel mutex
+    globalAudioCoordinator.registerChannel('speech_service', () => this.stopSpeaking());
   }
 
   /**
@@ -526,6 +586,9 @@ export class IndicSpeechService {
 
     const { rate, pitch } = this.calculateAdaptiveProsody(options.rate || 0.95, options.pitch || 1.0);
 
+    const channel = options.channel || 'speech_service';
+    globalAudioCoordinator.acquireLock(channel);
+
     this.stopSpeaking();
     this.isSpeaking = true;
     this.currentlySpeakingText = String(cleanSpeechText).toLowerCase();
@@ -710,7 +773,7 @@ export class IndicSpeechService {
     }
 
     // 2. Visible Browser Web Speech Fallback
-    if (options.strictGnani) {
+    if (options.strictGnani && options.suppressBrowserFallback) {
       console.warn('Strict Gnani mode active: suppressing Edge browser voice fallback.');
       this.isSpeaking = false;
       this.lastSpeechEndTime = Date.now();
@@ -1027,24 +1090,20 @@ export class IndicSpeechService {
         const spoken = (interim || final).trim();
         if (!spoken) return;
 
-        // Acoustic Echo Filter: Ignore speaker feedback of assistant's own voice
-        const isEcho = this.isAcousticEcho(spoken);
-
-        // Voice Barge-In:
+        // Half-Duplex Echo Blanking (Clinical Telephony Shield):
+        // 1. While assistant is actively speaking, freeze/blank recognition input
+        // to prevent phone/laptop speaker audio from cutting off speech or causing dual-talk.
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (isEcho) {
-            // Discard speaker echo: do not interrupt assistant, do not display on screen
-            return;
-          }
-
-          // Genuine caller interruption: user spoke words that differ from the assistant's speech!
-          if (spoken.length >= 2) {
-            this.interruptAssistant('user_voice_bargein');
-          }
           return;
         }
 
-        // Post-speech echo window: discard trailing reverberations of assistant voice
+        // 2. Post-speech echo-settling window (350ms): discard lingering room reverberation
+        if (Date.now() - this.lastSpeechEndTime < 350) {
+          return;
+        }
+
+        // 3. Acoustic Echo Filter: Ignore delayed speaker reverberations of assistant's own voice
+        const isEcho = this.isAcousticEcho(spoken);
         if (Date.now() - this.lastSpeechEndTime < 1500 && isEcho) {
           return;
         }
@@ -1220,27 +1279,20 @@ export class IndicSpeechService {
         const currentText = (finalTranscript || interimTranscript || '').trim();
         if (!currentText) return;
 
-        // Acoustic Echo Suppression:
-        const isEcho = this.isAcousticEcho(currentText);
-
-        // If assistant is currently speaking:
+        // Half-Duplex Echo Blanking (Clinical Telephony Shield):
+        // 1. While assistant is actively speaking, freeze/blank incoming speech recognition
+        // This guarantees Dr. Sanjivani will NEVER be interrupted by her own voice echoing from laptop/phone speakers!
         if (this.isSpeaking || this.conversationState === 'SPEAKING') {
-          if (isEcho) {
-            // Discard speaker echo! Do NOT display on screen and do NOT interrupt assistant!
-            return;
-          }
-
-          // User spoke genuine words to interrupt the assistant!
-          const userSpoke = (interimTranscript && interimTranscript.trim().length >= 2) || (finalTranscript && finalTranscript.trim().length >= 2);
-          if (userSpoke) {
-            this.interruptAssistant('user_voice_bargein');
-            onTranscript({ finalTranscript, interimTranscript });
-            pendingUtterance = currentText;
-          }
           return;
         }
 
-        // Discard post-speech reverberations of assistant voice
+        // 2. Post-speech echo-settling window (350ms): discard lingering room reverberation
+        if (Date.now() - this.lastSpeechEndTime < 350) {
+          return;
+        }
+
+        // 3. Acoustic Echo Suppression: Discard delayed reverberations of assistant voice
+        const isEcho = this.isAcousticEcho(currentText);
         if (Date.now() - this.lastSpeechEndTime < 1500 && isEcho) {
           return;
         }

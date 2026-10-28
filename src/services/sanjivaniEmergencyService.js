@@ -14,6 +14,7 @@
 
 import { EVON_MODEL_METADATA } from './gnaniEvonService.js';
 import { cleanTextForSpeech, getBestVoice } from '../utils/speechSanitizer.js';
+import { speechService } from './indicSpeechService.js';
 
 export function isWithinIndia(lat, lon) {
   const nLat = Number(lat);
@@ -597,20 +598,17 @@ class SanjivaniAudioSynthesizer {
     }
   }
 
-  // Speaks guidance using browser SpeechSynthesis with full markdown/special char sanitization
+  // Speaks guidance using unified Indic Speech Service (coordinating mutex and echo blanking)
   speakGuidance(text) {
-    if (!window.speechSynthesis || !text) return;
+    if (!text || typeof window === 'undefined') return;
     try {
-      window.speechSynthesis.cancel();
       const clean = cleanTextForSpeech(text);
       if (!clean) return;
-      const utter = new SpeechSynthesisUtterance(clean);
-      utter.rate = 0.94; // Calm, clear clinical pacing
-      utter.pitch = 1.0;
-      const voices = window.speechSynthesis.getVoices();
-      const best = getBestVoice(voices, 'en-IN');
-      if (best) utter.voice = best;
-      window.speechSynthesis.speak(utter);
+      speechService.speak(clean, {
+        channel: 'sanjivani_guidance',
+        rate: 0.94,
+        pitch: 1.0
+      });
     } catch (e) {
       console.warn('Speech synthesis error:', e);
     }
@@ -985,14 +983,15 @@ export async function intimateAndBookHospitalEmergencyBed({
   // Play audio radio dispatch chime
   sanjivaniAudio.playRadioChime();
 
-  // Synthesize Pre-Arrival Radio Broadcast via SpeechSynthesis if available
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(
-      `Hospital Intimation Confirmed. Emergency bed locked at ${hospital.name}. Trauma bay notified.`
+  // Synthesize Pre-Arrival Radio Broadcast via unified Indic Speech Service
+  if (typeof window !== 'undefined') {
+    speechService.speak(
+      `Hospital Intimation Confirmed. Emergency bed locked at ${hospital.name}. Trauma bay notified.`,
+      {
+        channel: 'sanjivani_guidance',
+        rate: 1.05
+      }
     );
-    utterance.rate = 1.05;
-    window.speechSynthesis.speak(utterance);
   }
 
   return panBriefing;

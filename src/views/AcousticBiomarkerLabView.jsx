@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { analyzeAcousticSignals, ACOUSTIC_CLUSTER_PROFILES } from '../services/clinicalMlInferenceEngine';
-import { speechService } from '../services/indicSpeechService';
+import { speechService, globalAudioCoordinator } from '../services/indicSpeechService';
 import { reasonAcousticBiomarkerWithEvon } from '../services/gnaniEvonService';
 import EvonStatusChip from '../components/EvonStatusChip';
 import { earshotDescribe, earshotMatch } from '../services/acousticReasoningService';
@@ -125,14 +125,23 @@ export default function AcousticBiomarkerLabView() {
       ? `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb || 'unavailable'} decibels.`
       : `Acoustic Phonation Telemetry. Audio is unvoiced with spectral centroid of ${dspMetrics.spectralCentroid || 'unavailable'} Hertz. Fundamental pitch frequency is unavailable.`;
 
+    const wasRecordingMic = isRecordingMic && !isSamplingAudio;
+    if (wasRecordingMic) {
+      stopAllAudio();
+    }
+
     setIsSpeakingReadout(true);
     await speechService.speak(readoutText, {
+      channel: 'acoustic_lab_readout',
       langCode: 'en-IN',
       onStart: (info) => {
         setReadoutProvider(info?.provider || 'browser_fallback');
       },
       onEnd: () => {
         setIsSpeakingReadout(false);
+        if (wasRecordingMic) {
+          handleToggleLiveMic();
+        }
       },
       onError: () => {
         setIsSpeakingReadout(false);
@@ -222,6 +231,7 @@ export default function AcousticBiomarkerLabView() {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
     }
+    globalAudioCoordinator.releaseLock('acoustic_lab');
     setIsRecordingMic(false);
     setIsPlayingSound(false);
     setIsToneActive(false);
@@ -266,6 +276,9 @@ export default function AcousticBiomarkerLabView() {
       return;
     }
 
+    globalAudioCoordinator.acquireLock('acoustic_lab');
+    speechService.stopSpeaking();
+    speechService.stopConversationalSession();
     stopAllAudio();
 
     try {
@@ -292,6 +305,9 @@ export default function AcousticBiomarkerLabView() {
       return;
     }
 
+    globalAudioCoordinator.acquireLock('acoustic_lab');
+    speechService.stopSpeaking();
+    speechService.stopConversationalSession();
     stopAllAudio();
     handleReset();
 

@@ -389,6 +389,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
 
     // Speak using Unified Indic Speech Service (Gnani Timbre TTS when live / safe browser fallback)
     speechService.speak(currentRx.speechText, {
+      channel: 'opd_audio_rx',
       langCode: currentRx.langCode,
       rate: audioPlaybackRate,
       onEnd: () => stopAudio(),
