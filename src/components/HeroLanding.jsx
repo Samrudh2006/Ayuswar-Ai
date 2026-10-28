@@ -1654,7 +1654,7 @@ export default function HeroLanding({
                 id: 'metaphor_resolver',
                 num: '4',
                 title: '4. Indic Metaphor',
-                badge: '22 Dialects',
+                badge: '12 Indic Dialects',
                 col: '#8B5CF6',
                 gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)',
                 icon: Languages,
@@ -2521,7 +2521,7 @@ export default function HeroLanding({
                     </span>
                   </div>
                   <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '3px 8px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
-                    ✓ 22 Languages Supported
+                    ✓ 6 Live Streams • 12 Gnani Models
                   </span>
                 </div>
 
@@ -2645,7 +2645,7 @@ export default function HeroLanding({
                 color: '#64748B',
                 fontWeight: 650
               }}>
-                <span>🎙️ Browser speech (Web Speech API). Gnani voice integration: planned</span>
+                <span>🎙️ Client-Side Web Speech Synthesis • Gnani Timbre Neural Voice: Planned</span>
                 <span style={{ color: '#0F4C5C', fontWeight: 800 }}>⚡ Browser Client Speech</span>
               </div>
             </div>
@@ -2685,7 +2685,7 @@ export default function HeroLanding({
                   </button>
                   <div>
                     <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#2DD4BF', letterSpacing: '1px' }}>
-                      Browser speech (Web Speech API). Gnani voice integration: planned
+                      Interactive Vernacular Audio-Rx Stream
                     </div>
                     <div style={{ fontSize: '16px', fontWeight: 800, color: '#F8FAFC' }}>
                       {activeDialectId === 'te' && 'Telugu Spoken Schedule: Dr. Ananya Voice'}
@@ -3507,7 +3507,7 @@ export default function HeroLanding({
                         Browser Speech Recognition & Planned Indic ASR
                       </h3>
                       <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                        Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
+                        Client-side Web Speech API prototype with planned Gnani Indic ASR integration. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
                       </p>
                       <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
                         • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
@@ -3525,7 +3525,7 @@ export default function HeroLanding({
                         Spoken Audio-Rx Schedule Synthesis (Prototype)
                       </h3>
                       <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
-                        Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
+                        Client-side SpeechSynthesis prototype with planned Gnani Timbre neural voice integration. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
                       </p>
                       <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
                         • <strong>Engine:</strong> Browser SpeechSynthesis API<br />

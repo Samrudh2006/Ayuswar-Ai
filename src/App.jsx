@@ -3,14 +3,15 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-
 import Navbar from './components/Navbar';
 import HeroLanding from './components/HeroLanding';
 import FloatingAssistant from './components/FloatingAssistant';
-import DoctorAuthModal from './components/DoctorAuthModal';
-import PatientAuthModal from './components/PatientAuthModal';
-import WhatsAppAudioRxModal from './components/WhatsAppAudioRxModal';
-import MobileInnovationHubModal from './components/MobileInnovationHubModal';
-import TeleconsultModal from './components/TeleconsultModal';
-import VitalsRppgModal from './components/VitalsRppgModal';
-import PillVisionScannerModal from './components/PillVisionScannerModal';
-import LiveScribeSessionModal from './components/LiveScribeSessionModal';
+// Lazy-loaded on-demand modals for ultra-fast initial page load
+const DoctorAuthModal = lazyWithRetry(() => import('./components/DoctorAuthModal'));
+const PatientAuthModal = lazyWithRetry(() => import('./components/PatientAuthModal'));
+const WhatsAppAudioRxModal = lazyWithRetry(() => import('./components/WhatsAppAudioRxModal'));
+const MobileInnovationHubModal = lazyWithRetry(() => import('./components/MobileInnovationHubModal'));
+const TeleconsultModal = lazyWithRetry(() => import('./components/TeleconsultModal'));
+const VitalsRppgModal = lazyWithRetry(() => import('./components/VitalsRppgModal'));
+const PillVisionScannerModal = lazyWithRetry(() => import('./components/PillVisionScannerModal'));
+const LiveScribeSessionModal = lazyWithRetry(() => import('./components/LiveScribeSessionModal'));
 import SeoHead from './components/SeoHead';
 import MobilePwaInstallBanner from './components/MobilePwaInstallBanner';
 import DemoRecordingOverlay from './components/DemoRecordingOverlay';
@@ -514,14 +515,15 @@ export default function App() {
         </React.Suspense>
       )}
 
-      {/* Clinician Authentication & OPD Login Modal */}
-      {isDoctorAuthModalOpen && (
-        <DoctorAuthModal
-          isOpen={isDoctorAuthModalOpen}
-          onClose={() => setIsDoctorAuthModalOpen(false)}
-          onLoginSuccess={handleDoctorLoginSuccess}
-        />
-      )}
+      <React.Suspense fallback={null}>
+        {/* Clinician Authentication & OPD Login Modal */}
+        {isDoctorAuthModalOpen && (
+          <DoctorAuthModal
+            isOpen={isDoctorAuthModalOpen}
+            onClose={() => setIsDoctorAuthModalOpen(false)}
+            onLoginSuccess={handleDoctorLoginSuccess}
+          />
+        )}
 
       {/* Patient ABHA Citizen Login Modal */}
       {isPatientAuthModalOpen && (
@@ -629,15 +631,16 @@ export default function App() {
         />
       )}
 
-      {/* Phase 2: Live Ambient Voice Scribe Session Modal */}
-      {isLiveScribeOpen && currentPatient && (
-        <LiveScribeSessionModal 
-          isOpen={isLiveScribeOpen}
-          onClose={() => setIsLiveScribeOpen(false)}
-          patientData={currentPatient}
-          doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
-        />
-      )}
+        {/* Phase 2: Live Ambient Voice Scribe Session Modal */}
+        {isLiveScribeOpen && currentPatient && (
+          <LiveScribeSessionModal 
+            isOpen={isLiveScribeOpen}
+            onClose={() => setIsLiveScribeOpen(false)}
+            patientData={currentPatient}
+            doctorName={currentDoctor?.doctorName || 'Dr. Priya Sharma, MD'}
+          />
+        )}
+      </React.Suspense>
 
 
       {/* Demo Recording Mode Overlay (Active only with ?demo-record=1) */}
