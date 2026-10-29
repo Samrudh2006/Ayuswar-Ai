@@ -2484,6 +2484,105 @@ body {
     width: 100% !important;
     box-sizing: border-box !important;
   }
+
+  /* Patient Portal Mobile Header & Profile */
+  .patient-header-settings-btn {
+    display: none !important;
+  }
+
+  .patient-header-profile-chevron {
+    display: none !important;
+  }
+
+  /* Doctor & Patient Mobile Sidebar Drawers */
+  .doctor-portal-aside,
+  .patient-portal-aside {
+    width: min(85vw, 340px) !important;
+    left: -360px !important;
+  }
+
+  .doctor-portal-aside.mobile-open,
+  .patient-portal-aside.mobile-open {
+    left: 0 !important;
+  }
+
+  /* Patient Portal Responsive Grids & Mobile Stacks */
+  .patient-quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
+  }
+
+  .patient-dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+  }
+
+  .patient-vitals-summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .patient-vitals-history-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .patient-goals-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .patient-bp-subgrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .patient-time-slots-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .patient-settings-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .patient-settings-subgrid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .patient-vitals-modal-grid-2,
+  .patient-vitals-modal-grid-3,
+  .patient-report-modal-grid,
+  .patient-med-modal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .patient-summary-slip-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .patient-report-actions-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
 }
 
 .opd-tab-label-full {

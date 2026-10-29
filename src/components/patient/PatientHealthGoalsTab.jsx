@@ -150,7 +150,7 @@ export default function PatientHealthGoalsTab({
       )}
 
       {/* 3x3 Clinical Goals Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px' }}>
+      <div className="patient-goals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', width: '100%' }}>
         
         {/* 1. Daily Walking & Steps Goal */}
         <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -316,7 +316,7 @@ export default function PatientHealthGoalsTab({
               Resting Heart Rate: <strong>{restingPulse} bpm</strong> (Normal Sinus Rhythm)
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', marginBottom: '12px' }}>
+            <div className="patient-bp-subgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', marginBottom: '12px', width: '100%' }}>
               <div>
                 <label style={{ fontSize: '10px', color: '#64748B', fontWeight: 700 }}>Systolic</label>
                 <input

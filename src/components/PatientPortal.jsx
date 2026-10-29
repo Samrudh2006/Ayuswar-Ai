@@ -1105,8 +1105,9 @@ export default function PatientPortal({
           </div>
 
           {/* Right Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button 
+              className="patient-header-settings-btn"
               onClick={() => setActiveTab('settings')}
             style={{ 
               cursor: 'pointer',
@@ -1127,6 +1128,7 @@ export default function PatientPortal({
           </button>
 
           <button 
+            className="patient-header-notifications-btn"
             onClick={() => setIsNotificationsDrawerOpen(true)}
             style={{ 
               position: 'relative', 
@@ -1161,7 +1163,13 @@ export default function PatientPortal({
           {/* Profile Trigger */}
           <div 
             className="patient-header-profile-badge"
-            onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            onClick={() => {
+              if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                setMobileDrawerOpen(true);
+              } else {
+                setIsProfileMenuOpen(!isProfileMenuOpen);
+              }
+            }}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -1196,7 +1204,7 @@ export default function PatientPortal({
               <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24', whiteSpace: 'nowrap' }}>{patientName}</div>
               <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>{abhaId}</div>
             </div>
-            <ChevronDown size={14} color="#64748B" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', flexShrink: 0 }} />
+            <ChevronDown className="patient-header-profile-chevron" size={14} color="#64748B" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', flexShrink: 0 }} />
 
             {/* Profile Dropdown Menu */}
             {isProfileMenuOpen && (
@@ -1390,11 +1398,12 @@ export default function PatientPortal({
               </div>
 
               {/* 4 Action Quick Cards */}
-              <div style={{
+              <div className="patient-quick-actions-grid" style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '18px',
-                marginBottom: '26px'
+                marginBottom: '26px',
+                width: '100%'
               }}>
                 <div 
                   onClick={() => setActiveTab('appointments')} 
@@ -1490,7 +1499,7 @@ export default function PatientPortal({
               </div>
 
               {/* Middle Section: Left (Appointments, Vitals, Reports) | Right (Chat, Goals, Doctor card) */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.08fr 0.92fr', gap: '22px', marginBottom: '26px' }}>
+              <div className="patient-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1.08fr 0.92fr', gap: '22px', marginBottom: '26px', width: '100%' }}>
                 {/* Left Column */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   {/* Upcoming Appointments */}
@@ -1571,7 +1580,7 @@ export default function PatientPortal({
                       <span onClick={() => setActiveTab('my_health')} style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View Details →</span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+                    <div className="patient-vitals-summary-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', width: '100%' }}>
                       <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Heart Rate</div>
@@ -1634,7 +1643,7 @@ export default function PatientPortal({
                           background: '#FAF8F5',
                           border: '1px solid #F1F5F9'
                         }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <span>{rep.icon}</span>
                             <div>
                               <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24' }}>{rep.title}</div>
@@ -2031,7 +2040,7 @@ export default function PatientPortal({
                 )}
 
                 {/* Vitals History Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                <div className="patient-vitals-history-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px', width: '100%' }}>
                   {vitalsHistory.map((v, i) => {
                     const isReportSource = v.sourceType === 'report';
                     return (
@@ -2204,7 +2213,7 @@ export default function PatientPortal({
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Activity size={22} color="#2DD4BF" />
                         <div>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
@@ -2238,7 +2247,7 @@ export default function PatientPortal({
                     {/* Form Body */}
                     <form onSubmit={handleSaveManualVitals} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {/* Date & Recording Context */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div className="patient-vitals-modal-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%' }}>
                         <div>
                           <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                             Measurement Date
@@ -2326,7 +2335,7 @@ export default function PatientPortal({
                       </div>
 
                       {/* Pulse & SpO2 & Weight */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                      <div className="patient-vitals-modal-grid-3" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', width: '100%' }}>
                         <div>
                           <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '4px' }}>
                             Pulse / HR (bpm)
@@ -2525,7 +2534,7 @@ export default function PatientPortal({
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Calendar size={22} color="#2DD4BF" />
                         <div>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
@@ -2614,7 +2623,7 @@ export default function PatientPortal({
                         <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                           Select Preferred Time Slot
                         </label>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                        <div className="patient-time-slots-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', width: '100%' }}>
                           {['09:30 AM', '10:15 AM', '11:30 AM', '02:30 PM', '03:15 PM', '04:00 PM', '05:00 PM', '06:00 PM'].map(slot => (
                             <button
                               key={slot}
@@ -3092,7 +3101,7 @@ export default function PatientPortal({
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <button
                         onClick={() => handlePlayVoicePrescription(selectedLanguage === 'Telugu' ? rep.spokenTelugu : rep.spokenHindi)}
                         style={{
@@ -3173,7 +3182,7 @@ export default function PatientPortal({
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <UploadCloud size={22} color="#2DD4BF" />
                         <div>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
@@ -3432,7 +3441,7 @@ export default function PatientPortal({
                       )}
 
                       {/* Title & Date */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '12px' }}>
+                      <div className="patient-report-modal-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '12px', width: '100%' }}>
                         <div>
                           <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                             Report Name / Test Type
@@ -3789,7 +3798,7 @@ export default function PatientPortal({
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Pill size={22} color="#2DD4BF" />
                         <div>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
@@ -3835,7 +3844,7 @@ export default function PatientPortal({
                       </div>
 
                       {/* Chronotherapy Slot */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div className="patient-med-modal-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%' }}>
                         <div>
                           <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
                             Timing Slot
@@ -3972,7 +3981,7 @@ export default function PatientPortal({
                     flexWrap: 'wrap',
                     gap: '10px'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <ShieldCheck size={18} color={ddiAlerts.length > 0 ? '#DC2626' : '#15803D'} />
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: ddiAlerts.length > 0 ? '#991B1B' : '#166534' }}>
@@ -4325,7 +4334,7 @@ export default function PatientPortal({
               )}
 
               {/* Settings Sections Grid (2 Columns) */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '22px' }}>
+              <div className="patient-settings-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '22px', width: '100%' }}>
                 
                 {/* 1. AyuSwar Indic Voice & Dialect Engine */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
@@ -4366,7 +4375,7 @@ export default function PatientPortal({
                     </select>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '14px' }}>
+                  <div className="patient-settings-subgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '14px', width: '100%' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#081C24', marginBottom: '6px' }}>
                         Voice Persona & Tone (Browser Speech)
@@ -4849,17 +4858,21 @@ export default function PatientPortal({
               </div>
 
               {/* Patient Barcode & Demographics Grid */}
-              <div style={{
-                background: '#FAF8F5',
-                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
-                borderRadius: '10px',
-                padding: '12px 16px',
-                marginBottom: '18px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '12px',
-                fontSize: '12px'
-              }}>
+              <div 
+                className="patient-summary-slip-grid"
+                style={{
+                  background: '#FAF8F5',
+                  border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                  borderRadius: '10px',
+                  padding: '12px 16px',
+                  marginBottom: '18px',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
+                  gap: '12px',
+                  fontSize: '12px',
+                  width: '100%'
+                }}
+              >
                 <div>
                   <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>PATIENT NAME</span>
                   <strong style={{ color: '#081C24', fontSize: '13px' }}>{patientName}</strong>
