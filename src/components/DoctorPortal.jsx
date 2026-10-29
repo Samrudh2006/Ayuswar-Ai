@@ -24,6 +24,10 @@ import {
   Stethoscope, 
   Pill, 
   BookOpen, 
+  LayoutGrid,
+  FlaskConical,
+  ClipboardPlus,
+  BookOpenCheck,
   Settings, 
   Home, 
   Database,
@@ -1049,14 +1053,30 @@ export default function DoctorPortal({
             )}
           </div>
 
-          {/* Navigation Items (All 8 Sidebar Items) */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {/* Section Category Header (Matching User Design) */}
+          {!isCollapsedView && (
+            <div style={{
+              fontSize: '11px',
+              fontWeight: 750,
+              letterSpacing: '0.8px',
+              textTransform: 'uppercase',
+              color: '#64748B',
+              paddingLeft: '6px',
+              marginBottom: '14px',
+              fontFamily: 'Outfit, sans-serif'
+            }}>
+              Clinical Workspace
+            </div>
+          )}
+
+          {/* Navigation Items (Exact Lucide Icons & Sizing Matching User Design) */}
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             {[
-              { id: 'dashboard', label: 'Dashboard', icon: Home },
+              { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
               { id: 'opd_queue', label: 'OPD Queue & Patients', icon: Users },
-              { id: 'reports', label: 'Reports & Lab', icon: FileText },
-              { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
-              { id: 'clinical_library', label: 'Clinical Library', icon: BookOpen },
+              { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
+              { id: 'prescriptions', label: 'Prescriptions', icon: ClipboardPlus },
+              { id: 'clinical_library', label: 'Clinical Library', icon: BookOpenCheck },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(item => {
               const Icon = item.icon;
@@ -1070,23 +1090,26 @@ export default function DoctorPortal({
                   }}
                   title={item.label}
                   style={{
+                    position: 'relative',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: isCollapsedView ? 'center' : 'flex-start',
-                    gap: isCollapsedView ? '0' : '12px',
-                    padding: isCollapsedView ? '10px 0' : '10px 14px',
-                    borderRadius: '10px',
+                    gap: isCollapsedView ? '0' : '14px',
+                    padding: isCollapsedView ? '12px 0' : '12px 14px',
+                    borderRadius: '12px',
                     border: 'none',
                     background: isActive ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
-                    color: isActive ? '#0F4C5C' : '#475569',
+                    color: isActive ? '#0F4C5C' : '#1E293B',
                     fontFamily: 'Outfit, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: isActive ? 700 : 500,
+                    fontSize: '15px',
+                    fontWeight: isActive ? 750 : 600,
                     cursor: 'pointer',
                     textAlign: 'left',
                     transition: 'all 160ms ease',
                     whiteSpace: 'nowrap',
-                    boxShadow: 'none'
+                    width: '100%',
+                    boxShadow: 'none',
+                    overflow: 'hidden'
                   }}
                   onMouseEnter={e => {
                     if (!isActive) {
@@ -1097,17 +1120,80 @@ export default function DoctorPortal({
                   onMouseLeave={e => {
                     if (!isActive) {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#475569';
+                      e.currentTarget.style.color = '#1E293B';
                     }
                   }}
                 >
-                  <Icon size={18} color={isActive ? '#0F4C5C' : '#64748B'} />
-                  {!isCollapsedView && <span>{item.label}</span>}
+                  {/* Distinctive Teal Active Left Accent Bar (Matching User Design) */}
+                  {isActive && !isCollapsedView && (
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: '4px',
+                      background: '#0F4C5C',
+                      borderRadius: '4px 0 0 4px'
+                    }} />
+                  )}
+                  <Icon size={20} color={isActive ? '#0F4C5C' : '#1E293B'} strokeWidth={isActive ? 2.2 : 1.8} style={{ flexShrink: 0 }} />
+                  {!isCollapsedView && <span style={{ fontSize: '15px', fontWeight: isActive ? 750 : 600 }}>{item.label}</span>}
                 </button>
               );
             })}
+          </nav>
+        </div>
 
-            {/* Dedicated Single Drawer Logout (No Role Switcher) */}
+        {/* Bottom Clinician Workspace & Preferences Card (Matching User Image) */}
+        {!isCollapsedView ? (
+          <div style={{ width: '100%' }}>
+            <div style={{ borderTop: '1px solid #E2E8F0', margin: '14px 0 10px 0' }} />
+            <div 
+              onClick={() => {
+                setActiveTab('settings');
+                setMobileDrawerOpen(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 12px',
+                borderRadius: '12px',
+                background: '#FAF8F5',
+                border: '1px solid #E2E8F0',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              title="Physician Credentials & Settings"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  border: '2px solid #0F4C5C',
+                  flexShrink: 0
+                }}>
+                  <img 
+                    src="/assets/dr_ananya_avatar.jpg" 
+                    alt={doctorName} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                </div>
+                <div style={{ minWidth: 0, textAlign: 'left' }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Clinician Workspace
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>
+                    Account & preferences
+                  </div>
+                </div>
+              </div>
+              <ChevronRight size={16} color="#64748B" />
+            </div>
+
+            {/* Prominent Clean Logout */}
             <button
               onClick={() => {
                 setMobileDrawerOpen(false);
@@ -1118,60 +1204,68 @@ export default function DoctorPortal({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: isCollapsedView ? 'center' : 'flex-start',
-                gap: isCollapsedView ? '0' : '12px',
-                padding: isCollapsedView ? '10px 0' : '10px 14px',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '9px 12px',
                 borderRadius: '10px',
                 border: '1px solid rgba(220, 38, 38, 0.25)',
                 background: 'rgba(254, 242, 242, 0.75)',
                 color: '#DC2626',
                 fontFamily: 'Outfit, sans-serif',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: 700,
                 cursor: 'pointer',
-                textAlign: 'left',
                 transition: 'all 160ms ease',
-                whiteSpace: 'nowrap',
-                marginTop: '10px'
+                marginTop: '8px'
               }}
             >
-              <LogOut size={18} color="#DC2626" />
-              {!isCollapsedView && <span>Logout</span>}
+              <LogOut size={15} color="#DC2626" />
+              <span>Logout</span>
             </button>
-          </nav>
-        </div>
-
-        {/* Bottom Co-Pilot Card */}
-        {!isCollapsedView ? (
-          <div style={{
-            background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
-            borderRadius: '14px',
-            padding: '14px',
-            border: '1px solid #B2E5E5',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              fontSize: '14px',
-              fontWeight: 800,
-              fontFamily: 'Outfit, sans-serif',
-              color: '#081C24',
-              marginBottom: '2px'
-            }}>
-              AyuSwar AI
-            </div>
-            <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.35 }}>
-              Your AI co-pilot for better healthcare
-            </div>
           </div>
         ) : (
           <div style={{
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            gap: '10px',
             padding: '8px 0',
-            color: '#0F4C5C'
-          }} title="AyuSwar AI Co-pilot">
-            <Sparkles size={20} />
+            borderTop: '1px solid #E2E8F0'
+          }}>
+            <div 
+              onClick={() => setActiveTab('settings')}
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                border: '2px solid #0F4C5C',
+                cursor: 'pointer'
+              }}
+              title="Clinician Workspace"
+            >
+              <img 
+                src="/assets/dr_ananya_avatar.jpg" 
+                alt={doctorName} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />
+            </div>
+            <button
+              onClick={() => {
+                if (onLogoutDoctor) onLogoutDoctor();
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#DC2626',
+                cursor: 'pointer',
+                padding: '4px'
+              }}
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         )}
       </aside>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Home, 
+  LayoutGrid,
+  FlaskConical,
+  ClipboardPlus,
   Heart, 
   Calendar, 
   FileText, 
@@ -826,20 +829,36 @@ export default function PatientPortal({
               <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             {!isCollapsedView && (
-              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '21px', fontWeight: 800, color: '#091E26', whiteSpace: 'nowrap' }}>
+              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#091E26', whiteSpace: 'nowrap' }}>
                 Ayu<span style={{ color: '#0F4C5C' }}>Swar</span> <span style={{ color: '#D4AF37' }}>AI</span>
               </div>
             )}
           </div>
 
-          {/* Navigation Items (All 8 Patient Sidebar Items) */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {/* Section Category Header (Matching User Design) */}
+          {!isCollapsedView && (
+            <div style={{
+              fontSize: '11px',
+              fontWeight: 750,
+              letterSpacing: '0.8px',
+              textTransform: 'uppercase',
+              color: '#64748B',
+              paddingLeft: '6px',
+              marginBottom: '14px',
+              fontFamily: 'Outfit, sans-serif'
+            }}>
+              Citizen Workspace
+            </div>
+          )}
+
+          {/* Navigation Items (Exact Lucide Icons & Sizing Matching User Design) */}
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             {[
-              { id: 'home', label: 'Home', icon: Home },
+              { id: 'home', label: 'Dashboard', icon: LayoutGrid },
               { id: 'my_health', label: 'My Health', icon: Heart },
               { id: 'appointments', label: 'Appointments', icon: Calendar },
-              { id: 'reports', label: 'Reports', icon: FileText },
-              { id: 'medications', label: 'Medications', icon: Pill },
+              { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
+              { id: 'medications', label: 'Prescriptions', icon: ClipboardPlus },
               { id: 'health_goals', label: 'Health Goals', icon: Target },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(item => {
@@ -854,64 +873,185 @@ export default function PatientPortal({
                   }}
                   title={item.label}
                   style={{
+                    position: 'relative',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: isCollapsedView ? 'center' : 'flex-start',
-                    gap: isCollapsedView ? '0' : '12px',
-                    padding: isCollapsedView ? '10px 0' : '10px 14px',
+                    gap: isCollapsedView ? '0' : '14px',
+                    padding: isCollapsedView ? '12px 0' : '12px 14px',
                     borderRadius: '12px',
                     border: 'none',
-                    background: isActive ? 'rgba(15, 76, 92, 0.1)' : 'transparent',
-                    color: isActive ? '#0F4C5C' : '#475569',
+                    background: isActive ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
+                    color: isActive ? '#0F4C5C' : '#1E293B',
                     fontFamily: 'Outfit, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: isActive ? 750 : 500,
+                    fontSize: '15px',
+                    fontWeight: isActive ? 750 : 600,
                     cursor: 'pointer',
                     textAlign: 'left',
-                    transition: 'all 160ms ease'
+                    transition: 'all 160ms ease',
+                    whiteSpace: 'nowrap',
+                    width: '100%',
+                    boxShadow: 'none',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'rgba(15, 76, 92, 0.04)';
+                      e.currentTarget.style.color = '#0F4C5C';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#1E293B';
+                    }
                   }}
                 >
-                  <Icon size={18} color={isActive ? '#0F4C5C' : '#64748B'} />
-                  {!isCollapsedView && <span>{item.label}</span>}
+                  {/* Distinctive Teal Active Left Accent Bar (Matching User Design) */}
+                  {isActive && !isCollapsedView && (
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: '4px',
+                      background: '#0F4C5C',
+                      borderRadius: '4px 0 0 4px'
+                    }} />
+                  )}
+                  <Icon size={20} color={isActive ? '#0F4C5C' : '#1E293B'} strokeWidth={isActive ? 2.2 : 1.8} style={{ flexShrink: 0 }} />
+                  {!isCollapsedView && <span style={{ fontSize: '15px', fontWeight: isActive ? 750 : 600 }}>{item.label}</span>}
                 </button>
               );
             })}
           </nav>
         </div>
 
-        {/* Bottom Health Card */}
-        {isCollapsedView ? (
-          <div 
-            style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              padding: '12px 0', 
-              borderTop: '1px solid #E2E8F0' 
-            }}
-            title="AyuSwar Health Companion"
-          >
-            <Heart size={20} color="#0F4C5C" />
+        {/* Bottom Citizen Workspace & Preferences Card (Matching User Image) */}
+        {!isCollapsedView ? (
+          <div style={{ width: '100%' }}>
+            <div style={{ borderTop: '1px solid #E2E8F0', margin: '14px 0 10px 0' }} />
+            <div 
+              onClick={() => {
+                setActiveTab('settings');
+                setMobileDrawerOpen(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '10px 12px',
+                borderRadius: '12px',
+                background: '#FAF8F5',
+                border: '1px solid #E2E8F0',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              title="Citizen Health Records & Settings"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                <div style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #0F4C5C, #D4AF37)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  flexShrink: 0,
+                  border: '2px solid rgba(15, 76, 92, 0.2)'
+                }}>
+                  {patientName[0]}
+                </div>
+                <div style={{ minWidth: 0, textAlign: 'left' }}>
+                  <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Citizen Workspace
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>
+                    ABHA health records
+                  </div>
+                </div>
+              </div>
+              <ChevronRight size={16} color="#64748B" />
+            </div>
+
+            {/* Prominent Clean Logout */}
+            <button
+              onClick={() => {
+                setMobileDrawerOpen(false);
+                if (onLogoutPatient) onLogoutPatient();
+              }}
+              className="portal-drawer-logout-btn"
+              title="Logout from Patient Session"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '9px 12px',
+                borderRadius: '10px',
+                border: '1px solid rgba(220, 38, 38, 0.25)',
+                background: 'rgba(254, 242, 242, 0.75)',
+                color: '#DC2626',
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 160ms ease',
+                marginTop: '8px'
+              }}
+            >
+              <LogOut size={15} color="#DC2626" />
+              <span>Logout</span>
+            </button>
           </div>
         ) : (
           <div style={{
-            background: 'linear-gradient(135deg, #E6F7F7 0%, #D1F2F2 100%)',
-            borderRadius: '16px',
-            padding: '16px',
-            border: '1px solid #B2E5E5',
-            textAlign: 'center'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '8px 0',
+            borderTop: '1px solid #E2E8F0'
           }}>
-            <div style={{
-              fontSize: '14.5px',
-              fontWeight: 800,
-              fontFamily: 'Outfit, sans-serif',
-              color: '#081C24',
-              marginBottom: '4px'
-            }}>
-              Your health matters
+            <div 
+              onClick={() => setActiveTab('settings')}
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #0F4C5C, #D4AF37)',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '14px',
+                cursor: 'pointer'
+              }}
+              title="Citizen Workspace"
+            >
+              {patientName[0]}
             </div>
-            <div style={{ fontSize: '11px', color: '#006D6D', lineHeight: 1.4 }}>
-              AyuSwar is here for you, always.
-            </div>
+            <button
+              onClick={() => {
+                if (onLogoutPatient) onLogoutPatient();
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#DC2626',
+                cursor: 'pointer',
+                padding: '4px'
+              }}
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         )}
       </aside>

@@ -1182,6 +1182,11 @@ h6 {
     left: 0 !important;
   }
 
+  .doctor-portal-aside nav button,
+  .patient-portal-aside nav button {
+    box-sizing: border-box !important;
+  }
+
   .mobile-drawer-backdrop {
     display: block !important;
   }
