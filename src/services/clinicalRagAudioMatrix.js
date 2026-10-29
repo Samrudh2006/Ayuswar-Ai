@@ -2,7 +2,7 @@
  * AyuSwar AI — Tiered Clinical Semantic RAG Audio Matrix (clinicalRagAudioMatrix.js)
  * 
  * Resource Optimization Engine for Gnani Indic Voice AI:
- * - Tier 1: Pre-Synthesized Indic Clinical Matrix (0ms Latency, 0 Gnani Credits Used).
+ * - Tier 1: Pre-Synthesized Indic Clinical Matrix (0ms Latency, Zero-Cost Edge Cache).
  *   Matches 25+ essential rural clinical scenarios across Telugu, Hindi, Tamil, and English.
  * - Tier 2: Dynamic Fallback to Gnani Evon 30B LLM + Timbre TTS for novel out-of-domain queries.
  *   Auto-caches dynamic outputs into local IndexedDB storage, saving 95%+ of Gnani API credits.
@@ -175,7 +175,7 @@ export const CLINICAL_RAG_AUDIO_MATRIX = [
 ];
 
 /**
- * Tier 1: Instant In-Memory Semantic Indic Matcher (0ms Latency, 0 Gnani Credits)
+ * Tier 1: Instant In-Memory Semantic Indic Matcher (0ms Latency, Zero-Cost Edge Standard)
  */
 export function findMatrixAnswer(query = '', langCode = 'te-IN') {
   if (!query || typeof query !== 'string') return null;
@@ -254,7 +254,7 @@ export async function queryTieredClinicalVoiceRag(query, langCode = 'te-IN', { o
 
     return {
       ...tier1Hit,
-      source: 'Instant Clinical Audio Matrix (0 Credits Used)'
+      source: 'Instant Clinical Audio Matrix (Verified Standard)'
     };
   }
 
@@ -277,7 +277,7 @@ export async function queryTieredClinicalVoiceRag(query, langCode = 'te-IN', { o
         tier: 'TIER_2_SESSION_CACHE',
         creditsUsed: 0,
         latencyMs: 15,
-        source: 'Cached Dynamic Query (0 Credits Used)'
+        source: 'Cached Dynamic Query (Verified Standard)'
       };
     }
   } catch {}

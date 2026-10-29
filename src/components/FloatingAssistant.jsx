@@ -161,7 +161,7 @@ export default function FloatingAssistant({
     speechService.stopSpeaking();
     const currentGen = ++activeSpeechGenRef.current;
     
-    // Tier 1: Check Pre-Synthesized Instant Clinical RAG Matrix (0ms, 0 Gnani Credits)
+    // Tier 1: Check Pre-Synthesized Instant Clinical RAG Matrix (0ms Instant Response)
     const tier1 = findMatrixAnswer(queryText, selectedLanguage || 'te-IN');
     if (tier1) {
       if (activeSpeechGenRef.current !== currentGen) return;

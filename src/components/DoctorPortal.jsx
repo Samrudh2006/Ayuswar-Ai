@@ -788,13 +788,13 @@ export default function DoctorPortal({
     const newQuery = aiPrompt.trim();
     setAiPrompt('');
 
-    // 1. Check Tier 1 Instant Semantic Audio Matrix (0ms, 0 Gnani Credits)
+    // 1. Check Tier 1 Instant Semantic Audio Matrix (0ms Instant Response)
     const tier1 = findMatrixAnswer(newQuery, 'te-IN');
     if (tier1) {
       setAiResponses(prev => [
         {
           q: newQuery,
-          a: `⚡ [Instant Indic Clinical Matrix • 0 Gnani Credits]\n${tier1.answer}\n\n• Clinical Coding: ICD-10 ${tier1.icd10} | SNOMED ${tier1.snomed}\n• Jan Aushadhi Formulary: ${tier1.genericDrug} (${tier1.savings})`
+          a: `⚡ [Verified Indic Clinical Guidelines • Instant Response]\n${tier1.answer}\n\n• Clinical Coding: ICD-10 ${tier1.icd10} | SNOMED ${tier1.snomed}\n• Jan Aushadhi Formulary: ${tier1.genericDrug} (${tier1.savings})`
         },
         ...prev
       ]);

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Play, 
-  Pause, 
-  RotateCcw, 
-  CheckCircle2, 
-  Sparkles, 
-  FileText, 
-  ShieldCheck, 
-  Volume2, 
-  Clock, 
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  CheckCircle2,
+  Sparkles,
+  FileText,
+  ShieldCheck,
+  Volume2,
+  Clock,
   X,
   Stethoscope,
   TrendingDown,
@@ -108,7 +108,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
     setIsPlaying(false);
     try {
       speechService.stopSpeaking();
-    } catch {}
+    } catch { }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.pause();
     }
@@ -121,7 +121,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
     setIsCompleted(false);
     try {
       speechService.stopSpeaking();
-    } catch {}
+    } catch { }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
@@ -150,7 +150,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
           u.pitch = isDoctor ? 1.06 : 0.88;
           window.speechSynthesis.speak(u);
           audioUtteranceRef.current = u;
-        } catch {}
+        } catch { }
       }
     }
   };
@@ -228,7 +228,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="modal-overlay"
       style={{
         position: 'fixed',
@@ -242,7 +242,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
         padding: '16px'
       }}
     >
-      <div 
+      <div
         className="modal-content"
         style={{
           background: '#ffffff',
@@ -279,7 +279,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
               </div>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => { resetDemo(); onClose(); }}
             style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', padding: '4px' }}
           >
@@ -300,7 +300,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {!isPlaying ? (
-              <button 
+              <button
                 onClick={startDemo}
                 style={{
                   background: '#0F4C5C',
@@ -320,7 +320,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
                 <span>{currentLineIndex === -1 ? 'Start Live Scribe (ప్రారంభించు)' : 'Resume'}</span>
               </button>
             ) : (
-              <button 
+              <button
                 onClick={pauseDemo}
                 style={{
                   background: '#F59E0B',
@@ -341,7 +341,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
               </button>
             )}
 
-            <button 
+            <button
               onClick={resetDemo}
               style={{
                 background: '#E2E8F0',
@@ -422,7 +422,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
             const isLatest = idx === currentLineIndex;
 
             return (
-              <div 
+              <div
                 key={idx}
                 style={{
                   display: 'flex',
