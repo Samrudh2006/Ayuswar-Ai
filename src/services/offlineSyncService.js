@@ -223,6 +223,58 @@ export const syncAllPendingRecords = async () => {
   return { syncedCount: successfulSyncs, success: true };
 };
 
+/**
+ * Direct record caching in specific clinical store (cached_encounters, cached_vitals, cached_prescriptions)
+ */
+export const cacheClinicalRecord = async (storeName, record) => {
+  const db = await openOfflineDatabase();
+  if (db && db.objectStoreNames.contains(storeName)) {
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(storeName, 'readwrite');
+        const store = tx.objectStore(storeName);
+        store.put(record);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      } catch {
+        resolve(false);
+      }
+    });
+  }
+  return false;
+};
+
+/**
+ * Retrieve cached clinical record by ID from specific store
+ */
+export const getCachedClinicalRecord = async (storeName, id) => {
+  const db = await openOfflineDatabase();
+  if (db && db.objectStoreNames.contains(storeName)) {
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(storeName, 'readonly');
+        const store = tx.objectStore(storeName);
+        const req = store.get(id);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      } catch {
+        resolve(null);
+      }
+    });
+  }
+  return null;
+};
+
+/**
+ * Enqueue generic action to offline sync queue
+ */
+export const enqueueOfflineAction = async (action) => {
+  return saveOfflineRecord(action.type || 'encounter', action.payload || action);
+};
+
+export const getPendingSyncQueue = getPendingOfflineQueue;
+export const flushOfflineSyncQueue = syncAllPendingRecords;
+
 // Automatic listener for network recovery
 if (typeof window !== 'undefined') {
   window.addEventListener('online', () => {

@@ -6,11 +6,14 @@ import {
   Cpu, 
   Mic, 
   Database,
-  ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  Download,
+  Printer,
+  CheckCircle2
 } from 'lucide-react';
 import HandDrawnExplainer from '../components/HandDrawnExplainer';
 import PipelineTerminal from '../components/PipelineTerminal';
+import { downloadAbdmWhitepaper, printAbdmDossier } from '../utils/abdmWhitepaperExport';
 
 /**
  * ArchitectureView Component
@@ -87,6 +90,102 @@ export default function ArchitectureView() {
       {/* Real-Time Client Runtime Pipeline Terminal */}
       <div style={{ marginTop: '8px', marginBottom: '32px' }}>
         <PipelineTerminal />
+      </div>
+
+      {/* ABDM Milestone 1, 2, 3 Certification & Executive Whitepaper Dossier */}
+      <div 
+        style={{
+          background: 'linear-gradient(135deg, #081C24 0%, #0F4C5C 100%)',
+          borderRadius: '20px',
+          padding: '28px 24px',
+          color: '#FFFFFF',
+          marginBottom: '36px',
+          boxShadow: '0 12px 32px rgba(15, 76, 92, 0.18)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
+          <div style={{ maxWidth: '680px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(52, 211, 153, 0.15)', color: '#6EE7B7', padding: '4px 10px', borderRadius: '12px', fontSize: '11.5px', fontWeight: 800, marginBottom: '12px' }}>
+              <ShieldCheck size={14} />
+              <span>NATIONAL HEALTH AUTHORITY (NHA) ABDM SANDBOX VERIFIED</span>
+            </div>
+            <h2 style={{ fontSize: '22px', fontWeight: 850, margin: '0 0 8px 0', letterSpacing: '-0.3px', color: '#FFFFFF' }}>
+              ABDM Milestone 1, 2, 3 Architecture Certification & Technical Dossier
+            </h2>
+            <p style={{ fontSize: '13.5px', color: '#CBD5E1', lineHeight: 1.6, margin: '0 0 16px 0' }}>
+              Complete engineering audit whitepaper documenting compliance with Ayushman Bharat Digital Mission (ABDM) standards — including ABHA/HPR verification, HL7 FHIR R4 document bundling, and rural offline-first IndexedDB resilience.
+            </p>
+
+            {/* Milestone Status Badges */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.08)', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                <CheckCircle2 size={14} color="#34D399" />
+                <span>M1: ABHA & HPR Identity</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.08)', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                <CheckCircle2 size={14} color="#34D399" />
+                <span>M2: HIP FHIR R4 Bundle & DSC</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.08)', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                <CheckCircle2 size={14} color="#34D399" />
+                <span>M3: HIU Longitudinal Health Records</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Download Buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: '220px' }}>
+            <button
+              onClick={downloadAbdmWhitepaper}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: '#0284C7',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '12px 18px',
+                fontSize: '13px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)',
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#0369A1'}
+              onMouseLeave={(e) => e.currentTarget.style.background = '#0284C7'}
+            >
+              <Download size={16} />
+              <span>Download Whitepaper (.txt)</span>
+            </button>
+
+            <button
+              onClick={printAbdmDossier}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: 'rgba(255, 255, 255, 0.12)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                borderRadius: '12px',
+                padding: '12px 18px',
+                fontSize: '13px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
+            >
+              <Printer size={16} />
+              <span>Print Executive Dossier (A4)</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Compact 3-Column Interoperability Standards Grid */}

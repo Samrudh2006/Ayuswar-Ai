@@ -84,6 +84,18 @@ const ROUTE_METADATA = {
     description: 'Accessible patient portal for reviewing vernacular audio prescriptions, dosage reminder schedules, Jan Aushadhi cost savings, and Ayushman Bharat health records.',
     keywords: 'Patient Health Portal, ABHA Health Record, Vernacular Spoken Rx, Medicine Reminders, Ayushman Bharat Citizen App',
     section: 'Patient Portal'
+  },
+  '/auth/doctor': {
+    title: 'Clinician HPR Portal Authentication — AyuSwar AI Indic Healthcare',
+    description: 'Physician login and Healthcare Professional Registry (HPR) credential verification for AyuSwar AI ambient clinical operating system.',
+    keywords: 'Doctor Login, HPR Authentication, ABDM Clinician Access, Healthcare Professional Registry, Rural PHC Doctor Portal',
+    section: 'Authentication'
+  },
+  '/auth/patient': {
+    title: 'Citizen ABHA Health Record Authentication — AyuSwar AI',
+    description: 'Patient login via Ayushman Bharat Health Account (ABHA ID) for reviewing vernacular spoken audio prescriptions and lab reports.',
+    keywords: 'Patient Login, ABHA Authentication, Ayushman Bharat Health Account, Citizen Access, Audio Prescriptions',
+    section: 'Authentication'
   }
 };
 
@@ -131,13 +143,21 @@ export default function SeoHead() {
 
     // 3. Update Open Graph Protocol tags
     const canonicalUrl = `https://ayuswar-ai.vercel.app${pathname === '/' ? '' : pathname}`;
+    const socialImageUrl = 'https://ayuswar-ai.vercel.app/assets/ayuswar_master_emblem.png';
     setMetaTag('property', 'og:title', meta.title);
     setMetaTag('property', 'og:description', meta.description);
     setMetaTag('property', 'og:url', canonicalUrl);
+    setMetaTag('property', 'og:image', socialImageUrl);
+    setMetaTag('property', 'og:image:secure_url', socialImageUrl);
+    setMetaTag('property', 'og:image:type', 'image/png');
+    setMetaTag('property', 'og:image:width', '1200');
+    setMetaTag('property', 'og:image:height', '630');
 
     // 4. Update Twitter Card tags
+    setMetaTag('name', 'twitter:card', 'summary_large_image');
     setMetaTag('name', 'twitter:title', meta.title);
     setMetaTag('name', 'twitter:description', meta.description);
+    setMetaTag('name', 'twitter:image', socialImageUrl);
 
     // 5. Update Canonical link
     let canonicalLink = document.querySelector('link[rel="canonical"]');
