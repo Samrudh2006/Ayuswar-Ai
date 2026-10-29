@@ -333,7 +333,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+        <div className="clinical-ontology-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', width: '100%' }}>
           {filteredOntology.map(item => (
             <div
               key={item.id}
@@ -554,7 +554,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                   {selectedOntologyTerm.clinicalTerm}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '12px' }}>
+                <div className="clinical-ontology-modal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '12px' }}>
                   <div style={{ background: '#EFF6FF', padding: '10px', borderRadius: '8px', border: '1px solid #BFDBFE' }}>
                     <div style={{ fontSize: '10.5px', color: '#1E40AF', fontWeight: 750 }}>WHO ICD-10 Taxonomy</div>
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#1E3A8A', fontFamily: 'monospace', marginTop: '2px' }}>

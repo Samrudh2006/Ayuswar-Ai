@@ -634,6 +634,40 @@ export default function Navbar({
               )}
             </div>
 
+            {/* Mobile Doctor Portal Quick Action / Icon (Visible on Mobile Across Public Screens) */}
+            <button
+              type="button"
+              className="mobile-doctor-quick-btn"
+              onClick={() => {
+                if (doctorProfile) {
+                  navigate('/doctor-portal');
+                } else if (onOpenDoctorAuth) {
+                  onOpenDoctorAuth();
+                } else {
+                  navigate('/auth/doctor');
+                }
+              }}
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                gap: '5px',
+                padding: '6px 10px',
+                borderRadius: '8px',
+                border: isDoctorActive ? '1.5px solid #0F4C5C' : '1px solid rgba(15, 76, 92, 0.25)',
+                background: isDoctorActive ? '#0F4C5C' : 'rgba(15, 76, 92, 0.08)',
+                color: isDoctorActive ? '#ffffff' : '#0F4C5C',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+              title={doctorProfile ? `Signed in: ${doctorProfile.name || 'Doctor'}` : "Doctor Sign-In / OPD Portal"}
+              aria-label="Doctor Sign-In / OPD Portal"
+            >
+              <Stethoscope size={15} color={isDoctorActive ? '#ffffff' : '#0F4C5C'} />
+              <span>{doctorProfile ? 'OPD' : 'Doctor'}</span>
+            </button>
+
             {/* Mobile Hamburger Button */}
             <button
               type="button"

@@ -1106,6 +1106,38 @@ export default function DoctorPortal({
                 </button>
               );
             })}
+
+            {/* Dedicated Single Drawer Logout (No Role Switcher) */}
+            <button
+              onClick={() => {
+                setMobileDrawerOpen(false);
+                if (onLogoutDoctor) onLogoutDoctor();
+              }}
+              className="portal-drawer-logout-btn"
+              title="Logout from Doctor Session"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: isCollapsedView ? 'center' : 'flex-start',
+                gap: isCollapsedView ? '0' : '12px',
+                padding: isCollapsedView ? '10px 0' : '10px 14px',
+                borderRadius: '10px',
+                border: '1px solid rgba(220, 38, 38, 0.25)',
+                background: 'rgba(254, 242, 242, 0.75)',
+                color: '#DC2626',
+                fontFamily: 'Outfit, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                textAlign: 'left',
+                transition: 'all 160ms ease',
+                whiteSpace: 'nowrap',
+                marginTop: '10px'
+              }}
+            >
+              <LogOut size={18} color="#DC2626" />
+              {!isCollapsedView && <span>Logout</span>}
+            </button>
           </nav>
         </div>
 
@@ -1210,8 +1242,9 @@ export default function DoctorPortal({
         </div>
 
           {/* Profile, Switcher, Settings & Logout */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
             <button 
+              className="doctor-header-settings-btn"
               onClick={() => setActiveTab('settings')}
               style={{ 
                 cursor: 'pointer',
@@ -1232,6 +1265,7 @@ export default function DoctorPortal({
             </button>
 
             <button 
+              className="doctor-header-notifications-btn"
               onClick={() => setIsNotificationsDrawerOpen(true)}
               style={{ 
                 position: 'relative', 
@@ -1266,6 +1300,11 @@ export default function DoctorPortal({
             {/* Single Doctor Login Badge (No Switcher) */}
             <div 
               className="doctor-header-profile-badge"
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                  setMobileDrawerOpen(true);
+                }
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1275,11 +1314,13 @@ export default function DoctorPortal({
                 background: 'rgba(15, 76, 92, 0.06)',
                 border: '1.5px solid rgba(15, 76, 92, 0.22)',
                 minWidth: 0,
-                flexShrink: 1
+                flexShrink: 0,
+                cursor: 'pointer'
               }}
               title="Verified Physician ABDM Session (Single Doctor Login)"
             >
               <div style={{
+                position: 'relative',
                 width: '38px',
                 height: '38px',
                 borderRadius: '50%',
@@ -1292,8 +1333,18 @@ export default function DoctorPortal({
                   alt={doctorName} 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
+                <span style={{
+                  position: 'absolute',
+                  bottom: '1px',
+                  right: '1px',
+                  width: '9px',
+                  height: '9px',
+                  borderRadius: '50%',
+                  background: '#10B981',
+                  border: '1.5px solid #ffffff'
+                }} title="ABDM Active"></span>
               </div>
-              <div style={{ textAlign: 'left', minWidth: 0 }}>
+              <div className="doctor-header-profile-text" style={{ textAlign: 'left', minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap' }}>{doctorName}</span>
                 </div>
@@ -2353,20 +2404,25 @@ export default function DoctorPortal({
               })()}
 
               {/* View Selector Switcher */}
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'space-between', 
-                marginBottom: '20px', 
-                background: '#FAF8F5', 
-                padding: '8px 12px', 
-                borderRadius: '16px', 
-                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
-                flexWrap: 'wrap',
-                gap: '12px'
-              }}>
-                <div style={{ display: 'inline-flex', background: '#E2E8F0', padding: '4px', borderRadius: '12px', gap: '4px' }}>
+              <div 
+                className="opd-subview-tabs-container"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  marginBottom: '20px', 
+                  background: '#FAF8F5', 
+                  padding: '8px 12px', 
+                  borderRadius: '16px', 
+                  border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                  flexWrap: 'wrap',
+                  gap: '12px'
+                }}>
+                <div 
+                  className="opd-subview-tabs-group"
+                  style={{ display: 'inline-flex', background: '#E2E8F0', padding: '4px', borderRadius: '12px', gap: '4px' }}>
                   <button
+                    className="opd-subview-tab-btn"
                     onClick={() => setOpdViewMode('queue')}
                     style={{
                       padding: '8px 18px',
@@ -2384,10 +2440,12 @@ export default function DoctorPortal({
                     }}
                   >
                     <Clock size={14} />
-                    <span>Today's Live Queue ({allAppointmentsList.filter(a => a.offsetDays === 0).length})</span>
+                    <span className="opd-tab-label-full">Today's Live Queue ({allAppointmentsList.filter(a => a.offsetDays === 0).length})</span>
+                    <span className="opd-tab-label-compact">Live Queue ({allAppointmentsList.filter(a => a.offsetDays === 0).length})</span>
                   </button>
 
                   <button
+                    className="opd-subview-tab-btn"
                     onClick={() => setOpdViewMode('schedule')}
                     style={{
                       padding: '8px 18px',
@@ -2405,10 +2463,12 @@ export default function DoctorPortal({
                     }}
                   >
                     <Calendar size={14} />
-                    <span>Consultation Schedules ({allAppointmentsList.length})</span>
+                    <span className="opd-tab-label-full">Consultation Schedules ({allAppointmentsList.length})</span>
+                    <span className="opd-tab-label-compact">Schedules ({allAppointmentsList.length})</span>
                   </button>
 
                   <button
+                    className="opd-subview-tab-btn"
                     onClick={() => setOpdViewMode('directory')}
                     style={{
                       padding: '8px 18px',
@@ -2426,12 +2486,13 @@ export default function DoctorPortal({
                     }}
                   >
                     <Users size={14} />
-                    <span>All Patients Registry ({patientsList.length})</span>
+                    <span className="opd-tab-label-full">All Patients Registry ({patientsList.length})</span>
+                    <span className="opd-tab-label-compact">Registry ({patientsList.length})</span>
                   </button>
                 </div>
 
                 {/* Quick Search */}
-                <div style={{ position: 'relative', width: '260px' }}>
+                <div className="opd-subview-search-box" style={{ position: 'relative', width: '260px' }}>
                   <Search size={14} color="#64748B" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
                   <input
                     type="text"
@@ -4037,7 +4098,7 @@ export default function DoctorPortal({
                 </div>
 
                 {/* OCR Scanner Viewport & Extraction Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.4fr', gap: '16px' }}>
+                <div className="ayuvision-ocr-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.4fr', gap: '16px', width: '100%' }}>
                   {/* Scanner Visual Box */}
                   <div style={{
                     background: '#0B132B',
