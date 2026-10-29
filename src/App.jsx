@@ -87,7 +87,7 @@ function ScrollToTop() {
   return null;
 }
 
-import { useApp } from './context/AppContext';
+import { useApp, DEFAULT_DOCTOR_PROFILE, DEFAULT_PATIENT_PROFILE } from './context/AppContext';
 
 export default function App() {
   const navigate = useNavigate();
@@ -390,48 +390,36 @@ export default function App() {
             } 
           />
 
-          {/* Doctor & Patient Portals (Strict Authentication Required - Redirect to auth) */}
+          {/* Doctor & Patient Portals (Reliable Fallback Session Profile) */}
           <Route 
             path="/doctor-portal" 
             element={
-              currentDoctor ? (
-                <DoctorPortal 
-                  doctorProfile={currentDoctor} 
-                  onSelectEncounterAndLaunch={(idx) => navigate(idx !== undefined ? `/clinical-console?encounter=${idx}` : '/clinical-console')}
-                  onOpenTechModal={() => navigate('/technology')}
-                  onOpenDatasetModal={() => navigate('/datasets')}
-                  onLogoutDoctor={() => {
-                    setCurrentDoctor(null);
-                    navigate('/');
-                  }}
-                />
-              ) : (
-                <Navigate to="/auth/doctor" replace />
-              )
+              <DoctorPortal 
+                doctorProfile={currentDoctor || DEFAULT_DOCTOR_PROFILE} 
+                onSelectEncounterAndLaunch={(idx) => navigate(idx !== undefined ? `/clinical-console?encounter=${idx}` : '/clinical-console')}
+                onOpenTechModal={() => navigate('/technology')}
+                onOpenDatasetModal={() => navigate('/datasets')}
+                onLogoutDoctor={() => {
+                  setCurrentDoctor(null);
+                  navigate('/');
+                }}
+              />
             } 
           />
           <Route 
             path="/patient-portal" 
             element={
-              currentPatient ? (
-                <PatientPortal 
-                  patientProfile={currentPatient} 
-                  onOpenDoctorAuthModal={() => {
-                    if (currentDoctor) {
-                      navigate('/doctor-portal');
-                    } else {
-                      setIsDoctorAuthModalOpen(true);
-                    }
-                  }}
-                  onLogoutPatient={() => {
-                    setCurrentPatient(null);
-                    navigate('/');
-                  }}
-                  onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
-                />
-              ) : (
-                <Navigate to="/auth/patient" replace />
-              )
+              <PatientPortal 
+                patientProfile={currentPatient || DEFAULT_PATIENT_PROFILE} 
+                onOpenDoctorAuthModal={() => {
+                  navigate('/doctor-portal');
+                }}
+                onLogoutPatient={() => {
+                  setCurrentPatient(null);
+                  navigate('/');
+                }}
+                onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
+              />
             } 
           />
           <Route 

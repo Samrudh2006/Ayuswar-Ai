@@ -26,3 +26,4 @@ export const triggerHaptic = (type = 'light') => {
     }
   } catch {}
 };
+

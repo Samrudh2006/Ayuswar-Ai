@@ -60,9 +60,13 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
   // Role Type: 'doctor' | 'patient' | 'hospital'
   const [userType, setUserType] = useState(defaultUserType);
 
-  // Login Form State (Clean defaults, never prefilled without user action)
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  // Login Form State (Prefilled with authentic 1-tap demo credentials for frictionless access)
+  const [identifier, setIdentifier] = useState(() => 
+    defaultUserType === 'patient' ? 'lakshmi.amma@91-8842-1920-5511' : 'dr.priya@kurnoolphc.abdm.in'
+  );
+  const [password, setPassword] = useState(() => 
+    defaultUserType === 'patient' ? 'PatientDemo#2026' : 'DoctorDemo#2026'
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
@@ -113,6 +117,16 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
   // Switch role type handler
   const handleUserTypeChange = (type) => {
     setUserType(type);
+    if (type === 'doctor') {
+      setIdentifier('dr.priya@kurnoolphc.abdm.in');
+      setPassword('DoctorDemo#2026');
+    } else if (type === 'patient') {
+      setIdentifier('lakshmi.amma@91-8842-1920-5511');
+      setPassword('PatientDemo#2026');
+    } else {
+      setIdentifier('phc.kurnool@abdm.gov.in');
+      setPassword('HospitalDemo#2026');
+    }
   };
 
   // 1-Tap Demo Account Autofill for Login
@@ -180,44 +194,36 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
   // Submit Login Handler with Role-Aware Redirection
   const handleLoginSubmit = (e) => {
     e?.preventDefault();
-    if (!identifier) {
-      setToastMessage('Please enter your mobile, email, or click a 1-tap demo account.');
-      setTimeout(() => setToastMessage(null), 3000);
-      return;
-    }
-
     setIsLoading(true);
 
-    setTimeout(() => {
+    if (userType === 'doctor' || userType === 'hospital') {
+      const doctorObj = DOCTOR_REGISTRY.pulmonology || {
+        id: 'doc_priya',
+        doctorName: 'Dr. Priya Sharma, MD',
+        specialty: 'Pulmonology & Critical Care',
+        facility: 'Kurnool District Hospital (ABDM PHC #1402)',
+        experience: '14 years',
+        hprId: 'dr.priya@hpr.abdm',
+        avatar: '/assets/dr_ananya_avatar.jpg'
+      };
+      setCurrentDoctor(doctorObj);
       setIsLoading(false);
-
-      if (userType === 'doctor' || userType === 'hospital') {
-        const doctorObj = DOCTOR_REGISTRY.pulmonology || {
-          id: 'doc_priya',
-          doctorName: 'Dr. Priya Sharma, MD',
-          specialty: 'Pulmonology & Critical Care',
-          facility: 'Kurnool District Hospital (ABDM PHC #1402)',
-          experience: '14 years',
-          hprId: 'dr.priya@hpr.abdm',
-          avatar: '/assets/dr_ananya_avatar.jpg'
-        };
-        setCurrentDoctor(doctorObj);
-        navigate('/doctor-portal');
-      } else {
-        const patientObj = DEMO_PATIENTS[0] || {
-          id: 'pat_lakshmi',
-          name: 'Lakshmi Amma',
-          age: 58,
-          gender: 'Female',
-          language: 'Telugu',
-          abhaId: '91-8842-1920-5511',
-          phone: '+91-9000000001',
-          village: 'Kurnool Rural'
-        };
-        setCurrentPatient(patientObj);
-        navigate('/patient-portal');
-      }
-    }, 40);
+      navigate('/doctor-portal');
+    } else {
+      const patientObj = DEMO_PATIENTS[0] || {
+        id: 'pat_lakshmi',
+        name: 'Lakshmi Amma',
+        age: 58,
+        gender: 'Female',
+        language: 'Telugu',
+        abhaId: '91-8842-1920-5511',
+        phone: '+91-9000000001',
+        village: 'Kurnool Rural'
+      };
+      setCurrentPatient(patientObj);
+      setIsLoading(false);
+      navigate('/patient-portal');
+    }
   };
 
   // Sign-Up Step 1 -> Step 2

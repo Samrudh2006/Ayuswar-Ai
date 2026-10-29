@@ -28,6 +28,7 @@ import {
 import { askAyuSwarBrain, getAiConfig, saveAiConfig, AI_PROVIDERS } from '../services/aiBrainService';
 import { speakHumanized } from '../utils/speechSanitizer';
 import { speechService } from '../services/indicSpeechService';
+import { findMatrixAnswer } from '../services/clinicalRagAudioMatrix';
 
 /**
  * 4K Sharp Vector Emblem for AyuSwar AI
@@ -160,6 +161,18 @@ export default function FloatingAssistant({
     speechService.stopSpeaking();
     const currentGen = ++activeSpeechGenRef.current;
     
+    // Tier 1: Check Pre-Synthesized Instant Clinical RAG Matrix (0ms, 0 Gnani Credits)
+    const tier1 = findMatrixAnswer(queryText, selectedLanguage || 'te-IN');
+    if (tier1) {
+      if (activeSpeechGenRef.current !== currentGen) return;
+      setCurrentAiReply(tier1.answer);
+      if (isAiVoiceEnabled && !isMuted) {
+        speakOutLoud(tier1.answer, currentGen);
+      }
+      setIsProcessingQuery(false);
+      return;
+    }
+
     try {
       const answer = await askAyuSwarBrain(queryText, effectiveRole, { 
         patientProfile, 

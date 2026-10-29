@@ -74,6 +74,7 @@ import LiveOpdDemoSimulator from './LiveOpdDemoSimulator';
 import KurnoolClimateSentinel from './KurnoolClimateSentinel';
 import { triggerHaptic } from '../utils/haptics';
 import { audioMutex } from '../services/clinicalTelemetry';
+import { findMatrixAnswer } from '../services/clinicalRagAudioMatrix';
 
 /**
  * DoctorPortal Component — Complete Enterprise Physician Operating System
@@ -261,6 +262,10 @@ export default function DoctorPortal({
     };
   }, []);
 
+  const [fhirToast, setFhirToast] = useState(null);
+  const [allAppointmentsList, setAllAppointmentsList] = useState(DEMO_APPOINTMENTS);
+  const [dashboardAppointments, setDashboardAppointments] = useState(INITIAL_DASHBOARD_APPOINTMENTS);
+
   const { isVoiceNavActive, toggleVoiceNav, lastCommandHeard, commandFeedbackToast } = useDoctorVoiceNavigation({
     onNavigateTab: (tab) => {
       triggerHaptic('light');
@@ -270,7 +275,7 @@ export default function DoctorPortal({
       triggerHaptic('medium');
       const upcoming = allAppointmentsList.find(a => a.status === 'Upcoming' || a.offsetDays === 0);
       if (upcoming) {
-        setFhirToast(`Advancing OPD Queue: Selected Token ${upcoming.token} (${upcoming.name})`);
+        setFhirToast(`Advancing OPD Queue: Selected Token ${upcoming.token} (${upcoming.patientName || upcoming.name})`);
         setTimeout(() => setFhirToast(null), 3500);
       }
     }
@@ -290,8 +295,6 @@ export default function DoctorPortal({
   const [patientSearchTerm, setPatientSearchTerm] = useState('');
   const [patientTriageFilter, setPatientTriageFilter] = useState('all');
   const [opdViewMode, setOpdViewMode] = useState('queue'); // 'queue' | 'schedule' | 'directory'
-  const [allAppointmentsList, setAllAppointmentsList] = useState(DEMO_APPOINTMENTS);
-  const [dashboardAppointments, setDashboardAppointments] = useState(INITIAL_DASHBOARD_APPOINTMENTS);
   const [isNewAppointmentModalOpen, setIsNewAppointmentModalOpen] = useState(false);
   const [newApptForm, setNewApptForm] = useState({
     patientId: 'DEMO-P001',
@@ -362,7 +365,6 @@ export default function DoctorPortal({
   const [reportsViewMode, setReportsViewMode] = useState('by_patient'); // 'by_patient' | 'all'
   const [dicomInvert, setDicomInvert] = useState(false);
   // dicomContrast omitted
-  const [fhirToast, setFhirToast] = useState(null);
   const [plannedToast, setPlannedToast] = useState(null);
   const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] = useState(false);
 
@@ -680,6 +682,19 @@ export default function DoctorPortal({
 
     const newQuery = aiPrompt.trim();
     setAiPrompt('');
+
+    // 1. Check Tier 1 Instant Semantic Audio Matrix (0ms, 0 Gnani Credits)
+    const tier1 = findMatrixAnswer(newQuery, 'te-IN');
+    if (tier1) {
+      setAiResponses(prev => [
+        {
+          q: newQuery,
+          a: `⚡ [Instant Indic Clinical Matrix • 0 Gnani Credits]\n${tier1.answer}\n\n• Clinical Coding: ICD-10 ${tier1.icd10} | SNOMED ${tier1.snomed}\n• Jan Aushadhi Formulary: ${tier1.genericDrug} (${tier1.savings})`
+        },
+        ...prev
+      ]);
+      return;
+    }
 
     // Pre-insert with loading indicator
     setAiResponses(prev => [{ q: newQuery, a: 'Analyzing clinical query against ICMR, GINA & NFI guidelines...' }, ...prev]);

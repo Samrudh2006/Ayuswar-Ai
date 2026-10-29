@@ -901,15 +901,14 @@ export default function PatientPortal({
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             {[
               { id: 'home', label: 'Dashboard', icon: LayoutGrid },
-              { id: 'my_health', label: 'My Health', icon: Heart },
-              { id: 'appointments', label: 'Appointments', icon: Calendar },
+              { id: 'appointments', label: 'OPD Queue & Appointments', icon: Users },
               { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
               { id: 'medications', label: 'Prescriptions', icon: ClipboardPlus },
-              { id: 'health_goals', label: 'Health Goals', icon: Target },
+              { id: 'my_health', label: 'Clinical Health Records', icon: BookOpenCheck },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map(item => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = activeTab === item.id || (item.id === 'home' && activeTab === 'dashboard') || (item.id === 'my_health' && activeTab === 'health_goals');
               return (
                 <button
                   key={item.id}
@@ -5089,14 +5088,14 @@ export default function PatientPortal({
       >
         {[
           { id: 'home', label: 'Dashboard', icon: LayoutGrid },
-          { id: 'my_health', label: 'My Health', icon: Heart },
-          { id: 'appointments', label: 'Appointments', icon: Calendar },
+          { id: 'appointments', label: 'OPD Queue', icon: Users },
           { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
           { id: 'medications', label: 'Prescriptions', icon: ClipboardPlus },
+          { id: 'my_health', label: 'Clinical Library', icon: BookOpenCheck },
           { id: 'settings', label: 'Settings', icon: Settings }
         ].map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+          const isActive = activeTab === tab.id || (tab.id === 'home' && activeTab === 'dashboard') || (tab.id === 'my_health' && activeTab === 'health_goals');
           return (
             <button
               key={tab.id}

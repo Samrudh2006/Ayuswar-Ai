@@ -11,9 +11,12 @@ import {
   Clock, 
   X,
   Stethoscope,
-  TrendingDown
+  TrendingDown,
+  Download,
+  Mic
 } from 'lucide-react';
 import { audioMutex } from '../services/clinicalTelemetry';
+import { speechService } from '../services/indicSpeechService';
 
 const DEMO_ENCOUNTER_SCRIPT = [
   {
@@ -103,6 +106,9 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
 
   const pauseDemo = () => {
     setIsPlaying(false);
+    try {
+      speechService.stopSpeaking();
+    } catch {}
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.pause();
     }
@@ -113,24 +119,73 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
     setCurrentLineIndex(-1);
     setElapsedSeconds(0);
     setIsCompleted(false);
+    try {
+      speechService.stopSpeaking();
+    } catch {}
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
     audioMutex.release('opd-demo-sim');
   };
 
-  // Speaks dialogue line in natural Telugu
+  // Speaks dialogue line in natural Telugu with dual personality (Gnani voice or browser fallback)
   const speakDialogueLine = (line) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    if (!line || !line.text) return;
+    const isDoctor = line.role === 'doctor';
     try {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(line.text);
-      u.lang = 'te-IN';
-      u.rate = line.role === 'doctor' ? 1.05 : 0.95;
-      u.pitch = line.role === 'doctor' ? 1.05 : 0.9;
-      window.speechSynthesis.speak(u);
-      audioUtteranceRef.current = u;
-    } catch {}
+      speechService.speak(line.text, {
+        channel: 'opd-demo-sim',
+        langCode: 'te-IN',
+        voice: isDoctor ? 'Nalini' : 'Arya',
+        pitch: isDoctor ? 1.06 : 0.88,
+        rate: isDoctor ? 1.02 : 0.94
+      });
+    } catch {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(line.text);
+          u.lang = 'te-IN';
+          u.rate = isDoctor ? 1.05 : 0.94;
+          u.pitch = isDoctor ? 1.06 : 0.88;
+          window.speechSynthesis.speak(u);
+          audioUtteranceRef.current = u;
+        } catch {}
+      }
+    }
+  };
+
+  // Replay a single line for video recording retakes
+  const replaySingleLine = (line, idx) => {
+    setCurrentLineIndex(idx);
+    speakDialogueLine(line);
+  };
+
+  // Export full clinical dialogue script with phonetic guide for video recording
+  const handleExportAudioScript = () => {
+    const lines = [
+      'AYUSWAR AI — 60s RAYALASEEMA TELUGU OPD ENCOUNTER SCRIPT',
+      'Location: Kurnool District Hospital OPD (Rayalaseema)',
+      'Doctor: Dr. Priya Sharma, MD (Gnani Voice: Nalini / Pitch 1.06)',
+      'Patient: Narayana Rao, 58M (Gnani Voice: Arya / Pitch 0.88)',
+      '========================================================================\n',
+      ...DEMO_ENCOUNTER_SCRIPT.map((item, i) => {
+        return `[T+${item.timeOffset}s] ${item.speaker}:\n"${item.text}"\n${item.extractedConcept ? `➔ RECOGNIZED: ${item.extractedConcept.vernacular} (${item.extractedConcept.concept}) | ICD-10: ${item.extractedConcept.icd10 || 'N/A'}` : ''}\n`;
+      }),
+      '========================================================================',
+      'SOAP NOTE SUMMARY:',
+      '• Chief Complaint: Burning chest, palpitations (గుండెల్లో దడ), acid eructation.',
+      '• Clinical Diagnosis: GERD with secondary palpitations (ICD-10: K21.9 / R00.2).',
+      '• Formulary: PMBJP Pantoprazole 40mg + Domperidone SR (₹28 vs ₹198 brand, 86% savings).'
+    ];
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'AyuSwar_Rayalaseema_OPD_Demo_Video_Script.txt';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -312,10 +367,31 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '11px', background: isPlaying ? '#DCFCE7' : '#F1F5F9', color: isPlaying ? '#15803D' : '#64748B', padding: '3px 9px', borderRadius: '8px', fontWeight: 750 }}>
               {isPlaying ? '🔴 LIVE ASR STREAMING' : (isCompleted ? '✓ CONSULTATION COMPLETED' : 'READY')}
             </span>
+
+            <button
+              onClick={handleExportAudioScript}
+              title="Download Full Encounter Audio Script for Video Recording"
+              style={{
+                background: '#FAF8F5',
+                color: '#0F4C5C',
+                border: '1px solid rgba(15, 76, 92, 0.4)',
+                borderRadius: '8px',
+                padding: '6px 12px',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <Download size={13} />
+              <span>Export Script (.txt)</span>
+            </button>
           </div>
         </div>
 
@@ -370,12 +446,38 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
                     marginBottom: '4px',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     gap: '6px'
                   }}>
-                    <span>{line.speaker}</span>
-                    {isLatest && isPlaying && (
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#EF4444', animation: 'pulse 1s infinite' }} />
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>{line.speaker}</span>
+                      {isLatest && isPlaying && (
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#EF4444', animation: 'pulse 1s infinite' }} />
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => replaySingleLine(line, idx)}
+                      title="Play this line (for video recording retake)"
+                      style={{
+                        background: isDoctor ? 'rgba(21, 128, 61, 0.1)' : 'rgba(15, 76, 92, 0.1)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '3px 8px',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '10.5px',
+                        fontWeight: 750,
+                        color: isDoctor ? '#15803D' : '#0F4C5C',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <Volume2 size={12} />
+                      <span>Replay Voice</span>
+                    </button>
                   </div>
 
                   <div style={{ fontSize: '14px', color: '#081C24', lineHeight: 1.5, fontWeight: isDoctor ? 600 : 500 }}>
@@ -470,3 +572,4 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
     </div>
   );
 }
+

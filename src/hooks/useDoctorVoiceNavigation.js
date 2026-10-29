@@ -172,3 +172,4 @@ export function useDoctorVoiceNavigation({ onNavigateTab, onSelectNextPatient })
     commandFeedbackToast
   };
 }
+

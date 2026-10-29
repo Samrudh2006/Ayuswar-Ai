@@ -9,6 +9,35 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'mr-IN', name: 'Marathi (मराठी)', label: 'Marathi', vernacular: 'मराठी', voiceCode: 'mr-IN' }
 ];
 
+export const DEFAULT_DOCTOR_PROFILE = {
+  id: 'doc_priya',
+  doctorName: 'Dr. Priya Sharma, MD',
+  hprId: 'DEMO-HPR-8921-9942',
+  nmcRegNo: 'DEMO-NMC-TS-2016-48291',
+  specialty: 'Pulmonology & Critical Care',
+  department: 'Chest & Respiratory Medicine',
+  facility: 'Kurnool District Hospital (ABDM PHC #1402)',
+  experience: '14 years',
+  avatar: '/assets/dr_ananya_avatar.jpg',
+  specialtyDomain: 'respiratory',
+  isExplicitLogin: true
+};
+
+export const DEFAULT_PATIENT_PROFILE = {
+  id: 'DEMO-P001',
+  name: 'Lakshmi Amma',
+  patientName: 'Lakshmi Amma',
+  vernacularName: 'లక్ష్మి అమ్మ',
+  age: 58,
+  gender: 'Female',
+  genderLabel: 'Female',
+  language: 'Telugu (తెలుగు)',
+  abhaId: '91-4521-8932-1049',
+  phone: '+91 98480 22338',
+  village: 'Kurnool Rural',
+  isExplicitLogin: true
+};
+
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
@@ -49,21 +78,8 @@ export function AppProvider({ children }) {
     }
   }, [isDemoMode]);
 
-  const DEFAULT_DOCTOR = {
-    doctorName: 'Dr. Priya Sharma, MD',
-    hprId: '91-8842-1923-4410',
-    specialty: 'Pulmonology & Critical Care',
-    hospital: 'Kurnool District Hospital (ABDM PHC #1402)'
-  };
-
-  const DEFAULT_PATIENT = {
-    patientName: 'Ramesh Patel',
-    abhaId: '91-4521-8820-9102',
-    age: 48,
-    gender: 'Male',
-    bloodGroup: 'B+',
-    conditions: ['Bronchial Asthma', 'Mild Dyspnea']
-  };
+  const DEFAULT_DOCTOR = DEFAULT_DOCTOR_PROFILE;
+  const DEFAULT_PATIENT = DEFAULT_PATIENT_PROFILE;
 
   // Authenticated profiles (starts as null until clinician / citizen explicitly logs in or registers)
   const [doctorProfile, setDoctorProfileState] = useState(() => {
