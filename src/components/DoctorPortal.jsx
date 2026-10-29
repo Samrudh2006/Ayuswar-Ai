@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Users, 
   Calendar, 
@@ -218,7 +219,29 @@ export default function DoctorPortal({
   appointmentsQueue = [],
   onAcceptAppointment
 }) {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get('tab');
+  const validDoctorTabs = ['dashboard', 'opd_queue', 'reports', 'prescriptions', 'clinical_library', 'settings'];
+  const [activeTab, setActiveTabState] = useState(() => {
+    return (tabFromUrl && validDoctorTabs.includes(tabFromUrl)) ? tabFromUrl : 'dashboard';
+  });
+
+  const setActiveTab = (newTab) => {
+    setActiveTabState(newTab);
+    try {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev);
+        next.set('tab', newTab);
+        return next;
+      }, { replace: true });
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (tabFromUrl && validDoctorTabs.includes(tabFromUrl) && tabFromUrl !== activeTab) {
+      setActiveTabState(tabFromUrl);
+    }
+  }, [tabFromUrl]);
   const [dashboardPillView, setDashboardPillView] = useState('overview'); // 'overview' | 'queue' | 'analytics'
   const [dashboardStatusFilter, setDashboardStatusFilter] = useState('all'); // 'all' | 'Upcoming' | 'In Progress' | 'Completed'
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);

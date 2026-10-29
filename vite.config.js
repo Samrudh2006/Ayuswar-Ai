@@ -509,6 +509,24 @@ export default defineConfig(({ mode }) => {
           });
         }
       }
-    ]
+    ],
+    build: {
+      chunkSizeWarningLimit: 1200,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/maplibre-gl')) {
+              return 'vendor-maplibre';
+            }
+            if (id.includes('node_modules/tesseract.js')) {
+              return 'vendor-tesseract';
+            }
+            if (id.includes('node_modules/canvas-confetti') || id.includes('node_modules/roughjs')) {
+              return 'vendor-visuals';
+            }
+          }
+        }
+      }
+    }
   };
 });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Home, 
   LayoutGrid,
@@ -90,7 +91,29 @@ export default function PatientPortal({
   appointmentsQueue = [],
   onBookAppointment
 }) {
-  const [activeTab, setActiveTab] = useState('home');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get('tab');
+  const validPatientTabs = ['home', 'my_health', 'appointments', 'reports', 'medications', 'health_goals', 'settings'];
+  const [activeTab, setActiveTabState] = useState(() => {
+    return (tabFromUrl && validPatientTabs.includes(tabFromUrl)) ? tabFromUrl : 'home';
+  });
+
+  const setActiveTab = (newTab) => {
+    setActiveTabState(newTab);
+    try {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev);
+        next.set('tab', newTab);
+        return next;
+      }, { replace: true });
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (tabFromUrl && validPatientTabs.includes(tabFromUrl) && tabFromUrl !== activeTab) {
+      setActiveTabState(tabFromUrl);
+    }
+  }, [tabFromUrl]);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [showWhatsAppRxModal, setShowWhatsAppRxModal] = useState(false);

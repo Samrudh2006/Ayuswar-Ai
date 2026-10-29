@@ -1,0 +1,283 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AyuSwar AI — Ambient Clinical Intelligence API",
+    "description": "Production-grade Indic Clinical Voice Scribe, Telephony Gateway, and Conservative Triage Boundary API built for Primary Health Centers in India. Implements ABDM M3 (Ayushman Bharat Digital Mission) FHIR R4 draft schemas and DPDP Act 2023 ephemeral voice data compliance.",
+    "version": "2.5.0-prototype",
+    "contact": {
+      "name": "AyuSwar AI Engineering Consortium",
+      "url": "https://ayuswar-ai.vercel.app/"
+    },
+    "license": {
+      "name": "MIT (Clinical Prototype Demonstration)",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ayuswar-ai.vercel.app/api",
+      "description": "Production Vercel Edge Serverless Gateway"
+    },
+    {
+      "url": "http://localhost:5173/api",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/triage": {
+      "post": {
+        "summary": "Clinical Emergency Triage Boundary",
+        "description": "Evaluates patient complaints and acoustic biomarkers with strict safety invariants: 1. Synchronous conservative rule floor. 2. Asymmetric escalation only (model can never downgrade a RED emergency). 3. Ephemeral audio stream analysis with zero persistent storage of raw voice.",
+        "operationId": "evaluateTriage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Triage evaluation completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/429RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/500InternalError"
+          }
+        }
+      }
+    },
+    "/gnani/stt": {
+      "post": {
+        "summary": "Indic ASR Speech-to-Text Gateway",
+        "description": "Transcribes 16kHz PCM audio buffers into clinical vernacular text across 7 Indic languages (Telugu, Hindi, Tamil, Kannada, Malayalam, Bengali, Marathi) using Gnani Prisma v3.",
+        "operationId": "transcribeSpeech",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SttRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transcription completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SttResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gnani/tts": {
+      "post": {
+        "summary": "Vernacular Clinical Prescription Synthesizer",
+        "description": "Converts written medical regimens and doctor instructions into natural regional dialect audio for non-literate patients.",
+        "operationId": "synthesizeSpeech",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TtsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Audio synthesis successful (returns base64 or audio URL)"
+          }
+        }
+      }
+    },
+    "/evon/chat": {
+      "post": {
+        "summary": "Evon-30B Medical Clinical Co-pilot",
+        "description": "Generates differential diagnoses, ICD-10 suggestions, drug-drug interaction alerts, and vernacular medical explanations.",
+        "operationId": "queryEvonCopilot"
+      }
+    },
+    "/auth/verify": {
+      "post": {
+        "summary": "ABDM Mobile & HPR ID Authentication",
+        "description": "Authenticates doctor HPR tokens and patient ABHA addresses."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TriageRequest": {
+        "type": "object",
+        "required": ["transcript"],
+        "properties": {
+          "transcript": {
+            "type": "string",
+            "maxLength": 2000,
+            "example": "రెండు రోజుల నుండి గుండెల్లో నొప్పి ఉండి చెమటలు పడుతున్నాయి"
+          },
+          "acousticPanicIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 70,
+            "example": 82
+          },
+          "language": {
+            "type": "string",
+            "default": "te",
+            "enum": ["te", "hi", "en", "ta", "kn", "mr", "bn"]
+          }
+        }
+      },
+      "TriageResponse": {
+        "type": "object",
+        "properties": {
+          "urgencyLevel": {
+            "type": "string",
+            "enum": ["RED", "YELLOW", "GREEN"],
+            "example": "RED"
+          },
+          "suspectedCondition": {
+            "type": "string",
+            "example": "Acute Coronary Syndrome (STEMI / Angina Suspicion)"
+          },
+          "icd10": {
+            "type": "string",
+            "example": "I21.9"
+          },
+          "priorityProtocol": {
+            "type": "string",
+            "example": "Immediate 12-Lead ECG + Aspirin 325mg + Sublingual Nitrate"
+          },
+          "executionSource": {
+            "type": "string",
+            "enum": ["RULES_ONLY", "RULES_PLUS_MODEL_ADVISORY", "RULES_FALLBACK_ON_ERROR", "LOCAL_RULES_FALLBACK"],
+            "example": "RULES_ONLY"
+          },
+          "modelEscalationApplied": {
+            "type": "boolean",
+            "example": false
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SttRequest": {
+        "type": "object",
+        "required": ["audioBase64", "languageCode"],
+        "properties": {
+          "audioBase64": {
+            "type": "string",
+            "description": "Base64 encoded 16kHz mono PCM or WAV buffer"
+          },
+          "languageCode": {
+            "type": "string",
+            "example": "te-IN"
+          }
+        }
+      },
+      "SttResponse": {
+        "type": "object",
+        "properties": {
+          "transcript": {
+            "type": "string",
+            "example": "ఛాతీలో నొప్పిగా ఉంది"
+          },
+          "confidence": {
+            "type": "number",
+            "example": 0.96
+          },
+          "detectedLanguage": {
+            "type": "string",
+            "example": "te-IN"
+          }
+        }
+      },
+      "TtsRequest": {
+        "type": "object",
+        "required": ["text", "languageCode"],
+        "properties": {
+          "text": {
+            "type": "string",
+            "example": "ఉదయం టిఫిన్ తర్వాత ఒక మాత్ర వేసుకోండి"
+          },
+          "languageCode": {
+            "type": "string",
+            "example": "te-IN"
+          },
+          "voiceGender": {
+            "type": "string",
+            "enum": ["female", "male"],
+            "default": "female"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400BadRequest": {
+        "description": "Invalid input or payload too large",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "Invalid or missing transcript" }
+              }
+            }
+          }
+        }
+      },
+      "429RateLimited": {
+        "description": "Client exceeded IP rate limit threshold",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "Too many requests. Please try again later." }
+              }
+            }
+          }
+        }
+      },
+      "500InternalError": {
+        "description": "Internal server processing failure with sanitized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "Internal triage service failure" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

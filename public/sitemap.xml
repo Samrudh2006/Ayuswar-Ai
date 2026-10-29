@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ayuswar-ai.vercel.app/</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en-IN" href="https://ayuswar-ai.vercel.app/" />
@@ -16,75 +16,99 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://ayuswar-ai.vercel.app/" />
   </url>
   <url>
+    <loc>https://ayuswar-ai.vercel.app/doctor-portal</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/patient-portal</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/clinical-console</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://ayuswar-ai.vercel.app/solutions</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/technology</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/scanner</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.88</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/audio-rx</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.88</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/acoustic-lab</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/language-matrix</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/benchmarks</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/datasets</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/emergency</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://ayuswar-ai.vercel.app/prescription/preview</loc>
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/doctor-portal</loc>
-    <lastmod>2026-10-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://ayuswar-ai.vercel.app/login</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ayuswar-ai.vercel.app/patient-portal</loc>
-    <lastmod>2026-10-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://ayuswar-ai.vercel.app/privacy-policy</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ayuswar-ai.vercel.app/terms</loc>
+    <lastmod>2026-10-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

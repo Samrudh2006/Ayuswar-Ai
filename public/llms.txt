@@ -1,28 +1,30 @@
-# AyuSwar AI — Ambient Clinical Voice Scribe & Triage Prototype
+# AyuSwar AI — Ambient Clinical Intelligence & Indic Voice Scribe (2026)
 
-> AyuSwar AI is a prototype demonstration running on synthetic data. It is not a medical device and is not intended for medical diagnosis.
+> AyuSwar AI is a prototype demonstration running on synthetic data. It is not an approved medical device and is not intended for autonomous medical diagnosis.
 
-AyuSwar AI explores ambient clinical voice intelligence, acoustic signal analysis, and open health informatics tailored specifically for high-volume rural Primary Health Centers (PHCs) and Community Health Centers (CHCs) across India, with deep dialect support for Telugu, Hindi, and Indian English.
+AyuSwar AI is an ambient clinical voice intelligence, acoustic signal reasoning, and open health informatics platform designed specifically for high-volume rural Primary Health Centers (PHCs), Community Health Centers (CHCs), and 108 emergency ambulance networks across India. It features deep colloquial dialect comprehension across 7 Indic languages, with a specialized focus on Rayalaseema, Telangana, Coastal Andhra, and Uttarandhra Telugu variants and Hindi colloquial dialects.
 
-## Core Capabilities & Modules
+## Core Capabilities & Clinical Modules
 
-- [Ambient OPD Voice Scribe](https://ayuswar-ai.vercel.app/solutions/opd_ambient_scribe): Ambient consultation transcription converting spoken multi-lingual dialogues into draft structured SOAP notes and ABDM FHIR R4 electronic health records for physician validation.
-- [Spoken Audio-Rx Studio](https://ayuswar-ai.vercel.app/audio-rx): High-contrast vernacular spoken prescription playback with word-by-word karaoke synchronization to overcome patient illiteracy and dosage confusion.
-- [Medicine Blister Scanner](https://ayuswar-ai.vercel.app/scanner): Synthetic pharmaceutical computer vision demonstration identifying medicine strips and mapping Jan Aushadhi generic substitutions.
-- [Acoustic Biomarker Lab](https://ayuswar-ai.vercel.app/acoustic-lab): Non-diagnostic browser-based DSP demonstration analyzing vocal audio frequencies, spectral centroid, and spectrograms.
-- [Sanjivani 108 Emergency Triage](https://ayuswar-ai.vercel.app/emergency): Simulated emergency triage protocol demonstration with CPR cadence metronome and hospital pre-alert telemetry simulation.
-- [Indic Language & Dialect Matrix](https://ayuswar-ai.vercel.app/language-matrix): Comprehensive regional speech support covering Rayalaseema, Telangana, Coastal Andhra, and Uttarandhra Telugu variants and Hindi dialects.
-- [Clinical Architecture Blueprint](https://ayuswar-ai.vercel.app/technology): Architectural documentation detailing the zero-cloud ephemeral RAM audio pipeline, DPDP Act 2023 compliance, and offline edge deployment.
-- [Automated Contract Benchmarks](https://ayuswar-ai.vercel.app/benchmarks): Real-time verification suite executing 24 contract tests on data protection, non-diagnostic boundaries, and FHIR schema integrity.
-- [Synthetic Clinical Datasets](https://ayuswar-ai.vercel.app/datasets): Synthetic OPD dialogues, colloquial idiom crosswalks, and bilingual terminology tables grounded in IndiaAI AIKosh (aikosh.indiaai.gov.in) and PMBJP open schemas.
+- **Ambient OPD Clinical Scribe**: Converts spoken physician-patient multi-lingual dialogues into draft structured SOAP notes and ABDM FHIR R4 electronic health records for physician validation.
+- **On-Device Silero VAD (WebAssembly)**: Local client-side voice activity detection that separates human voice from noisy rural OPD backgrounds with zero cloud latency.
+- **WebRTC SIP Cellular Audio Gateway**: Direct telecom provider interface allowing rural citizens to dial in via standard phone lines with browser-based WebRTC SIP bridges.
+- **Gnani Live 16kHz WebSocket Streaming STT**: Direct byte-by-byte streaming pipeline to Gnani Prisma v3 Indic ASR engines.
+- **Spoken Audio-Rx Studio**: High-contrast vernacular spoken prescription playback with word-by-word karaoke synchronization to overcome patient illiteracy and dosage confusion.
+- **Jan Aushadhi Generic Substitution Engine**: Automated optical & formulary mapping to Pradhan Mantri Bharatiya Janaushadhi Pariyojana (PMBJP) generic alternatives, saving patients up to 86% on essential medications.
+- **Sanjivani 108 Emergency Triage**: Simulated high-acuity triage protocol with conservative rule floor, asynchronous model escalation guardrail, CPR cadence metronome, and hospital pre-alert telemetry.
+- **Indic Vernacular Clinical Ontology**: Deterministic crosswalk mapping visceral regional colloquial idioms (e.g., Telugu 'గుండెల్లో దడ', 'పసలీ చలన', 'పుట్టించే జ్వరం') directly to WHO ICD-10 and SNOMED CT codes without generative hallucination.
 
-## Data Privacy & Regulatory Compliance
+## API & Technical Specifications
 
-- **DPDP Act 2023 Compliance**: Audio data is processed strictly in volatile ephemeral RAM inside Indian sovereign boundaries. Zero persistent audio is written to disk or third-party cloud servers.
+- **OpenAPI 3.0 Specification**: https://ayuswar-ai.vercel.app/openapi.json
+- **Full Architecture & Evaluation Blueprint**: https://ayuswar-ai.vercel.app/technology
+- **Contract Verification Benchmarks (74 Specs)**: https://ayuswar-ai.vercel.app/benchmarks
+- **LLM Full Context Specification**: https://ayuswar-ai.vercel.app/llms-full.txt
+- **XML Sitemap**: https://ayuswar-ai.vercel.app/sitemap.xml
+
+## Data Privacy & Regulatory Invariants
+
+- **DPDP Act 2023 Sovereign Ephemeral RAM**: Audio data is processed strictly in volatile ephemeral memory inside Indian sovereign boundaries. Zero persistent audio is written to disk or third-party cloud servers.
 - **HL7 FHIR R4 & ABDM**: Structured records conform to Ayushman Bharat Digital Mission (ABDM) draft FHIR R4 JSON schemas.
-- **Deterministic Medical Crosswalk**: Visceral regional colloquial idioms (e.g., Telugu 'పీకల్లో పిల్లికూతలు' / 'ఆయాసం') are mapped deterministically to WHO ICD-10 (R06.2) and SNOMED CT (195967001) without generative hallucination.
-
-## Geographic & Deployment Focus
-
-- **Primary Regions**: Andhra Pradesh (Kurnool, Tirupati, Visakhapatnam), Telangana (Hyderabad, Warangal), and Pan-India rural healthcare networks.
-- **Target Facilities**: Primary Health Centers (PHCs), Community Health Centers (CHCs), Sub-Centers, Basti Dawakhanas, and Jan Aushadhi Kendras.
+- **Conservative Triage Safeguard**: AI models can only escalate emergency priority levels (e.g. Yellow to Red), never downgrade a rule-based clinical emergency floor.
