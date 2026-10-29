@@ -69,6 +69,11 @@ import { downloadFhirJson, calculateMewsScore, getJanAushadhiGenericInfo } from 
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 import LiveTelemetryBadge from './LiveTelemetryBadge';
+import { useDoctorVoiceNavigation } from '../hooks/useDoctorVoiceNavigation';
+import LiveOpdDemoSimulator from './LiveOpdDemoSimulator';
+import KurnoolClimateSentinel from './KurnoolClimateSentinel';
+import { triggerHaptic } from '../utils/haptics';
+import { audioMutex } from '../services/clinicalTelemetry';
 
 /**
  * DoctorPortal Component — Complete Enterprise Physician Operating System
@@ -242,6 +247,35 @@ export default function DoctorPortal({
       setActiveTabState(tabFromUrl);
     }
   }, [tabFromUrl]);
+  const [isOpdDemoModalOpen, setIsOpdDemoModalOpen] = useState(false);
+  const [isDeviceOnline, setIsDeviceOnline] = useState(() => typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  useEffect(() => {
+    const handleOnline = () => setIsDeviceOnline(true);
+    const handleOffline = () => setIsDeviceOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const { isVoiceNavActive, toggleVoiceNav, lastCommandHeard, commandFeedbackToast } = useDoctorVoiceNavigation({
+    onNavigateTab: (tab) => {
+      triggerHaptic('light');
+      setActiveTab(tab);
+    },
+    onSelectNextPatient: () => {
+      triggerHaptic('medium');
+      const upcoming = allAppointmentsList.find(a => a.status === 'Upcoming' || a.offsetDays === 0);
+      if (upcoming) {
+        setFhirToast(`Advancing OPD Queue: Selected Token ${upcoming.token} (${upcoming.name})`);
+        setTimeout(() => setFhirToast(null), 3500);
+      }
+    }
+  });
+
   const [dashboardPillView, setDashboardPillView] = useState('overview'); // 'overview' | 'queue' | 'analytics'
   const [dashboardStatusFilter, setDashboardStatusFilter] = useState('all'); // 'all' | 'Upcoming' | 'In Progress' | 'Completed'
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
@@ -941,6 +975,16 @@ export default function DoctorPortal({
     }, 1200);
   };
 
+  const [isMobileScreen, setIsMobileScreen] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 860 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileScreen(window.innerWidth <= 860);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
@@ -1360,6 +1404,53 @@ export default function DoctorPortal({
 
           {/* Profile, Switcher, Settings & Logout */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+            {/* Hands-Free Doctor Voice Navigation Button */}
+            <button
+              onClick={() => {
+                triggerHaptic('medium');
+                toggleVoiceNav();
+              }}
+              style={{
+                background: isVoiceNavActive ? 'linear-gradient(135deg, #EF4444, #DC2626)' : 'rgba(15, 76, 92, 0.08)',
+                color: isVoiceNavActive ? '#ffffff' : '#0F4C5C',
+                border: isVoiceNavActive ? '1.5px solid #B91C1C' : '1px solid rgba(15, 76, 92, 0.2)',
+                borderRadius: '10px',
+                padding: '6px 10px',
+                fontSize: '11.5px',
+                fontWeight: 750,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                transition: 'all 0.15s ease'
+              }}
+              title="Hands-Free Voice Commands: Say 'Next Patient', 'Prescriptions', or 'Queue'"
+            >
+              <Mic size={15} style={{ animation: isVoiceNavActive ? 'pulse 1s infinite' : 'none' }} />
+              <span className="voice-nav-label" style={{ fontSize: '11.5px' }}>{isVoiceNavActive ? 'Voice Active' : 'Voice Nav'}</span>
+            </button>
+
+            {/* Offline Health Mode Status Pill */}
+            {!isDeviceOnline && (
+              <div 
+                style={{
+                  background: '#064E3B',
+                  color: '#6EE7B7',
+                  border: '1px solid #059669',
+                  borderRadius: '10px',
+                  padding: '5px 9px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+                title="Zero-Network Rural Mode: Local VAD & IndexedDB Active"
+              >
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399', animation: 'pulse 1s infinite' }} />
+                <span>Offline OPD</span>
+              </div>
+            )}
             <button 
               className="doctor-header-settings-btn"
               onClick={() => setActiveTab('settings')}
@@ -1500,8 +1591,32 @@ export default function DoctorPortal({
           </div>
         </header>
 
+        {/* Hands-Free Doctor Voice Command Feedback Toast */}
+        {commandFeedbackToast && (
+          <div style={{
+            background: 'linear-gradient(135deg, #0F4C5C, #0B2530)',
+            color: '#ffffff',
+            padding: '10px 18px',
+            borderRadius: '12px',
+            margin: '14px 28px 0 28px',
+            boxShadow: '0 4px 16px rgba(15, 76, 92, 0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            border: '1.5px solid #5EEAD4',
+            animation: 'fadeIn 0.2s ease',
+            zIndex: 60
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 750 }}>
+              <Sparkles size={16} color="#5EEAD4" />
+              <span>{commandFeedbackToast}</span>
+            </div>
+            <span style={{ fontSize: '11px', color: '#99F6E4', fontWeight: 650 }}>Hands-Free Doctor Voice Engine</span>
+          </div>
+        )}
+
         {/* Content Body */}
-        <div style={{ padding: '24px 28px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+        <div className="doctor-portal-content-body" style={{ padding: isMobileScreen ? '14px 12px 76px 12px' : '24px 28px', maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
 
           {/* ---------------------------------------------------------------------
               TAB 1: DASHBOARD (EXACT TO SCREENSHOT 1)
@@ -1646,6 +1761,15 @@ export default function DoctorPortal({
                   </button>
                 </div>
 
+                {/* Kurnool PHC Live Weather-Health & Environmental Sentinel */}
+                <KurnoolClimateSentinel 
+                  onAddOrsToRx={() => {
+                    triggerHaptic('success');
+                    setFhirToast('Added WHO Oral Rehydration Salts (ORS) sachet (PMBJP Generic: ₹4.50) to active OPD prescription.');
+                    setTimeout(() => setFhirToast(null), 3500);
+                  }}
+                />
+
                 {/* 3. Core Feature Command Strip: OPD Ambient Scribe & WhatsApp Audio-Rx (Preserved) */}
                 <div style={{
                   background: 'linear-gradient(135deg, #0A2540 0%, #0F3B66 100%)',
@@ -1691,6 +1815,33 @@ export default function DoctorPortal({
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    {/* One-Click Live Rayalaseema Telugu Encounter Simulation */}
+                    <button
+                      onClick={() => {
+                        triggerHaptic('medium');
+                        setIsOpdDemoModalOpen(true);
+                      }}
+                      style={{
+                        background: 'linear-gradient(135deg, #10B981 0%, #0F4C5C 100%)',
+                        color: '#ffffff',
+                        border: '1.5px solid #34D399',
+                        borderRadius: '10px',
+                        padding: '10px 18px',
+                        fontSize: '12.5px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)',
+                        minHeight: '44px'
+                      }}
+                      title="Run Interactive 42-Second Rayalaseema Telugu OPD Consultation Simulation"
+                    >
+                      <Play size={14} fill="#ffffff" />
+                      <span>▶️ 60s Live Telugu Scribe Demo</span>
+                    </button>
+
                     <button
                       onClick={() => {
                         if (onSelectEncounterAndLaunch) {
@@ -4170,13 +4321,13 @@ export default function DoctorPortal({
                 border: '1px solid #1E293B',
                 boxShadow: '0 10px 30px rgba(10, 37, 64, 0.15)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#38BDF8', color: '#081C24', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#38BDF8', color: '#081C24', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Scan size={20} />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: '#ffffff' }}>
+                      <h3 style={{ fontSize: isMobileScreen ? '14px' : '16px', fontWeight: 800, margin: 0, color: '#ffffff' }}>
                         AyuVision™ Blister Pack & Handwritten Prescription OCR Lens
                       </h3>
                       <div style={{ fontSize: '11.5px', color: '#94A3B8' }}>
@@ -4215,7 +4366,7 @@ export default function DoctorPortal({
                 </div>
 
                 {/* OCR Scanner Viewport & Extraction Grid */}
-                <div className="ayuvision-ocr-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.4fr', gap: '16px', width: '100%' }}>
+                <div className="ayuvision-ocr-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : '1.1fr 1.4fr', gap: '16px', width: '100%', boxSizing: 'border-box' }}>
                   {/* Scanner Visual Box */}
                   <div style={{
                     background: '#0B132B',
@@ -5918,6 +6069,18 @@ export default function DoctorPortal({
         initialLanguage={whatsAppModalPatient?.langCode?.includes('hi') ? 'hi' : 'te'}
       />
 
+      {/* 60s Live Rayalaseema Telugu OPD Simulation Modal */}
+      <LiveOpdDemoSimulator
+        isOpen={isOpdDemoModalOpen}
+        onClose={() => setIsOpdDemoModalOpen(false)}
+        onApplyToPrescription={() => {
+          triggerHaptic('success');
+          setActiveTab('prescriptions');
+          setFhirToast('✓ Transferred Telugu OPD Encounter to Active Prescription formulary (PMBJP Generic Applied).');
+          setTimeout(() => setFhirToast(null), 4500);
+        }}
+      />
+
       {/* Real-time Clinical Notifications Drawer */}
       <ClinicalNotificationsDrawer
         isOpen={isNotificationsDrawerOpen}
@@ -5956,10 +6119,11 @@ export default function DoctorPortal({
         aria-label="Mobile Navigation"
       >
         {[
-          { id: 'dashboard', label: 'Dashboard', icon: Home },
-          { id: 'opd_queue', label: 'Queue & Pts', icon: Users },
-          { id: 'prescriptions', label: 'Rx Meds', icon: Pill },
-          { id: 'reports', label: 'Labs', icon: FileText },
+          { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
+          { id: 'opd_queue', label: 'OPD Queue', icon: Users },
+          { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
+          { id: 'prescriptions', label: 'Prescriptions', icon: ClipboardPlus },
+          { id: 'clinical_library', label: 'Clinical Library', icon: BookOpenCheck },
           { id: 'settings', label: 'Settings', icon: Settings }
         ].map((tab) => {
           const Icon = tab.icon;
@@ -5968,9 +6132,7 @@ export default function DoctorPortal({
             <button
               key={tab.id}
               onClick={() => {
-                if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                  try { navigator.vibrate(12); } catch {}
-                }
+                triggerHaptic('light');
                 setActiveTab(tab.id);
               }}
               style={{

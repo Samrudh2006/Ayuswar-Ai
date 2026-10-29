@@ -212,3 +212,4 @@ CREATE POLICY "Insert audit log" ON public.clinical_audit_trail
 CREATE POLICY "Admins read audit log" ON public.clinical_audit_trail
   FOR SELECT TO authenticated
   USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+

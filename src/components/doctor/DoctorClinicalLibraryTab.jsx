@@ -15,6 +15,15 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
   const [selectedOntologyTerm, setSelectedOntologyTerm] = useState(null);
   const [nlmLiveResults, setNlmLiveResults] = useState(null);
   const [nlmLoading, setNlmLoading] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 860 : false
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobileScreen(window.innerWidth <= 860);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   React.useEffect(() => {
     if (!ontologySearchTerm || ontologySearchTerm.trim().length < 2) {
@@ -80,7 +89,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
         </div>
 
         {/* Quick Search */}
-        <div style={{ position: 'relative', width: '320px' }}>
+        <div style={{ position: 'relative', width: isMobileScreen ? '100%' : '320px', maxWidth: '100%' }}>
           <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
@@ -95,7 +104,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               fontSize: '13px',
               background: '#ffffff',
               color: '#081C24',
-              outline: 'none'
+              outline: 'none',
+              boxSizing: 'border-box'
             }}
           />
           {ontologySearchTerm && (
@@ -121,7 +131,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               fontSize: '11px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px', color: '#1E40AF', fontWeight: 800 }}>
-                <span>🌐 NLM NLM ICD-10 Server ({nlmLiveResults.latencyMs}ms):</span>
+                <span>🌐 NLM ICD-10 Server ({nlmLiveResults.latencyMs}ms):</span>
                 <span style={{ fontSize: '10px', color: '#16A34A' }}>✓ Live Stream</span>
               </div>
               {nlmLiveResults.results.map((item, i) => (
@@ -146,20 +156,23 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
         background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
         color: '#ffffff',
         borderRadius: '16px',
-        padding: '20px 24px',
+        padding: isMobileScreen ? '16px 14px' : '20px 24px',
         marginBottom: '22px',
         border: '1px solid #1E293B',
-        boxShadow: '0 10px 25px rgba(10, 37, 64, 0.15)'
+        boxShadow: '0 10px 25px rgba(10, 37, 64, 0.15)',
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Sparkles size={18} color="#38BDF8" />
-            <span style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flexWrap: 'wrap' }}>
+            <Sparkles size={18} color="#38BDF8" style={{ flexShrink: 0 }} />
+            <span style={{ fontSize: isMobileScreen ? '13px' : '14px', fontWeight: 800, color: '#38BDF8', lineHeight: 1.3 }}>
               Live Indic Semantic NLP Entity Extraction Sandbox
             </span>
           </div>
-          <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
-            Browser speech (Web Speech API). Gnani voice integration: planned
+          <span style={{ fontSize: '10.5px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, lineHeight: 1.3 }}>
+            Browser speech (Web Speech API)
           </span>
         </div>
 
@@ -333,20 +346,31 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
           </button>
         </div>
       ) : (
-        <div className="clinical-ontology-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', width: '100%' }}>
+        <div className="clinical-ontology-cards-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: isMobileScreen ? '1fr' : 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '16px',
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box'
+        }}>
           {filteredOntology.map(item => (
             <div
               key={item.id}
               style={{
                 background: '#ffffff',
                 borderRadius: '14px',
-                padding: '18px 20px',
+                padding: isMobileScreen ? '14px 16px' : '18px 20px',
                 border: '1px solid #E2E8F0',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                transition: 'box-shadow 0.15s ease'
+                transition: 'box-shadow 0.15s ease',
+                width: '100%',
+                maxWidth: '100%',
+                boxSizing: 'border-box',
+                overflow: 'hidden'
               }}
             >
               <div>
@@ -554,7 +578,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                   {selectedOntologyTerm.clinicalTerm}
                 </div>
-                <div className="clinical-ontology-modal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '12px' }}>
+                <div className="clinical-ontology-modal-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : 'repeat(2, 1fr)', gap: '10px', marginTop: '12px' }}>
                   <div style={{ background: '#EFF6FF', padding: '10px', borderRadius: '8px', border: '1px solid #BFDBFE' }}>
                     <div style={{ fontSize: '10.5px', color: '#1E40AF', fontWeight: 750 }}>WHO ICD-10 Taxonomy</div>
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#1E3A8A', fontFamily: 'monospace', marginTop: '2px' }}>

@@ -70,6 +70,7 @@ import MintIvoryWaveBackground from './MintIvoryWaveBackground';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
 import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
+import { triggerHaptic } from '../utils/haptics';
 
 /**
  * PatientPortal Component — Complete Enterprise Citizen Healthcare Operating System
@@ -725,6 +726,28 @@ export default function PatientPortal({
 
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
+  const [isMobileScreen, setIsMobileScreen] = useState(
+    typeof window !== 'undefined' ? window.innerWidth <= 860 : false
+  );
+  const [isDeviceOnline, setIsDeviceOnline] = useState(
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobileScreen(window.innerWidth <= 860);
+    const handleOnline = () => setIsDeviceOnline(true);
+    const handleOffline = () => setIsDeviceOnline(false);
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative' }}>
       {/* Pristine Mint-Ivory Flow Vector Canvas (Matching Doctor Portal) */}
@@ -891,6 +914,7 @@ export default function PatientPortal({
                 <button
                   key={item.id}
                   onClick={() => {
+                    triggerHaptic('light');
                     setActiveTab(item.id);
                     setMobileDrawerOpen(false);
                   }}
@@ -1309,8 +1333,17 @@ export default function PatientPortal({
             )}
           </div>
 
+          {/* Offline Indicator Pill */}
+          {!isDeviceOnline && (
+            <span style={{ fontSize: '11px', background: '#FEF2F2', color: '#DC2626', border: '1px solid #FCA5A5', padding: '3px 8px', borderRadius: '12px', fontWeight: 750, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#DC2626' }}></span>
+              Offline
+            </span>
+          )}
+
           {/* Prominent Header Logout Button */}
           <button
+            className="patient-header-logout-btn"
             onClick={() => {
               if (onLogoutPatient) onLogoutPatient();
             }}
@@ -1337,7 +1370,7 @@ export default function PatientPortal({
       </header>
 
         {/* Content Body */}
-        <div style={{ padding: '24px 28px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+        <div className="patient-portal-content-body" style={{ padding: isMobileScreen ? '14px 12px 76px 12px' : '24px 28px', maxWidth: '1400px', margin: '0 auto', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
 
           {/* ---------------------------------------------------------------------
               TAB 1: HOME (MATCHING SCREENSHOT 1 PATIENT VIEW)
@@ -1423,10 +1456,11 @@ export default function PatientPortal({
               {/* 4 Action Quick Cards */}
               <div className="patient-quick-actions-grid" style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '18px',
+                gridTemplateColumns: isMobileScreen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+                gap: isMobileScreen ? '12px' : '18px',
                 marginBottom: '26px',
-                width: '100%'
+                width: '100%',
+                boxSizing: 'border-box'
               }}>
                 <div 
                   onClick={() => setActiveTab('appointments')} 
@@ -1522,7 +1556,7 @@ export default function PatientPortal({
               </div>
 
               {/* Middle Section: Left (Appointments, Vitals, Reports) | Right (Chat, Goals, Doctor card) */}
-              <div className="patient-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1.08fr 0.92fr', gap: '22px', marginBottom: '26px', width: '100%' }}>
+              <div className="patient-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : '1.08fr 0.92fr', gap: '22px', marginBottom: '26px', width: '100%', boxSizing: 'border-box' }}>
                 {/* Left Column */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   {/* Upcoming Appointments */}
@@ -1603,7 +1637,7 @@ export default function PatientPortal({
                       <span onClick={() => setActiveTab('my_health')} style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View Details →</span>
                     </div>
 
-                    <div className="patient-vitals-summary-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', width: '100%' }}>
+                    <div className="patient-vitals-summary-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
                       <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
                         <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#64748B' }}>Heart Rate</div>
@@ -4357,7 +4391,7 @@ export default function PatientPortal({
               )}
 
               {/* Settings Sections Grid (2 Columns) */}
-              <div className="patient-settings-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '22px', width: '100%' }}>
+              <div className="patient-settings-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : 'repeat(2, 1fr)', gap: '22px', width: '100%', boxSizing: 'border-box' }}>
                 
                 {/* 1. AyuSwar Indic Voice & Dialect Engine */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
@@ -5054,10 +5088,11 @@ export default function PatientPortal({
         aria-label="Mobile Navigation"
       >
         {[
-          { id: 'home', label: 'Home', icon: Home },
+          { id: 'home', label: 'Dashboard', icon: LayoutGrid },
           { id: 'my_health', label: 'My Health', icon: Heart },
-          { id: 'appointments', label: 'Appts', icon: Calendar },
-          { id: 'medications', label: 'Meds', icon: Pill },
+          { id: 'appointments', label: 'Appointments', icon: Calendar },
+          { id: 'reports', label: 'Reports & Lab', icon: FlaskConical },
+          { id: 'medications', label: 'Prescriptions', icon: ClipboardPlus },
           { id: 'settings', label: 'Settings', icon: Settings }
         ].map((tab) => {
           const Icon = tab.icon;
@@ -5066,9 +5101,7 @@ export default function PatientPortal({
             <button
               key={tab.id}
               onClick={() => {
-                if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                  try { navigator.vibrate(12); } catch {}
-                }
+                triggerHaptic('light');
                 setActiveTab(tab.id);
               }}
               style={{

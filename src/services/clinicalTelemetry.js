@@ -144,3 +144,4 @@ class ClinicalTelemetryService {
 }
 
 export const clinicalTelemetry = new ClinicalTelemetryService();
+

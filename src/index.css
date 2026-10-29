@@ -2387,8 +2387,13 @@ body {
     display: none !important;
   }
 
-  .doctor-header-logout-btn {
-    display: none !important;
+  .doctor-header-logout-btn,
+  .patient-header-logout-btn {
+    display: flex !important;
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    border-radius: 12px !important;
+    gap: 4px !important;
   }
 
   .doctor-header-profile-text {
@@ -2462,20 +2467,32 @@ body {
   .ayuvision-ocr-grid {
     grid-template-columns: 1fr !important;
     width: 100% !important;
+    max-width: 100% !important;
     gap: 14px !important;
+    box-sizing: border-box !important;
   }
 
   /* Clinical Library Indic Ontology Cards Grid */
   .clinical-ontology-cards-grid {
     grid-template-columns: 1fr !important;
     width: 100% !important;
+    max-width: 100% !important;
     gap: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .clinical-ontology-cards-grid > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .clinical-ontology-modal-grid {
     grid-template-columns: 1fr !important;
     width: 100% !important;
+    max-width: 100% !important;
     gap: 10px !important;
+    box-sizing: border-box !important;
   }
 
   .prescription-preview-container {

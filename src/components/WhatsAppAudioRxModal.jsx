@@ -25,6 +25,7 @@ import { speechService } from '../services/indicSpeechService';
 import { queryGroqApi, getGroqApiKey } from '../services/aiBrainService';
 import { cleanTextForSpeech } from '../utils/speechSanitizer';
 import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
+import { audioMutex } from '../services/clinicalTelemetry';
 
 /**
  * WhatsAppAudioRxModal Component
@@ -370,6 +371,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
   };
 
   const stopAudio = () => {
+    audioMutex.release('whatsapp-audio-rx');
     setIsPlayingAudio(false);
     if (karaokeTimerRef.current) clearInterval(karaokeTimerRef.current);
     if (progressTimerRef.current) clearInterval(progressTimerRef.current);
@@ -381,6 +383,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
 
   const startAudio = () => {
     stopAudio();
+    audioMutex.acquire('whatsapp-audio-rx', () => stopAudio());
     setIsPlayingAudio(true);
     const tokens = currentRx.karaokeTokens;
     let tokenIdx = 0;
