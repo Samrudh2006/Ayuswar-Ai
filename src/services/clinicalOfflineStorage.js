@@ -89,3 +89,4 @@ export class ClinicalOfflineStorageService {
 }
 
 export const clinicalOfflineStorage = new ClinicalOfflineStorageService();
+

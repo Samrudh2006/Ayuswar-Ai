@@ -57,9 +57,25 @@ export default class ErrorBoundary extends React.Component {
             }}>
               Emergency? Dial 112 / 108
             </div>
-            <p style={{ fontSize: '13.5px', color: '#CBD5E1', marginBottom: '24px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '13.5px', color: '#CBD5E1', marginBottom: '16px', lineHeight: 1.5 }}>
               A client runtime component encountered an issue. Emergency healthcare services operate fail-safe offline protocols.
             </p>
+            {this.state.error?.message && (
+              <div style={{
+                background: 'rgba(0, 0, 0, 0.4)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                fontSize: '11px',
+                fontFamily: 'monospace',
+                color: '#FCA5A5',
+                marginBottom: '20px',
+                textAlign: 'left',
+                overflowX: 'auto',
+                border: '1px solid rgba(239, 68, 68, 0.2)'
+              }}>
+                {String(this.state.error.message)}
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={() => window.location.reload()}

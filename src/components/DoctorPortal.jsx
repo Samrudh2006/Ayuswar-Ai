@@ -48,6 +48,7 @@ import {
   PhoneCall,
   UserCheck,
   Check,
+  Play,
   LogOut,
   Menu,
   X
