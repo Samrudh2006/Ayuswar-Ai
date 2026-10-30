@@ -1252,115 +1252,114 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               </div>
             </div>
 
-            {/* Recording Controls Strip */}
+            {/* Recording Controls Strip (Strictly 1 Single Elegant Horizontal Bar) */}
             <div style={{
               background: '#061626',
               borderRadius: '14px',
-              padding: '16px 18px',
+              padding: '12px 18px',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '12px'
+              gap: '12px',
+              flexWrap: 'nowrap'
             }}>
-              {/* Left: The Only Primary Interactive Button + Live Auto Badges */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                {/* 1. Main Action: Start / Pause Recording */}
+              {/* Left: Start/Pause Action + Live Speaker Pill */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flexWrap: 'nowrap' }}>
                 <button
                   onClick={isRecording ? pauseRecordingSession : startRecordingSession}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '10px 20px',
-                    borderRadius: '12px',
+                    padding: '9px 18px',
+                    borderRadius: '10px',
                     background: isRecording ? '#EF4444' : '#10B981',
                     color: '#ffffff',
                     border: 'none',
                     fontSize: '13px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: isRecording ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 14px rgba(16, 185, 129, 0.35)',
+                    boxShadow: isRecording ? '0 0 14px rgba(239, 68, 68, 0.4)' : '0 3px 12px rgba(16, 185, 129, 0.35)',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  {isRecording ? <Pause size={16} /> : <Play size={16} fill="#ffffff" />}
-                  <span>{isRecording ? 'Pause Recording' : '▶ Start OPD Recording'}</span>
+                  {isRecording ? <Pause size={15} /> : <Play size={15} fill="#ffffff" />}
+                  <span>{isRecording ? 'Pause Recording' : 'Start OPD Recording'}</span>
                 </button>
 
-                {/* 2. Live Speaker Status Indicator (Auto-Diarized) */}
+                {/* Live Speaker Status Indicator (Auto-Diarized) */}
                 <div
                   onClick={() => handleSwitchActiveSpeaker()}
-                  title="Auto-Diarization Active (WebAudio Pitch DSP + NLP). Optional: click or tap Spacebar to override."
+                  title="Auto-Diarization Active (WebAudio Pitch DSP + NLP). Optional: tap Spacebar to switch."
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     background: activeLiveSpeaker.includes('Doctor') 
                       ? 'rgba(45, 212, 191, 0.12)' 
                       : 'rgba(251, 191, 36, 0.12)',
-                    border: `1.5px solid ${activeLiveSpeaker.includes('Doctor') ? 'rgba(45, 212, 191, 0.4)' : 'rgba(251, 191, 36, 0.4)'}`,
+                    border: `1.5px solid ${activeLiveSpeaker.includes('Doctor') ? 'rgba(45, 212, 191, 0.35)' : 'rgba(251, 191, 36, 0.35)'}`,
                     borderRadius: '10px',
-                    padding: '6px 12px',
-                    fontSize: '12px',
+                    padding: '6px 11px',
+                    fontSize: '11.5px',
                     fontWeight: 750,
                     color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
                   }}
                 >
-                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047', animation: isRecording ? 'pulse 1s infinite' : 'none' }} />
-                  <span>Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
-                  <span style={{ fontSize: '10px', opacity: 0.7, borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '6px' }}>Auto</span>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047', animation: isRecording ? 'pulse 1s infinite' : 'none' }} />
+                  <span>{activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
+                  <span style={{ fontSize: '9.5px', opacity: 0.65, borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '5px' }}>Auto</span>
                 </div>
 
-                {/* 3. Automatic AI Engine Pipeline Status Badges (Automated in Background) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                {/* Live Whisper Transcribing Indicator (Only shown during active background transcription) */}
+                {isTranscribingWhisper && (
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '5px',
-                    padding: '6px 11px',
-                    borderRadius: '10px',
-                    background: isTranscribingWhisper ? 'rgba(168, 85, 247, 0.25)' : 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(168, 85, 247, 0.3)',
-                    color: '#D8B4FE',
+                    padding: '4px 9px',
+                    borderRadius: '8px',
+                    background: 'rgba(168, 85, 247, 0.22)',
+                    border: '1px solid rgba(168, 85, 247, 0.4)',
+                    color: '#E9D5FF',
                     fontSize: '11px',
-                    fontWeight: 750
+                    fontWeight: 750,
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
                   }}>
-                    <Sparkles size={12} color="#FDE047" style={{ animation: isTranscribingWhisper ? 'spin 1.5s linear infinite' : 'none' }} />
-                    <span>{isTranscribingWhisper ? '⚡ Whisper Transcribing...' : '⚡ Groq Whisper STT (Auto)'}</span>
+                    <Sparkles size={11} color="#FDE047" style={{ animation: 'spin 1.5s linear infinite' }} />
+                    <span>Whisper Transcribing...</span>
                   </div>
-
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    padding: '6px 11px',
-                    borderRadius: '10px',
-                    background: 'rgba(45, 212, 191, 0.08)',
-                    border: '1px solid rgba(45, 212, 191, 0.25)',
-                    color: '#2DD4BF',
-                    fontSize: '11px',
-                    fontWeight: 750
-                  }}>
-                    <span>🧠 Smart Diarizer (Auto NLP+DSP)</span>
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* Right: Timer & Subtle Secondary Utilities */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Elapsed Time
+              {/* Right: Elapsed Timer + Subtle Utility Actions */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, flexWrap: 'nowrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      Elapsed
+                    </div>
+                    <div style={{ fontSize: '15px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
+                      {formatTimer(recordedSeconds)}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '16px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
-                    {formatTimer(recordedSeconds)}
-                  </div>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: isRecording ? '#EF4444' : '#64748B',
+                    animation: isRecording ? 'pulse 1s infinite' : 'none'
+                  }} />
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '10px' }}>
                   <button
                     onClick={resetRecordingSession}
                     style={{
@@ -1374,7 +1373,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '4px'
+                      gap: '4px',
+                      whiteSpace: 'nowrap'
                     }}
                     title="Reset consultation recording"
                   >
@@ -1395,7 +1395,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '4px'
+                      gap: '4px',
+                      whiteSpace: 'nowrap'
                     }}
                     title="Add a manual dialogue turn"
                   >
@@ -1403,14 +1404,6 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     <span>+ Add</span>
                   </button>
                 </div>
-
-                <div style={{
-                  width: '10px',
-                  height: '10px',
-                  borderRadius: '50%',
-                  background: isRecording ? '#EF4444' : '#64748B',
-                  animation: isRecording ? 'pulse 1s infinite' : 'none'
-                }} />
               </div>
             </div>
 
