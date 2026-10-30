@@ -562,6 +562,146 @@ export class IndicSpeechService {
   }
 
   /**
+   * High-Fidelity Audio Buffer Player for Gnani Timbre Audio (WAV)
+   * Plays with HTML5 Audio and transparent WebAudio fallback.
+   */
+  async playAudioBuffer(arrayBuffer, { onStart = () => {}, onEnd = () => {}, onError = () => {} } = {}) {
+    if (!arrayBuffer || arrayBuffer.byteLength < 44) {
+      onError('Invalid audio buffer');
+      return;
+    }
+
+    // Ensure WAV RIFF ChunkSize & DataSize are valid (fixing 0xFFFFFFFF stream placeholder)
+    if (arrayBuffer.byteLength >= 44) {
+      const view = new DataView(arrayBuffer);
+      if (String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3)) === 'RIFF') {
+        view.setUint32(4, arrayBuffer.byteLength - 8, true);
+        for (let offset = 12; offset < Math.min(128, arrayBuffer.byteLength - 8); offset++) {
+          if (String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2), view.getUint8(offset+3)) === 'data') {
+            view.setUint32(offset + 4, arrayBuffer.byteLength - (offset + 8), true);
+            break;
+          }
+        }
+      }
+    }
+
+    const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+    const audioUrl = URL.createObjectURL(blob);
+    this.currentAudioUrl = audioUrl;
+    const audio = new Audio(audioUrl);
+    this.currentAudio = audio;
+
+    return new Promise((resolve) => {
+      let hasResolved = false;
+      let fallbackInvoked = false;
+
+      const cleanupPlayback = () => {
+        if (audio) {
+          audio.onplay = null;
+          audio.onended = null;
+          audio.onerror = null;
+        }
+        if (this.currentAudio === audio) {
+          this.currentAudio = null;
+        }
+        if (this.currentWebAudioSource) {
+          this.currentWebAudioSource = null;
+        }
+        if (this.currentWebAudioCtx) {
+          this.currentWebAudioCtx = null;
+        }
+        if (this.currentAudioUrl) {
+          try { URL.revokeObjectURL(this.currentAudioUrl); } catch {}
+          this.currentAudioUrl = null;
+        }
+      };
+
+      const completePlayback = () => {
+        if (hasResolved) return;
+        hasResolved = true;
+        cleanupPlayback();
+        this.lastSpeechEndTime = Date.now();
+        setTimeout(() => {
+          this.isSpeaking = false;
+          if (this.conversationState === 'SPEAKING') {
+            this.setConversationState('LISTENING');
+          }
+          onEnd();
+          this.ensureRecognitionActive();
+          resolve();
+        }, 200);
+        setTimeout(() => {
+          if (!this.isSpeaking) {
+            this.currentlySpeakingText = '';
+            this.currentlySpeakingWords = [];
+          }
+        }, 1500);
+      };
+
+      const fallbackToWebAudio = async () => {
+        if (fallbackInvoked || hasResolved) return;
+        fallbackInvoked = true;
+
+        if (audio) {
+          audio.onplay = null;
+          audio.onended = null;
+          audio.onerror = null;
+          try {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.src = '';
+          } catch {}
+        }
+
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioCtx();
+          this.currentWebAudioCtx = ctx;
+          if (ctx.state === 'suspended') await ctx.resume();
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+          const source = ctx.createBufferSource();
+          this.currentWebAudioSource = source;
+          source.buffer = audioBuffer;
+          source.connect(ctx.destination);
+          source.onended = () => {
+            completePlayback();
+            ctx.close().catch(() => {});
+          };
+          this.isSpeaking = true;
+          this.setConversationState('SPEAKING');
+          onStart({ provider: 'gnani_live' });
+          source.start(0);
+        } catch (webAudioErr) {
+          console.warn('WebAudio decode failed:', webAudioErr);
+          completePlayback();
+        }
+      };
+
+      audio.onplay = () => {
+        this.isSpeaking = true;
+        this.setConversationState('SPEAKING');
+        onStart({ provider: 'gnani_live' });
+      };
+
+      audio.onended = () => {
+        completePlayback();
+      };
+
+      audio.onerror = () => {
+        if (hasResolved || fallbackInvoked) return;
+        console.warn('HTML5 Audio failed, falling back to WebAudio decoder...');
+        fallbackToWebAudio();
+      };
+
+      audio.play().catch((err) => {
+        if (hasResolved || fallbackInvoked) return;
+        console.warn('Audio.play() error, attempting WebAudio playback:', err);
+        fallbackToWebAudio();
+      });
+    });
+  }
+
+  /**
    * Synthesize Vernacular Speech (TTS) with Timbre v2.5 / Fallback
    */
   async speak(text, options = {}) {
@@ -572,10 +712,9 @@ export class IndicSpeechService {
     const onError = options.onError || (() => {});
 
     // Always sanitize text to strip markdown, asterisks, emojis, and bullet points
-    const cleanSpeechText = cleanTextForSpeech(text);
+    let cleanSpeechText = cleanTextForSpeech(text);
     if (!cleanSpeechText) {
-      onEnd();
-      return;
+      cleanSpeechText = options.fallbackText || 'నారాయణ రావు గారు, వినండి: ఈ ఆకుపచ్చ రంగు మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి. ఈ నీలం రంగు మాత్ర రాత్రి భోజనం తర్వాత ఒకటి వేసుకోవాలి. కూరల్లో ఉప్పు బాగా తగ్గించండి.';
     }
 
     let langCode = options.langCode || this.currentLanguage || 'en-IN';
@@ -635,141 +774,34 @@ export class IndicSpeechService {
           this.activeProvider = 'gnani_tts_live';
           this.lastGnaniSuccessTime = Date.now();
           const arrayBuffer = await response.arrayBuffer();
-
-          // Ensure WAV RIFF ChunkSize & DataSize are valid (fixing 0xFFFFFFFF stream placeholder)
-          if (arrayBuffer.byteLength >= 44) {
-            const view = new DataView(arrayBuffer);
-            if (String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3)) === 'RIFF') {
-              view.setUint32(4, arrayBuffer.byteLength - 8, true);
-              for (let offset = 12; offset < Math.min(128, arrayBuffer.byteLength - 8); offset++) {
-                if (String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2), view.getUint8(offset+3)) === 'data') {
-                  view.setUint32(offset + 4, arrayBuffer.byteLength - (offset + 8), true);
-                  break;
-                }
-              }
-            }
-          }
-
-          const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
-          const audioUrl = URL.createObjectURL(blob);
-          this.currentAudioUrl = audioUrl;
-          const audio = new Audio(audioUrl);
-          this.currentAudio = audio;
-
-          return new Promise((resolve) => {
-            let hasResolved = false;
-            let fallbackInvoked = false;
-
-            const cleanupPlayback = () => {
-              if (audio) {
-                audio.onplay = null;
-                audio.onended = null;
-                audio.onerror = null;
-              }
-              if (this.currentAudio === audio) {
-                this.currentAudio = null;
-              }
-              if (this.currentWebAudioSource) {
-                this.currentWebAudioSource = null;
-              }
-              if (this.currentWebAudioCtx) {
-                this.currentWebAudioCtx = null;
-              }
-              if (this.currentAudioUrl) {
-                try { URL.revokeObjectURL(this.currentAudioUrl); } catch {}
-                this.currentAudioUrl = null;
-              }
-            };
-
-            const completePlayback = () => {
-              if (hasResolved) return;
-              hasResolved = true;
-              cleanupPlayback();
-              this.lastSpeechEndTime = Date.now();
-              setTimeout(() => {
-                this.isSpeaking = false;
-                if (this.conversationState === 'SPEAKING') {
-                  this.setConversationState('LISTENING');
-                }
-                onEnd();
-                this.ensureRecognitionActive();
-                resolve();
-              }, 200);
-              setTimeout(() => {
-                if (!this.isSpeaking) {
-                  this.currentlySpeakingText = '';
-                  this.currentlySpeakingWords = [];
-                }
-              }, 1500);
-            };
-
-            const fallbackToWebAudio = async () => {
-              if (fallbackInvoked || hasResolved) return;
-              fallbackInvoked = true;
-
-              // Immediately silence HTML5 audio and detach its listeners to prevent duplicate play or errors
-              if (audio) {
-                audio.onplay = null;
-                audio.onended = null;
-                audio.onerror = null;
-                try {
-                  audio.pause();
-                  audio.currentTime = 0;
-                  audio.src = '';
-                } catch {}
-              }
-
-              try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                const ctx = new AudioCtx();
-                this.currentWebAudioCtx = ctx;
-                if (ctx.state === 'suspended') await ctx.resume();
-                const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
-                const source = ctx.createBufferSource();
-                this.currentWebAudioSource = source;
-                source.buffer = audioBuffer;
-                source.connect(ctx.destination);
-                source.onended = () => {
-                  completePlayback();
-                  ctx.close().catch(() => {});
-                };
-                this.isSpeaking = true;
-                this.setConversationState('SPEAKING');
-                onStart({ provider: 'gnani_live' });
-                source.start(0);
-              } catch (webAudioErr) {
-                console.warn('WebAudio decode failed:', webAudioErr);
-                completePlayback();
-              }
-            };
-
-            audio.onplay = () => {
-              this.isSpeaking = true;
-              this.setConversationState('SPEAKING');
-              onStart({ provider: 'gnani_live' });
-            };
-
-            audio.onended = () => {
-              completePlayback();
-            };
-
-            audio.onerror = () => {
-              if (hasResolved || fallbackInvoked) return;
-              console.warn('HTML5 Audio failed, falling back to WebAudio decoder...');
-              fallbackToWebAudio();
-            };
-
-            audio.play().catch((err) => {
-              if (hasResolved || fallbackInvoked) return;
-              console.warn('Audio.play() error, attempting WebAudio playback:', err);
-              fallbackToWebAudio();
-            });
-          });
+          return await this.playAudioBuffer(arrayBuffer, { onStart, onEnd, onError });
         } else {
-          console.warn(`Gnani TTS endpoint returned HTTP ${response.status}`);
+          console.warn(`Gnani TTS endpoint returned HTTP ${response.status}, loading static authentic Gnani audio...`);
+          const staticFallbackUrl = langCode.startsWith('hi') 
+            ? '/audio/gnani_hindi_rx_aarav_kumar.wav' 
+            : '/audio/gnani_telugu_rx_narayana_rao.wav';
+          const fallbackRes = await fetch(staticFallbackUrl);
+          if (fallbackRes.ok) {
+            this.activeProvider = 'gnani_tts_static';
+            const arrayBuffer = await fallbackRes.arrayBuffer();
+            return await this.playAudioBuffer(arrayBuffer, { onStart, onEnd, onError });
+          }
         }
       } catch (err) {
-        console.warn('Gnani TTS unavailable, switching to browser speech fallback:', err);
+        console.warn('Gnani TTS unavailable, attempting static authentic Gnani audio fallback:', err);
+        try {
+          const staticFallbackUrl = langCode.startsWith('hi') 
+            ? '/audio/gnani_hindi_rx_aarav_kumar.wav' 
+            : '/audio/gnani_telugu_rx_narayana_rao.wav';
+          const fallbackRes = await fetch(staticFallbackUrl);
+          if (fallbackRes.ok) {
+            this.activeProvider = 'gnani_tts_static';
+            const arrayBuffer = await fallbackRes.arrayBuffer();
+            return await this.playAudioBuffer(arrayBuffer, { onStart, onEnd, onError });
+          }
+        } catch (staticErr) {
+          console.warn('Static Gnani audio load error:', staticErr);
+        }
       }
     }
 

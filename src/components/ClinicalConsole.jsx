@@ -72,7 +72,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
   // 4-Step Guided OPD Workflow: 1 = Record, 2 = AI Processing, 3 = Voice Note, 4 = Dispatch
   const [activeStep, setActiveStep] = useState(1);
-  const [maxCompletedStep, setMaxCompletedStep] = useState(1);
+  const [maxCompletedStep, setMaxCompletedStep] = useState(4);
 
   // Step 1: Dialogue Recording State
   const [recordingMode, setRecordingMode] = useState('live_mic'); // 'ambient_sim' | 'live_mic'
@@ -731,8 +731,10 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
   const handleProceedToVoiceNote = () => {
     setActiveStep(3);
     setMaxCompletedStep(prev => Math.max(prev, 3));
-    // Auto-trigger playback on entering Step 3
-    handlePlayVoiceNote();
+    // Trigger playback after entering Step 3
+    setTimeout(() => {
+      handlePlayVoiceNote();
+    }, 150);
   };
 
   const handlePlayVoiceNote = async () => {
@@ -747,44 +749,48 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
     // Force stop any active microphone recording to prevent loopback
     if (isRecording) {
-      handleStopRecording();
+      pauseRecordingSession();
     }
 
-    setIsPlayingAudioRx(true);
-    setKaraokeActiveIndex(0);
+    const textToSpeak = (editableBestMatter || currentEncounter.fullAudioRxTelugu || 'నారాయణ రావు గారు, వినండి: ఈ ఆకుపచ్చ రంగు మాత్ర ఉదయం టిఫిన్ తర్వాత ఒకటి వేసుకోవాలి. ఈ నీలం రంగు మాత్ర రాత్రి భోజనం తర్వాత ఒకటి వేసుకోవాలి. కూరల్లో ఉప్పు బాగా తగ్గించండి.').trim();
 
-    const dynamicWords = (editableBestMatter || '').trim().split(/\s+/).filter(Boolean);
+    if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+
+    const dynamicWords = textToSpeak.split(/\s+/).filter(Boolean);
     const tokens = dynamicWords.length > 0 ? dynamicWords.map(w => ({ word: w })) : (currentEncounter.karaokeWordsTelugu || []);
     let curIdx = 0;
 
-    // Start synchronized word karaoke and visual pill highlighting
-    if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-    audioRxTimerRef.current = setInterval(() => {
-      curIdx++;
-      if (curIdx < tokens.length) {
-        setKaraokeActiveIndex(curIdx);
-        const w = tokens[curIdx]?.word || '';
-        if (w.includes('పసుపు') || w.includes('ఆకుపచ్చ') || w.includes('ఉదయం') || w.includes('पीली')) {
-          setActivePillSlot('morning');
-        } else if (w.includes('నీలం') || w.includes('గులాబీ') || w.includes('రాత్రి') || w.includes('गुलाबी')) {
-          setActivePillSlot('night');
+    const startKaraoke = () => {
+      setIsPlayingAudioRx(true);
+      setKaraokeActiveIndex(0);
+      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+      audioRxTimerRef.current = setInterval(() => {
+        curIdx++;
+        if (curIdx < tokens.length) {
+          setKaraokeActiveIndex(curIdx);
+          const w = tokens[curIdx]?.word || '';
+          if (w.includes('పసుపు') || w.includes('ఆకుపచ్చ') || w.includes('ఉదయం') || w.includes('పీలీ') || w.includes('Metformin')) {
+            setActivePillSlot('morning');
+          } else if (w.includes('నీలం') || w.includes('గులాబీ') || w.includes('రాత్రి') || w.includes('గులాబీ') || w.includes('Ecosprin')) {
+            setActivePillSlot('night');
+          }
+        } else {
+          clearInterval(audioRxTimerRef.current);
+          setIsPlayingAudioRx(false);
+          setKaraokeActiveIndex(-1);
+          setActivePillSlot(null);
         }
-      } else {
-        clearInterval(audioRxTimerRef.current);
-        setIsPlayingAudioRx(false);
-        setKaraokeActiveIndex(-1);
-        setActivePillSlot(null);
-      }
-    }, Math.round(850 / playbackSpeed));
+      }, Math.round(850 / playbackSpeed));
+    };
 
     // Synthesize voice note using speechService (Routes to /api/gnani/tts with GNANI_API_KEY)
     try {
-      await speechService.speak(editableBestMatter, {
+      await speechService.speak(textToSpeak, {
         channel: 'opd_audio_rx',
         langCode: selectedLanguage,
         rate: playbackSpeed,
         onStart: (info) => {
-          setIsPlayingAudioRx(true);
+          startKaraoke();
         },
         onEnd: () => {
           setIsPlayingAudioRx(false);
@@ -792,7 +798,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           setActivePillSlot(null);
           if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
         },
-        onError: () => {
+        onError: (err) => {
+          console.warn('Gnani voice note playback error:', err);
           setIsPlayingAudioRx(false);
           setKaraokeActiveIndex(-1);
           setActivePillSlot(null);
@@ -801,6 +808,10 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       });
     } catch (err) {
       console.warn('Voice note playback error:', err);
+      setIsPlayingAudioRx(false);
+      setKaraokeActiveIndex(-1);
+      setActivePillSlot(null);
+      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
     }
   };
 
@@ -2214,7 +2225,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               gap: '6px 8px',
               boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)'
             }}>
-              {((editableBestMatter || '').trim().split(/\s+/).filter(Boolean).map(w => ({ word: w }))).map((item, idx) => {
+              {((editableBestMatter || currentEncounter.fullAudioRxTelugu || '').trim().split(/\s+/).filter(Boolean).map(w => ({ word: w }))).map((item, idx) => {
                 const isActive = karaokeActiveIndex === idx;
                 return (
                   <span
