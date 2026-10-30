@@ -1108,7 +1108,7 @@ export default function DoctorPortal({
   const isCollapsedView = isSidebarCollapsed && !mobileDrawerOpen;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+    <div className="doctor-portal-container" style={{ display: 'flex', height: '100vh', maxHeight: '100vh', width: '100%', position: 'relative', overflow: 'hidden' }}>
       {/* Pristine Mint-Ivory Flow Vector Canvas */}
       <MintIvoryWaveBackground />
 
@@ -1135,7 +1135,8 @@ export default function DoctorPortal({
         style={{
           width: isCollapsedView ? '76px' : '240px',
           height: '100vh',
-          position: 'sticky',
+          maxHeight: '100vh',
+          position: 'relative',
           top: 0,
           background: 'rgba(255, 255, 255, 0.94)',
           backdropFilter: 'blur(16px)',
@@ -1145,7 +1146,8 @@ export default function DoctorPortal({
           justifyContent: 'space-between',
           padding: isCollapsedView ? '20px 10px' : '20px 16px',
           flexShrink: 0,
-          overflow: 'visible',
+          overflowY: 'hidden',
+          overflowX: 'visible',
           zIndex: 96,
           transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1), left 250ms ease-in-out'
         }}
@@ -1202,7 +1204,7 @@ export default function DoctorPortal({
           {isSidebarCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
         </button>
 
-        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div style={{ flex: 1, overflowY: 'hidden', overflowX: 'hidden' }}>
           {/* Brand Logo */}
           <div 
             onClick={() => window.location.href = '/'}
@@ -1460,7 +1462,7 @@ export default function DoctorPortal({
       {/* =========================================================================
           MAIN PHYSICIAN OPERATING CANVAS
           ========================================================================= */}
-      <div className="doctor-portal-main-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
+      <div className="doctor-portal-main-canvas" style={{ flex: 1, height: '100vh', maxHeight: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',
@@ -1522,35 +1524,35 @@ export default function DoctorPortal({
           </div>
         </div>
 
-          {/* Profile, Switcher, Settings & Logout */}
+          {/* Controls: Sleek Voice Nav, Offline Status, Settings */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
-            {/* Hands-Free Doctor Voice Navigation Button */}
+            {/* Hands-Free Doctor Voice Navigation Button (Sleek 38px Icon Button) */}
             <button
               onClick={() => {
                 triggerHaptic('medium');
                 toggleVoiceNav();
               }}
               style={{
-                background: isVoiceNavActive ? 'linear-gradient(135deg, #EF4444, #DC2626)' : 'rgba(15, 76, 92, 0.08)',
-                color: isVoiceNavActive ? '#ffffff' : '#0F4C5C',
-                border: isVoiceNavActive ? '1.5px solid #B91C1C' : '1px solid rgba(15, 76, 92, 0.2)',
+                width: '38px',
+                height: '38px',
                 borderRadius: '10px',
-                padding: '6px 10px',
-                fontSize: '11.5px',
-                fontWeight: 750,
-                cursor: 'pointer',
+                border: isVoiceNavActive ? '1.5px solid #EF4444' : '1px solid #E2E8F0',
+                background: isVoiceNavActive ? 'rgba(239, 68, 68, 0.12)' : '#F8FAFC',
+                color: isVoiceNavActive ? '#DC2626' : '#0F4C5C',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
-                transition: 'all 0.15s ease'
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 150ms ease',
+                padding: 0
               }}
-              title="Hands-Free Voice Commands: Say 'Next Patient', 'Prescriptions', or 'Queue'"
+              title={isVoiceNavActive ? "Voice Commands Active — Click to turn off" : "Hands-Free Voice Commands: Say 'Next Patient', 'Prescriptions', etc."}
+              aria-label="Toggle Voice Navigation"
             >
-              <Mic size={15} style={{ animation: isVoiceNavActive ? 'pulse 1s infinite' : 'none' }} />
-              <span className="voice-nav-label" style={{ fontSize: '11.5px' }}>{isVoiceNavActive ? 'Voice Active' : 'Voice Nav'}</span>
+              <Mic size={18} color={isVoiceNavActive ? '#DC2626' : '#0F4C5C'} style={{ animation: isVoiceNavActive ? 'pulse 1s infinite' : 'none' }} />
             </button>
 
-            {/* Offline Health Mode Status Pill */}
+            {/* Offline Health Mode Status Pill (Only visible when device is offline or simulated offline) */}
             {(!isDeviceOnline || isSimulatingOffline) && (
               <div 
                 style={{
@@ -1558,8 +1560,8 @@ export default function DoctorPortal({
                   color: '#6EE7B7',
                   border: '1px solid #059669',
                   borderRadius: '10px',
-                  padding: '5px 9px',
-                  fontSize: '11px',
+                  padding: '6px 11px',
+                  fontSize: '11.5px',
                   fontWeight: 800,
                   display: 'flex',
                   alignItems: 'center',
@@ -1568,57 +1570,8 @@ export default function DoctorPortal({
                 title="Zero-Network Rural Mode: Local VAD & IndexedDB Active"
               >
                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399', animation: 'pulse 1s infinite' }} />
-                <span>Offline OPD {pendingOfflineCount > 0 ? `(${pendingOfflineCount} Queued)` : ''}</span>
+                <span>Offline OPD {pendingOfflineCount > 0 ? `(${pendingOfflineCount})` : ''}</span>
               </div>
-            )}
-
-            {/* Rural Offline Simulation Toggle */}
-            <button
-              onClick={handleToggleOfflineSimulation}
-              style={{
-                background: isSimulatingOffline ? '#FEF3C7' : '#F1F5F9',
-                color: isSimulatingOffline ? '#B45309' : '#475569',
-                border: isSimulatingOffline ? '1.5px solid #F59E0B' : '1px solid #CBD5E1',
-                borderRadius: '10px',
-                padding: '6px 10px',
-                fontSize: '11px',
-                fontWeight: 750,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                transition: 'all 0.15s ease'
-              }}
-              title={isSimulatingOffline ? "Reconnecting & Syncing with ABDM Gateway" : "Simulate Zero-Network Rural PHC Offline Mode"}
-            >
-              <WifiOff size={13} color={isSimulatingOffline ? '#D97706' : '#64748B'} />
-              <span>{isSimulatingOffline ? 'Exit Offline' : 'Simulate Offline'}</span>
-            </button>
-
-            {/* ABDM Instant Sync Button if items pending */}
-            {(pendingOfflineCount > 0 || isSimulatingOffline) && (
-              <button
-                onClick={handleTriggerAbdmSync}
-                disabled={isSyncingOffline}
-                style={{
-                  background: '#0284C7',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '10px',
-                  padding: '6px 10px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: isSyncingOffline ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  boxShadow: '0 2px 8px rgba(2, 132, 199, 0.3)'
-                }}
-                title="Flush IndexedDB offline queue to ABDM Sandbox Gateway"
-              >
-                <RefreshCw size={12} style={{ animation: isSyncingOffline ? 'spin 1s linear infinite' : 'none' }} />
-                <span>{isSyncingOffline ? 'Syncing...' : `Sync ABDM (${pendingOfflineCount || 1})`}</span>
-              </button>
             )}
             <button 
               className="doctor-header-settings-btn"
@@ -1984,33 +1937,6 @@ export default function DoctorPortal({
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    {/* One-Click Live Rayalaseema Telugu Encounter Simulation */}
-                    <button
-                      onClick={() => {
-                        triggerHaptic('medium');
-                        setIsOpdDemoModalOpen(true);
-                      }}
-                      style={{
-                        background: 'linear-gradient(135deg, #10B981 0%, #0F4C5C 100%)',
-                        color: '#ffffff',
-                        border: '1.5px solid #34D399',
-                        borderRadius: '10px',
-                        padding: '10px 18px',
-                        fontSize: '12.5px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)',
-                        minHeight: '44px'
-                      }}
-                      title="Run Interactive 42-Second Rayalaseema Telugu OPD Consultation Simulation"
-                    >
-                      <Play size={14} fill="#ffffff" />
-                      <span>▶️ 60s Live Telugu Scribe Demo</span>
-                    </button>
-
                     <button
                       onClick={() => {
                         if (onSelectEncounterAndLaunch) {

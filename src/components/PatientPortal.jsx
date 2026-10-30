@@ -749,7 +749,7 @@ export default function PatientPortal({
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative' }}>
+    <div className="patient-portal-container" style={{ display: 'flex', height: '100vh', maxHeight: '100vh', width: '100%', position: 'relative', overflow: 'hidden' }}>
       {/* Pristine Mint-Ivory Flow Vector Canvas (Matching Doctor Portal) */}
       <MintIvoryWaveBackground />
 
@@ -776,7 +776,8 @@ export default function PatientPortal({
         style={{
           width: isCollapsedView ? '76px' : '240px',
           height: '100vh',
-          position: 'sticky',
+          maxHeight: '100vh',
+          position: 'relative',
           top: 0,
           background: 'rgba(255, 255, 255, 0.94)',
           backdropFilter: 'blur(16px)',
@@ -786,7 +787,8 @@ export default function PatientPortal({
           justifyContent: 'space-between',
           padding: isCollapsedView ? '20px 10px' : '20px 16px',
           flexShrink: 0,
-          overflow: 'visible',
+          overflowY: 'hidden',
+          overflowX: 'visible',
           zIndex: 96,
           transition: 'width 200ms cubic-bezier(0.2, 0, 0, 1), left 250ms ease-in-out'
         }}
@@ -843,7 +845,7 @@ export default function PatientPortal({
           {isSidebarCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
         </button>
 
-        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div style={{ flex: 1, overflowY: 'hidden', overflowX: 'hidden' }}>
           {/* Logo */}
           <div 
             onClick={() => window.location.href = '/'}
@@ -1105,7 +1107,7 @@ export default function PatientPortal({
       {/* =========================================================================
           MAIN PATIENT WORKSPACE CANVAS
           ========================================================================= */}
-      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
+      <div className="patient-portal-main-canvas ayuswar-portal-canvas" style={{ flex: 1, height: '100vh', maxHeight: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', width: '100%', maxWidth: '100vw', minWidth: 0, position: 'relative', zIndex: 1, background: 'transparent' }}>
         {/* Top Header */}
         <header style={{
           background: 'rgba(255, 255, 255, 0.88)',

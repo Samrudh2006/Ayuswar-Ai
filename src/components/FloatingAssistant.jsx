@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Mic, 
-  MicOff, 
-  PhoneOff, 
-  MessageSquare, 
-  Check, 
-  X, 
-  Minus, 
-  Volume2, 
-  VolumeX, 
-  Send, 
-  Sparkles, 
-  FileText, 
-  Calendar, 
-  User, 
-  Heart, 
-  Pill, 
+import {
+  Mic,
+  MicOff,
+  PhoneOff,
+  MessageSquare,
+  Check,
+  X,
+  Minus,
+  Volume2,
+  VolumeX,
+  Send,
+  Sparkles,
+  FileText,
+  Calendar,
+  User,
+  Heart,
+  Pill,
   CheckCircle2,
   ChevronRight,
   Activity,
@@ -103,10 +103,10 @@ export default function FloatingAssistant({
   const [currentAiReply, setCurrentAiReply] = useState('');
   const [isProcessingQuery, setIsProcessingQuery] = useState(false);
   const [showAiSettingsModal, setShowAiSettingsModal] = useState(false);
-  
+
   // AI Provider & Key Settings
   const [selectedProvider, setSelectedProvider] = useState(() => getAiConfig().provider);
-    const [keySavedToast, setKeySavedToast] = useState(false);
+  const [keySavedToast, setKeySavedToast] = useState(false);
 
   // Determine role: Doctor mode vs Patient mode vs Landing page
   const isDoctorMode = activeView === 'doctor_portal' || activeView === 'console';
@@ -134,16 +134,16 @@ export default function FloatingAssistant({
         speechRecognitionRef.current.onresult = null;
         speechRecognitionRef.current.onerror = null;
         speechRecognitionRef.current.onend = null;
-        try { speechRecognitionRef.current.abort(); } catch {}
+        try { speechRecognitionRef.current.abort(); } catch { }
         speechRecognitionRef.current = null;
       }
       if (mediaRecorderRef.current) {
         try {
           mediaRecorderRef.current.stream?.getTracks?.().forEach(t => {
-            try { t.stop(); t.enabled = false; } catch {}
+            try { t.stop(); t.enabled = false; } catch { }
           });
           mediaRecorderRef.current.recorder?.stop();
-        } catch {}
+        } catch { }
         mediaRecorderRef.current = null;
       }
     };
@@ -156,11 +156,11 @@ export default function FloatingAssistant({
     setLastUserQuery(queryText);
     setIsProcessingQuery(true);
     setAssistantState('speaking');
-    
+
     // Ensure any previously playing speech is halted before generating new reply
     speechService.stopSpeaking();
     const currentGen = ++activeSpeechGenRef.current;
-    
+
     // Tier 1: Check Pre-Synthesized Instant Clinical RAG Matrix (0ms Instant Response)
     const tier1 = findMatrixAnswer(queryText, selectedLanguage || 'te-IN');
     if (tier1) {
@@ -174,8 +174,8 @@ export default function FloatingAssistant({
     }
 
     try {
-      const answer = await askAyuSwarBrain(queryText, effectiveRole, { 
-        patientProfile, 
+      const answer = await askAyuSwarBrain(queryText, effectiveRole, {
+        patientProfile,
         doctorProfile,
         skipGroq: true,
         source: 'floating_assistant'
@@ -187,7 +187,7 @@ export default function FloatingAssistant({
       }
     } catch {
       if (activeSpeechGenRef.current !== currentGen) return;
-      const fallback = effectiveRole === 'receptionist' 
+      const fallback = effectiveRole === 'receptionist'
         ? "Namaste! Welcome to AyuSwar Hospital. Token #14 assigned with Dr. Ananya Sharma. Wait time ~8 mins."
         : "I have recorded your symptom. Dr. Priya has been notified and your vitals are stable.";
       setCurrentAiReply(fallback);
@@ -235,15 +235,15 @@ export default function FloatingAssistant({
         timerRef.current = null;
       }
       if (speechRecognitionRef.current) {
-        try { speechRecognitionRef.current.stop(); } catch {}
+        try { speechRecognitionRef.current.stop(); } catch { }
         speechRecognitionRef.current = null;
       }
 
       const cleaned = liveTranscript.trim();
-      const isPlaceholder = !cleaned || 
-        cleaned.startsWith('Listening') || 
-        cleaned.startsWith('తెలుగులో') || 
-        cleaned.startsWith('हिन्दी में') || 
+      const isPlaceholder = !cleaned ||
+        cleaned.startsWith('Listening') ||
+        cleaned.startsWith('తెలుగులో') ||
+        cleaned.startsWith('हिन्दी में') ||
         cleaned.startsWith('Tap');
 
       let dispatched = false;
@@ -258,7 +258,7 @@ export default function FloatingAssistant({
         const { recorder, chunks, stream } = mediaRecorderRef.current;
         mediaRecorderRef.current = null;
         recorder.onstop = async () => {
-          try { stream?.getTracks?.().forEach(t => t.stop()); } catch {}
+          try { stream?.getTracks?.().forEach(t => t.stop()); } catch { }
           if (!dispatched && !speechSessionDispatchedRef.current && chunks.length > 0) {
             const audioBlob = new Blob(chunks, { type: 'audio/webm' });
             if (audioBlob.size > 800) {
@@ -273,7 +273,7 @@ export default function FloatingAssistant({
             }
           }
         };
-        try { recorder.stop(); } catch {}
+        try { recorder.stop(); } catch { }
       }
 
       if (!dispatched) {
@@ -292,10 +292,10 @@ export default function FloatingAssistant({
       setIsMeSpeaking(true);
       setAssistantState('listening');
       setElapsedVoiceSec(0);
-      const promptText = speechLanguage === 'te-IN' 
-        ? 'తెలుగులో మాట్లాడండి... మీ ప్రశ్న లేదా సమస్య చెప్పండి' 
-        : (speechLanguage === 'hi-IN' 
-          ? 'हिन्दी में बोलें... अपनी समस्या या सवाल पूछें' 
+      const promptText = speechLanguage === 'te-IN'
+        ? 'తెలుగులో మాట్లాడండి... మీ ప్రశ్న లేదా సమస్య చెప్పండి'
+        : (speechLanguage === 'hi-IN'
+          ? 'हिन्दी में बोलें... अपनी समस्या या सवाल पूछें'
           : 'Listening in English... Speak your symptoms or hospital query');
       setLiveTranscript(promptText);
 
@@ -305,16 +305,16 @@ export default function FloatingAssistant({
         speechRecognitionRef.current.onresult = null;
         speechRecognitionRef.current.onerror = null;
         speechRecognitionRef.current.onend = null;
-        try { speechRecognitionRef.current.abort(); } catch {}
+        try { speechRecognitionRef.current.abort(); } catch { }
         speechRecognitionRef.current = null;
       }
       if (mediaRecorderRef.current) {
         try {
           mediaRecorderRef.current.stream?.getTracks?.().forEach(t => {
-            try { t.stop(); t.enabled = false; } catch {}
+            try { t.stop(); t.enabled = false; } catch { }
           });
           mediaRecorderRef.current.recorder?.stop();
-        } catch {}
+        } catch { }
         mediaRecorderRef.current = null;
       }
       timerRef.current = setInterval(() => {
@@ -370,8 +370,8 @@ export default function FloatingAssistant({
     if (customQuery) {
       handleProcessQuestion(customQuery);
     } else {
-      const defaultQ = effectiveRole === 'doctor' 
-        ? 'latest patient reports and asthma GINA guidelines' 
+      const defaultQ = effectiveRole === 'doctor'
+        ? 'latest patient reports and asthma GINA guidelines'
         : (effectiveRole === 'patient' ? 'my appointment and medications' : 'book opd token for doctor');
       handleProcessQuestion(defaultQ);
     }
@@ -388,14 +388,14 @@ export default function FloatingAssistant({
       sessionTimerRef.current = null;
     }
     if (speechRecognitionRef.current) {
-      try { speechRecognitionRef.current.stop(); } catch {}
+      try { speechRecognitionRef.current.stop(); } catch { }
       speechRecognitionRef.current = null;
     }
     if (mediaRecorderRef.current) {
       try {
         mediaRecorderRef.current.stream?.getTracks?.().forEach(t => t.stop());
         mediaRecorderRef.current.recorder?.stop();
-      } catch {}
+      } catch { }
       mediaRecorderRef.current = null;
     }
     setIsMeSpeaking(false);
@@ -469,7 +469,7 @@ export default function FloatingAssistant({
   };
 
   return (
-    <div 
+    <div
       className="floating-assistant-container"
       style={{
         position: 'fixed',
@@ -483,7 +483,7 @@ export default function FloatingAssistant({
           STATE 1: COLLAPSED STATE (FLOATING PILL BUTTON / MOBILE CIRCULAR FAB)
           ========================================================================= */}
       {assistantState === 'collapsed' && (
-        <div 
+        <div
           className="floating-assistant-pill"
           onClick={() => setAssistantState('expanded')}
           style={{
@@ -531,14 +531,14 @@ export default function FloatingAssistant({
               </span>
             </span>
             <span style={{ fontSize: '10px', color: '#64748B', fontWeight: 600 }}>
-              {effectiveRole === 'doctor' 
-                ? 'Clinical Co-Pilot' 
+              {effectiveRole === 'doctor'
+                ? 'Clinical Co-Pilot'
                 : (effectiveRole === 'patient' ? 'Your Health Companion' : 'AI Clinic Helpdesk')}
             </span>
           </div>
 
           {/* Mic Button Circle */}
-          <button 
+          <button
             type="button"
             className="floating-assistant-mic"
             onClick={(e) => {
@@ -609,17 +609,17 @@ export default function FloatingAssistant({
                 <span style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                   Ayu<span style={{ color: '#0F4C5C' }}>Swar</span> AI
                 </span>
-                <span style={{ 
-                  fontSize: '9.5px', 
+                <span style={{
+                  fontSize: '9.5px',
                   color: effectiveRole === 'doctor' ? '#0F4C5C' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
                   background: effectiveRole === 'doctor' ? 'rgba(15, 76, 92, 0.1)' : (effectiveRole === 'patient' ? 'rgba(217,119,6,0.1)' : 'rgba(13,148,136,0.1)'),
                   padding: '2px 6px',
                   borderRadius: '6px',
                   fontWeight: 750,
-                  marginLeft: '6px' 
+                  marginLeft: '6px'
                 }}>
-                  {effectiveRole === 'doctor' 
-                    ? `Doctor Co-Pilot · ${doctorName}` 
+                  {effectiveRole === 'doctor'
+                    ? `Doctor Co-Pilot · ${doctorName}`
                     : (effectiveRole === 'patient' ? `Health Companion · ${patientName}` : 'Indic Ambient Scribe')}
                 </span>
               </div>
@@ -730,7 +730,7 @@ export default function FloatingAssistant({
                         type="button"
                         onClick={() => {
                           setSpeechLanguage(lang.id);
-                          try { localStorage.setItem('ayuswar_language', lang.id); } catch {}
+                          try { localStorage.setItem('ayuswar_language', lang.id); } catch { }
                           if (speechRecognitionRef.current) {
                             speechRecognitionRef.current.lang = lang.id;
                           }
@@ -784,8 +784,8 @@ export default function FloatingAssistant({
                           borderRadius: '3px',
                           background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#334155'),
                           transition: 'height 180ms ease',
-                          animation: (assistantState === 'speaking' || isMeSpeaking) 
-                            ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out` 
+                          animation: (assistantState === 'speaking' || isMeSpeaking)
+                            ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out`
                             : 'none'
                         }}
                       />
@@ -809,9 +809,9 @@ export default function FloatingAssistant({
                       boxShadow: (assistantState === 'listening' || assistantState === 'speaking') ? '0 0 8px currentColor' : 'none'
                     }}></span>
                     <span>
-                      {isMeSpeaking 
-    ? `Recording Live Speech (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})...` 
-    : (assistantState === 'speaking' ? 'AyuSwar AI Speaking (Gnani Timbre Neural Voice)' : 'Ready · Standby (00:00)')}
+                      {isMeSpeaking
+                        ? `Recording Live Speech (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})...`
+                        : (assistantState === 'speaking' ? 'AyuSwar AI Speaking (Gnani Timbre Neural Voice)' : 'Ready · Standby (00:00)')}
                     </span>
                   </div>
                 </div>
@@ -846,10 +846,10 @@ export default function FloatingAssistant({
                     </div>
                   ) : (
                     <div style={{ color: '#475569' }}>
-                      {effectiveRole === 'doctor' 
-                        ? `Good day Dr. ${doctorName}. Clinical ambient scribe is active. Dictate notes, check drug interactions, or review reports.` 
-                        : (effectiveRole === 'patient' 
-                          ? `Namaste ${patientName}! Your health assistant is ready. Ask about your medicines, test reports, or diet in your own language.` 
+                      {effectiveRole === 'doctor'
+                        ? `Good day Dr. ${doctorName}. Clinical ambient scribe is active. Dictate notes, check drug interactions, or review reports.`
+                        : (effectiveRole === 'patient'
+                          ? `Namaste ${patientName}! Your health assistant is ready. Ask about your medicines, test reports, or diet in your own language.`
                           : 'Namaste! Welcome to AyuSwar AI. Experience bilingual ambient clinical voice scribe for Indian hospital OPDs.')}
                     </div>
                   )}
@@ -874,8 +874,8 @@ export default function FloatingAssistant({
                   color: '#475569'
                 }}>
                   <span>
-                    {effectiveRole === 'doctor' 
-                      ? '⚡ Clinician Shortcuts:' 
+                    {effectiveRole === 'doctor'
+                      ? '⚡ Clinician Shortcuts:'
                       : (effectiveRole === 'patient' ? '🌿 Health Shortcuts:' : '✨ Explore Shortcuts:')}
                   </span>
                   <button
@@ -1143,8 +1143,8 @@ export default function FloatingAssistant({
 
                 {/* Inline Text Query Drawer */}
                 {showTextInput && (
-                  <form 
-                    onSubmit={handleSendText} 
+                  <form
+                    onSubmit={handleSendText}
                     style={{
                       marginTop: '6px',
                       display: 'flex',
@@ -1206,8 +1206,8 @@ export default function FloatingAssistant({
                       padding: '9px 12px',
                       borderRadius: '20px',
                       border: isMeSpeaking ? '1.5px solid #EF4444' : '1.5px solid #0F4C5C',
-                      background: isMeSpeaking 
-                        ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' 
+                      background: isMeSpeaking
+                        ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)'
                         : 'linear-gradient(135deg, #0F4C5C 0%, #115E59 100%)',
                       color: '#ffffff',
                       fontSize: '11.5px',
@@ -1220,8 +1220,8 @@ export default function FloatingAssistant({
                   >
                     {isMeSpeaking ? <MicOff size={15} /> : <Mic size={15} />}
                     <span>
-                      {isMeSpeaking 
-                        ? `Stop & Send (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})` 
+                      {isMeSpeaking
+                        ? `Stop & Send (${String(Math.floor(elapsedVoiceSec / 60)).padStart(2, '0')}:${String(elapsedVoiceSec % 60).padStart(2, '0')})`
                         : 'Me to Speak'}
                     </span>
                   </button>
@@ -1325,8 +1325,8 @@ export default function FloatingAssistant({
                 marginBottom: '18px'
               }}>
                 <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
-                  {effectiveRole === 'doctor' 
-                    ? "Clinical Encounter Summary:" 
+                  {effectiveRole === 'doctor'
+                    ? "Clinical Encounter Summary:"
                     : (effectiveRole === 'patient' ? "Consultation Summary:" : "Real-Time Consultation Summary:")}
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#475569', lineHeight: 1.6 }}>
