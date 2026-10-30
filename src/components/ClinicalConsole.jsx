@@ -275,6 +275,11 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
     if (simIntervalRef.current) clearInterval(simIntervalRef.current);
     stopPhysicalMicPipeline();
     setMicStatusMsg('Recording paused.');
+
+    // AUTOMATIC: Trigger high-precision Whisper transcription automatically if audio was captured
+    if (recordingMode === 'live_mic' && recordedAudioChunksRef.current && recordedAudioChunksRef.current.length > 0) {
+      handleTranscribeWithGroqWhisper();
+    }
   };
 
   const resetRecordingSession = () => {
@@ -1259,14 +1264,16 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               flexWrap: 'wrap',
               gap: '12px'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              {/* Left: The Only Primary Interactive Button + Live Auto Badges */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                {/* 1. Main Action: Start / Pause Recording */}
                 <button
                   onClick={isRecording ? pauseRecordingSession : startRecordingSession}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '10px 18px',
+                    padding: '10px 20px',
                     borderRadius: '12px',
                     background: isRecording ? '#EF4444' : '#10B981',
                     color: '#ffffff',
@@ -1274,167 +1281,127 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     fontSize: '13px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: isRecording ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 12px rgba(16, 185, 129, 0.3)'
+                    boxShadow: isRecording ? '0 0 16px rgba(239, 68, 68, 0.5)' : '0 4px 14px rgba(16, 185, 129, 0.35)',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {isRecording ? <Pause size={16} /> : <Play size={16} fill="#ffffff" />}
                   <span>{isRecording ? 'Pause Recording' : '▶ Start OPD Recording'}</span>
                 </button>
 
-                {/* Speaker Indicator & Manual / Spacebar Switch */}
-                <button
+                {/* 2. Live Speaker Status Indicator (Auto-Diarized) */}
+                <div
                   onClick={() => handleSwitchActiveSpeaker()}
-                  title="Click or press SPACEBAR anytime to switch speaker between Doctor and Patient"
+                  title="Auto-Diarization Active (WebAudio Pitch DSP + NLP). Optional: click or tap Spacebar to override."
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
                     background: activeLiveSpeaker.includes('Doctor') 
-                      ? 'linear-gradient(135deg, rgba(45, 212, 191, 0.22) 0%, rgba(15, 76, 92, 0.45) 100%)' 
-                      : 'linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(180, 83, 9, 0.45) 100%)',
-                    border: `2px solid ${activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FBBF24'}`,
-                    borderRadius: '12px',
-                    padding: '8px 14px',
-                    fontSize: '12.5px',
-                    fontWeight: 850,
-                    color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047',
-                    cursor: 'pointer',
-                    boxShadow: activeLiveSpeaker.includes('Doctor') 
-                      ? '0 0 14px rgba(45, 212, 191, 0.3)' 
-                      : '0 0 14px rgba(251, 191, 36, 0.3)',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <span>Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
-                  <span style={{
-                    background: 'rgba(255,255,255,0.22)',
-                    padding: '2px 7px',
-                    borderRadius: '5px',
-                    fontSize: '10px',
-                    fontWeight: 900,
-                    color: '#ffffff',
-                    border: '1px solid rgba(255,255,255,0.25)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}>
-                    <span style={{ fontFamily: 'monospace' }}>SPACE</span>
-                    <span>⇄ Switch</span>
-                  </span>
-                </button>
-
-                {/* Groq Whisper-large-v3-turbo High-Precision STT Button */}
-                <button
-                  onClick={handleTranscribeWithGroqWhisper}
-                  disabled={isTranscribingWhisper}
-                  title="Send recorded audio to Groq Whisper-large-v3-turbo for 95%+ medical & drug terminology accuracy"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 14px',
-                    borderRadius: '12px',
-                    background: isTranscribingWhisper 
-                      ? '#6B21A8' 
-                      : 'linear-gradient(135deg, #7E22CE 0%, #4338CA 100%)',
-                    color: '#ffffff',
-                    border: '1.5px solid #A855F7',
-                    fontSize: '11.5px',
-                    fontWeight: 800,
-                    cursor: isTranscribingWhisper ? 'wait' : 'pointer',
-                    boxShadow: '0 2px 10px rgba(126, 34, 206, 0.35)',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <Sparkles size={13} color="#FDE047" />
-                  <span>{isTranscribingWhisper ? 'Transcribing with Whisper...' : '⚡ Groq Whisper STT (95%+)'}</span>
-                </button>
-
-                {/* Diarization Mode Toggle (Smart Hybrid vs Spacebar Only) */}
-                <button
-                  onClick={() => {
-                    const next = autoDiarizationMode === 'smart_hybrid' ? 'spacebar_manual' : 'smart_hybrid';
-                    setAutoDiarizationMode(next);
-                  }}
-                  title="Smart Hybrid: uses Linguistic NLP + WebAudio Pitch DSP + Spacebar. Spacebar Only: toggles solely on keyboard Spacebar."
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 12px',
-                    borderRadius: '12px',
-                    background: autoDiarizationMode === 'smart_hybrid' ? 'rgba(45, 212, 191, 0.15)' : 'rgba(255, 255, 255, 0.08)',
-                    border: `1.5px solid ${autoDiarizationMode === 'smart_hybrid' ? '#2DD4BF' : 'rgba(255, 255, 255, 0.2)'}`,
-                    color: autoDiarizationMode === 'smart_hybrid' ? '#2DD4BF' : '#94A3B8',
-                    fontSize: '11.5px',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <span>🧠 Diarizer:</span>
-                  <span style={{
-                    background: autoDiarizationMode === 'smart_hybrid' ? '#2DD4BF' : '#64748B',
-                    color: autoDiarizationMode === 'smart_hybrid' ? '#061626' : '#ffffff',
-                    padding: '2px 7px',
-                    borderRadius: '5px',
-                    fontSize: '10px',
-                    fontWeight: 900
-                  }}>
-                    {autoDiarizationMode === 'smart_hybrid' ? 'Smart Hybrid (NLP+DSP)' : 'Manual Spacebar'}
-                  </span>
-                </button>
-
-                <button
-                  onClick={resetRecordingSession}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    padding: '9px 12px',
+                      ? 'rgba(45, 212, 191, 0.12)' 
+                      : 'rgba(251, 191, 36, 0.12)',
+                    border: `1.5px solid ${activeLiveSpeaker.includes('Doctor') ? 'rgba(45, 212, 191, 0.4)' : 'rgba(251, 191, 36, 0.4)'}`,
                     borderRadius: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    color: '#CBD5E1',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}
-                >
-                  <RotateCcw size={13} />
-                  <span>Reset</span>
-                </button>
-
-                <button
-                  onClick={() => setShowAddTurnModal(true)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    padding: '9px 12px',
-                    borderRadius: '10px',
-                    background: 'rgba(45, 212, 191, 0.15)',
-                    color: '#2DD4BF',
-                    border: '1px solid #2DD4BF',
+                    padding: '6px 12px',
                     fontSize: '12px',
                     fontWeight: 750,
+                    color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047',
                     cursor: 'pointer'
                   }}
                 >
-                  <Edit3 size={13} />
-                  <span>+ Add</span>
-                </button>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047', animation: isRecording ? 'pulse 1s infinite' : 'none' }} />
+                  <span>Speaking: {activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
+                  <span style={{ fontSize: '10px', opacity: 0.7, borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '6px' }}>Auto</span>
+                </div>
+
+                {/* 3. Automatic AI Engine Pipeline Status Badges (Automated in Background) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '6px 11px',
+                    borderRadius: '10px',
+                    background: isTranscribingWhisper ? 'rgba(168, 85, 247, 0.25)' : 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(168, 85, 247, 0.3)',
+                    color: '#D8B4FE',
+                    fontSize: '11px',
+                    fontWeight: 750
+                  }}>
+                    <Sparkles size={12} color="#FDE047" style={{ animation: isTranscribingWhisper ? 'spin 1.5s linear infinite' : 'none' }} />
+                    <span>{isTranscribingWhisper ? '⚡ Whisper Transcribing...' : '⚡ Groq Whisper STT (Auto)'}</span>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '6px 11px',
+                    borderRadius: '10px',
+                    background: 'rgba(45, 212, 191, 0.08)',
+                    border: '1px solid rgba(45, 212, 191, 0.25)',
+                    color: '#2DD4BF',
+                    fontSize: '11px',
+                    fontWeight: 750
+                  }}>
+                    <span>🧠 Smart Diarizer (Auto NLP+DSP)</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Timer & Live Signal Status */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {/* Right: Timer & Subtle Secondary Utilities */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Elapsed Time
                   </div>
-                  <div style={{ fontSize: '17px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
                     {formatTimer(recordedSeconds)}
                   </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', borderLeft: '1px solid rgba(255,255,255,0.12)', paddingLeft: '12px' }}>
+                  <button
+                    onClick={resetRecordingSession}
+                    style={{
+                      background: 'rgba(255,255,255,0.08)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      borderRadius: '8px',
+                      color: '#94A3B8',
+                      padding: '6px 10px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                    title="Reset consultation recording"
+                  >
+                    <RotateCcw size={12} />
+                    <span>Reset</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowAddTurnModal(true)}
+                    style={{
+                      background: 'rgba(45, 212, 191, 0.1)',
+                      border: '1px solid rgba(45, 212, 191, 0.25)',
+                      borderRadius: '8px',
+                      color: '#2DD4BF',
+                      padding: '6px 10px',
+                      fontSize: '11px',
+                      fontWeight: 750,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                    title="Add a manual dialogue turn"
+                  >
+                    <Edit3 size={12} />
+                    <span>+ Add</span>
+                  </button>
                 </div>
 
                 <div style={{
