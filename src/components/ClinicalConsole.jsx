@@ -92,6 +92,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const [micVolume, setMicVolume] = useState(18);
   const [liveTranscriptionText, setLiveTranscriptionText] = useState('');
   const [micStatusMsg, setMicStatusMsg] = useState('');
+  const [micPermissionDenied, setMicPermissionDenied] = useState(false);
 
   // Single-Mic Diarization, Hardware Noise Suppression & DSP Telemetry
   const [detectedPitch, setDetectedPitch] = useState(null); // Fundamental Frequency (F0) in Hz
@@ -318,16 +319,21 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
   const startPhysicalMicPipeline = async () => {
     try {
-      // 1. Hardware-level Noise Suppression, Echo Cancellation, AGC & 16kHz Clinical Sampling
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,    // Rejects room echoes and assistant speaker feedback
-          noiseSuppression: true,    // Rejects fan noise, air conditioner hum & room ambient chatter
-          autoGainControl: true,     // Normalizes conversational volume across distances
-          sampleRate: 16000,         // Clinical 16kHz standard for Gnani & Whisper ASR engines
-          channelCount: 1
-        }
-      });
+      setMicPermissionDenied(false);
+      // 1. Hardware-level Noise Suppression, Echo Cancellation, AGC (Flexible cross-platform constraints)
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,    // Rejects room echoes and assistant speaker feedback
+            noiseSuppression: true,    // Rejects fan noise, air conditioner hum & room ambient chatter
+            autoGainControl: true      // Normalizes conversational volume across distances
+          }
+        });
+      } catch (audioConstraintErr) {
+        console.warn('Advanced audio constraints not supported, falling back to basic audio:', audioConstraintErr);
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
       mediaStreamRef.current = stream;
 
       const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
@@ -420,81 +426,109 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       // 5. Continuous Speech Recognition with Post-ASR Clinical Normalizer & NLP Role Classification
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRec) {
-        const rec = new SpeechRec();
-        rec.continuous = true;
-        rec.interimResults = true;
-        rec.lang = currentEncounter.langCode || 'te-IN';
+        try {
+          const rec = new SpeechRec();
+          rec.continuous = true;
+          rec.interimResults = true;
+          rec.lang = selectedLanguage || currentEncounter.langCode || 'te-IN';
+          rec.maxAlternatives = 1;
 
-        rec.onresult = (e) => {
-          let interim = '';
-          let finalStr = '';
-          for (let i = e.resultIndex; i < e.results.length; i++) {
-            const transcript = e.results[i][0].transcript;
-            if (e.results[i].isFinal) finalStr += transcript + ' ';
-            else interim += transcript;
-          }
-          if (finalStr.trim()) {
-            const rawTrimmed = finalStr.trim();
-
-            // A. Post-ASR Clinical Normalizer (Phonetic Auto-Correction with NFI Drugs & ICD-10)
-            const normalizedText = normalizeCodeMixedClinicalText(rawTrimmed);
-
-            // B. Linguistic NLP Role Classifier (questions/prescriptions vs symptoms/complaints)
-            const linguisticRole = classifyClinicalRoleLinguistically(normalizedText);
-
-            // C. Tri-Layer Diarization: Linguistic ➔ Pitch Clustering ➔ Active Manual Role
-            let currentSpeaker = activeLiveSpeakerRef.current;
-            if (autoDiarizationMode === 'smart_hybrid') {
-              if (linguisticRole === 'Doctor') {
-                currentSpeaker = 'Doctor (Live Mic)';
-              } else if (linguisticRole === 'Patient') {
-                currentSpeaker = 'Patient (Live Mic)';
-              } else if (pitchCluster) {
-                currentSpeaker = pitchCluster.includes('Doctor') ? 'Doctor (Live Mic)' : 'Patient (Live Mic)';
-              }
+          rec.onresult = (e) => {
+            let interim = '';
+            let finalStr = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const transcript = e.results[i][0].transcript;
+              if (e.results[i].isFinal) finalStr += transcript + ' ';
+              else interim += transcript;
             }
+            if (finalStr.trim()) {
+              const rawTrimmed = finalStr.trim();
 
-            activeLiveSpeakerRef.current = currentSpeaker;
-            setActiveLiveSpeaker(currentSpeaker);
+              // A. Post-ASR Clinical Normalizer (Phonetic Auto-Correction with NFI Drugs & ICD-10)
+              const normalizedText = normalizeCodeMixedClinicalText(rawTrimmed);
 
-            setDialogueTurns(prev => [
-              ...prev,
-              {
-                speaker: currentSpeaker,
-                text: normalizedText,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-                linguisticRole: linguisticRole || undefined,
-                pitchF0: detectedPitch || undefined
+              // B. Linguistic NLP Role Classifier (questions/prescriptions vs symptoms/complaints)
+              const linguisticRole = classifyClinicalRoleLinguistically(normalizedText);
+
+              // C. Tri-Layer Diarization: Linguistic ➔ Pitch Clustering ➔ Active Manual Role
+              let currentSpeaker = activeLiveSpeakerRef.current;
+              if (autoDiarizationMode === 'smart_hybrid') {
+                if (linguisticRole === 'Doctor') {
+                  currentSpeaker = 'Doctor (Live Mic)';
+                } else if (linguisticRole === 'Patient') {
+                  currentSpeaker = 'Patient (Live Mic)';
+                } else if (pitchCluster) {
+                  currentSpeaker = pitchCluster.includes('Doctor') ? 'Doctor (Live Mic)' : 'Patient (Live Mic)';
+                }
               }
-            ]);
-            setLiveTranscriptionText('');
 
-            // Automatically switch active speaker for next turn when you stop speaking!
-            if (autoSwitchOnPauseRef.current) {
-              const nextSpeaker = currentSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
-              activeLiveSpeakerRef.current = nextSpeaker;
-              setActiveLiveSpeaker(nextSpeaker);
+              activeLiveSpeakerRef.current = currentSpeaker;
+              setActiveLiveSpeaker(currentSpeaker);
+
+              setDialogueTurns(prev => [
+                ...prev,
+                {
+                  speaker: currentSpeaker,
+                  text: normalizedText,
+                  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                  linguisticRole: linguisticRole || undefined,
+                  pitchF0: detectedPitch || undefined
+                }
+              ]);
+              setLiveTranscriptionText('');
+
+              // Automatically switch active speaker for next turn when you stop speaking!
+              if (autoSwitchOnPauseRef.current) {
+                const nextSpeaker = currentSpeaker.includes('Doctor') ? 'Patient (Live Mic)' : 'Doctor (Live Mic)';
+                activeLiveSpeakerRef.current = nextSpeaker;
+                setActiveLiveSpeaker(nextSpeaker);
+              }
+            } else if (interim.trim()) {
+              const normalizedInterim = normalizeCodeMixedClinicalText(interim.trim());
+              setLiveTranscriptionText(normalizedInterim);
             }
-          } else if (interim.trim()) {
-            const normalizedInterim = normalizeCodeMixedClinicalText(interim.trim());
-            setLiveTranscriptionText(normalizedInterim);
-          }
-        };
+          };
 
-        rec.onerror = (err) => console.warn('SpeechRecognition warning:', err);
-        rec.onend = () => {
-          if (isRecordingRef.current && mediaStreamRef.current && speechRecognitionRef.current) {
-            try { speechRecognitionRef.current.start(); } catch {}
-          }
-        };
+          rec.onerror = (err) => {
+            console.warn('SpeechRecognition warning:', err);
+            if (err.error === 'not-allowed') {
+              setMicPermissionDenied(true);
+            }
+          };
 
-        speechRecognitionRef.current = rec;
-        try { rec.start(); } catch {}
+          rec.onend = () => {
+            if (isRecordingRef.current && mediaStreamRef.current && speechRecognitionRef.current && !micPermissionDenied) {
+              try { speechRecognitionRef.current.start(); } catch {}
+            }
+          };
+
+          speechRecognitionRef.current = rec;
+          rec.start();
+        } catch (srErr) {
+          console.warn('SpeechRecognition start failed:', srErr);
+        }
       }
       setMicStatusMsg('Hardware mic active: Noise suppression & 85Hz-3400Hz filter engaged.');
     } catch (err) {
       console.warn('Physical microphone unavailable, using client simulator:', err);
-      setMicStatusMsg('Hardware mic permission not granted. Running local audio spectrum simulator.');
+      setMicPermissionDenied(true);
+      setMicStatusMsg('Microphone blocked by browser. Auto-streaming clinical dialogue simulation.');
+
+      // Automatically fallback to streaming dialogue turns so screen NEVER remains empty!
+      let nextTurnIndex = dialogueTurns.length;
+      if (dialogueTurns.length === 0 && currentEncounter.dialogue.length > 0) {
+        setDialogueTurns([currentEncounter.dialogue[0]]);
+        nextTurnIndex = 1;
+      }
+      if (simIntervalRef.current) clearInterval(simIntervalRef.current);
+      simIntervalRef.current = setInterval(() => {
+        if (nextTurnIndex < currentEncounter.dialogue.length) {
+          const nextTurn = currentEncounter.dialogue[nextTurnIndex];
+          setDialogueTurns(prev => [...prev, nextTurn]);
+          nextTurnIndex++;
+        }
+        setMicVolume(Math.floor(25 + Math.random() * 55));
+      }, 2500);
     }
   };
 
@@ -1484,6 +1518,52 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               overflowY: 'auto',
               paddingRight: '6px'
             }}>
+              {/* Browser Microphone Permission Denied Notice with Quick Switch */}
+              {micPermissionDenied && (
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  background: '#FEF3C7',
+                  border: '1.5px solid #F59E0B',
+                  color: '#92400E',
+                  fontSize: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  flexWrap: 'wrap'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '18px' }}>🎙️</span>
+                    <div>
+                      <strong>Microphone Access Blocked in Chrome:</strong> Click the <strong>lock 🔒 or camera/mic icon</strong> in Chrome's address bar (top left near localhost:5173) and choose <strong>"Allow"</strong>, then refresh.
+                      <div style={{ fontSize: '11px', marginTop: '3px', color: '#B45309' }}>
+                        💡 Running in <strong>Auto-Simulation mode</strong> so your video recording shows streaming doctor-patient speech without interruption!
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setRecordingMode('ambient_sim');
+                      setMicPermissionDenied(false);
+                      if (!isRecording) startRecordingSession();
+                    }}
+                    style={{
+                      background: '#0F4C5C',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '7px 12px',
+                      fontSize: '11px',
+                      fontWeight: 750,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    ⚡ Stream Simulation
+                  </button>
+                </div>
+              )}
+
               {dialogueTurns.length === 0 && !liveTranscriptionText && (
                 <div style={{
                   padding: '36px 20px',
