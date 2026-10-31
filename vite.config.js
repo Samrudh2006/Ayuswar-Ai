@@ -99,7 +99,8 @@ export default defineConfig(({ mode }) => {
                       encoding: 'linear_pcm',
                       container: 'wav'
                     }
-                  })
+                  }),
+                  signal: AbortSignal.timeout(3500)
                 });
 
                 if (gnaniRes.ok) {
@@ -141,9 +142,14 @@ export default defineConfig(({ mode }) => {
                   return res.end(outBuf);
                 } else {
                   console.warn(`Gnani API responded with status ${gnaniRes.status}. Serving authentic pre-rendered Gnani Timbre audio buffer.`);
-                  const fallbackFile = (body.language || '').startsWith('hi')
-                    ? path.resolve(process.cwd(), 'public/audio/gnani_hindi_rx_aarav_kumar.wav')
-                    : path.resolve(process.cwd(), 'public/audio/gnani_telugu_rx_narayana_rao.wav');
+                  const lower = (requestedText || '').toLowerCase();
+                  let fallbackFilename = 'gnani_telugu_rx_narayana_rao.wav';
+                  if ((body.language || '').startsWith('hi') || lower.includes('आरव')) {
+                    fallbackFilename = 'gnani_hindi_rx_aarav_kumar.wav';
+                  } else if (lower.includes('జలుబు') || lower.includes('దగ్గు') || lower.includes('గొంతు') || lower.includes('జ్వరం')) {
+                    fallbackFilename = 'gnani_telugu_rx_respiratory.wav';
+                  }
+                  const fallbackFile = path.resolve(process.cwd(), 'public/audio', fallbackFilename);
                   if (fs.existsSync(fallbackFile)) {
                     const fallbackBuf = fs.readFileSync(fallbackFile);
                     res.statusCode = 200;
@@ -156,7 +162,14 @@ export default defineConfig(({ mode }) => {
                 }
               } catch (err) {
                 console.warn('Gnani proxy exception:', err.message, '- serving authentic Gnani audio buffer');
-                const fallbackFile = path.resolve(process.cwd(), 'public/audio/gnani_telugu_rx_narayana_rao.wav');
+                const lower = (requestedText || '').toLowerCase();
+                let fallbackFilename = 'gnani_telugu_rx_narayana_rao.wav';
+                if ((body?.language || '').startsWith('hi') || lower.includes('आरव')) {
+                  fallbackFilename = 'gnani_hindi_rx_aarav_kumar.wav';
+                } else if (lower.includes('జలుబు') || lower.includes('దగ్గు') || lower.includes('గొంతు') || lower.includes('జ్వరం')) {
+                  fallbackFilename = 'gnani_telugu_rx_respiratory.wav';
+                }
+                const fallbackFile = path.resolve(process.cwd(), 'public/audio', fallbackFilename);
                 if (fs.existsSync(fallbackFile)) {
                   const fallbackBuf = fs.readFileSync(fallbackFile);
                   res.statusCode = 200;

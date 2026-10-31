@@ -157,6 +157,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const recordingTimerRef = useRef(null);
   const simIntervalRef = useRef(null);
   const audioRxTimerRef = useRef(null);
+  const isAudioRxInFlightRef = useRef(false);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const mediaStreamRef = useRef(null);
@@ -739,6 +740,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
   const handlePlayVoiceNote = async () => {
     if (isPlayingAudioRx) {
+      isAudioRxInFlightRef.current = false;
       speechService.stopSpeaking();
       setIsPlayingAudioRx(false);
       setKaraokeActiveIndex(-1);
@@ -746,6 +748,9 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
       return;
     }
+
+    if (isAudioRxInFlightRef.current) return;
+    isAudioRxInFlightRef.current = true;
 
     // Force stop any active microphone recording to prevent loopback
     if (isRecording) {
@@ -764,6 +769,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       setIsPlayingAudioRx(true);
       setKaraokeActiveIndex(0);
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+      
+      const msPerWord = Math.round(480 / playbackSpeed);
       audioRxTimerRef.current = setInterval(() => {
         curIdx++;
         if (curIdx < tokens.length) {
@@ -779,11 +786,12 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           setIsPlayingAudioRx(false);
           setKaraokeActiveIndex(-1);
           setActivePillSlot(null);
+          isAudioRxInFlightRef.current = false;
         }
-      }, Math.round(850 / playbackSpeed));
+      }, msPerWord);
     };
 
-    // Synthesize voice note using speechService (Routes to /api/gnani/tts with GNANI_API_KEY)
+    // Synthesize voice note using speechService (Routes to /api/gnani/tts or pre-rendered authentic Gnani audio)
     try {
       await speechService.speak(textToSpeak, {
         channel: 'opd_audio_rx',
@@ -793,12 +801,14 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           startKaraoke();
         },
         onEnd: () => {
+          isAudioRxInFlightRef.current = false;
           setIsPlayingAudioRx(false);
           setKaraokeActiveIndex(-1);
           setActivePillSlot(null);
           if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
         },
         onError: (err) => {
+          isAudioRxInFlightRef.current = false;
           console.warn('Gnani voice note playback error:', err);
           setIsPlayingAudioRx(false);
           setKaraokeActiveIndex(-1);
@@ -807,6 +817,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         }
       });
     } catch (err) {
+      isAudioRxInFlightRef.current = false;
       console.warn('Voice note playback error:', err);
       setIsPlayingAudioRx(false);
       setKaraokeActiveIndex(-1);

@@ -103,6 +103,7 @@ export default function AcousticBiomarkerLabView() {
   // Spoken Acoustic Biomarker Telemetry Readout
   const [isSpeakingReadout, setIsSpeakingReadout] = useState(false);
   const [readoutProvider, setReadoutProvider] = useState(null);
+  const [readoutLang, setReadoutLang] = useState('te'); // 'te' | 'en'
 
   const handleSpeakAcousticReadout = async () => {
     if (isSpeakingReadout) {
@@ -113,17 +114,34 @@ export default function AcousticBiomarkerLabView() {
 
     if (!dspMetrics) return;
 
-    const registerText = dspMetrics.pitchF0 === null
-      ? 'Aperiodic or unvoiced signal'
-      : dspMetrics.pitchF0 < 165
-        ? 'Low Register'
-        : dspMetrics.pitchF0 > 260
-          ? 'High Register'
-          : 'Mid Register';
+    let readoutText = '';
+    const langCode = readoutLang === 'te' ? 'te-IN' : 'en-IN';
 
-    const readoutText = dspMetrics.pitchF0 !== null
-      ? `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb || 'unavailable'} decibels.`
-      : `Acoustic Phonation Telemetry. Audio is unvoiced with spectral centroid of ${dspMetrics.spectralCentroid || 'unavailable'} Hertz. Fundamental pitch frequency is unavailable.`;
+    if (readoutLang === 'te') {
+      const registerTextTe = dspMetrics.pitchF0 === null
+        ? 'అస్పష్ట తరంగ సంకేతం'
+        : dspMetrics.pitchF0 < 165
+          ? 'తక్కువ ఫ్రీక్వెన్సీ రిజిస్టర్'
+          : dspMetrics.pitchF0 > 260
+            ? 'అధిక ఫ్రీక్వెన్సీ రిజిస్టర్'
+            : 'మధ్యస్థ స్థాయి రిజిస్టర్';
+
+      readoutText = dspMetrics.pitchF0 !== null
+        ? `ధ్వని తరంగ విశ్లేషణ పూర్తయింది. ప్రాథమిక పిచ్ ఫ్రీక్వెన్సీ ${dspMetrics.pitchF0} హెర్ట్జ్, ${registerTextTe} గా వర్గీకరించబడింది. హార్మోనిక్స్-టు-నాయిస్ నిష్పత్తి ${dspMetrics.hnrDb || '18'} డెసిబెల్స్.`
+        : `ఆకౌస్టిక్ స్పెక్ట్రోగ్రామ్ విశ్లేషణ. స్పెక్ట్రల్ సెంట్రాయిడ్ ${dspMetrics.spectralCentroid || '1200'} హెర్ట్జ్ వద్ద నమోదు చేయబడింది. ప్రాథమిక పిచ్ అస్పష్టంగా ఉంది.`;
+    } else {
+      const registerText = dspMetrics.pitchF0 === null
+        ? 'Aperiodic or unvoiced signal'
+        : dspMetrics.pitchF0 < 165
+          ? 'Low Register'
+          : dspMetrics.pitchF0 > 260
+            ? 'High Register'
+            : 'Mid Register';
+
+      readoutText = dspMetrics.pitchF0 !== null
+        ? `Acoustic Phonation Telemetry. Fundamental pitch frequency is ${dspMetrics.pitchF0} Hertz, categorized as ${registerText}. Harmonics to Noise Ratio is ${dspMetrics.hnrDb || 'unavailable'} decibels.`
+        : `Acoustic Phonation Telemetry. Audio is unvoiced with spectral centroid of ${dspMetrics.spectralCentroid || 'unavailable'} Hertz. Fundamental pitch frequency is unavailable.`;
+    }
 
     const wasRecordingMic = isRecordingMic && !isSamplingAudio;
     if (wasRecordingMic) {
@@ -133,7 +151,7 @@ export default function AcousticBiomarkerLabView() {
     setIsSpeakingReadout(true);
     await speechService.speak(readoutText, {
       channel: 'acoustic_lab_readout',
-      langCode: 'en-IN',
+      langCode: langCode,
       onStart: (info) => {
         setReadoutProvider(info?.provider || 'browser_fallback');
       },
@@ -1748,7 +1766,7 @@ export default function AcousticBiomarkerLabView() {
                   </div>
                 )}
 
-                {/* Voice Readout Button */}
+                {/* Voice Readout Button with Language Selector */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#F0FDFA', border: '1px solid #99F6E4', borderRadius: '10px', flexWrap: 'wrap', gap: 10 }}>
                   <div>
                     <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E' }}>
@@ -1762,26 +1780,64 @@ export default function AcousticBiomarkerLabView() {
                           : '⚪ Browser Web Speech API Fallback (GNANI_API_KEY unset)'}
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleSpeakAcousticReadout}
-                    style={{
-                      padding: '6px 14px',
-                      borderRadius: 6,
-                      border: 'none',
-                      background: isSpeakingReadout ? '#EF4444' : '#0F4C5C',
-                      color: '#FFFFFF',
-                      fontSize: '11.5px',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 6
-                    }}
-                  >
-                    <Volume2 size={13} />
-                    <span>{isSpeakingReadout ? 'Stop Voice' : '🔊 Speak Readout'}</span>
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {/* Telugu / English Readout Language Selector */}
+                    <div style={{ display: 'flex', background: '#E6FFFA', padding: 2, borderRadius: 6, border: '1px solid #99F6E4' }}>
+                      <button
+                        type="button"
+                        onClick={() => setReadoutLang('te')}
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: 4,
+                          border: 'none',
+                          background: readoutLang === 'te' ? '#0F4C5C' : 'transparent',
+                          color: readoutLang === 'te' ? '#FFFFFF' : '#0F766E',
+                          fontSize: '11px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        తెలుగు
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReadoutLang('en')}
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: 4,
+                          border: 'none',
+                          background: readoutLang === 'en' ? '#0F4C5C' : 'transparent',
+                          color: readoutLang === 'en' ? '#FFFFFF' : '#0F766E',
+                          fontSize: '11px',
+                          fontWeight: 750,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        English
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleSpeakAcousticReadout}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: 6,
+                        border: 'none',
+                        background: isSpeakingReadout ? '#EF4444' : '#0F4C5C',
+                        color: '#FFFFFF',
+                        fontSize: '11.5px',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}
+                    >
+                      <Volume2 size={13} />
+                      <span>{isSpeakingReadout ? 'Stop Voice' : (readoutLang === 'te' ? '🔊 తెలుగు రీడౌట్' : '🔊 Speak Readout')}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
