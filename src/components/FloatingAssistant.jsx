@@ -45,15 +45,15 @@ export function AyuSwarOrbLogo({ size = 28, glow = true }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'radial-gradient(circle at 35% 30%, #00F5D4 0%, #0F4C5C 60%, #0A2540 100%)',
-      boxShadow: glow ? '0 0 16px rgba(0, 245, 212, 0.55), 0 0 30px rgba(0, 0, 0, 0.16)' : 'none',
+      background: '#0F4C5C',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
       flexShrink: 0
     }}>
       <svg width={size * 0.72} height={size * 0.72} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         {/* Outer Acoustic Petals */}
         <path d="M18 4 C15 11 11 15 4 18 C11 21 15 25 18 32 C21 25 25 21 32 18 C25 15 21 11 18 4 Z" fill="rgba(255,255,255,0.95)" />
         {/* Core Soundwave Ring */}
-        <circle cx="18" cy="18" r="6" stroke="#0A2540" strokeWidth="1.8" fill="rgba(0, 245, 212, 0.9)" />
+        <circle cx="18" cy="18" r="6" stroke="#0A2540" strokeWidth="1.8" fill="#D4AF37" />
         {/* Center Neural Acoustic Dot */}
         <circle cx="18" cy="18" r="2.4" fill="#0A2540" />
       </svg>
@@ -556,7 +556,7 @@ export default function FloatingAssistant({
               width: '34px',
               height: '34px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
+              background: '#0F4C5C',
               color: '#ffffff',
               border: 'none',
               cursor: 'pointer',
@@ -782,7 +782,7 @@ export default function FloatingAssistant({
                           width: '3.5px',
                           height: (assistantState === 'speaking' || isMeSpeaking) ? `${h}px` : '6px',
                           borderRadius: '3px',
-                          background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#2C4A52'),
+                          background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? '#0F4C5C' : '#2C4A52'),
                           transition: 'height 180ms ease',
                           animation: (assistantState === 'speaking' || isMeSpeaking)
                             ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out`
@@ -805,7 +805,7 @@ export default function FloatingAssistant({
                       width: '7px',
                       height: '7px',
                       borderRadius: '50%',
-                      background: assistantState === 'listening' ? '#EF4444' : (assistantState === 'speaking' ? '#00F5D4' : '#698892'),
+                      background: assistantState === 'listening' ? '#EF4444' : (assistantState === 'speaking' ? '#D4AF37' : '#698892'),
                       boxShadow: (assistantState === 'listening' || assistantState === 'speaking') ? '0 0 8px currentColor' : 'none'
                     }}></span>
                     <span>

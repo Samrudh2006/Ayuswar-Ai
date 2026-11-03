@@ -826,22 +826,8 @@ export default function HeroLanding({
                       transform: isSelected ? 'translateY(-2px)' : 'none'
                     }}
                   >
-                    <div
-                      className="solution-icon-circle"
-                      style={{
-                        width: '42px',
-                        height: '42px',
-                        borderRadius: '50%',
-                        background: isSelected ? 'linear-gradient(135deg, #0F4C5C, #00A896)' : 'rgba(0, 0, 0, 0.06)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: isSelected ? '#ffffff' : '#0F4C5C',
-                        marginBottom: '8px',
-                        transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
-                      }}
-                    >
-                      <IconComponent size={20} className="solution-micro-icon" />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: isSelected ? '#0F4C5C' : '#486770', marginBottom: '8px' }}>
+                      <IconComponent size={22} className="solution-micro-icon" />
                     </div>
                     <span style={{
                       fontSize: '11px',
@@ -1098,9 +1084,7 @@ export default function HeroLanding({
             paddingBottom: '28px'
           }}>
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(0, 0, 0, 0.13)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
-                <Globe2 size={isMobileView ? 20 : 24} />
-              </div>
+              <Globe2 size={isMobileView ? 22 : 26} color="#D4AF37" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
@@ -1108,9 +1092,7 @@ export default function HeroLanding({
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(217, 119, 6, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24' }}>
-                <Building2 size={isMobileView ? 20 : 24} />
-              </div>
+              <Building2 size={isMobileView ? 22 : 26} color="#FBBF24" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
@@ -1118,9 +1100,7 @@ export default function HeroLanding({
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(0, 0, 0, 0.13)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
-                <Users2 size={isMobileView ? 20 : 24} />
-              </div>
+              <Users2 size={isMobileView ? 22 : 26} color="#D4AF37" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
@@ -1128,9 +1108,7 @@ export default function HeroLanding({
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399' }}>
-                <HeartPulse size={isMobileView ? 20 : 24} />
-              </div>
+              <HeartPulse size={isMobileView ? 22 : 26} color="#059669" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
@@ -1149,9 +1127,7 @@ export default function HeroLanding({
           ========================================================================= */}
       <section id="impact-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
         <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 28px 0' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: '#D97706', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-            THE NATIONAL HEALTHCARE GAP
-          </div>
+          
           <h2 style={{ fontSize: '34px', color: '#081C24', marginBottom: '12px' }}>
             Why Indian Healthcare Cannot Rely on Typing or English
           </h2>
@@ -1292,9 +1268,7 @@ export default function HeroLanding({
       <section style={{ background: '#FAF8F5', borderTop: '2px solid #D0DFE2', borderBottom: '2px solid #D0DFE2', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 30px 0' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-              CLOSED-LOOP VERNACULAR PIPELINE
-            </div>
+            
             <h2 style={{ fontSize: '34px', color: '#081C24', marginBottom: '10px' }}>
               From Ambient Doctor-Patient Spoken Words to Color-Coded Audio-Rx
             </h2>
@@ -1493,9 +1467,7 @@ export default function HeroLanding({
           ========================================================================= */}
       <section className="hero-bento-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
         <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 30px 0' }}>
-          <div style={{ fontSize: '12px', fontWeight: 850, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-            ENGINEERING EXCELLENCE
-          </div>
+          
           <h2 style={{ fontSize: '34px', color: '#081C24', marginBottom: '10px' }}>
             6 Deep-Tech Moats That Define AyuSwar AI
           </h2>
@@ -1832,30 +1804,9 @@ export default function HeroLanding({
                   {/* Top Body: Left 3D Icon Container + Right High-Fidelity UI Preview */}
                   <div className="hero-bento-tile-body" style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: '14px', alignItems: 'stretch', marginBottom: '14px' }}>
                     {/* Left 3D-Styled Icon Plinth */}
-                    <div className="hero-bento-icon-plinth" style={{
-                      background: '#FAF8F5',
-                      borderRadius: '16px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '1px solid #D0DFE2',
-                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                    }}>
-                      <div style={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '12px',
-                        background: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: tile.col,
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
-                      }}>
-                        <IconComp size={24} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF8F5', borderRadius: '10px', border: '1px solid #D0DFE2', color: '#0F4C5C', width: '48px', height: '48px', flexShrink: 0 }}>
+                        <span style={{ fontSize: '18px', fontWeight: 900, fontFamily: 'var(--font-display)' }}>{tile.num}</span>
                       </div>
-                    </div>
 
                     {/* Right Dedicated UI Telemetry Box */}
                     <div className="hero-bento-right-box" style={{ minHeight: '125px', minWidth: 0, overflow: 'hidden' }}>
@@ -2496,9 +2447,7 @@ export default function HeroLanding({
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           {/* Header */}
           <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 32px 0' }}>
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
-              PAN-INDIA LINGUISTIC COVERAGE
-            </div>
+            
             <h2 className="hero-dialect-heading" style={{ fontSize: '34px', color: '#081C24', marginBottom: '8px' }}>
               Interactive Dialect Atlas & Karaoke Scrubber
             </h2>
@@ -2914,7 +2863,7 @@ export default function HeroLanding({
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: 'linear-gradient(135deg, #0F4C5C 0%, #006666 100%)',
+                  background: '#0F4C5C',
                   color: '#ffffff',
                   border: 'none',
                   padding: '12px 22px',
@@ -2938,9 +2887,7 @@ export default function HeroLanding({
           ========================================================================= */}
       <section style={{ maxWidth: '1380px', margin: '0 auto', padding: '52px 24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto 28px auto' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '8px' }}>
-            CLINICAL GOVERNANCE & OPEN STANDARDS
-          </div>
+          
           <h2 style={{ fontSize: '34px', color: '#081C24', marginBottom: '10px', letterSpacing: '-0.02em', fontWeight: 850 }}>
             Engineered for Zero Harm: Doctor-in-the-Loop & Open Clinical Science
           </h2>
@@ -4182,10 +4129,7 @@ export default function HeroLanding({
           position: relative;
           overflow: hidden;
         }
-        .solution-micro-card:hover .solution-icon-circle {
-          transform: scale(1.12) translateY(-2px);
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-        }
+        
         .solution-micro-card:hover .solution-micro-icon {
           animation: microIconPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -4215,7 +4159,6 @@ export default function HeroLanding({
             animation: none !important;
           }
           .solution-micro-card,
-          .solution-icon-circle,
           .solution-micro-icon {
             transition: none !important;
             transform: none !important;
