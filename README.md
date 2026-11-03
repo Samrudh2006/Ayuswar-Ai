@@ -16,7 +16,7 @@
 [![Gnani AI](https://img.shields.io/badge/Gnani%20AI-Prisma%20v3%20%7C%20Timbre%20%7C%20Evon%2030B-7C3AED?style=for-the-badge&logo=googleassistant&logoColor=white)](https://gnani.ai/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Test Suite](https://img.shields.io/badge/Automated%20Tests-70%2F70%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![Test Suite](https://img.shields.io/badge/Automated%20Tests-74%2F74%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![E2E Suite](https://img.shields.io/badge/Puppeteer%20E2E-5%2F5%20PASSING-0F4C5C?style=for-the-badge&logo=puppeteer&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![CodeRabbit](https://img.shields.io/badge/CodeRabbit-REVIEW%20CLEAN-34D399?style=for-the-badge&logo=githubactions&logoColor=black)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Acoustic Engine](https://img.shields.io/badge/Acoustic%20AI-Earshot%20AST%2BCLAP-D4AF37?style=for-the-badge&logo=soundcharts&logoColor=08232C)](https://github.com/Leonxlnx/earshot)
