@@ -1101,7 +1101,7 @@ export default function HeroLanding({
           </div>
 
           <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#D0DFE2', letterSpacing: '0.4px', lineHeight: 1.4 }}>
-            Voice-First Clinical Scribe & CDSS for Bharat. <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Prototype Demo)</span>
+            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 750, textDecoration: 'none' }}>Samrudh</a> <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Gnani.ai Challenge Prototype)</span>
           </div>
         </div>
       </div>
@@ -3734,7 +3734,7 @@ export default function HeroLanding({
           gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. All rights reserved. Built with craft & dedication for Bharat.
+            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 800, textDecoration: 'none' }}>Samrudh</a> for the Gnani.ai Great Indian AI Internship Challenge.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <Link to="/privacy" style={{ color: '#94A3B8', textDecoration: 'none' }}>
