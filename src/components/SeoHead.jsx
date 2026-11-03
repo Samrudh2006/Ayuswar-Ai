@@ -8,9 +8,9 @@ import { useLocation } from 'react-router-dom';
  */
 const ROUTE_METADATA = {
   '/': {
-    title: 'AyuSwar AI — Ambient Clinical Voice Scribe & Triage Prototype | Indic Health AI',
-    description: 'AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis. Ambient clinical voice scribe exploring vernacular transcription in Telugu, Hindi, and English with draft ABDM FHIR R4 schema formatting.',
-    keywords: 'AyuSwar AI, Clinical Voice Scribe, Indic Voice AI, Telugu Medical Speech, ABDM FHIR R4, Primary Health Center AI, Rayalaseema Health Tech, DPDP Act 2023',
+    title: 'AyuSwar AI (ఆయుస్వర) — Sovereign Indic Ambient Clinical Voice Scribe & Triage',
+    description: 'Production-grade ambient clinical voice scribe, acoustic biomarker phenotyping & 108 emergency triage. Powered by Gnani.ai Prisma v3, Timbre TTS & Evon 30B reasoner. Grounded in ABDM M3 FHIR R4.',
+    keywords: 'AyuSwar AI, ఆయుస్వర, Clinical Voice Scribe, Indic Voice AI, Gnani AI, Prisma v3, Timbre TTS, Evon 30B, Telugu Medical Speech, ABDM FHIR R4, Primary Health Center AI, Rayalaseema Health Tech, Sanjivani 108, Jan Aushadhi Generic, DPDP Act 2023',
     section: 'Home'
   },
   '/solutions': {
@@ -141,23 +141,26 @@ export default function SeoHead() {
     setMetaTag('name', 'description', meta.description);
     setMetaTag('name', 'keywords', meta.keywords);
 
-    // 3. Update Open Graph Protocol tags
+    // 3. Update Open Graph Protocol tags (WhatsApp, LinkedIn, X, Telegram, iMessage)
     const canonicalUrl = `https://ayuswar-ai.vercel.app${pathname === '/' ? '' : pathname}`;
-    const socialImageUrl = 'https://ayuswar-ai.vercel.app/assets/ayuswar_master_emblem.png';
+    const socialImageUrl = 'https://ayuswar-ai.vercel.app/assets/ayuswar_og_banner.jpg';
+    setMetaTag('property', 'og:site_name', 'AyuSwar AI (ఆయుస్వర)');
     setMetaTag('property', 'og:title', meta.title);
     setMetaTag('property', 'og:description', meta.description);
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:image', socialImageUrl);
     setMetaTag('property', 'og:image:secure_url', socialImageUrl);
-    setMetaTag('property', 'og:image:type', 'image/png');
+    setMetaTag('property', 'og:image:type', 'image/jpeg');
     setMetaTag('property', 'og:image:width', '1200');
     setMetaTag('property', 'og:image:height', '630');
+    setMetaTag('property', 'og:image:alt', 'AyuSwar AI Master Clinical Voice Platform Banner — Deepam Heartbeat Logo with Gnani.ai Voice Stack');
 
     // 4. Update Twitter Card tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');
     setMetaTag('name', 'twitter:title', meta.title);
     setMetaTag('name', 'twitter:description', meta.description);
     setMetaTag('name', 'twitter:image', socialImageUrl);
+    setMetaTag('name', 'twitter:image:alt', 'AyuSwar AI Sovereign Indic Healthcare Platform');
 
     // 5. Update Canonical link
     let canonicalLink = document.querySelector('link[rel="canonical"]');
