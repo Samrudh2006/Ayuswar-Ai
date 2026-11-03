@@ -90,7 +90,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           height: '7px',
           borderRadius: '50%',
           background: badge.dot,
-          boxShadow: isLive ? '0 0 6px #10B981' : 'none',
+          boxShadow: 'none',
           display: 'inline-block'
         }} />
         <span>{badge.text}</span>

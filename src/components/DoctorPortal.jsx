@@ -4582,7 +4582,7 @@ export default function DoctorPortal({
                         right: 0,
                         height: '3px',
                         background: '#38BDF8',
-                        boxShadow: '0 0 12px #38BDF8',
+                        boxShadow: 'none',
                         animation: 'scanLaser 1.2s infinite alternate'
                       }} />
                     )}

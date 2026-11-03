@@ -48,7 +48,7 @@
 
   /* Typography & Multi-Script Indic Hierarchy (Editorial / Enterprise IBM Plex Sans) */
   --font-main: 'IBM Plex Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', 'Noto Sans Tamil', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'IBM Plex Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Albert Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-indic: 'Noto Sans Telugu', 'Noto Sans Devanagari', 'Noto Sans Tamil', 'Nirmala UI', 'Gautami', 'Mukti', sans-serif;
 
   /* Emil Kowalski & UX Peak Animation Easing Curves */
@@ -152,6 +152,17 @@ p,
   top: 16px;
   outline: 3px solid #D4AF37;
   outline-offset: 2px;
+}
+
+/* Headings: Albert Sans with distinct character (not IBM Plex Sans) */
+h1, h2, h3, h4, h5, h6,
+.hero-headline,
+.section-title,
+.card-title,
+.modal-title,
+.hero-trust-strip-title {
+  font-family: var(--font-display) !important;
+  letter-spacing: -0.02em;
 }
 
 /* Reset & Base Rules */
@@ -716,13 +727,13 @@ h6 {
   100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 12px #10B981, 0 0 22px rgba(16, 185, 129, 0.8);
+    box-shadow: none;
   }
 
   50% {
     opacity: 0.65;
     transform: scale(1.22);
-    box-shadow: 0 0 5px #10B981, 0 0 10px rgba(16, 185, 129, 0.4);
+    box-shadow: none;
   }
 }
 
@@ -817,11 +828,11 @@ h6 {
 
   0%,
   100% {
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    box-shadow: none;
   }
 
   50% {
-    box-shadow: 0 0 24px rgba(16, 185, 129, 0.85);
+    box-shadow: none;
   }
 }
 
@@ -1608,11 +1619,12 @@ body {
   }
 
   .hero-secondary-cta {
-    width: 100% !important;
-    justify-content: center !important;
-    padding: 12px 18px !important;
-    font-size: 13.5px !important;
-  }
+  background: #0F4C5C !important;
+  color: #FFFFFF !important;
+  border: 1px solid #0F4C5C !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+}
 }
 
 /* ==========================================================================

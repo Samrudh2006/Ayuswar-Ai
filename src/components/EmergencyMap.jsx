@@ -295,7 +295,7 @@ export default function EmergencyMap({
               height: 9px;
               border-radius: 50%;
               background: #0284C7;
-              box-shadow: 0 0 12px #38BDF8;
+              box-shadow: none;
               animation: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             "></div>
           </div>
@@ -666,7 +666,7 @@ export default function EmergencyMap({
           gap: '8px',
           boxShadow: '0 8px 24px rgba(0, 0, 0, 0.7)'
         }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: 'none' }} />
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#FFFFFF' }}>
             ● TELEMETRY STREAM (SIMULATION)
           </span>
@@ -690,7 +690,7 @@ export default function EmergencyMap({
           color: '#E0F2FE',
           fontWeight: 800
         }}>
-          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 8px #34D399' }} />
+          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', boxShadow: 'none' }} />
           <span>GREEN CORRIDOR (SIMULATION): {trafficOverrideCount} SIGNALS PREEMPTED</span>
         </div>
       </div>

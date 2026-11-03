@@ -65,7 +65,7 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
           height: '7px',
           borderRadius: '50%',
           background: '#10B981',
-          boxShadow: '0 0 6px #10B981',
+          boxShadow: 'none',
           display: 'inline-block'
         }}></span>
         <Wind size={11} color="#059669" />
@@ -107,7 +107,7 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
             height: '8px',
             borderRadius: '50%',
             background: '#2DD4BF',
-            boxShadow: '0 0 8px #2DD4BF',
+            boxShadow: 'none',
             display: 'inline-block'
           }}></span>
           <span style={{ fontWeight: 800, color: '#2DD4BF', textTransform: 'uppercase', letterSpacing: '0.4px', fontSize: '10.5px' }}>

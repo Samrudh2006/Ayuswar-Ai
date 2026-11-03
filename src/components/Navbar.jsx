@@ -499,7 +499,6 @@ export default function Navbar({
               }}
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
-              <PhoneCall size={14} style={{ animation: 'sanjivaniEmergencyPulse 1s infinite' }} />
               <span>{isMobileNavbar ? '108' : 'Sanjivani-108'}</span>
             </button>
 
@@ -526,7 +525,6 @@ export default function Navbar({
                 }}
                 aria-label={`Language selector. Current: ${currentLangObj.name}`}
               >
-                <Languages size={14} color="#0F4C5C" />
                 <span>{currentLangObj.label}</span>
                 <ChevronDown size={12} />
               </button>
@@ -584,7 +582,6 @@ export default function Navbar({
                 aria-haspopup="true"
                 title="Login to Doctor OPD Workspace or Patient ABHA Portal"
               >
-                <User size={14} color={(isDoctorActive || isPatientActive) ? '#ffffff' : '#0F4C5C'} />
                 <span>{doctorProfile ? 'Doctor (Active)' : (patientProfile ? 'Patient (Active)' : 'Login')}</span>
                 <ChevronDown size={12} style={{ transform: loginOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s ease' }} />
               </button>

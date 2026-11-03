@@ -458,7 +458,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)'
           }}>
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', display: 'inline-block', boxShadow: '0 0 8px #34D399' }} />
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34D399', display: 'inline-block', boxShadow: 'none' }} />
             <span>ABDM M3 & NABL Standardized</span>
           </div>
         </div>

@@ -684,7 +684,7 @@ export default function HeroLanding({
               alignItems: 'center',
               gap: '8px',
               padding: '6px 16px',
-              borderRadius: '30px',
+              borderRadius: '10px',
               background: 'rgba(0, 0, 0, 0.06)',
               border: '1.5px solid rgba(0, 0, 0, 0.16)',
               boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 0, 0, 0.06)',
@@ -747,7 +747,7 @@ export default function HeroLanding({
                 borderRadius: '50%',
                 background: '#10B981',
                 display: 'inline-block',
-                boxShadow: '0 0 10px #10B981',
+                boxShadow: 'none',
                 flexShrink: 0
               }}></span>
               <span style={{
@@ -886,7 +886,7 @@ export default function HeroLanding({
                 }}
                 title="Watch 2-Minute End-to-End Clinical Journey"
               >
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FEF08A', boxShadow: '0 0 8px #FEF08A' }}></span>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FEF08A', boxShadow: 'none' }}></span>
                 <span>2-Min Live Clinical Walkthrough</span>
               </button>
 
@@ -896,9 +896,9 @@ export default function HeroLanding({
                 onMouseEnter={() => preloadModule('/acoustic-lab')}
                 onTouchStart={() => preloadModule('/acoustic-lab')}
                 style={{
-                  background: 'linear-gradient(135deg, #0A2540 0%, #1E3A8A 100%)',
+                  background: '#0F4C5C',
                   color: '#ffffff',
-                  border: '1.5px solid #D4AF37',
+                  border: '1px solid #0F4C5C',
                   borderRadius: '30px',
                   padding: '13px 24px',
                   fontSize: '14.5px',
@@ -947,7 +947,7 @@ export default function HeroLanding({
                 }}
                 title="Install AyuSwar AI PWA (Progressive Web App) on your device"
               >
-                <Download size={15} color="#0F4C5C" />
+                
                 <span>Install PWA App</span>
                 <span style={{ fontSize: '10px', background: 'rgba(0, 0, 0, 0.08)', color: '#0F4C5C', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>FAST</span>
               </button>
@@ -1199,7 +1199,7 @@ export default function HeroLanding({
 
             {/* Right Pill */}
             <div className="hero-gap-pill hero-gap-pill-right">
-              <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
+              <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: 'none' }} />
               <div style={{ fontSize: '12px' }}>
                 <strong style={{ color: '#34D399' }}>AYUSWAR AMBIENT: </strong>
                 <span style={{ color: '#D0DFE2' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
@@ -1256,14 +1256,14 @@ export default function HeroLanding({
             border: '1.5px solid #34D399',
             borderRadius: '18px',
             padding: '16px 20px',
-            boxShadow: '0 4px 16px rgba(16, 185, 129, 0.08)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '12px'
           }}>
             <div className="hero-gap-metric-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', boxShadow: 'none' }} />
               <span style={{ fontSize: '12px', fontWeight: 800, color: '#047857', textTransform: 'uppercase' }}>AyuSwar AI</span>
             </div>
             <div className="hero-gap-metric-stats" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -1343,7 +1343,7 @@ export default function HeroLanding({
 
               {/* Live Bus Heartbeat */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px 14px', borderRadius: '12px', border: '1px solid #2C4A52' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px #34D399' }} className="animate-ping" />
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: 'none' }} className="animate-ping" />
                 <span style={{ fontSize: '12px', fontWeight: 750, color: '#D0DFE2' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {isNeuralBusPaused ? '⏸️ Paused (Inspection)' : `Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
               </div>
             </div>
@@ -1389,7 +1389,7 @@ export default function HeroLanding({
                 gap: '8px'
               }}>
                 <span style={{ color: '#2DD4BF', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2DD4BF', boxShadow: '0 0 8px #2DD4BF' }}></span>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2DD4BF', boxShadow: 'none' }}></span>
                   16 kHz DSP Waveform
                 </span>
                 {[
@@ -1422,7 +1422,7 @@ export default function HeroLanding({
                 })}
                 <span style={{ color: '#38BDF8', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
                   Patient Delivery Gateway
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 8px #38BDF8' }}></span>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: 'none' }}></span>
                 </span>
               </div>
             </div>
@@ -1469,7 +1469,7 @@ export default function HeroLanding({
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: 'linear-gradient(135deg, #0F4C5C 0%, #006666 100%)',
+                  background: '#0F4C5C',
                   color: '#ffffff',
                   border: 'none',
                   padding: '10px 18px',
@@ -1653,7 +1653,7 @@ export default function HeroLanding({
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         ABDM HL7 FHIR R4
                       </span>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 6px #38BDF8' }} />
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38BDF8', boxShadow: 'none' }} />
                     </div>
                     <pre style={{
                       margin: 0,
@@ -2598,7 +2598,7 @@ export default function HeroLanding({
                   borderRadius: '18px',
                   border: '2px solid #10B981',
                   padding: '20px',
-                  boxShadow: '0 8px 24px rgba(16, 185, 129, 0.12)'
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
                 }}>
                   {/* Region & Accuracy Bar */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '6px' }}>
@@ -2755,7 +2755,7 @@ export default function HeroLanding({
                 }}
               >
                 {/* Background Grid Lines for DAW feel */}
-                <div style={{ position: 'absolute', inset: 0, opacity: 0.15, pointerEvents: 'none', backgroundImage: 'radial-gradient(#38BDF8 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                
 
                 {/* Mirrored High-Density Acoustic Speech Formant Bars (72 Bars) */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', height: '100%', gap: '2px', position: 'relative', zIndex: 1 }}>
@@ -2783,7 +2783,7 @@ export default function HeroLanding({
                           background: isPassed
                             ? 'linear-gradient(180deg, #38BDF8 0%, #0F4C5C 50%, #10B981 100%)'
                             : 'linear-gradient(180deg, #2C4A52 0%, #1E293B 100%)',
-                          boxShadow: isPassed ? '0 0 6px rgba(45,212,191,0.6)' : 'none',
+                          boxShadow: 'none',
                           transition: 'height 0.12s ease',
                           minWidth: '2px'
                         }}
@@ -2800,7 +2800,7 @@ export default function HeroLanding({
                   left: `${karaokeProgress}%`,
                   width: '2px',
                   background: '#FFFFFF',
-                  boxShadow: '0 0 12px #38BDF8, 0 0 24px #0F4C5C',
+                  boxShadow: '0 0 0 1px #0F4C5C',
                   zIndex: 10,
                   pointerEvents: 'none',
                   transition: 'left 0.1s linear'
@@ -2814,7 +2814,7 @@ export default function HeroLanding({
                     borderRadius: '50%',
                     background: '#38BDF8',
                     border: '2px solid #FFFFFF',
-                    boxShadow: '0 0 10px #38BDF8'
+                    boxShadow: 'none'
                   }} />
                 </div>
               </div>
@@ -2861,7 +2861,7 @@ export default function HeroLanding({
                           : isPast
                             ? '1px solid #0F4C5C'
                             : '1px solid #2C4A52',
-                        boxShadow: isHighlighted ? '0 0 20px rgba(45, 212, 191, 0.6)' : 'none',
+                        boxShadow: 'none',
                         transform: isHighlighted ? 'scale(1.08)' : 'none',
                         transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                         cursor: 'pointer'
@@ -4038,7 +4038,7 @@ export default function HeroLanding({
 
                   {/* Real-Time Ambient Triage Parsing Card */}
                   <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: 'none' }} />
                     <span style={{ fontSize: '12.5px', color: '#081C24', fontWeight: 600 }}>
                       Ambient AI Parse: <span style={{ color: '#0F4C5C' }}>"పీకల్లో పిల్లికూతలు" ➔ Expiratory Wheeze (ICD-10 R06.2)</span> • Triage: Sub-acute respiratory strain.
                     </span>

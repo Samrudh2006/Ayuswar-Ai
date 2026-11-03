@@ -109,7 +109,7 @@ export default function TeleconsultModal({
             height: '10px',
             borderRadius: '50%',
             background: '#10B981',
-            boxShadow: '0 0 10px #10B981'
+            boxShadow: 'none'
           }} />
           <div>
             <div style={{ fontSize: '14px', fontWeight: 800 }}>{doctorName}</div>

@@ -225,7 +225,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
               borderRadius: '50%',
               background: 'rgba(45, 212, 191, 0.25)',
               border: '2px solid #2DD4BF',
-              boxShadow: '0 0 20px #2DD4BF',
+              boxShadow: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -392,15 +392,15 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
         @keyframes cursorPing {
           0% {
             transform: scale(0.95);
-            box-shadow: 0 0 10px #2DD4BF;
+            box-shadow: none;
           }
           50% {
             transform: scale(1.15);
-            box-shadow: 0 0 24px #2DD4BF;
+            box-shadow: none;
           }
           100% {
             transform: scale(0.95);
-            box-shadow: 0 0 10px #2DD4BF;
+            box-shadow: none;
           }
         }
       `}</style>
