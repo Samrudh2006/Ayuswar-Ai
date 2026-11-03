@@ -46,7 +46,7 @@ async function generatePdf() {
   try {
     const page = await browser.newPage();
     const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    
+
     await page.setContent(htmlContent, {
       waitUntil: 'networkidle0'
     });

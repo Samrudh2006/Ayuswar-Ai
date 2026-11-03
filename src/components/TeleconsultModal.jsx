@@ -151,8 +151,8 @@ export default function TeleconsultModal({
           width: '110px',
           height: '150px',
           borderRadius: '16px',
-          background: '#0F172A',
-          border: '2px solid rgba(15, 76, 92, 0.5)',
+          background: '#091E26',
+          border: '2px solid rgba(0, 0, 0, 0.16)',
           overflow: 'hidden',
           boxShadow: '0 10px 25px rgba(0,0,0,0.5)'
         }}>
@@ -165,7 +165,7 @@ export default function TeleconsultModal({
               style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
             />
           ) : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B', fontSize: '10px' }}>
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#698892', fontSize: '10px' }}>
               Cam Off
             </div>
           )}
@@ -194,14 +194,14 @@ export default function TeleconsultModal({
           backdropFilter: 'blur(12px)',
           borderRadius: '16px',
           padding: '12px 18px',
-          border: '1px solid rgba(15, 76, 92, 0.4)',
+          border: '1px solid rgba(0, 0, 0, 0.16)',
           boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#38BDF8', letterSpacing: '-0.2px' }}>
             {subtitleText}
           </div>
-          <div style={{ fontSize: '11.5px', color: '#CBD5E1', marginTop: '3px' }}>
+          <div style={{ fontSize: '11.5px', color: '#D0DFE2', marginTop: '3px' }}>
             {englishText}
           </div>
         </div>

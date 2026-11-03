@@ -201,7 +201,7 @@ export default function HandDrawnExplainer() {
             fontSize: '13px',
             fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 2px 10px rgba(15, 76, 92, 0.28)',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.16)',
             transition: 'all 0.2s ease'
           }}
           title="Replay real-time stroke-by-stroke animation"

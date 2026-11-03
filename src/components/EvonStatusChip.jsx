@@ -50,7 +50,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
     ? { label: 'LIVE (200 OK)', bg: '#10B981', color: '#FFFFFF', dot: '#10B981', text: '● EVON 30B: LIVE' }
     : isUnavailable
       ? { label: 'UNAVAILABLE (UPSTREAM ERROR)', bg: '#EF4444', color: '#FFFFFF', dot: '#EF4444', text: '▲ EVON 30B: UNAVAILABLE' }
-      : { label: 'UNCONFIGURED (FALLBACK ACTIVE)', bg: '#475569', color: '#F1F5F9', dot: '#94A3B8', text: '○ EVON 30B: UNCONFIGURED (SAFE FALLBACK)' };
+      : { label: 'UNCONFIGURED (FALLBACK ACTIVE)', bg: '#486770', color: '#F1F5F9', dot: '#94A3B8', text: '○ EVON 30B: UNCONFIGURED (SAFE FALLBACK)' };
 
   const formatLastSuccess = (isoStr) => {
     if (!isoStr) return 'Never in this session';
@@ -82,7 +82,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           cursor: 'pointer',
           fontSize: '11px',
           fontWeight: 700,
-          color: isLive ? '#10B981' : isUnavailable ? '#EF4444' : '#64748B'
+          color: isLive ? '#10B981' : isUnavailable ? '#EF4444' : '#698892'
         }}
       >
         <span style={{
@@ -103,7 +103,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
     <div style={{
       background: isLive ? 'rgba(6, 78, 59, 0.35)' : isUnavailable ? 'rgba(69, 10, 10, 0.4)' : 'rgba(15, 23, 42, 0.65)',
       borderRadius: '10px',
-      border: `1px solid ${isLive ? '#059669' : isUnavailable ? '#991B1B' : '#334155'}`,
+      border: `1px solid ${isLive ? '#059669' : isUnavailable ? '#991B1B' : '#2C4A52'}`,
       padding: '10px 14px',
       display: 'flex',
       flexDirection: 'column',
@@ -116,7 +116,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
             width: '24px',
             height: '24px',
             borderRadius: '6px',
-            background: isLive ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : isUnavailable ? '#991B1B' : '#334155',
+            background: isLive ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : isUnavailable ? '#991B1B' : '#2C4A52',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -156,7 +156,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
             background: 'rgba(255, 255, 255, 0.08)',
             border: '1px solid rgba(255, 255, 255, 0.15)',
             borderRadius: '6px',
-            color: '#E2E8F0',
+            color: '#D0DFE2',
             padding: '4px 8px',
             fontSize: '10.5px',
             cursor: 'pointer',
@@ -176,7 +176,7 @@ export default function EvonStatusChip({ compact = false, showDetails = false })
           flexWrap: 'wrap',
           gap: '12px',
           fontSize: '10.5px',
-          color: '#CBD5E1',
+          color: '#D0DFE2',
           paddingTop: '4px',
           borderTop: '1px solid rgba(255, 255, 255, 0.08)'
         }}>

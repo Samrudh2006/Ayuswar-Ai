@@ -539,7 +539,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, letterSpacing: '-0.3px', fontFamily: 'Outfit, sans-serif', color: '#FFFFFF' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, letterSpacing: '-0.3px', fontFamily: 'var(--font-main)', color: '#FFFFFF' }}>
                   Vernacular WhatsApp Audio-Rx
                 </h2>
                 <span style={{
@@ -554,7 +554,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   BROWSER SPEECH
                 </span>
               </div>
-              <p style={{ fontSize: '12.5px', color: '#CBD5E1', margin: '3px 0 0 0' }}>
+              <p style={{ fontSize: '12.5px', color: '#D0DFE2', margin: '3px 0 0 0' }}>
                 Solves Indian non-literacy with native audio voice notes & synchronized glowing karaoke pills.
               </p>
             </div>
@@ -592,22 +592,22 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
           }}
         >
           {/* LEFT COLUMN: Controls, Language, Karaoke Spoken Rx, Visual Schedule */}
-          <div style={{ padding: '26px', borderRight: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ padding: '26px', borderRight: '1px solid #D0DFE2', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
             {/* Patient & Dispatch Selector */}
-            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
+            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '10px' }}>
                 Patient Destination & Phone Number
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '11px', color: '#475569', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '11px', color: '#486770', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
                     Recipient Patient
                   </label>
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                     {patient.name} <span style={{ color: '#0F4C5C', fontWeight: 700 }}>({patient.vernacularName || 'నారాయణ'})</span>
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11px', color: '#698892' }}>
                     ABHA: {patient.abhaId} • {patient.age}y {patient.gender}
                   </div>
                   <AbdmRegistryBadgeRow
@@ -627,7 +627,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '11px', color: '#475569', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '11px', color: '#486770', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
                     WhatsApp Mobile Number
                   </label>
                   <input
@@ -639,7 +639,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                       width: '100%',
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       fontSize: '13px',
                       fontWeight: 700,
                       color: '#081C24',
@@ -652,7 +652,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
 
               {/* Fast Phone Presets */}
               <div style={{ display: 'flex', gap: '6px', marginTop: '10px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '10.5px', color: '#64748B', alignSelf: 'center', marginRight: '4px' }}>Quick Select:</span>
+                <span style={{ fontSize: '10.5px', color: '#698892', alignSelf: 'center', marginRight: '4px' }}>Quick Select:</span>
                 {[
                   { label: 'Narayana (+91 98490-12345)', num: '+91 98490 12345', lang: 'te' },
                   { label: 'Aarav Kumar (+91 99887-65432)', num: '+91 99887 65432', lang: 'hi' },
@@ -665,9 +665,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                       fontSize: '11px',
                       padding: '3px 8px',
                       borderRadius: '6px',
-                      border: '1px solid #E2E8F0',
-                      background: phoneNumber === preset.num ? 'rgba(15, 76, 92, 0.1)' : '#F1F5F9',
-                      color: phoneNumber === preset.num ? '#0F4C5C' : '#475569',
+                      border: '1px solid #D0DFE2',
+                      background: phoneNumber === preset.num ? 'rgba(0, 0, 0, 0.07)' : '#F1F5F9',
+                      color: phoneNumber === preset.num ? '#0F4C5C' : '#486770',
                       fontWeight: 700,
                       cursor: 'pointer'
                     }}
@@ -679,9 +679,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             </div>
 
             {/* Language & Voice Synthesis Engine */}
-            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Spoken Dialect & Synthesis Speed
                 </div>
                 <span style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -704,9 +704,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                     style={{
                       padding: '8px 6px',
                       borderRadius: '10px',
-                      border: selectedLanguage === lang.code ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
-                      background: selectedLanguage === lang.code ? 'rgba(15, 76, 92, 0.08)' : '#ffffff',
-                      color: selectedLanguage === lang.code ? '#0F4C5C' : '#475569',
+                      border: selectedLanguage === lang.code ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
+                      background: selectedLanguage === lang.code ? 'rgba(0, 0, 0, 0.06)' : '#ffffff',
+                      color: selectedLanguage === lang.code ? '#0F4C5C' : '#486770',
                       fontSize: '11.5px',
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -741,7 +741,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                   }}
                 >
                   <Sparkles size={14} color="#00F5D4" />
@@ -749,7 +749,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 </button>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px', color: '#64748B' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px', color: '#698892' }}>
                 <span>Speech Tempo:</span>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   {[0.8, 1.0, 1.25].map(rate => (
@@ -759,9 +759,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                       style={{
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        border: '1px solid #E2E8F0',
+                        border: '1px solid #D0DFE2',
                         background: audioPlaybackRate === rate ? '#0A2540' : '#F1F5F9',
-                        color: audioPlaybackRate === rate ? '#ffffff' : '#475569',
+                        color: audioPlaybackRate === rate ? '#ffffff' : '#486770',
                         fontSize: '11px',
                         fontWeight: 700,
                         cursor: 'pointer'
@@ -779,8 +779,8 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
               background: '#061626',
               borderRadius: '16px',
               padding: '20px',
-              border: '1.5px solid rgba(15, 76, 92, 0.4)',
-              boxShadow: '0 8px 24px rgba(15, 76, 92, 0.15)',
+              border: '1.5px solid rgba(0, 0, 0, 0.16)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.10)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -828,7 +828,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                         borderRadius: '8px',
                         fontSize: '14.5px',
                         fontWeight: isActive ? 850 : 600,
-                        color: isActive ? '#061626' : (isPill ? '#FDE68A' : '#E2E8F0'),
+                        color: isActive ? '#061626' : (isPill ? '#FDE68A' : '#D0DFE2'),
                         background: isActive 
                           ? (token.pill === 'night' ? '#F472B6' : (token.pill === 'morning' ? '#FBBF24' : '#2DD4BF'))
                           : (isPill ? 'rgba(251, 191, 36, 0.15)' : 'rgba(255, 255, 255, 0.05)'),
@@ -862,7 +862,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                     fontSize: '13.5px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
                   }}
                 >
                   {isPlayingAudio ? <Pause size={16} fill="#ffffff" /> : <Play size={16} fill="#ffffff" />}
@@ -872,9 +872,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             </div>
 
             {/* Visual Color-Coded Pill Schedule (Doctor-Configurable Timings) */}
-            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#ffffff', padding: '16px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Doctor-Selected Dosage Schedule & Meal Timings
                 </div>
                 <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#0F4C5C', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
@@ -1147,7 +1147,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   borderRadius: '10px',
                   background: '#ffffff',
                   color: '#081C24',
-                  border: '1.5px solid #CBD5E1',
+                  border: '1.5px solid #D0DFE2',
                   fontSize: '11.5px',
                   fontWeight: 800,
                   cursor: 'pointer'
@@ -1208,9 +1208,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   gap: '4px',
                   padding: '10px 8px',
                   borderRadius: '10px',
-                  background: 'rgba(15, 76, 92, 0.08)',
+                  background: 'rgba(0, 0, 0, 0.06)',
                   color: '#0F4C5C',
-                  border: '1.5px solid rgba(15, 76, 92, 0.3)',
+                  border: '1.5px solid rgba(0, 0, 0, 0.16)',
                   fontSize: '11.5px',
                   fontWeight: 800,
                   cursor: 'pointer'
@@ -1332,7 +1332,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   padding: '10px 12px',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
                   maxWidth: '92%',
-                  border: isPlayingAudio ? '1.5px solid #25D366' : '1px solid #E2E8F0'
+                  border: isPlayingAudio ? '1.5px solid #25D366' : '1px solid #D0DFE2'
                 }}>
                   {/* Doctor Voice Note Header */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -1403,7 +1403,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   <div style={{ fontWeight: 800, color: '#075E54', marginBottom: '4px' }}>
                     🏥 AyuSwar Clinical Prescription
                   </div>
-                  <div style={{ fontSize: '11px', color: '#475569', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '11px', color: '#486770', marginBottom: '8px' }}>
                     Patient: <strong>{patient.name}</strong> • Dr. Priya Sharma
                   </div>
 
@@ -1431,7 +1431,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   padding: '10px',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
                   maxWidth: '92%',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #D0DFE2',
                   cursor: 'pointer'
                 }}
                 onClick={togglePlayAudio}
@@ -1444,7 +1444,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                       <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#081C24' }}>
                         Tap to Replay Spoken Audio-Rx
                       </div>
-                      <div style={{ fontSize: '10px', color: '#64748B' }}>
+                      <div style={{ fontSize: '10px', color: '#698892' }}>
                         ayuswar.ai/rx/{patient.abhaId || '91-4521'}
                       </div>
                     </div>
@@ -1466,7 +1466,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                   borderRadius: '20px',
                   padding: '8px 14px',
                   fontSize: '11.5px',
-                  color: '#64748B'
+                  color: '#698892'
                 }}>
                   Reply in Telugu or send voice note...
                 </div>
@@ -1491,12 +1491,12 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
         <div style={{
           background: '#ffffff',
           padding: '14px 28px',
-          borderTop: '1px solid #E2E8F0',
+          borderTop: '1px solid #D0DFE2',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '12px',
-          color: '#64748B'
+          color: '#698892'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldCheck size={16} color="#059669" />
@@ -1508,9 +1508,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             style={{
               padding: '8px 18px',
               borderRadius: '8px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D0DFE2',
               background: '#ffffff',
-              color: '#334155',
+              color: '#2C4A52',
               fontSize: '12.5px',
               fontWeight: 700,
               cursor: 'pointer'

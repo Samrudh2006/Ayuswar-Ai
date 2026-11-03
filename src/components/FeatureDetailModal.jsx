@@ -131,7 +131,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
+        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.14)',
         border: '1px solid #D8E7EB'
       }}>
         {/* Header */}
@@ -205,15 +205,15 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
 
           {/* Metrics & Architecture Row */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-              <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Clinical Benchmark</div>
+            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
+              <div style={{ fontSize: '11px', color: '#698892', fontWeight: 700, textTransform: 'uppercase' }}>Clinical Benchmark</div>
               <div style={{ fontSize: '13px', fontWeight: 750, color: '#081C24', marginTop: '4px' }}>
                 {current.scientificMetric}
               </div>
             </div>
 
-            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-              <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Technical Pipeline</div>
+            <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
+              <div style={{ fontSize: '11px', color: '#698892', fontWeight: 700, textTransform: 'uppercase' }}>Technical Pipeline</div>
               <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#0F4C5C', marginTop: '4px' }}>
                 {current.techSpec}
               </div>
@@ -222,8 +222,8 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
         </div>
 
         {/* Footer Actions */}
-        <div style={{ padding: '16px 28px', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAF8F5', flexWrap: 'wrap', gap: '10px' }}>
-          <span style={{ fontSize: '12px', color: '#64748B' }}>
+        <div style={{ padding: '16px 28px', borderTop: '1px solid #D0DFE2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAF8F5', flexWrap: 'wrap', gap: '10px' }}>
+          <span style={{ fontSize: '12px', color: '#698892' }}>
             Secure access required to run live consultation sessions.
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

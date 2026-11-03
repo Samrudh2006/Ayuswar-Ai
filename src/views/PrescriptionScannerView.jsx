@@ -364,7 +364,7 @@ export default function PrescriptionScannerView() {
       ddiConflict: 'Verify prior history of penicillin/beta-lactam allergy before dispensing.',
       contourDetected: true,
       imagePlaceholderColor: '#F1F5F9',
-      pillColor: '#475569',
+      pillColor: '#486770',
       boundingBoxes: [
         { label: 'BRAND_NAME', text: 'AMOXICILLIN 500MG', x: 26, y: 34, w: 230, h: 32, conf: 'High Match' },
         { label: 'ACTIVE_SALT', text: 'AMOXICILLIN + CLAVULANATE', x: 26, y: 76, w: 280, h: 26, conf: 'High Match' },
@@ -604,7 +604,7 @@ export default function PrescriptionScannerView() {
           batchNumber: batch || 'Not identified',
           expiryDate: expiry || 'Not identified',
           ddiConflict: null,
-          pillColor: '#64748B',
+          pillColor: '#698892',
           imagePlaceholderColor: '#F1F5F9'
         });
       }
@@ -670,7 +670,7 @@ export default function PrescriptionScannerView() {
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#64748B', fontSize: '13px' }}>Solutions</span>
+        <span style={{ color: '#698892', fontSize: '13px' }}>Solutions</span>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Blister Strip & Paper Rx Scanner</span>
       </div>
@@ -749,12 +749,12 @@ export default function PrescriptionScannerView() {
       {/* Workspace Grid */}
       <div className="scanner-workspace-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '20px' }}>
         {/* Left Column: Interactive Input / Sample Selector */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>
             <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#081C24', marginBottom: '8px' }}>
               1. Input Medicine Packaging Sample
             </h3>
-            <p style={{ fontSize: '13px', color: '#64748B' }}>
+            <p style={{ fontSize: '13px', color: '#698892' }}>
               Upload any physical medicine strip image, capture using live camera, or test with clinical presets.
             </p>
           </div>
@@ -773,7 +773,7 @@ export default function PrescriptionScannerView() {
                 borderRadius: '8px',
                 border: 'none',
                 background: activeTab === 'samples' ? '#0A2540' : 'transparent',
-                color: activeTab === 'samples' ? '#FFFFFF' : '#64748B',
+                color: activeTab === 'samples' ? '#FFFFFF' : '#698892',
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer'
@@ -789,7 +789,7 @@ export default function PrescriptionScannerView() {
                 borderRadius: '8px',
                 border: 'none',
                 background: activeTab === 'camera' ? '#0A2540' : 'transparent',
-                color: activeTab === 'camera' ? '#FFFFFF' : '#64748B',
+                color: activeTab === 'camera' ? '#FFFFFF' : '#698892',
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer',
@@ -808,7 +808,7 @@ export default function PrescriptionScannerView() {
                 padding: '8px',
                 borderRadius: '8px',
                 background: activeTab === 'upload' ? '#0A2540' : 'transparent',
-                color: activeTab === 'upload' ? '#FFFFFF' : '#64748B',
+                color: activeTab === 'upload' ? '#FFFFFF' : '#698892',
                 fontSize: '12px',
                 fontWeight: 750,
                 cursor: 'pointer',
@@ -930,7 +930,7 @@ export default function PrescriptionScannerView() {
                   style={{
                     padding: '14px',
                     borderRadius: '12px',
-                    border: selectedSampleIdx === idx ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                    border: selectedSampleIdx === idx ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
                     background: selectedSampleIdx === idx ? '#F0FDFA' : '#FFFFFF',
                     cursor: 'pointer',
                     display: 'flex',
@@ -949,7 +949,7 @@ export default function PrescriptionScannerView() {
                           height: '42px', 
                           borderRadius: '8px', 
                           objectFit: 'cover', 
-                          border: '1.5px solid #CBD5E1',
+                          border: '1.5px solid #D0DFE2',
                           flexShrink: 0
                         }} 
                       />
@@ -958,7 +958,7 @@ export default function PrescriptionScannerView() {
                     )}
                     <div>
                       <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>{sample.brand}</div>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>{sample.genericSalt}</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>{sample.genericSalt}</div>
                     </div>
                   </div>
                   {sample.ddiConflict && (
@@ -977,11 +977,11 @@ export default function PrescriptionScannerView() {
               height: '240px',
               borderRadius: '12px',
               background: uploadedImage 
-                ? `url(${uploadedImage}) center/contain no-repeat #0F172A` 
+                ? `url(${uploadedImage}) center/contain no-repeat #091E26` 
                 : currentSample.realImageUrl 
-                  ? `linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url(${currentSample.realImageUrl}) center/cover no-repeat #0F172A`
+                  ? `linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), url(${currentSample.realImageUrl}) center/cover no-repeat #091E26`
                   : currentSample.imagePlaceholderColor,
-              border: '2px solid #CBD5E1',
+              border: '2px solid #D0DFE2',
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
@@ -1154,7 +1154,7 @@ export default function PrescriptionScannerView() {
           {/* OpenCV.js Computer Vision Preprocessing Badge & Toggle */}
           <div style={{
             background: useCvEnhancement ? '#F0FDF4' : '#F8FAFC',
-            border: useCvEnhancement ? '1px solid #BBF7D0' : '1px solid #E2E8F0',
+            border: useCvEnhancement ? '1px solid #BBF7D0' : '1px solid #D0DFE2',
             borderRadius: '10px',
             padding: '10px 14px',
             display: 'flex',
@@ -1165,10 +1165,10 @@ export default function PrescriptionScannerView() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '14px' }}>🔬</span>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F172A' }}>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#091E26' }}>
                   OpenCV.js Adaptive Foil Binarization
                 </div>
-                <div style={{ fontSize: '10.5px', color: '#64748B' }}>
+                <div style={{ fontSize: '10.5px', color: '#698892' }}>
                   {cvStats 
                     ? `Otsu Threshold: ${cvStats.otsuThreshold} • Contrast Range: ${cvStats.minLuminance}–${cvStats.maxLuminance}`
                     : 'Removes foil reflections, crinkles & shadows prior to Tesseract OCR'}
@@ -1210,7 +1210,7 @@ export default function PrescriptionScannerView() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.16)'
               }}
             >
               <RefreshCw size={16} />
@@ -1222,12 +1222,12 @@ export default function PrescriptionScannerView() {
         {/* Right Column: OCR Extraction & Formulary Results */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Card: Resolved Active Chemical Compound */}
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', boxShadow: '0 4px 16px rgba(10,37,64,0.04)' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.03)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Resolved Active Generic Salt (NFI)
               </div>
-              <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F172A', background: '#FAF8F5', padding: '2px 8px', borderRadius: '6px', fontFamily: 'monospace' }}>
+              <span style={{ fontSize: '11px', fontWeight: 750, color: '#091E26', background: '#FAF8F5', padding: '2px 8px', borderRadius: '6px', fontFamily: 'monospace' }}>
                 {currentSample.nfiCode}
               </span>
             </div>
@@ -1240,7 +1240,7 @@ export default function PrescriptionScannerView() {
                   borderRadius: '12px',
                   overflow: 'hidden',
                   flexShrink: 0,
-                  border: '1.5px solid #CBD5E1',
+                  border: '1.5px solid #D0DFE2',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
                 }}>
                   <img 
@@ -1254,7 +1254,7 @@ export default function PrescriptionScannerView() {
                 <h2 style={{ fontSize: '18px', fontWeight: 850, color: '#081C24', margin: '0 0 4px 0' }}>
                   {currentSample.genericSalt}
                 </h2>
-                <div style={{ fontSize: '12.5px', color: '#64748B' }}>
+                <div style={{ fontSize: '12.5px', color: '#698892' }}>
                   Form: {currentSample.dosageForm} • Brand: <strong>{currentSample.brand}</strong>
                 </div>
                 {currentSample.vernacularTe && (
@@ -1279,15 +1279,15 @@ export default function PrescriptionScannerView() {
             </div>
 
             {/* Jan Aushadhi Generic Cost Optimizer */}
-            <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase' }}>
                   Pradhan Mantri Jan Aushadhi Equivalent
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                   {currentSample.janAushadhiGeneric}
                 </div>
-                <div style={{ fontSize: '12px', color: '#475569', marginTop: '2px' }}>
+                <div style={{ fontSize: '12px', color: '#486770', marginTop: '2px' }}>
                   Branded MRP: <s>{currentSample.brandedPrice}</s> → Jan Aushadhi: <strong style={{ color: '#0D9488' }}>{currentSample.janAushadhiPrice}</strong>
                 </div>
               </div>
@@ -1365,7 +1365,7 @@ export default function PrescriptionScannerView() {
             }}>
               {/* Age Toggle */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', fontWeight: 750, color: '#475569' }}>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#486770' }}>
                   Patient Age Profile:
                 </span>
                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -1374,9 +1374,9 @@ export default function PrescriptionScannerView() {
                     style={{
                       padding: '4px 10px',
                       borderRadius: '8px',
-                      border: patientAgeProfile === 'adult' ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
+                      border: patientAgeProfile === 'adult' ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
                       background: patientAgeProfile === 'adult' ? '#E6FAF8' : '#F8FAFC',
-                      color: patientAgeProfile === 'adult' ? '#0F4C5C' : '#64748B',
+                      color: patientAgeProfile === 'adult' ? '#0F4C5C' : '#698892',
                       fontSize: '11.5px',
                       fontWeight: 750,
                       cursor: 'pointer'
@@ -1389,9 +1389,9 @@ export default function PrescriptionScannerView() {
                     style={{
                       padding: '4px 10px',
                       borderRadius: '8px',
-                      border: patientAgeProfile === 'geriatric' ? '1.5px solid #B91C1C' : '1px solid #CBD5E1',
+                      border: patientAgeProfile === 'geriatric' ? '1.5px solid #B91C1C' : '1px solid #D0DFE2',
                       background: patientAgeProfile === 'geriatric' ? '#FEE2E2' : '#F8FAFC',
-                      color: patientAgeProfile === 'geriatric' ? '#B91C1C' : '#64748B',
+                      color: patientAgeProfile === 'geriatric' ? '#B91C1C' : '#698892',
                       fontSize: '11.5px',
                       fontWeight: 750,
                       cursor: 'pointer'
@@ -1404,7 +1404,7 @@ export default function PrescriptionScannerView() {
 
               {/* eGFR Renal Function Toggle */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', fontWeight: 750, color: '#475569' }}>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#486770' }}>
                   Renal Function (eGFR):
                 </span>
                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -1419,9 +1419,9 @@ export default function PrescriptionScannerView() {
                       style={{
                         padding: '4px 8px',
                         borderRadius: '8px',
-                        border: patientEgfrProfile === eg.id ? '1.5px solid #0A2540' : '1px solid #CBD5E1',
+                        border: patientEgfrProfile === eg.id ? '1.5px solid #0A2540' : '1px solid #D0DFE2',
                         background: patientEgfrProfile === eg.id ? '#0A2540' : '#F8FAFC',
-                        color: patientEgfrProfile === eg.id ? '#FFFFFF' : '#64748B',
+                        color: patientEgfrProfile === eg.id ? '#FFFFFF' : '#698892',
                         fontSize: '11px',
                         fontWeight: 750,
                         cursor: 'pointer'
@@ -1439,7 +1439,7 @@ export default function PrescriptionScannerView() {
               <div style={{ fontSize: '13.5px', fontWeight: 800, color: beersSafety.color, marginBottom: '4px' }}>
                 {beersSafety.title}
               </div>
-              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.5, marginBottom: '6px' }}>
+              <div style={{ fontSize: '12px', color: '#2C4A52', lineHeight: 1.5, marginBottom: '6px' }}>
                 {beersSafety.details}
               </div>
               <div style={{
@@ -1482,7 +1482,7 @@ export default function PrescriptionScannerView() {
           border-radius: 28px;
           border: 2px solid #2DD4BF;
           background: radial-gradient(circle at 50% 30%, #0F3B4A 0%, #061B23 100%);
-          box-shadow: 0 10px 30px rgba(15, 76, 92, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16), inset 0 2px 4px rgba(255, 255, 255, 0.2);
           overflow: hidden;
           display: flex;
           align-items: flex-end;
@@ -1553,7 +1553,7 @@ export default function PrescriptionScannerView() {
           align-items: baseline;
           gap: 2px;
           color: #FFFFFF;
-          font-family: Outfit, sans-serif;
+          font-family: var(--font-main);
           font-weight: 850;
           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
@@ -1622,7 +1622,7 @@ export default function PrescriptionScannerView() {
           border-radius: 8px;
           background: rgba(255, 255, 255, 0.12);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          color: #E2E8F0;
+          color: #D0DFE2;
           font-size: 11.5px;
           font-weight: 700;
           cursor: pointer;

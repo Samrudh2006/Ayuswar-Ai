@@ -803,7 +803,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#64748B', fontSize: '13px' }}>Solutions</span>
+        <span style={{ color: '#698892', fontSize: '13px' }}>Solutions</span>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Vernacular Audio-Rx Studio</span>
       </div>
@@ -829,7 +829,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           {/* Live Waveform Studio Card */}
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Mic size={18} color="#0F4C5C" />
@@ -837,7 +837,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               </div>
               <span style={{ 
                 background: isRecordingLiveMic ? '#FEE2E2' : '#F1F5F9', 
-                color: isRecordingLiveMic ? '#DC2626' : '#64748B', 
+                color: isRecordingLiveMic ? '#DC2626' : '#698892', 
                 fontSize: '11px', 
                 padding: '3px 8px', 
                 borderRadius: '6px', 
@@ -848,7 +848,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
             </div>
 
             {/* 60 FPS Waveform Oscilloscope Canvas */}
-            <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1.5px solid #0F172A', background: '#061626', position: 'relative' }}>
+            <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1.5px solid #091E26', background: '#061626', position: 'relative' }}>
               <canvas 
                 ref={canvasRef} 
                 width={500} 
@@ -875,7 +875,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 <span>
                   Pitch: <strong style={{ color: livePitchHz > 0 ? '#F59E0B' : '#94A3B8' }}>{livePitchHz > 0 ? `${livePitchHz} Hz` : 'Silent'}</strong>
                   {' • '}
-                  Vol: <strong style={{ color: '#E2E8F0' }}>{liveRmsDb} dB</strong>
+                  Vol: <strong style={{ color: '#D0DFE2' }}>{liveRmsDb} dB</strong>
                 </span>
               </div>
 
@@ -917,7 +917,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: isRecordingLiveMic ? '0 4px 14px rgba(220,38,38,0.35)' : '0 4px 14px rgba(15, 76, 92, 0.3)'
+                  boxShadow: isRecordingLiveMic ? '0 4px 14px rgba(220,38,38,0.35)' : '0 4px 14px rgba(0, 0, 0, 0.16)'
                 }}
               >
                 {isRecordingLiveMic ? <Square size={16} fill="#FFF" /> : <Mic size={16} />}
@@ -931,7 +931,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   style={{
                     padding: '12px 16px',
                     borderRadius: '12px',
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid #D0DFE2',
                     background: '#FAF8F5',
                     color: '#081C24',
                     fontSize: '13px',
@@ -1008,7 +1008,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   </span>
                 </div>
 
-                <div style={{ fontSize: '11.5px', color: '#475569' }}>
+                <div style={{ fontSize: '11.5px', color: '#486770' }}>
                   Dominant Peak: <strong>{acousticResult.dominantFreqHz} Hz</strong> • Amplitude: <strong>{acousticResult.peakDb} dB</strong> • Acoustic Confidence: <strong>{acousticResult.confidence}%</strong>
                 </div>
 
@@ -1027,7 +1027,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
 
             {/* Recorded Audio Audio Element */}
             {liveRecordedAudioUrl && (
-              <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                 <div style={{ fontSize: '11px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>
                   ✓ Live Voice Note Recorded Ready for WhatsApp Dispatch:
                 </div>
@@ -1037,7 +1037,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* Karaoke Telemetry Box */}
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Synthesized Mother Tongue Readout:</span>
@@ -1065,14 +1065,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#64748B' }}>🎙️ Gnani Voice:</span>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#698892' }}>🎙️ Gnani Voice:</span>
                   <select
                     value={selectedGnaniVoice}
                     onChange={(e) => { setSelectedGnaniVoice(e.target.value); handleStopAudio(); }}
                     style={{
                       padding: '4px 8px',
                       borderRadius: '7px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       fontSize: '11px',
                       fontWeight: 700,
                       color: '#081C24',
@@ -1111,7 +1111,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                       borderRadius: '8px',
                       border: 'none',
                       background: activeLang === lang.code ? '#0F4C5C' : '#F1F5F9',
-                      color: activeLang === lang.code ? '#FFFFFF' : '#475569',
+                      color: activeLang === lang.code ? '#FFFFFF' : '#486770',
                       fontSize: '11.5px',
                       fontWeight: 750,
                       cursor: 'pointer'
@@ -1125,7 +1125,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
             <div style={{
-              background: 'linear-gradient(135deg, #0A2540 0%, #0F172A 100%)',
+              background: 'linear-gradient(135deg, #0A2540 0%, #091E26 100%)',
               borderRadius: '14px',
               padding: '20px',
               minHeight: '130px',
@@ -1146,7 +1146,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                       style={{
                         display: 'inline-block',
                         marginRight: '6px',
-                        color: isCurrent ? '#00F5D4' : idx < karaokeActiveIndex ? '#FFFFFF' : '#64748B',
+                        color: isCurrent ? '#00F5D4' : idx < karaokeActiveIndex ? '#FFFFFF' : '#698892',
                         fontWeight: isCurrent ? 850 : 600,
                         transform: isCurrent ? 'scale(1.12)' : 'scale(1)',
                         transition: 'all 140ms ease',
@@ -1230,7 +1230,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           {/* Visual Pill Cards */}
-          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px' }}>
             <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginBottom: '14px' }}>
               Color-Coded Visual Pill Chronotherapy Schedule
             </h3>
@@ -1240,7 +1240,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               <div style={{
                 padding: '16px',
                 borderRadius: '12px',
-                border: activePillHighlight === 'morning' ? '2.5px solid #F59E0B' : '1px solid #E2E8F0',
+                border: activePillHighlight === 'morning' ? '2.5px solid #F59E0B' : '1px solid #D0DFE2',
                 background: activePillHighlight === 'morning' ? '#FEF3C7' : '#F8FAFC',
                 display: 'flex',
                 alignItems: 'center',
@@ -1257,7 +1257,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
                     Pantoprazole 40mg (పసుపు గోళీ / Yellow Pill)
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>
+                  <div style={{ fontSize: '12px', color: '#698892' }}>
                     Morning: 08:30 AM (Before Breakfast • 30 mins empty stomach)
                   </div>
                 </div>
@@ -1267,7 +1267,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               <div style={{
                 padding: '16px',
                 borderRadius: '12px',
-                border: activePillHighlight === 'night' ? '2.5px solid #EC4899' : '1px solid #E2E8F0',
+                border: activePillHighlight === 'night' ? '2.5px solid #EC4899' : '1px solid #D0DFE2',
                 background: activePillHighlight === 'night' ? '#FCE7F3' : '#F8FAFC',
                 display: 'flex',
                 alignItems: 'center',
@@ -1284,7 +1284,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
                     Metformin 500mg SR (గులాబీ గోళీ / Pink Pill)
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>
+                  <div style={{ fontSize: '12px', color: '#698892' }}>
                     Night: 08:30 PM (After Dinner • Regular with water)
                   </div>
                 </div>
@@ -1372,9 +1372,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                         flex: 1,
                         padding: '8px',
                         borderRadius: '8px',
-                        border: teachBackAnswers.q1 === 0 ? '2px solid #10B981' : '1px solid #CBD5E1',
+                        border: teachBackAnswers.q1 === 0 ? '2px solid #10B981' : '1px solid #D0DFE2',
                         background: teachBackAnswers.q1 === 0 ? '#DCFCE7' : '#F8FAFC',
-                        color: teachBackAnswers.q1 === 0 ? '#166534' : '#334155',
+                        color: teachBackAnswers.q1 === 0 ? '#166534' : '#2C4A52',
                         fontSize: '11px',
                         fontWeight: 750,
                         cursor: 'pointer'
@@ -1388,9 +1388,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                         flex: 1,
                         padding: '8px',
                         borderRadius: '8px',
-                        border: teachBackAnswers.q1 === 1 ? '2px solid #EF4444' : '1px solid #CBD5E1',
+                        border: teachBackAnswers.q1 === 1 ? '2px solid #EF4444' : '1px solid #D0DFE2',
                         background: teachBackAnswers.q1 === 1 ? '#FEE2E2' : '#F8FAFC',
-                        color: teachBackAnswers.q1 === 1 ? '#991B1B' : '#334155',
+                        color: teachBackAnswers.q1 === 1 ? '#991B1B' : '#2C4A52',
                         fontSize: '11px',
                         fontWeight: 750,
                         cursor: 'pointer'
@@ -1413,9 +1413,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                         flex: 1,
                         padding: '8px',
                         borderRadius: '8px',
-                        border: teachBackAnswers.q2 === 0 ? '2px solid #10B981' : '1px solid #CBD5E1',
+                        border: teachBackAnswers.q2 === 0 ? '2px solid #10B981' : '1px solid #D0DFE2',
                         background: teachBackAnswers.q2 === 0 ? '#DCFCE7' : '#F8FAFC',
-                        color: teachBackAnswers.q2 === 0 ? '#166534' : '#334155',
+                        color: teachBackAnswers.q2 === 0 ? '#166534' : '#2C4A52',
                         fontSize: '11px',
                         fontWeight: 750,
                         cursor: 'pointer'
@@ -1429,9 +1429,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                         flex: 1,
                         padding: '8px',
                         borderRadius: '8px',
-                        border: teachBackAnswers.q2 === 1 ? '2px solid #EF4444' : '1px solid #CBD5E1',
+                        border: teachBackAnswers.q2 === 1 ? '2px solid #EF4444' : '1px solid #D0DFE2',
                         background: teachBackAnswers.q2 === 1 ? '#FEE2E2' : '#F8FAFC',
-                        color: teachBackAnswers.q2 === 1 ? '#991B1B' : '#334155',
+                        color: teachBackAnswers.q2 === 1 ? '#991B1B' : '#2C4A52',
                         fontSize: '11px',
                         fontWeight: 750,
                         cursor: 'pointer'
@@ -1580,9 +1580,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
         marginTop: '24px',
         background: '#FFFFFF',
         borderRadius: '16px',
-        border: '1.5px solid #CBD5E1',
+        border: '1.5px solid #D0DFE2',
         padding: '24px',
-        boxShadow: '0 4px 16px rgba(10,37,64,0.04)'
+        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.03)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
@@ -1595,7 +1595,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 Nature 2024 Protocol
               </span>
             </div>
-            <p style={{ fontSize: '12.5px', color: '#64748B', margin: '4px 0 0 0' }}>
+            <p style={{ fontSize: '12.5px', color: '#698892', margin: '4px 0 0 0' }}>
               Autonomous structured consultation documentation mapping vernacular dialogue to standard clinical EHR SOAP charts.
             </p>
           </div>
@@ -1606,7 +1606,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               style={{
                 padding: '8px 14px',
                 borderRadius: '8px',
-                border: '1px solid #CBD5E1',
+                border: '1px solid #D0DFE2',
                 background: '#FFFFFF',
                 color: '#081C24',
                 fontSize: '12px',
@@ -1650,14 +1650,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           gap: '16px'
         }}>
           {/* S - Subjective */}
-          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', marginBottom: '6px' }}>
               S • Subjective (రోగి వివరణ)
             </div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Epigastric Pyrosis & Dyspepsia
             </div>
-            <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '12px', color: '#486770', lineHeight: 1.5 }}>
               • Burning retrosternal sensation x 3 weeks.<br />
               • Exacerbated in early morning & postprandial.<br />
               • Adherence Teach-Back: <strong style={{ color: teachBackVerified ? '#16A34A' : '#D97706' }}>
@@ -1667,14 +1667,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* O - Objective */}
-          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#0284C7', textTransform: 'uppercase', marginBottom: '6px' }}>
               O • Objective (క్లినికల్ కొలతలు)
             </div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Vitals & Acoustic Biomarkers
             </div>
-            <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '12px', color: '#486770', lineHeight: 1.5 }}>
               • BP: <strong>138/88 mmHg</strong> | HR: <strong>76 bpm</strong><br />
               • SpO2: <strong>98%</strong> | BMI: <strong>26.2 kg/m²</strong><br />
               • Acoustic Wheeze Index: <strong>{acousticResult ? `${acousticResult.wheezeIndex}% (${acousticResult.title})` : '14% (Normal Vesicular)'}</strong>
@@ -1682,14 +1682,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* A - Assessment */}
-          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#7C3AED', textTransform: 'uppercase', marginBottom: '6px' }}>
               A • Assessment (ICD-10 Diagnostic Codes)
             </div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               ICD-10-CM Clinical Coding
             </div>
-            <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '12px', color: '#486770', lineHeight: 1.5 }}>
               • <strong style={{ color: '#6D28D9' }}>K21.9</strong> — Gastro-esophageal reflux disease<br />
               • <strong style={{ color: '#6D28D9' }}>E11.9</strong> — Type 2 diabetes mellitus (Non-insulin)<br />
               • <strong style={{ color: '#6D28D9' }}>I10</strong> — Essential (primary) hypertension
@@ -1697,14 +1697,14 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
           </div>
 
           {/* P - Plan */}
-          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '16px' }}>
+          <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px' }}>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', marginBottom: '6px' }}>
               P • Plan (చికిత్స & జన్ ఔషధి)
             </div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               Vernacular Pharmacotherapy Plan
             </div>
-            <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '12px', color: '#486770', lineHeight: 1.5 }}>
               • Tab Pantoprazole 40mg (Morning empty stomach)<br />
               • Tab Metformin 500mg SR (Night post dinner)<br />
               • PMBJP Jan Aushadhi generic savings active.<br />

@@ -21,7 +21,7 @@ export default function TermsOfServiceView() {
             Terms of Clinical Use & Research Sandbox
           </h1>
         </div>
-        <p style={{ fontSize: '14px', color: '#64748B', margin: 0 }}>
+        <p style={{ fontSize: '14px', color: '#698892', margin: 0 }}>
           Last updated: October 2026 • AyuSwar AI Open Source Clinical Architecture
         </p>
       </div>
@@ -48,9 +48,9 @@ export default function TermsOfServiceView() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', color: '#334155', lineHeight: 1.7, fontSize: '14.5px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', color: '#2C4A52', lineHeight: 1.7, fontSize: '14.5px' }}>
         {/* Section 1 */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             1. Clinician-in-the-Loop Requirement
           </h2>
@@ -60,7 +60,7 @@ export default function TermsOfServiceView() {
         </div>
 
         {/* Section 2 */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             2. Jan Aushadhi & Generic Substitution Guidance
           </h2>
@@ -70,7 +70,7 @@ export default function TermsOfServiceView() {
         </div>
 
         {/* Section 3 */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             3. Emergency Telemetry & Distress Situations
           </h2>
@@ -82,7 +82,7 @@ export default function TermsOfServiceView() {
         </div>
 
         {/* Section 4 */}
-        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '24px' }}>
+        <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '24px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#081C24', marginTop: 0, marginBottom: '12px' }}>
             4. Open Source Apache 2.0 Licensing
           </h2>

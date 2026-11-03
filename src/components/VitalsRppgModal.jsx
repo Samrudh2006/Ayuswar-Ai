@@ -140,7 +140,7 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
         width: '100%',
         maxWidth: '460px',
         borderRadius: '24px',
-        border: '1.5px solid rgba(15, 76, 92, 0.35)',
+        border: '1.5px solid rgba(0, 0, 0, 0.16)',
         boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
         overflow: 'hidden',
         display: 'flex',
@@ -231,8 +231,8 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
             width: '160px',
             height: '200px',
             borderRadius: '50%',
-            border: isScanning ? '2.5px solid #D4AF37' : '2px dashed #64748B',
-            boxShadow: isScanning ? '0 0 24px rgba(212, 175, 55, 0.45)' : 'none',
+            border: isScanning ? '2.5px solid #D4AF37' : '2px dashed #698892',
+            boxShadow: isScanning ? '0 0 24px rgba(0, 0, 0, 0.14)' : 'none',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -266,11 +266,11 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            border: '1px solid rgba(15, 76, 92, 0.3)'
+            border: '1px solid rgba(0, 0, 0, 0.16)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Activity size={14} color="#D4AF37" className={isScanning ? 'animate-pulse' : ''} />
-              <span style={{ fontSize: '11px', color: '#CBD5E1', fontWeight: 700 }}>Pulse Flux Wave:</span>
+              <span style={{ fontSize: '11px', color: '#D0DFE2', fontWeight: 700 }}>Pulse Flux Wave:</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '16px' }}>
               {pulseWaveform.map((val, idx) => (
@@ -306,19 +306,19 @@ export default function VitalsRppgModal({ isOpen, onClose, onSaveVitals }) {
               <div style={{ background: '#0A1E34', padding: '12px', borderRadius: '12px', border: '1px solid #16365C', textAlign: 'center' }}>
                 <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase' }}>Heart Rate</div>
                 <div style={{ fontSize: '22px', fontWeight: 900, color: '#FF6B6B', marginTop: '2px' }}>{heartRate}</div>
-                <div style={{ fontSize: '10px', color: '#CBD5E1' }}>BPM</div>
+                <div style={{ fontSize: '10px', color: '#D0DFE2' }}>BPM</div>
               </div>
 
               <div style={{ background: '#0A1E34', padding: '12px', borderRadius: '12px', border: '1px solid #16365C', textAlign: 'center' }}>
                 <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase' }}>Respiration</div>
                 <div style={{ fontSize: '22px', fontWeight: 900, color: '#38BDF8', marginTop: '2px' }}>{respirationRate}</div>
-                <div style={{ fontSize: '10px', color: '#CBD5E1' }}>RPM</div>
+                <div style={{ fontSize: '10px', color: '#D0DFE2' }}>RPM</div>
               </div>
 
               <div style={{ background: '#0A1E34', padding: '12px', borderRadius: '12px', border: '1px solid #16365C', textAlign: 'center' }}>
                 <div style={{ fontSize: '10px', color: '#94A3B8', textTransform: 'uppercase' }}>Est. SpO2</div>
                 <div style={{ fontSize: '22px', fontWeight: 900, color: '#10B981', marginTop: '2px' }}>{bloodOxygen}%</div>
-                <div style={{ fontSize: '10px', color: '#CBD5E1' }}>Pulse Ox</div>
+                <div style={{ fontSize: '10px', color: '#D0DFE2' }}>Pulse Ox</div>
               </div>
             </div>
           ) : (

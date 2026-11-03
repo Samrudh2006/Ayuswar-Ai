@@ -29,7 +29,7 @@ export default class ErrorBoundary extends React.Component {
           background: '#061626',
           color: '#ffffff',
           padding: '24px',
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: 'var(--font-main)',
           textAlign: 'center'
         }}>
           <div style={{
@@ -57,7 +57,7 @@ export default class ErrorBoundary extends React.Component {
             }}>
               Emergency? Dial 112 / 108
             </div>
-            <p style={{ fontSize: '13.5px', color: '#CBD5E1', marginBottom: '16px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '13.5px', color: '#D0DFE2', marginBottom: '16px', lineHeight: 1.5 }}>
               A client runtime component encountered an issue. Emergency healthcare services operate fail-safe offline protocols.
             </p>
             {this.state.error?.message && (

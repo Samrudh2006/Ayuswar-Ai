@@ -11,7 +11,7 @@ export default function NotFoundView() {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '40px 20px',
-      background: 'radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.08) 0%, rgba(10, 37, 64, 0.02) 70%)',
+      background: 'radial-gradient(circle at 50% 20%, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.01) 70%)',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       <div style={{
@@ -20,8 +20,8 @@ export default function NotFoundView() {
         textAlign: 'center',
         background: '#FFFFFF',
         borderRadius: '24px',
-        border: '1px solid #CBD5E1',
-        boxShadow: '0 20px 40px -15px rgba(10, 37, 64, 0.1)',
+        border: '1px solid #D0DFE2',
+        boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.07)',
         padding: '48px 36px'
       }}>
         {/* Animated Emblem */}
@@ -36,7 +36,7 @@ export default function NotFoundView() {
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto',
-            boxShadow: '0 10px 25px rgba(212, 175, 55, 0.25)'
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.14)'
           }}>
             <span style={{ fontSize: '32px', fontWeight: 900, color: '#0F4C5C', fontFamily: 'serif' }}>404</span>
           </div>
@@ -46,7 +46,7 @@ export default function NotFoundView() {
           Clinical Route Not Found
         </h1>
 
-        <p style={{ fontSize: '14.5px', color: '#64748B', lineHeight: 1.6, maxWidth: '480px', margin: '0 auto 30px auto' }}>
+        <p style={{ fontSize: '14.5px', color: '#698892', lineHeight: 1.6, maxWidth: '480px', margin: '0 auto 30px auto' }}>
           The clinical page, diagnostic specimen, or endpoint you requested does not exist or has been relocated to another FHIR registry block.
         </p>
 
@@ -64,7 +64,7 @@ export default function NotFoundView() {
               padding: '14px 16px',
               borderRadius: '12px',
               background: '#FAF8F5',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #D0DFE2',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -75,7 +75,7 @@ export default function NotFoundView() {
             <Activity size={20} color="#0F4C5C" />
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Acoustic Lab</div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>Real-time voice DSP</div>
+              <div style={{ fontSize: '11px', color: '#698892' }}>Real-time voice DSP</div>
             </div>
           </Link>
 
@@ -85,7 +85,7 @@ export default function NotFoundView() {
               padding: '14px 16px',
               borderRadius: '12px',
               background: '#FAF8F5',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #D0DFE2',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -96,7 +96,7 @@ export default function NotFoundView() {
             <FileText size={20} color="#059669" />
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Jan Aushadhi Rx</div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>data.gov.in formulary</div>
+              <div style={{ fontSize: '11px', color: '#698892' }}>data.gov.in formulary</div>
             </div>
           </Link>
 
@@ -106,7 +106,7 @@ export default function NotFoundView() {
               padding: '14px 16px',
               borderRadius: '12px',
               background: '#FAF8F5',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #D0DFE2',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -117,7 +117,7 @@ export default function NotFoundView() {
             <Cpu size={20} color="#2563EB" />
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Deep-Tech Specs</div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>Architecture & models</div>
+              <div style={{ fontSize: '11px', color: '#698892' }}>Architecture & models</div>
             </div>
           </Link>
 
@@ -127,7 +127,7 @@ export default function NotFoundView() {
               padding: '14px 16px',
               borderRadius: '12px',
               background: '#FAF8F5',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #D0DFE2',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -138,7 +138,7 @@ export default function NotFoundView() {
             <Search size={20} color="#D97706" />
             <div>
               <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>Blister OCR</div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>Scan strip medications</div>
+              <div style={{ fontSize: '11px', color: '#698892' }}>Scan strip medications</div>
             </div>
           </Link>
         </div>
@@ -157,7 +157,7 @@ export default function NotFoundView() {
             fontSize: '14px',
             fontWeight: 800,
             textDecoration: 'none',
-            boxShadow: '0 4px 15px rgba(15, 76, 92, 0.3)',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.16)',
             transition: 'transform 0.15s ease'
           }}
         >

@@ -16,7 +16,7 @@ export default function PipelineTerminal() {
     { type: 'init', tag: '[INIT]', text: 'W3C AudioContext initialized (sampleRate: 16000Hz, channels: 1 PCM)', color: '#38BDF8' },
     { type: 'audio', tag: '[AUDIO-DSP]', text: 'Local FFT buffer active • Acoustic F0 & formants extraction started', color: '#10B981' },
     { type: 'speech', tag: '[WEB-SPEECH]', text: 'Voice event captured • Locale: te-IN (Rayalaseema colloquial stream)', color: '#F59E0B' },
-    { type: 'nlp', tag: '[INDIC-TOKENIZER]', text: 'Raw utterance: "రెండు రోజుల నుంచి పీకల్లో పిల్లికూతలు వస్తున్నాయి"', color: '#E2E8F0' },
+    { type: 'nlp', tag: '[INDIC-TOKENIZER]', text: 'Raw utterance: "రెండు రోజుల నుంచి పీకల్లో పిల్లికూతలు వస్తున్నాయి"', color: '#D0DFE2' },
     { type: 'nlp', tag: '[ONTOLOGY-MAP]', text: 'Idiom resolved: "పీకల్లో పిల్లికూతలు" ➔ Wheezing / Bronchospasm (ICD-10 R06.2)', color: '#38BDF8' },
     { type: 'risk', tag: '[SENTINEL]', text: 'Acoustic wheeze formant match: Positive • Priority flag: Sub-acute (Amber)', color: '#F59E0B' },
     { type: 'ocr', tag: '[OPTICAL-SCAN]', text: 'Camera frame buffered ➔ Tesseract.js WASM matching active salt: Pantoprazole 40mg', color: '#A78BFA' },
@@ -61,7 +61,7 @@ export default function PipelineTerminal() {
       border: '1.5px solid #1E293B',
       borderRadius: '18px',
       overflow: 'hidden',
-      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25), 0 0 20px rgba(15, 76, 92, 0.15)',
+      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25), 0 0 20px rgba(0, 0, 0, 0.10)',
       fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'
     }}>
       {/* Terminal Title Bar */}
@@ -71,7 +71,7 @@ export default function PipelineTerminal() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottom: '1px solid #334155'
+        borderBottom: '1px solid #2C4A52'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {/* Mac-style Window Controls */}
@@ -82,7 +82,7 @@ export default function PipelineTerminal() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '10px' }}>
             <Terminal size={14} color="#D4AF37" />
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#E2E8F0', letterSpacing: '0.4px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#D0DFE2', letterSpacing: '0.4px' }}>
               ayuswar-client-runtime :: telemetry-stream
             </span>
           </div>
@@ -111,7 +111,7 @@ export default function PipelineTerminal() {
           <button
             onClick={handleRestart}
             style={{
-              background: 'rgba(15, 76, 92, 0.2)',
+              background: 'rgba(0, 0, 0, 0.14)',
               border: '1px solid #0F4C5C',
               color: '#D4AF37',
               padding: '4px 10px',
@@ -139,7 +139,7 @@ export default function PipelineTerminal() {
         overflowY: 'auto',
         fontSize: '13px',
         lineHeight: 1.7,
-        color: '#E2E8F0',
+        color: '#D0DFE2',
         background: '#070C1E'
       }}>
         {PIPELINE_LOGS.slice(0, activeLineIndex + 1).map((log, idx) => (
@@ -152,7 +152,7 @@ export default function PipelineTerminal() {
               animation: 'termFadeIn 0.25s ease'
             }}
           >
-            <span style={{ color: '#475569', fontSize: '11.5px', userSelect: 'none', width: '22px' }}>
+            <span style={{ color: '#486770', fontSize: '11.5px', userSelect: 'none', width: '22px' }}>
               {(idx + 1).toString().padStart(2, '0')}
             </span>
             <span style={{ color: log.color, fontWeight: 700, flexShrink: 0, fontSize: '12px' }}>
@@ -179,14 +179,14 @@ export default function PipelineTerminal() {
 
       {/* Terminal Footer Bar */}
       <div style={{
-        background: '#0F172A',
+        background: '#091E26',
         padding: '10px 20px',
         borderTop: '1px solid #1E293B',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: '11.5px',
-        color: '#64748B'
+        color: '#698892'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Shield size={13} color="#10B981" />

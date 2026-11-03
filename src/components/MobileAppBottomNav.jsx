@@ -139,8 +139,8 @@ export default function MobileAppBottomNav({
         background: 'rgba(255, 255, 255, 0.94)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderTop: '1px solid #E2E8F0',
-        boxShadow: '0 -4px 20px rgba(10, 37, 64, 0.08)',
+        borderTop: '1px solid #D0DFE2',
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.06)',
         zIndex: 900,
         display: 'flex',
         alignItems: 'center',
@@ -232,7 +232,7 @@ export default function MobileAppBottomNav({
               cursor: 'pointer',
               padding: '6px 4px',
               position: 'relative',
-              color: item.isActive ? activeColor : '#64748B',
+              color: item.isActive ? activeColor : '#698892',
               transition: 'all 0.15s ease'
             }}
           >

@@ -230,7 +230,7 @@ export default function SanjivaniTransferModal({
               <div style={{ fontSize: '13px', fontWeight: 900, color: '#10B981' }}>
                 {formData.assignedBay}
               </div>
-              <div style={{ fontSize: '9.5px', color: '#CBD5E1' }}>
+              <div style={{ fontSize: '9.5px', color: '#D0DFE2' }}>
                 Road ETA: <strong>{hospital.etaMinutes} min ({hospital.distanceKm} km)</strong>
               </div>
             </div>
@@ -349,7 +349,7 @@ export default function SanjivaniTransferModal({
                   border: '1px solid #1E3456',
                   borderRadius: '6px',
                   padding: '7px 10px',
-                  color: '#CBD5E1',
+                  color: '#D0DFE2',
                   fontSize: '11.5px',
                   marginTop: '4px'
                 }}
@@ -409,7 +409,7 @@ export default function SanjivaniTransferModal({
             <div style={{ fontSize: '10.5px', fontWeight: 800, color: '#38BDF8', marginBottom: '4px' }}>
               🔬 Autonomous Indic Speech & Acoustic Biomarker Handover
             </div>
-            <div style={{ fontSize: '10.5px', color: '#CBD5E1', lineHeight: 1.45 }}>
+            <div style={{ fontSize: '10.5px', color: '#D0DFE2', lineHeight: 1.45 }}>
               <div><strong>Live Speech Ingested:</strong> "{liveTranscript}"</div>
               <div style={{ fontSize: '9.5px', color: '#94A3B8', fontStyle: 'italic', marginTop: '2px' }}>
                 Translation: "{englishTranslation}"

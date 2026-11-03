@@ -157,7 +157,7 @@ export default function Navbar({
     background: '#ffffff',
     border: '1px solid #D1E1E6',
     borderRadius: 10,
-    boxShadow: '0 12px 30px -5px rgba(15, 76, 92, 0.14), 0 8px 12px -6px rgba(15, 76, 92, 0.06)',
+    boxShadow: '0 12px 30px -5px rgba(0, 0, 0, 0.10), 0 8px 12px -6px rgba(0, 0, 0, 0.04)',
     padding: '8px',
     minWidth: 295,
     zIndex: 1000,
@@ -229,7 +229,7 @@ export default function Navbar({
         zIndex: 900,
         background: '#FAF8F5',
         borderBottom: '1px solid #D1E1E6',
-        boxShadow: '0 1px 4px 0 rgba(15, 76, 92, 0.06)'
+        boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.04)'
       }}>
         <div className="navbar-header-inner" style={{
           width: '100%',
@@ -304,8 +304,8 @@ export default function Navbar({
                   >
                     <Stethoscope size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>OPD Ambient Scribe</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>Vernacular consultation drafting</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>OPD Ambient Scribe</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>Vernacular consultation drafting</div>
                     </div>
                   </Link>
 
@@ -319,8 +319,8 @@ export default function Navbar({
                   >
                     <Scan size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>Blister Strip Scanner</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>OCR & PMBJP generic pricing</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>Blister Strip Scanner</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>OCR & PMBJP generic pricing</div>
                     </div>
                   </Link>
 
@@ -334,8 +334,8 @@ export default function Navbar({
                   >
                     <Volume2 size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>Vernacular Audio-Rx Studio</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>Spoken dosage instructions</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>Vernacular Audio-Rx Studio</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>Spoken dosage instructions</div>
                     </div>
                   </Link>
 
@@ -349,8 +349,8 @@ export default function Navbar({
                   >
                     <Activity size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>Acoustic Biomarker Lab</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>Non-diagnostic audio DSP features</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>Acoustic Biomarker Lab</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>Non-diagnostic audio DSP features</div>
                     </div>
                   </Link>
 
@@ -371,7 +371,7 @@ export default function Navbar({
                     <PhoneCall size={17} color="#dc2626" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
                       <div style={{ fontWeight: 650, color: '#dc2626', whiteSpace: 'nowrap' }}>Sanjivani-108 Emergency GIS</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>Live ambulance telemetry & CPR metronome</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>Live ambulance telemetry & CPR metronome</div>
                     </div>
                   </Link>
                 </div>
@@ -436,8 +436,8 @@ export default function Navbar({
                   >
                     <Languages size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>Indic Language Matrix</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>ASR & TTS provider status</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>Indic Language Matrix</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>ASR & TTS provider status</div>
                     </div>
                   </Link>
 
@@ -451,8 +451,8 @@ export default function Navbar({
                   >
                     <BookOpen size={17} color="#0e7490" style={{ flexShrink: 0, marginTop: 2 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a', whiteSpace: 'nowrap' }}>Clinical Knowledge & Lexicon</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 1 }}>ICD-10 taxonomy & colloquial phrases</div>
+                      <div style={{ fontWeight: 650, color: '#091E26', whiteSpace: 'nowrap' }}>Clinical Knowledge & Lexicon</div>
+                      <div style={{ fontSize: '0.75rem', color: '#698892', marginTop: 1 }}>ICD-10 taxonomy & colloquial phrases</div>
                     </div>
                   </Link>
                 </div>
@@ -469,18 +469,19 @@ export default function Navbar({
               type="button"
               className="navbar-sanjivani-btn"
               onClick={onOpenSanjivani ? onOpenSanjivani : () => navigate('/sanjivani')}
+              aria-label="Launch Live Sanjivani-108 Emergency Operational Console"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
                 padding: '6px 12px',
                 borderRadius: 8,
-                background: 'linear-gradient(135deg, #D64550 0%, #B91C1C 100%)',
+                background: '#B91C1C',
                 color: '#ffffff',
                 fontSize: '0.825rem',
-                fontWeight: 750,
-                border: '1.5px solid #E53E3E',
-                boxShadow: '0 2px 10px rgba(214, 69, 80, 0.35)',
+                fontWeight: 700,
+                border: '1px solid #991B1B',
+                boxShadow: '0 1px 4px rgba(0, 0, 0, 0.12)',
                 cursor: 'pointer',
                 letterSpacing: '0.2px',
                 transition: 'all 0.15s ease',
@@ -490,11 +491,11 @@ export default function Navbar({
                 preloadModule('sanjivani_modal');
                 preloadModule('/emergency');
                 e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(214, 69, 80, 0.55)';
+                e.currentTarget.style.boxShadow = '0 3px 8px rgba(0, 0, 0, 0.16)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 10px rgba(214, 69, 80, 0.35)';
+                e.currentTarget.style.boxShadow = '0 1px 4px rgba(0, 0, 0, 0.12)';
               }}
               title="Launch Live Sanjivani-108 Emergency Operational Console"
             >
@@ -507,6 +508,9 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
+                aria-label="Select Interface Language"
+                aria-haspopup="listbox"
+                aria-expanded={langMenuOpen}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -604,8 +608,8 @@ export default function Navbar({
                   >
                     <Stethoscope size={16} color="#0F4C5C" style={{ flexShrink: 0 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a' }}>Doctor Login</div>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>Clinical OPD workspace</div>
+                      <div style={{ fontWeight: 650, color: '#091E26' }}>Doctor Login</div>
+                      <div style={{ fontSize: '0.72rem', color: '#698892' }}>Clinical OPD workspace</div>
                     </div>
                   </button>
 
@@ -626,8 +630,8 @@ export default function Navbar({
                   >
                     <Users size={16} color="#0F4C5C" style={{ flexShrink: 0 }} />
                     <div>
-                      <div style={{ fontWeight: 650, color: '#0f172a' }}>Patient Login</div>
-                      <div style={{ fontSize: '0.72rem', color: '#64748b' }}>ABHA Citizen Portal</div>
+                      <div style={{ fontWeight: 650, color: '#091E26' }}>Patient Login</div>
+                      <div style={{ fontSize: '0.72rem', color: '#698892' }}>ABHA Citizen Portal</div>
                     </div>
                   </button>
                 </div>
@@ -653,8 +657,8 @@ export default function Navbar({
                 gap: '5px',
                 padding: '6px 10px',
                 borderRadius: '8px',
-                border: isDoctorActive ? '1.5px solid #0F4C5C' : '1px solid rgba(15, 76, 92, 0.25)',
-                background: isDoctorActive ? '#0F4C5C' : 'rgba(15, 76, 92, 0.08)',
+                border: isDoctorActive ? '1.5px solid #0F4C5C' : '1px solid rgba(0, 0, 0, 0.16)',
+                background: isDoctorActive ? '#0F4C5C' : 'rgba(0, 0, 0, 0.06)',
                 color: isDoctorActive ? '#ffffff' : '#0F4C5C',
                 fontSize: '12px',
                 fontWeight: 700,
@@ -673,10 +677,13 @@ export default function Navbar({
               type="button"
               className="mobile-menu-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile clinical navigation menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation-drawer"
               style={{
                 padding: '7px 9px',
                 borderRadius: 8,
-                border: '1.5px solid #cbd5e1',
+                border: '1.5px solid #D0DFE2',
                 background: mobileMenuOpen ? '#0F4C5C' : '#f8fafc',
                 color: mobileMenuOpen ? '#ffffff' : '#0A2540',
                 cursor: 'pointer',
@@ -728,15 +735,15 @@ export default function Navbar({
                 zIndex: 9999,
                 display: 'flex',
                 flexDirection: 'column',
-                boxShadow: '-10px 0 36px rgba(10, 37, 64, 0.22)',
+                boxShadow: '-10px 0 36px rgba(0, 0, 0, 0.14)',
                 animation: 'slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                borderLeft: '1px solid #E2E8F0'
+                borderLeft: '1px solid #D0DFE2'
               }}
             >
               {/* Sidebar Header */}
               <div style={{
                 padding: '16px 18px',
-                borderBottom: '1px solid #E2E8F0',
+                borderBottom: '1px solid #D0DFE2',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -748,7 +755,7 @@ export default function Navbar({
                     <div style={{ fontWeight: 850, fontSize: '1rem', color: '#0F4C5C', letterSpacing: '-0.2px' }}>
                       AyuSwar AI
                     </div>
-                    <div style={{ fontSize: '0.675rem', color: '#64748B', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.675rem', color: '#698892', fontWeight: 600 }}>
                       Clinical Navigation Menu
                     </div>
                   </div>
@@ -761,9 +768,9 @@ export default function Navbar({
                     width: 34,
                     height: 34,
                     borderRadius: 8,
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid #D0DFE2',
                     background: '#FFFFFF',
-                    color: '#0F172A',
+                    color: '#091E26',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -806,7 +813,7 @@ export default function Navbar({
                       alignItems: 'center',
                       gap: 4,
                       cursor: 'pointer',
-                      boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)',
                       textAlign: 'center'
                     }}
                   >
@@ -860,32 +867,32 @@ export default function Navbar({
                 <Link to="/solutions/opd_ambient_scribe" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/solutions/opd_ambient_scribe')}>
                   <Stethoscope size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>OPD Ambient Scribe</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Vernacular consultation drafting</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>OPD Ambient Scribe</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>Vernacular consultation drafting</div>
                   </div>
                 </Link>
                 
                 <Link to="/scanner" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/scanner')}>
                   <Scan size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Blister Strip Scanner</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>OCR & PMBJP generic pricing</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Blister Strip Scanner</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>OCR & PMBJP generic pricing</div>
                   </div>
                 </Link>
                 
                 <Link to="/audio-rx" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/audio-rx')}>
                   <Volume2 size={18} color="#6366F1" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Vernacular Audio-Rx Studio</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Spoken dosage instructions</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Vernacular Audio-Rx Studio</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>Spoken dosage instructions</div>
                   </div>
                 </Link>
                 
                 <Link to="/acoustic-lab" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/acoustic-lab')}>
                   <Activity size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Acoustic Biomarker Lab</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Non-diagnostic audio DSP features</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Acoustic Biomarker Lab</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>Non-diagnostic audio DSP features</div>
                   </div>
                 </Link>
 
@@ -893,7 +900,7 @@ export default function Navbar({
                   <PhoneCall size={18} color="#DC2626" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
                     <div style={{ fontWeight: 700, color: '#DC2626', fontSize: '0.825rem' }}>Sanjivani-108 Emergency GIS</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Live ambulance telemetry & CPR</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>Live ambulance telemetry & CPR</div>
                   </div>
                 </Link>
 
@@ -905,16 +912,16 @@ export default function Navbar({
                 <Link to="/technology" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isTechActive)}>
                   <Layers size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Technology & Architecture</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>Deep-Tech pipeline HLD & terminal</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Technology & Architecture</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>Deep-Tech pipeline HLD & terminal</div>
                   </div>
                 </Link>
 
                 <Link to="/benchmarks" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(isImpactActive)}>
                   <BarChart3 size={18} color="#10B981" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Clinical Impact & Validation</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>24 QA test suite & workflow model</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Clinical Impact & Validation</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>24 QA test suite & workflow model</div>
                   </div>
                 </Link>
 
@@ -926,16 +933,16 @@ export default function Navbar({
                 <Link to="/language-matrix" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/language-matrix')}>
                   <Languages size={18} color="#0E7490" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Indic Language Matrix</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>22 Scheduled languages & dialects</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Indic Language Matrix</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>22 Scheduled languages & dialects</div>
                   </div>
                 </Link>
 
                 <Link to="/datasets" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/datasets')}>
                   <BookOpen size={18} color="#D97706" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.825rem' }}>Clinical Knowledge & Lexicon</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>ICD-10 taxonomy & colloquial phrases</div>
+                    <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Clinical Knowledge & Lexicon</div>
+                    <div style={{ fontSize: '0.7rem', color: '#698892' }}>ICD-10 taxonomy & colloquial phrases</div>
                   </div>
                 </Link>
               </div>
@@ -943,22 +950,22 @@ export default function Navbar({
               {/* Sidebar Footer */}
               <div style={{
                 padding: '12px 16px',
-                borderTop: '1px solid #E2E8F0',
+                borderTop: '1px solid #D0DFE2',
                 background: '#FAF8F5',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
-                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>Simulation Data:</span>
+                <span style={{ fontSize: '0.75rem', color: '#698892', fontWeight: 600 }}>Simulation Data:</span>
                 <button
                   type="button"
                   onClick={() => toggleDemoMode()}
                   style={{
                     padding: '4px 10px',
                     borderRadius: 6,
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid #D0DFE2',
                     background: isDemoMode ? '#FEF3C7' : '#FFFFFF',
-                    color: isDemoMode ? '#92400E' : '#475569',
+                    color: isDemoMode ? '#92400E' : '#486770',
                     fontSize: '0.725rem',
                     fontWeight: 700,
                     cursor: 'pointer'

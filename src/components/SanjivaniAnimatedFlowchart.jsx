@@ -54,7 +54,7 @@ export default function SanjivaniAnimatedFlowchart({ activeStage = 0 }) {
   return (
     <div style={{
       background: '#FAF8F5',
-      border: '1.5px solid #E2E8F0',
+      border: '1.5px solid #D0DFE2',
       borderRadius: '16px',
       padding: '20px',
       marginBottom: '20px',
@@ -78,7 +78,7 @@ export default function SanjivaniAnimatedFlowchart({ activeStage = 0 }) {
             Sanjivani-108 Automated Handover Pipeline
           </h4>
         </div>
-        <span style={{ fontSize: '11.5px', color: '#64748B', fontWeight: 600 }}>
+        <span style={{ fontSize: '11.5px', color: '#698892', fontWeight: 600 }}>
           Live Multi-Stage Dispatch Flow
         </span>
       </div>
@@ -129,19 +129,19 @@ export default function SanjivaniAnimatedFlowchart({ activeStage = 0 }) {
                   </span>
                 </div>
 
-                <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F172A', marginBottom: '2px' }}>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#091E26', marginBottom: '2px' }}>
                   {st.title}
                 </div>
                 <div style={{ fontSize: '11.5px', fontWeight: 700, color: st.color, marginBottom: '6px' }}>
                   {st.subtitle}
                 </div>
-                <p style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4, margin: 0 }}>
+                <p style={{ fontSize: '12px', color: '#486770', lineHeight: 1.4, margin: 0 }}>
                   {st.detail}
                 </p>
               </div>
 
               {/* Active Step Indicator */}
-              <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px dashed #CBD5E1', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px dashed #D0DFE2', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '10.5px', fontWeight: 700, color: isActive ? st.color : '#94A3B8' }}>
                   {isActive ? '● IN PROGRESS' : '○ Standby'}
                 </span>

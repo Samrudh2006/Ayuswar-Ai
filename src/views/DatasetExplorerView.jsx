@@ -101,14 +101,14 @@ export default function DatasetExplorerView() {
         </Link>
       </div>
 
-      <div style={{ background: '#FAF8F5', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+      <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
           <div style={{ width: 44, height: 44, borderRadius: 10, background: '#0e7490', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
             <Database size={24} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              <h1 className="page-main-heading" style={{ margin: 0, fontSize: '1.5rem', color: '#0f172a', fontWeight: 700 }}>Clinical Knowledge & Lexicon Reference</h1>
+              <h1 className="page-main-heading" style={{ margin: 0, fontSize: '1.5rem', color: '#091E26', fontWeight: 700 }}>Clinical Knowledge & Lexicon Reference</h1>
               <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '3px 8px', borderRadius: 999, fontWeight: 600 }}>
                 Reference Schema
               </span>
@@ -116,7 +116,7 @@ export default function DatasetExplorerView() {
                 IndiaAI AIKosh Repository (aikosh.indiaai.gov.in)
               </span>
             </div>
-            <p className="page-main-subtext" style={{ margin: '8px 0 0 0', color: '#475569', fontSize: '0.925rem', lineHeight: 1.5 }}>
+            <p className="page-main-subtext" style={{ margin: '8px 0 0 0', color: '#486770', fontSize: '0.925rem', lineHeight: 1.5 }}>
               Curated from IndiaAI AIKosh (National Data & AI Repository, MeitY), PMBJP Janaushadhi, WHO ICD-10, and ABDM SNOMED-CT clinical ontologies. Note: This dictionary provides ontology mapping for voice transcripts and does not constitute autonomous diagnostic software.
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function DatasetExplorerView() {
       </div>
 
       {/* Tabs */}
-      <div className="dataset-tabs-row" style={{ display: 'flex', gap: 8, borderBottom: '2px solid #e2e8f0', marginBottom: 20, overflowX: 'auto', paddingBottom: 2 }}>
+      <div className="dataset-tabs-row" style={{ display: 'flex', gap: 8, borderBottom: '2px solid #D0DFE2', marginBottom: 20, overflowX: 'auto', paddingBottom: 2 }}>
         <button
           onClick={() => setActiveTab('dictionary')}
           style={{
@@ -133,7 +133,7 @@ export default function DatasetExplorerView() {
             borderBottom: activeTab === 'dictionary' ? '2px solid #0e7490' : '2px solid transparent',
             marginBottom: -2,
             background: 'none',
-            color: activeTab === 'dictionary' ? '#0e7490' : '#64748b',
+            color: activeTab === 'dictionary' ? '#0e7490' : '#698892',
             fontWeight: activeTab === 'dictionary' ? 700 : 500,
             cursor: 'pointer',
             display: 'flex',
@@ -154,7 +154,7 @@ export default function DatasetExplorerView() {
             borderBottom: activeTab === 'diseases' ? '2px solid #0e7490' : '2px solid transparent',
             marginBottom: -2,
             background: 'none',
-            color: activeTab === 'diseases' ? '#0e7490' : '#64748b',
+            color: activeTab === 'diseases' ? '#0e7490' : '#698892',
             fontWeight: activeTab === 'diseases' ? 700 : 500,
             cursor: 'pointer',
             display: 'flex',
@@ -175,7 +175,7 @@ export default function DatasetExplorerView() {
             borderBottom: activeTab === 'matcher' ? '2px solid #0e7490' : '2px solid transparent',
             marginBottom: -2,
             background: 'none',
-            color: activeTab === 'matcher' ? '#0e7490' : '#64748b',
+            color: activeTab === 'matcher' ? '#0e7490' : '#698892',
             fontWeight: activeTab === 'matcher' ? 700 : 500,
             cursor: 'pointer',
             display: 'flex',
@@ -196,7 +196,7 @@ export default function DatasetExplorerView() {
             borderBottom: activeTab === 'papers' ? '2px solid #0e7490' : '2px solid transparent',
             marginBottom: -2,
             background: 'none',
-            color: activeTab === 'papers' ? '#0e7490' : '#64748b',
+            color: activeTab === 'papers' ? '#0e7490' : '#698892',
             fontWeight: activeTab === 'papers' ? 700 : 500,
             cursor: 'pointer',
             display: 'flex',
@@ -222,7 +222,7 @@ export default function DatasetExplorerView() {
               style={{
                 width: '100%',
                 padding: '10px 14px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #D0DFE2',
                 borderRadius: 8,
                 fontSize: '0.9rem'
               }}
@@ -231,12 +231,12 @@ export default function DatasetExplorerView() {
 
           <div className="dataset-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
             {filteredDictionary.map((item, idx) => (
-              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
+              <div key={idx} style={{ background: '#fff', border: '1px solid #D0DFE2', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#0f172a', minWidth: 0, overflowWrap: 'break-word' }}>
+                  <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#091E26', minWidth: 0, overflowWrap: 'break-word' }}>
                     {item.term}
                   </div>
-                  <span style={{ fontSize: '0.725rem', background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: 4, fontWeight: 600, flexShrink: 0 }}>
+                  <span style={{ fontSize: '0.725rem', background: '#FAF8F5', color: '#486770', padding: '2px 8px', borderRadius: 4, fontWeight: 600, flexShrink: 0 }}>
                     {item.language} • {item.region}
                   </span>
                 </div>
@@ -245,7 +245,7 @@ export default function DatasetExplorerView() {
                   → Standard Clinical: {item.standardClinicalTerm}
                 </div>
 
-                <div style={{ fontSize: '0.825rem', color: '#64748b', lineHeight: 1.4, marginBottom: 10, overflowWrap: 'break-word' }}>
+                <div style={{ fontSize: '0.825rem', color: '#698892', lineHeight: 1.4, marginBottom: 10, overflowWrap: 'break-word' }}>
                   Meaning: {item.meaning}
                 </div>
 
@@ -256,7 +256,7 @@ export default function DatasetExplorerView() {
                   <button
                     onClick={() => playSpeech(item.term, item.language === 'Telugu' ? 'te-IN' : 'hi-IN')}
                     style={{
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid #D0DFE2',
                       background: '#FAF8F5',
                       borderRadius: 6,
                       padding: '4px 8px',
@@ -265,7 +265,7 @@ export default function DatasetExplorerView() {
                       alignItems: 'center',
                       gap: 4,
                       fontSize: '0.75rem',
-                      color: '#334155',
+                      color: '#2C4A52',
                       flexShrink: 0
                     }}
                   >
@@ -292,7 +292,7 @@ export default function DatasetExplorerView() {
                 flex: '1 1 200px',
                 minWidth: 0,
                 padding: '10px 14px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #D0DFE2',
                 borderRadius: 8,
                 fontSize: '0.9rem'
               }}
@@ -303,7 +303,7 @@ export default function DatasetExplorerView() {
               style={{
                 flex: '0 1 160px',
                 padding: '10px 14px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #D0DFE2',
                 borderRadius: 8,
                 fontSize: '0.9rem',
                 background: '#fff'
@@ -315,9 +315,9 @@ export default function DatasetExplorerView() {
 
           <div className="dataset-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
             {filteredDiseases.map((d, idx) => (
-              <div key={idx} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
+              <div key={idx} style={{ background: '#fff', border: '1px solid #D0DFE2', borderRadius: 10, padding: 16, minWidth: 0, boxSizing: 'border-box' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
-                  <div style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a', minWidth: 0, overflowWrap: 'break-word' }}>
+                  <div style={{ fontWeight: 700, fontSize: '1rem', color: '#091E26', minWidth: 0, overflowWrap: 'break-word' }}>
                     {d.diseaseName}
                   </div>
                   <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: 4, fontWeight: 700, flexShrink: 0 }}>
@@ -325,15 +325,15 @@ export default function DatasetExplorerView() {
                   </span>
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: 8 }}>
+                <div style={{ fontSize: '0.8rem', color: '#698892', marginBottom: 8 }}>
                   Category: {d.category}
                 </div>
 
-                <div style={{ fontSize: '0.825rem', color: '#334155', marginBottom: 6, overflowWrap: 'break-word' }}>
+                <div style={{ fontSize: '0.825rem', color: '#2C4A52', marginBottom: 6, overflowWrap: 'break-word' }}>
                   <strong>Telugu:</strong> {d.teluguName || 'N/A'} • <strong>Hindi:</strong> {d.hindiName || 'N/A'}
                 </div>
 
-                <div style={{ fontSize: '0.8rem', color: '#475569', background: '#FAF8F5', padding: 8, borderRadius: 6, overflowWrap: 'break-word' }}>
+                <div style={{ fontSize: '0.8rem', color: '#486770', background: '#FAF8F5', padding: 8, borderRadius: 6, overflowWrap: 'break-word' }}>
                   <strong>Key Symptoms:</strong> {Array.isArray(d.symptoms) ? d.symptoms.slice(0, 4).join(', ') : d.symptoms}
                 </div>
               </div>
@@ -363,7 +363,7 @@ export default function DatasetExplorerView() {
               style={{
                 width: '100%',
                 padding: '10px 14px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid #D0DFE2',
                 borderRadius: 8,
                 fontSize: '0.9rem',
                 fontFamily: 'inherit'
@@ -395,8 +395,8 @@ export default function DatasetExplorerView() {
                 padding: '10px 14px',
                 borderRadius: 8,
                 background: '#FAF8F5',
-                color: '#334155',
-                border: '1px solid #cbd5e1',
+                color: '#2C4A52',
+                border: '1px solid #D0DFE2',
                 fontSize: '0.8rem',
                 cursor: 'pointer'
               }}
@@ -411,8 +411,8 @@ export default function DatasetExplorerView() {
                 padding: '10px 14px',
                 borderRadius: 8,
                 background: '#FAF8F5',
-                color: '#334155',
-                border: '1px solid #cbd5e1',
+                color: '#2C4A52',
+                border: '1px solid #D0DFE2',
                 fontSize: '0.8rem',
                 cursor: 'pointer'
               }}
@@ -422,8 +422,8 @@ export default function DatasetExplorerView() {
           </div>
 
           {matchResult && (
-            <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: 10, padding: 20 }}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#0f172a' }}>Keyword Extraction Results</h3>
+            <div style={{ background: '#fff', border: '1px solid #D0DFE2', borderRadius: 10, padding: 20 }}>
+              <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#091E26' }}>Keyword Extraction Results</h3>
               {matchResult.matchedTerms && matchResult.matchedTerms.length > 0 ? (
                 <div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
@@ -435,7 +435,7 @@ export default function DatasetExplorerView() {
                   </div>
                   {matchResult.matchedDiseases && matchResult.matchedDiseases.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginBottom: 8 }}>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2C4A52', marginBottom: 8 }}>
                         Referenced Conditions with Matched Keywords:
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -449,7 +449,7 @@ export default function DatasetExplorerView() {
                   )}
                 </div>
               ) : (
-                <div style={{ color: '#64748b', fontSize: '0.875rem' }}>
+                <div style={{ color: '#698892', fontSize: '0.875rem' }}>
                   No colloquial dictionary terms matched the provided input.
                 </div>
               )}
@@ -462,19 +462,19 @@ export default function DatasetExplorerView() {
       {activeTab === 'papers' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {TOP_RESEARCH_DOMAINS.map((domain, i) => (
-            <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 18 }}>
-              <h3 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: '#0f172a' }}>{domain.domain || domain.title}</h3>
+            <div key={i} style={{ background: '#fff', border: '1px solid #D0DFE2', borderRadius: 10, padding: 18 }}>
+              <h3 style={{ margin: '0 0 6px 0', fontSize: '1.05rem', color: '#091E26' }}>{domain.domain || domain.title}</h3>
               <p style={{ margin: '0 0 12px 0', fontSize: '0.85rem', color: '#0F4C5C', fontWeight: 600 }}>Top Venues: {domain.topVenues || domain.description}</p>
               {domain.papers && domain.papers.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
                   {domain.papers.map((p, idx) => (
-                    <div key={idx} style={{ padding: 12, background: '#FAF8F5', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: '0.825rem', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                    <div key={idx} style={{ padding: 12, background: '#FAF8F5', borderRadius: 8, border: '1px solid #D0DFE2', fontSize: '0.825rem', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                       <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '0.9rem', overflowWrap: 'break-word' }}>{p.title}</div>
-                      <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: 3, overflowWrap: 'break-word' }}>
+                      <div style={{ color: '#698892', fontSize: '0.75rem', marginTop: 3, overflowWrap: 'break-word' }}>
                         {p.authors} • <em>{p.journal}</em> {p.doi && `• DOI: ${p.doi}`}
                       </div>
                       {p.coreInsight && (
-                        <div style={{ color: '#334155', marginTop: 6, lineHeight: 1.45, overflowWrap: 'break-word' }}>
+                        <div style={{ color: '#2C4A52', marginTop: 6, lineHeight: 1.45, overflowWrap: 'break-word' }}>
                           <strong>Core Insight:</strong> {p.coreInsight}
                         </div>
                       )}

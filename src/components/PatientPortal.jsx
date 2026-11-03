@@ -556,7 +556,7 @@ export default function PatientPortal({
       medicine: 'Budesonide Inhaler (200 mcg)',
       purpose: 'Airway anti-inflammatory for Asthma',
       color: '#0F4C5C',
-      bg: 'rgba(15, 76, 92, 0.1)',
+      bg: 'rgba(0, 0, 0, 0.07)',
       teluguAudioText: 'ఉదయం టిఫిన్ తిన్న తర్వాత ఈ ఇన్హేలర్ రెండు పఫ్స్ తీసుకోండి, తర్వాత నోరు పుక్కిలించండి.',
       hindiAudioText: 'सुबह नाश्ते के बाद इस इन्हेलर के दो पफ लें, और फिर कुल्ला करें।'
     },
@@ -783,7 +783,7 @@ export default function PatientPortal({
           top: 0,
           background: 'rgba(255, 255, 255, 0.94)',
           backdropFilter: 'blur(16px)',
-          borderRight: '1px solid rgba(15, 76, 92, 0.08)',
+          borderRight: '1px solid rgba(0, 0, 0, 0.06)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -812,7 +812,7 @@ export default function PatientPortal({
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            color: '#64748B',
+            color: '#698892',
             zIndex: 70
           }}
           aria-label="Close menu"
@@ -832,7 +832,7 @@ export default function PatientPortal({
             height: '24px',
             borderRadius: '50%',
             background: '#ffffff',
-            border: '1px solid rgba(15, 76, 92, 0.15)',
+            border: '1px solid rgba(0, 0, 0, 0.10)',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             display: 'flex',
             alignItems: 'center',
@@ -872,14 +872,14 @@ export default function PatientPortal({
               alignItems: 'center',
               justifyContent: 'center',
               background: '#FAF8F5',
-              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.14)',
               flexShrink: 0,
               padding: '2px'
             }}>
               <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             {!isCollapsedView && (
-              <div style={{ fontFamily: 'Outfit, sans-serif', fontSize: '20px', fontWeight: 800, color: '#091E26', whiteSpace: 'nowrap' }}>
+              <div style={{ fontFamily: 'var(--font-main)', fontSize: '20px', fontWeight: 800, color: '#091E26', whiteSpace: 'nowrap' }}>
                 Ayu<span style={{ color: '#0F4C5C' }}>Swar</span> <span style={{ color: '#D4AF37' }}>AI</span>
               </div>
             )}
@@ -892,10 +892,10 @@ export default function PatientPortal({
               fontWeight: 750,
               letterSpacing: '0.8px',
               textTransform: 'uppercase',
-              color: '#64748B',
+              color: '#698892',
               paddingLeft: '6px',
               marginBottom: '14px',
-              fontFamily: 'Outfit, sans-serif'
+              fontFamily: 'var(--font-main)'
             }}>
               Citizen Workspace
             </div>
@@ -931,9 +931,9 @@ export default function PatientPortal({
                     padding: isCollapsedView ? '12px 0' : '12px 14px',
                     borderRadius: '12px',
                     border: 'none',
-                    background: isActive ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
+                    background: isActive ? 'rgba(0, 0, 0, 0.06)' : 'transparent',
                     color: isActive ? '#0F4C5C' : '#1E293B',
-                    fontFamily: 'Outfit, sans-serif',
+                    fontFamily: 'var(--font-main)',
                     fontSize: '15px',
                     fontWeight: isActive ? 750 : 600,
                     cursor: 'pointer',
@@ -946,7 +946,7 @@ export default function PatientPortal({
                   }}
                   onMouseEnter={e => {
                     if (!isActive) {
-                      e.currentTarget.style.background = 'rgba(15, 76, 92, 0.04)';
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.03)';
                       e.currentTarget.style.color = '#0F4C5C';
                     }
                   }}
@@ -980,7 +980,7 @@ export default function PatientPortal({
         {/* Bottom Citizen Workspace & Preferences Card (Matching User Image) */}
         {!isCollapsedView ? (
           <div style={{ width: '100%' }}>
-            <div style={{ borderTop: '1px solid #E2E8F0', margin: '14px 0 10px 0' }} />
+            <div style={{ borderTop: '1px solid #D0DFE2', margin: '14px 0 10px 0' }} />
             <div 
               onClick={() => {
                 setActiveTab('settings');
@@ -993,7 +993,7 @@ export default function PatientPortal({
                 padding: '10px 12px',
                 borderRadius: '12px',
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #D0DFE2',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease'
               }}
@@ -1012,7 +1012,7 @@ export default function PatientPortal({
                   fontWeight: 800,
                   fontSize: '15px',
                   flexShrink: 0,
-                  border: '2px solid rgba(15, 76, 92, 0.2)'
+                  border: '2px solid rgba(0, 0, 0, 0.14)'
                 }}>
                   {patientName[0]}
                 </div>
@@ -1020,12 +1020,12 @@ export default function PatientPortal({
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Citizen Workspace
                   </div>
-                  <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '11px', color: '#698892', whiteSpace: 'nowrap' }}>
                     ABHA health records
                   </div>
                 </div>
               </div>
-              <ChevronRight size={16} color="#64748B" />
+              <ChevronRight size={16} color="#698892" />
             </div>
 
             {/* Prominent Clean Logout */}
@@ -1047,7 +1047,7 @@ export default function PatientPortal({
                 border: '1px solid rgba(220, 38, 38, 0.25)',
                 background: 'rgba(254, 242, 242, 0.75)',
                 color: '#DC2626',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-main)',
                 fontSize: '13px',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -1066,7 +1066,7 @@ export default function PatientPortal({
             alignItems: 'center',
             gap: '10px',
             padding: '8px 0',
-            borderTop: '1px solid #E2E8F0'
+            borderTop: '1px solid #D0DFE2'
           }}>
             <div 
               onClick={() => setActiveTab('settings')}
@@ -1119,7 +1119,7 @@ export default function PatientPortal({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(15, 76, 92, 0.08)',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
           position: 'sticky',
           top: 0,
           zIndex: 50,
@@ -1138,7 +1138,7 @@ export default function PatientPortal({
                 width: '38px',
                 height: '38px',
                 borderRadius: '8px',
-                border: '1px solid rgba(15, 76, 92, 0.15)',
+                border: '1px solid rgba(0, 0, 0, 0.10)',
                 background: '#FAF8F5',
                 color: '#0F4C5C',
                 cursor: 'pointer',
@@ -1164,8 +1164,8 @@ export default function PatientPortal({
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              border: activeTab === 'settings' ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-              background: activeTab === 'settings' ? 'rgba(15, 76, 92, 0.1)' : '#F8FAFC',
+              border: activeTab === 'settings' ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+              background: activeTab === 'settings' ? 'rgba(0, 0, 0, 0.07)' : '#F8FAFC',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1174,7 +1174,7 @@ export default function PatientPortal({
             }} 
             title="Citizen Settings & ABHA Locker Preferences"
           >
-            <Settings size={18} color={activeTab === 'settings' ? '#0F4C5C' : '#64748B'} />
+            <Settings size={18} color={activeTab === 'settings' ? '#0F4C5C' : '#698892'} />
           </button>
 
           <button 
@@ -1186,8 +1186,8 @@ export default function PatientPortal({
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              border: isNotificationsDrawerOpen ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-              background: isNotificationsDrawerOpen ? 'rgba(15, 76, 92, 0.1)' : '#F8FAFC',
+              border: isNotificationsDrawerOpen ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+              background: isNotificationsDrawerOpen ? 'rgba(0, 0, 0, 0.07)' : '#F8FAFC',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1197,7 +1197,7 @@ export default function PatientPortal({
             title="Citizen Health Alerts & Reminders"
             aria-label="Open Health Notifications"
           >
-            <Bell size={18} color={isNotificationsDrawerOpen ? '#0F4C5C' : '#64748B'} />
+            <Bell size={18} color={isNotificationsDrawerOpen ? '#0F4C5C' : '#698892'} />
             <span style={{
               position: 'absolute',
               top: '7px',
@@ -1227,7 +1227,7 @@ export default function PatientPortal({
               cursor: 'pointer',
               padding: '4px 8px',
               borderRadius: '12px',
-              background: isProfileMenuOpen ? 'rgba(15, 76, 92, 0.08)' : 'transparent',
+              background: isProfileMenuOpen ? 'rgba(0, 0, 0, 0.06)' : 'transparent',
               transition: 'background 140ms ease',
               position: 'relative',
               minWidth: 0,
@@ -1252,9 +1252,9 @@ export default function PatientPortal({
             </div>
             <div className="patient-header-profile-sub" style={{ textAlign: 'left', minWidth: 0 }}>
               <div style={{ fontSize: '13.5px', fontWeight: 750, color: '#081C24', whiteSpace: 'nowrap' }}>{patientName}</div>
-              <div style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap' }}>{abhaId}</div>
+              <div style={{ fontSize: '11px', color: '#698892', whiteSpace: 'nowrap' }}>{abhaId}</div>
             </div>
-            <ChevronDown className="patient-header-profile-chevron" size={14} color="#64748B" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', flexShrink: 0 }} />
+            <ChevronDown className="patient-header-profile-chevron" size={14} color="#698892" style={{ transform: isProfileMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', flexShrink: 0 }} />
 
             {/* Profile Dropdown Menu */}
             {isProfileMenuOpen && (
@@ -1267,14 +1267,14 @@ export default function PatientPortal({
                   width: '320px',
                   background: '#ffffff',
                   borderRadius: '16px',
-                  boxShadow: '0 18px 45px rgba(10, 37, 64, 0.16)',
-                  border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                  boxShadow: '0 18px 45px rgba(0, 0, 0, 0.11)',
+                  border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                   padding: '14px',
                   zIndex: 200
                 }}
               >
                 <div style={{ paddingBottom: '10px', borderBottom: '1px solid #F1F5F9', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#64748B', letterSpacing: '0.6px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#698892', letterSpacing: '0.6px' }}>
                     Active Citizen ABHA Session
                   </div>
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
@@ -1285,7 +1285,7 @@ export default function PatientPortal({
                   </div>
                 </div>
 
-                <div style={{ fontSize: '11px', fontWeight: 750, color: '#475569', marginBottom: '8px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 750, color: '#486770', marginBottom: '8px' }}>
                   {hasFamilyLocker ? 'Switch Patient Account / Family Locker (కుటుంబ ఖాతా):' : 'Account Locker (Single Citizen Profile):'}
                 </div>
                 
@@ -1304,8 +1304,8 @@ export default function PatientPortal({
                           justifyContent: 'space-between',
                           padding: '8px 10px',
                           borderRadius: '10px',
-                          border: pat.patientName === patientName ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-                          background: pat.patientName === patientName ? 'rgba(15, 76, 92, 0.05)' : '#ffffff',
+                          border: pat.patientName === patientName ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+                          background: pat.patientName === patientName ? 'rgba(0, 0, 0, 0.03)' : '#ffffff',
                           cursor: 'pointer',
                           textAlign: 'left'
                         }}
@@ -1319,7 +1319,7 @@ export default function PatientPortal({
                               </span>
                             )}
                           </div>
-                          <div style={{ fontSize: '10.5px', color: '#64748B' }}>
+                          <div style={{ fontSize: '10.5px', color: '#698892' }}>
                             {pat.condition || 'General Health'} • Assigned: <strong>{pat.assignedDoctor?.doctorName || 'Dr. Priya Sharma'}</strong>
                           </div>
                         </div>
@@ -1328,7 +1328,7 @@ export default function PatientPortal({
                     ))}
                   </div>
                 ) : (
-                  <div style={{ padding: '8px 10px', background: '#FAF8F5', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ padding: '8px 10px', background: '#FAF8F5', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', fontSize: '11.5px', color: '#698892' }}>
                     Single Citizen Account. No family members were registered during signup.
                   </div>
                 )}
@@ -1400,14 +1400,14 @@ export default function PatientPortal({
                   <DeepamHeartbeatEmblem size={58} />
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                      <h1 style={{ fontSize: '26px', fontWeight: 850, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                      <h1 style={{ fontSize: '26px', fontWeight: 850, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                         Namaste, {patientName.split(' ')[0]}
                       </h1>
                       <span className="ayuswar-accent-badge">
                         🌿 ఆయురారోగ్యాలు (Ayur-Arogya)
                       </span>
                     </div>
-                    <p style={{ fontSize: '13.5px', color: '#475569', marginTop: '5px', fontWeight: 500, marginBottom: '6px' }}>
+                    <p style={{ fontSize: '13.5px', color: '#486770', marginTop: '5px', fontWeight: 500, marginBottom: '6px' }}>
                       Your personalized citizen health locker & vernacular ambient care companion.
                     </p>
                     <AbdmRegistryBadgeRow
@@ -1437,8 +1437,8 @@ export default function PatientPortal({
                   backdropFilter: 'blur(10px)',
                   padding: '8px 16px',
                   borderRadius: '16px',
-                  border: '1px solid rgba(15, 76, 92, 0.14)',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.04)'
+                  border: '1px solid rgba(0, 0, 0, 0.10)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.03)'
                 }}>
                   <div style={{
                     display: 'flex',
@@ -1450,7 +1450,7 @@ export default function PatientPortal({
                       ABHA Verified Health Record
                     </span>
                   </div>
-                  <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 650 }}>
+                  <span style={{ fontSize: '11px', color: '#698892', fontWeight: 650 }}>
                     ABHA: <code style={{ color: '#0F4C5C', fontWeight: 750 }}>{abhaId}</code>
                   </span>
                 </div>
@@ -1473,17 +1473,17 @@ export default function PatientPortal({
                     cursor: 'pointer', 
                     textAlign: 'center',
                     background: '#FFFFFF',
-                    border: '1px solid rgba(15, 76, 92, 0.11)',
-                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0,0,0,0.02)'
                   }}
                 >
-                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
+                  <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(0, 0, 0, 0.06)', color: '#0F4C5C', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
                     <Calendar size={22} />
                   </div>
                   <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     Book Appointment
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892' }}>
                     Schedule with your doctor
                   </div>
                 </div>
@@ -1496,8 +1496,8 @@ export default function PatientPortal({
                     cursor: 'pointer', 
                     textAlign: 'center',
                     background: '#FFFFFF',
-                    border: '1px solid rgba(15, 76, 92, 0.11)',
-                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0,0,0,0.02)'
                   }}
                 >
                   <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(239, 68, 68, 0.08)', color: '#DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
@@ -1506,7 +1506,7 @@ export default function PatientPortal({
                   <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     My Health
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892' }}>
                     ABHA Card & Vitals
                   </div>
                 </div>
@@ -1519,8 +1519,8 @@ export default function PatientPortal({
                     cursor: 'pointer', 
                     textAlign: 'center',
                     background: '#FFFFFF',
-                    border: '1px solid rgba(15, 76, 92, 0.11)',
-                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0,0,0,0.02)'
                   }}
                 >
                   <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.08)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
@@ -1529,7 +1529,7 @@ export default function PatientPortal({
                   <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     Upload Reports
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892' }}>
                     Share test results
                   </div>
                 </div>
@@ -1542,8 +1542,8 @@ export default function PatientPortal({
                     cursor: 'pointer', 
                     textAlign: 'center',
                     background: '#FFFFFF',
-                    border: '1px solid rgba(15, 76, 92, 0.11)',
-                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05), 0 2px 6px rgba(0,0,0,0.02)'
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0,0,0,0.02)'
                   }}
                 >
                   <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(217, 119, 6, 0.08)', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto' }}>
@@ -1552,7 +1552,7 @@ export default function PatientPortal({
                   <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>
                     View Prescriptions
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892' }}>
                     Check your medicines
                   </div>
                 </div>
@@ -1565,7 +1565,7 @@ export default function PatientPortal({
                   {/* Upcoming Appointments */}
                   <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                         Upcoming Appointments
                       </h3>
                       <span onClick={() => setActiveTab('appointments')} style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View All →</span>
@@ -1578,7 +1578,7 @@ export default function PatientPortal({
                       padding: '14px 16px',
                       borderRadius: '12px',
                       background: '#F8FAFC',
-                      border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 2px 10px -2px rgba(15, 76, 92, 0.03)'
+                      border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 2px 10px -2px rgba(0, 0, 0, 0.02)'
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <div style={{
@@ -1595,7 +1595,7 @@ export default function PatientPortal({
                         </div>
                         <div>
                           <div style={{ fontSize: '14px', fontWeight: 750, color: '#081C24' }}>{assignedDoctor.doctorName}</div>
-                          <div style={{ fontSize: '11.5px', color: '#64748B' }}>{assignedDoctor.specialty} • 10:15 AM • Online Consultation</div>
+                          <div style={{ fontSize: '11.5px', color: '#698892' }}>{assignedDoctor.specialty} • 10:15 AM • Online Consultation</div>
                         </div>
                       </div>
 
@@ -1621,7 +1621,7 @@ export default function PatientPortal({
                   <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                           Health Overview
                         </h3>
                         {(() => {
@@ -1641,18 +1641,18 @@ export default function PatientPortal({
                     </div>
 
                     <div className="patient-vitals-summary-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
                         <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Heart Rate</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Heart Rate</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                           {vitalsHistory?.[0]?.pulse || '76 bpm'}
                         </div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
                         <Activity size={16} color="#DC2626" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Blood Pressure</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Blood Pressure</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                           {vitalsHistory?.[0]?.bp ? vitalsHistory[0].bp.replace(' mmHg', '') : '132/84'}
                         </div>
@@ -1661,18 +1661,18 @@ export default function PatientPortal({
                         </span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
                         <Scale size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Weight</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Weight</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
                           {vitalsHistory?.[0]?.weight || '63 kg'}
                         </div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)', textAlign: 'center' }}>
+                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
                         <Moon size={16} color="#6366F1" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Sleep</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Sleep</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>7.5 hrs</div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Good</span>
                       </div>
@@ -1682,7 +1682,7 @@ export default function PatientPortal({
                   {/* Recent Reports */}
                   <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                         Recent Reports
                       </h3>
                       <span onClick={() => setActiveTab('reports')} style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View All →</span>
@@ -1707,7 +1707,7 @@ export default function PatientPortal({
                             <span>{rep.icon}</span>
                             <div>
                               <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24' }}>{rep.title}</div>
-                              <div style={{ fontSize: '11px', color: '#64748B' }}>{rep.date}</div>
+                              <div style={{ fontSize: '11px', color: '#698892' }}>{rep.date}</div>
                             </div>
                           </div>
                           <button 
@@ -1715,7 +1715,7 @@ export default function PatientPortal({
                             style={{
                               padding: '4px 12px',
                               borderRadius: '6px',
-                              border: '1px solid rgba(15, 76, 92, 0.12)',
+                              border: '1px solid rgba(0, 0, 0, 0.08)',
                               background: '#ffffff',
                               fontSize: '11px',
                               fontWeight: 700,
@@ -1737,11 +1737,11 @@ export default function PatientPortal({
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }}></span>
-                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                           Attending Physician & Care Team
                         </h3>
                       </div>
-                      <span style={{ fontSize: '11px', color: '#0F4C5C', background: 'rgba(15, 76, 92, 0.08)', padding: '3px 8px', borderRadius: '10px', fontWeight: 750 }}>
+                      <span style={{ fontSize: '11px', color: '#0F4C5C', background: 'rgba(0, 0, 0, 0.06)', padding: '3px 8px', borderRadius: '10px', fontWeight: 750 }}>
                         District OPD
                       </span>
                     </div>
@@ -1765,7 +1765,7 @@ export default function PatientPortal({
                         <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#081C24' }}>
                           {assignedDoctor.doctorName}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#64748B' }}>
+                        <div style={{ fontSize: '12px', color: '#698892' }}>
                           {assignedDoctor.specialty}
                         </div>
                         <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 700, marginTop: '2px' }}>
@@ -1791,7 +1791,7 @@ export default function PatientPortal({
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '6px',
-                          boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
+                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                         }}
                       >
                         <Calendar size={13} />
@@ -1804,7 +1804,7 @@ export default function PatientPortal({
                           flex: 1,
                           padding: '9px',
                           borderRadius: '10px',
-                          border: '1px solid rgba(15, 76, 92, 0.2)',
+                          border: '1px solid rgba(0, 0, 0, 0.14)',
                           background: '#FAF8F5',
                           color: '#0F4C5C',
                           fontSize: '12px',
@@ -1825,7 +1825,7 @@ export default function PatientPortal({
                   {/* Health Goals Card */}
                   <div className="ayuswar-glass-card" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                      <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                         Daily Adherence & Activity
                       </h3>
                       <span onClick={() => setActiveTab('health_goals')} style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', cursor: 'pointer' }}>View All →</span>
@@ -1850,7 +1850,7 @@ export default function PatientPortal({
                       </div>
                       <div>
                         <div style={{ fontSize: '14px', fontWeight: 750, color: '#081C24' }}>Medication & Steps On Track</div>
-                        <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>Next dose: 08:30 PM (Metformin after dinner)</div>
+                        <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>Next dose: 08:30 PM (Metformin after dinner)</div>
                       </div>
                     </div>
                   </div>
@@ -1860,11 +1860,11 @@ export default function PatientPortal({
                     background: 'linear-gradient(135deg, #F0FDF9 0%, #FAF8F5 100%)',
                     borderRadius: '16px',
                     padding: '20px 24px',
-                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.05)'
+                    boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)'
                   }}>
                     <div>
                       <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>Better Health Together</h4>
@@ -1909,12 +1909,12 @@ export default function PatientPortal({
             <div>
               <div style={{ marginBottom: '20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                     My Health Profile & Health ID Card
                   </h2>
                   <SampleDataChip />
                 </div>
-                <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
+                <p style={{ fontSize: '13px', color: '#698892', margin: '4px 0 0 0' }}>
                   Fictional patient health identifier and self-entered historical vitals.
                 </p>
               </div>
@@ -1926,8 +1926,8 @@ export default function PatientPortal({
                   borderRadius: '20px',
                   padding: '24px',
                   color: '#ffffff',
-                  boxShadow: '0 12px 32px rgba(10, 37, 64, 0.22)',
-                  border: '1.5px solid rgba(212, 175, 55, 0.3)',
+                  boxShadow: '0 12px 32px rgba(0, 0, 0, 0.14)',
+                  border: '1.5px solid rgba(0, 0, 0, 0.14)',
                   position: 'relative'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '18px' }}>
@@ -1984,7 +1984,7 @@ export default function PatientPortal({
                   {/* ABDM Planned Line */}
                   <div style={{
                     fontSize: '11px',
-                    color: '#CBD5E1',
+                    color: '#D0DFE2',
                     background: 'rgba(0,0,0,0.25)',
                     padding: '8px 12px',
                     borderRadius: '8px',
@@ -2002,7 +2002,7 @@ export default function PatientPortal({
               </div>
 
               {/* Longitudinal Vitals Tracker (Manual Entry + Automated Lab Report Sync) */}
-              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px' }}>
+              <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
@@ -2025,7 +2025,7 @@ export default function PatientPortal({
                         Auto-Sync from Reports Active
                       </div>
                     </div>
-                    <p style={{ fontSize: '12px', color: '#64748B', margin: '4px 0 0 0' }}>
+                    <p style={{ fontSize: '12px', color: '#698892', margin: '4px 0 0 0' }}>
                       Self-entered demo values & automated pathology extractions. Computed from logged record entries & clinical lab sheets.
                     </p>
                   </div>
@@ -2037,7 +2037,7 @@ export default function PatientPortal({
                       style={{
                         background: '#FAF8F5',
                         color: '#0F4C5C',
-                        border: '1.5px solid rgba(15, 76, 92, 0.25)',
+                        border: '1.5px solid rgba(0, 0, 0, 0.16)',
                         borderRadius: '10px',
                         padding: '8px 14px',
                         fontSize: '12px',
@@ -2069,7 +2069,7 @@ export default function PatientPortal({
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        boxShadow: '0 4px 12px rgba(15, 76, 92, 0.2)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.14)',
                         transition: 'all 120ms ease'
                       }}
                     >
@@ -2110,8 +2110,8 @@ export default function PatientPortal({
                           background: isReportSource ? '#F8FAFC' : '#FAF8F5', 
                           padding: '16px', 
                           borderRadius: '14px', 
-                          border: isReportSource ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(15, 76, 92, 0.1)', 
-                          boxShadow: '0 4px 16px -2px rgba(15, 76, 92, 0.04)',
+                          border: isReportSource ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(0, 0, 0, 0.07)', 
+                          boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.03)',
                           position: 'relative',
                           display: 'flex',
                           flexDirection: 'column',
@@ -2126,7 +2126,7 @@ export default function PatientPortal({
                               <div style={{ fontSize: '12px', color: '#0F4C5C', fontWeight: 800 }}>
                                 {v.date || formatDemoDate(v.offsetDays || 0)}
                               </div>
-                              <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>
+                              <div style={{ fontSize: '11px', color: '#698892', fontWeight: 600 }}>
                                 {v.relativeLabel ? `(${v.relativeLabel})` : `(${getRelativeDaysLabel(v.offsetDays || 0)})`}
                               </div>
                             </div>
@@ -2205,12 +2205,12 @@ export default function PatientPortal({
                           </div>
 
                           {/* Pulse & SpO2 */}
-                          <div style={{ fontSize: '12.5px', color: '#334155', marginBottom: '4px' }}>
+                          <div style={{ fontSize: '12.5px', color: '#2C4A52', marginBottom: '4px' }}>
                             Pulse: <strong>{v.pulse}</strong> • SpO2: <strong>{v.spo2}</strong>
                           </div>
 
                           {/* Weight & Blood Sugar */}
-                          <div style={{ fontSize: '12px', color: '#475569', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          <div style={{ fontSize: '12px', color: '#486770', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                             <span>Weight: <strong>{v.weight}</strong></span>
                             {v.bloodSugar && <span>• Glucose: <strong>{v.bloodSugar}</strong></span>}
                           </div>
@@ -2219,8 +2219,8 @@ export default function PatientPortal({
                         {/* Source Note Footer */}
                         <div style={{ 
                           fontSize: '10.5px', 
-                          color: '#64748B', 
-                          borderTop: '1px dashed rgba(15, 76, 92, 0.12)', 
+                          color: '#698892', 
+                          borderTop: '1px dashed rgba(0, 0, 0, 0.08)', 
                           paddingTop: '6px',
                           display: 'flex',
                           alignItems: 'center',
@@ -2233,7 +2233,7 @@ export default function PatientPortal({
                   })}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '11px', color: '#64748B' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', fontSize: '11px', color: '#698892' }}>
                   <span>Note: Health parameters reflect demo simulation data. Always seek professional physician evaluation for clinical readings.</span>
                   <span style={{ fontWeight: 700, color: '#0F4C5C' }}>{vitalsHistory.length} recordings logged</span>
                 </div>
@@ -2261,7 +2261,7 @@ export default function PatientPortal({
                     maxWidth: '520px',
                     borderRadius: '18px',
                     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     overflow: 'hidden'
                   }}>
                     {/* Header */}
@@ -2276,10 +2276,10 @@ export default function PatientPortal({
                       <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Activity size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'var(--font-main)' }}>
                             Add Vitals Manually
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '2px' }}>
                             Self-enter home readings or health worker visit measurements
                           </div>
                         </div>
@@ -2317,7 +2317,7 @@ export default function PatientPortal({
                             value={vitalsForm.date}
                             onChange={e => setVitalsForm({ ...vitalsForm, date: e.target.value })}
                             placeholder="e.g. 23 Oct 2026"
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                             required
                           />
                         </div>
@@ -2328,7 +2328,7 @@ export default function PatientPortal({
                           <select
                             value={vitalsForm.sourceNote}
                             onChange={e => setVitalsForm({ ...vitalsForm, sourceNote: e.target.value })}
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                           >
                             <option value="Self-measured at home">Home Self-Check (Digital Meter)</option>
                             <option value="Community Health Worker Visit">Community Health Worker (ASHA / ANM Visit)</option>
@@ -2339,7 +2339,7 @@ export default function PatientPortal({
                       </div>
 
                       {/* Blood Pressure Fields */}
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.08)' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                           <span style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Blood Pressure (BP)</span>
                           {(() => {
@@ -2370,24 +2370,24 @@ export default function PatientPortal({
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                           <div>
-                            <label style={{ display: 'block', fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>Systolic (mmHg)</label>
+                            <label style={{ display: 'block', fontSize: '11px', color: '#698892', marginBottom: '4px' }}>Systolic (mmHg)</label>
                             <input
                               type="number"
                               value={vitalsForm.systolic}
                               onChange={e => setVitalsForm({ ...vitalsForm, systolic: e.target.value })}
                               placeholder="120"
-                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px', fontWeight: 700 }}
+                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '14px', fontWeight: 700 }}
                               required
                             />
                           </div>
                           <div>
-                            <label style={{ display: 'block', fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>Diastolic (mmHg)</label>
+                            <label style={{ display: 'block', fontSize: '11px', color: '#698892', marginBottom: '4px' }}>Diastolic (mmHg)</label>
                             <input
                               type="number"
                               value={vitalsForm.diastolic}
                               onChange={e => setVitalsForm({ ...vitalsForm, diastolic: e.target.value })}
                               placeholder="80"
-                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px', fontWeight: 700 }}
+                              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '14px', fontWeight: 700 }}
                               required
                             />
                           </div>
@@ -2405,7 +2405,7 @@ export default function PatientPortal({
                             value={vitalsForm.pulse}
                             onChange={e => setVitalsForm({ ...vitalsForm, pulse: e.target.value })}
                             placeholder="74"
-                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                             required
                           />
                         </div>
@@ -2418,7 +2418,7 @@ export default function PatientPortal({
                             value={vitalsForm.spo2}
                             onChange={e => setVitalsForm({ ...vitalsForm, spo2: e.target.value })}
                             placeholder="98"
-                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                             required
                           />
                         </div>
@@ -2432,7 +2432,7 @@ export default function PatientPortal({
                             value={vitalsForm.weight}
                             onChange={e => setVitalsForm({ ...vitalsForm, weight: e.target.value })}
                             placeholder="63"
-                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                             required
                           />
                         </div>
@@ -2448,7 +2448,7 @@ export default function PatientPortal({
                           value={vitalsForm.bloodSugar}
                           onChange={e => setVitalsForm({ ...vitalsForm, bloodSugar: e.target.value })}
                           placeholder="e.g. 104"
-                          style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px' }}
+                          style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px' }}
                         />
                       </div>
 
@@ -2461,9 +2461,9 @@ export default function PatientPortal({
                             flex: 1,
                             padding: '10px',
                             borderRadius: '10px',
-                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            border: '1px solid rgba(0, 0, 0, 0.08)',
                             background: '#FAF8F5',
-                            color: '#475569',
+                            color: '#486770',
                             fontSize: '13px',
                             fontWeight: 700,
                             cursor: 'pointer'
@@ -2487,7 +2487,7 @@ export default function PatientPortal({
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                           }}
                         >
                           <CheckCircle2 size={16} />
@@ -2509,12 +2509,12 @@ export default function PatientPortal({
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif', margin: 0 }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)', margin: 0 }}>
                       Consultation Appointments
                     </h2>
                     <SampleDataChip />
                   </div>
-                  <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
+                  <p style={{ fontSize: '13px', color: '#698892', margin: '4px 0 0 0' }}>
                     Schedule follow-ups with Dr. Priya Sharma or district hospital specialists.
                   </p>
                 </div>
@@ -2533,7 +2533,7 @@ export default function PatientPortal({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.16)'
                   }}
                 >
                   <Plus size={16} />
@@ -2582,7 +2582,7 @@ export default function PatientPortal({
                     maxWidth: '520px',
                     borderRadius: '18px',
                     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     overflow: 'hidden'
                   }}>
                     {/* Header */}
@@ -2597,10 +2597,10 @@ export default function PatientPortal({
                       <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Calendar size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'var(--font-main)' }}>
                             Book Clinical Consultation
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '2px' }}>
                             Kurnool District Hospital • ABDM Health Facility #1402
                           </div>
                         </div>
@@ -2640,7 +2640,7 @@ export default function PatientPortal({
                             else if (e.target.value.includes('Rajesh')) setBookingSpecialty('Cardiology & Hypertension');
                             else setBookingSpecialty('General Medicine');
                           }}
-                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '13px', fontWeight: 700, color: '#081C24' }}
+                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '13px', fontWeight: 700, color: '#081C24' }}
                         >
                           <option value="Dr. Priya Sharma, MD">Dr. Priya Sharma, MD (Pulmonology & Critical Care)</option>
                           <option value="Dr. Rajesh Varma, MD, DM">Dr. Rajesh Varma, MD, DM (Cardiology & Heart Health)</option>
@@ -2664,9 +2664,9 @@ export default function PatientPortal({
                                 flex: 1,
                                 padding: '8px 10px',
                                 borderRadius: '8px',
-                                border: bookingDate === d ? '2px solid #0F4C5C' : '1px solid #CBD5E1',
-                                background: bookingDate === d ? 'rgba(15, 76, 92, 0.1)' : '#ffffff',
-                                color: bookingDate === d ? '#0F4C5C' : '#475569',
+                                border: bookingDate === d ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
+                                background: bookingDate === d ? 'rgba(0, 0, 0, 0.07)' : '#ffffff',
+                                color: bookingDate === d ? '#0F4C5C' : '#486770',
                                 fontSize: '12px',
                                 fontWeight: 750,
                                 cursor: 'pointer'
@@ -2692,9 +2692,9 @@ export default function PatientPortal({
                               style={{
                                 padding: '8px',
                                 borderRadius: '8px',
-                                border: bookingTime === slot ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
+                                border: bookingTime === slot ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
                                 background: bookingTime === slot ? '#0A2540' : '#F8FAFC',
-                                color: bookingTime === slot ? '#ffffff' : '#475569',
+                                color: bookingTime === slot ? '#ffffff' : '#486770',
                                 fontSize: '11.5px',
                                 fontWeight: 750,
                                 cursor: 'pointer',
@@ -2722,9 +2722,9 @@ export default function PatientPortal({
                                 flex: 1,
                                 padding: '9px 12px',
                                 borderRadius: '10px',
-                                border: bookingMode.includes(m.split(' ')[0]) ? '2px solid #0F4C5C' : '1px solid #E2E8F0',
-                                background: bookingMode.includes(m.split(' ')[0]) ? 'rgba(15, 76, 92, 0.08)' : '#ffffff',
-                                color: bookingMode.includes(m.split(' ')[0]) ? '#0F4C5C' : '#475569',
+                                border: bookingMode.includes(m.split(' ')[0]) ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
+                                background: bookingMode.includes(m.split(' ')[0]) ? 'rgba(0, 0, 0, 0.06)' : '#ffffff',
+                                color: bookingMode.includes(m.split(' ')[0]) ? '#0F4C5C' : '#486770',
                                 fontSize: '12px',
                                 fontWeight: 750,
                                 cursor: 'pointer'
@@ -2746,7 +2746,7 @@ export default function PatientPortal({
                           value={bookingReason}
                           onChange={e => setBookingReason(e.target.value)}
                           placeholder="e.g. ఛాతీలో దడ మరియు దగ్గు (Chest discomfort & cough)"
-                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px', color: '#081C24', boxSizing: 'border-box' }}
+                          style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px', color: '#081C24', boxSizing: 'border-box' }}
                         />
                       </div>
 
@@ -2759,9 +2759,9 @@ export default function PatientPortal({
                             flex: 1,
                             padding: '10px',
                             borderRadius: '10px',
-                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            border: '1px solid rgba(0, 0, 0, 0.08)',
                             background: '#FAF8F5',
-                            color: '#475569',
+                            color: '#486770',
                             fontSize: '13px',
                             fontWeight: 700,
                             cursor: 'pointer'
@@ -2807,7 +2807,7 @@ export default function PatientPortal({
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                           }}
                         >
                           <CheckCircle2 size={16} />
@@ -2836,24 +2836,24 @@ export default function PatientPortal({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     
                     {/* Upcoming Appointments Card */}
-                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px' }}>
+                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                         <div>
                           <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>
                             Upcoming Consultations
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>
                             Runtime-relative scheduled visits with your care team
                           </div>
                         </div>
-                        <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px' }}>
                           {upcomingAppts.length} Scheduled
                         </span>
                       </div>
 
                       {upcomingAppts.length === 0 ? (
-                        <div style={{ padding: '24px', textAlign: 'center', background: '#FAF8F5', borderRadius: '12px', border: '1px dashed #CBD5E1' }}>
-                          <p style={{ fontSize: '13px', color: '#64748B', margin: '0 0 10px 0' }}>No upcoming appointments scheduled.</p>
+                        <div style={{ padding: '24px', textAlign: 'center', background: '#FAF8F5', borderRadius: '12px', border: '1px dashed #D0DFE2' }}>
+                          <p style={{ fontSize: '13px', color: '#698892', margin: '0 0 10px 0' }}>No upcoming appointments scheduled.</p>
                           <button
                             onClick={() => setIsBookConsultationModalOpen(true)}
                             style={{ background: '#0F4C5C', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', fontWeight: 750, cursor: 'pointer' }}
@@ -2874,7 +2874,7 @@ export default function PatientPortal({
                                   padding: '16px 20px',
                                   borderRadius: '14px',
                                   background: isToday ? '#FFFBEB' : '#F8FAFC',
-                                  border: isToday ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+                                  border: isToday ? '1.5px solid #F59E0B' : '1px solid #D0DFE2',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'space-between',
@@ -2884,7 +2884,7 @@ export default function PatientPortal({
                               >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '220px', flex: 1 }}>
                                   <div style={{
-                                    background: isToday ? '#FEF3C7' : 'rgba(15, 76, 92, 0.1)',
+                                    background: isToday ? '#FEF3C7' : 'rgba(0, 0, 0, 0.07)',
                                     color: isToday ? '#D97706' : '#0F4C5C',
                                     padding: '8px 12px',
                                     borderRadius: '10px',
@@ -2910,11 +2910,11 @@ export default function PatientPortal({
                                           🏥 In-Person OPD
                                         </span>
                                       )}
-                                      <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#475569', padding: '1px 6px', borderRadius: '6px', fontFamily: 'monospace' }}>
+                                      <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#486770', padding: '1px 6px', borderRadius: '6px', fontFamily: 'monospace' }}>
                                         {appt.id}
                                       </span>
                                     </div>
-                                    <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                                    <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>
                                       {appt.specialty || 'General Medicine'} • {appt.facility || 'District Hospital OPD'}
                                     </div>
                                     <div style={{ fontSize: '12px', color: '#0F4C5C', marginTop: '2px', fontWeight: 650 }}>
@@ -2953,7 +2953,7 @@ export default function PatientPortal({
                                       style={{
                                         background: '#FAF8F5',
                                         color: '#081C24',
-                                        border: '1px solid rgba(15, 76, 92, 0.12)',
+                                        border: '1px solid rgba(0, 0, 0, 0.08)',
                                         borderRadius: '8px',
                                         padding: '8px 14px',
                                         fontSize: '12px',
@@ -2974,8 +2974,8 @@ export default function PatientPortal({
                                     onClick={() => showPlannedNotice('Appointment rescheduling is a planned feature.')}
                                     style={{
                                       background: '#ffffff',
-                                      color: '#64748B',
-                                      border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                                      color: '#698892',
+                                      border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                                       borderRadius: '8px',
                                       padding: '8px 12px',
                                       fontSize: '12px',
@@ -2988,7 +2988,7 @@ export default function PatientPortal({
                                     }}
                                   >
                                     <span>Reschedule</span>
-                                    <span style={{ fontSize: '9px', background: '#FAF8F5', color: '#64748B', padding: '1px 5px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>
+                                    <span style={{ fontSize: '9px', background: '#FAF8F5', color: '#698892', padding: '1px 5px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>
                                   </button>
                                 </div>
                               </div>
@@ -2999,23 +2999,23 @@ export default function PatientPortal({
                     </div>
 
                     {/* Past Completed Visits Card */}
-                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px' }}>
+                    <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                         <div>
                           <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>
                             Past Completed Visits & Summaries
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>
                             Historical encounters logged in your demo health record
                           </div>
                         </div>
-                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#FAF8F5', color: '#475569', padding: '3px 10px', borderRadius: '12px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#FAF8F5', color: '#486770', padding: '3px 10px', borderRadius: '12px' }}>
                           {pastAppts.length} Completed
                         </span>
                       </div>
 
                       {pastAppts.length === 0 ? (
-                        <div style={{ padding: '20px', textAlign: 'center', background: '#FAF8F5', borderRadius: '12px', color: '#64748B', fontSize: '13px' }}>
+                        <div style={{ padding: '20px', textAlign: 'center', background: '#FAF8F5', borderRadius: '12px', color: '#698892', fontSize: '13px' }}>
                           No past consultation records on file.
                         </div>
                       ) : (
@@ -3027,7 +3027,7 @@ export default function PatientPortal({
                                 padding: '14px 18px',
                                 borderRadius: '12px',
                                 background: '#FAF8F5',
-                                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                                border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
@@ -3037,8 +3037,8 @@ export default function PatientPortal({
                             >
                               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{
-                                  background: '#E2E8F0',
-                                  color: '#334155',
+                                  background: '#D0DFE2',
+                                  color: '#2C4A52',
                                   padding: '6px 10px',
                                   borderRadius: '8px',
                                   textAlign: 'center',
@@ -3055,7 +3055,7 @@ export default function PatientPortal({
                                       COMPLETED
                                     </span>
                                   </div>
-                                  <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+                                  <div style={{ fontSize: '11.5px', color: '#698892', marginTop: '2px' }}>
                                     {past.type} • Reason: {past.reason || 'Clinical consultation'}
                                   </div>
                                 </div>
@@ -3064,9 +3064,9 @@ export default function PatientPortal({
                               <button
                                 onClick={() => setActiveTab('reports')}
                                 style={{
-                                  background: 'rgba(15, 76, 92, 0.1)',
+                                  background: 'rgba(0, 0, 0, 0.07)',
                                   color: '#0F4C5C',
-                                  border: '1px solid rgba(15, 76, 92, 0.25)',
+                                  border: '1px solid rgba(0, 0, 0, 0.16)',
                                   borderRadius: '8px',
                                   padding: '8px 14px',
                                   fontSize: '11.5px',
@@ -3096,10 +3096,10 @@ export default function PatientPortal({
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '14px' }}>
                 <div>
-                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                     My Diagnostic & Lab Reports
                   </h2>
-                  <p style={{ fontSize: '13px', color: '#64748B' }}>
+                  <p style={{ fontSize: '13px', color: '#698892' }}>
                     Listen to simplified doctor findings in your native dialect or download official PDFs.
                   </p>
                 </div>
@@ -3119,7 +3119,7 @@ export default function PatientPortal({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.16)',
                     transition: 'all 140ms ease'
                   }}
                 >
@@ -3137,7 +3137,7 @@ export default function PatientPortal({
                       background: '#ffffff',
                       borderRadius: '14px',
                       padding: '20px',
-                      border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                      border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -3156,7 +3156,7 @@ export default function PatientPortal({
                             </span>
                           )}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#64748B' }}>Completed on {rep.date} • Reviewed by {rep.doctor || 'Dr. Priya Sharma'}</div>
+                        <div style={{ fontSize: '12px', color: '#698892' }}>Completed on {rep.date} • Reviewed by {rep.doctor || 'Dr. Priya Sharma'}</div>
                         <div style={{ fontSize: '12.5px', color: '#1E293B', marginTop: '4px', maxWidth: '540px' }}>{rep.summary}</div>
                       </div>
                     </div>
@@ -3165,7 +3165,7 @@ export default function PatientPortal({
                       <button
                         onClick={() => handlePlayVoicePrescription(selectedLanguage === 'Telugu' ? rep.spokenTelugu : rep.spokenHindi)}
                         style={{
-                          background: 'rgba(15, 76, 92, 0.1)',
+                          background: 'rgba(0, 0, 0, 0.07)',
                           border: '1.5px solid #0F4C5C',
                           color: '#0F4C5C',
                           padding: '8px 16px',
@@ -3228,7 +3228,7 @@ export default function PatientPortal({
                     maxWidth: '520px',
                     borderRadius: '18px',
                     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     overflow: 'hidden',
                     maxHeight: '90vh',
                     overflowY: 'auto'
@@ -3245,10 +3245,10 @@ export default function PatientPortal({
                       <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <UploadCloud size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'var(--font-main)' }}>
                             Upload Diagnostic / Lab Report
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '2px' }}>
                             Automated AI OCR & Vernacular Voiceover (Browser speech)
                           </div>
                         </div>
@@ -3312,17 +3312,17 @@ export default function PatientPortal({
                             borderRadius: '16px',
                             padding: '24px 18px',
                             textAlign: 'center',
-                            background: isReportDraggingOver ? 'rgba(15, 76, 92, 0.12)' : 'rgba(15, 76, 92, 0.04)',
+                            background: isReportDraggingOver ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.03)',
                             cursor: 'pointer',
                             transition: 'all 0.18s ease',
-                            boxShadow: isReportDraggingOver ? '0 0 16px rgba(15, 76, 92, 0.2)' : 'none'
+                            boxShadow: isReportDraggingOver ? '0 0 16px rgba(0, 0, 0, 0.14)' : 'none'
                           }}
                         >
                           <UploadCloud size={34} color="#0F4C5C" style={{ margin: '0 auto 8px auto', display: 'block' }} />
                           <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                             Drag & drop diagnostic PDF, DICOM, or scan image
                           </div>
-                          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '3px', marginBottom: '14px' }}>
+                          <div style={{ fontSize: '11px', color: '#698892', marginTop: '3px', marginBottom: '14px' }}>
                             Supports PDF, JPEG, PNG, DICOM, WebP up to 25 MB
                           </div>
 
@@ -3346,7 +3346,7 @@ export default function PatientPortal({
                                 fontSize: '12px',
                                 fontWeight: 750,
                                 cursor: 'pointer',
-                                boxShadow: '0 2px 8px rgba(15, 76, 92, 0.25)'
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                               }}
                             >
                               <FolderOpen size={15} />
@@ -3355,8 +3355,8 @@ export default function PatientPortal({
                           </div>
 
                           {/* Quick One-Click Sample Reports */}
-                          <div style={{ marginTop: '16px', borderTop: '1px solid rgba(15, 76, 92, 0.12)', paddingTop: '12px' }}>
-                            <div style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', marginBottom: '8px' }}>
+                          <div style={{ marginTop: '16px', borderTop: '1px solid rgba(0, 0, 0, 0.08)', paddingTop: '12px' }}>
+                            <div style={{ fontSize: '10.5px', fontWeight: 700, color: '#698892', marginBottom: '8px' }}>
                               Or quickly test with a sample clinical report:
                             </div>
                             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -3511,7 +3511,7 @@ export default function PatientPortal({
                             value={newReportTitle}
                             onChange={e => setNewReportTitle(e.target.value)}
                             placeholder="e.g. HbA1c Blood Test"
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px' }}
                           />
                         </div>
 
@@ -3523,7 +3523,7 @@ export default function PatientPortal({
                             type="text"
                             value={newReportDate}
                             onChange={e => setNewReportDate(e.target.value)}
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px' }}
                           />
                         </div>
                       </div>
@@ -3538,7 +3538,7 @@ export default function PatientPortal({
                           value={newReportDoctor}
                           onChange={e => setNewReportDoctor(e.target.value)}
                           placeholder="Dr. Priya Sharma (Pulmonologist)"
-                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px' }}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px' }}
                         />
                       </div>
 
@@ -3556,7 +3556,7 @@ export default function PatientPortal({
                           <div style={{ fontSize: '12px', fontWeight: 750, color: '#065F46' }}>
                             AyuSwar Indic Bio-Scribe AI
                           </div>
-                          <div style={{ fontSize: '11px', color: '#64748B' }}>
+                          <div style={{ fontSize: '11px', color: '#698892' }}>
                             Extracts clinical biomarkers & translates to Telugu / Hindi speech
                           </div>
                         </div>
@@ -3596,7 +3596,7 @@ export default function PatientPortal({
                           rows={2}
                           value={newReportSummary}
                           onChange={e => setNewReportSummary(e.target.value)}
-                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12px' }}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12px' }}
                         />
                       </div>
 
@@ -3609,7 +3609,7 @@ export default function PatientPortal({
                           type="text"
                           value={newReportTelugu}
                           onChange={e => setNewReportTelugu(e.target.value)}
-                          style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12px' }}
+                          style={{ width: '100%', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12px' }}
                         />
                       </div>
 
@@ -3625,9 +3625,9 @@ export default function PatientPortal({
                             flex: 1,
                             padding: '10px',
                             borderRadius: '10px',
-                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            border: '1px solid rgba(0, 0, 0, 0.08)',
                             background: '#FAF8F5',
-                            color: '#475569',
+                            color: '#486770',
                             fontSize: '13px',
                             fontWeight: 700,
                             cursor: 'pointer'
@@ -3693,7 +3693,7 @@ export default function PatientPortal({
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                           }}
                         >
                           <CheckCircle2 size={16} />
@@ -3714,10 +3714,10 @@ export default function PatientPortal({
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
-                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                     Personalized Chronotherapy Medication Schedule
                   </h2>
-                  <p style={{ fontSize: '13px', color: '#64748B' }}>
+                  <p style={{ fontSize: '13px', color: '#698892' }}>
                     Pill schedule tailored to meal context (Early Morning, Morning, Afternoon, Evening, Night) with spoken voiceover (Browser speech).
                   </p>
                 </div>
@@ -3811,7 +3811,7 @@ export default function PatientPortal({
                       style={{
                         padding: '6px 12px',
                         borderRadius: '10px',
-                        border: '1px solid rgba(15, 76, 92, 0.15)',
+                        border: '1px solid rgba(0, 0, 0, 0.10)',
                         fontSize: '12px',
                         fontWeight: 750,
                         color: '#081C24',
@@ -3847,7 +3847,7 @@ export default function PatientPortal({
                     maxWidth: '520px',
                     borderRadius: '18px',
                     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(15, 76, 92, 0.12)',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
                     overflow: 'hidden'
                   }}>
                     <div style={{
@@ -3861,10 +3861,10 @@ export default function PatientPortal({
                       <div className="patient-report-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Pill size={22} color="#2DD4BF" />
                         <div>
-                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, fontFamily: 'var(--font-main)' }}>
                             Add Medication Manually
                           </h3>
-                          <div style={{ fontSize: '12px', color: '#E2E8F0', marginTop: '2px' }}>
+                          <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '2px' }}>
                             Set meal timing, dosage & auto-generate voice instructions
                           </div>
                         </div>
@@ -3899,7 +3899,7 @@ export default function PatientPortal({
                           value={manualMedName}
                           onChange={e => setManualMedName(e.target.value)}
                           placeholder="e.g. Metformin 500mg or Pantoprazole"
-                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px' }}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px' }}
                         />
                       </div>
 
@@ -3925,7 +3925,7 @@ export default function PatientPortal({
                                 setManualMealContext('After Dinner (రాత్రి భోజనం తర్వాత / रात खाने के बाद)');
                               }
                             }}
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12px' }}
                           >
                             <option value="early_morning">🌅 Early Morning (Empty Stomach)</option>
                             <option value="morning">☀️ Morning (After Breakfast)</option>
@@ -3944,7 +3944,7 @@ export default function PatientPortal({
                             value={manualPurpose}
                             onChange={e => setManualPurpose(e.target.value)}
                             placeholder="e.g. Sugar control"
-                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12.5px' }}
+                            style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px' }}
                           />
                         </div>
                       </div>
@@ -3957,7 +3957,7 @@ export default function PatientPortal({
                           type="text"
                           value={manualTeluguAudio}
                           onChange={e => setManualTeluguAudio(e.target.value)}
-                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.15)', fontSize: '12px' }}
+                          style={{ width: '100%', padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12px' }}
                         />
                       </div>
 
@@ -3970,9 +3970,9 @@ export default function PatientPortal({
                             flex: 1,
                             padding: '10px',
                             borderRadius: '10px',
-                            border: '1px solid rgba(15, 76, 92, 0.12)',
+                            border: '1px solid rgba(0, 0, 0, 0.08)',
                             background: '#FAF8F5',
-                            color: '#475569',
+                            color: '#486770',
                             fontSize: '13px',
                             fontWeight: 700,
                             cursor: 'pointer'
@@ -3991,7 +3991,7 @@ export default function PatientPortal({
                               medicine: manualMedName,
                               purpose: manualPurpose,
                               color: '#0F4C5C',
-                              bg: 'rgba(15, 76, 92, 0.1)',
+                              bg: 'rgba(0, 0, 0, 0.07)',
                               teluguAudioText: manualTeluguAudio,
                               hindiAudioText: manualHindiAudio
                             };
@@ -4013,7 +4013,7 @@ export default function PatientPortal({
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 2px 8px rgba(15, 76, 92, 0.3)'
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)'
                           }}
                         >
                           <CheckCircle2 size={16} />
@@ -4071,7 +4071,7 @@ export default function PatientPortal({
                         background: '#ffffff',
                         borderRadius: '16px',
                         padding: '20px 24px',
-                        border: isChecked ? '1.5px solid #10B981' : '1px solid #E2E8F0',
+                        border: isChecked ? '1.5px solid #10B981' : '1px solid #D0DFE2',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -4086,7 +4086,7 @@ export default function PatientPortal({
                             width: '28px',
                             height: '28px',
                             borderRadius: '8px',
-                            border: isChecked ? 'none' : '2px solid #CBD5E1',
+                            border: isChecked ? 'none' : '2px solid #D0DFE2',
                             background: isChecked ? '#10B981' : '#ffffff',
                             color: '#ffffff',
                             display: 'flex',
@@ -4111,7 +4111,7 @@ export default function PatientPortal({
                           <div style={{ fontSize: '16px', fontWeight: 850, color: '#081C24', marginTop: '2px' }}>
                             {slot.medicine}
                           </div>
-                          <div style={{ fontSize: '12px', color: '#64748B' }}>
+                          <div style={{ fontSize: '12px', color: '#698892' }}>
                             Purpose: {slot.purpose}
                           </div>
 
@@ -4120,13 +4120,13 @@ export default function PatientPortal({
                             <span style={{ fontSize: '11px', background: '#DCFCE7', color: '#166534', padding: '2px 8px', borderRadius: '6px', fontWeight: 750, border: '1px solid #BBF7D0' }}>
                               Jan Aushadhi Generic: {janInfo.genericName}
                             </span>
-                            <span style={{ fontSize: '11px', color: '#475569' }}>
+                            <span style={{ fontSize: '11px', color: '#486770' }}>
                               Branded MRP: <s style={{ color: '#94A3B8' }}>₹{janInfo.brandedMrp}</s> → Jan Aushadhi: <strong style={{ color: '#0D9488' }}>₹{janInfo.janAushadhiPrice}</strong>
                             </span>
                             <span style={{ fontSize: '10.5px', background: '#FEF3C7', color: '#92400E', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>
                               Save {janInfo.savingsPercent}%
                             </span>
-                            <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 650 }}>
+                            <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#486770', padding: '2px 6px', borderRadius: '4px', fontWeight: 650 }}>
                               {janInfo.nlemCeiling}
                             </span>
                           </div>
@@ -4169,10 +4169,10 @@ export default function PatientPortal({
           {activeTab === 'ai_assistant' && (
             <div>
               <div style={{ marginBottom: '20px' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                   AyuSwar Personal Health Assistant
                 </h2>
-                <p style={{ fontSize: '13px', color: '#64748B' }}>
+                <p style={{ fontSize: '13px', color: '#698892' }}>
                   Ask questions in your mother tongue about symptoms, diet, and medicines.
                 </p>
               </div>
@@ -4215,7 +4215,7 @@ export default function PatientPortal({
               <div style={{
                 background: '#ffffff',
                 borderRadius: '16px',
-                border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                 padding: '24px',
                 minHeight: '440px',
                 display: 'flex',
@@ -4230,7 +4230,7 @@ export default function PatientPortal({
                         alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
                         background: msg.sender === 'user' ? '#0F4C5C' : '#F8FAFC',
                         color: msg.sender === 'user' ? '#ffffff' : '#1E293B',
-                        border: msg.sender === 'user' ? 'none' : '1px solid #E2E8F0',
+                        border: msg.sender === 'user' ? 'none' : '1px solid #D0DFE2',
                         padding: '12px 18px',
                         borderRadius: msg.sender === 'user' ? '16px 16px 2px 16px' : '16px 16px 16px 2px',
                         fontSize: '13.5px',
@@ -4253,7 +4253,7 @@ export default function PatientPortal({
                       flex: 1,
                       padding: '12px 16px',
                       borderRadius: '12px',
-                      border: '1px solid rgba(15, 76, 92, 0.15)',
+                      border: '1px solid rgba(0, 0, 0, 0.10)',
                       fontSize: '13px',
                       outline: 'none'
                     }}
@@ -4333,12 +4333,12 @@ export default function PatientPortal({
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: '16px',
-                boxShadow: '0 10px 25px rgba(10, 37, 64, 0.12)'
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)'
               }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                     <span style={{ 
-                      background: 'rgba(15, 76, 92, 0.3)', 
+                      background: 'rgba(0, 0, 0, 0.16)', 
                       padding: '4px 10px', 
                       borderRadius: '20px', 
                       fontSize: '11px', 
@@ -4351,10 +4351,10 @@ export default function PatientPortal({
                     </span>
                     <span style={{ fontSize: '12px', color: '#93C5FD' }}>• ABHA: <code>{abhaId}</code></span>
                   </div>
-                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'Outfit, sans-serif', margin: '0 0 6px 0' }}>
+                  <h2 style={{ fontSize: '24px', fontWeight: 800, fontFamily: 'var(--font-main)', margin: '0 0 6px 0' }}>
                     Citizen Preferences, Audio Engine & Security Suite
                   </h2>
-                  <p style={{ fontSize: '13px', color: '#E2E8F0', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '13px', color: '#D0DFE2', margin: 0, maxWidth: '650px', lineHeight: 1.5 }}>
                     Configure vernacular dialect nuance, multi-modal WhatsApp & IVR dispatches, emergency 108 caregiver escalation, and granular family data sharing permissions.
                   </p>
                 </div>
@@ -4365,7 +4365,7 @@ export default function PatientPortal({
                     setTimeout(() => setSettingsSavedToast(false), 4000);
                   }}
                   className="btn-primary"
-                  style={{ padding: '12px 24px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 15px rgba(15, 76, 92, 0.4)' }}
+                  style={{ padding: '12px 24px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.16)' }}
                 >
                   <ShieldCheck size={16} />
                   <span>Save All Settings</span>
@@ -4397,14 +4397,14 @@ export default function PatientPortal({
               <div className="patient-settings-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : 'repeat(2, 1fr)', gap: '22px', width: '100%', boxSizing: 'border-box' }}>
                 
                 {/* 1. AyuSwar Indic Voice & Dialect Engine */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(15, 76, 92, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F4C5C' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0, 0, 0, 0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F4C5C' }}>
                       <Languages size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>Indic Voice & Dialect Synthesis</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Configure pronunciation, regional idioms, and tempo</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>Configure pronunciation, regional idioms, and tempo</div>
                     </div>
                   </div>
 
@@ -4419,7 +4419,7 @@ export default function PatientPortal({
                         width: '100%',
                         padding: '10px 14px',
                         borderRadius: '10px',
-                        border: '1px solid rgba(15, 76, 92, 0.15)',
+                        border: '1px solid rgba(0, 0, 0, 0.10)',
                         fontSize: '13px',
                         fontWeight: 650,
                         color: '#081C24'
@@ -4443,7 +4443,7 @@ export default function PatientPortal({
                       <select
                         value={voicePersona}
                         onChange={e => setVoicePersona(e.target.value)}
-                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '12px', fontWeight: 650 }}
+                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '12px', fontWeight: 650 }}
                       >
                         <option value="female_compassionate">Dr. Priya (Empathetic Female)</option>
                         <option value="male_calm">Dr. Rajesh (Senior Male Physician)</option>
@@ -4459,7 +4459,7 @@ export default function PatientPortal({
                       <select
                         value={speechTempo}
                         onChange={e => setSpeechTempo(e.target.value)}
-                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '12px', fontWeight: 650 }}
+                        style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '12px', fontWeight: 650 }}
                       >
                         <option value="0.75x">0.75x (Slow & Clear — Best for elderly)</option>
                         <option value="1.0x">1.0x (Standard Conversational)</option>
@@ -4468,10 +4468,10 @@ export default function PatientPortal({
                     </div>
                   </div>
 
-                  <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                       <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Auto-Play Spoken Narrations</div>
-                      <div style={{ fontSize: '11px', color: '#64748B' }}>Instantly read lab reports and pills when opened</div>
+                      <div style={{ fontSize: '11px', color: '#698892' }}>Instantly read lab reports and pills when opened</div>
                     </div>
                     <input 
                       type="checkbox" 
@@ -4483,22 +4483,22 @@ export default function PatientPortal({
                 </div>
 
                 {/* 2. Omnichannel Alerts & Tele-Dispatch */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(37, 99, 235, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563EB' }}>
                       <Smartphone size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>Omnichannel Tele-Dispatch</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>WhatsApp Voice Notes, IVR Phone Calls & Regional SMS</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>WhatsApp Voice Notes, IVR Phone Calls & Regional SMS</div>
                     </div>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>WhatsApp Audio Prescriptions</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Send .opus audio note + Telugu PDF after doctor visit</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Send .opus audio note + Telugu PDF after doctor visit</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4508,10 +4508,10 @@ export default function PatientPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Automated IVR Phone Call Reminders</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Phone rings for elderly patients who cannot read screens</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Phone rings for elderly patients who cannot read screens</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4521,10 +4521,10 @@ export default function PatientPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Unicode Regional SMS Alerts</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>2G network fallback in native Telugu script (మీ మందుల సమయం)</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>2G network fallback in native Telugu script (మీ మందుల సమయం)</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4536,11 +4536,11 @@ export default function PatientPortal({
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 650 }}>Scheduled Dispatch Slot:</span>
+                    <span style={{ fontSize: '12px', color: '#698892', fontWeight: 650 }}>Scheduled Dispatch Slot:</span>
                     <select
                       value={preferredReminderTime}
                       onChange={e => setPreferredReminderTime(e.target.value)}
-                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '12px', fontWeight: 700 }}
+                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '12px', fontWeight: 700 }}
                     >
                       <option value="06:30 AM">06:30 AM (Early Morning Empty Stomach)</option>
                       <option value="08:30 AM">08:30 AM (Post-Breakfast)</option>
@@ -4551,14 +4551,14 @@ export default function PatientPortal({
                 </div>
 
                 {/* 3. Emergency Caregiver Escalation & 108 SOS */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#DC2626' }}>
                       <PhoneCall size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>Emergency Caregiver Escalation</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Designated contact & automated 108 ambulance dispatch</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>Designated contact & automated 108 ambulance dispatch</div>
                     </div>
                   </div>
 
@@ -4570,7 +4570,7 @@ export default function PatientPortal({
                       type="text"
                       value={emergencyContactName}
                       onChange={e => setEmergencyContactName(e.target.value)}
-                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '13px', fontWeight: 650 }}
+                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '13px', fontWeight: 650 }}
                     />
                   </div>
 
@@ -4582,7 +4582,7 @@ export default function PatientPortal({
                       type="text"
                       value={emergencyPhone}
                       onChange={e => setEmergencyPhone(e.target.value)}
-                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '13px', fontWeight: 650 }}
+                      style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '13px', fontWeight: 650 }}
                     />
                   </div>
 
@@ -4601,28 +4601,28 @@ export default function PatientPortal({
 
                   <button
                     onClick={() => alert(`Simulated Alert Sent to Caregiver ${emergencyContactName} (${emergencyPhone}): "AyuSwar Alert: Emergency test ping successful. Patient is stable."`)}
-                    style={{ width: '100%', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.12)', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 750, color: '#081C24', cursor: 'pointer' }}
+                    style={{ width: '100%', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 750, color: '#081C24', cursor: 'pointer' }}
                   >
                     Send Test Ping to Caregiver Mobile
                   </button>
                 </div>
 
                 {/* 4. ABDM & ABHA Health Locker Consent Governance */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
                       <ShieldCheck size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>ABDM Consent Governance</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>National Health Authority digital health locker permissions</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>National Health Authority digital health locker permissions</div>
                     </div>
                   </div>
 
-                  <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', marginBottom: '12px' }}>
+                  <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', marginBottom: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '12px', color: '#64748B' }}>ABHA Number Status:</span>
-                      <span style={{ fontSize: '11px', background: '#FAF8F5', color: '#475569', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>ABHA integration: PLANNED</span>
+                      <span style={{ fontSize: '12px', color: '#698892' }}>ABHA Number Status:</span>
+                      <span style={{ fontSize: '11px', background: '#FAF8F5', color: '#486770', padding: '2px 8px', borderRadius: '10px', fontWeight: 800 }}>ABHA integration: PLANNED</span>
                     </div>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', fontFamily: 'monospace' }}>
                       {abhaId}
@@ -4634,7 +4634,7 @@ export default function PatientPortal({
                     <select
                       value={consentDurationDays}
                       onChange={e => setConsentDurationDays(Number(e.target.value))}
-                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.12)', fontSize: '12px', fontWeight: 650 }}
+                      style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.08)', fontSize: '12px', fontWeight: 650 }}
                     >
                       <option value={7}>7 Days (Temporary)</option>
                       <option value={30}>30 Days (Recommended)</option>
@@ -4643,10 +4643,10 @@ export default function PatientPortal({
                     </select>
                   </div>
 
-                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer', marginBottom: '14px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer', marginBottom: '14px' }}>
                     <div>
                       <div style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Auto-Grant Specialist Access</div>
-                      <div style={{ fontSize: '11px', color: '#64748B' }}>Allow {assignedDoctor.doctorName} to access prior discharge records</div>
+                      <div style={{ fontSize: '11px', color: '#698892' }}>Allow {assignedDoctor.doctorName} to access prior discharge records</div>
                     </div>
                     <input 
                       type="checkbox" 
@@ -4666,7 +4666,7 @@ export default function PatientPortal({
                     </button>
                     <button
                       onClick={() => alert(`Exporting FHIR R4 JSON Bundle (Encounters, Observations, MedicationRequests) for ${patientName}...`)}
-                      style={{ flex: 1, background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.12)', borderRadius: '8px', padding: '8px', fontSize: '11.5px', fontWeight: 700, color: '#081C24', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                      style={{ flex: 1, background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '8px', padding: '8px', fontSize: '11.5px', fontWeight: 700, color: '#081C24', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     >
                       <FileCheck size={13} />
                       <span>FHIR R4 JSON</span>
@@ -4675,26 +4675,26 @@ export default function PatientPortal({
                 </div>
 
                 {/* 5. Family Locker & Caregiver Privacy Controls */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
                       <UserCheck size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>Family Locker Sharing Permissions</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Manage view permissions across registered family members</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>Manage view permissions across registered family members</div>
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '12.5px', color: '#475569', marginBottom: '12px' }}>
+                  <div style={{ fontSize: '12.5px', color: '#486770', marginBottom: '12px' }}>
                     Linked Accounts: <strong>{familyListToDisplay.map(f => f.patientName).join(', ')}</strong>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Shared Medication Dashboard</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Caregiver can view which pills have been taken today</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Caregiver can view which pills have been taken today</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4703,10 +4703,10 @@ export default function PatientPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Sensitive Diagnostic Masking</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Mask private psychiatric, fertility or oncology records</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Mask private psychiatric, fertility or oncology records</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4723,22 +4723,22 @@ export default function PatientPortal({
                 </div>
 
                 {/* 6. Rural PHC Offline Mode & Low Data Compression */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284C7' }}>
                       <WifiOff size={20} />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: 0 }}>Offline Mode & Rural Network Optimization</h3>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Zero-internet spoken audio playback for rural PHC visits</div>
+                      <div style={{ fontSize: '12px', color: '#698892' }}>Zero-internet spoken audio playback for rural PHC visits</div>
                     </div>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Offline Spoken Rx Caching</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Keep regional voice prescriptions cached locally on device</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Keep regional voice prescriptions cached locally on device</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4748,10 +4748,10 @@ export default function PatientPortal({
                       />
                     </label>
 
-                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', cursor: 'pointer' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', cursor: 'pointer' }}>
                       <div>
                         <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#081C24' }}>Low-Bandwidth Audio Compression</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>Transmits audio at 12 kbps Opus to preserve 2G cellular data</div>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>Transmits audio at 12 kbps Opus to preserve 2G cellular data</div>
                       </div>
                       <input 
                         type="checkbox" 
@@ -4784,7 +4784,7 @@ export default function PatientPortal({
               <div style={{ marginTop: '24px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
                 <button
                   onClick={() => alert('Preferences restored to clinical baseline for Rayalaseema region.')}
-                  style={{ background: '#FAF8F5', border: '1px solid rgba(15, 76, 92, 0.12)', borderRadius: '10px', padding: '12px 20px', fontSize: '13px', fontWeight: 700, color: '#475569', cursor: 'pointer' }}
+                  style={{ background: '#FAF8F5', border: '1px solid rgba(0, 0, 0, 0.08)', borderRadius: '10px', padding: '12px 20px', fontSize: '13px', fontWeight: 700, color: '#486770', cursor: 'pointer' }}
                 >
                   Reset to Clinical Defaults
                 </button>
@@ -4817,7 +4817,7 @@ export default function PatientPortal({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(10, 37, 64, 0.75)',
+          background: 'rgba(0, 0, 0, 0.14)',
           backdropFilter: 'blur(6px)',
           padding: '20px'
         }}>
@@ -4905,15 +4905,15 @@ export default function PatientPortal({
                   <div style={{ fontSize: '18px', fontWeight: 900, color: '#081C24', margin: '3px 0' }}>
                     {assignedDoctor.facility || 'Kurnool District Hospital (ABDM PHC #1402)'}
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892' }}>
                     Department of {assignedDoctor.specialty} • National Health Authority HFR ID: HFR-AP-14029
                   </div>
                 </div>
 
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>{assignedDoctor.doctorName}</div>
-                  <div style={{ fontSize: '11px', color: '#475569' }}>{assignedDoctor.nmcRegNo || 'NMC-TS-2016-48291'}</div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>HPR: {assignedDoctor.hprId || 'ABHA-HPR-8921-9942'}</div>
+                  <div style={{ fontSize: '11px', color: '#486770' }}>{assignedDoctor.nmcRegNo || 'NMC-TS-2016-48291'}</div>
+                  <div style={{ fontSize: '10.5px', color: '#698892' }}>HPR: {assignedDoctor.hprId || 'ABHA-HPR-8921-9942'}</div>
                 </div>
               </div>
 
@@ -4922,7 +4922,7 @@ export default function PatientPortal({
                 className="patient-summary-slip-grid"
                 style={{
                   background: '#FAF8F5',
-                  border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)',
+                  border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                   borderRadius: '10px',
                   padding: '12px 16px',
                   marginBottom: '18px',
@@ -4934,32 +4934,32 @@ export default function PatientPortal({
                 }}
               >
                 <div>
-                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>PATIENT NAME</span>
+                  <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>PATIENT NAME</span>
                   <strong style={{ color: '#081C24', fontSize: '13px' }}>{patientName}</strong>
                 </div>
                 <div>
-                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>AGE / GENDER</span>
+                  <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>AGE / GENDER</span>
                   <strong style={{ color: '#081C24' }}>{patientProfile?.age || 28} Yrs • {patientProfile?.gender || 'Female'}</strong>
                 </div>
                 <div>
-                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>ABHA ID</span>
+                  <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>ABHA ID</span>
                   <strong style={{ color: '#081C24', fontFamily: 'monospace' }}>{abhaId}</strong>
                 </div>
                 <div>
-                  <span style={{ color: '#64748B', display: 'block', fontSize: '10.5px' }}>DATE OF ISSUE</span>
+                  <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>DATE OF ISSUE</span>
                   <strong style={{ color: '#081C24' }}>23/10/2026</strong>
                 </div>
               </div>
 
               {/* Vitals & Clinical Assessment */}
               <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', textTransform: 'uppercase', marginBottom: '4px' }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 750, color: '#486770', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Recorded Vitals & Condition
                 </div>
-                <div style={{ fontSize: '12.5px', background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', color: '#334155', marginBottom: '8px' }}>
+                <div style={{ fontSize: '12.5px', background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', color: '#2C4A52', marginBottom: '8px' }}>
                   BP: {patientProfile?.vitals?.bp || '120/80 mmHg'} • Pulse: {patientProfile?.vitals?.hr || '76 bpm'} • SpO2: {patientProfile?.vitals?.spo2 || '98%'}
                 </div>
-                <div style={{ fontSize: '13px', color: '#081C24', background: 'rgba(15, 76, 92, 0.08)', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(15, 76, 92, 0.2)' }}>
+                <div style={{ fontSize: '13px', color: '#081C24', background: 'rgba(0, 0, 0, 0.06)', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.14)' }}>
                   <strong>Provisional Diagnosis: </strong> {patientProfile?.condition || 'Seasonal Bronchial Sensitivity & Allergic Airway Reactivity'}
                 </div>
               </div>
@@ -4973,10 +4973,10 @@ export default function PatientPortal({
                   </span>
                 </div>
 
-                <div style={{ border: '1px solid rgba(15, 76, 92, 0.08)', boxShadow: '0 4px 18px -2px rgba(15, 76, 92, 0.04)', borderRadius: '10px', overflow: 'hidden' }}>
+                <div style={{ border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', borderRadius: '10px', overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                     <thead>
-                      <tr style={{ background: '#FAF8F5', borderBottom: '1px solid #E2E8F0', color: '#475569', textAlign: 'left' }}>
+                      <tr style={{ background: '#FAF8F5', borderBottom: '1px solid #D0DFE2', color: '#486770', textAlign: 'left' }}>
                         <th style={{ padding: '10px 12px' }}>Medicine & Generic Equivalent</th>
                         <th style={{ padding: '10px 12px' }}>Timing & Indic Context</th>
                         <th style={{ padding: '10px 12px' }}>Instructions</th>
@@ -4997,7 +4997,7 @@ export default function PatientPortal({
                           <td style={{ padding: '10px 12px', color: '#081C24', fontWeight: 600 }}>
                             {med.time} ({med.mealContext})
                           </td>
-                          <td style={{ padding: '10px 12px', color: '#475569' }}>
+                          <td style={{ padding: '10px 12px', color: '#486770' }}>
                             {med.purpose || 'As directed by physician'}
                           </td>
                         </tr>
@@ -5009,7 +5009,7 @@ export default function PatientPortal({
 
               {/* QR Verification & DSC e-Signature Footer */}
               <div style={{
-                borderTop: '2px dashed #CBD5E1',
+                borderTop: '2px dashed #D0DFE2',
                 paddingTop: '16px',
                 marginTop: '20px',
                 display: 'flex',
@@ -5023,7 +5023,7 @@ export default function PatientPortal({
                     isDoctor={false}
                     showCenterBadge={false}
                   />
-                  <div style={{ fontSize: '11px', color: '#64748B', maxWidth: '240px' }}>
+                  <div style={{ fontSize: '11px', color: '#698892', maxWidth: '240px' }}>
                     ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
                     Encrypted with SHA-256 digital certificate. Scannable via any smartphone camera.
                   </div>
@@ -5035,12 +5035,12 @@ export default function PatientPortal({
                     border: '1.5px solid #0F4C5C',
                     borderRadius: '8px',
                     padding: '6px 14px',
-                    background: 'rgba(15, 76, 92, 0.05)',
+                    background: 'rgba(0, 0, 0, 0.03)',
                     marginBottom: '4px'
                   }}>
                     <div style={{ fontSize: '10px', color: '#0F4C5C', fontWeight: 800 }}>CLASS-3 DIGITAL SIGNATURE (DSC)</div>
                     <div style={{ fontSize: '12.5px', fontWeight: 900, color: '#081C24' }}>{assignedDoctor.doctorName}</div>
-                    <div style={{ fontSize: '10px', color: '#64748B' }}>Attending Physician (Demo)</div>
+                    <div style={{ fontSize: '10px', color: '#698892' }}>Attending Physician (Demo)</div>
                   </div>
                   <div style={{ fontSize: '10px', color: '#94A3B8' }}>Generated via AyuSwar Ambient Clinical AI</div>
                 </div>
@@ -5080,7 +5080,7 @@ export default function PatientPortal({
           right: 0,
           height: '62px',
           background: '#ffffff',
-          borderTop: '1px solid #E2E8F0',
+          borderTop: '1px solid #D0DFE2',
           boxShadow: '0 -4px 16px rgba(15, 23, 42, 0.08)',
           zIndex: 80,
           alignItems: 'center',
@@ -5116,7 +5116,7 @@ export default function PatientPortal({
                 gap: '3px',
                 background: 'transparent',
                 border: 'none',
-                color: isActive ? '#0F4C5C' : '#64748B',
+                color: isActive ? '#0F4C5C' : '#698892',
                 cursor: 'pointer',
                 padding: '6px 0',
                 transition: 'all 0.15s ease',
@@ -5127,10 +5127,10 @@ export default function PatientPortal({
                 position: 'relative',
                 padding: '2px 14px',
                 borderRadius: '16px',
-                background: isActive ? 'rgba(15, 76, 92, 0.12)' : 'transparent',
+                background: isActive ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
                 transition: 'all 0.15s ease'
               }}>
-                <Icon size={19} color={isActive ? '#0F4C5C' : '#64748B'} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon size={19} color={isActive ? '#0F4C5C' : '#698892'} strokeWidth={isActive ? 2.5 : 2} />
               </div>
               <span style={{
                 fontSize: '10px',
@@ -5174,13 +5174,13 @@ export default function PatientPortal({
           color: '#ffffff',
           padding: '12px 20px',
           borderRadius: '12px',
-          boxShadow: '0 8px 24px rgba(10,37,64,0.35)',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.14)',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
           fontSize: '13px',
           fontWeight: 700,
-          border: '1px solid rgba(212, 175, 55, 0.3)',
+          border: '1px solid rgba(0, 0, 0, 0.14)',
           maxWidth: '90vw'
         }}>
           <span style={{ fontSize: '10px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '6px', fontWeight: 800 }}>PLANNED</span>

@@ -136,11 +136,11 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Studio Header Bar */}
       <div className="opd-dual-studio-header-card" style={{
-        background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+        background: 'linear-gradient(135deg, #091E26 0%, #1E293B 100%)',
         color: '#ffffff',
         borderRadius: '24px',
         padding: '24px 28px',
-        border: '1px solid #334155',
+        border: '1px solid #2C4A52',
         boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
       }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '18px' }}>
@@ -149,7 +149,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(15, 76, 92, 0.25)',
+              background: 'rgba(0, 0, 0, 0.16)',
               border: '1.5px solid #0F4C5C',
               display: 'flex',
               alignItems: 'center',
@@ -170,7 +170,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   borderRadius: '10px',
                   background: isPlaying ? 'rgba(16, 185, 129, 0.2)' : 'rgba(148, 163, 184, 0.2)',
                   color: isPlaying ? '#34D399' : '#94A3B8',
-                  border: isPlaying ? '1px solid #059669' : '1px solid #475569'
+                  border: isPlaying ? '1px solid #059669' : '1px solid #486770'
                 }}>
                   {isPlaying ? '● LIVE STREAMING' : 'PAUSED'}
                 </span>
@@ -196,7 +196,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               fontSize: '13px',
               fontWeight: 750,
               cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)',
               transition: 'all 0.2s ease'
             }}
           >
@@ -210,7 +210,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           background: 'rgba(15, 23, 42, 0.65)',
           borderRadius: '16px',
           padding: '14px 18px',
-          border: '1px solid #334155',
+          border: '1px solid #2C4A52',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -219,7 +219,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Sliders size={18} color="#2DD4BF" />
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#E2E8F0' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: '#D0DFE2' }}>
               DSP Acoustic Filter:
             </span>
           </div>
@@ -232,7 +232,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
-                border: filterMode === 'raw' ? '1.5px solid #EF4444' : '1px solid #475569',
+                border: filterMode === 'raw' ? '1.5px solid #EF4444' : '1px solid #486770',
                 background: filterMode === 'raw' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
                 color: filterMode === 'raw' ? '#FCA5A5' : '#94A3B8',
                 cursor: 'pointer',
@@ -248,8 +248,8 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
-                border: filterMode === 'kalman' ? '1.5px solid #2DD4BF' : '1px solid #475569',
-                background: filterMode === 'kalman' ? 'rgba(15, 76, 92, 0.25)' : 'transparent',
+                border: filterMode === 'kalman' ? '1.5px solid #2DD4BF' : '1px solid #486770',
+                background: filterMode === 'kalman' ? 'rgba(0, 0, 0, 0.16)' : 'transparent',
                 color: filterMode === 'kalman' ? '#5EEAD4' : '#94A3B8',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease'
@@ -267,19 +267,19 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           gap: '12px',
           marginTop: '14px'
         }}>
-          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
+          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #2C4A52' }}>
             <div style={{ fontSize: '11px', color: '#94A3B8' }}>Signal-to-Noise Profile (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#34D399' : '#F87171' }}>
               {filterMode === 'kalman' ? 'Noise-Subtracted Voice' : 'Raw Ambient Voice'}
             </div>
           </div>
-          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
+          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #2C4A52' }}>
             <div style={{ fontSize: '11px', color: '#94A3B8' }}>Diarization Separation (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#38BDF8' : '#FBBF24' }}>
               {filterMode === 'kalman' ? 'Dual Speaker Channel' : 'Overlap Detection'}
             </div>
           </div>
-          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #334155' }}>
+          <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #2C4A52' }}>
             <div style={{ fontSize: '11px', color: '#94A3B8' }}>Audio Pipeline (SIMULATION)</div>
             <div style={{ fontSize: '15px', fontWeight: 800, color: '#A78BFA' }}>
               Client WebAudio Pipeline (unmeasured)
@@ -294,7 +294,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
         <div style={{
           background: '#ffffff',
           borderRadius: '24px',
-          border: '1.5px solid #E2E8F0',
+          border: '1.5px solid #D0DFE2',
           padding: 'clamp(14px, 3.5vw, 24px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           display: 'flex',
@@ -332,8 +332,8 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   alignItems: 'center',
                   gap: '4px',
                   background: '#FAF8F5',
-                  color: '#475569',
-                  border: '1px solid #CBD5E1',
+                  color: '#486770',
+                  border: '1px solid #D0DFE2',
                   padding: '8px 12px',
                   borderRadius: '10px',
                   fontSize: '12px',
@@ -348,7 +348,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600 }}>Speed:</span>
+              <span style={{ fontSize: '11px', color: '#698892', fontWeight: 600 }}>Speed:</span>
               {[1, 1.5].map((speed) => (
                 <button
                   key={speed}
@@ -358,9 +358,9 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                     borderRadius: '6px',
                     fontSize: '11px',
                     fontWeight: 700,
-                    border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-                    background: playbackSpeed === speed ? 'rgba(15, 76, 92, 0.1)' : '#ffffff',
-                    color: playbackSpeed === speed ? '#0F4C5C' : '#64748B',
+                    border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+                    background: playbackSpeed === speed ? 'rgba(0, 0, 0, 0.07)' : '#ffffff',
+                    color: playbackSpeed === speed ? '#0F4C5C' : '#698892',
                     cursor: 'pointer'
                   }}
                 >
@@ -389,9 +389,9 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                       : (idx < activeStep ? '#F8FAFC' : '#ffffff'),
                     border: isCurrent
                       ? (isDoctor ? '2px solid #0F4C5C' : '2px solid #10B981')
-                      : '1.5px solid #E2E8F0',
+                      : '1.5px solid #D0DFE2',
                     boxShadow: isCurrent 
-                      ? (isDoctor ? '0 6px 18px rgba(15, 76, 92, 0.18)' : '0 6px 18px rgba(16,185,129,0.18)')
+                      ? (isDoctor ? '0 6px 18px rgba(0, 0, 0, 0.13)' : '0 6px 18px rgba(16,185,129,0.18)')
                       : 'none',
                     opacity: idx > activeStep ? 0.6 : 1
                   }}
@@ -406,11 +406,11 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                         color: isDoctor ? '#0F4C5C' : '#059669',
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        background: isDoctor ? 'rgba(15, 76, 92, 0.1)' : 'rgba(16,185,129,0.1)'
+                        background: isDoctor ? 'rgba(0, 0, 0, 0.07)' : 'rgba(16,185,129,0.1)'
                       }}>
                         {item.name}
                       </span>
-                      <span style={{ fontSize: '11px', color: '#64748B' }}>{item.role}</span>
+                      <span style={{ fontSize: '11px', color: '#698892' }}>{item.role}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       {isCurrent && isPlaying && (
@@ -428,7 +428,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   <p style={{
                     fontSize: '14.5px',
                     fontWeight: 700,
-                    color: '#0F172A',
+                    color: '#091E26',
                     lineHeight: 1.5,
                     margin: '0 0 6px 0',
                     fontFamily: 'system-ui, -apple-system, sans-serif'
@@ -439,7 +439,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                   {/* English Clinical Translation */}
                   <p style={{
                     fontSize: '12.5px',
-                    color: '#475569',
+                    color: '#486770',
                     fontStyle: 'italic',
                     margin: 0,
                     lineHeight: 1.45
@@ -456,7 +456,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
         <div style={{
           background: 'linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%)',
           borderRadius: '24px',
-          border: '1.5px solid #CBD5E1',
+          border: '1.5px solid #D0DFE2',
           padding: 'clamp(14px, 3.5vw, 24px)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           display: 'flex',
@@ -466,7 +466,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           boxSizing: 'border-box'
         }}>
           {/* Note Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #E2E8F0', paddingBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #D0DFE2', paddingBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <FileText size={18} color="#0F4C5C" />
               <div>
@@ -498,10 +498,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 1 ? '#F0FDFA' : '#F1F5F9',
-              border: activeStep >= 1 ? '1.5px solid #0F4C5C' : '1px dashed #CBD5E1',
+              border: activeStep >= 1 ? '1.5px solid #0F4C5C' : '1px dashed #D0DFE2',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 1 ? '#0F4C5C' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 1 ? '#0F4C5C' : '#698892', marginBottom: '4px' }}>
                 SUBJECTIVE (S) — Vernacular Symptom Resolution
               </div>
               {activeStep >= 1 ? (
@@ -520,10 +520,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 2 ? '#F0FDFA' : '#F1F5F9',
-              border: activeStep >= 2 ? '1.5px solid #0F4C5C' : '1px dashed #CBD5E1',
+              border: activeStep >= 2 ? '1.5px solid #0F4C5C' : '1px dashed #D0DFE2',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#0F4C5C' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#0F4C5C' : '#698892', marginBottom: '4px' }}>
                 OBJECTIVE (O) — Real-Time Clinical Vitals
               </div>
               {activeStep >= 2 ? (
@@ -543,10 +543,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 2 ? '#EFF6FF' : '#F1F5F9',
-              border: activeStep >= 2 ? '1.5px solid #3B82F6' : '1px dashed #CBD5E1',
+              border: activeStep >= 2 ? '1.5px solid #3B82F6' : '1px dashed #D0DFE2',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#2563EB' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 2 ? '#2563EB' : '#698892', marginBottom: '4px' }}>
                 ASSESSMENT (A) — Standard WHO ICD-10 Ontologies
               </div>
               {activeStep >= 2 ? (
@@ -576,10 +576,10 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               padding: '12px 14px',
               borderRadius: '12px',
               background: activeStep >= 4 ? '#ECFDF5' : '#F1F5F9',
-              border: activeStep >= 4 ? '1.5px solid #10B981' : '1px dashed #CBD5E1',
+              border: activeStep >= 4 ? '1.5px solid #10B981' : '1px dashed #D0DFE2',
               transition: 'all 0.3s ease'
             }}>
-              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 4 ? '#059669' : '#64748B', marginBottom: '4px' }}>
+              <div style={{ fontSize: '11.5px', fontWeight: 800, color: activeStep >= 4 ? '#059669' : '#698892', marginBottom: '4px' }}>
                 PLAN (P) — Attending e-Rx & Spoken Audio-Rx
               </div>
               {activeStep >= 4 ? (
@@ -601,7 +601,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           {/* Bottom Safeguard Notice */}
           <div style={{
             fontSize: '11.5px',
-            color: '#64748B',
+            color: '#698892',
             background: '#FAF8F5',
             padding: '10px 12px',
             borderRadius: '10px',
@@ -1694,7 +1694,7 @@ export default function DetailedModuleView({
   };
 
   return (
-    <div className="detailed-module-container" style={{ minHeight: '100vh', background: '#FAF8F5', color: '#0F172A', paddingBottom: '96px' }}>
+    <div className="detailed-module-container" style={{ minHeight: '100vh', background: '#FAF8F5', color: '#091E26', paddingBottom: '96px' }}>
       {/* Top Breadcrumb & Navigation Bar */}
       <div style={{
         position: 'sticky',
@@ -1702,7 +1702,7 @@ export default function DetailedModuleView({
         zIndex: 40,
         background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid #E2E8F0',
+        borderBottom: '1px solid #D0DFE2',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
       }}>
         <div style={{
@@ -1715,7 +1715,7 @@ export default function DetailedModuleView({
           flexWrap: 'wrap',
           gap: '12px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#64748B' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#698892' }}>
             <button 
               onClick={() => onBackToHome ? onBackToHome() : navigate('/')}
               style={{
@@ -1724,7 +1724,7 @@ export default function DetailedModuleView({
                 gap: '6px',
                 background: 'none',
                 border: 'none',
-                color: '#475569',
+                color: '#486770',
                 fontWeight: 700,
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -1734,9 +1734,9 @@ export default function DetailedModuleView({
               <ArrowLeft size={16} />
               <span>Back to Home</span>
             </button>
-            <span style={{ color: '#CBD5E1' }}>/</span>
-            <span style={{ color: '#64748B', fontWeight: 600 }}>{currentModule.category}</span>
-            <span style={{ color: '#CBD5E1' }}>/</span>
+            <span style={{ color: '#D0DFE2' }}>/</span>
+            <span style={{ color: '#698892', fontWeight: 600 }}>{currentModule.category}</span>
+            <span style={{ color: '#D0DFE2' }}>/</span>
             <span style={{ color: '#0F4C5C', fontWeight: 800 }}>{currentModule.title}</span>
           </div>
 
@@ -1752,7 +1752,7 @@ export default function DetailedModuleView({
                   fontSize: '12.5px',
                   borderRadius: '10px',
                   border: 'none',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -1769,7 +1769,7 @@ export default function DetailedModuleView({
               onClick={() => setIsTourModalOpen(true)}
               style={{
                 padding: '9px 16px',
-                background: '#0F172A',
+                background: '#091E26',
                 color: '#FFFFFF',
                 fontWeight: 750,
                 fontSize: '12px',
@@ -1792,7 +1792,7 @@ export default function DetailedModuleView({
       {/* Hero Header for this Module */}
       <div style={{
         background: 'linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%)',
-        borderBottom: '1px solid #E2E8F0',
+        borderBottom: '1px solid #D0DFE2',
         padding: '36px 24px'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -1828,22 +1828,22 @@ export default function DetailedModuleView({
                 >
                   {currentModule.badge}
                 </span>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#698892', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   Deep Technical Specification
                 </span>
               </div>
-              <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.02em', margin: '6px 0 0 0' }}>
+              <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#091E26', letterSpacing: '-0.02em', margin: '6px 0 0 0' }}>
                 {currentModule.title}
               </h1>
             </div>
           </div>
-          <p style={{ fontSize: '15px', color: '#475569', maxWidth: '780px', lineHeight: 1.5, margin: '14px 0 0 0' }}>
+          <p style={{ fontSize: '15px', color: '#486770', maxWidth: '780px', lineHeight: 1.5, margin: '14px 0 0 0' }}>
             {currentModule.tagline}
           </p>
 
           {/* Section Step Progress Bar */}
           <div style={{ paddingTop: '20px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase' }}>
               Section {currentPage} of {currentModule.totalPages}:
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '220px' }}>
@@ -1861,8 +1861,8 @@ export default function DetailedModuleView({
                       ? '#0F4C5C' 
                       : idx + 1 < currentPage 
                       ? '#5EEAD4' 
-                      : '#CBD5E1',
-                    boxShadow: currentPage === idx + 1 ? '0 0 0 2px rgba(15, 76, 92, 0.25)' : 'none'
+                      : '#D0DFE2',
+                    boxShadow: currentPage === idx + 1 ? '0 0 0 2px rgba(0, 0, 0, 0.16)' : 'none'
                   }}
                   title={`Jump to section ${idx + 1}`}
                 />
@@ -1875,11 +1875,11 @@ export default function DetailedModuleView({
       {/* Main Multi-Page Section Content */}
       <div className="detailed-module-main-body" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(16px, 3vw, 32px) clamp(10px, 3vw, 24px)', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div style={{ borderBottom: '1px solid #E2E8F0', paddingBottom: '16px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#0F172A', margin: 0, letterSpacing: '-0.01em' }}>
+          <div style={{ borderBottom: '1px solid #D0DFE2', paddingBottom: '16px' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#091E26', margin: 0, letterSpacing: '-0.01em' }}>
               {currentPageData.pageTitle}
             </h2>
-            <p style={{ fontSize: '14px', color: '#64748B', margin: '6px 0 0 0' }}>
+            <p style={{ fontSize: '14px', color: '#698892', margin: '6px 0 0 0' }}>
               {currentPageData.subtitle}
             </p>
           </div>
@@ -1892,7 +1892,7 @@ export default function DetailedModuleView({
           {/* Sub-Section Pagination: Next / Previous Buttons */}
           <div style={{
             paddingTop: '32px',
-            borderTop: '1px solid #E2E8F0',
+            borderTop: '1px solid #D0DFE2',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -1912,7 +1912,7 @@ export default function DetailedModuleView({
                 cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
                 background: currentPage === 1 ? '#F1F5F9' : '#FFFFFF',
                 color: currentPage === 1 ? '#94A3B8' : '#1E293B',
-                border: '1px solid #CBD5E1',
+                border: '1px solid #D0DFE2',
                 boxShadow: currentPage === 1 ? 'none' : '0 2px 8px rgba(0,0,0,0.04)'
               }}
             >
@@ -1920,7 +1920,7 @@ export default function DetailedModuleView({
               <span>Previous Section</span>
             </button>
 
-            <div style={{ fontSize: '12px', fontWeight: 800, color: '#64748B' }}>
+            <div style={{ fontSize: '12px', fontWeight: 800, color: '#698892' }}>
               Section {currentPage} of {currentModule.totalPages}
             </div>
 
@@ -1939,7 +1939,7 @@ export default function DetailedModuleView({
                 background: currentPage === currentModule.totalPages ? '#F1F5F9' : '#0F4C5C',
                 color: currentPage === currentModule.totalPages ? '#94A3B8' : '#FFFFFF',
                 border: 'none',
-                boxShadow: currentPage === currentModule.totalPages ? 'none' : '0 4px 14px rgba(15, 76, 92, 0.25)'
+                boxShadow: currentPage === currentModule.totalPages ? 'none' : '0 4px 14px rgba(0, 0, 0, 0.16)'
               }}
             >
               <span>Next Section</span>
@@ -1951,7 +1951,7 @@ export default function DetailedModuleView({
           <div style={{
             paddingTop: '36px',
             marginTop: '36px',
-            borderTop: '2px dashed #E2E8F0',
+            borderTop: '2px dashed #D0DFE2',
             display: 'flex',
             justifyContent: 'space-between',
             gap: '16px',
@@ -1964,7 +1964,7 @@ export default function DetailedModuleView({
                   padding: '14px 18px',
                   borderRadius: '14px',
                   background: '#FFFFFF',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #D0DFE2',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1973,12 +1973,12 @@ export default function DetailedModuleView({
                   textAlign: 'left'
                 }}
               >
-                <div style={{ padding: '8px', borderRadius: '10px', background: '#FAF8F5', color: '#475569' }}>
+                <div style={{ padding: '8px', borderRadius: '10px', background: '#FAF8F5', color: '#486770' }}>
                   <ArrowLeft size={16} />
                 </div>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#94A3B8' }}>Previous Module</div>
-                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F172A' }}>{modulesData[prevModuleKey].title}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{modulesData[prevModuleKey].title}</div>
                 </div>
               </button>
             ) : <div />}
@@ -1990,7 +1990,7 @@ export default function DetailedModuleView({
                   padding: '14px 18px',
                   borderRadius: '14px',
                   background: '#FFFFFF',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #D0DFE2',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -2001,7 +2001,7 @@ export default function DetailedModuleView({
               >
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#94A3B8' }}>Next Module</div>
-                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F172A' }}>{modulesData[nextModuleKey].title}</div>
+                  <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{modulesData[nextModuleKey].title}</div>
                 </div>
                 <div style={{ padding: '8px', borderRadius: '10px', background: '#E6F7F8', color: '#0F4C5C' }}>
                   <ArrowRight size={16} />

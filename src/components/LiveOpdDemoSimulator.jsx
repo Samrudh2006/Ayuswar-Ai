@@ -253,7 +253,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
-          border: '1.5px solid rgba(15, 76, 92, 0.2)',
+          border: '1.5px solid rgba(0, 0, 0, 0.14)',
           overflow: 'hidden'
         }}
       >
@@ -291,7 +291,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
         <div style={{
           padding: '12px 20px',
           background: '#FAF8F5',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid #D0DFE2',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -344,8 +344,8 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
             <button
               onClick={resetDemo}
               style={{
-                background: '#E2E8F0',
-                color: '#475569',
+                background: '#D0DFE2',
+                color: '#486770',
                 border: 'none',
                 borderRadius: '10px',
                 padding: '8px 12px',
@@ -361,14 +361,14 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
               <span>Reset</span>
             </button>
 
-            <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 650, display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div style={{ fontSize: '12px', color: '#698892', fontWeight: 650, display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Clock size={13} />
               <span>{elapsedSeconds}s / 42s</span>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '11px', background: isPlaying ? '#DCFCE7' : '#F1F5F9', color: isPlaying ? '#15803D' : '#64748B', padding: '3px 9px', borderRadius: '8px', fontWeight: 750 }}>
+            <span style={{ fontSize: '11px', background: isPlaying ? '#DCFCE7' : '#F1F5F9', color: isPlaying ? '#15803D' : '#698892', padding: '3px 9px', borderRadius: '8px', fontWeight: 750 }}>
               {isPlaying ? '🔴 LIVE ASR STREAMING' : (isCompleted ? '✓ CONSULTATION COMPLETED' : 'READY')}
             </span>
 
@@ -378,7 +378,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
               style={{
                 background: '#FAF8F5',
                 color: '#0F4C5C',
-                border: '1px solid rgba(15, 76, 92, 0.4)',
+                border: '1px solid rgba(0, 0, 0, 0.16)',
                 borderRadius: '8px',
                 padding: '6px 12px',
                 fontSize: '11.5px',
@@ -406,7 +406,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
           background: '#ffffff'
         }}>
           {currentLineIndex === -1 && (
-            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#64748B' }}>
+            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#698892' }}>
               <Volume2 size={40} color="#0F4C5C" style={{ opacity: 0.5, marginBottom: '10px' }} />
               <h4 style={{ fontSize: '16px', fontWeight: 750, color: '#081C24', margin: '0 0 6px 0' }}>
                 One-Click Rayalaseema Telugu OPD Simulation
@@ -434,10 +434,10 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
                 <div style={{
                   maxWidth: '85%',
                   background: isDoctor ? '#F0FDF4' : '#F8FAFC',
-                  border: isLatest ? '1.5px solid #0F4C5C' : (isDoctor ? '1px solid #BBF7D0' : '1px solid #E2E8F0'),
+                  border: isLatest ? '1.5px solid #0F4C5C' : (isDoctor ? '1px solid #BBF7D0' : '1px solid #D0DFE2'),
                   borderRadius: isDoctor ? '16px 16px 16px 4px' : '16px 16px 4px 16px',
                   padding: '12px 16px',
-                  boxShadow: isLatest ? '0 4px 14px rgba(15, 76, 92, 0.12)' : 'none'
+                  boxShadow: isLatest ? '0 4px 14px rgba(0, 0, 0, 0.08)' : 'none'
                 }}>
                   <div style={{
                     fontSize: '11px',
@@ -461,7 +461,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
                       onClick={() => replaySingleLine(line, idx)}
                       title="Play this line (for video recording retake)"
                       style={{
-                        background: isDoctor ? 'rgba(21, 128, 61, 0.1)' : 'rgba(15, 76, 92, 0.1)',
+                        background: isDoctor ? 'rgba(21, 128, 61, 0.1)' : 'rgba(0, 0, 0, 0.07)',
                         border: 'none',
                         cursor: 'pointer',
                         padding: '3px 8px',
@@ -540,7 +540,7 @@ export default function LiveOpdDemoSimulator({ isOpen, onClose, onApplyToPrescri
                 <CheckCircle2 size={18} color="#10B981" />
                 <span>Live Encounter Complete: Structured ABDM FHIR SOAP Note Drafted!</span>
               </div>
-              <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.5 }}>
+              <div style={{ fontSize: '12px', color: '#2C4A52', lineHeight: 1.5 }}>
                 • <strong>Chief Complaint:</strong> Retrosternal burning sensation, palpitations (గుండెల్లో దడ), acid eructation (2 days).<br />
                 • <strong>Clinical Diagnosis:</strong> GERD with secondary sinus tachycardia (ICD-10: K21.9 / R00.2).<br />
                 • <strong>Formulary Optimization:</strong> Brand Pantoprazole 40mg + Domperidone (₹198) substituted to PMBJP Jan Aushadhi generic (₹28). <strong>Patient saves ₹170!</strong>

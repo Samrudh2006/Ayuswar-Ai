@@ -76,14 +76,14 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
               Clinical Library & Indic Vernacular Ontology
             </h2>
-            <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.12)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px', border: '1px solid rgba(15, 76, 92, 0.3)' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.08)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.16)' }}>
               28 Mapped Indic Metaphors • 7 Indic Languages
             </span>
           </div>
-          <p style={{ fontSize: '13px', color: '#64748B' }}>
+          <p style={{ fontSize: '13px', color: '#698892' }}>
             Direct semantic translation matrix resolving regional colloquial expressions into WHO ICD-10 and SNOMED-CT clinical codes.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               width: '100%',
               padding: '9px 12px 9px 36px',
               borderRadius: '10px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D0DFE2',
               fontSize: '13px',
               background: '#ffffff',
               color: '#081C24',
@@ -143,7 +143,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <strong style={{ color: '#0F4C5C' }}>{item.code}</strong>
-                  <span style={{ color: '#475569', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }}>{item.name}</span>
+                  <span style={{ color: '#486770', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '200px' }}>{item.name}</span>
                 </div>
               ))}
             </div>
@@ -159,7 +159,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
         padding: isMobileScreen ? '16px 14px' : '20px 24px',
         marginBottom: '22px',
         border: '1px solid #1E293B',
-        boxShadow: '0 10px 25px rgba(10, 37, 64, 0.15)',
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.10)',
         width: '100%',
         maxWidth: '100%',
         boxSizing: 'border-box'
@@ -214,7 +214,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               style={{
                 background: 'rgba(255,255,255,0.12)',
                 border: '1px solid rgba(255,255,255,0.25)',
-                color: '#E2E8F0',
+                color: '#D0DFE2',
                 fontSize: '11px',
                 padding: '3px 10px',
                 borderRadius: '12px',
@@ -233,7 +233,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
             Mapped Clinical Concepts ({liveResolvedEntities.length} Entities Recognized):
           </div>
           {liveResolvedEntities.length === 0 ? (
-            <div style={{ fontSize: '12px', color: '#CBD5E1', fontStyle: 'italic' }}>
+            <div style={{ fontSize: '12px', color: '#D0DFE2', fontStyle: 'italic' }}>
               No exact ontology match found in current buffer. Try selecting a preset above.
             </div>
           ) : (
@@ -293,11 +293,11 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 fontSize: '12px',
                 fontWeight: 700,
                 cursor: 'pointer',
-                border: ontologyLangFilter === lang.key ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
+                border: ontologyLangFilter === lang.key ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
                 background: ontologyLangFilter === lang.key ? '#0F4C5C' : '#ffffff',
-                color: ontologyLangFilter === lang.key ? '#ffffff' : '#475569',
+                color: ontologyLangFilter === lang.key ? '#ffffff' : '#486770',
                 whiteSpace: 'nowrap',
-                boxShadow: ontologyLangFilter === lang.key ? '0 2px 6px rgba(15, 76, 92, 0.2)' : 'none'
+                boxShadow: ontologyLangFilter === lang.key ? '0 2px 6px rgba(0, 0, 0, 0.14)' : 'none'
               }}
             >
               {lang.label} <span style={{ opacity: 0.8, fontSize: '10.5px' }}>({lang.count})</span>
@@ -325,9 +325,9 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 fontSize: '11.5px',
                 fontWeight: 650,
                 cursor: 'pointer',
-                border: ontologySystemFilter === sys.key ? '1px solid #1E3A8A' : '1px solid #E2E8F0',
+                border: ontologySystemFilter === sys.key ? '1px solid #1E3A8A' : '1px solid #D0DFE2',
                 background: ontologySystemFilter === sys.key ? '#1E3A8A' : '#F8FAFC',
-                color: ontologySystemFilter === sys.key ? '#ffffff' : '#64748B',
+                color: ontologySystemFilter === sys.key ? '#ffffff' : '#698892',
                 whiteSpace: 'nowrap'
               }}
             >
@@ -339,8 +339,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
 
       {/* Ontology Cards Grid */}
       {filteredOntology.length === 0 ? (
-        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
-          <p style={{ fontSize: '15px', color: '#64748B', fontWeight: 600 }}>No vernacular expressions matching "{ontologySearchTerm}".</p>
+        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '40px', textAlign: 'center', border: '1px solid #D0DFE2' }}>
+          <p style={{ fontSize: '15px', color: '#698892', fontWeight: 600 }}>No vernacular expressions matching "{ontologySearchTerm}".</p>
           <button onClick={() => { setOntologySearchTerm(''); setOntologyLangFilter('all'); setOntologySystemFilter('all'); }} className="btn-outline" style={{ marginTop: '12px', padding: '6px 16px', fontSize: '12px' }}>
             Reset Ontology Filters
           </button>
@@ -361,7 +361,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 background: '#ffffff',
                 borderRadius: '14px',
                 padding: isMobileScreen ? '14px 16px' : '18px 20px',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #D0DFE2',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -385,7 +385,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                         onClick={() => playPronunciation(item.vernacular, item.language)}
                         title="Listen to Native Pronunciation"
                         style={{
-                          background: 'rgba(15, 76, 92, 0.1)',
+                          background: 'rgba(0, 0, 0, 0.07)',
                           border: 'none',
                           color: '#0F4C5C',
                           width: '26px',
@@ -400,8 +400,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                         <Volume2 size={13} />
                       </button>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>
-                      <em>{item.transliteration}</em> • <span style={{ fontWeight: 650, color: '#334155' }}>{item.language} ({item.dialect})</span>
+                    <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>
+                      <em>{item.transliteration}</em> • <span style={{ fontWeight: 650, color: '#2C4A52' }}>{item.language} ({item.dialect})</span>
                     </div>
                   </div>
 
@@ -418,8 +418,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 </div>
 
                 {/* Standardized Medical Concept */}
-                <div style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', marginBottom: '10px' }}>
-                  <div style={{ fontSize: '11px', color: '#64748B', textTransform: 'uppercase', fontWeight: 750 }}>
+                <div style={{ background: '#FAF8F5', padding: '10px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '11px', color: '#698892', textTransform: 'uppercase', fontWeight: 750 }}>
                     Standard Clinical Concept:
                   </div>
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
@@ -429,7 +429,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                     <code style={{ fontSize: '11px', background: '#E0F2FE', color: '#0369A1', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
                       ICD-10: {item.icd10}
                     </code>
-                    <code style={{ fontSize: '11px', background: '#FAF8F5', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                    <code style={{ fontSize: '11px', background: '#FAF8F5', color: '#486770', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
                       SNOMED: {item.snomed}
                     </code>
                     <span style={{ fontSize: '11px', background: '#F3E8FF', color: '#7E22CE', padding: '2px 6px', borderRadius: '4px', fontWeight: 650 }}>
@@ -439,7 +439,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 </div>
 
                 {/* Clinical Context */}
-                <div style={{ fontSize: '12px', color: '#334155', lineHeight: 1.45, marginBottom: '8px' }}>
+                <div style={{ fontSize: '12px', color: '#2C4A52', lineHeight: 1.45, marginBottom: '8px' }}>
                   <strong>Pathophysiology:</strong> {item.clinicalContext}
                 </div>
 
@@ -449,7 +449,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                 </div>
 
                 {/* Patient Utterance Example */}
-                <div style={{ fontSize: '11.5px', color: '#64748B', fontStyle: 'italic', marginBottom: '12px' }}>
+                <div style={{ fontSize: '11.5px', color: '#698892', fontStyle: 'italic', marginBottom: '12px' }}>
                   "{item.sampleUtterance}"
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(10, 37, 64, 0.7)',
+          background: 'rgba(0, 0, 0, 0.14)',
           backdropFilter: 'blur(4px)',
           padding: '20px'
         }}>
@@ -507,7 +507,7 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            border: '1px solid #CBD5E1'
+            border: '1px solid #D0DFE2'
           }}>
             {/* Modal Header */}
             <div style={{
@@ -571,8 +571,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
             <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }}>
               
               {/* Standardized Concept Banner */}
-              <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px 16px' }}>
-                <div style={{ fontSize: '11px', color: '#64748B', textTransform: 'uppercase', fontWeight: 750 }}>
+              <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px 16px' }}>
+                <div style={{ fontSize: '11px', color: '#698892', textTransform: 'uppercase', fontWeight: 750 }}>
                   Standardized Clinical Concept & Classification
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
@@ -598,8 +598,8 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               </div>
 
               {/* Pathophysiology & Context */}
-              <div style={{ background: '#ffffff', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px 16px' }}>
-                <div style={{ fontSize: '11.5px', color: '#64748B', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>
+              <div style={{ background: '#ffffff', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px 16px' }}>
+                <div style={{ fontSize: '11.5px', color: '#698892', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>
                   Clinical Context & Differential Diagnosis
                 </div>
                 <div style={{ fontSize: '13px', color: '#1E293B', lineHeight: 1.5 }}>
@@ -618,11 +618,11 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
               </div>
 
               {/* Sample Native Patient Utterance */}
-              <div style={{ background: '#FAF8F5', borderRadius: '10px', padding: '12px 14px', border: '1px solid #E2E8F0' }}>
-                <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 750, textTransform: 'uppercase', marginBottom: '2px' }}>
+              <div style={{ background: '#FAF8F5', borderRadius: '10px', padding: '12px 14px', border: '1px solid #D0DFE2' }}>
+                <div style={{ fontSize: '11px', color: '#698892', fontWeight: 750, textTransform: 'uppercase', marginBottom: '2px' }}>
                   Recorded Patient Vernacular Utterance:
                 </div>
-                <div style={{ fontSize: '13px', color: '#334155', fontStyle: 'italic', fontWeight: 600 }}>
+                <div style={{ fontSize: '13px', color: '#2C4A52', fontStyle: 'italic', fontWeight: 600 }}>
                   "{selectedOntologyTerm.sampleUtterance}"
                 </div>
               </div>
@@ -631,14 +631,14 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
             {/* Modal Footer */}
             <div style={{
               background: '#FAF8F5',
-              borderTop: '1px solid #E2E8F0',
+              borderTop: '1px solid #D0DFE2',
               padding: '14px 24px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px'
             }}>
-              <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+              <div style={{ fontSize: '11.5px', color: '#698892' }}>
                 ABDM Semantic Interoperability Layer v2.5
               </div>
 
@@ -653,9 +653,9 @@ export default function DoctorClinicalLibraryTab({ onShowToast }) {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '8px',
-                    border: '1px solid #CBD5E1',
+                    border: '1px solid #D0DFE2',
                     background: '#ffffff',
-                    color: '#334155',
+                    color: '#2C4A52',
                     fontSize: '12.5px',
                     fontWeight: 700,
                     cursor: 'pointer'

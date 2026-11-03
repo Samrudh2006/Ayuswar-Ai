@@ -95,7 +95,7 @@ export default function IndicLanguageMatrixView() {
 
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '12px' }}>
           <Globe size={14} />
           <span>VERNACULAR LANGUAGE CAPABILITY SPECIFICATION</span>
         </div>
@@ -134,7 +134,7 @@ export default function IndicLanguageMatrixView() {
                 background: '#FFFFFF',
                 borderRadius: '16px',
                 border: isSelected ? '2px solid #0F4C5C' : '1px solid #D1E1E6',
-                boxShadow: isSelected ? '0 10px 25px rgba(15, 76, 92, 0.12)' : '0 4px 14px rgba(15, 76, 92, 0.04)',
+                boxShadow: isSelected ? '0 10px 25px rgba(0, 0, 0, 0.08)' : '0 4px 14px rgba(0, 0, 0, 0.03)',
                 padding: '20px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -167,7 +167,7 @@ export default function IndicLanguageMatrixView() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px',
-                    boxShadow: isSelected ? '0 2px 8px rgba(15, 76, 92, 0.25)' : 'none'
+                    boxShadow: isSelected ? '0 2px 8px rgba(0, 0, 0, 0.16)' : 'none'
                   }}
                 >
                   {isSelected ? <CheckCircle2 size={13} /> : null}
@@ -182,31 +182,31 @@ export default function IndicLanguageMatrixView() {
                   <span style={{ color: '#091E26', fontWeight: 700 }}>{item.asrEngine}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748B' }}>Text-to-Speech (TTS):</span>
+                  <span style={{ color: '#698892' }}>Text-to-Speech (TTS):</span>
                   <span style={{ color: '#081C24', fontWeight: 700 }}>{item.ttsEngine}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748B' }}>Integration Status:</span>
+                  <span style={{ color: '#698892' }}>Integration Status:</span>
                   <span style={{ color: '#0D9488', fontWeight: 750 }}>{item.status}</span>
                 </div>
               </div>
 
               {/* Dialect Metaphors */}
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: '#486770', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
                   Dialect Samples in Colloquial Dictionary:
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {item.dialectRegions.map((region, idx) => (
                     <div key={idx} style={{ background: '#FAF8F5', borderRadius: '8px', padding: '8px 12px', fontSize: '12px' }}>
                       <span style={{ fontWeight: 750, color: '#081C24' }}>{region.region}: </span>
-                      <span style={{ color: '#334155' }}>"{region.sampleMetaphor}"</span>
+                      <span style={{ color: '#2C4A52' }}>"{region.sampleMetaphor}"</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ fontSize: '11.5px', color: '#64748B', borderTop: '1px solid #F1F5F9', paddingTop: '10px', marginTop: 'auto' }}>
+              <div style={{ fontSize: '11.5px', color: '#698892', borderTop: '1px solid #F1F5F9', paddingTop: '10px', marginTop: 'auto' }}>
                 <strong>Methodology:</strong> {item.methodology}
               </div>
             </div>

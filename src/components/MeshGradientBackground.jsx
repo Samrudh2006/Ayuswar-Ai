@@ -51,8 +51,8 @@ export default function MeshGradientBackground({
 
     // 4 Fluid Color Blobs — Theme 10: Banarasi Zari (Silk Petrol Teal, Zari Gold, Silk Wine)
     const blobs = [
-      { x: width * 0.2, y: height * 0.25, r: Math.min(width, height) * 0.45, vx: 0.35, vy: 0.22, color: 'rgba(15, 76, 92, 0.22)' },
-      { x: width * 0.75, y: height * 0.3, r: Math.min(width, height) * 0.48, vx: -0.28, vy: 0.3, color: 'rgba(212, 175, 55, 0.16)' },
+      { x: width * 0.2, y: height * 0.25, r: Math.min(width, height) * 0.45, vx: 0.35, vy: 0.22, color: 'rgba(0, 0, 0, 0.15)' },
+      { x: width * 0.75, y: height * 0.3, r: Math.min(width, height) * 0.48, vx: -0.28, vy: 0.3, color: 'rgba(0, 0, 0, 0.10)' },
       { x: width * 0.45, y: height * 0.8, r: Math.min(width, height) * 0.52, vx: 0.25, vy: -0.25, color: 'rgba(23, 101, 121, 0.18)' },
       { x: width * 0.85, y: height * 0.75, r: Math.min(width, height) * 0.38, vx: -0.2, vy: -0.18, color: 'rgba(109, 33, 79, 0.10)' }
     ];

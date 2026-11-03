@@ -927,7 +927,7 @@ export default function SanjivaniEmergencyAssistant({
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '14.5px', fontWeight: 850, color: '#FFFFFF', fontFamily: 'Outfit, sans-serif' }}>
+                <span style={{ fontSize: '14.5px', fontWeight: 850, color: '#FFFFFF', fontFamily: 'var(--font-main)' }}>
                   108 ALS Acoustic Telemetry
                 </span>
                 <span style={{
@@ -998,8 +998,8 @@ export default function SanjivaniEmergencyAssistant({
 
                 {/* Call Timer */}
                 <div style={{
-                  background: '#0F172A',
-                  border: '1px solid #334155',
+                  background: '#091E26',
+                  border: '1px solid #2C4A52',
                   padding: '5px 10px',
                   borderRadius: '20px',
                   color: '#38BDF8',
@@ -1047,7 +1047,7 @@ export default function SanjivaniEmergencyAssistant({
                   style={{
                     background: isAudioMuted ? '#EF4444' : '#1E293B',
                     color: '#FFFFFF',
-                    border: isAudioMuted ? 'none' : '1px solid #475569',
+                    border: isAudioMuted ? 'none' : '1px solid #486770',
                     borderRadius: '50%',
                     width: '32px',
                     height: '32px',
@@ -1109,7 +1109,7 @@ export default function SanjivaniEmergencyAssistant({
                 borderRadius: '50%',
                 background: voiceState === 'SPEAKING' ? '#A855F7' : voiceState === 'THINKING' ? '#F59E0B' : '#10B981'
               }}></span>
-              <span style={{ color: '#E2E8F0', fontWeight: 700 }}>
+              <span style={{ color: '#D0DFE2', fontWeight: 700 }}>
                 {voiceState === 'SPEAKING' 
                   ? '🔊 Dr. Sanjivani Speaking (Gnani Timbre Voice)' 
                   : voiceState === 'THINKING' 
@@ -1127,7 +1127,7 @@ export default function SanjivaniEmergencyAssistant({
                 VAD: {vadConfidence}%
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span style={{ color: '#64748B', fontSize: '9.5px', fontFamily: 'monospace' }}>MIC LEVEL</span>
+                <span style={{ color: '#698892', fontSize: '9.5px', fontFamily: 'monospace' }}>MIC LEVEL</span>
                 <div style={{ width: '48px', height: '6px', background: '#1E293B', borderRadius: '3px', overflow: 'hidden' }}>
                   <div style={{
                     width: `${Math.min(100, Math.round(voiceRms * 400))}%`,
@@ -1148,15 +1148,15 @@ export default function SanjivaniEmergencyAssistant({
           borderRadius: '8px',
           padding: '8px 12px',
           fontSize: '12px',
-          color: '#E2E8F0',
+          color: '#D0DFE2',
           display: 'flex',
           alignItems: 'center',
           gap: '8px'
         }}>
-          <span style={{ fontSize: '9.5px', background: '#334155', color: '#94A3B8', padding: '2px 5px', borderRadius: '4px', fontWeight: 800, textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '9.5px', background: '#2C4A52', color: '#94A3B8', padding: '2px 5px', borderRadius: '4px', fontWeight: 800, textTransform: 'uppercase' }}>
             Live Diarization
           </span>
-          <span style={{ fontStyle: 'italic', color: liveTranscript ? '#38BDF8' : '#64748B' }}>
+          <span style={{ fontStyle: 'italic', color: liveTranscript ? '#38BDF8' : '#698892' }}>
             {liveTranscript || 'Listening to emergency paramedic and triage audio stream...'}
           </span>
         </div>

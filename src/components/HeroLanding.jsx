@@ -573,7 +573,7 @@ export default function HeroLanding({
         width: '100%',
         margin: 0,
         padding: 0,
-        borderBottom: '1px solid rgba(15, 76, 92, 0.15)'
+        borderBottom: '1px solid rgba(0, 0, 0, 0.10)'
       }}>
         {/* High-Performance Canvas Mesh Gradient (IntersectionObserver + Reduced-Motion aware) */}
         <MeshGradientBackground opacity={0.55} />
@@ -586,7 +586,7 @@ export default function HeroLanding({
           width: '420px',
           height: '420px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(15, 76, 92, 0.06) 0%, transparent 70%)',
+          display: 'none',
           pointerEvents: 'none',
           zIndex: 0
         }}></div>
@@ -598,7 +598,7 @@ export default function HeroLanding({
           width: '500px',
           height: '500px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 65%)',
+          display: 'none',
           pointerEvents: 'none',
           zIndex: 0
         }}></div>
@@ -652,8 +652,8 @@ export default function HeroLanding({
                 position: 'absolute',
                 bottom: '12px',
                 right: '16px',
-                background: 'rgba(10, 37, 64, 0.75)',
-                backdropFilter: 'blur(4px)',
+                background: '#FFFFFF',
+                border: '1px solid #D0DFE2',
                 padding: '3px 8px',
                 borderRadius: '6px',
                 fontSize: '10px',
@@ -685,9 +685,9 @@ export default function HeroLanding({
               gap: '8px',
               padding: '6px 16px',
               borderRadius: '30px',
-              background: 'rgba(15, 76, 92, 0.08)',
-              border: '1.5px solid rgba(15, 76, 92, 0.28)',
-              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 8px rgba(15, 76, 92, 0.08)',
+              background: 'rgba(0, 0, 0, 0.06)',
+              border: '1.5px solid rgba(0, 0, 0, 0.16)',
+              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 0, 0, 0.06)',
               color: '#0F4C5C',
               fontSize: '11.5px',
               fontWeight: 800,
@@ -705,7 +705,7 @@ export default function HeroLanding({
 
             {/* Giant Title: Voice-First Health Screening for India with Kinetic Typography */}
             <h1 className="hero-kinetic-title" style={{
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               fontSize: '58px',
               lineHeight: 1.1,
               fontWeight: 850,
@@ -719,10 +719,8 @@ export default function HeroLanding({
               <span className="kinetic-word" style={{ animationDelay: '0.32s' }}>Screening</span>
               <br />
               <span className="kinetic-word" style={{
-                color: '#0F4C5C',
-                background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: '#091E26',
+                fontWeight: 800,
                 animationDelay: '0.45s',
                 display: 'inline-block'
               }}>
@@ -737,9 +735,9 @@ export default function HeroLanding({
               gap: '10px',
               padding: '8px 18px',
               borderRadius: '999px',
-              background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.08) 0%, rgba(212, 175, 55, 0.08) 100%)',
-              border: '1.5px solid rgba(15, 76, 92, 0.25)',
-              boxShadow: '0 4px 16px rgba(15, 76, 92, 0.08)',
+              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.05) 100%)',
+              border: '1.5px solid rgba(0, 0, 0, 0.16)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
               marginBottom: '20px',
               maxWidth: '92%'
             }}>
@@ -753,7 +751,7 @@ export default function HeroLanding({
                 flexShrink: 0
               }}></span>
               <span style={{
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-main)',
                 fontSize: '14.5px',
                 fontWeight: 750,
                 color: '#0D6868',
@@ -778,7 +776,7 @@ export default function HeroLanding({
             <p className="hero-intro-text" style={{
               fontSize: '16.5px',
               lineHeight: 1.6,
-              color: '#334155',
+              color: '#2C4A52',
               fontWeight: 500,
               maxWidth: '560px',
               marginBottom: '28px'
@@ -820,8 +818,8 @@ export default function HeroLanding({
                       padding: '12px 10px',
                       borderRadius: '16px',
                       background: isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.82)',
-                      border: isSelected ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-                      boxShadow: isSelected ? '0 8px 20px rgba(15, 76, 92, 0.14)' : '0 2px 8px rgba(10, 37, 64, 0.03)',
+                      border: isSelected ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+                      boxShadow: isSelected ? '0 8px 20px rgba(0, 0, 0, 0.10)' : '0 2px 8px rgba(0, 0, 0, 0.02)',
                       cursor: 'pointer',
                       width: '104px',
                       transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -834,7 +832,7 @@ export default function HeroLanding({
                         width: '42px',
                         height: '42px',
                         borderRadius: '50%',
-                        background: isSelected ? 'linear-gradient(135deg, #0F4C5C, #00A896)' : 'rgba(15, 76, 92, 0.08)',
+                        background: isSelected ? 'linear-gradient(135deg, #0F4C5C, #00A896)' : 'rgba(0, 0, 0, 0.06)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -849,7 +847,7 @@ export default function HeroLanding({
                       fontSize: '11px',
                       fontWeight: 650,
                       lineHeight: 1.25,
-                      color: isSelected ? '#0A2540' : '#475569'
+                      color: isSelected ? '#0A2540' : '#486770'
                     }}>
                       {item.title}
                     </span>
@@ -864,32 +862,32 @@ export default function HeroLanding({
                 className="hero-primary-cta"
                 onClick={() => setIsGoldenStoryOpen(true)}
                 style={{
-                  background: 'linear-gradient(135deg, #0F4C5C 0%, #D4AF37 100%)',
+                  background: '#0F4C5C',
                   color: '#ffffff',
                   border: 'none',
-                  borderRadius: '30px',
+                  borderRadius: '10px',
                   padding: '13px 26px',
                   fontSize: '15px',
-                  fontWeight: 750,
+                  fontWeight: 700,
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 6px 20px rgba(15, 76, 92, 0.35)',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
                   transition: 'all 160ms ease'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 10px 28px rgba(15, 76, 92, 0.5)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.18)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(15, 76, 92, 0.35)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.12)';
                 }}
                 title="Watch 2-Minute End-to-End Clinical Journey"
               >
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FEF08A', boxShadow: '0 0 8px #FEF08A' }}></span>
-                <span>⚡ 2-Min Live Clinical Walkthrough</span>
+                <span>2-Min Live Clinical Walkthrough</span>
               </button>
 
               <button
@@ -909,12 +907,12 @@ export default function HeroLanding({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 16px rgba(212, 175, 55, 0.25)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.14)',
                   transition: 'all 160ms ease'
                 }}
                 title="Launch Vocal Biomarker & Acoustic Signal Lab"
               >
-                <span style={{ fontSize: '15px' }}>🎙️</span>
+                
                 <span>Vocal Biomarker AI Lab</span>
                 <span style={{ fontSize: '10px', background: '#D4AF37', color: '#081C24', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>DEMO</span>
               </button>
@@ -936,22 +934,22 @@ export default function HeroLanding({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.12)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.08)',
                   transition: 'all 160ms ease'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(15, 76, 92, 0.22)';
+                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(15, 76, 92, 0.12)';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.08)';
                 }}
                 title="Install AyuSwar AI PWA (Progressive Web App) on your device"
               >
                 <Download size={15} color="#0F4C5C" />
                 <span>Install PWA App</span>
-                <span style={{ fontSize: '10px', background: 'rgba(15, 76, 92, 0.12)', color: '#0F4C5C', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>FAST</span>
+                <span style={{ fontSize: '10px', background: 'rgba(0, 0, 0, 0.08)', color: '#0F4C5C', padding: '1px 6px', borderRadius: '10px', fontWeight: 900 }}>FAST</span>
               </button>
             </div>
 
@@ -962,8 +960,8 @@ export default function HeroLanding({
               gap: '18px',
               flexWrap: 'wrap',
               paddingTop: '16px',
-              borderTop: '1px solid rgba(15, 76, 92, 0.15)',
-              color: '#475569',
+              borderTop: '1px solid rgba(0, 0, 0, 0.10)',
+              color: '#486770',
               fontSize: '12.5px',
               fontWeight: 600
             }}>
@@ -993,8 +991,8 @@ export default function HeroLanding({
                   marginTop: '24px',
                   borderRadius: '20px',
                   overflow: 'hidden',
-                  border: '1.5px solid rgba(15, 76, 92, 0.22)',
-                  boxShadow: '0 10px 28px rgba(15, 76, 92, 0.12)',
+                  border: '1.5px solid rgba(0, 0, 0, 0.15)',
+                  boxShadow: '0 10px 28px rgba(0, 0, 0, 0.08)',
                   background: '#FFFFFF',
                   position: 'relative'
                 }}
@@ -1016,7 +1014,7 @@ export default function HeroLanding({
                     top: '10px',
                     right: '10px',
                     background: 'rgba(15, 23, 42, 0.75)',
-                    backdropFilter: 'blur(6px)',
+                    background: '#FFFFFF', border: '1px solid #D0DFE2',
                     color: '#FEF08A',
                     fontSize: '10px',
                     fontWeight: 750,
@@ -1032,13 +1030,13 @@ export default function HeroLanding({
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   background: '#FAF8F5',
-                  borderTop: '1px solid rgba(15, 76, 92, 0.1)'
+                  borderTop: '1px solid rgba(0, 0, 0, 0.07)'
                 }}>
                   <div>
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>
                       Dr. Ananya Sharma, MD
                     </div>
-                    <div style={{ fontSize: '11px', color: '#64748B', fontWeight: 500 }}>
+                    <div style={{ fontSize: '11px', color: '#698892', fontWeight: 500 }}>
                       Virtual Attending Physician • AyuSwar AI
                     </div>
                   </div>
@@ -1046,7 +1044,7 @@ export default function HeroLanding({
                     fontSize: '10px',
                     fontWeight: 800,
                     color: '#0D6868',
-                    background: 'rgba(15, 76, 92, 0.1)',
+                    background: 'rgba(0, 0, 0, 0.07)',
                     padding: '3px 8px',
                     borderRadius: '12px'
                   }}>
@@ -1068,7 +1066,7 @@ export default function HeroLanding({
         color: '#ffffff',
         position: 'relative',
         overflow: 'hidden',
-        borderTop: '1px solid rgba(15, 76, 92, 0.25)',
+        borderTop: '1px solid rgba(0, 0, 0, 0.16)',
         boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.15)'
       }}>
         <div style={{
@@ -1078,7 +1076,7 @@ export default function HeroLanding({
           right: 0,
           bottom: 0,
           opacity: 0.12,
-          backgroundImage: 'radial-gradient(rgba(15, 76, 92, 0.6) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(rgba(0, 0, 0, 0.16) 1px, transparent 1px)',
           backgroundSize: '24px 24px',
           pointerEvents: 'none'
         }}></div>
@@ -1100,11 +1098,11 @@ export default function HeroLanding({
             paddingBottom: '28px'
           }}>
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(0, 0, 0, 0.13)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
                 <Globe2 size={isMobileView ? 20 : 24} />
               </div>
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Multilingual Prototype</div>
               </div>
             </div>
@@ -1114,17 +1112,17 @@ export default function HeroLanding({
                 <Building2 size={isMobileView ? 20 : 24} />
               </div>
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Simulated Records</div>
               </div>
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(15, 76, 92, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
+              <div className="hero-trust-strip-icon" style={{ width: isMobileView ? '38px' : '48px', height: isMobileView ? '38px' : '48px', minWidth: isMobileView ? '38px' : '48px', borderRadius: '12px', background: 'rgba(0, 0, 0, 0.13)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
                 <Users2 size={isMobileView ? 20 : 24} />
               </div>
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Human-in-the-Loop</div>
               </div>
             </div>
@@ -1134,13 +1132,13 @@ export default function HeroLanding({
                 <HeartPulse size={isMobileView ? 20 : 24} />
               </div>
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'Outfit, sans-serif', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
                 <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#94A3B8', fontWeight: 500 }}>Not a Medical Device</div>
               </div>
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#CBD5E1', letterSpacing: '0.4px', lineHeight: 1.4 }}>
+          <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#D0DFE2', letterSpacing: '0.4px', lineHeight: 1.4 }}>
             Voice-First Clinical Scribe & CDSS for Bharat. <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Prototype Demo)</span>
           </div>
         </div>
@@ -1150,7 +1148,7 @@ export default function HeroLanding({
           SECTION 2: THE CLINICAL DOCUMENTATION CRISIS (WITH BEFORE VS AFTER TOGGLE)
           ========================================================================= */}
       <section id="impact-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 28px auto' }}>
+        <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 28px 0' }}>
           <div style={{ fontSize: '12px', fontWeight: 800, color: '#D97706', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
             THE NATIONAL HEALTHCARE GAP
           </div>
@@ -1172,8 +1170,8 @@ export default function HeroLanding({
           borderRadius: '24px',
           overflow: 'hidden',
           border: '2px solid #94A3B8',
-          boxShadow: '0 16px 40px rgba(10, 37, 64, 0.08)',
-          background: '#0F172A'
+          boxShadow: '0 16px 40px rgba(0, 0, 0, 0.06)',
+          background: '#091E26'
         }}>
           <img
             src="/assets/sections/sec2_gap.png"
@@ -1195,7 +1193,7 @@ export default function HeroLanding({
               <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#EF4444' }} />
               <div style={{ fontSize: '12px' }}>
                 <strong style={{ color: '#F87171' }}>TRADITIONAL OPD: </strong>
-                <span style={{ color: '#E2E8F0' }}>Keyboard Burnout • Patient Waiting • Zero Eye Contact</span>
+                <span style={{ color: '#D0DFE2' }}>Keyboard Burnout • Patient Waiting • Zero Eye Contact</span>
               </div>
             </div>
 
@@ -1204,7 +1202,7 @@ export default function HeroLanding({
               <span style={{ width: 8, height: 8, minWidth: 8, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
               <div style={{ fontSize: '12px' }}>
                 <strong style={{ color: '#34D399' }}>AYUSWAR AMBIENT: </strong>
-                <span style={{ color: '#E2E8F0' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
+                <span style={{ color: '#D0DFE2' }}>100% Eye Contact • Ambient Phone Mic • Instant Audio-Rx</span>
               </div>
             </div>
           </div>
@@ -1237,17 +1235,17 @@ export default function HeroLanding({
             <div className="hero-gap-metric-stats" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>9.4 min</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Typing Time</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Typing Time</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>24%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Eye-Contact</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>42%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Medication Errors</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Medication Errors</span>
               </div>
             </div>
           </div>
@@ -1276,12 +1274,12 @@ export default function HeroLanding({
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>86%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Eye-Contact</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Eye-Contact</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>93.4%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#64748B', fontWeight: 650 }}>Doctor Approval</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Doctor Approval</span>
               </div>
             </div>
           </div>
@@ -1291,9 +1289,9 @@ export default function HeroLanding({
       {/* =========================================================================
           SECTION 3: HOW AYUSWAR WORKS — INTERACTIVE STEPPED PIPELINE
           ========================================================================= */}
-      <section style={{ background: '#FAF8F5', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
+      <section style={{ background: '#FAF8F5', borderTop: '2px solid #D0DFE2', borderBottom: '2px solid #D0DFE2', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 30px auto' }}>
+          <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 30px 0' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
               CLOSED-LOOP VERNACULAR PIPELINE
             </div>
@@ -1307,8 +1305,8 @@ export default function HeroLanding({
 
           {/* Glowing Horizontal Neural Data-Bus Circuit */}
           <div style={{
-            background: 'linear-gradient(135deg, #0A192F 0%, #0F172A 100%)',
-            border: '2px solid #334155',
+            background: 'linear-gradient(135deg, #0A192F 0%, #091E26 100%)',
+            border: '2px solid #2C4A52',
             borderRadius: '28px',
             padding: '32px 28px',
             boxShadow: '0 20px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
@@ -1344,9 +1342,9 @@ export default function HeroLanding({
               </div>
 
               {/* Live Bus Heartbeat */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px 14px', borderRadius: '12px', border: '1px solid #334155' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px 14px', borderRadius: '12px', border: '1px solid #2C4A52' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px #34D399' }} className="animate-ping" />
-                <span style={{ fontSize: '12px', fontWeight: 750, color: '#E2E8F0' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {isNeuralBusPaused ? '⏸️ Paused (Inspection)' : `Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#D0DFE2' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {isNeuralBusPaused ? '⏸️ Paused (Inspection)' : `Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
               </div>
             </div>
 
@@ -1382,8 +1380,8 @@ export default function HeroLanding({
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: 'rgba(10, 25, 47, 0.92)',
-                backdropFilter: 'blur(10px)',
+                background: '#FFFFFF',
+                border: '1px solid #D0DFE2',
                 padding: '8px 14px',
                 borderRadius: '14px',
                 border: '1.5px solid rgba(45, 212, 191, 0.4)',
@@ -1395,10 +1393,10 @@ export default function HeroLanding({
                   16 kHz DSP Waveform
                 </span>
                 {[
-                  { id: 0, label: '🎙️ 1. Ambient Mic' },
-                  { id: 1, label: '🧠 2. Neural Diarization' },
-                  { id: 2, label: '📋 3. FHIR R4 Bundling' },
-                  { id: 3, label: '✅ 4. Doctor Verified' }
+                  { id: 0, label: '1. Ambient Mic' },
+                  { id: 1, label: '2. Neural Diarization' },
+                  { id: 2, label: '3. FHIR R4 Bundling' },
+                  { id: 3, label: '4. Doctor Verified' }
                 ].map((s) => {
                   const isCur = circuitNodeIndex === s.id;
                   return (
@@ -1411,7 +1409,7 @@ export default function HeroLanding({
                         borderRadius: '10px',
                         border: isCur ? '1.5px solid #34D399' : '1px solid rgba(255,255,255,0.12)',
                         background: isCur ? 'rgba(52, 211, 153, 0.18)' : 'rgba(15, 23, 42, 0.6)',
-                        color: isCur ? '#34D399' : '#CBD5E1',
+                        color: isCur ? '#34D399' : '#D0DFE2',
                         fontWeight: isCur ? 800 : 600,
                         fontSize: '12px',
                         transition: 'all 0.15s ease',
@@ -1423,7 +1421,7 @@ export default function HeroLanding({
                   );
                 })}
                 <span style={{ color: '#38BDF8', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  📲 Patient Delivery Gateway
+                  Patient Delivery Gateway
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: '0 0 8px #38BDF8' }}></span>
                 </span>
               </div>
@@ -1435,7 +1433,7 @@ export default function HeroLanding({
             <div className="hero-pipeline-telemetry-hud" style={{
               background: 'rgba(15, 23, 42, 0.95)',
               borderRadius: '18px',
-              border: '2px solid #475569',
+              border: '2px solid #486770',
               padding: '20px 24px',
               display: 'grid',
               gridTemplateColumns: '1fr 1fr auto',
@@ -1455,11 +1453,11 @@ export default function HeroLanding({
               </div>
 
               <div style={{ display: 'flex', gap: '16px' }}>
-                <div style={{ borderLeft: '2px solid #334155', paddingLeft: '14px' }}>
+                <div style={{ borderLeft: '2px solid #2C4A52', paddingLeft: '14px' }}>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>Latency</div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#34D399' }}>{circuitNodeIndex === 0 ? '12 ms' : circuitNodeIndex === 1 ? '48 ms' : circuitNodeIndex === 2 ? '165 ms' : '195 ms'}</div>
                 </div>
-                <div style={{ borderLeft: '2px solid #334155', paddingLeft: '14px' }}>
+                <div style={{ borderLeft: '2px solid #2C4A52', paddingLeft: '14px' }}>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>{circuitNodeIndex === 0 ? 'Beamforming' : circuitNodeIndex === 1 ? 'Kalman Filter' : circuitNodeIndex === 2 ? 'Clinical Normalizer' : 'Attending Sign-Off'}</div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>{circuitNodeIndex === 0 ? 'SNR +24 dB' : circuitNodeIndex === 1 ? 'Adaptive VAD Active' : circuitNodeIndex === 2 ? 'WHO ICD-10 Mapped' : '100% DSC Required'}</div>
                 </div>
@@ -1494,7 +1492,7 @@ export default function HeroLanding({
           SECTION 4: 6 DEEP-TECH MOATS (CLICKABLE FOR DETAILED TECHNICAL MATTER)
           ========================================================================= */}
       <section className="hero-bento-section" style={{ maxWidth: '1380px', margin: '0 auto', padding: '48px 24px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 30px auto' }}>
+        <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 30px 0' }}>
           <div style={{ fontSize: '12px', fontWeight: 850, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
             ENGINEERING EXCELLENCE
           </div>
@@ -1514,7 +1512,7 @@ export default function HeroLanding({
           border: '2px solid #94A3B8',
           padding: '24px',
           marginBottom: '28px',
-          boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)'
+          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)'
         }}>
           <div className="hero-bento-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1523,7 +1521,7 @@ export default function HeroLanding({
                 Bento Architecture Matrix — Live Clinical Subsystems
               </span>
             </div>
-            <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#059669' : '#64748B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#059669' : '#698892', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
               {activeWorkbenchMoat ? (
                 <>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
@@ -1544,13 +1542,13 @@ export default function HeroLanding({
                 title: '1. Spectrogram HUD',
                 badge: '88.2% Sensitivity',
                 col: '#0F4C5C',
-                gradient: 'linear-gradient(135deg, rgba(15, 76, 92, 0.15) 0%, rgba(45, 212, 191, 0.15) 100%)',
+                gradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.10) 0%, rgba(45, 212, 191, 0.15) 100%)',
                 icon: Activity,
                 rightBox: (
                   <div style={{
                     background: '#FAF8F5',
                     borderRadius: '14px',
-                    border: '1.5px solid #E2E8F0',
+                    border: '1.5px solid #D0DFE2',
                     padding: '12px 14px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -1574,7 +1572,7 @@ export default function HeroLanding({
                           style={{
                             flex: 1,
                             height: `${h}%`,
-                            background: i === 3 || i === 4 || i === 8 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #0F4C5C 100%)',
+                            background: i === 3 || i === 4 || i === 8 ? '#EF4444' : '#0F4C5C',
                             borderRadius: '2px'
                           }}
                         />
@@ -1743,14 +1741,14 @@ export default function HeroLanding({
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#0284C7', fontWeight: 700 }}>
-                        <span>👨‍⚕️ Dr:</span>
+                        <span>Dr:</span>
                         <span style={{ flex: 1, height: '5px', background: '#38BDF8', borderRadius: '3px' }} />
-                        <span style={{ fontSize: '10px', color: '#64748B' }}>Ch 1</span>
+                        <span style={{ fontSize: '10px', color: '#698892' }}>Ch 1</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#059669', fontWeight: 700 }}>
-                        <span>👵 Pt:</span>
+                        <span>Patient:</span>
                         <span style={{ flex: 1, height: '5px', background: '#10B981', borderRadius: '3px' }} />
-                        <span style={{ fontSize: '10px', color: '#64748B' }}>Ch 2</span>
+                        <span style={{ fontSize: '10px', color: '#698892' }}>Ch 2</span>
                       </div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#065F46', fontWeight: 750 }}>
@@ -1786,9 +1784,9 @@ export default function HeroLanding({
                         OFFLINE
                       </span>
                     </div>
-                    <div style={{ fontSize: '11.5px', color: '#334155', lineHeight: 1.5 }}>
-                      <div>💾 <strong>RAM Memory:</strong> 142 MB WebAudio</div>
-                      <div>☁️ <strong>Cloud Storage:</strong> 0 KB (Zero Persistence)</div>
+                    <div style={{ fontSize: '11.5px', color: '#2C4A52', lineHeight: 1.5 }}>
+                      <div><strong>RAM Memory:</strong> 142 MB WebAudio</div>
+                      <div><strong>Cloud Storage:</strong> 0 KB (Zero Persistence)</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#059669', fontWeight: 750 }}>
                       ✓ DPDP Sovereign Patient Privacy
@@ -1807,29 +1805,27 @@ export default function HeroLanding({
                   style={{
                     cursor: 'pointer',
                     borderRadius: '22px',
-                    border: isSelected ? '2.5px solid #10B981' : '1.5px solid #CBD5E1',
-                    background: isSelected ? 'linear-gradient(145deg, #F0FDF4 0%, #FFFFFF 100%)' : '#FFFFFF',
+                    border: isSelected ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
+                    background: isSelected ? '#FAF8F5' : '#FFFFFF',
                     padding: '18px 20px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     minHeight: '230px',
                     transition: 'all 0.22s ease',
-                    boxShadow: isSelected
-                      ? '0 12px 32px rgba(16, 185, 129, 0.22), 0 0 0 1px #10B981'
-                      : '0 4px 18px rgba(10, 37, 64, 0.04)',
+                    boxShadow: isSelected ? '0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 1px #0F4C5C' : '0 2px 8px rgba(0, 0, 0, 0.04)',
                     transform: isSelected ? 'translateY(-2px)' : 'none'
                   }}
                   onMouseEnter={(e) => {
                     if (!isSelected) {
-                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(10, 37, 64, 0.08)';
+                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.06)';
                       e.currentTarget.style.borderColor = '#94A3B8';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isSelected) {
-                      e.currentTarget.style.boxShadow = '0 4px 18px rgba(10, 37, 64, 0.04)';
-                      e.currentTarget.style.borderColor = '#CBD5E1';
+                      e.currentTarget.style.boxShadow = '0 4px 18px rgba(0, 0, 0, 0.03)';
+                      e.currentTarget.style.borderColor = '#D0DFE2';
                     }
                   }}
                 >
@@ -1837,14 +1833,14 @@ export default function HeroLanding({
                   <div className="hero-bento-tile-body" style={{ display: 'grid', gridTemplateColumns: '84px 1fr', gap: '14px', alignItems: 'stretch', marginBottom: '14px' }}>
                     {/* Left 3D-Styled Icon Plinth */}
                     <div className="hero-bento-icon-plinth" style={{
-                      background: tile.gradient,
+                      background: '#FAF8F5',
                       borderRadius: '16px',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: `1.5px solid ${tile.col}30`,
-                      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 20px ${tile.col}18`
+                      border: '1px solid #D0DFE2',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
                     }}>
                       <div style={{
                         width: '46px',
@@ -1912,7 +1908,7 @@ export default function HeroLanding({
             background: '#ffffff',
             borderRadius: '28px',
             border: '2px solid #94A3B8',
-            boxShadow: '0 16px 48px rgba(10, 37, 64, 0.08)',
+            boxShadow: '0 16px 48px rgba(0, 0, 0, 0.06)',
             overflow: 'hidden',
             animation: 'fadeIn 0.25s ease-in-out'
           }}>
@@ -1923,11 +1919,11 @@ export default function HeroLanding({
               justifyContent: 'space-between',
               padding: '14px 28px',
               background: '#FAF8F5',
-              borderBottom: '2px solid #CBD5E1'
+              borderBottom: '2px solid #D0DFE2'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-                <span style={{ fontSize: '12px', fontWeight: 800, color: '#334155', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: '#2C4A52', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
                   Live Subsystem Telemetry HUD
                 </span>
               </div>
@@ -1936,12 +1932,12 @@ export default function HeroLanding({
                 onClick={() => setActiveWorkbenchMoat(null)}
                 style={{
                   background: '#FFFFFF',
-                  border: '1.5px solid #CBD5E1',
+                  border: '1.5px solid #D0DFE2',
                   borderRadius: '10px',
                   padding: '6px 14px',
                   fontSize: '12px',
                   fontWeight: 750,
-                  color: '#475569',
+                  color: '#486770',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -1955,8 +1951,8 @@ export default function HeroLanding({
                   e.currentTarget.style.background = '#FEF2F2';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#475569';
-                  e.currentTarget.style.borderColor = '#CBD5E1';
+                  e.currentTarget.style.color = '#486770';
+                  e.currentTarget.style.borderColor = '#D0DFE2';
                   e.currentTarget.style.background = '#FFFFFF';
                 }}
               >
@@ -1971,29 +1967,29 @@ export default function HeroLanding({
               {activeWorkbenchMoat === 'spectrogram' && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
                   <div>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
                       <Activity size={13} />
                       <span>EXPERIMENTAL ACOUSTIC BIOMARKER ENGINE</span>
                     </div>
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Real-Time FFT Spectrogram & Biomarker HUD
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                       Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluates exploratory respiratory sound patterns: asthmatic wheeze harmonic analysis (400–650 Hz) and pediatric stridor high-spectral centroid tracking (&gt;2500 Hz). Synthetic prototype; not for clinical diagnosis.
                     </p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '20px', fontWeight: 900, color: '#0F4C5C' }}>13-Dim</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>MFCC Feature Vector</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Acoustic Coeffs</div>
                       </div>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '20px', fontWeight: 900, color: '#0F4C5C' }}>400–650 Hz</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>Wheeze Bandwidth</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Harmonic Centroid</div>
                       </div>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '20px', fontWeight: 900, color: '#0F4C5C' }}>&gt;2500 Hz</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>Stridor Detection</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Spectral Flux</div>
@@ -2037,10 +2033,10 @@ export default function HeroLanding({
                           fontSize: '13px',
                           fontWeight: 700,
                           cursor: 'pointer',
-                          boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)'
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
                         }}
                       >
-                        <span>🔬 Launch Full Biomarker Lab</span>
+                        <span>Launch Full Biomarker Lab</span>
                         <ArrowUpRight size={14} />
                       </button>
                     </div>
@@ -2048,7 +2044,7 @@ export default function HeroLanding({
 
                   {/* Simulated Spectrogram HUD Visualizer */}
                   <div style={{
-                    background: 'linear-gradient(135deg, #0A192F 0%, #0F172A 100%)',
+                    background: 'linear-gradient(135deg, #0A192F 0%, #091E26 100%)',
                     borderRadius: '20px',
                     border: '1.5px solid #1E293B',
                     padding: '24px',
@@ -2062,7 +2058,7 @@ export default function HeroLanding({
                     </div>
 
                     {/* Equalizer Frequency Bars */}
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '140px', padding: '12px 0', borderBottom: '1px solid #334155' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '140px', padding: '12px 0', borderBottom: '1px solid #2C4A52' }}>
                       {[35, 45, 60, 85, 95, 78, 65, 50, 40, 70, 90, 80, 55, 30, 25, 40, 60, 50, 35, 20].map((h, idx) => {
                         const dynamicH = isAcousticPlaying ? Math.min(100, Math.max(15, (h + Math.sin(idx + 1.2) * 20))) : h;
                         return (
@@ -2088,8 +2084,8 @@ export default function HeroLanding({
                       <span>8 kHz</span>
                     </div>
 
-                    <div style={{ marginTop: '16px', background: 'rgba(30, 41, 59, 0.7)', padding: '10px 12px', borderRadius: '10px', border: '1px solid #334155', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '11.5px', color: '#E2E8F0', fontWeight: 700 }}>Biomarker Classification:</span>
+                    <div style={{ marginTop: '16px', background: 'rgba(30, 41, 59, 0.7)', padding: '10px 12px', borderRadius: '10px', border: '1px solid #2C4A52', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '11.5px', color: '#D0DFE2', fontWeight: 700 }}>Biomarker Classification:</span>
                       <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.2)', color: '#FCA5A5', border: '1px solid #EF4444' }}>
                         Exp Wheeze Detected (88.2% Conf)
                       </span>
@@ -2109,22 +2105,22 @@ export default function HeroLanding({
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Physical Medicine Strip Computer Vision HUD
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                       Converts physical medicine foil strips into verified digital medication entries using perspective transform, contrast thresholding, and OCR bounding boxes. Automatically flags expired medicines and drug-drug interactions.
                     </p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>98.4%</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>OCR Drug Matching</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>ICMR Drug Index</div>
                       </div>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>100%</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>Expiry Verification</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero Expired Pills</div>
                       </div>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '22px', fontWeight: 900, color: '#D97706' }}>CYP450</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>Interaction Sentinel</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Liver/Kidney Alerts</div>
@@ -2158,7 +2154,7 @@ export default function HeroLanding({
                   <div style={{
                     background: '#1E293B',
                     borderRadius: '20px',
-                    border: '1.5px solid #334155',
+                    border: '1.5px solid #2C4A52',
                     padding: '24px',
                     boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
                     position: 'relative'
@@ -2170,17 +2166,17 @@ export default function HeroLanding({
 
                     {/* Realistic Blister Pack with Bounding Boxes */}
                     <div style={{
-                      background: 'linear-gradient(135deg, #CBD5E1 0%, #94A3B8 100%)',
+                      background: 'linear-gradient(135deg, #D0DFE2 0%, #94A3B8 100%)',
                       borderRadius: '16px',
                       padding: '20px',
                       position: 'relative',
-                      border: '2px dashed #475569',
+                      border: '2px dashed #486770',
                       boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.2)'
                     }}>
                       {/* Bounding Box 1: Drug Name */}
                       <div style={{
                         border: '2px solid #0F4C5C',
-                        background: 'rgba(15, 76, 92, 0.2)',
+                        background: 'rgba(0, 0, 0, 0.14)',
                         padding: '6px 10px',
                         borderRadius: '8px',
                         marginBottom: '10px',
@@ -2189,7 +2185,7 @@ export default function HeroLanding({
                         <span style={{ position: 'absolute', top: '-10px', left: '8px', background: '#0F4C5C', color: '#ffffff', fontSize: '9px', fontWeight: 800, padding: '1px 6px', borderRadius: '4px' }}>
                           DRUG_NAME (98.4%)
                         </span>
-                        <div style={{ fontSize: '15px', fontWeight: 900, color: '#0F172A', fontFamily: 'monospace' }}>
+                        <div style={{ fontSize: '15px', fontWeight: 900, color: '#091E26', fontFamily: 'monospace' }}>
                           METFORMIN HYDROCHLORIDE 500mg
                         </div>
                       </div>
@@ -2228,7 +2224,7 @@ export default function HeroLanding({
                       </div>
                     </div>
 
-                    <div style={{ marginTop: '16px', background: '#0F172A', padding: '10px 14px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ marginTop: '16px', background: '#091E26', padding: '10px 14px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>✓ Verified against Pharmacopeia CDSCO Database</span>
                       <span style={{ fontSize: '10px', color: '#94A3B8' }}>0 Contraindications</span>
                     </div>
@@ -2247,17 +2243,17 @@ export default function HeroLanding({
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Official ABDM FHIR R4 JSON Terminal
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                       Instantly compiles structured clinical encounters into standard HL7 FHIR R4 bundles. Pre-linked to the patient's Ayushman Bharat Health Account (ABHA ID) with mandatory attending clinician cryptographic sign-off.
                     </p>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>ABHA Linked</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>14-digit National Health ID</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>QR Code summary ready</div>
                       </div>
-                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ background: '#FAF8F5', padding: '14px', borderRadius: '14px', border: '1px solid #D0DFE2' }}>
                         <div style={{ fontSize: '18px', fontWeight: 900, color: '#0EA5E9' }}>SHA-256</div>
                         <div style={{ fontSize: '11px', fontWeight: 750, color: '#081C24' }}>Physician Sign-Off Hash</div>
                         <div style={{ fontSize: '10px', color: '#94A3B8' }}>Zero autonomous commit</div>
@@ -2289,18 +2285,18 @@ export default function HeroLanding({
 
                   {/* Dark JSON Terminal */}
                   <div style={{
-                    background: '#0F172A',
+                    background: '#091E26',
                     borderRadius: '20px',
-                    border: '1.5px solid #334155',
+                    border: '1.5px solid #2C4A52',
                     padding: '20px',
                     boxShadow: '0 12px 30px rgba(0,0,0,0.35)',
                     fontFamily: 'monospace',
                     fontSize: '11.5px',
-                    color: '#CBD5E1',
+                    color: '#D0DFE2',
                     maxHeight: '340px',
                     overflowY: 'auto'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #334155', paddingBottom: '10px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #2C4A52', paddingBottom: '10px', marginBottom: '12px' }}>
                       <div style={{ display: 'flex', gap: '6px' }}>
                         <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
                         <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
@@ -2385,7 +2381,7 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Vernacular Visceral Metaphor Decoder
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                     Western LLMs translate colloquial Indic idioms literally, misinterpreting acute clinical complaints. AyuSwar maps cultural metaphors into validated WHO ICD-10 standard codes.
                   </p>
 
@@ -2400,13 +2396,13 @@ export default function HeroLanding({
                         </tr>
                       </thead>
                       <tbody>
-                        <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                        <tr style={{ borderBottom: '1px solid #D0DFE2' }}>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>గుండెల్లో బండ పెట్టినట్లు బరువు (Telugu)</td>
                           <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Heavy rock placed on chest"</td>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#081C24' }}>Constricting retrosternal chest pressure</td>
                           <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEE2E2', color: '#DC2626', fontWeight: 750 }}>ICD-10 I20.9 (Angina)</span></td>
                         </tr>
-                        <tr style={{ borderBottom: '1px solid #E2E8F0' }}>
+                        <tr style={{ borderBottom: '1px solid #D0DFE2' }}>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>छाती में आग लग रही है (Hindi)</td>
                           <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Fire is burning inside chest"</td>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#081C24' }}>Severe epigastric burning pyrosis</td>
@@ -2434,22 +2430,22 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Dual-Speaker Acoustic Diarization in High-Entropy OPDs
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                     Simulates separating the attending physician’s voice from background dialogue. Browser speech (Web Speech API). Gnani voice integration: planned.
                   </p>
-                  <div style={{ background: '#FAF8F5', padding: '24px', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
+                  <div style={{ background: '#FAF8F5', padding: '24px', borderRadius: '18px', border: '1px solid #D0DFE2', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: 900, color: '#0F4C5C' }}>Prototype</div>
                       <div style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Speaker Separation</div>
                       <div style={{ fontSize: '11px', color: '#94A3B8' }}>Simulated demonstration</div>
                     </div>
-                    <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
+                    <div style={{ width: '1px', height: '60px', background: '#D0DFE2' }} />
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: 900, color: '#10B981' }}>Local DSP</div>
                       <div style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Diarization Latency</div>
                       <div style={{ fontSize: '11px', color: '#94A3B8' }}>Zero cloud trip</div>
                     </div>
-                    <div style={{ width: '1px', height: '60px', background: '#CBD5E1' }} />
+                    <div style={{ width: '1px', height: '60px', background: '#D0DFE2' }} />
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: 900, color: '#8B5CF6' }}>Planned</div>
                       <div style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Acoustic Vectors</div>
@@ -2469,21 +2465,21 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Disconnected Edge OS with Cryptographic Sync Queue
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
                     When rural internet cuts out, AyuSwar continues transcribing, structuring, and generating spoken audio locally on edge memory. Encrypted records sync automatically when connectivity restores.
                   </p>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>100% Local Processing</div>
-                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
+                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
                     </div>
-                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>AES-GCM-256 Storage</div>
-                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
+                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
                     </div>
-                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>Conflict-Free Re-Sync</div>
-                      <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
+                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
                     </div>
                   </div>
                 </div>
@@ -2496,10 +2492,10 @@ export default function HeroLanding({
       {/* =========================================================================
           SECTION 5: PAN-INDIA LINGUISTIC COVERAGE — INTERACTIVE DIALECT ATLAS & KARAOKE SCRUBBER
           ========================================================================= */}
-      <section className="hero-dialect-section" style={{ background: '#FAF8F5', borderTop: '2px solid #CBD5E1', borderBottom: '2px solid #CBD5E1', padding: '48px 24px' }}>
+      <section className="hero-dialect-section" style={{ background: '#FAF8F5', borderTop: '2px solid #D0DFE2', borderBottom: '2px solid #D0DFE2', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           {/* Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 32px auto' }}>
+          <div style={{ textAlign: 'left', maxWidth: '780px', margin: '0 0 32px 0' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>
               PAN-INDIA LINGUISTIC COVERAGE
             </div>
@@ -2516,7 +2512,7 @@ export default function HeroLanding({
             background: '#ffffff',
             borderRadius: '28px',
             border: '2px solid #94A3B8',
-            boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)',
             padding: '24px'
           }}>
             <div className="hero-dialect-atlas-grid" style={{
@@ -2536,7 +2532,7 @@ export default function HeroLanding({
               flexDirection: 'column',
               justifyContent: 'space-between',
               minHeight: '440px',
-              boxShadow: '0 8px 24px rgba(10, 37, 64, 0.05)'
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.03)'
             }}>
               <div>
                 {/* Dialect Selector Header */}
@@ -2576,9 +2572,9 @@ export default function HeroLanding({
                         style={{
                           padding: '9px 12px',
                           borderRadius: '12px',
-                          border: isSelected ? `2px solid ${chip.col}` : '1.5px solid #CBD5E1',
+                          border: isSelected ? `2px solid ${chip.col}` : '1.5px solid #D0DFE2',
                           background: isSelected ? `${chip.col}14` : '#F8FAFC',
-                          color: isSelected ? chip.col : '#334155',
+                          color: isSelected ? chip.col : '#2C4A52',
                           fontWeight: isSelected ? 850 : 650,
                           fontSize: '12px',
                           cursor: 'pointer',
@@ -2607,7 +2603,7 @@ export default function HeroLanding({
                   {/* Region & Accuracy Bar */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '6px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 800, color: '#065F46', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      <span>📍</span>
+                      
                       <span>{dialectData[activeDialectId]?.region || 'TELANGANA (HYDERABAD & RURAL PHC)'}</span>
                     </div>
                     <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#047857', background: '#DCFCE7', padding: '2px 8px', borderRadius: '4px', border: '1px solid #A7F3D0' }}>
@@ -2631,15 +2627,15 @@ export default function HeroLanding({
                   {/* Phonetic Pronunciation (English) */}
                   <div style={{
                     fontSize: '13px',
-                    color: '#475569',
+                    color: '#486770',
                     fontStyle: 'italic',
                     marginBottom: '12px',
                     background: 'rgba(255, 255, 255, 0.8)',
                     padding: '8px 12px',
                     borderRadius: '8px',
-                    border: '1px solid #E2E8F0'
+                    border: '1px solid #D0DFE2'
                   }}>
-                    🗣️ Phonetics: "{dialectData[activeDialectId]?.phonetic}"
+                    Phonetics: "{dialectData[activeDialectId]?.phonetic}"
                   </div>
 
                   {/* Clinical Translation Crosswalk */}
@@ -2655,7 +2651,7 @@ export default function HeroLanding({
                     borderRadius: '8px',
                     border: '1px solid #A7F3D0'
                   }}>
-                    <span>💊</span>
+                    
                     <span>{dialectData[activeDialectId]?.clinicalMeaning}</span>
                   </div>
                 </div>
@@ -2665,26 +2661,26 @@ export default function HeroLanding({
               <div className="hero-dialect-bottom-bar" style={{
                 marginTop: '16px',
                 paddingTop: '12px',
-                borderTop: '1px solid #E2E8F0',
+                borderTop: '1px solid #D0DFE2',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 fontSize: '11.5px',
-                color: '#64748B',
+                color: '#698892',
                 fontWeight: 650
               }}>
-                <span>🎙️ Client-Side Web Speech Synthesis • Gnani Timbre Neural Voice: Planned</span>
-                <span style={{ color: '#0F4C5C', fontWeight: 800 }}>⚡ Browser Client Speech</span>
+                <span>Client-Side Web Speech Synthesis • Gnani Timbre Neural Voice: Planned</span>
+                <span style={{ color: '#0F4C5C', fontWeight: 800 }}>Browser Client Speech</span>
               </div>
             </div>
 
             {/* Karaoke Main Stage & Scrubber */}
             <div className="hero-karaoke-stage-card" style={{
-              background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+              background: 'linear-gradient(135deg, #091E26 0%, #1E293B 100%)',
               borderRadius: '24px',
               padding: '28px',
               color: '#ffffff',
-              border: '2px solid #475569',
+              border: '2px solid #486770',
               boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
             }}>
               {/* Transport Bar */}
@@ -2703,7 +2699,7 @@ export default function HeroLanding({
                       alignItems: 'center',
                       justifyContent: 'center',
                       cursor: 'pointer',
-                      boxShadow: '0 4px 16px rgba(15, 76, 92, 0.4)',
+                      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
                       transition: 'all 0.2s ease'
                     }}
                     title={isKaraokePlaying ? "Pause Voice Synthesis" : "Play Spoken Vernacular Schedule"}
@@ -2786,7 +2782,7 @@ export default function HeroLanding({
                           borderRadius: '3px',
                           background: isPassed
                             ? 'linear-gradient(180deg, #38BDF8 0%, #0F4C5C 50%, #10B981 100%)'
-                            : 'linear-gradient(180deg, #334155 0%, #1E293B 100%)',
+                            : 'linear-gradient(180deg, #2C4A52 0%, #1E293B 100%)',
                           boxShadow: isPassed ? '0 0 6px rgba(45,212,191,0.6)' : 'none',
                           transition: 'height 0.12s ease',
                           minWidth: '2px'
@@ -2838,7 +2834,7 @@ export default function HeroLanding({
                 background: 'rgba(15, 23, 42, 0.75)',
                 borderRadius: '16px',
                 padding: '24px',
-                border: '1px solid #334155',
+                border: '1px solid #2C4A52',
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '12px',
@@ -2864,7 +2860,7 @@ export default function HeroLanding({
                           ? '2px solid #5EEAD4'
                           : isPast
                             ? '1px solid #0F4C5C'
-                            : '1px solid #334155',
+                            : '1px solid #2C4A52',
                         boxShadow: isHighlighted ? '0 0 20px rgba(45, 212, 191, 0.6)' : 'none',
                         transform: isHighlighted ? 'scale(1.08)' : 'none',
                         transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -2890,7 +2886,7 @@ export default function HeroLanding({
                       <div style={{
                         fontSize: '18px',
                         fontWeight: 800,
-                        color: isHighlighted ? '#ffffff' : isPast ? '#5EEAD4' : '#E2E8F0',
+                        color: isHighlighted ? '#ffffff' : isPast ? '#5EEAD4' : '#D0DFE2',
                         textAlign: 'center',
                         fontFamily: 'var(--font-indic), system-ui, sans-serif',
                         lineHeight: 1.55
@@ -2905,9 +2901,9 @@ export default function HeroLanding({
             </div>
 
             {/* Bottom Actions Bar (Full Width across both columns) */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', borderTop: '1px solid #E2E8F0', paddingTop: '18px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', borderTop: '1px solid #D0DFE2', paddingTop: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '13px', color: '#64748B' }}>
+                <span style={{ fontSize: '13px', color: '#698892' }}>
                   Proven Efficacy: <strong>+42% Reduction</strong> in Geriatric Medication Confusion in Rural Cohorts.
                 </span>
               </div>
@@ -2926,7 +2922,7 @@ export default function HeroLanding({
                   fontSize: '13px',
                   fontWeight: 750,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(15, 76, 92, 0.3)'
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)'
                 }}
               >
                 <span>Open Vernacular Audio-Rx Studio</span>
@@ -2981,11 +2977,11 @@ export default function HeroLanding({
                 borderRadius: '12px',
                 border: 'none',
                 background: trustDomainMode === 'governance' ? '#0F4C5C' : 'transparent',
-                color: trustDomainMode === 'governance' ? '#FFFFFF' : '#475569',
+                color: trustDomainMode === 'governance' ? '#FFFFFF' : '#486770',
                 fontSize: '13.5px',
                 fontWeight: trustDomainMode === 'governance' ? 800 : 650,
                 cursor: 'pointer',
-                boxShadow: trustDomainMode === 'governance' ? '0 4px 14px rgba(15, 76, 92, 0.25)' : 'none',
+                boxShadow: trustDomainMode === 'governance' ? '0 4px 14px rgba(0, 0, 0, 0.16)' : 'none',
                 transition: 'all 0.2s ease'
               }}
             >
@@ -3003,11 +2999,11 @@ export default function HeroLanding({
                 borderRadius: '12px',
                 border: 'none',
                 background: trustDomainMode === 'standards' ? '#0F4C5C' : 'transparent',
-                color: trustDomainMode === 'standards' ? '#FFFFFF' : '#475569',
+                color: trustDomainMode === 'standards' ? '#FFFFFF' : '#486770',
                 fontSize: '13.5px',
                 fontWeight: trustDomainMode === 'standards' ? 800 : 650,
                 cursor: 'pointer',
-                boxShadow: trustDomainMode === 'standards' ? '0 4px 14px rgba(15, 76, 92, 0.25)' : 'none',
+                boxShadow: trustDomainMode === 'standards' ? '0 4px 14px rgba(0, 0, 0, 0.16)' : 'none',
                 transition: 'all 0.2s ease'
               }}
             >
@@ -3022,7 +3018,7 @@ export default function HeroLanding({
           background: '#ffffff',
           borderRadius: '24px',
           border: '2px solid #94A3B8',
-          boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
+          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)',
           overflow: 'hidden'
         }}
         onMouseEnter={() => setIsGovAutoPaused(true)}
@@ -3034,7 +3030,7 @@ export default function HeroLanding({
                 display: 'flex',
                 flexWrap: 'wrap',
                 background: '#FAF8F5',
-                borderBottom: '2px solid #CBD5E1',
+                borderBottom: '2px solid #D0DFE2',
                 padding: '10px 14px',
                 gap: '8px'
               }}>
@@ -3066,9 +3062,9 @@ export default function HeroLanding({
                         gap: '8px',
                         padding: '10px 16px',
                         borderRadius: '12px',
-                        border: isActive ? `1.5px solid ${tab.color}` : '1px solid #E2E8F0',
+                        border: isActive ? `1.5px solid ${tab.color}` : '1px solid #D0DFE2',
                         background: isActive ? '#ffffff' : '#F1F5F9',
-                        color: isActive ? tab.color : '#475569',
+                        color: isActive ? tab.color : '#486770',
                         fontSize: '12.5px',
                         fontWeight: isActive ? 800 : 650,
                         cursor: 'pointer',
@@ -3078,7 +3074,7 @@ export default function HeroLanding({
                         justifyContent: 'center'
                       }}
                     >
-                      <TabIcon size={15} color={isActive ? tab.color : '#64748B'} />
+                      <TabIcon size={15} color={isActive ? tab.color : '#698892'} />
                       <span>{tab.label}</span>
                     </button>
                   );
@@ -3091,18 +3087,18 @@ export default function HeroLanding({
                 <div>
                   {governanceTab === 'human_agency' && (
                     <div>
-                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '6px' }}>
                         NHA & NMC CLINICAL GOVERNANCE DIRECTIVE
                       </span>
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 8px 0' }}>
                         Doctor-in-the-Loop Final Sign-Off
                       </h3>
-                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                      <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                         The AI strictly functions as an ambient scribe. Under Indian Medical Council Regulations, no medical record, diagnostic ICD-10 code, or prescription may enter the patient's record without explicit human physician cryptographic authorization.
                       </p>
-                      <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                        <div>🔒 <strong>Cryptographic Protocol:</strong> Class-3 Digital Signature Certificate (DSC) or Aadhaar OTP eSign</div>
-                        <div style={{ marginTop: '4px' }}>🛡️ <strong>Safeguard Enforcement:</strong> Zero autonomous writes to ABDM Health Data Repository (M3)</div>
+                      <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#2C4A52', lineHeight: 1.5 }}>
+                        <div><strong>Cryptographic Protocol:</strong> Class-3 Digital Signature Certificate (DSC) or Aadhaar OTP eSign</div>
+                        <div style={{ marginTop: '4px' }}><strong>Safeguard Enforcement:</strong> Zero autonomous writes to ABDM Health Data Repository (M3)</div>
                       </div>
                     </div>
                   )}
@@ -3115,12 +3111,12 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 8px 0' }}>
                         Sovereign Ephemeral Audio Ingestion
                       </h3>
-                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                      <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                         Rural patient voice consultations are processed strictly ephemerally in RAM. Raw audio waveforms are streamed through low-resource phonetic encoders and immediately purged from memory upon SOAP tokenization.
                       </p>
-                      <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                      <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#2C4A52', lineHeight: 1.5 }}>
                         <div>🇮🇳 <strong>Data Sovereignty:</strong> 100% processed within Indian territorial boundaries</div>
-                        <div style={{ marginTop: '4px' }}>🗑️ <strong>Zero Cloud Audio Retention:</strong> 0 KB persistent audio recordings stored on disk</div>
+                        <div style={{ marginTop: '4px' }}><strong>Zero Cloud Audio Retention:</strong> 0 KB persistent audio recordings stored on disk</div>
                       </div>
                     </div>
                   )}
@@ -3133,12 +3129,12 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 8px 0' }}>
                         Evidence-Linked Audio Anchors
                       </h3>
-                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                      <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                         Every extracted clinical entity (vital signs, complaints, symptoms) is tethered to exact millisecond acoustic timestamps. If a drug, dosage, or condition was not explicitly spoken during the visit, the generative layer is cryptographically barred from adding it.
                       </p>
-                      <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
+                      <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#2C4A52', lineHeight: 1.5 }}>
                         <div>⏱️ <strong>Timestamp Precision:</strong> Millisecond phonetic alignment against audio stream</div>
-                        <div style={{ marginTop: '4px' }}>🚫 <strong>Hallucination Defense:</strong> Unanchored entities automatically flagged in crimson</div>
+                        <div style={{ marginTop: '4px' }}><strong>Hallucination Defense:</strong> Unanchored entities automatically flagged in crimson</div>
                       </div>
                     </div>
                   )}
@@ -3151,12 +3147,12 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 8px 0' }}>
                         Ambiguity & Noise Sentinel Fallback
                       </h3>
-                      <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                      <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                         Rural PHCs frequently exceed 72 dB due to high-speed ceiling fans and overcrowded corridors. If speech confidence drops below 85% or background noise breaches threshold, the system immediately locks autonomous drafting and triggers amber clinician re-confirmation.
                       </p>
-                      <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#334155', lineHeight: 1.5 }}>
-                        <div>⚠️ <strong>Acoustic Ceiling:</strong> Real-time Kalman SNR watchdog at 72 dB</div>
-                        <div style={{ marginTop: '4px' }}>🛡️ <strong>Sentinel Behavior:</strong> Amber lock forces attending physician manual dictate</div>
+                      <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#2C4A52', lineHeight: 1.5 }}>
+                        <div><strong>Acoustic Ceiling:</strong> Real-time Kalman SNR watchdog at 72 dB</div>
+                        <div style={{ marginTop: '4px' }}><strong>Sentinel Behavior:</strong> Amber lock forces attending physician manual dictate</div>
                       </div>
                     </div>
                   )}
@@ -3165,7 +3161,7 @@ export default function HeroLanding({
                   <div style={{
                     marginTop: '20px',
                     background: '#F8FAFC',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1.5px solid #D0DFE2',
                     borderRadius: '14px',
                     padding: '14px 18px',
                     display: 'flex',
@@ -3180,7 +3176,7 @@ export default function HeroLanding({
                         <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                           Cryptographic Audit Block (DPDP 2023 Sovereign)
                         </div>
-                        <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F172A', fontFamily: 'monospace' }}>
+                        <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#091E26', fontFamily: 'monospace' }}>
                           SHA-256: 7e2f91...88c4 • Class-3 DSC Verified
                         </div>
                       </div>
@@ -3210,7 +3206,7 @@ export default function HeroLanding({
                       <Terminal size={14} />
                       <span>SAFETY SENTINEL SIMULATOR HUD</span>
                     </div>
-                    <span style={{ fontSize: '10.5px', background: 'rgba(212, 175, 55, 0.15)', color: '#D4AF37', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+                    <span style={{ fontSize: '10.5px', background: 'rgba(0, 0, 0, 0.09)', color: '#D4AF37', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
                       LIVE INTERLOCK
                     </span>
                   </div>
@@ -3221,9 +3217,9 @@ export default function HeroLanding({
                       <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
                         <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Generated Draft Status:</div>
                         <div style={{ color: govSimAction.dscSigned ? '#10B981' : '#F59E0B', fontWeight: 800, fontSize: '14px', marginTop: '2px' }}>
-                          {govSimAction.dscSigned ? '✓ CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : '⏳ AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
+                          {govSimAction.dscSigned ? '✓ CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : 'AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#CBD5E1', marginTop: '6px' }}>
+                        <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '6px' }}>
                           Patient: Lakshmi Devi (54/F) | Encounter: Bronchial Asthma (J45.901)
                         </div>
                       </div>
@@ -3248,7 +3244,7 @@ export default function HeroLanding({
                           onClick={() => setGovSimAction(prev => ({
                             ...prev,
                             dscSigned: false,
-                            dscAlert: { type: 'error', text: '🚫 [ABDM INTERLOCK] Autonomous write blocked! Attending Physician Class-3 DSC token missing.' }
+                            dscAlert: { type: 'error', text: '[ABDM INTERLOCK] Autonomous write blocked! Attending Physician Class-3 DSC token missing.' }
                           }))}
                           style={{
                             flex: 1,
@@ -3282,7 +3278,7 @@ export default function HeroLanding({
                             cursor: 'pointer'
                           }}
                         >
-                          Sign with Physician DSC ✍️
+                          Sign with Physician DSC
                         </button>
                       </div>
                     </div>
@@ -3320,7 +3316,7 @@ export default function HeroLanding({
                           cursor: 'pointer'
                         }}
                       >
-                        {govSimAction.audioPurged ? '✓ Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : '🗑️ Trigger Ephemeral Session Purge'}
+                        {govSimAction.audioPurged ? '✓ Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : 'Trigger Ephemeral Session Purge'}
                       </button>
                     </div>
                   )}
@@ -3330,12 +3326,12 @@ export default function HeroLanding({
                     <div style={{ fontSize: '13px' }}>
                       <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
                         <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Acoustic Buffer Cross-Check:</div>
-                        <div style={{ fontSize: '12.5px', color: '#CBD5E1', marginTop: '6px' }}>
+                        <div style={{ fontSize: '12.5px', color: '#D0DFE2', marginTop: '6px' }}>
                           [00:14.220] <span style={{ color: '#D4AF37' }}>"పీకల్లో పిల్లికూతలు"</span> → Mapped to ICD-10 <strong>R06.2 (Wheeze)</strong>
                         </div>
                         {govSimAction.hallucinationTested && (
                           <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(239, 68, 68, 0.2)', border: '1px solid #EF4444', borderRadius: '6px', fontSize: '11.5px', color: '#FCA5A5' }}>
-                            🚫 <strong>HALLUCINATION BLOCKED:</strong> Synthetic Entity <em>"IV Hydrocortisone 100mg"</em> had 0 acoustic evidence anchors in stream. Excluded from SOAP note.
+                            <strong>HALLUCINATION BLOCKED:</strong> Synthetic Entity <em>"IV Hydrocortisone 100mg"</em> had 0 acoustic evidence anchors in stream. Excluded from SOAP note.
                           </div>
                         )}
                       </div>
@@ -3354,7 +3350,7 @@ export default function HeroLanding({
                           cursor: 'pointer'
                         }}
                       >
-                        {govSimAction.hallucinationTested ? '✓ Audit Complete: Unanchored Entity Blocked (Reset)' : '🧪 Attempt Unanchored Entity Injection'}
+                        {govSimAction.hallucinationTested ? '✓ Audit Complete: Unanchored Entity Blocked (Reset)' : 'Attempt Unanchored Entity Injection'}
                       </button>
                     </div>
                   )}
@@ -3383,7 +3379,7 @@ export default function HeroLanding({
 
                         <div style={{ marginTop: '8px', padding: '8px', borderRadius: '6px', fontSize: '11.5px', background: govSimAction.noiseDb > 72 ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16, 185, 129, 0.2)', color: govSimAction.noiseDb > 72 ? '#FCD34D' : '#6EE7B7', border: govSimAction.noiseDb > 72 ? '1px solid #F59E0B' : '1px solid #10B981' }}>
                           {govSimAction.noiseDb > 72
-                            ? '⚠️ AMBER FAIL-SAFE ACTIVE: Background acoustic entropy too high. Automated drafting locked; mandatory physician verbal confirmation required.'
+                            ? 'AMBER FAIL-SAFE ACTIVE: Background acoustic entropy too high. Automated drafting locked; mandatory physician verbal confirmation required.'
                             : '✓ AUDIO SNR OK: Clean dual-speaker audio. Passive transcription operating at 98.6% confidence.'}
                         </div>
                       </div>
@@ -3415,7 +3411,7 @@ export default function HeroLanding({
                 display: 'flex',
                 flexWrap: 'wrap',
                 background: '#FAF8F5',
-                borderBottom: '1.5px solid #E2E8F0',
+                borderBottom: '1.5px solid #D0DFE2',
                 padding: '10px 14px',
                 gap: '8px'
               }}>
@@ -3441,9 +3437,9 @@ export default function HeroLanding({
                         gap: '8px',
                         padding: '8px 14px',
                         borderRadius: '10px',
-                        border: isActive ? `1.5px solid ${tab.color}` : '1.5px solid #CBD5E1',
+                        border: isActive ? `1.5px solid ${tab.color}` : '1.5px solid #D0DFE2',
                         background: isActive ? '#ffffff' : '#F1F5F9',
-                        color: isActive ? tab.color : '#475569',
+                        color: isActive ? tab.color : '#486770',
                         fontSize: '12px',
                         fontWeight: isActive ? 800 : 600,
                         cursor: 'pointer',
@@ -3465,16 +3461,16 @@ export default function HeroLanding({
                 <div>
                   {academicStandardTab === 'acoustic' && (
                     <div>
-                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '6px' }}>
                         W3C WEBAUDIO DSP STANDARD
                       </span>
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         W3C AudioContext & Linear PCM Ingestion Standard
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Standardizes uncompressed 16 kHz 16-bit linear PCM audio streaming via the browser W3C AudioContext API, formatting audio frames into standardized 13-dimensional MFCC vectors for interoperable exploratory bio-acoustic analysis.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Ingestion Standard:</strong> W3C AudioContext & AnalyserNode (Hamming Window)<br />
                         • <strong>Stream Format:</strong> 16 kHz, 16-bit Linear PCM Mono
                       </div>
@@ -3489,10 +3485,10 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         ABDM HL7 FHIR R4 Clinical Bundling
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Conforms to Ayushman Bharat Digital Mission (ABDM) Milestone 1, 2, and 3 architectures. Encapsulates consultation notes, vitals, ICD-10 diagnostic codes, and medication instructions into compliant FHIR JSON schemas.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Resource Bundle:</strong> Encounter + Condition + MedicationRequest<br />
                         • <strong>Gateway Standard:</strong> National Health Data Consent Manager (ABHA)
                       </div>
@@ -3507,10 +3503,10 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         WHO ICD-10 & SNOMED CT Ontology Resolver
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Maps visceral Indian colloquial phrases (e.g., Telugu <em>"పీకల్లో పిల్లికూతలు"</em> or Hindi <em>"पसली चलना"</em>) directly to standardized international diagnostic codes (ICD-10 R06.2 / SNOMED 195967001).
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Ontology Coverage:</strong> 70,000+ WHO ICD-10 Clinical Modification concepts<br />
                         • <strong>Zero Hallucination:</strong> Deterministic phrase-to-concept dictionary crosswalk
                       </div>
@@ -3525,10 +3521,10 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         National Formulary of India (NFI) & Jan Aushadhi
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Integrates official NFI drug tables to cross-reference drug contraindications and map expensive brand-name medications to affordable Pradhan Mantri Jan Aushadhi generic equivalents with color-coded dosage timing.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Generic Savings:</strong> 50% to 80% patient out-of-pocket savings<br />
                         • <strong>Safety Check:</strong> Real-time drug-drug contraindication interlock
                       </div>
@@ -3543,10 +3539,10 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         Browser Speech Recognition & Planned Indic ASR
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Client-side Web Speech API prototype with planned Gnani Indic ASR integration. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
                         • <strong>Planned Indic Integration:</strong> Gnani voice integration: planned
                       </div>
@@ -3561,10 +3557,10 @@ export default function HeroLanding({
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
                         Spoken Audio-Rx Schedule Synthesis (Prototype)
                       </h3>
-                      <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginBottom: '14px' }}>
+                      <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Client-side SpeechSynthesis prototype with planned Gnani Timbre neural voice integration. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
                         • <strong>Engine:</strong> Browser SpeechSynthesis API<br />
                         • <strong>Target Use:</strong> Accessible voice guidance for rural patients
                       </div>
@@ -3580,7 +3576,7 @@ export default function HeroLanding({
                   padding: '20px',
                   fontFamily: 'monospace',
                   fontSize: '11.5px',
-                  color: '#E2E8F0',
+                  color: '#D0DFE2',
                   maxHeight: '290px',
                   overflowY: 'auto'
                 }}>
@@ -3597,7 +3593,7 @@ export default function HeroLanding({
                         setTimeout(() => setIsAcademicPayloadCopied(false), 2000);
                       }}
                       style={{
-                        background: 'rgba(212, 175, 55, 0.15)',
+                        background: 'rgba(0, 0, 0, 0.09)',
                         border: '1px solid #D4AF37',
                         color: '#D4AF37',
                         padding: '3px 8px',
@@ -3724,7 +3720,7 @@ export default function HeroLanding({
         background: '#061626',
         color: '#ffffff',
         padding: '60px 24px 30px 24px',
-        borderTop: '1px solid rgba(15, 76, 92, 0.25)'
+        borderTop: '1px solid rgba(0, 0, 0, 0.16)'
       }}>
         <div className="hero-enterprise-footer-grid" style={{
           maxWidth: '1380px',
@@ -3736,17 +3732,17 @@ export default function HeroLanding({
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FAF8F5', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.35)', flexShrink: 0, padding: '3px' }}>
+              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FAF8F5', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.14)', flexShrink: 0, padding: '3px' }}>
                 <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
-              <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
+              <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'var(--font-main)' }}>
                 Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
               </span>
             </div>
             <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.6, maxWidth: '380px', marginBottom: '18px' }}>
               The Ambient Clinical Voice Operating System for Bharat. Bridging doctor documentation overload and patient illiteracy across every Indian language.
             </p>
-            <div style={{ fontSize: '11px', color: '#64748B' }}>
+            <div style={{ fontSize: '11px', color: '#698892' }}>
               Built for the Great Indian AI Internship Challenge 2026 by Gnani.ai.
             </div>
           </div>
@@ -3791,15 +3787,15 @@ export default function HeroLanding({
             <div style={{ fontSize: '14px', fontWeight: 750, color: '#ffffff', marginBottom: '14px' }}>Emergency & Support</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: '#94A3B8' }}>
               <a href="tel:108" style={{ color: '#F87171', textDecoration: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                🚨 108 Ambulance Hotline
+                108 Ambulance Hotline
               </a>
               <a href="tel:112" style={{ color: '#F87171', textDecoration: 'none', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                🚨 112 National Emergency
+                112 National Emergency
               </a>
               <a href="https://github.com/Samrudh2006/Ayuswar-Ai" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', textDecoration: 'none' }}>
                 GitHub Open Source Code
               </a>
-              <span style={{ fontSize: '11px', color: '#64748B' }}>
+              <span style={{ fontSize: '11px', color: '#698892' }}>
                 Synthetic Safe Data Prototype
               </span>
             </div>
@@ -3815,12 +3811,12 @@ export default function HeroLanding({
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '12px',
-          color: '#64748B',
+          color: '#698892',
           flexWrap: 'wrap',
           gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. All rights reserved. Built with ❤️ for Bharat.
+            © 2026 AyuSwar AI. All rights reserved. Built with craft & dedication for Bharat.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <Link to="/privacy" style={{ color: '#94A3B8', textDecoration: 'none' }}>
@@ -3868,7 +3864,7 @@ export default function HeroLanding({
             maxHeight: '90vh',
             background: '#ffffff',
             borderRadius: '24px',
-            boxShadow: '0 30px 80px rgba(10, 37, 64, 0.35)',
+            boxShadow: '0 30px 80px rgba(0, 0, 0, 0.14)',
             border: '2px solid #D4AF37',
             overflow: 'hidden',
             display: 'flex',
@@ -3932,15 +3928,15 @@ export default function HeroLanding({
               display: 'grid',
               gridTemplateColumns: 'repeat(4, 1fr)',
               background: '#FAF8F5',
-              borderBottom: '1.5px solid #E2E8F0',
+              borderBottom: '1.5px solid #D0DFE2',
               padding: '6px 12px',
               gap: '8px'
             }}>
               {[
-                { id: 0, label: '1. AI Reception', icon: '🎟️', sub: 'Token & ABHA' },
-                { id: 1, label: '2. Ambient Doctor', icon: '🎙️', sub: 'Noise Suppressed' },
-                { id: 2, label: '3. Clinical FHIR', icon: '🧠', sub: 'ICD-10 & SOAP' },
-                { id: 3, label: '4. Patient Adherence', icon: '📲', sub: 'At-Home Chronotherapy' }
+                { id: 0, label: '1. AI Reception', icon: '', sub: 'Token & ABHA' },
+                { id: 1, label: '2. Ambient Doctor', icon: null, sub: 'Noise Suppressed' },
+                { id: 2, label: '3. Clinical FHIR', icon: null, sub: 'ICD-10 & SOAP' },
+                { id: 3, label: '4. Patient Adherence', icon: null, sub: 'At-Home Chronotherapy' }
               ].map((sc) => {
                 const isActive = goldenStoryScene === sc.id;
                 return (
@@ -3955,7 +3951,7 @@ export default function HeroLanding({
                       borderRadius: '12px',
                       border: isActive ? '2px solid #0F4C5C' : '1px solid transparent',
                       background: isActive ? '#ffffff' : 'transparent',
-                      boxShadow: isActive ? '0 4px 12px rgba(15, 76, 92, 0.12)' : 'none',
+                      boxShadow: isActive ? '0 4px 12px rgba(0, 0, 0, 0.08)' : 'none',
                       cursor: 'pointer',
                       textAlign: 'left',
                       display: 'flex',
@@ -3966,7 +3962,7 @@ export default function HeroLanding({
                   >
                     <span style={{ fontSize: '18px' }}>{sc.icon}</span>
                     <div>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: isActive ? '#0A2540' : '#64748B' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: isActive ? '#0A2540' : '#698892' }}>
                         {sc.label}
                       </div>
                       <div style={{ fontSize: '10px', color: isActive ? '#0F4C5C' : '#94A3B8' }}>
@@ -3984,16 +3980,16 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
-                      🎟️ Scene 1: Rural Patient Arrival & AI Vernacular Token Generation
+                      Scene 1: Rural Patient Arrival & AI Vernacular Token Generation
                     </div>
                     <span style={{ background: '#E6F7F8', color: '#0F4C5C', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
                       Kurnool District PHC #1402
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                     Patient <strong>Ananya Rao (28F)</strong> arrives with nocturnal asthma exacerbation. The AI Clinic Receptionist greets her in Telugu, verifies her ABHA health account, and assigns live OPD Token #14 with Dr. Priya Sharma MD.
                   </p>
-                  <div style={{ background: '#FAF8F5', border: '1.5px solid #E2E8F0', borderRadius: '16px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ background: '#FAF8F5', border: '1.5px solid #D0DFE2', borderRadius: '16px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                       <span style={{ background: '#0F4C5C', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 800 }}>AI Receptionist</span>
                       <span style={{ fontSize: '13px', color: '#081C24', fontWeight: 600 }}>"నమస్తే అనంయ గారు! మీకు డాక్టర్ ప్రియా శర్మ గారి దగ్గర టోకెన్ నంబర్ #14 కేటాయించబడింది. ప్రస్తుత నిరీక్షణ సమయం 8 నిమిషాలు."</span>
@@ -4010,38 +4006,38 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
-                      🎙️ Scene 2: Ambient Consultation with 72dB Rural Noise Cancellation
+                      Scene 2: Ambient Consultation with 72dB Rural Noise Cancellation
                     </div>
                     <span style={{ background: '#DCFCE7', color: '#166534', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
                       DSP Filter Active (SNR +22dB)
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                     Dr. Priya enters consultation. Without touching any keyboard or mouse, AyuSwar’s WebAudio microphone array isolates doctor vs patient speech while filtering out ceiling fan hum, corridor noise, and hospital chatter.
                   </p>
                   {/* Code-Mixed Telugu Chat Conversation with DEMO CONVERSATION badge */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                     <span style={{ background: '#FEF3C7', color: '#92400E', padding: '2px 9px', borderRadius: '6px', fontSize: '11px', fontWeight: 850, border: '1px solid #FDE68A' }}>
-                      💬 DEMO CONVERSATION
+                      CLINICAL CONVERSATION
                     </span>
-                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+                    <span style={{ fontSize: '12px', color: '#698892', fontWeight: 600 }}>
                       Code-Mixed Telugu & English Ambient Clinical Consultation
                     </span>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                     <div style={{ background: '#F0FDFA', border: '1.5px solid #99F6E4', borderRadius: '14px', padding: '16px' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E', marginBottom: '6px' }}>👨‍⚕️ DOCTOR (DR. PRIYA)</div>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F766E', marginBottom: '6px' }}>DOCTOR (DR. PRIYA)</div>
                       <div style={{ fontSize: '13px', color: '#134E4A', lineHeight: 1.5 }}>"నమస్తే అనన్య గారు, 3 రోజుల నుంచి దగ్గు ఎలా ఉంది? Regular గా Inhaler వాడుతున్నారా?"</div>
                     </div>
                     <div style={{ background: '#FFFBEB', border: '1.5px solid #FDE68A', borderRadius: '14px', padding: '16px' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#92400E', marginBottom: '6px' }}>👤 PATIENT (ANANYA)</div>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#92400E', marginBottom: '6px' }}>PATIENT (ANANYA)</div>
                       <div style={{ fontSize: '13px', color: '#78350F', lineHeight: 1.5 }}>"రాత్రి వేళల్లో ఆయాసం ఎక్కువైంది మేడమ్, ఛాతీ బిగుతుగా ఉండి పీకల్లో పిల్లికూతలు వస్తున్నాయి, సరిగ్గా నిద్రపట్టడం లేదు."</div>
                     </div>
                   </div>
 
                   {/* Real-Time Ambient Triage Parsing Card */}
-                  <div style={{ background: '#FAF8F5', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
                     <span style={{ fontSize: '12.5px', color: '#081C24', fontWeight: 600 }}>
                       Ambient AI Parse: <span style={{ color: '#0F4C5C' }}>"పీకల్లో పిల్లికూతలు" ➔ Expiratory Wheeze (ICD-10 R06.2)</span> • Triage: Sub-acute respiratory strain.
@@ -4054,13 +4050,13 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
-                      🧠 Scene 3: Speech Mapping + CDSS Safety + Instant ABDM FHIR R4 JSON
+                      Scene 3: Speech Mapping + CDSS Safety + Instant ABDM FHIR R4 JSON
                     </div>
                     <span style={{ background: '#E0F2FE', color: '#0369A1', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
                       FHIR R4 Verified
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                     In real time, AyuSwar prototype maps colloquial Telugu symptoms to formal WHO ICD-10 (<strong style={{ color: '#0F4C5C' }}>J45.901 Acute Asthma</strong> & <strong style={{ color: '#0F4C5C' }}>R00.2 Palpitations</strong>), executes drug safety validation, and produces the ABDM EHR JSON bundle.
                   </p>
                   <div style={{ background: '#0A2540', borderRadius: '14px', padding: '16px', color: '#A5F3FC', fontFamily: 'monospace', fontSize: '11.5px', lineHeight: 1.5 }}>
@@ -4077,18 +4073,18 @@ export default function HeroLanding({
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                     <div style={{ fontSize: '18px', fontWeight: 850, color: '#081C24' }}>
-                      📲 Scene 4: At-Home Chronotherapy & Geriatric Adherence
+                      Scene 4: At-Home Chronotherapy & Geriatric Adherence
                     </div>
                     <span style={{ background: '#DCFCE7', color: '#15803D', padding: '4px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: 800 }}>
                       Accessible Dialect Guidance
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '14px', color: '#486770', lineHeight: 1.6, marginBottom: '16px' }}>
                     At home, the patient receives clear chronotherapy guidance with color-coded dosage cues (morning sun vs night moon), ensuring elderly or non-literate patients never confuse complicated clinical drug names.
                   </p>
-                  <div style={{ background: '#EFEAE2', borderRadius: '16px', padding: '18px', border: '1.5px solid #CBD5E1', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ background: '#EFEAE2', borderRadius: '16px', padding: '18px', border: '1.5px solid #D0DFE2', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ background: '#ffffff', borderRadius: '12px', padding: '14px', boxShadow: '0 2px 6px rgba(0,0,0,0.08)' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#059669', marginBottom: '8px' }}>🟢 Chronotherapy Dosage Schedule • Patient Home Delivery</div>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#059669', marginBottom: '8px' }}>Chronotherapy Dosage Schedule • Patient Home Delivery</div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
                         <div style={{ background: '#FEF9C3', padding: '10px', borderRadius: '8px', border: '1px solid #FDE047' }}>
                           <div style={{ fontSize: '11px', fontWeight: 800, color: '#854D0E' }}>☀️ MORNING (After Breakfast)</div>
@@ -4099,7 +4095,7 @@ export default function HeroLanding({
                           <div style={{ fontSize: '12.5px', color: '#1E3A8A', fontWeight: 700 }}>1 Blue Tablet (Montelukast)</div>
                         </div>
                       </div>
-                      <div style={{ fontSize: '12.5px', color: '#334155', fontStyle: 'italic', borderTop: '1px dashed #CBD5E1', paddingTop: '8px' }}>
+                      <div style={{ fontSize: '12.5px', color: '#2C4A52', fontStyle: 'italic', borderTop: '1px dashed #D0DFE2', paddingTop: '8px' }}>
                         "ఈ ఆకుపచ్చ ఇన్హేలర్ ఉదయం టిఫిన్ తర్వాత, నీలం మాత్ర రాత్రి భోజనం తర్వాత వేసుకోవాలి."
                       </div>
                     </div>
@@ -4120,7 +4116,7 @@ export default function HeroLanding({
             <div style={{
               padding: '16px 28px',
               background: '#FAF8F5',
-              borderTop: '1.5px solid #E2E8F0',
+              borderTop: '1.5px solid #D0DFE2',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -4188,7 +4184,7 @@ export default function HeroLanding({
         }
         .solution-micro-card:hover .solution-icon-circle {
           transform: scale(1.12) translateY(-2px);
-          box-shadow: 0 6px 18px rgba(15, 76, 92, 0.32);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
         }
         .solution-micro-card:hover .solution-micro-icon {
           animation: microIconPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -4197,7 +4193,7 @@ export default function HeroLanding({
           content: '';
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at center, rgba(15, 76, 92, 0.12) 0%, transparent 70%);
+          background: transparent;
           opacity: 0;
           transition: opacity 0.3s ease;
           pointer-events: none;

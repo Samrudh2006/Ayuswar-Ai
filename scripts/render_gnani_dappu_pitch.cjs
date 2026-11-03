@@ -78,7 +78,14 @@ const htmlContent = `<!DOCTYPE html>
       flex-direction: column;
       justify-content: space-between;
       flex: 1;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+
+    /* Masthead Block */
+    .masthead {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2px;
     }
 
     /* Header */
@@ -86,12 +93,12 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       position: relative;
-      min-height: 52px;
+      min-height: 54px;
       margin-bottom: 1px;
     }
     .header-logo {
-      width: 52px;
-      height: 52px;
+      width: 54px;
+      height: 54px;
       object-fit: contain;
       position: absolute;
       left: 0;
@@ -101,10 +108,10 @@ const htmlContent = `<!DOCTYPE html>
     .header-text {
       width: 100%;
       text-align: center;
-      padding: 0 54px;
+      padding: 0 56px;
     }
     .title {
-      font-size: 21pt;
+      font-size: 22pt;
       font-weight: 700;
       letter-spacing: -0.2px;
       color: #05161c;
@@ -112,7 +119,7 @@ const htmlContent = `<!DOCTYPE html>
       margin-bottom: 2px;
     }
     .subtitle {
-      font-size: 9.2pt;
+      font-size: 9.4pt;
       font-style: italic;
       color: #2b3b42;
       line-height: 1.18;
@@ -120,14 +127,14 @@ const htmlContent = `<!DOCTYPE html>
     }
     .pitch-meta {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 7.8pt;
+      font-size: 8.0pt;
       color: #444444;
       line-height: 1.15;
       margin-bottom: 2px;
     }
     .links {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 7.9pt;
+      font-size: 8.1pt;
       color: #111111;
       line-height: 1.15;
     }
@@ -139,30 +146,30 @@ const htmlContent = `<!DOCTYPE html>
     hr.divider {
       border: none;
       border-top: 1px solid #333333;
-      margin: 3px 0 4px 0;
+      margin: 3px 0 3px 0;
     }
 
     /* Central Hook */
     .quote-hook {
       text-align: center;
       font-style: italic;
-      font-size: 10.2pt;
-      color: #05161c;
-      line-height: 1.28;
-      margin: 2px 0 3px 0;
-      font-weight: 500;
+      font-size: 10.4pt;
+      color: #0F4C5C;
+      line-height: 1.25;
+      margin: 1px 0 1px 0;
+      font-weight: 600;
     }
 
     /* Section Headings */
     .section-title {
       text-align: center;
       font-family: "Georgia", "Cambria", serif;
-      font-size: 9.0pt;
+      font-size: 9.2pt;
       font-weight: 700;
       letter-spacing: 0.6px;
       text-transform: uppercase;
       color: #05161c;
-      margin: 3px 0 2px 0;
+      margin: 2px 0 2px 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -172,8 +179,8 @@ const htmlContent = `<!DOCTYPE html>
     p.lead-text {
       text-align: justify;
       color: #1a1a1a;
-      font-size: 8.4pt;
-      line-height: 1.32;
+      font-size: 8.65pt;
+      line-height: 1.38;
       margin-bottom: 0px;
     }
 
@@ -182,34 +189,34 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 2px 0;
-      gap: 4px;
+      margin: 1px 0;
+      gap: 5px;
     }
     .flow-box {
       flex: 1;
       border: 1px solid #1a1a1a;
-      padding: 5px 4px;
+      padding: 9px 5px;
       text-align: center;
       background: #FFFFFF;
-      min-height: 50px;
+      min-height: 70px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
     .flow-box-title {
-      font-size: 8.1pt;
+      font-size: 8.5pt;
       font-weight: 700;
       letter-spacing: 0.4px;
       text-transform: uppercase;
       color: #05161c;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .flow-box-desc {
-      font-size: 7.3pt;
-      line-height: 1.18;
+      font-size: 7.7pt;
+      line-height: 1.25;
       color: #2b3b42;
     }
     .flow-arrow {
@@ -225,8 +232,8 @@ const htmlContent = `<!DOCTYPE html>
       gap: 6px;
       background: #F4F9FA;
       border: 1px solid #0F4C5C;
-      padding: 6px 8px;
-      margin: 2px 0;
+      padding: 11px 11px;
+      margin: 1px 0;
     }
     .gnani-col {
       flex: 1;
@@ -238,7 +245,7 @@ const htmlContent = `<!DOCTYPE html>
       padding-right: 0;
     }
     .gnani-tag {
-      font-size: 7.9pt;
+      font-size: 8.3pt;
       font-weight: 750;
       color: #0F4C5C;
       text-transform: uppercase;
@@ -246,11 +253,11 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       gap: 3px;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .gnani-desc {
-      font-size: 7.4pt;
-      line-height: 1.24;
+      font-size: 7.75pt;
+      line-height: 1.32;
       color: #1a2a30;
       text-align: justify;
     }
@@ -260,50 +267,50 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       justify-content: space-between;
       gap: 6px;
-      margin: 2px 0;
+      margin: 1px 0;
     }
     .workflow-card {
       flex: 1;
       border: 1px solid #1a1a1a;
-      padding: 7px 8px;
+      padding: 10px 10px;
       background: #FFFFFF;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 124px;
+      min-height: 180px;
     }
     .workflow-card-title {
-      font-size: 8.2pt;
+      font-size: 8.4pt;
       font-weight: 700;
       letter-spacing: 0.3px;
       text-transform: uppercase;
       color: #05161c;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 3px;
     }
     .workflow-card-body {
-      font-size: 7.6pt;
-      line-height: 1.25;
+      font-size: 7.8pt;
+      line-height: 1.34;
       color: #1a1a1a;
       text-align: justify;
       flex: 1;
     }
     .workflow-card-footer {
-      font-size: 7.1pt;
+      font-size: 7.2pt;
       font-style: italic;
       color: #3b4b52;
-      margin-top: 4px;
+      margin-top: 5px;
       text-align: left;
     }
 
     .plus-bar {
       text-align: center;
-      font-size: 7.6pt;
-      line-height: 1.24;
+      font-size: 7.85pt;
+      line-height: 1.25;
       color: #222222;
-      margin: 2px 0;
+      margin: 2px 0 0 0;
     }
     .plus-bar strong {
       color: #05161c;
@@ -312,11 +319,11 @@ const htmlContent = `<!DOCTYPE html>
     /* Safety Box */
     .callout-box {
       border: 1px solid #333333;
-      padding: 5px 9px;
-      margin: 2px 0;
+      padding: 9px 12px;
+      margin: 1px 0;
       background: #fafafa;
-      font-size: 7.6pt;
-      line-height: 1.24;
+      font-size: 7.9pt;
+      line-height: 1.32;
       text-align: justify;
     }
     .callout-box strong {
@@ -327,10 +334,10 @@ const htmlContent = `<!DOCTYPE html>
     .personal-note-box {
       border: 1px solid #0F4C5C;
       background: #F4FBFB;
-      padding: 6px 9px;
-      margin: 2px 0;
-      font-size: 7.7pt;
-      line-height: 1.26;
+      padding: 10px 13px;
+      margin: 1px 0;
+      font-size: 8.1pt;
+      line-height: 1.34;
       text-align: justify;
       color: #0A3641;
     }
@@ -343,26 +350,26 @@ const htmlContent = `<!DOCTYPE html>
     .metrics-strip {
       display: flex;
       gap: 5px;
-      margin: 3px 0 1px 0;
+      margin: 2px 0 0px 0;
     }
     .metric-cell {
       flex: 1;
       border: 1px solid #1a1a1a;
       background: #FFFFFF;
-      padding: 5px 4px;
+      padding: 9px 5px;
       text-align: center;
     }
     .metric-number {
-      font-size: 9.0pt;
+      font-size: 10.2pt;
       font-weight: 700;
       color: #05161c;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin-bottom: 2px;
     }
     .metric-caption {
-      font-size: 6.9pt;
+      font-size: 7.25pt;
       color: #333333;
-      line-height: 1.16;
+      line-height: 1.20;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
@@ -379,7 +386,7 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       justify-content: space-between;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 7.6pt;
+      font-size: 7.8pt;
       color: #333333;
     }
 
@@ -411,23 +418,23 @@ const htmlContent = `<!DOCTYPE html>
 <body>
   <div class="sheet">
     <div class="content-body">
-      <!-- Header -->
-      <div class="header">
-        <img src="data:image/png;base64,${emblemBase64}" class="header-logo" alt="AyuSwar AI Emblem Logo" />
-        <div class="header-text">
-          <div class="title">AyuSwar AI</div>
-          <div class="subtitle">Ayu (life) + Swar (voice) — Voice-First Sovereign Health Assistant for Bharat</div>
-          <div class="pitch-meta">One-page solution pitch · Gnani's Great Indian AI Internship Challenge 2026</div>
-          <div class="links">Live app: <a href="https://ayuswar-ai.vercel.app">ayuswar-ai.vercel.app</a> · Code: <a href="https://github.com/Samrudh2006/Ayuswar-Ai">github.com/Samrudh2006/Ayuswar-Ai</a></div>
+      <!-- Masthead Block (Header + Divider + Question Hook) -->
+      <div class="masthead">
+        <div class="header">
+          <img src="data:image/png;base64,${emblemBase64}" class="header-logo" alt="AyuSwar AI Emblem Logo" />
+          <div class="header-text">
+            <div class="title">AyuSwar AI</div>
+            <div class="subtitle">Ayu (life) + Swar (voice) — Voice-First Sovereign Health Assistant for Bharat</div>
+            <div class="pitch-meta">One-page solution pitch · Gnani's Great Indian AI Internship Challenge 2026</div>
+            <div class="links">Live app: <a href="https://ayuswar-ai.vercel.app">ayuswar-ai.vercel.app</a> · Code: <a href="https://github.com/Samrudh2006/Ayuswar-Ai">github.com/Samrudh2006/Ayuswar-Ai</a></div>
+          </div>
         </div>
-      </div>
 
-      <hr class="divider">
+        <hr class="divider">
 
-      <!-- Central Hook -->
-      <div class="quote-hook">
-        What would healthcare software look like if it listened and spoke<br>
-        in the languages India actually uses?
+        <div class="quote-hook">
+          “What would healthcare software look like if it listened and spoke in the languages India actually uses?”
+        </div>
       </div>
 
       <!-- Problem Section -->
@@ -470,11 +477,11 @@ const htmlContent = `<!DOCTYPE html>
         <div class="gnani-matrix">
           <div class="gnani-col">
             <div class="gnani-tag">${icons.mic} Prisma v3 (STT)</div>
-            <div class="gnani-desc">Rayalaseema Telugu dialect ASR + linguistic diarization separating doctor &amp; patient speech without manual buttons.</div>
+            <div class="gnani-desc">Rayalaseema Telugu dialect ASR + linguistic pitch diarization separating doctor &amp; patient speech in real time without buttons.</div>
           </div>
           <div class="gnani-col">
             <div class="gnani-tag">${icons.wave} Timbre v2.5 (TTS)</div>
-            <div class="gnani-desc">Nalini 24kHz maternal voice reading prescriptions aloud with 1:1 karaoke highlighting and Telugu food cues.</div>
+            <div class="gnani-desc">Nalini 24kHz sovereign neural voice reading prescriptions aloud with 1:1 karaoke highlighting and Telugu cultural food cues.</div>
           </div>
           <div class="gnani-col">
             <div class="gnani-tag">${icons.brain} Evon 30B (LLM)</div>
@@ -492,7 +499,7 @@ const htmlContent = `<!DOCTYPE html>
             <div>
               <div class="workflow-card-title">${icons.stethoscope} AMBIENT OPD SCRIBE</div>
               <div class="workflow-card-body">
-                Transcribes consultations in regional Telugu dialects using automated pitch DSP diarization. Suggests WHO ICD-10 &amp; SNOMED-CT codes for physician review. The system assists; it never decides.
+                Transcribes rural consultations in regional Telugu dialects using automated pitch DSP diarization. Suggests WHO ICD-10 &amp; SNOMED-CT codes for physician review with zero manual button pressing. The system assists; it never decides.
               </div>
             </div>
             <div class="workflow-card-footer">
@@ -503,9 +510,9 @@ const htmlContent = `<!DOCTYPE html>
           <!-- Card 2 -->
           <div class="workflow-card">
             <div>
-              <div class="workflow-card-title">${icons.ambulance} SANJIVANI 108</div>
+              <div class="workflow-card-title">${icons.ambulance} SANJIVANI EMERGENCY TRIAGE</div>
               <div class="workflow-card-body">
-                Voice symptom intake, rules-based red/yellow/green triage, GPS nearest hospital mapping, and structured clinician handover summaries with live ambulance coordination telemetry.
+                Voice symptom intake for 108 emergency triage, rules-based red/yellow/green severity sorting, GPS nearest hospital routing, and structured clinician handover summaries with live ambulance coordination telemetry.
               </div>
             </div>
             <div class="workflow-card-footer">
@@ -518,7 +525,7 @@ const htmlContent = `<!DOCTYPE html>
             <div>
               <div class="workflow-card-title">${icons.wave} ACOUSTIC VOICE LAB</div>
               <div class="workflow-card-body">
-                Records voice and breathing sounds to compute on-device signal features (pitch F0, Harmonics-to-Noise Ratio, 380–450Hz wheeze harmonics) via Web Audio API with bilingual voice readouts.
+                Records voice and breathing sounds to compute on-device signal features (pitch F0, jitter, shimmer, Harmonics-to-Noise Ratio, 380–450Hz wheeze harmonics) via Web Audio API with bilingual voice readouts.
               </div>
             </div>
             <div class="workflow-card-footer">

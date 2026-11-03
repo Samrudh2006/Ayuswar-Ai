@@ -271,7 +271,7 @@ export default function PrescriptionPreviewView() {
               data.gov.in & PMBJP Verified
             </span>
           </div>
-          <p style={{ fontSize: '13.5px', color: '#64748B', margin: 0 }}>
+          <p style={{ fontSize: '13.5px', color: '#698892', margin: 0 }}>
             Automated generic drug substitution mapping Indian Pharmacopoeia generics to Pradhan Mantri Jan Aushadhi Kendra codes for up to 88% patient cost reduction.
           </p>
         </div>
@@ -302,7 +302,7 @@ export default function PrescriptionPreviewView() {
             style={{
               padding: '10px 16px',
               borderRadius: '10px',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D0DFE2',
               background: '#FFFFFF',
               color: '#081C24',
               fontSize: '13px',
@@ -331,7 +331,7 @@ export default function PrescriptionPreviewView() {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '0 4px 12px rgba(15, 76, 92, 0.25)'
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.16)'
             }}
           >
             <Printer size={15} />
@@ -437,7 +437,7 @@ export default function PrescriptionPreviewView() {
       <div style={{ 
         background: '#FFFFFF', 
         borderRadius: '14px', 
-        border: '1px solid #CBD5E1', 
+        border: '1px solid #D0DFE2', 
         padding: '18px 22px', 
         marginBottom: '24px',
         position: 'relative' 
@@ -476,7 +476,7 @@ export default function PrescriptionPreviewView() {
                 transform: 'translateY(-50%)',
                 background: 'none',
                 border: 'none',
-                color: '#64748B',
+                color: '#698892',
                 cursor: 'pointer',
                 fontWeight: 700
               }}
@@ -491,7 +491,7 @@ export default function PrescriptionPreviewView() {
           <div style={{
             marginTop: '10px',
             background: '#FFFFFF',
-            border: '1px solid #CBD5E1',
+            border: '1px solid #D0DFE2',
             borderRadius: '10px',
             boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
             overflow: 'hidden'
@@ -516,14 +516,14 @@ export default function PrescriptionPreviewView() {
                   <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#081C24' }}>
                     {drug.genericName}
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11.5px', color: '#698892', marginTop: '2px' }}>
                     Popular Brand: <strong>{drug.popularBrand}</strong> • Category: {drug.category} • Code: {drug.kendraCode}
                   </div>
                 </div>
 
                 <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <div>
-                    <div style={{ fontSize: '10.5px', color: '#64748B', textDecoration: 'line-through' }}>MRP ₹{drug.brandedMrp}</div>
+                    <div style={{ fontSize: '10.5px', color: '#698892', textDecoration: 'line-through' }}>MRP ₹{drug.brandedMrp}</div>
                     <div style={{ fontSize: '14px', fontWeight: 850, color: '#15803D' }}>PMBJP ₹{drug.janAushadhiPrice}</div>
                     <div style={{ fontSize: '10.5px', color: '#059669', fontWeight: 700 }}>Save {drug.savingsPercent}%</div>
                   </div>
@@ -560,8 +560,8 @@ export default function PrescriptionPreviewView() {
         style={{
           background: '#FFFFFF',
           borderRadius: '16px',
-          border: '1px solid #CBD5E1',
-          boxShadow: '0 8px 30px rgba(10,37,64,0.06)',
+          border: '1px solid #D0DFE2',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
           padding: '36px',
           position: 'relative'
         }}
@@ -575,13 +575,13 @@ export default function PrescriptionPreviewView() {
             <div style={{ fontSize: '13px', color: '#0F4C5C', fontWeight: 750 }}>
               {patient.doctorSpecialty}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '2px' }}>
+            <div style={{ fontSize: '11.5px', color: '#698892', marginTop: '2px' }}>
               Medical Reg No: {patient.regNumber} • {patient.facilityName}
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '12px', fontWeight: 800, color: '#081C24' }}>Date: {patient.date}</div>
-            <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>FHIR R4 Bundle #RX-2026-PMBJP-0941</div>
+            <div style={{ fontSize: '11px', color: '#698892', marginTop: '4px' }}>FHIR R4 Bundle #RX-2026-PMBJP-0941</div>
             <div style={{ fontSize: '10.5px', color: '#15803D', fontWeight: 750, marginTop: '2px' }}>
               ✓ Data.gov.in / PMBI Compliant
             </div>
@@ -600,26 +600,26 @@ export default function PrescriptionPreviewView() {
           fontSize: '13px' 
         }}>
           <div>
-            <span style={{ color: '#64748B' }}>Patient Name: </span>
+            <span style={{ color: '#698892' }}>Patient Name: </span>
             <strong style={{ color: '#081C24' }}>{patient.name} ({patient.vernacularName})</strong>
           </div>
           <div>
-            <span style={{ color: '#64748B' }}>Age / Gender: </span>
+            <span style={{ color: '#698892' }}>Age / Gender: </span>
             <strong style={{ color: '#081C24' }}>{patient.age}y / {patient.gender}</strong>
           </div>
           <div>
-            <span style={{ color: '#64748B' }}>ABHA ID: </span>
+            <span style={{ color: '#698892' }}>ABHA ID: </span>
             <strong style={{ color: '#081C24', fontFamily: 'monospace' }}>{patient.abhaId}</strong>
           </div>
           <div>
-            <span style={{ color: '#64748B' }}>Recorded Vitals: </span>
+            <span style={{ color: '#698892' }}>Recorded Vitals: </span>
             <span style={{ color: '#081C24' }}>{patient.vitals}</span>
           </div>
         </div>
 
         {/* Clinical Diagnosis */}
         <div style={{ marginBottom: '24px' }}>
-          <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '4px' }}>
+          <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#698892', textTransform: 'uppercase', marginBottom: '4px' }}>
             Clinical Diagnosis & Assessment:
           </div>
           <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
@@ -636,7 +636,7 @@ export default function PrescriptionPreviewView() {
                 Medication Order & Jan Aushadhi Dispense Mapping
               </span>
             </div>
-            <span style={{ fontSize: '11.5px', color: '#64748B' }}>
+            <span style={{ fontSize: '11.5px', color: '#698892' }}>
               {medications.length} Prescribed Medications
             </span>
           </div>
@@ -652,7 +652,7 @@ export default function PrescriptionPreviewView() {
                 <div 
                   key={med.id} 
                   style={{ 
-                    border: med.isJanAushadhi ? '1.5px solid #BBF7D0' : '1px solid #E2E8F0', 
+                    border: med.isJanAushadhi ? '1.5px solid #BBF7D0' : '1px solid #D0DFE2', 
                     borderRadius: '12px', 
                     padding: '16px 18px', 
                     background: med.isJanAushadhi ? '#F0FDF4' : '#FFFFFF',
@@ -688,7 +688,7 @@ export default function PrescriptionPreviewView() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       {/* Price & Savings Badge */}
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>
                           Branded: <s style={{ color: '#DC2626' }}>₹{brandMrp}</s>
                         </div>
                         <div style={{ fontSize: '14px', fontWeight: 850, color: med.isJanAushadhi ? '#15803D' : '#0A2540' }}>
@@ -707,9 +707,9 @@ export default function PrescriptionPreviewView() {
                         style={{
                           padding: '6px 12px',
                           borderRadius: '8px',
-                          border: med.isJanAushadhi ? '1px solid #059669' : '1px solid #CBD5E1',
+                          border: med.isJanAushadhi ? '1px solid #059669' : '1px solid #D0DFE2',
                           background: med.isJanAushadhi ? '#ECFDF5' : '#F8FAFC',
-                          color: med.isJanAushadhi ? '#065F46' : '#475569',
+                          color: med.isJanAushadhi ? '#065F46' : '#486770',
                           fontSize: '11.5px',
                           fontWeight: 750,
                           cursor: 'pointer'
@@ -735,7 +735,7 @@ export default function PrescriptionPreviewView() {
                     </div>
                   </div>
 
-                  <div style={{ fontSize: '12.5px', color: '#334155', marginTop: '8px', borderTop: '1px dashed #CBD5E1', paddingTop: '8px' }}>
+                  <div style={{ fontSize: '12.5px', color: '#2C4A52', marginTop: '8px', borderTop: '1px dashed #D0DFE2', paddingTop: '8px' }}>
                     <strong>Dosage & Frequency:</strong> {med.dosage} • <strong>Timing:</strong> {med.timing} • <strong>Duration:</strong> {med.duration}
                   </div>
 
@@ -750,7 +750,7 @@ export default function PrescriptionPreviewView() {
 
         {/* Doctor Signature & Dispense Stamp */}
         <div style={{ 
-          borderTop: '2px solid #E2E8F0', 
+          borderTop: '2px solid #D0DFE2', 
           paddingTop: '20px', 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -769,7 +769,7 @@ export default function PrescriptionPreviewView() {
               <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 750, marginBottom: '2px' }}>
                 ✓ Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) Verified Dispense Slip
               </div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>
+              <div style={{ fontSize: '11px', color: '#698892' }}>
                 Show this QR slip at any PMBJP Kendra across India for price-capped generic delivery.
               </div>
             </div>
@@ -778,7 +778,7 @@ export default function PrescriptionPreviewView() {
           <div style={{ textAlign: 'right' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '200px', marginBottom: '4px' }} />
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{patient.doctorName}</div>
-            <div style={{ fontSize: '11px', color: '#64748B' }}>Attending Physician Digital Signature (ABDM HPR Verified)</div>
+            <div style={{ fontSize: '11px', color: '#698892' }}>Attending Physician Digital Signature (ABDM HPR Verified)</div>
           </div>
         </div>
       </div>

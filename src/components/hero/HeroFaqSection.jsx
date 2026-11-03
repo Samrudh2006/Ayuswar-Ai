@@ -78,11 +78,11 @@ export default function HeroFaqSection({ onSelectModule }) {
           borderRadius: '24px',
           border: '2px solid #94A3B8',
           padding: '24px',
-          boxShadow: '0 12px 36px rgba(10, 37, 64, 0.06)',
+          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.04)',
           position: 'sticky',
           top: '20px'
         }}>
-          <div style={{ borderRadius: '18px', overflow: 'hidden', border: '1.5px solid #CBD5E1', marginBottom: '18px', background: '#E6FAF8' }}>
+          <div style={{ borderRadius: '18px', overflow: 'hidden', border: '1.5px solid #D0DFE2', marginBottom: '18px', background: '#E6FAF8' }}>
             <img
               src="/assets/sections/sec8_faq.png"
               alt="Dr. Ananya Waving Avatar with FAQ Question Bubble"
@@ -94,13 +94,13 @@ export default function HeroFaqSection({ onSelectModule }) {
             />
           </div>
 
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '8px', fontSize: '11px', fontWeight: 800, marginBottom: '8px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '8px', fontSize: '11px', fontWeight: 800, marginBottom: '8px' }}>
             <span>24/7 VIRTUAL CLINICAL SUPPORT</span>
           </div>
           <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#081C24', margin: '0 0 6px 0' }}>
             Have Questions? We Have Answers.
           </h3>
-          <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: 1.55, marginBottom: '18px' }}>
+          <p style={{ fontSize: '13.5px', color: '#698892', lineHeight: 1.55, marginBottom: '18px' }}>
             Explore how AyuSwar handles noisy 72 dB OPD halls, strictly adheres to DPDP Act 2023 RAM-only processing, and ensures 100% human doctor sign-off.
           </p>
 
@@ -120,7 +120,7 @@ export default function HeroFaqSection({ onSelectModule }) {
               justifyContent: 'center',
               gap: '8px',
               cursor: 'pointer',
-              boxShadow: '0 6px 20px rgba(15, 76, 92, 0.25)'
+              boxShadow: '0 6px 20px rgba(0, 0, 0, 0.16)'
             }}
           >
             <span>Ask Dr. Ananya Virtual Assistant</span>
@@ -141,7 +141,7 @@ export default function HeroFaqSection({ onSelectModule }) {
                   borderRadius: '12px',
                   overflow: 'hidden',
                   transition: 'all 200ms ease',
-                  boxShadow: isExpanded ? '0 8px 24px rgba(15, 76, 92, 0.12)' : '0 2px 8px rgba(10, 37, 64, 0.04)'
+                  boxShadow: isExpanded ? '0 8px 24px rgba(0, 0, 0, 0.08)' : '0 2px 8px rgba(0, 0, 0, 0.03)'
                 }}
               >
                 <button
@@ -156,21 +156,21 @@ export default function HeroFaqSection({ onSelectModule }) {
                     border: 'none',
                     textAlign: 'left',
                     cursor: 'pointer',
-                    fontFamily: 'Outfit, sans-serif',
+                    fontFamily: 'var(--font-main)',
                     fontSize: '15px',
                     fontWeight: 700,
                     color: isExpanded ? '#0F4C5C' : '#0A2540'
                   }}
                 >
                   <span>{faq.q}</span>
-                  {isExpanded ? <ChevronUp size={17} color="#0F4C5C" /> : <ChevronDown size={17} color="#64748B" />}
+                  {isExpanded ? <ChevronUp size={17} color="#0F4C5C" /> : <ChevronDown size={17} color="#698892" />}
                 </button>
                 {isExpanded && (
                   <div style={{
                     padding: '0 20px 18px 20px',
                     fontSize: '13.5px',
                     lineHeight: 1.6,
-                    color: '#475569',
+                    color: '#486770',
                     borderTop: '1px solid #F1F5F9',
                     paddingTop: '12px'
                   }}>

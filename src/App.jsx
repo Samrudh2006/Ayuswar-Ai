@@ -54,12 +54,12 @@ function RouteLoadingFallback() {
       gap: '14px',
       background: '#FAF8F5',
       color: '#0F4C5C',
-      fontFamily: 'Outfit, sans-serif'
+      fontFamily: 'var(--font-main)'
     }}>
       <div style={{
         width: '38px',
         height: '38px',
-        border: '3px solid rgba(15, 76, 92, 0.15)',
+        border: '3px solid rgba(0, 0, 0, 0.10)',
         borderTopColor: '#0F4C5C',
         borderRadius: '50%',
         animation: 'ayuswar-spin 0.75s linear infinite'
@@ -449,9 +449,9 @@ export default function App() {
         <footer 
           className="site-footer"
           style={{
-          background: '#0F172A',
-          color: '#E2E8F0',
-          borderTop: '1px solid #334155',
+          background: '#091E26',
+          color: '#D0DFE2',
+          borderTop: '1px solid #2C4A52',
           padding: '12px 20px',
           textAlign: 'center',
           fontSize: '12.5px',
@@ -481,7 +481,7 @@ export default function App() {
             backdropFilter: 'blur(8px)',
             color: '#ffffff',
             gap: 16,
-            fontFamily: 'Outfit, sans-serif'
+            fontFamily: 'var(--font-main)'
           }}>
             <div style={{
               width: 44,

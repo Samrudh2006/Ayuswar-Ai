@@ -568,7 +568,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#FFFFFF' }}>
               {toastNotification.title}
             </div>
-            <div style={{ fontSize: '11px', color: '#CBD5E1', marginTop: '2px' }}>
+            <div style={{ fontSize: '11px', color: '#D0DFE2', marginTop: '2px' }}>
               {toastNotification.message}
             </div>
           </div>
@@ -640,9 +640,9 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               }}
             >
               <span style={{ color: '#38BDF8', fontWeight: 800 }}>INCIDENT #108-AP-8902 (SIMULATION)</span>
-              <span style={{ color: '#475569' }}>•</span>
+              <span style={{ color: '#486770' }}>•</span>
               <span style={{ color: '#10B981', fontWeight: 700 }}>AMBULANCE FEED (SIMULATION) ●</span>
-              <span style={{ color: '#475569' }}>•</span>
+              <span style={{ color: '#486770' }}>•</span>
               <span style={{ color: '#38BDF8', fontWeight: 700 }}>ABDM HFR: PLANNED</span>
             </div>
           </div>
@@ -981,7 +981,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               style={{
                 background: geoAddress.includes('Kakinada') ? '#0284C7' : '#0B172E',
                 border: geoAddress.includes('Kakinada') ? '1px solid #38BDF8' : '1px solid #1E293B',
-                color: '#CBD5E1',
+                color: '#D0DFE2',
                 borderRadius: '6px',
                 padding: '5px 8px',
                 fontSize: '10.5px',
@@ -995,7 +995,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
               style={{
                 background: geoAddress.includes('Rajamahendravaram') ? '#0284C7' : '#0B172E',
                 border: geoAddress.includes('Rajamahendravaram') ? '1px solid #38BDF8' : '1px solid #1E293B',
-                color: '#CBD5E1',
+                color: '#D0DFE2',
                 borderRadius: '6px',
                 padding: '5px 8px',
                 fontSize: '10.5px',
@@ -1241,7 +1241,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                   <div style={{ fontSize: '15px', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.25, marginTop: '4px' }}>
                     {selectedHospital.name}
                   </div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B', marginTop: '2px' }}>
+                  <div style={{ fontSize: '10.5px', color: '#698892', marginTop: '2px' }}>
                     {selectedHospital.address}
                   </div>
 
@@ -1260,26 +1260,26 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                       <div style={{ fontSize: '17px', fontWeight: 900, color: '#38BDF8' }}>
                         {selectedHospital.etaMinutes} min
                       </div>
-                      <div style={{ fontSize: '8.5px', color: '#64748B' }}>ETA by Road</div>
+                      <div style={{ fontSize: '8.5px', color: '#698892' }}>ETA by Road</div>
                     </div>
                     <div style={{ width: '1px', height: '22px', background: '#1E3658' }} />
                     <div>
                       <div style={{ fontSize: '17px', fontWeight: 900, color: '#FFFFFF' }}>
                         {selectedHospital.distanceKm} km
                       </div>
-                      <div style={{ fontSize: '8.5px', color: '#64748B' }}>Distance</div>
+                      <div style={{ fontSize: '8.5px', color: '#698892' }}>Distance</div>
                     </div>
                     <div style={{ width: '1px', height: '22px', background: '#1E3658' }} />
                     <div>
                       <div style={{ fontSize: '17px', fontWeight: 900, color: '#10B981' }}>
                         {selectedHospital.bedsAvailable}
                       </div>
-                      <div style={{ fontSize: '8.5px', color: '#64748B' }}>Beds Ready</div>
+                      <div style={{ fontSize: '8.5px', color: '#698892' }}>Beds Ready</div>
                     </div>
                   </div>
 
                   {/* Why A-12 & Why this Real Hospital */}
-                  <div style={{ background: '#071224', padding: '8px 10px', borderRadius: '8px', fontSize: '10px', color: '#CBD5E1', marginBottom: '10px', lineHeight: 1.4 }}>
+                  <div style={{ background: '#071224', padding: '8px 10px', borderRadius: '8px', fontSize: '10px', color: '#D0DFE2', marginBottom: '10px', lineHeight: 1.4 }}>
                     <div><strong>Why Ambulance A-12?</strong> Closest ALS unit ({selectedHospital.distanceKm} km) • Defibrillator, Ventilator, 12-Lead ECG ready.</div>
                     <div style={{ marginTop: '3px' }}><strong>Why {selectedHospital.shortName}?</strong> {selectedHospital.matchReason}</div>
                   </div>
@@ -1363,7 +1363,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                       <span>🟢 ACCEPTING</span>
                       <span>🟢 {selectedHospital.resuscitationBayAssigned || 'BAY #02 RESERVED'}</span>
                     </div>
-                    <div style={{ fontSize: '9px', color: '#64748B', marginTop: '3px' }}>
+                    <div style={{ fontSize: '9px', color: '#698892', marginTop: '3px' }}>
                       Confirmed {hospitalAlertSecondsAgo}s ago with CMO {selectedHospital.cmo}
                     </div>
                   </div>
@@ -1429,7 +1429,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                   </div>
 
                   <div style={{ marginTop: '6px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#CBD5E1', marginBottom: '2px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#D0DFE2', marginBottom: '2px' }}>
                       <span>Bed Capacity</span>
                       <span style={{ color: '#10B981', fontWeight: 700 }}>{recommendedHospital.bedsAvailable} Available ({recommendedHospital.icuBeds} ICU)</span>
                     </div>
@@ -1497,7 +1497,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
-                        <span style={{ fontSize: '9.5px', color: '#64748B', fontWeight: 800 }}>{idx + 1}.</span>
+                        <span style={{ fontSize: '9.5px', color: '#698892', fontWeight: 800 }}>{idx + 1}.</span>
                         <div style={{ minWidth: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <div style={{ fontSize: '11px', fontWeight: 700, color: '#F1F5F9', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1569,22 +1569,22 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
             <span>
               <strong>Ambulance A-12:</strong> {ambulanceData.driver}
             </span>
-            <span style={{ color: '#475569' }}>|</span>
+            <span style={{ color: '#486770' }}>|</span>
             <span style={{ color: '#10B981', fontWeight: 700 }}>
               Mobile: +91 94401 22108
             </span>
-            <span style={{ color: '#475569' }}>|</span>
+            <span style={{ color: '#486770' }}>|</span>
             <span>Speed: <strong>{ambulanceData.speed} km/h</strong></span>
-            <span style={{ color: '#475569' }}>|</span>
+            <span style={{ color: '#486770' }}>|</span>
             <span>Status: <strong style={{ color: ambulanceData.status === 'EN_ROUTE' ? '#DC2626' : '#10B981' }}>{ambulanceData.status}</strong></span>
           </div>
 
           {/* Destination & Handshake */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>Target: <strong style={{ color: '#FFFFFF' }}>{selectedHospital?.name || 'Local Hospital'}</strong></span>
-            <span style={{ color: '#475569' }}>|</span>
+            <span style={{ color: '#486770' }}>|</span>
             <span>Bay: <strong style={{ color: '#38BDF8' }}>{selectedHospital?.resuscitationBayAssigned || 'Bay #02'}</strong></span>
-            <span style={{ color: '#475569' }}>|</span>
+            <span style={{ color: '#486770' }}>|</span>
             <span style={{ background: '#0F2547', color: '#38BDF8', padding: '1px 6px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: 700 }}>
               {panToken || 'PAN-READY'}
             </span>
@@ -1694,7 +1694,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                 {auditLogs.map((log, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '11px', background: '#0B172E', padding: '8px 12px', borderRadius: '6px' }}>
                     <span style={{ color: '#38BDF8', fontFamily: 'monospace', fontWeight: 800 }}>{log.time}</span>
-                    <span style={{ color: '#E2E8F0' }}>{log.event}</span>
+                    <span style={{ color: '#D0DFE2' }}>{log.event}</span>
                   </div>
                 ))}
               </div>
@@ -1768,7 +1768,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                 <div style={{ fontSize: '10px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', marginBottom: '6px' }}>
                   Tier 1: Accredited Facility Capabilities (ABDM Immutable Registry)
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', fontSize: '10px', color: '#CBD5E1' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', fontSize: '10px', color: '#D0DFE2' }}>
                   <div>• <strong>Trauma:</strong> {inspectedHospital.traumaTier}</div>
                   <div>• <strong>Cath Lab:</strong> {inspectedHospital.cathLab}</div>
                   <div>• <strong>ICU Beds:</strong> {inspectedHospital.icuBeds} Units Available</div>
@@ -1783,7 +1783,7 @@ export default function SanjivaniEmergencyModal({ isOpen, onClose }) {
                 <div style={{ fontSize: '10px', fontWeight: 800, color: '#10B981', textTransform: 'uppercase', marginBottom: '6px' }}>
                   Tier 2: Live Operational Status (ABDM Interoperability Bridge)
                 </div>
-                <div style={{ fontSize: '10px', color: '#CBD5E1', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '10px', color: '#D0DFE2', lineHeight: 1.5 }}>
                   <div>• <strong>Diversion Status:</strong> <span style={{ color: '#10B981', fontWeight: 700 }}>🟢 OPEN (Accepting Emergencies)</span></div>
                   <div>• <strong>Assigned Resuscitation Bay:</strong> <span style={{ color: '#38BDF8', fontWeight: 700 }}>{inspectedHospital.resuscitationBayAssigned}</span></div>
                   <div>• <strong>CMO On Duty:</strong> {inspectedHospital.cmo}</div>

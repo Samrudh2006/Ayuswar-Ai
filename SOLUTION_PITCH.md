@@ -30,9 +30,9 @@ In rural Primary Health Centres (PHCs), 1 doctor serves over 2,500 villagers dai
 
 ### THREE PRODUCTION WORKFLOWS
 
-| 🩺 AMBIENT OPD SCRIBE | 🚑 SANJIVANI 108 | 📊 ACOUSTIC VOICE LAB |
+| 🩺 AMBIENT OPD SCRIBE | 🚑 SANJIVANI EMERGENCY TRIAGE | 📊 ACOUSTIC VOICE LAB |
 | :--- | :--- | :--- |
-| Transcribes consultations in regional Telugu dialects using automated pitch DSP diarization. Suggests WHO ICD-10 & SNOMED-CT codes for physician review. The system assists; it never decides.<br><br>*Includes PMBJP generic substitution saving up to 86% on routine medication.* | Voice symptom intake, rules-based red/yellow/green triage, GPS nearest hospital mapping, and structured clinician handover summaries with live ambulance coordination telemetry.<br><br>*Research simulation; emergency ambulance dispatch is an interface demo.* | Records voice and breathing sounds to compute on-device signal features (pitch F0, Harmonics-to-Noise Ratio, 380–450Hz wheeze harmonics) via Web Audio API with bilingual voice readouts.<br><br>*Physical signal screening demonstration, not clinical diagnosis.* |
+| Transcribes consultations in regional Telugu dialects using automated pitch DSP diarization. Suggests WHO ICD-10 & SNOMED-CT codes for physician review with zero manual button pressing. The system assists; it never decides.<br><br>*Includes PMBJP generic substitution saving up to 86% on routine medication.* | Voice symptom intake for 108 emergency triage, rules-based red/yellow/green severity sorting, GPS nearest hospital routing, and structured clinician handover summaries with live ambulance coordination telemetry.<br><br>*Research simulation; emergency ambulance dispatch is an interface demo.* | Records voice and breathing sounds to compute on-device signal features (pitch F0, Harmonics-to-Noise Ratio, 380–450Hz wheeze harmonics) via Web Audio API with bilingual voice readouts.<br><br>*Physical signal screening demonstration, not clinical diagnosis.* |
 
 **Plus:** **PMBJP Jan Aushadhi** generic savings · **Audio-Rx** spoken prescriptions in native dialect with **WhatsApp** delivery · **ABDM M3 FHIR** zero-network offline sync
 

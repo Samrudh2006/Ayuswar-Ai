@@ -54,7 +54,7 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
           borderRadius: '20px',
           fontSize: '11px',
           color: '#065F46',
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: 'var(--font-main)',
           fontWeight: 700,
           userSelect: 'none',
           ...style
@@ -88,12 +88,12 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: '8px',
-        background: 'linear-gradient(90deg, rgba(6, 45, 48, 0.95) 0%, rgba(10, 37, 64, 0.95) 100%)',
+        background: 'linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.14) 100%)',
         color: '#ffffff',
         padding: '7px 14px',
         borderRadius: '10px',
         fontSize: '11.5px',
-        fontFamily: 'Outfit, sans-serif',
+        fontFamily: 'var(--font-main)',
         boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
         border: '1px solid rgba(45, 212, 191, 0.25)',
         ...style
@@ -123,7 +123,7 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
           style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
         >
           <Wind size={12} color="#FDE047" />
-          <span style={{ color: '#CBD5E1' }}>
+          <span style={{ color: '#D0DFE2' }}>
             {telemetry?.locationName?.split(' ')[0] || 'Kurnool'} AQI:
           </span>
           <strong style={{ color: telemetry?.riskColor || '#2DD4BF', fontFamily: 'monospace' }}>
@@ -166,7 +166,7 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
             background: 'rgba(255,255,255,0.1)',
             padding: '1px 6px',
             borderRadius: '4px',
-            color: '#CBD5E1'
+            color: '#D0DFE2'
           }}>
             ⚡ {telemetry.latencyMs}ms
           </span>

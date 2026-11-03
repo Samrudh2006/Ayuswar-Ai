@@ -46,7 +46,7 @@ export function AyuSwarOrbLogo({ size = 28, glow = true }) {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'radial-gradient(circle at 35% 30%, #00F5D4 0%, #0F4C5C 60%, #0A2540 100%)',
-      boxShadow: glow ? '0 0 16px rgba(0, 245, 212, 0.55), 0 0 30px rgba(15, 76, 92, 0.35)' : 'none',
+      boxShadow: glow ? '0 0 16px rgba(0, 245, 212, 0.55), 0 0 30px rgba(0, 0, 0, 0.16)' : 'none',
       flexShrink: 0
     }}>
       <svg width={size * 0.72} height={size * 0.72} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -476,7 +476,7 @@ export default function FloatingAssistant({
         bottom: '24px',
         right: '26px',
         zIndex: 1200,
-        fontFamily: 'Outfit, sans-serif'
+        fontFamily: 'var(--font-main)'
       }}
     >
       {/* =========================================================================
@@ -494,7 +494,7 @@ export default function FloatingAssistant({
             border: '1.5px solid #D4AF37',
             padding: '8px 10px 8px 12px',
             borderRadius: '40px',
-            boxShadow: '0 12px 36px rgba(15, 76, 92, 0.22), 0 4px 12px rgba(10, 37, 64, 0.12)',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)',
             cursor: 'pointer',
             transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
             transform: 'scale(1)'
@@ -530,7 +530,7 @@ export default function FloatingAssistant({
                 {effectiveRole === 'doctor' ? 'MD' : (effectiveRole === 'patient' ? 'Pt' : 'Reception')}
               </span>
             </span>
-            <span style={{ fontSize: '10px', color: '#64748B', fontWeight: 600 }}>
+            <span style={{ fontSize: '10px', color: '#698892', fontWeight: 600 }}>
               {effectiveRole === 'doctor'
                 ? 'Clinical Co-Pilot'
                 : (effectiveRole === 'patient' ? 'Your Health Companion' : 'AI Clinic Helpdesk')}
@@ -563,7 +563,7 @@ export default function FloatingAssistant({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(15, 76, 92, 0.35)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.16)',
               transition: 'transform 150ms ease'
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
@@ -587,7 +587,7 @@ export default function FloatingAssistant({
           background: '#ffffff',
           borderRadius: '24px',
           overflow: 'hidden',
-          boxShadow: '0 24px 60px rgba(10, 37, 64, 0.28), 0 8px 24px rgba(15, 76, 92, 0.16)',
+          boxShadow: '0 24px 60px rgba(0, 0, 0, 0.14), 0 8px 24px rgba(0, 0, 0, 0.11)',
           border: '1.5px solid #CCFBF1',
           display: 'flex',
           flexDirection: 'column',
@@ -612,7 +612,7 @@ export default function FloatingAssistant({
                 <span style={{
                   fontSize: '9.5px',
                   color: effectiveRole === 'doctor' ? '#0F4C5C' : (effectiveRole === 'patient' ? '#D97706' : '#0D9488'),
-                  background: effectiveRole === 'doctor' ? 'rgba(15, 76, 92, 0.1)' : (effectiveRole === 'patient' ? 'rgba(217,119,6,0.1)' : 'rgba(13,148,136,0.1)'),
+                  background: effectiveRole === 'doctor' ? 'rgba(0, 0, 0, 0.07)' : (effectiveRole === 'patient' ? 'rgba(217,119,6,0.1)' : 'rgba(13,148,136,0.1)'),
                   padding: '2px 6px',
                   borderRadius: '6px',
                   fontWeight: 750,
@@ -632,7 +632,7 @@ export default function FloatingAssistant({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#64748B',
+                  color: '#698892',
                   cursor: 'pointer',
                   padding: '3px',
                   borderRadius: '6px'
@@ -647,7 +647,7 @@ export default function FloatingAssistant({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#64748B',
+                  color: '#698892',
                   cursor: 'pointer',
                   padding: '3px',
                   borderRadius: '6px'
@@ -710,10 +710,10 @@ export default function FloatingAssistant({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: 'rgba(15, 76, 92, 0.05)',
+                  background: 'rgba(0, 0, 0, 0.03)',
                   borderRadius: '12px',
                   padding: '5px 8px',
-                  border: '1px solid rgba(15, 76, 92, 0.12)'
+                  border: '1px solid rgba(0, 0, 0, 0.08)'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 800, color: '#0F4C5C' }}>
                     <Globe size={13} color="#0F4C5C" />
@@ -737,8 +737,8 @@ export default function FloatingAssistant({
                         }}
                         style={{
                           background: speechLanguage === lang.id ? '#0F4C5C' : '#FFFFFF',
-                          color: speechLanguage === lang.id ? '#FFFFFF' : '#475569',
-                          border: speechLanguage === lang.id ? '1px solid #0F4C5C' : '1px solid #CBD5E1',
+                          color: speechLanguage === lang.id ? '#FFFFFF' : '#486770',
+                          border: speechLanguage === lang.id ? '1px solid #0F4C5C' : '1px solid #D0DFE2',
                           borderRadius: '8px',
                           padding: '3px 8px',
                           fontSize: '10.5px',
@@ -747,7 +747,7 @@ export default function FloatingAssistant({
                           display: 'flex',
                           alignItems: 'center',
                           gap: '3px',
-                          boxShadow: speechLanguage === lang.id ? '0 1px 4px rgba(15, 76, 92, 0.25)' : 'none',
+                          boxShadow: speechLanguage === lang.id ? '0 1px 4px rgba(0, 0, 0, 0.16)' : 'none',
                           transition: 'all 0.15s ease'
                         }}
                         title={`Switch speech transcription to ${lang.label}`}
@@ -761,7 +761,7 @@ export default function FloatingAssistant({
 
                 {/* Soundwave Frequency Visualizer Box */}
                 <div style={{
-                  background: 'radial-gradient(ellipse at center, #0F172A 0%, #0A2540 100%)',
+                  background: 'radial-gradient(ellipse at center, #091E26 0%, #0A2540 100%)',
                   borderRadius: '16px',
                   padding: '16px 14px',
                   color: '#ffffff',
@@ -782,7 +782,7 @@ export default function FloatingAssistant({
                           width: '3.5px',
                           height: (assistantState === 'speaking' || isMeSpeaking) ? `${h}px` : '6px',
                           borderRadius: '3px',
-                          background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#334155'),
+                          background: isMeSpeaking ? '#EF4444' : (assistantState === 'speaking' ? 'linear-gradient(180deg, #00F5D4 0%, #0F4C5C 100%)' : '#2C4A52'),
                           transition: 'height 180ms ease',
                           animation: (assistantState === 'speaking' || isMeSpeaking)
                             ? `pulseBar 0.${4 + (i % 5)}s infinite alternate ease-in-out`
@@ -805,7 +805,7 @@ export default function FloatingAssistant({
                       width: '7px',
                       height: '7px',
                       borderRadius: '50%',
-                      background: assistantState === 'listening' ? '#EF4444' : (assistantState === 'speaking' ? '#00F5D4' : '#64748B'),
+                      background: assistantState === 'listening' ? '#EF4444' : (assistantState === 'speaking' ? '#00F5D4' : '#698892'),
                       boxShadow: (assistantState === 'listening' || assistantState === 'speaking') ? '0 0 8px currentColor' : 'none'
                     }}></span>
                     <span>
@@ -819,7 +819,7 @@ export default function FloatingAssistant({
                 {/* Dynamic Dialogue / Transcript Card */}
                 <div style={{
                   background: '#FFFFFF',
-                  border: '1.5px solid #E2E8F0',
+                  border: '1.5px solid #D0DFE2',
                   borderRadius: '14px',
                   padding: '12px 14px',
                   fontSize: '12.5px',
@@ -842,10 +842,10 @@ export default function FloatingAssistant({
                       <div style={{ fontSize: '10px', fontWeight: 800, color: '#DC2626', textTransform: 'uppercase', marginBottom: '3px' }}>
                         Live Audio Stream:
                       </div>
-                      <div style={{ fontStyle: 'italic', color: '#475569' }}>{liveTranscript}</div>
+                      <div style={{ fontStyle: 'italic', color: '#486770' }}>{liveTranscript}</div>
                     </div>
                   ) : (
-                    <div style={{ color: '#475569' }}>
+                    <div style={{ color: '#486770' }}>
                       {effectiveRole === 'doctor'
                         ? `Good day Dr. ${doctorName}. Clinical ambient scribe is active. Dictate notes, check drug interactions, or review reports.`
                         : (effectiveRole === 'patient'
@@ -860,7 +860,7 @@ export default function FloatingAssistant({
               <div style={{
                 padding: '10px 14px',
                 background: '#FAF8F5',
-                borderTop: '1px solid #E2E8F0',
+                borderTop: '1px solid #D0DFE2',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px'
@@ -871,7 +871,7 @@ export default function FloatingAssistant({
                   justifyContent: 'space-between',
                   fontSize: '11px',
                   fontWeight: 800,
-                  color: '#475569'
+                  color: '#486770'
                 }}>
                   <span>
                     {effectiveRole === 'doctor'
@@ -910,7 +910,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -931,7 +931,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -952,7 +952,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -973,7 +973,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -997,7 +997,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -1018,7 +1018,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -1039,7 +1039,7 @@ export default function FloatingAssistant({
                           gap: '5px',
                           padding: '7px 9px',
                           borderRadius: '14px',
-                          border: '1px solid #CBD5E1',
+                          border: '1px solid #D0DFE2',
                           background: '#ffffff',
                           fontSize: '11px',
                           fontWeight: 750,
@@ -1161,7 +1161,7 @@ export default function FloatingAssistant({
                         flex: 1,
                         padding: '8px 12px',
                         borderRadius: '10px',
-                        border: '1.5px solid #CBD5E1',
+                        border: '1.5px solid #D0DFE2',
                         fontSize: '12px',
                         outline: 'none'
                       }}
@@ -1192,7 +1192,7 @@ export default function FloatingAssistant({
                   justifyContent: 'space-between',
                   gap: '8px',
                   paddingTop: '10px',
-                  borderTop: '1px solid #E2E8F0'
+                  borderTop: '1px solid #D0DFE2'
                 }}>
                   {/* Button 1: Me to Speak (User Mic Input) */}
                   <button
@@ -1213,7 +1213,7 @@ export default function FloatingAssistant({
                       fontSize: '11.5px',
                       fontWeight: 800,
                       cursor: 'pointer',
-                      boxShadow: isMeSpeaking ? '0 0 14px rgba(239, 68, 68, 0.45)' : '0 2px 8px rgba(15, 76, 92, 0.25)',
+                      boxShadow: isMeSpeaking ? '0 0 14px rgba(239, 68, 68, 0.45)' : '0 2px 8px rgba(0, 0, 0, 0.16)',
                       transition: 'all 0.2s ease'
                     }}
                     title={isMeSpeaking ? "Stop speaking and submit to AI" : "Tap to speak your query"}
@@ -1244,9 +1244,9 @@ export default function FloatingAssistant({
                       gap: '5px',
                       padding: '9px 12px',
                       borderRadius: '20px',
-                      border: isAiVoiceEnabled ? '1.5px solid #10B981' : '1.5px solid #CBD5E1',
+                      border: isAiVoiceEnabled ? '1.5px solid #10B981' : '1.5px solid #D0DFE2',
                       background: isAiVoiceEnabled ? '#ECFDF5' : '#F1F5F9',
-                      color: isAiVoiceEnabled ? '#065F46' : '#64748B',
+                      color: isAiVoiceEnabled ? '#065F46' : '#698892',
                       fontSize: '11px',
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1265,8 +1265,8 @@ export default function FloatingAssistant({
                       padding: '9px 12px',
                       borderRadius: '20px',
                       background: '#FAF8F5',
-                      border: '1px solid #CBD5E1',
-                      color: '#475569',
+                      border: '1px solid #D0DFE2',
+                      color: '#486770',
                       fontSize: '11px',
                       fontWeight: 750,
                       cursor: 'pointer'
@@ -1309,7 +1309,7 @@ export default function FloatingAssistant({
               <div style={{ fontSize: '17px', fontWeight: 800, color: '#081C24' }}>
                 {effectiveRole === 'doctor' ? 'Clinical Encounter Ended' : (effectiveRole === 'patient' ? 'Health Consultation Ended' : 'Inquiry Completed')}
               </div>
-              <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px', fontFamily: 'monospace' }}>
+              <div style={{ fontSize: '11px', color: '#698892', marginTop: '2px', fontFamily: 'monospace' }}>
                 {String(Math.floor(sessionActiveSec / 60)).padStart(2, '0')}:{String(sessionActiveSec % 60).padStart(2, '0')}
               </div>
 
@@ -1317,7 +1317,7 @@ export default function FloatingAssistant({
               <div style={{
                 width: '100%',
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #D0DFE2',
                 borderRadius: '12px',
                 padding: '12px 14px',
                 textAlign: 'left',
@@ -1329,7 +1329,7 @@ export default function FloatingAssistant({
                     ? "Clinical Encounter Summary:"
                     : (effectiveRole === 'patient' ? "Consultation Summary:" : "Real-Time Consultation Summary:")}
                 </div>
-                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#475569', lineHeight: 1.6 }}>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', color: '#486770', lineHeight: 1.6 }}>
                   {lastUserQuery ? (
                     <>
                       <li><strong>Query:</strong> &ldquo;{lastUserQuery.slice(0, 50)}{lastUserQuery.length > 50 ? '...' : ''}&rdquo;</li>
@@ -1408,7 +1408,7 @@ export default function FloatingAssistant({
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(10, 37, 64, 0.55)',
+          background: 'rgba(0, 0, 0, 0.14)',
           backdropFilter: 'blur(4px)',
           zIndex: 1400,
           display: 'flex',
@@ -1459,7 +1459,7 @@ export default function FloatingAssistant({
                     width: '100%',
                     padding: '9px 12px',
                     borderRadius: '10px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1.5px solid #D0DFE2',
                     fontSize: '12.5px',
                     fontWeight: 650,
                     color: '#081C24',
@@ -1475,8 +1475,8 @@ export default function FloatingAssistant({
               </div>
 
               <div style={{
-                background: 'rgba(15, 76, 92, 0.06)',
-                border: '1px solid rgba(15, 76, 92, 0.15)',
+                background: 'rgba(0, 0, 0, 0.04)',
+                border: '1px solid rgba(0, 0, 0, 0.10)',
                 borderRadius: '10px',
                 padding: '12px',
                 fontSize: '12px',

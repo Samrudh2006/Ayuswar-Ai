@@ -27,7 +27,7 @@ export default function KurnoolClimateSentinel({ onAddOrsToRx }) {
       borderRadius: '16px',
       padding: '16px 20px',
       color: '#ffffff',
-      boxShadow: '0 4px 18px rgba(15, 76, 92, 0.12)',
+      boxShadow: '0 4px 18px rgba(0, 0, 0, 0.08)',
       marginBottom: '20px',
       position: 'relative',
       overflow: 'hidden'
@@ -40,7 +40,7 @@ export default function KurnoolClimateSentinel({ onAddOrsToRx }) {
         width: '120px',
         height: '120px',
         borderRadius: '50%',
-        background: 'rgba(212, 175, 55, 0.08)',
+        background: 'rgba(0, 0, 0, 0.05)',
         pointerEvents: 'none'
       }} />
 
@@ -49,7 +49,7 @@ export default function KurnoolClimateSentinel({ onAddOrsToRx }) {
           <span style={{ fontSize: '11px', background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', padding: '3px 8px', borderRadius: '8px', fontWeight: 800, letterSpacing: '0.5px' }}>
             COPERNICUS • PHC WEATHER-HEALTH SENTINEL
           </span>
-          <span style={{ fontSize: '11.5px', color: '#CBD5E1', fontWeight: 650 }}>
+          <span style={{ fontSize: '11.5px', color: '#D0DFE2', fontWeight: 650 }}>
             Kurnool District Hospital OPD (Rayalaseema)
           </span>
         </div>
@@ -87,7 +87,7 @@ export default function KurnoolClimateSentinel({ onAddOrsToRx }) {
             <div style={{ fontSize: '12.5px', fontWeight: 750, color: '#FEF3C7' }}>
               Rayalaseema Arid Thermal Advisory: Elevated Geriatric Dehydration Risk
             </div>
-            <div style={{ fontSize: '11.5px', color: '#E2E8F0', marginTop: '2px', lineHeight: 1.4 }}>
+            <div style={{ fontSize: '11.5px', color: '#D0DFE2', marginTop: '2px', lineHeight: 1.4 }}>
               Ambient temperature is 37°C with low humidity. Recommend evaluating elderly and chronic renal patients for sub-clinical dehydration. Consider prophylactic Oral Rehydration Salts (ORS).
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function KurnoolClimateSentinel({ onAddOrsToRx }) {
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.14)',
             transition: 'all 0.15s ease'
           }}
         >

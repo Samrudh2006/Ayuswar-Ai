@@ -40,7 +40,7 @@ export default function Sidebar({
       flexDirection: 'column',
       justifyContent: 'space-between',
       transition: 'width 220ms cubic-bezier(0.23, 1, 0.32, 1)',
-      borderRight: '1px solid rgba(15, 76, 92, 0.2)',
+      borderRight: '1px solid rgba(0, 0, 0, 0.14)',
       position: 'relative',
       zIndex: 90,
       flexShrink: 0
@@ -64,13 +64,13 @@ export default function Sidebar({
                 overflow: 'hidden',
                 flexShrink: 0,
                 border: '2px solid #D4AF37',
-                boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.14)',
                 padding: '3px'
               }}>
                 <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <div style={{ whiteSpace: 'nowrap' }}>
-                <div style={{ fontSize: '18px', fontWeight: 850, fontFamily: 'Outfit, sans-serif' }}>
+                <div style={{ fontSize: '18px', fontWeight: 850, fontFamily: 'var(--font-main)' }}>
                   Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
                 </div>
                 <div style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.8px', marginTop: '-2px' }}>
@@ -88,7 +88,7 @@ export default function Sidebar({
               background: '#FAF8F5',
               overflow: 'hidden',
               border: '2px solid #D4AF37',
-              boxShadow: '0 4px 14px rgba(15, 76, 92, 0.2)',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.14)',
               padding: '3px'
             }}>
               <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -127,12 +127,12 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'landing' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
-              color: activeView === 'landing' ? '#D4AF37' : '#CBD5E1',
+              background: activeView === 'landing' ? 'rgba(0, 0, 0, 0.13)' : 'transparent',
+              color: activeView === 'landing' ? '#D4AF37' : '#D0DFE2',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'landing' ? 700 : 500,
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               textAlign: 'left',
               transition: 'all 160ms ease'
             }}
@@ -153,12 +153,12 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'doctor_portal' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
-              color: activeView === 'doctor_portal' ? '#D4AF37' : '#CBD5E1',
+              background: activeView === 'doctor_portal' ? 'rgba(0, 0, 0, 0.13)' : 'transparent',
+              color: activeView === 'doctor_portal' ? '#D4AF37' : '#D0DFE2',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'doctor_portal' ? 700 : 500,
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               textAlign: 'left',
               transition: 'all 160ms ease'
             }}
@@ -186,12 +186,12 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'console' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
-              color: activeView === 'console' ? '#D4AF37' : '#CBD5E1',
+              background: activeView === 'console' ? 'rgba(0, 0, 0, 0.13)' : 'transparent',
+              color: activeView === 'console' ? '#D4AF37' : '#D0DFE2',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'console' ? 700 : 500,
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               textAlign: 'left',
               transition: 'all 160ms ease'
             }}
@@ -219,12 +219,12 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'patient_portal' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
-              color: activeView === 'patient_portal' ? '#D4AF37' : '#CBD5E1',
+              background: activeView === 'patient_portal' ? 'rgba(0, 0, 0, 0.13)' : 'transparent',
+              color: activeView === 'patient_portal' ? '#D4AF37' : '#D0DFE2',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'patient_portal' ? 700 : 500,
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               textAlign: 'left',
               transition: 'all 160ms ease'
             }}
@@ -252,12 +252,12 @@ export default function Sidebar({
               padding: '11px 12px',
               borderRadius: '10px',
               border: 'none',
-              background: activeView === 'tech_specs' ? 'rgba(15, 76, 92, 0.18)' : 'transparent',
-              color: activeView === 'tech_specs' ? '#D4AF37' : '#CBD5E1',
+              background: activeView === 'tech_specs' ? 'rgba(0, 0, 0, 0.13)' : 'transparent',
+              color: activeView === 'tech_specs' ? '#D4AF37' : '#D0DFE2',
               cursor: 'pointer',
               fontSize: '13.5px',
               fontWeight: activeView === 'tech_specs' ? 700 : 500,
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'var(--font-main)',
               textAlign: 'left',
               transition: 'all 160ms ease'
             }}
@@ -289,7 +289,7 @@ export default function Sidebar({
             borderRadius: '10px',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             background: 'rgba(255, 255, 255, 0.04)',
-            color: '#E2E8F0',
+            color: '#D0DFE2',
             cursor: 'pointer',
             fontSize: '13px'
           }}

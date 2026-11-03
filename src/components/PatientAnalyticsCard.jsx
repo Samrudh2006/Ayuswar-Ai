@@ -106,8 +106,8 @@ export default function PatientAnalyticsCard() {
         background: '#ffffff',
         borderRadius: '20px',
         padding: '24px 28px',
-        border: '1px solid rgba(15, 76, 92, 0.08)',
-        boxShadow: '0 4px 20px -2px rgba(15, 76, 92, 0.04)',
+        border: '1px solid rgba(0, 0, 0, 0.06)',
+        boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.03)',
         marginBottom: '26px'
       }}
     >
@@ -144,13 +144,13 @@ export default function PatientAnalyticsCard() {
                 fontSize: '18px',
                 fontWeight: 800,
                 color: '#081C24',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-main)',
                 margin: 0
               }}
             >
               Patient Analytics
             </h3>
-            <p style={{ fontSize: '12.5px', color: '#64748B', margin: '3px 0 0 0' }}>
+            <p style={{ fontSize: '12.5px', color: '#698892', margin: '3px 0 0 0' }}>
               Track patient inflow and follow-ups trends over time
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function PatientAnalyticsCard() {
                   borderRadius: '9999px',
                   border: 'none',
                   background: isActive ? '#CCFBF1' : 'transparent',
-                  color: isActive ? '#0F766E' : '#64748B',
+                  color: isActive ? '#0F766E' : '#698892',
                   fontSize: '12px',
                   fontWeight: isActive ? 800 : 600,
                   cursor: 'pointer',
@@ -201,7 +201,7 @@ export default function PatientAnalyticsCard() {
           gap: '20px',
           marginBottom: '16px',
           fontSize: '12.5px',
-          color: '#475569',
+          color: '#486770',
           fontWeight: 650
         }}
       >
@@ -255,7 +255,7 @@ export default function PatientAnalyticsCard() {
                 y1={grid.y}
                 x2="810"
                 y2={grid.y}
-                stroke="#E2E8F0"
+                stroke="#D0DFE2"
                 strokeWidth="1"
                 strokeDasharray="4 4"
               />
@@ -351,7 +351,7 @@ export default function PatientAnalyticsCard() {
               x={getX(i, current.dates.length)}
               y="230"
               fontSize="11.5"
-              fill="#64748B"
+              fill="#698892"
               fontWeight="650"
               textAnchor="middle"
             >
@@ -405,7 +405,7 @@ export default function PatientAnalyticsCard() {
         {/* Aggregate Stats */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#698892', fontWeight: 700 }}>
               <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#0F766E' }}></span>
               <span>New Patients</span>
             </div>
@@ -420,7 +420,7 @@ export default function PatientAnalyticsCard() {
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#64748B', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#698892', fontWeight: 700 }}>
               <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#2563EB' }}></span>
               <span>Follow-ups</span>
             </div>

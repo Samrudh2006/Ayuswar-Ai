@@ -101,7 +101,7 @@ export function printAbdmDossier() {
           body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #081C24; margin: 0; padding: 24px; font-size: 13px; line-height: 1.5; }
           .header { border-bottom: 3px solid #0F4C5C; padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
           .title { font-size: 20px; font-weight: 900; color: #0F4C5C; letter-spacing: -0.3px; margin: 0; }
-          .subtitle { font-size: 11.5px; color: #64748B; font-weight: 600; margin-top: 4px; }
+          .subtitle { font-size: 11.5px; color: #698892; font-weight: 600; margin-top: 4px; }
           .badge-row { display: flex; gap: 8px; margin-top: 10px; }
           .badge { padding: 4px 10px; border-radius: 6px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; }
           .badge-green { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
@@ -109,11 +109,11 @@ export function printAbdmDossier() {
           .badge-gold { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
           .section { margin-bottom: 20px; }
           .section-title { font-size: 13px; font-weight: 800; color: #0F4C5C; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid #0F4C5C; padding-left: 8px; margin-bottom: 8px; }
-          .box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+          .box { background: #F8FAFC; border: 1px solid #D0DFE2; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
           table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
           th { background: #0F4C5C; color: #ffffff; text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; }
-          td { padding: 8px 10px; border-bottom: 1px solid #E2E8F0; }
-          .footer { border-top: 1px solid #CBD5E1; padding-top: 12px; margin-top: 24px; font-size: 11px; color: #64748B; display: flex; justify-content: space-between; }
+          td { padding: 8px 10px; border-bottom: 1px solid #D0DFE2; }
+          .footer { border-top: 1px solid #D0DFE2; padding-top: 12px; margin-top: 24px; font-size: 11px; color: #698892; display: flex; justify-content: space-between; }
         </style>
       </head>
       <body>
@@ -129,7 +129,7 @@ export function printAbdmDossier() {
           </div>
           <div style="text-align: right;">
             <div style="font-weight: 800; color: #0F4C5C; font-size: 12px;">DOC ID: AYUSWAR-ABDM-2026</div>
-            <div style="font-size: 11px; color: #64748B;">Kurnool District Hospital Node</div>
+            <div style="font-size: 11px; color: #698892;">Kurnool District Hospital Node</div>
           </div>
         </div>
 

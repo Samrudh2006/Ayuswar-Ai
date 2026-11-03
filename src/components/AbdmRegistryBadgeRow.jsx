@@ -109,10 +109,10 @@ export default function AbdmRegistryBadgeRow({
         title={`NHA HPR Registry: ${hprId} • Attending: ${doctorName} (APMC-2018-88421) • Click to copy`}
         style={{
           ...badgeBase,
-          background: copiedKey === 'hpr' ? '#CCFBF1' : 'rgba(15, 76, 92, 0.06)',
+          background: copiedKey === 'hpr' ? '#CCFBF1' : 'rgba(0, 0, 0, 0.04)',
           color: '#0F4C5C',
-          border: '1px solid rgba(15, 76, 92, 0.22)',
-          boxShadow: '0 1px 2px rgba(15, 76, 92, 0.05)'
+          border: '1px solid rgba(0, 0, 0, 0.15)',
+          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)'
         }}
       >
         <Stethoscope size={compact ? 11 : 12} color="#0F4C5C" />

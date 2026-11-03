@@ -34,27 +34,101 @@
   --color-ruby-light: #FDF2F3;
 
   /* Canvas & Surface (Mint-Ivory Healthcare Ambient System) */
-  --color-bg-light: #F3FAF7;
+  --color-bg-light: #FAF8F5;
   --color-bg-white: #FFFFFF;
-  --color-bg-card: rgba(255, 255, 255, 0.92);
+  --color-bg-card: #FFFFFF;
 
   /* Text & Legibility (Strict WCAG AAA Visibility) */
   --color-text-main: #091E26;
-  --color-text-muted: #3D545E;
+  --color-text-muted: #2C4A52;
+  --color-text-secondary: #486770;
   --color-text-on-dark: #FFFFFF;
-  --color-border: #D1E1E6;
+  --color-border: #D0DFE2;
   --color-border-subtle: #E5ECEF;
 
-  /* Typography & Multi-Script Indic Hierarchy */
-  --font-main: 'Plus Jakarta Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Outfit', 'Noto Sans Telugu', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography & Multi-Script Indic Hierarchy (Editorial / Enterprise IBM Plex Sans) */
+  --font-main: 'IBM Plex Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', 'Noto Sans Tamil', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'IBM Plex Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-indic: 'Noto Sans Telugu', 'Noto Sans Devanagari', 'Noto Sans Tamil', 'Nirmala UI', 'Gautami', 'Mukti', sans-serif;
 
   /* Emil Kowalski & UX Peak Animation Easing Curves */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-emil: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-tactile: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ==========================================================================
+   Emil Kowalski Design Engineering & Accessibility Foundations (WCAG 2.2 AA)
+   ========================================================================== */
+
+/* 1. Universal Tactile Button Physics (160ms scale press confirmation) */
+button,
+.btn,
+[role="button"] {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+button:active:not(:disabled),
+.btn:active:not(:disabled),
+[role="button"]:active:not([aria-disabled="true"]) {
+  transform: scale(0.97);
+}
+
+/* 2. Strict High-Contrast Accessible Focus Rings (:focus-visible) */
+:focus-visible {
+  outline: 2px solid #0F4C5C !important;
+  outline-offset: 2px !important;
+}
+
+/* 3. Tabular Numerals for Clinical Vitals, Timers, Prices & Adherence Scores */
+.tabular-nums,
+.stat-value,
+.vital-value,
+.mews-score,
+.price-tag,
+.countdown-timer,
+.patient-token,
+.clinical-metric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 4. Typographic Balancing (Zero single-word orphan lines) */
+.text-balance,
+h1,
+h2,
+h3,
+.section-title {
+  text-wrap: balance;
+}
+
+.text-pretty,
+p,
+.section-description,
+.card-desc,
+.clinical-summary {
+  text-wrap: pretty;
+}
+
+/* 5. Concentric Radius System (outer = inner + padding) */
+.concentric-surface {
+  border-radius: 16px;
+  padding: 16px;
+}
+.concentric-surface .concentric-child,
+.concentric-surface .inner-chip {
+  border-radius: 10px;
+}
+
+/* 6. WCAG 2.2 Touch Target Compliance for Mobile Clinicians */
+@media (pointer: coarse) {
+  button,
+  a.nav-action,
+  .interactive-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* Accessibility: Skip to Content Link */
@@ -70,7 +144,7 @@
   font-size: 14px;
   z-index: 99999;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(15, 76, 92, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
   transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -134,12 +208,6 @@ textarea {
 body {
   font-family: var(--font-main);
   background-color: var(--color-bg-light);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(220, 252, 245, 0.65) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(204, 251, 241, 0.55) 0px, transparent 45%),
-    radial-gradient(at 50% 100%, rgba(230, 248, 244, 0.50) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(254, 249, 235, 0.45) 0px, transparent 45%);
-  background-attachment: fixed;
   color: var(--color-text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -209,7 +277,7 @@ h6 {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(209, 225, 230, 0.85);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 12px 32px -4px rgba(15, 76, 92, 0.07);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 12px 32px -4px rgba(0, 0, 0, 0.05);
   border-radius: 16px;
 }
 
@@ -218,13 +286,13 @@ h6 {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(229, 236, 239, 0.85);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 18px rgba(15, 76, 92, 0.04);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 4px 18px rgba(0, 0, 0, 0.03);
   border-radius: 14px;
 }
 
 .dark-telemetry-panel {
   background: #081C24;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(7, 35, 43, 0.45);
   border-radius: 14px;
   color: #ffffff;
@@ -244,18 +312,18 @@ h6 {
   align-items: center;
   gap: 10px;
   transition: transform 140ms var(--ease-out), background-color 140ms ease, box-shadow 140ms ease;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 4px 14px rgba(15, 76, 92, 0.25);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 4px 14px rgba(0, 0, 0, 0.16);
 }
 
 .btn-primary:hover {
   background-color: #155e71;
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 8px 24px rgba(15, 76, 92, 0.35);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
 .btn-primary:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(15, 76, 92, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
 }
 
 .btn-outline {
@@ -271,7 +339,7 @@ h6 {
   align-items: center;
   gap: 9px;
   transition: transform 140ms var(--ease-out), border-color 140ms ease, color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(15, 76, 92, 0.04);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .btn-outline:hover {
@@ -279,7 +347,7 @@ h6 {
   color: var(--color-teal);
   background-color: var(--color-teal-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(15, 76, 92, 0.16);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11);
 }
 
 .btn-outline:active {
@@ -299,12 +367,12 @@ h6 {
   align-items: center;
   gap: 10px;
   transition: transform 160ms var(--ease-out), box-shadow 160ms ease;
-  box-shadow: 0 4px 16px rgba(15, 76, 92, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
 }
 
 .btn-teal:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 76, 92, 0.48);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
 .btn-teal:active {
@@ -325,12 +393,12 @@ h6 {
   align-items: center;
   gap: 8px;
   transition: transform 140ms var(--ease-out), box-shadow 140ms ease;
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 }
 
 .btn-zari-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
 }
 
 .btn-zari-gold:active {
@@ -342,7 +410,7 @@ h6 {
   border: 1px solid #D4AF37;
   color: #5E4605 !important;
   font-weight: 750;
-  box-shadow: 0 1px 4px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
 }
 
 .btn-outline {
@@ -358,7 +426,7 @@ h6 {
   align-items: center;
   gap: 9px;
   transition: transform 140ms var(--ease-out), border-color 140ms ease, color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(10, 37, 64, 0.03);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .btn-outline:hover {
@@ -366,7 +434,7 @@ h6 {
   color: var(--color-teal);
   background-color: var(--color-teal-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(15, 76, 92, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .btn-outline:active {
@@ -386,12 +454,12 @@ h6 {
   align-items: center;
   gap: 10px;
   transition: transform 160ms var(--ease-out), box-shadow 160ms ease;
-  box-shadow: 0 4px 16px rgba(15, 76, 92, 0.32);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
 }
 
 .btn-teal:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 76, 92, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
 .btn-teal:active {
@@ -488,14 +556,14 @@ h6 {
   border: 1.5px solid #CBD5E1;
   border-radius: 20px;
   padding: 24px;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 6px 20px rgba(10, 37, 64, 0.04);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95), 0 6px 20px rgba(0, 0, 0, 0.03);
   transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), border-color 220ms ease;
 }
 
 .bento-card:hover {
   transform: translateY(-3px);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 1), 0 16px 36px -4px rgba(15, 76, 92, 0.12);
-  border-color: rgba(15, 76, 92, 0.45);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 1), 0 16px 36px -4px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.16);
 }
 
 /* Horizontal Scroller Edge Fade Mask */
@@ -1147,7 +1215,7 @@ h6 {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 37, 64, 0.75) !important;
+  background: rgba(0, 0, 0, 0.14) !important;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   z-index: 1200;
@@ -1286,7 +1354,7 @@ h6 {
     justify-content: center !important;
     align-items: center !important;
     gap: 0 !important;
-    box-shadow: 0 4px 18px rgba(15, 76, 92, 0.45) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.16) !important;
   }
 
   .floating-assistant-label {
@@ -1479,7 +1547,7 @@ body {
     height: 48px !important;
     justify-content: center !important;
     gap: 0 !important;
-    box-shadow: 0 4px 18px rgba(15, 76, 92, 0.35) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.16) !important;
   }
 
   /* Mobile Hero Declutter & Visual Hierarchy Fixes (360px & 390px viewports) */
@@ -1551,23 +1619,17 @@ body {
    AyuSwar Visual System: Soft Mint + Ivory + Botanical Healthcare Identity
    ========================================================================== */
 
-/* Modern Healthcare Ambient Canvas (Soft Mint + Warm Ivory, Zero Glare) */
+/* Modern Healthcare Ambient Canvas (Clean Warm Ivory, Zero Glare) */
 .ayuswar-portal-canvas {
-  background-color: #FAF9F6 !important;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(235, 248, 245, 0.85) 0px, transparent 45%),
-    radial-gradient(at 100% 0%, rgba(240, 253, 244, 0.7) 0px, transparent 40%),
-    radial-gradient(at 50% 100%, rgba(238, 246, 248, 0.6) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(253, 249, 236, 0.5) 0px, transparent 45%) !important;
-  background-attachment: fixed !important;
+  background-color: #FAF8F5 !important;
   min-height: 100vh;
 }
 
 /* Crisp Elevated Surface for Medical Dashboards (Clean White, Soft Shadows, Zero Visual Glare) */
 .ayuswar-glass-card {
   background: #ffffff !important;
-  border: 1px solid rgba(15, 76, 92, 0.09) !important;
-  box-shadow: 0 4px 20px -2px rgba(15, 76, 92, 0.05), 0 2px 6px -1px rgba(15, 76, 92, 0.02) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.01) !important;
   border-radius: 16px !important;
   position: relative;
   overflow: hidden;
@@ -1575,15 +1637,15 @@ body {
 }
 
 .ayuswar-glass-card:hover {
-  border-color: rgba(15, 76, 92, 0.2) !important;
-  box-shadow: 0 10px 28px -4px rgba(15, 76, 92, 0.09), 0 4px 10px -2px rgba(15, 76, 92, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.06), 0 4px 10px -2px rgba(0, 0, 0, 0.03) !important;
 }
 
 /* Iconic AyuSwar Botanical Greeting Banner with Soft Mint Gradient & Organic Curves */
 .ayuswar-banner-botanical {
   background: linear-gradient(135deg, #F0FDF4 0%, #E8F7F5 45%, #FAF9F6 100%) !important;
   border: 1.5px solid #94A3B8 !important;
-  box-shadow: 0 10px 30px -6px rgba(15, 76, 92, 0.08), 0 4px 12px -2px rgba(15, 76, 92, 0.04) !important;
+  box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03) !important;
   position: relative;
   overflow: hidden;
   border-radius: 20px !important;
@@ -1598,9 +1660,9 @@ body {
   border-radius: 20px;
   font-size: 11.5px;
   font-weight: 750;
-  background: rgba(15, 76, 92, 0.08);
+  background: rgba(0, 0, 0, 0.06);
   color: #0F4C5C;
-  border: 1px solid rgba(15, 76, 92, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.10);
 }
 
 /* =========================================================================

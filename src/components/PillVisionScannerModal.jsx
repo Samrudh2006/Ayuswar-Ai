@@ -432,7 +432,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
         </div>
 
         {/* Mode Navigation Tabs */}
-        <div style={{ display: 'flex', background: '#FAF8F5', borderBottom: '1px solid #E2E8F0', padding: '6px 12px', gap: '6px' }}>
+        <div style={{ display: 'flex', background: '#FAF8F5', borderBottom: '1px solid #D0DFE2', padding: '6px 12px', gap: '6px' }}>
           <button
             onClick={() => { setActiveMode('camera'); startWebcam(); }}
             style={{
@@ -441,7 +441,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               borderRadius: '8px',
               border: 'none',
               background: activeMode === 'camera' ? '#ffffff' : 'transparent',
-              color: activeMode === 'camera' ? '#D97706' : '#64748B',
+              color: activeMode === 'camera' ? '#D97706' : '#698892',
               fontWeight: 700,
               fontSize: '12px',
               display: 'flex',
@@ -462,7 +462,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               borderRadius: '8px',
               border: 'none',
               background: activeMode === 'upload' ? '#ffffff' : 'transparent',
-              color: activeMode === 'upload' ? '#D97706' : '#64748B',
+              color: activeMode === 'upload' ? '#D97706' : '#698892',
               fontWeight: 700,
               fontSize: '12px',
               display: 'flex',
@@ -483,7 +483,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               borderRadius: '8px',
               border: 'none',
               background: activeMode === 'preset' ? '#ffffff' : 'transparent',
-              color: activeMode === 'preset' ? '#D97706' : '#64748B',
+              color: activeMode === 'preset' ? '#D97706' : '#698892',
               fontWeight: 700,
               fontSize: '12px',
               display: 'flex',
@@ -529,7 +529,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* Mode 1: Camera Feed */}
           {activeMode === 'camera' && (
-            <div style={{ background: '#0F172A', borderRadius: '16px', overflow: 'hidden', position: 'relative', textAlign: 'center' }}>
+            <div style={{ background: '#091E26', borderRadius: '16px', overflow: 'hidden', position: 'relative', textAlign: 'center' }}>
               <video 
                 ref={videoRef} 
                 playsInline 
@@ -540,7 +540,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               
               {!isWebcamActive && (
                 <div style={{ padding: '36px 20px', color: '#94A3B8' }}>
-                  <Camera size={36} color="#64748B" style={{ margin: '0 auto 10px auto' }} />
+                  <Camera size={36} color="#698892" style={{ margin: '0 auto 10px auto' }} />
                   <div style={{ fontSize: '13px', fontWeight: 600 }}>Webcam feed ready for scanning</div>
                   <button
                     onClick={startWebcam}
@@ -593,7 +593,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
             <div 
               onClick={() => fileInputRef.current?.click()}
               style={{
-                border: '2px dashed #CBD5E1',
+                border: '2px dashed #D0DFE2',
                 borderRadius: '16px',
                 padding: '24px 16px',
                 textAlign: 'center',
@@ -610,14 +610,14 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               />
               <Upload size={32} color="#D97706" style={{ margin: '0 auto 8px auto' }} />
               <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24' }}>Click to Upload Medicine Strip Photo</div>
-              <div style={{ fontSize: '11px', color: '#64748B', marginTop: '4px' }}>Supports Paracetamol, Pantocid, Glycomet, Augmentin packaging</div>
+              <div style={{ fontSize: '11px', color: '#698892', marginTop: '4px' }}>Supports Paracetamol, Pantocid, Glycomet, Augmentin packaging</div>
             </div>
           )}
 
           {/* Mode 3: Demo Presets */}
           {activeMode === 'preset' && (
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: '8px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#698892', textTransform: 'uppercase', marginBottom: '8px' }}>
                 Select Common Strip Sample:
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -629,9 +629,9 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                       flex: '1 1 calc(50% - 4px)',
                       padding: '8px 10px',
                       borderRadius: '10px',
-                      border: selectedPreset === p.id && !detectedResult ? '2px solid #D97706' : '1px solid #CBD5E1',
+                      border: selectedPreset === p.id && !detectedResult ? '2px solid #D97706' : '1px solid #D0DFE2',
                       background: selectedPreset === p.id && !detectedResult ? '#FEF3C7' : '#ffffff',
-                      color: selectedPreset === p.id && !detectedResult ? '#92400e' : '#334155',
+                      color: selectedPreset === p.id && !detectedResult ? '#92400e' : '#2C4A52',
                       fontSize: '11px',
                       fontWeight: 700,
                       cursor: 'pointer',
@@ -655,12 +655,12 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* Scanning Progress Bar */}
           {isScanning && (
-            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '12px', border: '1px solid #D0DFE2' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700, color: '#D97706', marginBottom: '6px' }}>
                 <span>{scanStatusText}</span>
                 <span>{scanProgress}%</span>
               </div>
-              <div style={{ width: '100%', height: '6px', background: '#E2E8F0', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '6px', background: '#D0DFE2', borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{ width: `${scanProgress}%`, height: '100%', background: '#D97706', transition: 'width 0.2s ease' }} />
               </div>
             </div>
@@ -668,9 +668,9 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
 
           {/* OpenCV Before vs After Image Previews */}
           {capturedImageUrl && (
-            <div style={{ display: 'flex', gap: '8px', background: '#FAF8F5', padding: '10px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', gap: '8px', background: '#FAF8F5', padding: '10px', borderRadius: '12px', border: '1px solid #D0DFE2' }}>
               <div style={{ flex: 1, textAlign: 'center' }}>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748B', marginBottom: '4px' }}>Original Photo</div>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#698892', marginBottom: '4px' }}>Original Photo</div>
                 <img src={capturedImageUrl} alt="Original Strip" style={{ width: '100%', maxHeight: '110px', objectFit: 'contain', borderRadius: '6px', background: '#000' }} />
               </div>
               {processedImageUrl && useCvEnhancement && (
@@ -689,7 +689,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
             background: '#FAF8F5',
             padding: '14px',
             borderRadius: '14px',
-            border: '1px solid #E2E8F0',
+            border: '1px solid #D0DFE2',
             display: 'flex',
             alignItems: 'center',
             gap: '14px'
@@ -705,7 +705,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
               justifyContent: 'center',
               flexShrink: 0,
               boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-              border: '1.5px solid #CBD5E1'
+              border: '1.5px solid #D0DFE2'
             }}>
               {currentDisplay.imageUrl ? (
                 <img 
@@ -724,7 +724,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                   ✓ {currentDisplay.isLiveOcr ? 'Live Scanned' : 'Formulary Verified'}
                 </span>
               </div>
-              <div style={{ fontSize: '11.5px', color: '#475569', marginTop: '2px' }}>
+              <div style={{ fontSize: '11.5px', color: '#486770', marginTop: '2px' }}>
                 {currentDisplay.color} • {currentDisplay.shape} • Imprint: {currentDisplay.imprint}
               </div>
               <div style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 600, marginTop: '3px' }}>
@@ -775,7 +775,7 @@ export default function PillVisionScannerModal({ isOpen, onClose }) {
                 borderRadius: '10px',
                 background: '#FAF8F5',
                 color: '#081C24',
-                border: '1px solid #CBD5E1',
+                border: '1px solid #D0DFE2',
                 fontWeight: 700,
                 fontSize: '12px',
                 display: 'flex',

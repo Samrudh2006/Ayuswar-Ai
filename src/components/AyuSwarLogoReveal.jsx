@@ -54,7 +54,7 @@ export default function AyuSwarLogoReveal({
         height: 54,
         borderRadius: '50%',
         overflow: 'hidden',
-        boxShadow: '0 4px 14px rgba(15, 76, 92, 0.22)',
+        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -101,7 +101,7 @@ export default function AyuSwarLogoReveal({
               borderRadius: '6px',
               letterSpacing: '0.5px',
               border: '1px solid #E8D595',
-              boxShadow: '0 1px 4px rgba(212, 175, 55, 0.35)',
+              boxShadow: '0 1px 4px rgba(0, 0, 0, 0.14)',
               whiteSpace: 'nowrap'
             }}>
               AI
@@ -134,7 +134,7 @@ export default function AyuSwarLogoReveal({
           <div className="ayuswar-subtitle" style={{
             fontSize: '0.68rem',
             fontWeight: 700,
-            color: '#64748B',
+            color: '#698892',
             textTransform: 'uppercase',
             letterSpacing: '0.8px',
             marginTop: '2px',

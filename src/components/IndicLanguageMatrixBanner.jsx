@@ -103,12 +103,12 @@ export default function IndicLanguageMatrixBanner() {
 
   return (
     <div className="indic-language-matrix-banner" style={{
-      background: 'linear-gradient(135deg, #0A2540 0%, #0F172A 100%)',
+      background: 'linear-gradient(135deg, #0A2540 0%, #091E26 100%)',
       borderRadius: '20px',
       padding: '24px',
       color: '#FFFFFF',
       marginBottom: '32px',
-      boxShadow: '0 12px 36px rgba(10, 37, 64, 0.18)',
+      boxShadow: '0 12px 36px rgba(0, 0, 0, 0.13)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       position: 'relative',
       overflow: 'hidden'
@@ -121,13 +121,13 @@ export default function IndicLanguageMatrixBanner() {
         width: '350px',
         height: '350px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(15, 76, 92, 0.18) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(0, 0, 0, 0.13) 0%, transparent 70%)',
         pointerEvents: 'none'
       }} />
 
       {/* Top Header Badge */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 76, 92, 0.25)', border: '1.5px solid rgba(15, 76, 92, 0.5)', padding: '5px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 800, color: '#2DD4BF', flexWrap: 'wrap', lineHeight: 1.35 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0, 0, 0, 0.16)', border: '1.5px solid rgba(0, 0, 0, 0.16)', padding: '5px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 800, color: '#2DD4BF', flexWrap: 'wrap', lineHeight: 1.35 }}>
           <Sparkles size={14} style={{ flexShrink: 0 }} />
           <span>VARIABLE FONT MORPH & VERNACULAR DIALECT REGIONAL MAP</span>
         </div>
@@ -151,7 +151,7 @@ export default function IndicLanguageMatrixBanner() {
               key={`en-${activeCycleIndex}`}
               className="variable-font-en"
               style={{
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-main)',
                 fontSize: '24px',
                 fontWeight: 800,
                 color: '#F8FAFC',
@@ -182,8 +182,8 @@ export default function IndicLanguageMatrixBanner() {
 
             {/* Subtitle Details */}
             <div style={{ fontSize: '12.5px', color: '#94A3B8', lineHeight: 1.5 }}>
-              <div style={{ color: '#E2E8F0', marginBottom: '2px' }}>{currentCycle.subEn}</div>
-              <div style={{ color: '#64748B', fontStyle: 'italic' }}>{currentCycle.subTe}</div>
+              <div style={{ color: '#D0DFE2', marginBottom: '2px' }}>{currentCycle.subEn}</div>
+              <div style={{ color: '#698892', fontStyle: 'italic' }}>{currentCycle.subTe}</div>
             </div>
           </div>
 
@@ -217,10 +217,10 @@ export default function IndicLanguageMatrixBanner() {
           gap: '14px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#E2E8F0' }}>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: '#D0DFE2' }}>
               📍 Regional Dialect Clusters (Interactive Map)
             </span>
-            <span style={{ fontSize: '11px', color: '#64748B' }}>
+            <span style={{ fontSize: '11px', color: '#698892' }}>
               Zero unverified coverage numbers
             </span>
           </div>
@@ -232,13 +232,13 @@ export default function IndicLanguageMatrixBanner() {
             alignItems: 'center'
           }}>
             {/* SVG Stylized Map of Southern/Central India with Pulsing Nodes */}
-            <div style={{ position: 'relative', width: '140px', height: '170px', background: '#0B132B', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(15, 76, 92, 0.3)' }}>
+            <div style={{ position: 'relative', width: '140px', height: '170px', background: '#0B132B', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(0, 0, 0, 0.16)' }}>
               <svg viewBox="100 120 180 180" style={{ width: '100%', height: '100%', display: 'block' }}>
                 {/* Stylized Geo Silhouette for Deccan/Andhra/Telangana Region */}
                 <path
                   d="M 140 140 L 220 150 L 250 200 L 240 260 L 190 280 L 160 250 L 130 200 Z"
-                  fill="rgba(15, 76, 92, 0.12)"
-                  stroke="rgba(15, 76, 92, 0.35)"
+                  fill="rgba(0, 0, 0, 0.08)"
+                  stroke="rgba(0, 0, 0, 0.16)"
                   strokeWidth="1.5"
                   strokeDasharray="3 3"
                 />
@@ -259,7 +259,7 @@ export default function IndicLanguageMatrixBanner() {
                   );
                 })}
               </svg>
-              <div style={{ position: 'absolute', bottom: '6px', left: '6px', fontSize: '9.5px', color: '#64748B', fontWeight: 600 }}>
+              <div style={{ position: 'absolute', bottom: '6px', left: '6px', fontSize: '9.5px', color: '#698892', fontWeight: 600 }}>
                 AP & Telangana
               </div>
             </div>

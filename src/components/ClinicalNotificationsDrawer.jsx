@@ -255,7 +255,7 @@ export default function ClinicalNotificationsDrawer({
         {/* Drawer Header */}
         <div style={{
           padding: '18px 20px',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid #D0DFE2',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -266,7 +266,7 @@ export default function ClinicalNotificationsDrawer({
               width: '36px',
               height: '36px',
               borderRadius: '10px',
-              background: isDoctor ? 'rgba(15, 76, 92, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+              background: isDoctor ? 'rgba(0, 0, 0, 0.08)' : 'rgba(16, 185, 129, 0.12)',
               color: isDoctor ? '#0F4C5C' : '#10B981',
               display: 'flex',
               alignItems: 'center',
@@ -275,10 +275,10 @@ export default function ClinicalNotificationsDrawer({
               <Bell size={20} />
             </div>
             <div>
-              <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+              <div style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
                 {isDoctor ? 'Clinical Alert Sentinel' : 'Citizen Health Alerts'}
               </div>
-              <div style={{ fontSize: '11px', color: '#64748B' }}>
+              <div style={{ fontSize: '11px', color: '#698892' }}>
                 {unreadCount > 0 ? `${unreadCount} unread update${unreadCount > 1 ? 's' : ''}` : 'All caught up!'}
               </div>
             </div>
@@ -288,7 +288,7 @@ export default function ClinicalNotificationsDrawer({
             onClick={onClose}
             style={{
               background: '#FFFFFF',
-              border: '1px solid #CBD5E1',
+              border: '1px solid #D0DFE2',
               borderRadius: '8px',
               width: '32px',
               height: '32px',
@@ -296,7 +296,7 @@ export default function ClinicalNotificationsDrawer({
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              color: '#64748B'
+              color: '#698892'
             }}
             title="Close Notifications"
           >
@@ -332,7 +332,7 @@ export default function ClinicalNotificationsDrawer({
                   border: 'none',
                   cursor: 'pointer',
                   background: filter === f.id ? '#0A2540' : '#F1F5F9',
-                  color: filter === f.id ? '#ffffff' : '#64748B',
+                  color: filter === f.id ? '#ffffff' : '#698892',
                   transition: 'all 120ms ease'
                 }}
               >
@@ -421,11 +421,11 @@ export default function ClinicalNotificationsDrawer({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#CBD5E1'
+                color: '#D0DFE2'
               }}>
                 <Bell size={24} />
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                 No notifications to display
               </div>
               <div style={{ fontSize: '12px', color: '#94A3B8' }}>
@@ -448,7 +448,7 @@ export default function ClinicalNotificationsDrawer({
                       : '#FFFFFF',
                     border: isUnread
                       ? (isUrgent ? '1.5px solid #FCA5A5' : '1.5px solid #BBF7D0')
-                      : '1px solid #E2E8F0',
+                      : '1px solid #D0DFE2',
                     boxShadow: isUnread ? '0 2px 8px rgba(0,0,0,0.06)' : 'none',
                     display: 'flex',
                     flexDirection: 'column',
@@ -473,7 +473,7 @@ export default function ClinicalNotificationsDrawer({
                       <div style={{
                         fontSize: '13px',
                         fontWeight: isUnread ? 800 : 700,
-                        color: isUrgent ? '#991B1B' : '#0F172A',
+                        color: isUrgent ? '#991B1B' : '#091E26',
                         lineHeight: 1.3
                       }}>
                         {item.title}
@@ -496,7 +496,7 @@ export default function ClinicalNotificationsDrawer({
                   {/* Body Text */}
                   <div style={{
                     fontSize: '12px',
-                    color: '#475569',
+                    color: '#486770',
                     lineHeight: 1.45,
                     paddingLeft: isUnread ? '13px' : '0'
                   }}>
@@ -510,7 +510,7 @@ export default function ClinicalNotificationsDrawer({
                     justifyContent: 'space-between',
                     marginTop: '4px',
                     paddingTop: '8px',
-                    borderTop: '1px dashed #E2E8F0'
+                    borderTop: '1px dashed #D0DFE2'
                   }}>
                     {item.actionLabel && (
                       <button
@@ -545,7 +545,7 @@ export default function ClinicalNotificationsDrawer({
                           background: 'transparent',
                           border: 'none',
                           fontSize: '11px',
-                          color: '#64748B',
+                          color: '#698892',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -581,13 +581,13 @@ export default function ClinicalNotificationsDrawer({
         {/* Footer Status */}
         <div style={{
           padding: '12px 18px',
-          borderTop: '1px solid #E2E8F0',
+          borderTop: '1px solid #D0DFE2',
           background: '#FAF8F5',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '11px',
-          color: '#64748B'
+          color: '#698892'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <ShieldCheck size={14} color="#0F4C5C" />

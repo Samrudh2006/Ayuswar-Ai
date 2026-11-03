@@ -377,7 +377,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
           justifyContent: 'space-between',
           position: 'relative',
           overflowY: 'auto',
-          borderRight: '1px solid #E2E8F0',
+          borderRight: '1px solid #D0DFE2',
           boxSizing: 'border-box'
         }}
       >
@@ -397,7 +397,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
           left: '25%',
           width: '420px',
           height: '420px',
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, rgba(15, 76, 92, 0.04) 55%, transparent 75%)',
+          background: 'radial-gradient(circle, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.03) 55%, transparent 75%)',
           pointerEvents: 'none',
           zIndex: 1
         }} />
@@ -426,7 +426,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
+              boxShadow: '0 0 20px rgba(0, 0, 0, 0.14)',
               overflow: 'hidden',
               padding: '2px',
               flexShrink: 0
@@ -434,7 +434,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
               <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div>
-              <div style={{ fontSize: '22px', fontWeight: 900, color: '#FFFFFF', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.3px' }}>
+              <div style={{ fontSize: '22px', fontWeight: 900, color: '#FFFFFF', fontFamily: 'var(--font-main)', letterSpacing: '-0.3px' }}>
                 AyuSwar AI
               </div>
               <div style={{ fontSize: '11px', color: '#D4AF37', fontWeight: 700, letterSpacing: '0.2px' }}>
@@ -485,7 +485,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             lineHeight: 1.18,
             letterSpacing: '-0.7px',
             marginBottom: '12px',
-            fontFamily: 'Outfit, sans-serif',
+            fontFamily: 'var(--font-main)',
             maxWidth: '520px'
           }}>
             AI-Powered Vernacular<br />
@@ -505,7 +505,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
           {/* Description */}
           <p style={{
             fontSize: '14px',
-            color: '#E2E8F0',
+            color: '#D0DFE2',
             lineHeight: 1.6,
             maxWidth: '470px',
             margin: 0
@@ -529,7 +529,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             background: 'rgba(7, 21, 38, 0.85)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(212, 175, 55, 0.35)',
+            border: '1.5px solid rgba(0, 0, 0, 0.14)',
             borderRadius: '16px',
             padding: '16px 20px',
             width: '100%',
@@ -549,10 +549,10 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '5px',
-                background: 'rgba(212, 175, 55, 0.12)',
+                background: 'rgba(0, 0, 0, 0.07)',
                 padding: '4px 10px',
                 borderRadius: '14px',
-                border: '1px solid rgba(212, 175, 55, 0.35)',
+                border: '1px solid rgba(0, 0, 0, 0.14)',
                 fontSize: '10.5px',
                 fontWeight: 750,
                 color: '#D4AF37'
@@ -591,7 +591,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             background: '#FFFFFF',
             borderRadius: '24px',
             border: '2.5px solid #0F766E',
-            boxShadow: '0 16px 40px -10px rgba(10, 37, 64, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04)',
+            boxShadow: '0 16px 40px -10px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)',
             padding: 'clamp(14px, 1.6vw, 22px) clamp(18px, 2.5vw, 36px)',
             display: 'flex',
             flexDirection: 'column',
@@ -720,13 +720,13 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   fontSize: '24px',
                   fontWeight: 900,
                   color: '#081C24',
-                  fontFamily: 'Outfit, sans-serif',
+                  fontFamily: 'var(--font-main)',
                   letterSpacing: '-0.5px',
                   marginBottom: '2px'
                 }}>
                   Create your <span style={{ color: '#0F4C5C' }}>AyuSwar AI</span> account
                 </h2>
-              <p style={{ fontSize: '12.5px', color: '#64748B', margin: 0 }}>
+              <p style={{ fontSize: '12.5px', color: '#698892', margin: 0 }}>
                 Join India's vernacular ambient clinical intelligence platform
               </p>
             </div>
@@ -734,7 +734,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             {/* Login / Sign Up Tab Switcher (keeps states feeling like same product) */}
             <div style={{
               display: 'flex',
-              borderBottom: '2px solid #E2E8F0',
+              borderBottom: '2px solid #D0DFE2',
               marginBottom: '20px'
             }}>
               <button
@@ -749,7 +749,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   marginBottom: '-2px',
                   fontSize: '13.5px',
                   fontWeight: 800,
-                  color: '#64748B',
+                  color: '#698892',
                   cursor: 'pointer'
                 }}
               >
@@ -790,8 +790,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   height: '30px',
                   borderRadius: '50%',
                   background: signupStep >= 1 ? '#0F4C5C' : '#F1F5F9',
-                  color: signupStep >= 1 ? '#FFFFFF' : '#64748B',
-                  border: signupStep >= 1 ? '1.5px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                  color: signupStep >= 1 ? '#FFFFFF' : '#698892',
+                  border: signupStep >= 1 ? '1.5px solid #0F4C5C' : '1.5px solid #D0DFE2',
                   fontWeight: 800,
                   fontSize: '12px',
                   display: 'flex',
@@ -801,13 +801,13 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 }}>
                   {signupStep > 1 ? <Check size={16} /> : '1'}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: signupStep === 1 ? 800 : 650, color: signupStep === 1 ? '#0F4C5C' : '#64748B' }}>
+                <div style={{ fontSize: '11px', fontWeight: signupStep === 1 ? 800 : 650, color: signupStep === 1 ? '#0F4C5C' : '#698892' }}>
                   ① Create Account
                 </div>
               </div>
 
               {/* Connecting Line 1 */}
-              <div style={{ flex: 1, height: '2px', background: signupStep >= 2 ? '#0F4C5C' : '#E2E8F0', margin: '0 8px 14px 8px' }} />
+              <div style={{ flex: 1, height: '2px', background: signupStep >= 2 ? '#0F4C5C' : '#D0DFE2', margin: '0 8px 14px 8px' }} />
 
               {/* Step 2: Verify Contact */}
               <div style={{ textAlign: 'center' }}>
@@ -816,8 +816,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   height: '30px',
                   borderRadius: '50%',
                   background: signupStep >= 2 ? '#0F4C5C' : '#F1F5F9',
-                  color: signupStep >= 2 ? '#FFFFFF' : '#64748B',
-                  border: signupStep >= 2 ? '1.5px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                  color: signupStep >= 2 ? '#FFFFFF' : '#698892',
+                  border: signupStep >= 2 ? '1.5px solid #0F4C5C' : '1.5px solid #D0DFE2',
                   fontWeight: 800,
                   fontSize: '12px',
                   display: 'flex',
@@ -827,13 +827,13 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 }}>
                   {signupStep > 2 ? <Check size={16} /> : '2'}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: signupStep === 2 ? 800 : 650, color: signupStep === 2 ? '#0F4C5C' : '#64748B' }}>
+                <div style={{ fontSize: '11px', fontWeight: signupStep === 2 ? 800 : 650, color: signupStep === 2 ? '#0F4C5C' : '#698892' }}>
                   ② Verify Contact
                 </div>
               </div>
 
               {/* Connecting Line 2 */}
-              <div style={{ flex: 1, height: '2px', background: signupStep >= 3 ? '#0F4C5C' : '#E2E8F0', margin: '0 8px 14px 8px' }} />
+              <div style={{ flex: 1, height: '2px', background: signupStep >= 3 ? '#0F4C5C' : '#D0DFE2', margin: '0 8px 14px 8px' }} />
 
               {/* Step 3: Account Ready */}
               <div style={{ textAlign: 'center' }}>
@@ -842,8 +842,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   height: '30px',
                   borderRadius: '50%',
                   background: signupStep === 3 ? '#047857' : '#F1F5F9',
-                  color: signupStep === 3 ? '#FFFFFF' : '#64748B',
-                  border: signupStep === 3 ? '1.5px solid #047857' : '1.5px solid #CBD5E1',
+                  color: signupStep === 3 ? '#FFFFFF' : '#698892',
+                  border: signupStep === 3 ? '1.5px solid #047857' : '1.5px solid #D0DFE2',
                   fontWeight: 800,
                   fontSize: '12px',
                   display: 'flex',
@@ -853,7 +853,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 }}>
                   {signupStep === 3 ? <Check size={16} /> : '3'}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: signupStep === 3 ? 800 : 650, color: signupStep === 3 ? '#047857' : '#64748B' }}>
+                <div style={{ fontSize: '11px', fontWeight: signupStep === 3 ? 800 : 650, color: signupStep === 3 ? '#047857' : '#698892' }}>
                   ③ Account Ready
                 </div>
               </div>
@@ -865,7 +865,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 {/* 1-Tap Demo Fill Helper */}
                 <div style={{
                   background: '#FAF8F5',
-                  border: '1px dashed #CBD5E1',
+                  border: '1px dashed #D0DFE2',
                   borderRadius: '10px',
                   padding: '8px 12px',
                   marginBottom: '14px',
@@ -875,7 +875,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   flexWrap: 'wrap',
                   gap: '8px'
                 }}>
-                  <div style={{ fontSize: '11.5px', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ fontSize: '11.5px', color: '#486770', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Sparkles size={14} color="#0F4C5C" />
                     <span>Demo mode: Test signup workflow without manual typing:</span>
                   </div>
@@ -910,7 +910,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       style={{
                         padding: '12px 10px',
                         borderRadius: '10px',
-                        border: userType === 'doctor' ? '2px solid #0F4C5C' : '1.5px solid #E2E8F0',
+                        border: userType === 'doctor' ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                         background: userType === 'doctor' ? '#F0FDFA' : '#FFFFFF',
                         display: 'flex',
                         flexDirection: 'column',
@@ -920,8 +920,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         transition: 'all 150ms ease'
                       }}
                     >
-                      <Stethoscope size={22} color={userType === 'doctor' ? '#0F4C5C' : '#64748B'} />
-                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'doctor' ? '#0F4C5C' : '#334155', textAlign: 'center', lineHeight: 1.25 }}>
+                      <Stethoscope size={22} color={userType === 'doctor' ? '#0F4C5C' : '#698892'} />
+                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'doctor' ? '#0F4C5C' : '#2C4A52', textAlign: 'center', lineHeight: 1.25 }}>
                         Doctor /<br />Clinical Lead
                       </div>
                     </button>
@@ -933,7 +933,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       style={{
                         padding: '12px 10px',
                         borderRadius: '10px',
-                        border: userType === 'patient' ? '2px solid #0F4C5C' : '1.5px solid #E2E8F0',
+                        border: userType === 'patient' ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                         background: userType === 'patient' ? '#F0FDFA' : '#FFFFFF',
                         display: 'flex',
                         flexDirection: 'column',
@@ -943,8 +943,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         transition: 'all 150ms ease'
                       }}
                     >
-                      <Users size={22} color={userType === 'patient' ? '#0F4C5C' : '#64748B'} />
-                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'patient' ? '#0F4C5C' : '#334155', textAlign: 'center', lineHeight: 1.25 }}>
+                      <Users size={22} color={userType === 'patient' ? '#0F4C5C' : '#698892'} />
+                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'patient' ? '#0F4C5C' : '#2C4A52', textAlign: 'center', lineHeight: 1.25 }}>
                         Patient /<br />Caregiver
                       </div>
                     </button>
@@ -956,7 +956,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       style={{
                         padding: '12px 10px',
                         borderRadius: '10px',
-                        border: userType === 'hospital' ? '2px solid #0F4C5C' : '1.5px solid #E2E8F0',
+                        border: userType === 'hospital' ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                         background: userType === 'hospital' ? '#F0FDFA' : '#FFFFFF',
                         display: 'flex',
                         flexDirection: 'column',
@@ -966,8 +966,8 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         transition: 'all 150ms ease'
                       }}
                     >
-                      <Building2 size={22} color={userType === 'hospital' ? '#0F4C5C' : '#64748B'} />
-                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'hospital' ? '#0F4C5C' : '#334155', textAlign: 'center', lineHeight: 1.25 }}>
+                      <Building2 size={22} color={userType === 'hospital' ? '#0F4C5C' : '#698892'} />
+                      <div style={{ fontSize: '11.5px', fontWeight: 750, color: userType === 'hospital' ? '#0F4C5C' : '#2C4A52', textAlign: 'center', lineHeight: 1.25 }}>
                         Hospital /<br />Health Centre
                       </div>
                     </button>
@@ -984,7 +984,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   {/* Row 1: Full Name & License */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Full Name <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1000,7 +1000,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1016,7 +1016,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         {userType === 'doctor' ? 'Medical Council / License' : (userType === 'hospital' ? 'Facility Registry (HFR) ID' : 'ABHA Number / Mobile')} <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1032,7 +1032,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1051,7 +1051,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   {/* Row 2: Email ID & Mobile Number */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Email ID <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1067,7 +1067,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1083,7 +1083,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Mobile Number <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1099,7 +1099,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1118,7 +1118,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   {/* Row 3: Password & Confirm Password */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Password <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1134,7 +1134,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 36px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1165,7 +1165,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Confirm Password <span style={{ color: '#DC2626' }}>*</span>
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1181,7 +1181,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 36px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             background: '#FFFFFF',
                             backgroundColor: '#FFFFFF',
                             fontSize: '13px',
@@ -1217,15 +1217,15 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     background: '#FAF8F5',
                     borderRadius: '8px',
                     padding: '8px 12px',
-                    border: '1px solid #E2E8F0',
+                    border: '1px solid #D0DFE2',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
                     fontSize: '11px',
-                    color: '#64748B',
+                    color: '#698892',
                     flexWrap: 'wrap'
                   }}>
-                    <span style={{ fontWeight: 700, color: '#334155' }}>Password must contain:</span>
+                    <span style={{ fontWeight: 700, color: '#2C4A52' }}>Password must contain:</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: pwdRequirements.length ? '#047857' : '#94A3B8' }}>
                       <Check size={12} /> At least 8 characters
                     </span>
@@ -1243,7 +1243,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   {/* Row 4: Preferred Language */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Primary Language (OPD Scribing)
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1254,7 +1254,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1280,7 +1280,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
+                      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: '#2C4A52', marginBottom: '5px' }}>
                         Timezone
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -1291,7 +1291,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                             width: '100%',
                             padding: '10px 12px 10px 36px',
                             borderRadius: '9px',
-                            border: '1.5px solid #CBD5E1',
+                            border: '1.5px solid #D0DFE2',
                             fontSize: '13px',
                             color: '#081C24',
                             outline: 'none',
@@ -1340,7 +1340,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     <ArrowRight size={17} />
                   </button>
 
-                  <div style={{ textAlign: 'center', fontSize: '12px', color: '#64748B' }}>
+                  <div style={{ textAlign: 'center', fontSize: '12px', color: '#698892' }}>
                     Already have an account?{' '}
                     <button
                       type="button"
@@ -1375,14 +1375,14 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '0 auto 12px auto',
-                    boxShadow: '0 4px 16px rgba(212, 175, 55, 0.25)'
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.14)'
                   }}>
                     <KeyRound size={26} color="#0F4C5C" />
                   </div>
                   <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#081C24', marginBottom: '6px' }}>
                     Verify Your Contact
                   </h3>
-                  <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '420px', margin: '0 auto' }}>
+                  <p style={{ fontSize: '13px', color: '#698892', maxWidth: '420px', margin: '0 auto' }}>
                     A 6-digit confirmation code was dispatched to{' '}
                     <strong style={{ color: '#081C24' }}>{signupForm.email || signupForm.mobile || 'your contact'}</strong>.
                   </p>
@@ -1405,7 +1405,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     <div style={{ fontSize: '12px', fontWeight: 800, color: '#044E4E' }}>
                       ⚡ Simulated Verification Code: <span style={{ letterSpacing: '2px', color: '#0F4C5C', fontSize: '14px' }}>884210</span>
                     </div>
-                    <div style={{ fontSize: '11px', color: '#64748B' }}>
+                    <div style={{ fontSize: '11px', color: '#698892' }}>
                       Safe simulated sandbox OTP for instant evaluation.
                     </div>
                   </div>
@@ -1460,7 +1460,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                           fontSize: '20px',
                           fontWeight: 800,
                           borderRadius: '10px',
-                          border: digit ? '2px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                          border: digit ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                           background: digit ? '#F0FDFA' : '#FFFFFF',
                           color: '#081C24',
                           outline: 'none'
@@ -1470,7 +1470,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   </div>
 
                   {/* Resend Cooldown Timer */}
-                  <div style={{ textAlign: 'center', fontSize: '12px', color: '#64748B' }}>
+                  <div style={{ textAlign: 'center', fontSize: '12px', color: '#698892' }}>
                     {resendCooldown > 0 ? (
                       <span>Resend code in <strong style={{ color: '#0F4C5C' }}>{resendCooldown}s</strong></span>
                     ) : (
@@ -1506,9 +1506,9 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       style={{
                         padding: '12px 14px',
                         borderRadius: '10px',
-                        border: '1.5px solid #CBD5E1',
+                        border: '1.5px solid #D0DFE2',
                         background: '#FFFFFF',
-                        color: '#334155',
+                        color: '#2C4A52',
                         fontSize: '13px',
                         fontWeight: 700,
                         cursor: 'pointer'
@@ -1561,17 +1561,17 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   <Check size={36} strokeWidth={3} />
                 </div>
 
-                <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#081C24', marginBottom: '6px', fontFamily: 'Outfit, sans-serif' }}>
+                <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#081C24', marginBottom: '6px', fontFamily: 'var(--font-main)' }}>
                   Account Ready!
                 </h3>
-                <p style={{ fontSize: '13.5px', color: '#64748B', maxWidth: '440px', margin: '0 auto 20px auto', lineHeight: 1.5 }}>
+                <p style={{ fontSize: '13.5px', color: '#698892', maxWidth: '440px', margin: '0 auto 20px auto', lineHeight: 1.5 }}>
                   Welcome to AyuSwar AI. Your account has been verified and provisioned in the ABDM Sandbox environment.
                 </p>
 
                 {/* Profile Confirmation Card */}
                 <div style={{
                   background: '#FAF8F5',
-                  border: '1.5px solid #E2E8F0',
+                  border: '1.5px solid #D0DFE2',
                   borderRadius: '14px',
                   padding: '16px 20px',
                   textAlign: 'left',
@@ -1579,7 +1579,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   margin: '0 auto 22px auto',
                   boxShadow: '0 4px 14px rgba(0,0,0,0.03)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid #E2E8F0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid #D0DFE2' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{
                         width: '32px',
@@ -1597,7 +1597,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                         <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>
                           {signupForm.fullName || (userType === 'doctor' ? 'Dr. Ananya Rao' : 'Lakshmi Amma')}
                         </div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>
+                        <div style={{ fontSize: '11px', color: '#698892' }}>
                           {userType === 'doctor' ? 'Clinical Lead' : (userType === 'hospital' ? 'Facility Command' : 'Citizen Health Profile')}
                         </div>
                       </div>
@@ -1617,19 +1617,19 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12px' }}>
                     <div>
-                      <span style={{ color: '#64748B' }}>{userType === 'doctor' ? 'HPR License:' : (userType === 'hospital' ? 'HFR Facility:' : 'ABHA Number:')}</span>
+                      <span style={{ color: '#698892' }}>{userType === 'doctor' ? 'HPR License:' : (userType === 'hospital' ? 'HFR Facility:' : 'ABHA Number:')}</span>
                       <div style={{ fontWeight: 750, color: '#081C24' }}>{signupForm.licenseNumber || (userType === 'doctor' ? 'APMC-2024-91823' : '91-8842-1920-5511')}</div>
                     </div>
                     <div>
-                      <span style={{ color: '#64748B' }}>Primary Language:</span>
+                      <span style={{ color: '#698892' }}>Primary Language:</span>
                       <div style={{ fontWeight: 750, color: '#081C24' }}>{signupForm.preferredLanguage || 'Telugu (తెలుగు)'}</div>
                     </div>
                     <div>
-                      <span style={{ color: '#64748B' }}>Registered Contact:</span>
+                      <span style={{ color: '#698892' }}>Registered Contact:</span>
                       <div style={{ fontWeight: 750, color: '#081C24' }}>{signupForm.email || signupForm.mobile || '+91 98480 22338'}</div>
                     </div>
                     <div>
-                      <span style={{ color: '#64748B' }}>Designated Workspace:</span>
+                      <span style={{ color: '#698892' }}>Designated Workspace:</span>
                       <div style={{ fontWeight: 750, color: '#0F4C5C' }}>
                         {userType === 'doctor' ? 'Doctor Clinical Console' : (userType === 'hospital' ? 'Hospital Command Center' : 'Patient Health Locker')}
                       </div>
@@ -1683,14 +1683,14 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 fontSize: '32px',
                 fontWeight: 900,
                 color: '#081C24',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-main)',
                 letterSpacing: '-0.5px',
                 marginBottom: '4px',
                 lineHeight: 1.2
               }}>
                 Welcome <span style={{ color: '#0F4C5C' }}>Back!</span>
               </h2>
-              <p style={{ fontSize: '14.5px', color: '#475569', margin: 0, fontWeight: 500 }}>
+              <p style={{ fontSize: '14.5px', color: '#486770', margin: 0, fontWeight: 500 }}>
                 Login to your AyuSwar AI account
               </p>
             </div>
@@ -1698,7 +1698,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             {/* Login / Sign Up Tab Switcher */}
             <div style={{
               display: 'flex',
-              borderBottom: '2px solid #E2E8F0',
+              borderBottom: '2px solid #D0DFE2',
               marginBottom: '16px'
             }}>
               <button
@@ -1732,7 +1732,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   marginBottom: '-2px',
                   fontSize: '15px',
                   fontWeight: 800,
-                  color: '#64748B',
+                  color: '#698892',
                   cursor: 'pointer',
                   transition: 'all 150ms ease'
                 }}
@@ -1772,7 +1772,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   style={{
                     padding: '9px 12px',
                     borderRadius: '8px',
-                    border: userType === 'doctor' && identifier ? '2px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                    border: userType === 'doctor' && identifier ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                     background: userType === 'doctor' && identifier ? '#E6F7F8' : '#FFFFFF',
                     color: '#081C24',
                     fontSize: '12.5px',
@@ -1782,7 +1782,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '6px',
-                    boxShadow: userType === 'doctor' && identifier ? '0 2px 6px rgba(15, 76, 92, 0.2)' : 'none',
+                    boxShadow: userType === 'doctor' && identifier ? '0 2px 6px rgba(0, 0, 0, 0.14)' : 'none',
                     transition: 'all 150ms ease'
                   }}
                 >
@@ -1794,7 +1794,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   style={{
                     padding: '9px 12px',
                     borderRadius: '8px',
-                    border: userType === 'patient' && identifier ? '2px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                    border: userType === 'patient' && identifier ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                     background: userType === 'patient' && identifier ? '#E6F7F8' : '#FFFFFF',
                     color: '#081C24',
                     fontSize: '12.5px',
@@ -1804,7 +1804,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '6px',
-                    boxShadow: userType === 'patient' && identifier ? '0 2px 6px rgba(15, 76, 92, 0.2)' : 'none',
+                    boxShadow: userType === 'patient' && identifier ? '0 2px 6px rgba(0, 0, 0, 0.14)' : 'none',
                     transition: 'all 150ms ease'
                   }}
                 >
@@ -1816,7 +1816,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   style={{
                     padding: '9px 12px',
                     borderRadius: '8px',
-                    border: userType === 'hospital' && identifier ? '2px solid #0F4C5C' : '1.5px solid #CBD5E1',
+                    border: userType === 'hospital' && identifier ? '2px solid #0F4C5C' : '1.5px solid #D0DFE2',
                     background: userType === 'hospital' && identifier ? '#E6F7F8' : '#FFFFFF',
                     color: '#081C24',
                     fontSize: '12.5px',
@@ -1826,7 +1826,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '6px',
-                    boxShadow: userType === 'hospital' && identifier ? '0 2px 6px rgba(15, 76, 92, 0.2)' : 'none',
+                    boxShadow: userType === 'hospital' && identifier ? '0 2px 6px rgba(0, 0, 0, 0.14)' : 'none',
                     transition: 'all 150ms ease'
                   }}
                 >
@@ -1838,7 +1838,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
             <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {/* User Type Selector Dropdown */}
               <div>
-                <label style={{ display: 'block', fontSize: '13.5px', fontWeight: 800, color: '#0F172A', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '13.5px', fontWeight: 800, color: '#091E26', marginBottom: '6px' }}>
                   Account Role
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -1849,7 +1849,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       width: '100%',
                       padding: '12px 16px 12px 44px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       background: '#FAF8F5',
                       fontSize: '14.5px',
                       color: '#081C24',
@@ -1867,7 +1867,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   <div style={{ position: 'absolute', left: '14px', top: '13px', pointerEvents: 'none', color: '#0F4C5C' }}>
                     {userType === 'doctor' ? <Stethoscope size={19} /> : userType === 'hospital' ? <Building2 size={19} /> : <User size={19} />}
                   </div>
-                  <div style={{ position: 'absolute', right: '14px', top: '15px', pointerEvents: 'none', color: '#64748B' }}>
+                  <div style={{ position: 'absolute', right: '14px', top: '15px', pointerEvents: 'none', color: '#698892' }}>
                     <ChevronDown size={16} />
                   </div>
                 </div>
@@ -1875,7 +1875,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
 
               {/* Identifier: Mobile Number / Email ID */}
               <div>
-                <label style={{ display: 'block', fontSize: '13.5px', fontWeight: 800, color: '#0F172A', marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '13.5px', fontWeight: 800, color: '#091E26', marginBottom: '6px' }}>
                   Mobile Number / Email ID / ABHA ID
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -1891,7 +1891,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       width: '100%',
                       padding: '12px 16px 12px 44px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       background: '#FFFFFF',
                       fontSize: '14.5px',
                       color: '#081C24',
@@ -1908,7 +1908,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
               {/* Password */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <label style={{ fontSize: '13.5px', fontWeight: 800, color: '#0F172A' }}>
+                  <label style={{ fontSize: '13.5px', fontWeight: 800, color: '#091E26' }}>
                     Password
                   </label>
                   <a 
@@ -1935,7 +1935,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                       width: '100%',
                       padding: '12px 44px 12px 44px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       background: '#FFFFFF',
                       fontSize: '14.5px',
                       color: '#081C24',
@@ -1967,7 +1967,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
 
               {/* Checkbox Row: Remember Me & Secure Login */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px', padding: '2px 0' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#334155' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#2C4A52' }}>
                   <input
                     type="checkbox"
                     checked={rememberMe}
@@ -2028,9 +2028,9 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                 fontSize: '12px',
                 fontWeight: 800
               }}>
-                <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
+                <div style={{ flex: 1, height: '1px', background: '#D0DFE2' }} />
                 <span>OR</span>
-                <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
+                <div style={{ flex: 1, height: '1px', background: '#D0DFE2' }} />
               </div>
 
               {/* Secondary CTA: Login with ABHA (ABDM) */}
@@ -2042,7 +2042,7 @@ export default function UnifiedAuthView({ defaultUserType = 'doctor' }) {
                   width: '100%',
                   padding: '11.5px 20px',
                   borderRadius: '11px',
-                  border: '1.5px solid #CBD5E1',
+                  border: '1.5px solid #D0DFE2',
                   background: '#FFFFFF',
                   color: '#081C24',
                   fontSize: '14.5px',

@@ -392,8 +392,8 @@ export default function MobileInnovationHubModal({
                   background: '#ffffff',
                   padding: '14px',
                   borderRadius: '16px',
-                  border: '1px solid #E2E8F0',
-                  boxShadow: '0 2px 8px rgba(10,37,64,0.03)',
+                  border: '1px solid #D0DFE2',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
@@ -424,7 +424,7 @@ export default function MobileInnovationHubModal({
                     </span>
                   </div>
 
-                  <p style={{ fontSize: '11.5px', color: '#475569', lineHeight: 1.45, margin: 0 }}>
+                  <p style={{ fontSize: '11.5px', color: '#486770', lineHeight: 1.45, margin: 0 }}>
                     {p.desc}
                   </p>
                 </div>

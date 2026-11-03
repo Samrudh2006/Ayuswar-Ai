@@ -857,7 +857,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
   };
 
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '16px 24px 80px 24px', fontFamily: 'Outfit, sans-serif' }}>
+    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '16px 24px 80px 24px', fontFamily: 'var(--font-main)' }}>
       
       {/* =====================================================================
           TOP BAR & NAVIGATION BACK
@@ -872,7 +872,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             padding: '8px 16px',
             borderRadius: '10px',
             background: '#ffffff',
-            border: '1.5px solid #CBD5E1',
+            border: '1.5px solid #D0DFE2',
             color: '#0F4C5C',
             fontSize: '13px',
             fontWeight: 750,
@@ -892,8 +892,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             gap: '6px',
             padding: '5px 12px',
             borderRadius: '20px',
-            background: gnaniStatus?.available ? '#F0FDF4' : 'rgba(15, 76, 92, 0.08)',
-            border: `1.5px solid ${gnaniStatus?.available ? '#86EFAC' : '#CBD5E1'}`,
+            background: gnaniStatus?.available ? '#F0FDF4' : 'rgba(0, 0, 0, 0.06)',
+            border: `1.5px solid ${gnaniStatus?.available ? '#86EFAC' : '#D0DFE2'}`,
             color: gnaniStatus?.available ? '#166534' : '#0F4C5C',
             fontWeight: 750
           }}>
@@ -905,7 +905,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </span>
           </div>
 
-          <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>
+          <span style={{ fontSize: '12px', color: '#698892', fontWeight: 600 }}>
             Session #{currentEncounter.patient.abhaId.slice(-4)}
           </span>
         </div>
@@ -918,8 +918,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         background: '#ffffff',
         borderRadius: '18px',
         padding: '16px 22px',
-        border: '1.5px solid #E2E8F0',
-        boxShadow: '0 4px 18px rgba(15, 76, 92, 0.06)',
+        border: '1.5px solid #D0DFE2',
+        boxShadow: '0 4px 18px rgba(0, 0, 0, 0.04)',
         marginBottom: '18px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
@@ -944,15 +944,15 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 <h1 style={{ fontSize: '18px', color: '#091E26', fontWeight: 850, margin: 0 }}>
                   {currentEncounter.patient.name}
                 </h1>
-                <span style={{ fontSize: '11.5px', background: '#F1F5F9', color: '#475569', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                <span style={{ fontSize: '11.5px', background: '#F1F5F9', color: '#486770', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
                   {currentEncounter.patient.gender}, {currentEncounter.patient.age}y
                 </span>
-                <span style={{ fontSize: '11px', background: 'rgba(15, 76, 92, 0.08)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '10px', fontWeight: 750 }}>
+                <span style={{ fontSize: '11px', background: 'rgba(0, 0, 0, 0.06)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '10px', fontWeight: 750 }}>
                   OPD Token #{101 + selectedEncounterIndex}
                 </span>
                 <LiveTelemetryBadge location={currentEncounter.patient.location || 'kurnool'} compact={true} />
               </div>
-              <p style={{ fontSize: '12px', color: '#64748B', margin: '3px 0 4px 0' }}>
+              <p style={{ fontSize: '12px', color: '#698892', margin: '3px 0 4px 0' }}>
                 Facility: {currentEncounter.patient.location} • Attending: <strong>{doctorProfile?.doctorName || currentEncounter.patient.doctorName || 'Dr. Priya Sharma, MD'}</strong>
               </p>
               <AbdmRegistryBadgeRow
@@ -978,10 +978,10 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             alignItems: 'center',
             gap: '12px',
             flexWrap: 'wrap',
-            background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.05) 0%, rgba(212, 175, 55, 0.08) 100%)',
+            background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.05) 100%)',
             padding: '10px 16px',
             borderRadius: '12px',
-            border: '1.5px solid rgba(15, 76, 92, 0.15)'
+            border: '1.5px solid rgba(0, 0, 0, 0.10)'
           }}>
             {/* Input: Auto-Detect Dialect */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -992,7 +992,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 background: '#ffffff',
                 padding: '6px 12px',
                 borderRadius: '8px',
-                border: '1px solid #CBD5E1',
+                border: '1px solid #D0DFE2',
                 fontSize: '11.5px',
                 fontWeight: 750,
                 color: '#0F4C5C'
@@ -1012,11 +1012,11 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               </div>
             </div>
 
-            <ArrowRight size={14} color="#64748B" />
+            <ArrowRight size={14} color="#698892" />
 
             {/* Output: Patient Vernacular Mother Tongue */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 750, color: '#486770' }}>
                 🔊 Patient Audio-Rx Language:
               </span>
               <select
@@ -1053,32 +1053,32 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           paddingTop: '12px',
           borderTop: '1px solid #F1F5F9'
         }}>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+            <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Heart size={11} color="#EF4444" /> Blood Pressure
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bp}</div>
           </div>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+            <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Activity size={11} color="#0F4C5C" /> Pulse / HR
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.heartRate}</div>
           </div>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+            <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Droplets size={11} color="#0284C7" /> SpO2 Oxygen
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.spo2}</div>
           </div>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+            <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Thermometer size={11} color="#D97706" /> Temperature
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.temp}</div>
           </div>
-          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+            <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Sparkles size={11} color="#9333EA" /> Random Blood Sugar
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bloodSugar}</div>
@@ -1095,7 +1095,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         padding: '16px 20px',
         color: '#ffffff',
         marginBottom: '22px',
-        boxShadow: '0 8px 24px rgba(10, 37, 64, 0.15)',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.10)',
         border: '1.5px solid rgba(255,255,255,0.1)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -1185,7 +1185,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <div style={{ fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                     {item.title}
                   </div>
-                  <div style={{ fontSize: '10.5px', color: isCurrent ? '#2DD4BF' : '#CBD5E1', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '10.5px', color: isCurrent ? '#2DD4BF' : '#D0DFE2', whiteSpace: 'nowrap' }}>
                     {item.desc}
                   </div>
                 </div>
@@ -1242,7 +1242,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             background: '#ffffff',
             borderRadius: '20px',
             padding: '22px',
-            border: '1.5px solid #E2E8F0',
+            border: '1.5px solid #D0DFE2',
             boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
             display: 'flex',
             flexDirection: 'column',
@@ -1264,13 +1264,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     🛡️ HW Noise Filter: Active
                   </span>
                 </h2>
-                <p style={{ fontSize: '11.5px', color: '#64748B', margin: '2px 0 0 0' }}>
+                <p style={{ fontSize: '11.5px', color: '#698892', margin: '2px 0 0 0' }}>
                   Single-Mic Diarization: WebAudio Pitch DSP + Linguistic NLP + Instant Spacebar Toggle
                 </p>
               </div>
 
               {/* Mode Toggle: Physical Mic vs Ambient Simulation */}
-              <div style={{ display: 'flex', background: '#F1F5F9', padding: '3px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+              <div style={{ display: 'flex', background: '#F1F5F9', padding: '3px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                 <button
                   onClick={() => { setRecordingMode('ambient_sim'); if (isRecording) pauseRecordingSession(); }}
                   style={{
@@ -1278,7 +1278,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     borderRadius: '7px',
                     border: 'none',
                     background: recordingMode === 'ambient_sim' ? '#0F4C5C' : 'transparent',
-                    color: recordingMode === 'ambient_sim' ? '#ffffff' : '#64748B',
+                    color: recordingMode === 'ambient_sim' ? '#ffffff' : '#698892',
                     fontSize: '11px',
                     fontWeight: 750,
                     cursor: 'pointer'
@@ -1293,7 +1293,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     borderRadius: '7px',
                     border: 'none',
                     background: recordingMode === 'live_mic' ? '#EF4444' : 'transparent',
-                    color: recordingMode === 'live_mic' ? '#ffffff' : '#64748B',
+                    color: recordingMode === 'live_mic' ? '#ffffff' : '#698892',
                     fontSize: '11px',
                     fontWeight: 750,
                     cursor: 'pointer',
@@ -1410,7 +1410,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     width: '8px',
                     height: '8px',
                     borderRadius: '50%',
-                    background: isRecording ? '#EF4444' : '#64748B',
+                    background: isRecording ? '#EF4444' : '#698892',
                     animation: isRecording ? 'pulse 1s infinite' : 'none'
                   }} />
                 </div>
@@ -1468,7 +1468,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               background: 'rgba(15, 23, 42, 0.04)',
               borderRadius: '12px',
               padding: '12px 16px',
-              border: '1px solid #E2E8F0',
+              border: '1px solid #D0DFE2',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -1592,7 +1592,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   textAlign: 'center',
                   background: '#FAF8F5',
                   borderRadius: '14px',
-                  border: '2px dashed #CBD5E1',
+                  border: '2px dashed #D0DFE2',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1604,7 +1604,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     width: '44px',
                     height: '44px',
                     borderRadius: '50%',
-                    background: 'rgba(15, 76, 92, 0.08)',
+                    background: 'rgba(0, 0, 0, 0.06)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -1614,7 +1614,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#091E26' }}>
                     No Spoken Dialogue Recorded Yet
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748B', maxWidth: '380px', lineHeight: 1.5 }}>
+                  <div style={{ fontSize: '12px', color: '#698892', maxWidth: '380px', lineHeight: 1.5 }}>
                     {recordingMode === 'live_mic'
                       ? (isRecording 
                           ? '🎙️ Listening with hardware noise suppression... Press SPACEBAR anytime to toggle Doctor ⇄ Patient!'
@@ -1641,8 +1641,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       onClick={() => setShowAddTurnModal(true)}
                       style={{
                         background: '#F1F5F9',
-                        color: '#475569',
-                        border: '1px solid #CBD5E1',
+                        color: '#486770',
+                        border: '1px solid #D0DFE2',
                         padding: '6px 14px',
                         borderRadius: '8px',
                         fontSize: '11.5px',
@@ -1691,7 +1691,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                           fontSize: '9.5px',
                           padding: '1px 5px',
                           borderRadius: '4px',
-                          background: isDoc ? 'rgba(15, 76, 92, 0.1)' : 'rgba(217, 119, 6, 0.1)',
+                          background: isDoc ? 'rgba(0, 0, 0, 0.07)' : 'rgba(217, 119, 6, 0.1)',
                           color: isDoc ? '#0F4C5C' : '#B45309',
                           fontWeight: 700
                         }}>
@@ -1769,7 +1769,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '10px',
-                boxShadow: '0 4px 16px rgba(15, 76, 92, 0.35)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
                 transition: 'all 0.2s ease',
                 marginTop: 'auto'
               }}
@@ -1786,7 +1786,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               background: '#ffffff',
               borderRadius: '20px',
               padding: '20px',
-              border: '1.5px solid #E2E8F0',
+              border: '1.5px solid #D0DFE2',
               boxShadow: '0 4px 18px rgba(0,0,0,0.04)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -1795,7 +1795,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   Vernacular Semantic Metaphor Resolver
                 </h3>
               </div>
-              <p style={{ fontSize: '11.5px', color: '#64748B', margin: '0 0 12px 0' }}>
+              <p style={{ fontSize: '11.5px', color: '#698892', margin: '0 0 12px 0' }}>
                 Translates rural colloquial idioms directly to formal WHO ICD-10 & SNOMED CT:
               </p>
 
@@ -1805,7 +1805,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     padding: '8px 12px',
                     borderRadius: '8px',
                     background: '#FAF8F5',
-                    border: '1px solid #E2E8F0',
+                    border: '1px solid #D0DFE2',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -1813,9 +1813,9 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   }}>
                     <div>
                       <div style={{ fontWeight: 800, color: '#D97706' }}>{map.dialect}</div>
-                      <div style={{ fontSize: '11px', color: '#64748B' }}>{map.clinicalTerm}</div>
+                      <div style={{ fontSize: '11px', color: '#698892' }}>{map.clinicalTerm}</div>
                     </div>
-                    <span style={{ fontSize: '10.5px', fontWeight: 800, background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '6px' }}>
+                    <span style={{ fontSize: '10.5px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '6px' }}>
                       ICD-10: {map.icd10}
                     </span>
                   </div>
@@ -1828,7 +1828,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               background: '#ffffff',
               borderRadius: '20px',
               padding: '20px',
-              border: '1.5px solid #E2E8F0',
+              border: '1.5px solid #D0DFE2',
               boxShadow: '0 4px 18px rgba(0,0,0,0.04)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
@@ -1839,20 +1839,20 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '10px', color: '#64748B' }}>Respiratory Effort</div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+                  <div style={{ fontSize: '10px', color: '#698892' }}>Respiratory Effort</div>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#D97706' }}>{currentEncounter.acousticBiomarkers.respiratoryEffort}</div>
                 </div>
-                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '10px', color: '#64748B' }}>Cough Signature</div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+                  <div style={{ fontSize: '10px', color: '#698892' }}>Cough Signature</div>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.acousticBiomarkers.coughType}</div>
                 </div>
-                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '10px', color: '#64748B' }}>Vocal Tremor</div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+                  <div style={{ fontSize: '10px', color: '#698892' }}>Vocal Tremor</div>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>{currentEncounter.acousticBiomarkers.vocalTremor}</div>
                 </div>
-                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '10px', color: '#64748B' }}>Risk Category</div>
+                <div style={{ background: '#FAF8F5', padding: '10px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
+                  <div style={{ fontSize: '10px', color: '#698892' }}>Risk Category</div>
                   <div style={{ fontSize: '13px', fontWeight: 800, color: '#10B981' }}>{currentEncounter.acousticBiomarkers.riskCategory}</div>
                 </div>
               </div>
@@ -1889,7 +1889,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0', color: '#2DD4BF' }}>
                 AI Indic Clinical Reasoner Synthesizing Prescription
               </h3>
-              <p style={{ fontSize: '13px', color: '#CBD5E1', margin: 0 }}>
+              <p style={{ fontSize: '13px', color: '#D0DFE2', margin: 0 }}>
                 {aiProcessingStage}
               </p>
             </div>
@@ -1933,7 +1933,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     fontSize: '13px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
                   }}
                 >
                   <span>🔊 Generate Voice Note with Gnani AI (Step 3 →)</span>
@@ -1949,7 +1949,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   background: '#ffffff',
                   borderRadius: '20px',
                   padding: '22px',
-                  border: '1.5px solid #E2E8F0',
+                  border: '1.5px solid #D0DFE2',
                   boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
                   display: 'flex',
                   flexDirection: 'column',
@@ -1968,24 +1968,24 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px' }}>
-                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>SUBJECTIVE (S):</div>
-                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.subjective}</div>
+                      <div style={{ color: '#2C4A52', lineHeight: 1.5 }}>{editableSoapNote.subjective}</div>
                     </div>
 
-                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>OBJECTIVE (O):</div>
-                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.objective}</div>
+                      <div style={{ color: '#2C4A52', lineHeight: 1.5 }}>{editableSoapNote.objective}</div>
                     </div>
 
-                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>ASSESSMENT (A):</div>
-                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.assessment}</div>
+                      <div style={{ color: '#2C4A52', lineHeight: 1.5 }}>{editableSoapNote.assessment}</div>
                     </div>
 
-                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ background: '#FAF8F5', padding: '12px', borderRadius: '10px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontWeight: 800, color: '#0F4C5C', marginBottom: '4px' }}>PLAN (P):</div>
-                      <div style={{ color: '#334155', lineHeight: 1.5 }}>{editableSoapNote.plan}</div>
+                      <div style={{ color: '#2C4A52', lineHeight: 1.5 }}>{editableSoapNote.plan}</div>
                     </div>
                   </div>
                 </div>
@@ -1996,12 +1996,12 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   borderRadius: '20px',
                   padding: '22px',
                   border: '2px solid #D4AF37',
-                  boxShadow: '0 8px 24px rgba(212, 175, 55, 0.12)',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.07)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '14px'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0, 0, 0, 0.14)', paddingBottom: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <Sparkles size={18} color="#D4AF37" />
                       <div>
@@ -2018,7 +2018,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     </span>
                   </div>
 
-                  <p style={{ fontSize: '12px', color: '#64748B', margin: 0 }}>
+                  <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>
                     This text has been composed by the clinical reasoning engine specifically tailored for non-reading rural patients. You may edit before synthesizing with Gnani.
                   </p>
 
@@ -2030,13 +2030,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       width: '100%',
                       padding: '14px',
                       borderRadius: '12px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       background: '#ffffff',
                       fontSize: '14px',
                       lineHeight: 1.6,
                       color: '#091E26',
                       fontWeight: 600,
-                      fontFamily: 'Outfit, system-ui, sans-serif',
+                      fontFamily: 'var(--font-main)',
                       boxSizing: 'border-box',
                       resize: 'vertical'
                     }}
@@ -2089,7 +2089,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
+                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)',
                       marginTop: 'auto'
                     }}
                   >
@@ -2114,8 +2114,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             background: '#ffffff',
             borderRadius: '24px',
             padding: '24px',
-            border: '2px solid rgba(15, 76, 92, 0.25)',
-            boxShadow: '0 8px 30px rgba(15, 76, 92, 0.08)',
+            border: '2px solid rgba(0, 0, 0, 0.16)',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.06)',
             display: 'flex',
             flexDirection: 'column',
             gap: '18px'
@@ -2127,7 +2127,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <h2 style={{ fontSize: '17px', fontWeight: 850, color: '#0F4C5C', margin: 0 }}>
                     Spoken Prescription Voice Note
                   </h2>
-                  <p style={{ fontSize: '12px', color: '#64748B', margin: '2px 0 0 0' }}>
+                  <p style={{ fontSize: '12px', color: '#698892', margin: '2px 0 0 0' }}>
                     Synthesized with Gnani Timbre Indic TTS Engine (/api/gnani/tts)
                   </p>
                 </div>
@@ -2153,8 +2153,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               gap: '14px',
               padding: '14px 18px',
               borderRadius: '14px',
-              background: 'linear-gradient(135deg, rgba(15, 76, 92, 0.06) 0%, rgba(212, 175, 55, 0.08) 100%)',
-              border: '1px solid rgba(15, 76, 92, 0.15)'
+              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.05) 100%)',
+              border: '1px solid rgba(0, 0, 0, 0.10)'
             }}>
               <div style={{
                 position: 'relative',
@@ -2177,7 +2177,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     left: 0,
                     right: 0,
                     height: '14px',
-                    background: 'rgba(15, 76, 92, 0.92)',
+                    background: 'rgba(0, 0, 0, 0.16)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -2194,14 +2194,14 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C' }}>
                   {doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}
                 </div>
-                <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                <div style={{ fontSize: '11.5px', color: '#698892' }}>
                   Speaking in <strong>{currentEncounter.language}</strong> with personalized dosage schedule
                 </div>
               </div>
 
               {/* Speed Controls */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 700 }}>Speed:</span>
+                <span style={{ fontSize: '11px', color: '#698892', fontWeight: 700 }}>Speed:</span>
                 {[0.8, 1.0, 1.25].map((speed) => (
                   <button
                     key={speed}
@@ -2211,9 +2211,9 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       borderRadius: '6px',
                       fontSize: '11px',
                       fontWeight: 800,
-                      border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #CBD5E1',
-                      background: playbackSpeed === speed ? 'rgba(15, 76, 92, 0.12)' : '#ffffff',
-                      color: playbackSpeed === speed ? '#0F4C5C' : '#64748B',
+                      border: playbackSpeed === speed ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+                      background: playbackSpeed === speed ? 'rgba(0, 0, 0, 0.08)' : '#ffffff',
+                      color: playbackSpeed === speed ? '#0F4C5C' : '#698892',
                       cursor: 'pointer'
                     }}
                   >
@@ -2246,7 +2246,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       padding: '3px 8px',
                       borderRadius: '6px',
                       fontWeight: isActive ? 800 : 500,
-                      color: isActive ? '#061626' : '#E2E8F0',
+                      color: isActive ? '#061626' : '#D0DFE2',
                       background: isActive ? '#FCD34D' : 'transparent',
                       boxShadow: isActive ? '0 0 14px rgba(252, 211, 77, 0.8)' : 'none',
                       transition: 'all 0.15s ease'
@@ -2276,7 +2276,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   fontSize: '14px',
                   fontWeight: 800,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.3)'
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
                 }}
               >
                 {isPlayingAudioRx ? <Pause size={17} /> : <Play size={17} fill="#ffffff" />}
@@ -2294,8 +2294,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   padding: '13px 16px',
                   borderRadius: '12px',
                   background: '#F1F5F9',
-                  border: '1px solid #CBD5E1',
-                  color: '#475569',
+                  border: '1px solid #D0DFE2',
+                  color: '#486770',
                   fontWeight: 750,
                   cursor: 'pointer'
                 }}
@@ -2322,7 +2322,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       padding: '12px 16px',
                       borderRadius: '12px',
                       background: isIlluminated ? 'rgba(252, 211, 77, 0.15)' : '#FAF8F5',
-                      border: isIlluminated ? `2px solid ${med.color}` : '1px solid #E2E8F0',
+                      border: isIlluminated ? `2px solid ${med.color}` : '1px solid #D0DFE2',
                       boxShadow: isIlluminated ? `0 0 16px ${med.color}40` : 'none',
                       transition: 'all 0.2s ease'
                     }}
@@ -2357,7 +2357,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               background: '#ffffff',
               borderRadius: '24px',
               padding: '24px',
-              border: isRxSigned ? '2px solid #10B981' : '1.5px solid #E2E8F0',
+              border: isRxSigned ? '2px solid #10B981' : '1.5px solid #D0DFE2',
               boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
               display: 'flex',
               flexDirection: 'column',
@@ -2370,7 +2370,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 </h3>
               </div>
 
-              <p style={{ fontSize: '12px', color: '#64748B', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5, margin: 0 }}>
                 Under National Medical Commission (NMC) & DPDP Act 2023, the physician reviews the synthesized spoken voice note and applies a cryptographic Class-3 DSC signature.
               </p>
 
@@ -2407,7 +2407,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     fontSize: '13px',
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(15, 76, 92, 0.25)'
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
                   }}
                 >
                   ✍️ Digitally Sign & Approve Prescription
@@ -2424,7 +2424,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   borderRadius: '12px',
                   background: isRxSigned 
                     ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
-                    : '#CBD5E1',
+                    : '#D0DFE2',
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '14px',
@@ -2470,7 +2470,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 <h3 style={{ fontSize: '16px', fontWeight: 850, color: '#091E26', margin: 0 }}>
                   WhatsApp Vernacular Audio-Rx Delivery
                 </h3>
-                <p style={{ fontSize: '11.5px', color: '#64748B', margin: '2px 0 0 0' }}>
+                <p style={{ fontSize: '11.5px', color: '#698892', margin: '2px 0 0 0' }}>
                   Target: {currentEncounter.patient.name} ({currentEncounter.patient.phone || '+91 98490 12345'})
                 </p>
               </div>
@@ -2505,7 +2505,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   background: '#F0FDFA',
                   padding: '10px',
                   borderRadius: '8px',
-                  border: '1px solid rgba(15, 76, 92, 0.15)',
+                  border: '1px solid rgba(0, 0, 0, 0.10)',
                   fontStyle: 'italic',
                   fontSize: '12px'
                 }}>
@@ -2550,7 +2550,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             background: '#ffffff',
             borderRadius: '24px',
             padding: '24px',
-            border: '1.5px solid #E2E8F0',
+            border: '1.5px solid #D0DFE2',
             boxShadow: '0 4px 18px rgba(0,0,0,0.04)',
             display: 'flex',
             flexDirection: 'column',
@@ -2571,7 +2571,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   padding: '12px',
                   borderRadius: '10px',
                   background: '#F1F5F9',
-                  border: '1px solid #CBD5E1',
+                  border: '1px solid #D0DFE2',
                   color: '#0F4C5C',
                   fontSize: '12.5px',
                   fontWeight: 800,
@@ -2592,7 +2592,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   padding: '12px',
                   borderRadius: '10px',
                   background: '#F1F5F9',
-                  border: '1px solid #CBD5E1',
+                  border: '1px solid #D0DFE2',
                   color: '#0F4C5C',
                   fontSize: '12.5px',
                   fontWeight: 800,
@@ -2609,7 +2609,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               background: '#FAF8F5',
               padding: '16px',
               borderRadius: '14px',
-              border: '1px dashed #CBD5E1',
+              border: '1px dashed #D0DFE2',
               display: 'flex',
               alignItems: 'center',
               gap: '16px'
@@ -2622,7 +2622,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#091E26' }}>
                   Official ABDM Digital Prescription QR
                 </div>
-                <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: '#698892', marginTop: '2px' }}>
                   Scannable by Jan Aushadhi pharmacists and rural patients for vernacular dosage playback.
                 </div>
               </div>
@@ -2645,7 +2645,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 16px rgba(15, 76, 92, 0.35)',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.16)',
                 marginTop: 'auto'
               }}
             >
@@ -2689,13 +2689,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               Insert Consultation Speaking Turn
             </h3>
             <div>
-              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', display: 'block', marginBottom: '4px' }}>
+              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#486770', display: 'block', marginBottom: '4px' }}>
                 Speaker Role:
               </label>
               <select
                 value={newSpeakerRole}
                 onChange={(e) => setNewSpeakerRole(e.target.value)}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '13px' }}
+                style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #D0DFE2', fontSize: '13px' }}
               >
                 <option value="Doctor">🩺 Attending Doctor</option>
                 <option value="Patient">👵 Patient</option>
@@ -2703,7 +2703,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </div>
 
             <div>
-              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#475569', display: 'block', marginBottom: '4px' }}>
+              <label style={{ fontSize: '11.5px', fontWeight: 750, color: '#486770', display: 'block', marginBottom: '4px' }}>
                 Spoken Text:
               </label>
               <textarea
@@ -2711,14 +2711,14 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 onChange={(e) => setNewSpeakerText(e.target.value)}
                 rows={3}
                 placeholder="Type or paste what was spoken..."
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1.5px solid #CBD5E1', fontSize: '13px', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1.5px solid #D0DFE2', fontSize: '13px', boxSizing: 'border-box' }}
               />
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
               <button
                 onClick={() => setShowAddTurnModal(false)}
-                style={{ padding: '8px 16px', borderRadius: '8px', background: '#F1F5F9', border: 'none', color: '#475569', fontWeight: 700, cursor: 'pointer' }}
+                style={{ padding: '8px 16px', borderRadius: '8px', background: '#F1F5F9', border: 'none', color: '#486770', fontWeight: 700, cursor: 'pointer' }}
               >
                 Cancel
               </button>
@@ -2848,7 +2848,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             gap: '14px',
             boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #D0DFE2', paddingBottom: '10px' }}>
               <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F4C5C' }}>
                 Official OPD Prescription Slip (Print Preview)
               </div>
@@ -2856,15 +2856,15 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </div>
 
             <div style={{ border: '2px solid #0F4C5C', borderRadius: '12px', padding: '16px', background: '#FAF8F5' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #CBD5E1', paddingBottom: '8px', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #D0DFE2', paddingBottom: '8px', marginBottom: '8px' }}>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '14px', color: '#091E26' }}>AYUSWAR AMBIENT CLINIC</div>
-                  <div style={{ fontSize: '10.5px', color: '#64748B' }}>Primary Health Centre • ABDM Integrated</div>
+                  <div style={{ fontSize: '10.5px', color: '#698892' }}>Primary Health Centre • ABDM Integrated</div>
                 </div>
                 <AuthenticQrCode value={`https://ayuswar.ai/rx/${currentEncounter.patient.abhaId}`} size={56} />
               </div>
 
-              <div style={{ fontSize: '11.5px', color: '#334155', marginBottom: '10px' }}>
+              <div style={{ fontSize: '11.5px', color: '#2C4A52', marginBottom: '10px' }}>
                 Patient: <strong>{currentEncounter.patient.name}</strong> • Age/Sex: {currentEncounter.patient.age}y / {currentEncounter.patient.gender} • ABHA: {currentEncounter.patient.abhaId}
               </div>
 
@@ -2875,8 +2875,8 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 ))}
               </div>
 
-              <div style={{ borderTop: '1px solid #CBD5E1', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ fontSize: '10px', color: '#64748B' }}>Class-3 Cryptographic DSC Stamp Verified</div>
+              <div style={{ borderTop: '1px solid #D0DFE2', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: '10px', color: '#698892' }}>Class-3 Cryptographic DSC Stamp Verified</div>
                 <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C' }}>{doctorProfile?.doctorName || 'Dr. Priya Sharma, MD'}</div>
               </div>
             </div>

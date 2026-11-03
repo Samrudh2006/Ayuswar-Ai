@@ -256,7 +256,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '16px',
-        background: 'rgba(10, 37, 64, 0.75)',
+        background: 'rgba(0, 0, 0, 0.14)',
         backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(5px)'
       }}
@@ -268,7 +268,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
         maxHeight: '92vh',
         borderRadius: '20px',
         overflow: 'hidden',
-        boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
+        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.14)',
         border: '1px solid #D8E7EB',
         display: 'flex',
         flexDirection: 'column'
@@ -323,7 +323,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
         <div style={{
           display: 'flex',
           background: '#FAF8F5',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid #D0DFE2',
           padding: '4px 6px'
         }}>
           <button
@@ -335,7 +335,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'register' ? '#ffffff' : 'transparent',
-              color: authMode === 'register' ? '#D97706' : '#64748B',
+              color: authMode === 'register' ? '#D97706' : '#698892',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -359,7 +359,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'login' ? '#ffffff' : 'transparent',
-              color: authMode === 'login' ? '#0A2540' : '#64748B',
+              color: authMode === 'login' ? '#0A2540' : '#698892',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -451,7 +451,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     width: '100%',
                     padding: '10px 12px',
                     borderRadius: '10px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1.5px solid #D0DFE2',
                     fontSize: '13px',
                     fontWeight: 600,
                     color: '#081C24',
@@ -481,13 +481,13 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                       width: '100%',
                       padding: '10px 14px 10px 36px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       fontSize: '13px',
                       fontFamily: 'monospace',
-                      color: '#0F172A'
+                      color: '#091E26'
                     }}
                   />
-                  <Smartphone size={16} color="#64748B" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                  <Smartphone size={16} color="#698892" style={{ position: 'absolute', left: '12px', top: '12px' }} />
                 </div>
               </div>
 
@@ -507,13 +507,13 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                       width: '100%',
                       padding: '10px 14px 10px 36px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       fontSize: '14px',
-                      color: '#0F172A',
+                      color: '#091E26',
                       letterSpacing: '2px'
                     }}
                   />
-                  <KeyRound size={16} color="#64748B" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                  <KeyRound size={16} color="#698892" style={{ position: 'absolute', left: '12px', top: '12px' }} />
                 </div>
               </div>
             </div>
@@ -543,7 +543,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
               {/* SECTION 1: PRIMARY CITIZEN DETAILS */}
               <div style={{
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #D0DFE2',
                 borderRadius: '14px',
                 padding: '14px 16px',
                 marginBottom: '16px'
@@ -555,7 +555,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.6fr', gap: '10px', marginBottom: '10px' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                       Full Name
                     </label>
                     <input
@@ -564,11 +564,11 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                       onChange={e => setRegName(e.target.value)}
                       placeholder="e.g. Ramesh Reddy"
                       required
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12.5px' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12.5px' }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                       Age & Gender
                     </label>
                     <div style={{ display: 'flex', gap: '4px' }}>
@@ -576,12 +576,12 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                         type="number"
                         value={regAge}
                         onChange={e => setRegAge(e.target.value)}
-                        style={{ width: '52px', padding: '8px 6px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                        style={{ width: '52px', padding: '8px 6px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                       />
                       <select
                         value={regGender}
                         onChange={e => setRegGender(e.target.value)}
-                        style={{ flex: 1, padding: '8px 4px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '11.5px', background: '#fff' }}
+                        style={{ flex: 1, padding: '8px 4px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '11.5px', background: '#fff' }}
                       >
                         <option value="Male">M</option>
                         <option value="Female">F</option>
@@ -592,7 +592,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                       Mobile Number
                     </label>
                     <input
@@ -600,17 +600,17 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                       value={regMobile}
                       onChange={e => setRegMobile(e.target.value)}
                       placeholder="98XXXXXXXX"
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                       Spoken Dialect / Language
                     </label>
                     <select
                       value={regLanguage}
                       onChange={e => setRegLanguage(e.target.value)}
-                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px', background: '#fff' }}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px', background: '#fff' }}
                     >
                       <option value="Telugu">తెలుగు (Telugu)</option>
                       <option value="Hindi">हिन्दी (Hindi)</option>
@@ -619,7 +619,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#486770', marginBottom: '4px' }}>
                     Primary Medical Condition / Disease
                   </label>
                   <select
@@ -643,7 +643,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
               {/* SECTION 2: FAMILY MEMBERS TOGGLE & CARDS */}
               <div style={{
-                border: '1.5px dashed #CBD5E1',
+                border: '1.5px dashed #D0DFE2',
                 borderRadius: '14px',
                 padding: '14px 16px',
                 marginBottom: '16px',
@@ -661,7 +661,7 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   </label>
                 </div>
 
-                <p style={{ fontSize: '11px', color: '#64748B', margin: '0 0 10px 0' }}>
+                <p style={{ fontSize: '11px', color: '#698892', margin: '0 0 10px 0' }}>
                   {includeFamily 
                     ? 'Register your parents, spouse, or children. Each will get an assigned doctor according to their disease and can be switched in your portal!'
                     : 'Unchecked: You will have a single citizen profile with no profile switching.'}
@@ -698,22 +698,22 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
 
                           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '8px', marginBottom: '8px' }}>
                             <div>
-                              <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#475569', marginBottom: '3px' }}>Name</label>
+                              <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#486770', marginBottom: '3px' }}>Name</label>
                               <input
                                 type="text"
                                 value={member.name}
                                 onChange={e => handleUpdateFamilyMember(member.id, 'name', e.target.value)}
                                 placeholder="e.g. Saraswathi Devi"
-                                style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                                style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                               />
                             </div>
                             <div>
-                              <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#475569', marginBottom: '3px' }}>Relation & Age</label>
+                              <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#486770', marginBottom: '3px' }}>Relation & Age</label>
                               <div style={{ display: 'flex', gap: '4px' }}>
                                 <select
                                   value={member.relation}
                                   onChange={e => handleUpdateFamilyMember(member.id, 'relation', e.target.value)}
-                                  style={{ flex: 1, padding: '6px 4px', borderRadius: '6px', border: '1px solid #CBD5E1', fontSize: '11px', background: '#fff' }}
+                                  style={{ flex: 1, padding: '6px 4px', borderRadius: '6px', border: '1px solid #D0DFE2', fontSize: '11px', background: '#fff' }}
                                 >
                                   <option value="Mother">Mother</option>
                                   <option value="Father">Father</option>
@@ -727,20 +727,20 @@ export default function PatientAuthModal({ isOpen, onClose, onLoginSuccess }) {
                                   type="number"
                                   value={member.age}
                                   onChange={e => handleUpdateFamilyMember(member.id, 'age', e.target.value)}
-                                  style={{ width: '42px', padding: '6px 4px', borderRadius: '6px', border: '1px solid #CBD5E1', fontSize: '11px' }}
+                                  style={{ width: '42px', padding: '6px 4px', borderRadius: '6px', border: '1px solid #D0DFE2', fontSize: '11px' }}
                                 />
                               </div>
                             </div>
                           </div>
 
                           <div>
-                            <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#475569', marginBottom: '3px' }}>
+                            <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: '#486770', marginBottom: '3px' }}>
                               Disease / Condition
                             </label>
                             <select
                               value={member.condition}
                               onChange={e => handleUpdateFamilyMember(member.id, 'condition', e.target.value)}
-                              style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #CBD5E1', fontSize: '11.5px', background: '#fff' }}
+                              style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #D0DFE2', fontSize: '11.5px', background: '#fff' }}
                             >
                               <option value="Type-2 Diabetes & Hypertension">🩸 Type-2 Diabetes & Hypertension (Cardiologist)</option>
                               <option value="Asthma & Seasonal Airway Wheezing">🫁 Asthma & Wheeze (Pulmonologist)</option>

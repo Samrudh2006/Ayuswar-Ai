@@ -95,7 +95,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
       position: 'fixed',
       inset: 0,
       zIndex: 9999,
-      background: 'rgba(10, 37, 64, 0.78)',
+      background: 'rgba(0, 0, 0, 0.14)',
       backdropFilter: 'blur(8px)',
       display: 'flex',
       alignItems: 'center',
@@ -109,7 +109,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
         width: '100%',
         boxShadow: '0 25px 60px rgba(0, 0, 0, 0.3)',
         overflow: 'hidden',
-        border: '1.5px solid #E2E8F0',
+        border: '1.5px solid #D0DFE2',
         display: 'flex',
         flexDirection: 'column'
       }}>
@@ -179,7 +179,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
         <div style={{
           position: 'relative',
           height: '420px',
-          background: '#0F172A',
+          background: '#091E26',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -278,7 +278,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
               {current.title}
             </h3>
 
-            <p style={{ fontSize: '13px', color: '#CBD5E1', lineHeight: 1.5, marginBottom: '14px' }}>
+            <p style={{ fontSize: '13px', color: '#D0DFE2', lineHeight: 1.5, marginBottom: '14px' }}>
               {current.desc}
             </p>
 
@@ -367,7 +367,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <span style={{ fontSize: '12px', color: '#64748B' }}>
+          <span style={{ fontSize: '12px', color: '#698892' }}>
             Click anywhere on progress dots or next button to navigate.
           </span>
           <button
@@ -376,7 +376,7 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
               padding: '8px 18px',
               borderRadius: '10px',
               border: 'none',
-              background: '#0F172A',
+              background: '#091E26',
               color: '#FFFFFF',
               fontSize: '13px',
               fontWeight: 750,

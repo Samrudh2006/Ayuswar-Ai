@@ -48,7 +48,7 @@ export default function CookieConsentBanner() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
         <ShieldCheck size={18} color="#D4AF37" style={{ flexShrink: 0 }} />
-        <div style={{ fontSize: '11px', lineHeight: 1.35, color: '#CBD5E1', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ fontSize: '11px', lineHeight: 1.35, color: '#D0DFE2', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           <span>DPDP Act 2023 compliant: Local storage used for language & sessions. Zero ad tracking.</span>{' '}
           <Link to="/privacy" style={{ color: '#D4AF37', textDecoration: 'underline', fontWeight: 600, whiteSpace: 'nowrap' }}>
             Privacy
@@ -68,7 +68,7 @@ export default function CookieConsentBanner() {
             fontSize: '11px',
             fontWeight: 700,
             cursor: 'pointer',
-            boxShadow: '0 2px 6px rgba(15, 76, 92, 0.3)',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.16)',
             whiteSpace: 'nowrap'
           }}
         >

@@ -106,7 +106,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '16px',
-        background: 'rgba(10, 37, 64, 0.75)',
+        background: 'rgba(0, 0, 0, 0.14)',
         backdropFilter: 'blur(5px)',
         WebkitBackdropFilter: 'blur(5px)'
       }}
@@ -118,7 +118,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
         maxHeight: '90vh',
         borderRadius: '20px',
         overflow: 'hidden',
-        boxShadow: '0 25px 60px rgba(10, 37, 64, 0.35)',
+        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.14)',
         border: '1px solid #D8E7EB',
         display: 'flex',
         flexDirection: 'column'
@@ -173,7 +173,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
         <div style={{
           display: 'flex',
           background: '#FAF8F5',
-          borderBottom: '1px solid #E2E8F0',
+          borderBottom: '1px solid #D0DFE2',
           padding: '4px 6px'
         }}>
           <button
@@ -185,7 +185,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'login' ? '#ffffff' : 'transparent',
-              color: authMode === 'login' ? '#0F4C5C' : '#64748B',
+              color: authMode === 'login' ? '#0F4C5C' : '#698892',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -209,7 +209,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
               border: 'none',
               borderRadius: '10px',
               background: authMode === 'register' ? '#ffffff' : 'transparent',
-              color: authMode === 'register' ? '#0F4C5C' : '#64748B',
+              color: authMode === 'register' ? '#0F4C5C' : '#698892',
               fontWeight: 800,
               fontSize: '13px',
               cursor: 'pointer',
@@ -233,8 +233,8 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                ========================================================================= */
             <div>
               <div style={{
-                background: 'rgba(15, 76, 92, 0.06)',
-                border: '1px solid rgba(15, 76, 92, 0.2)',
+                background: 'rgba(0, 0, 0, 0.04)',
+                border: '1px solid rgba(0, 0, 0, 0.14)',
                 padding: '12px 14px',
                 borderRadius: '10px',
                 fontSize: '12px',
@@ -269,7 +269,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 14px rgba(15, 76, 92, 0.35)',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)',
                   marginBottom: '16px'
                 }}
               >
@@ -288,7 +288,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     width: '100%',
                     padding: '11px 14px',
                     borderRadius: '10px',
-                    border: '1.5px solid #CBD5E1',
+                    border: '1.5px solid #D0DFE2',
                     fontSize: '13px',
                     fontWeight: 650,
                     color: '#081C24',
@@ -320,13 +320,13 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                       width: '100%',
                       padding: '11px 14px 11px 36px',
                       borderRadius: '10px',
-                      border: '1.5px solid #CBD5E1',
+                      border: '1.5px solid #D0DFE2',
                       fontSize: '14px',
-                      color: '#0F172A',
+                      color: '#091E26',
                       letterSpacing: '2px'
                     }}
                   />
-                  <KeyRound size={16} color="#64748B" style={{ position: 'absolute', left: '12px', top: '13px' }} />
+                  <KeyRound size={16} color="#698892" style={{ position: 'absolute', left: '12px', top: '13px' }} />
                 </div>
               </div>
             </div>
@@ -361,7 +361,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   onChange={e => setRegDoctorName(e.target.value)}
                   placeholder="e.g. Dr. Priya Sharma, MD"
                   required
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12.5px' }}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12.5px' }}
                 />
               </div>
 
@@ -394,7 +394,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     onChange={e => setRegNmcNo(e.target.value)}
                     placeholder="NMC-TS-2024-8849"
                     required
-                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                   />
                 </div>
                 <div>
@@ -406,7 +406,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                     value={regExperience}
                     onChange={e => setRegExperience(e.target.value)}
                     placeholder="12 years"
-                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                   />
                 </div>
               </div>
@@ -421,7 +421,7 @@ export default function DoctorAuthModal({ isOpen, onClose, onLoginSuccess }) {
                   onChange={e => setRegFacility(e.target.value)}
                   placeholder="e.g. Kurnool District Hospital (ABDM PHC #1402)"
                   required
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '12px' }}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '12px' }}
                 />
               </div>
             </div>

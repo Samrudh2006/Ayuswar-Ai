@@ -243,7 +243,7 @@ export default function MobilePwaInstallBanner() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'rgba(10, 37, 64, 0.72)',
+            background: 'rgba(0, 0, 0, 0.14)',
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)',
             zIndex: 1400,
@@ -262,7 +262,7 @@ export default function MobilePwaInstallBanner() {
               maxWidth: '480px',
               width: '100%',
               overflow: 'hidden',
-              boxShadow: '0 24px 64px rgba(10, 37, 64, 0.45)',
+              boxShadow: '0 24px 64px rgba(0, 0, 0, 0.14)',
               border: '1.5px solid #D4AF37'
             }}
           >
@@ -311,7 +311,7 @@ export default function MobilePwaInstallBanner() {
                   border: 'none',
                   borderRadius: '10px',
                   background: deviceTab === 'desktop' ? '#ffffff' : 'transparent',
-                  color: deviceTab === 'desktop' ? '#0F4C5C' : '#64748B',
+                  color: deviceTab === 'desktop' ? '#0F4C5C' : '#698892',
                   fontWeight: deviceTab === 'desktop' ? 750 : 600,
                   fontSize: '12px',
                   cursor: 'pointer',
@@ -334,7 +334,7 @@ export default function MobilePwaInstallBanner() {
                   border: 'none',
                   borderRadius: '10px',
                   background: deviceTab === 'android' ? '#ffffff' : 'transparent',
-                  color: deviceTab === 'android' ? '#0F4C5C' : '#64748B',
+                  color: deviceTab === 'android' ? '#0F4C5C' : '#698892',
                   fontWeight: deviceTab === 'android' ? 750 : 600,
                   fontSize: '12px',
                   cursor: 'pointer',
@@ -357,7 +357,7 @@ export default function MobilePwaInstallBanner() {
                   border: 'none',
                   borderRadius: '10px',
                   background: deviceTab === 'ios' ? '#ffffff' : 'transparent',
-                  color: deviceTab === 'ios' ? '#0F4C5C' : '#64748B',
+                  color: deviceTab === 'ios' ? '#0F4C5C' : '#698892',
                   fontWeight: deviceTab === 'ios' ? 750 : 600,
                   fontSize: '12px',
                   cursor: 'pointer',
@@ -508,13 +508,11 @@ export default function MobilePwaInstallBanner() {
           max-width: 460px;
           margin: 0 auto;
           z-index: 1050;
-          background: linear-gradient(135deg, rgba(10, 37, 64, 0.96) 0%, rgba(15, 76, 92, 0.96) 100%);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          border-radius: 16px;
+          background: #0F4C5C;
+          border-radius: 12px;
           padding: 10px 14px;
-          box-shadow: 0 12px 36px rgba(10, 37, 64, 0.4);
-          border: 1.5px solid rgba(212, 175, 55, 0.85);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.16);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           color: #ffffff;
           display: flex;
           align-items: center;
@@ -554,11 +552,11 @@ export default function MobilePwaInstallBanner() {
         .ayuswar-pwa-badge {
           font-size: 8.5px;
           font-weight: 900;
-          background: rgba(212, 175, 55, 0.25);
+          background: rgba(0, 0, 0, 0.14);
           color: #D4AF37;
           padding: 1px 6px;
           border-radius: 4px;
-          border: 1px solid rgba(212, 175, 55, 0.4);
+          border: 1px solid rgba(0, 0, 0, 0.14);
         }
 
         .ayuswar-pwa-subtitle {

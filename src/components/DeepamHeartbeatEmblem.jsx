@@ -29,7 +29,7 @@ export default function DeepamHeartbeatEmblem({
         borderRadius: '50%',
         background: '#FAF8F5',
         border: '2px solid #D4AF37',
-        boxShadow: '0 4px 14px rgba(15, 76, 92, 0.22)',
+        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
         overflow: 'hidden',
         padding: '3px',
         ...style

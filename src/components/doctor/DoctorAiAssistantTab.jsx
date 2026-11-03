@@ -18,11 +18,11 @@ export default function DoctorAiAssistantTab({
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Sparkles size={22} color="#0F4C5C" />
-          <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'Outfit, sans-serif' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#081C24', fontFamily: 'var(--font-main)' }}>
             AI Clinical Co-Pilot & Decision Support
           </h2>
         </div>
-        <p style={{ fontSize: '13px', color: '#64748B' }}>
+        <p style={{ fontSize: '13px', color: '#698892' }}>
           Evidence-based clinical assistance calibrated for Indian healthcare guidelines (ICMR, GINA, WHO ICD-10, NFI).
         </p>
       </div>
@@ -41,9 +41,9 @@ export default function DoctorAiAssistantTab({
             style={{
               padding: '8px 16px',
               borderRadius: '10px',
-              border: aiCategory === cat.id ? '1.5px solid #0F4C5C' : '1px solid #E2E8F0',
-              background: aiCategory === cat.id ? 'rgba(15, 76, 92, 0.08)' : '#ffffff',
-              color: aiCategory === cat.id ? '#0F4C5C' : '#64748B',
+              border: aiCategory === cat.id ? '1.5px solid #0F4C5C' : '1px solid #D0DFE2',
+              background: aiCategory === cat.id ? 'rgba(0, 0, 0, 0.06)' : '#ffffff',
+              color: aiCategory === cat.id ? '#0F4C5C' : '#698892',
               fontSize: '12.5px',
               fontWeight: 750,
               cursor: 'pointer'
@@ -58,7 +58,7 @@ export default function DoctorAiAssistantTab({
       <div style={{
         background: '#ffffff',
         borderRadius: '16px',
-        border: '1px solid #E2E8F0',
+        border: '1px solid #D0DFE2',
         padding: '24px',
         minHeight: '440px',
         display: 'flex',
@@ -85,7 +85,7 @@ export default function DoctorAiAssistantTab({
               <div style={{
                 alignSelf: 'flex-start',
                 background: '#FAF8F5',
-                border: '1px solid #E2E8F0',
+                border: '1px solid #D0DFE2',
                 padding: '16px 20px',
                 borderRadius: '14px 14px 14px 2px',
                 fontSize: '13.5px',
@@ -110,7 +110,7 @@ export default function DoctorAiAssistantTab({
               flex: 1,
               padding: '12px 16px',
               borderRadius: '12px',
-              border: '1.5px solid #CBD5E1',
+              border: '1.5px solid #D0DFE2',
               fontSize: '13.5px',
               outline: 'none'
             }}

@@ -65,14 +65,14 @@ export default function ArchitectureView() {
           <span>Home</span>
         </Link>
         <span style={{ color: '#94A3B8' }}>/</span>
-        <span style={{ color: '#64748B', fontSize: '13px' }}>Technology</span>
+        <span style={{ color: '#698892', fontSize: '13px' }}>Technology</span>
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Architecture Pipeline</span>
       </div>
 
       {/* Clean, Modern Header */}
       <div className="architecture-header" style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '10px' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800, marginBottom: '10px' }}>
           <Layers size={14} />
           <span>SYSTEM ARCHITECTURE & PIPELINE HLD</span>
         </div>
@@ -100,7 +100,7 @@ export default function ArchitectureView() {
           padding: '28px 24px',
           color: '#FFFFFF',
           marginBottom: '36px',
-          boxShadow: '0 12px 32px rgba(15, 76, 92, 0.18)',
+          boxShadow: '0 12px 32px rgba(0, 0, 0, 0.13)',
           border: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
@@ -113,7 +113,7 @@ export default function ArchitectureView() {
             <h2 style={{ fontSize: '22px', fontWeight: 850, margin: '0 0 8px 0', letterSpacing: '-0.3px', color: '#FFFFFF' }}>
               ABDM Milestone 1, 2, 3 Architecture Certification & Technical Dossier
             </h2>
-            <p style={{ fontSize: '13.5px', color: '#CBD5E1', lineHeight: 1.6, margin: '0 0 16px 0' }}>
+            <p style={{ fontSize: '13.5px', color: '#D0DFE2', lineHeight: 1.6, margin: '0 0 16px 0' }}>
               Complete engineering audit whitepaper documenting compliance with Ayushman Bharat Digital Mission (ABDM) standards — including ABHA/HPR verification, HL7 FHIR R4 document bundling, and rural offline-first IndexedDB resilience.
             </p>
 
@@ -194,7 +194,7 @@ export default function ArchitectureView() {
           <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
             Core Interoperability & Clinical Schema Standards
           </h2>
-          <p style={{ fontSize: '13.5px', color: '#64748B', margin: 0 }}>
+          <p style={{ fontSize: '13.5px', color: '#698892', margin: 0 }}>
             Standard specifications implemented across the client runtime and clinical data exchange layer.
           </p>
         </div>
@@ -212,9 +212,9 @@ export default function ArchitectureView() {
                 style={{
                   background: '#FFFFFF',
                   borderRadius: '16px',
-                  border: '1px solid #E2E8F0',
+                  border: '1px solid #D0DFE2',
                   padding: '20px',
-                  boxShadow: '0 2px 8px rgba(10, 37, 64, 0.03)',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between'
@@ -241,7 +241,7 @@ export default function ArchitectureView() {
                   <div style={{ fontSize: '12px', fontWeight: 700, color: std.color, marginBottom: '8px' }}>
                     {std.tag}
                   </div>
-                  <p style={{ fontSize: '13px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
+                  <p style={{ fontSize: '13px', color: '#486770', lineHeight: 1.5, margin: 0 }}>
                     {std.desc}
                   </p>
                 </div>

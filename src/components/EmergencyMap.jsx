@@ -610,7 +610,7 @@ export default function EmergencyMap({
               key={hosp.id || i}
               onClick={() => onSelectHospital(hosp)}
               style={{
-                background: selectedHospital?.id === hosp.id ? 'rgba(212, 175, 55, 0.15)' : '#131F37',
+                background: selectedHospital?.id === hosp.id ? 'rgba(0, 0, 0, 0.09)' : '#131F37',
                 border: selectedHospital?.id === hosp.id ? '1.5px solid #D4AF37' : '1px solid #203554',
                 padding: '14px 18px',
                 borderRadius: '12px',
@@ -670,7 +670,7 @@ export default function EmergencyMap({
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#FFFFFF' }}>
             ● TELEMETRY STREAM (SIMULATION)
           </span>
-          <span style={{ color: '#334155' }}>|</span>
+          <span style={{ color: '#2C4A52' }}>|</span>
           <span style={{ fontSize: '10.5px', color: '#94A3B8' }}>
             GNSS Telemetry (SIMULATION)
           </span>
@@ -908,7 +908,7 @@ export default function EmergencyMap({
         <button
           onClick={toggleSatelliteStyle}
           title="Toggle Map Style"
-          style={{ background: '#0F1E38', border: '1px solid #1C335A', color: '#CBD5E1', borderRadius: '6px', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          style={{ background: '#0F1E38', border: '1px solid #1C335A', color: '#D0DFE2', borderRadius: '6px', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <Layers size={15} />
         </button>
@@ -966,7 +966,7 @@ export default function EmergencyMap({
               <div style={{ fontSize: '15px', fontWeight: 900, color: '#38BDF8' }}>
                 {telemetrySpeed}
               </div>
-              <div style={{ fontSize: '7.5px', color: '#64748B' }}>km/h</div>
+              <div style={{ fontSize: '7.5px', color: '#698892' }}>km/h</div>
             </div>
 
             {/* ETA Countdown */}
@@ -975,7 +975,7 @@ export default function EmergencyMap({
               <div style={{ fontSize: '15px', fontWeight: 900, color: '#10B981' }}>
                 {formatEta(etaRemainingSec)}
               </div>
-              <div style={{ fontSize: '7.5px', color: '#64748B' }}>mm:ss</div>
+              <div style={{ fontSize: '7.5px', color: '#698892' }}>mm:ss</div>
             </div>
 
             {/* Heart Rate */}
@@ -984,7 +984,7 @@ export default function EmergencyMap({
               <div style={{ fontSize: '15px', fontWeight: 900, color: '#EF4444' }}>
                 {heartRate}
               </div>
-              <div style={{ fontSize: '7.5px', color: '#64748B' }}>BPM</div>
+              <div style={{ fontSize: '7.5px', color: '#698892' }}>BPM</div>
             </div>
 
             {/* SpO2 */}
@@ -993,7 +993,7 @@ export default function EmergencyMap({
               <div style={{ fontSize: '15px', fontWeight: 900, color: '#A78BFA' }}>
                 {spO2}%
               </div>
-              <div style={{ fontSize: '7.5px', color: '#64748B' }}>O2 Sat</div>
+              <div style={{ fontSize: '7.5px', color: '#698892' }}>O2 Sat</div>
             </div>
           </div>
 
@@ -1002,7 +1002,7 @@ export default function EmergencyMap({
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px', fontSize: '8px' }}>
               <span style={{ color: '#10B981', fontWeight: 800 }}>● ECG LEAD-II (25 mm/s • 10 mm/mV)</span>
               <span style={{ color: '#38BDF8', fontWeight: 700 }}>PLETH SpO2: {spO2}%</span>
-              <span style={{ color: '#64748B', fontFamily: 'monospace' }}>IoT CAN-BUS: ACTIVE</span>
+              <span style={{ color: '#698892', fontFamily: 'monospace' }}>IoT CAN-BUS: ACTIVE</span>
             </div>
             <svg viewBox="0 0 280 34" style={{ width: '100%', height: '34px', overflow: 'hidden' }}>
               <defs>
@@ -1034,7 +1034,7 @@ export default function EmergencyMap({
             alignItems: 'center',
             justifyContent: 'space-between',
             fontSize: '9.5px',
-            color: '#CBD5E1',
+            color: '#D0DFE2',
             border: '1px solid #12213A'
           }}>
             <span>Blood Pressure: <strong style={{ color: '#F1F5F9' }}>136/88 mmHg</strong></span>

@@ -20,7 +20,7 @@ export function useDoctorVoiceNavigation({ onNavigateTab, onSelectNextPatient })
         utterance.rate = 1.1;
         utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
-      } catch {}
+      } catch { }
     }
   }, []);
 
@@ -90,7 +90,7 @@ export function useDoctorVoiceNavigation({ onNavigateTab, onSelectNextPatient })
       if (recognitionRef.current) {
         try {
           recognitionRef.current.stop();
-        } catch {}
+        } catch { }
       }
       return;
     }
@@ -125,7 +125,7 @@ export function useDoctorVoiceNavigation({ onNavigateTab, onSelectNextPatient })
         if (isVoiceNavActive) {
           try {
             recognition.start();
-          } catch {}
+          } catch { }
         }
       };
 
@@ -139,7 +139,7 @@ export function useDoctorVoiceNavigation({ onNavigateTab, onSelectNextPatient })
       if (recognitionRef.current) {
         try {
           recognitionRef.current.stop();
-        } catch {}
+        } catch { }
       }
     };
   }, [isVoiceNavActive, handleCommandMatch]);
