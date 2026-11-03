@@ -1101,7 +1101,7 @@ export default function HeroLanding({
           </div>
 
           <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#D0DFE2', letterSpacing: '0.4px', lineHeight: 1.4 }}>
-            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 750, textDecoration: 'none' }}>Samrudh</a> <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Gnani.ai Challenge Prototype)</span>
+            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 750, textDecoration: 'none' }}>Samrudh</a> <span style={{ color: '#D4AF37', fontWeight: 700 }}>(Clinical Voice Prototype)</span>
           </div>
         </div>
       </div>
@@ -3661,7 +3661,7 @@ export default function HeroLanding({
               The Ambient Clinical Voice Operating System for Bharat. Bridging doctor documentation overload and patient illiteracy across every Indian language.
             </p>
             <div style={{ fontSize: '11px', color: '#698892' }}>
-              Built for the Great Indian AI Internship Challenge 2026 by Gnani.ai.
+              Sovereign Indic Clinical Voice Scribe & Triage Architecture.
             </div>
           </div>
 
@@ -3734,7 +3734,7 @@ export default function HeroLanding({
           gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 800, textDecoration: 'none' }}>Samrudh</a> for the Gnani.ai Great Indian AI Internship Challenge.
+            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', fontWeight: 800, textDecoration: 'none' }}>Samrudh</a> for Bharat.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <Link to="/privacy" style={{ color: '#94A3B8', textDecoration: 'none' }}>
