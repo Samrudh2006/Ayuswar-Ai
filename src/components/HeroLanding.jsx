@@ -14,34 +14,18 @@ import {
   Building2,
   Users2,
   HeartPulse,
-  Sparkles,
-  FileCheck,
   CheckCircle2,
   AlertTriangle,
   Cpu,
-  Layers,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
   Lock,
   Stethoscope,
-  Smartphone,
-  FileText,
   Pill,
-  Radio,
-  QrCode,
   ArrowUpRight,
   X,
-  Sliders,
-  Zap,
   Copy,
   Check,
-  RotateCcw,
-  VolumeX,
   Terminal,
-  Eye,
-  Download
+  Eye
 } from 'lucide-react';
 import FeatureDetailModal from './FeatureDetailModal';
 import MeshGradientBackground from './MeshGradientBackground';
@@ -468,7 +452,7 @@ export default function HeroLanding({
         { word: 'ఈ', hint: 'This', trigger: 0 },
         { word: 'ఆకుపచ్చ', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
         { word: 'మాత్ర', hint: 'Tablet', trigger: 30 },
-        { word: 'ఉదయం', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'ఉదయం', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'టిఫిన్ తర్వాత', hint: 'After breakfast', trigger: 60 },
         { word: 'ఒకటి', hint: '1 Tablet', trigger: 75 },
         { word: 'వేసుకోవాలి', hint: 'Take with water', trigger: 90 }
@@ -485,7 +469,7 @@ export default function HeroLanding({
         { word: 'यह', hint: 'This', trigger: 0 },
         { word: 'हरी', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
         { word: 'गोली', hint: 'Tablet', trigger: 30 },
-        { word: 'सुबह', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'सुबह', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'नाश्ते के बाद', hint: 'After breakfast', trigger: 60 },
         { word: 'एक गोली', hint: '1 Tablet', trigger: 75 },
         { word: 'पानी से लें', hint: 'Take with water', trigger: 90 }
@@ -502,7 +486,7 @@ export default function HeroLanding({
         { word: 'இந்த', hint: 'This', trigger: 0 },
         { word: 'நீல', hint: 'Blue (Foil)', trigger: 15, isPill: true, pillColor: '#2563EB' },
         { word: 'மாத்திரை', hint: 'Tablet', trigger: 30 },
-        { word: 'காலை', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'காலை', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'உணவுக்குப் பின்', hint: 'After food', trigger: 60 },
         { word: 'ஒரு மாத்திரை', hint: '1 Tablet', trigger: 75 },
         { word: 'சாப்பிடவும்', hint: 'Take with water', trigger: 90 }
@@ -519,7 +503,7 @@ export default function HeroLanding({
         { word: 'ಈ', hint: 'This', trigger: 0 },
         { word: 'ಹಸಿರು', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
         { word: 'ಮಾತ್ರೆ', hint: 'Tablet', trigger: 30 },
-        { word: 'ಬೆಳಿಗ್ಗೆ', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'ಬೆಳಿಗ್ಗೆ', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'ತಿಂಡಿ ನಂತರ', hint: 'After breakfast', trigger: 60 },
         { word: 'ಒಂದು', hint: '1 Tablet', trigger: 75 },
         { word: 'ಸೇವಿಸಿ', hint: 'Take with water', trigger: 90 }
@@ -536,7 +520,7 @@ export default function HeroLanding({
         { word: 'ही', hint: 'This', trigger: 0 },
         { word: 'हिरवी', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
         { word: 'गोळी', hint: 'Tablet', trigger: 30 },
-        { word: 'सकाळी', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'सकाळी', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'नाश्त्यानंतर', hint: 'After breakfast', trigger: 60 },
         { word: 'एक', hint: '1 Tablet', trigger: 75 },
         { word: 'पाण्यासोबत घ्या', hint: 'Take with water', trigger: 90 }
@@ -553,7 +537,7 @@ export default function HeroLanding({
         { word: 'এই', hint: 'This', trigger: 0 },
         { word: 'সবুজ', hint: 'Green (Foil)', trigger: 15, isPill: true, pillColor: '#10B981' },
         { word: 'ট্যাবলেট', hint: 'Tablet', trigger: 30 },
-        { word: 'সকালে', hint: 'Morning', trigger: 45, isTime: true, icon: '☀️' },
+        { word: 'সকালে', hint: 'Morning', trigger: 45, isTime: true, icon: '' },
         { word: 'খাবারের পর', hint: 'After food', trigger: 60 },
         { word: 'একটি', hint: '1 Tablet', trigger: 75 },
         { word: 'জল দিয়ে খাবেন', hint: 'Take with water', trigger: 90 }
@@ -631,7 +615,7 @@ export default function HeroLanding({
             }}>
               <img
                 src="/assets/sections/sec1_hero.png"
-                alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
+                alt="Dr. Ananya Sharma MD : AyuSwar Virtual Attending Physician"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -969,7 +953,7 @@ export default function HeroLanding({
               </div>
             </div>
 
-            {/* Dedicated Mobile Doctor Visual Card — Distinct separated area below text */}
+            {/* Dedicated Mobile Doctor Visual Card : Distinct separated area below text */}
             {isMobileView && (
               <div
                 className="hero-mobile-doctor-card"
@@ -986,7 +970,7 @@ export default function HeroLanding({
                 <div style={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden', background: '#F8F6F0' }}>
                   <img
                     src="/assets/sections/sec1_hero.png"
-                    alt="Dr. Ananya Sharma MD — AyuSwar Virtual Attending Physician"
+                    alt="Dr. Ananya Sharma MD : AyuSwar Virtual Attending Physician"
                     style={{
                       width: '100%',
                       height: '100%',
@@ -1263,7 +1247,7 @@ export default function HeroLanding({
       </section>
 
       {/* =========================================================================
-          SECTION 3: HOW AYUSWAR WORKS — INTERACTIVE STEPPED PIPELINE
+          SECTION 3: HOW AYUSWAR WORKS : INTERACTIVE STEPPED PIPELINE
           ========================================================================= */}
       <section style={{ background: '#FAF8F5', borderTop: '2px solid #D0DFE2', borderBottom: '2px solid #D0DFE2', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
@@ -1303,8 +1287,7 @@ export default function HeroLanding({
                   justifyContent: 'center',
                   color: '#2DD4BF'
                 }}>
-                  <Cpu size={20} className="animate-pulse" />
-                </div>
+                  </div>
                 <div>
                   <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#2DD4BF' }}>
                     Closed-Loop Neural Bus Architecture
@@ -1488,9 +1471,8 @@ export default function HeroLanding({
         }}>
           <div className="hero-bento-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Layers size={18} color="#0F4C5C" />
               <span style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
-                Bento Architecture Matrix — Live Clinical Subsystems
+                Bento Architecture Matrix : Live Clinical Subsystems
               </span>
             </div>
             <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#059669' : '#698892', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -1581,7 +1563,7 @@ export default function HeroLanding({
                         Tesseract Optical OCR
                       </span>
                       <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
-                        ✓ NFI Verified
+                        NFI Verified
                       </span>
                     </div>
                     {/* Viewfinder Bounding Box */}
@@ -1642,7 +1624,7 @@ export default function HeroLanding({
 }`}
                     </pre>
                     <div style={{ fontSize: '11px', color: '#4ADE80', fontWeight: 750 }}>
-                      ✓ ABDM M1, M2, M3 Encrypted
+                      ABDM M1, M2, M3 Encrypted
                     </div>
                   </div>
                 )
@@ -1671,12 +1653,12 @@ export default function HeroLanding({
                         Metaphor Crosswalk
                       </span>
                       <span style={{ fontSize: '10px', color: '#6D28D9', fontWeight: 800, background: '#EDE9FE', padding: '2px 6px', borderRadius: '4px' }}>
-                        TE ➔ WHO
+                        TE to WHO
                       </span>
                     </div>
                     <div style={{ background: '#FFFFFF', padding: '6px 8px', borderRadius: '8px', border: '1px solid #DDD6FE' }}>
                       <div style={{ fontSize: '12px', fontWeight: 800, color: '#581C87' }}>"పీకల్లో పిల్లికూతలు"</div>
-                      <div style={{ fontSize: '11px', color: '#7E22CE', marginTop: '2px' }}>⬇ ICD-10: R06.2 (Wheezing)</div>
+                      <div style={{ fontSize: '11px', color: '#7E22CE', marginTop: '2px' }}>ICD-10: R06.2 (Wheezing)</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 650 }}>
                       SNOMED CT: 195967001 Concept
@@ -1761,7 +1743,7 @@ export default function HeroLanding({
                       <div><strong>Cloud Storage:</strong> 0 KB (Zero Persistence)</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#059669', fontWeight: 750 }}>
-                      ✓ DPDP Sovereign Patient Privacy
+                      DPDP Sovereign Patient Privacy
                     </div>
                   </div>
                 )
@@ -1907,7 +1889,7 @@ export default function HeroLanding({
                   e.currentTarget.style.background = '#FFFFFF';
                 }}
               >
-                <span>✕</span>
+                <span aria-hidden="true">&times;</span>
                 <span>Close Telemetry</span>
               </button>
             </div>
@@ -1919,7 +1901,6 @@ export default function HeroLanding({
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
                   <div>
                     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                      <Activity size={13} />
                       <span>EXPERIMENTAL ACOUSTIC BIOMARKER ENGINE</span>
                     </div>
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2050,7 +2031,6 @@ export default function HeroLanding({
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '28px', alignItems: 'center' }}>
                   <div>
                     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.1)', color: '#D97706', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                      <Scan size={13} />
                       <span>TESSERACT IN-BROWSER OCR & BLISTER STRIP GEOMETRY</span>
                     </div>
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2095,7 +2075,6 @@ export default function HeroLanding({
                           cursor: 'pointer'
                         }}
                       >
-                        <Scan size={15} />
                         <span>Launch Blister Strip Scanner</span>
                       </button>
                     </div>
@@ -2176,7 +2155,7 @@ export default function HeroLanding({
                     </div>
 
                     <div style={{ marginTop: '16px', background: '#091E26', padding: '10px 14px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>✓ Verified against Pharmacopeia CDSCO Database</span>
+                      <span style={{ fontSize: '11px', color: '#34D399', fontWeight: 700 }}>Verified against Pharmacopeia CDSCO Database</span>
                       <span style={{ fontSize: '10px', color: '#94A3B8' }}>0 Contraindications</span>
                     </div>
                   </div>
@@ -2188,7 +2167,6 @@ export default function HeroLanding({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px', alignItems: 'center' }}>
                   <div>
                     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(14, 165, 233, 0.1)', color: '#0EA5E9', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                      <Terminal size={13} />
                       <span>AYUSHMAN BHARAT DIGITAL MISSION (ABDM) COMPLIANCE</span>
                     </div>
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2326,7 +2304,6 @@ export default function HeroLanding({
               {activeWorkbenchMoat === 'metaphor_resolver' && (
                 <div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(139, 92, 246, 0.1)', color: '#8B5CF6', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                    <Languages size={13} />
                     <span>CULTURAL IDIOM RESOLUTION ENGINE</span>
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2410,7 +2387,6 @@ export default function HeroLanding({
               {activeWorkbenchMoat === 'offline_edge' && (
                 <div>
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
-                    <Lock size={13} />
                     <span>RURAL RESILIENCE ENGINE</span>
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2441,7 +2417,7 @@ export default function HeroLanding({
       </section>
 
       {/* =========================================================================
-          SECTION 5: PAN-INDIA LINGUISTIC COVERAGE — INTERACTIVE DIALECT ATLAS & KARAOKE SCRUBBER
+          SECTION 5: PAN-INDIA LINGUISTIC COVERAGE : INTERACTIVE DIALECT ATLAS & KARAOKE SCRUBBER
           ========================================================================= */}
       <section className="hero-dialect-section" style={{ background: '#FAF8F5', borderTop: '2px solid #D0DFE2', borderBottom: '2px solid #D0DFE2', padding: '48px 24px' }}>
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
@@ -2487,13 +2463,12 @@ export default function HeroLanding({
                 {/* Dialect Selector Header */}
                 <div className="hero-dialect-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Languages size={18} color="#0F4C5C" />
                     <span style={{ fontSize: '13px', fontWeight: 800, color: '#081C24', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       Select Indic Dialect Stream
                     </span>
                   </div>
                   <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '3px 8px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
-                    ✓ 6 Live Streams • 12 Gnani Models
+                    6 Live Streams • 12 Gnani Models
                   </span>
                 </div>
 
@@ -2932,7 +2907,6 @@ export default function HeroLanding({
                 transition: 'all 0.2s ease'
               }}
             >
-              <ShieldCheck size={17} />
               <span>1. Doctor-in-the-Loop Governance (4 Safeguards)</span>
             </button>
             <button
@@ -2954,7 +2928,6 @@ export default function HeroLanding({
                 transition: 'all 0.2s ease'
               }}
             >
-              <FileCheck size={17} />
               <span>2. Academic Rigor & Open Standards (6 Benchmarks)</span>
             </button>
           </div>
@@ -3062,7 +3035,7 @@ export default function HeroLanding({
                         Rural patient voice consultations are processed strictly ephemerally in RAM. Raw audio waveforms are streamed through low-resource phonetic encoders and immediately purged from memory upon SOAP tokenization.
                       </p>
                       <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '14px', fontSize: '12.5px', color: '#2C4A52', lineHeight: 1.5 }}>
-                        <div>🇮🇳 <strong>Data Sovereignty:</strong> 100% processed within Indian territorial boundaries</div>
+                        <div><strong>Data Sovereignty:</strong> 100% processed within Indian territorial boundaries</div>
                         <div style={{ marginTop: '4px' }}><strong>Zero Cloud Audio Retention:</strong> 0 KB persistent audio recordings stored on disk</div>
                       </div>
                     </div>
@@ -3118,7 +3091,6 @@ export default function HeroLanding({
                     gap: '12px'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <ShieldCheck size={20} color="#059669" />
                       <div>
                         <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                           Cryptographic Audit Block (DPDP 2023 Sovereign)
@@ -3130,10 +3102,10 @@ export default function HeroLanding({
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 750, flexWrap: 'wrap' }}>
                       <span style={{ background: '#DCFCE7', color: '#065F46', padding: '4px 10px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
-                        ✓ Zero Cloud Audio Retention
+                        Zero Cloud Audio Retention
                       </span>
                       <span style={{ background: '#EFF6FF', color: '#1E40AF', padding: '4px 10px', borderRadius: '6px', border: '1px solid #BFDBFE' }}>
-                        ✓ ABDM M3 Interoperable
+                        ABDM M3 Interoperable
                       </span>
                     </div>
                   </div>
@@ -3150,7 +3122,6 @@ export default function HeroLanding({
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid #1E3A5F', pb: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontWeight: 800, color: '#D4AF37' }}>
-                      <Terminal size={14} />
                       <span>SAFETY SENTINEL SIMULATOR HUD</span>
                     </div>
                     <span style={{ fontSize: '10.5px', background: 'rgba(0, 0, 0, 0.09)', color: '#D4AF37', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
@@ -3164,7 +3135,7 @@ export default function HeroLanding({
                       <div style={{ background: '#0B2540', padding: '12px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #1E3A5F' }}>
                         <div style={{ color: '#94A3B8', fontSize: '11px', textTransform: 'uppercase', fontWeight: 700 }}>Generated Draft Status:</div>
                         <div style={{ color: govSimAction.dscSigned ? '#10B981' : '#F59E0B', fontWeight: 800, fontSize: '14px', marginTop: '2px' }}>
-                          {govSimAction.dscSigned ? '✓ CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : 'AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
+                          {govSimAction.dscSigned ? 'CRYPTOGRAPHICALLY COMMITTED (ABDM M3)' : 'AWAITING ATTENDING PHYSICIAN DSC SIGNATURE'}
                         </div>
                         <div style={{ fontSize: '12px', color: '#D0DFE2', marginTop: '6px' }}>
                           Patient: Lakshmi Devi (54/F) | Encounter: Bronchial Asthma (J45.901)
@@ -3211,7 +3182,7 @@ export default function HeroLanding({
                           onClick={() => setGovSimAction(prev => ({
                             ...prev,
                             dscSigned: true,
-                            dscAlert: { type: 'success', text: '✓ [SIGNED BY DR. PRIYA SHARMA] DSC SHA-256 Verified. Committed to ABDM Encounter #ABDM-PHC-8921.' }
+                            dscAlert: { type: 'success', text: '[SIGNED BY DR. PRIYA SHARMA] DSC SHA-256 Verified. Committed to ABDM Encounter #ABDM-PHC-8921.' }
                           }))}
                           style={{
                             flex: 1,
@@ -3263,7 +3234,7 @@ export default function HeroLanding({
                           cursor: 'pointer'
                         }}
                       >
-                        {govSimAction.audioPurged ? '✓ Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : 'Trigger Ephemeral Session Purge'}
+                        {govSimAction.audioPurged ? 'Audio Purged: 0 KB on Disk (Click to Re-Simulate Stream)' : 'Trigger Ephemeral Session Purge'}
                       </button>
                     </div>
                   )}
@@ -3297,7 +3268,7 @@ export default function HeroLanding({
                           cursor: 'pointer'
                         }}
                       >
-                        {govSimAction.hallucinationTested ? '✓ Audit Complete: Unanchored Entity Blocked (Reset)' : 'Attempt Unanchored Entity Injection'}
+                        {govSimAction.hallucinationTested ? 'Audit Complete: Unanchored Entity Blocked (Reset)' : 'Attempt Unanchored Entity Injection'}
                       </button>
                     </div>
                   )}
@@ -3327,7 +3298,7 @@ export default function HeroLanding({
                         <div style={{ marginTop: '8px', padding: '8px', borderRadius: '6px', fontSize: '11.5px', background: govSimAction.noiseDb > 72 ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16, 185, 129, 0.2)', color: govSimAction.noiseDb > 72 ? '#FCD34D' : '#6EE7B7', border: govSimAction.noiseDb > 72 ? '1px solid #F59E0B' : '1px solid #10B981' }}>
                           {govSimAction.noiseDb > 72
                             ? 'AMBER FAIL-SAFE ACTIVE: Background acoustic entropy too high. Automated drafting locked; mandatory physician verbal confirmation required.'
-                            : '✓ AUDIO SNR OK: Clean dual-speaker audio. Passive transcription operating at 98.6% confidence.'}
+                            : 'AUDIO SNR OK: Clean dual-speaker audio. Passive transcription operating at 98.6% confidence.'}
                         </div>
                       </div>
 
@@ -3831,16 +3802,16 @@ export default function HeroLanding({
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #D4AF37 0%, #0F4C5C 100%)',
+                  background: '#0F4C5C',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <Sparkles size={18} color="#ffffff" />
+                  <span style={{ fontSize: '13px', fontWeight: 900, color: '#FFFFFF' }}>01</span>
                 </div>
                 <div>
                   <div style={{ fontSize: '15.5px', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.2px' }}>
-                    AyuSwar AI — 2-Minute End-to-End Clinical Golden Loop
+                    AyuSwar AI : 2-Minute End-to-End Clinical Golden Loop
                   </div>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>
                     From Rural OPD Arrival to Native WhatsApp Spoken Karaoke Prescription
@@ -3987,7 +3958,7 @@ export default function HeroLanding({
                   <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: 'none' }} />
                     <span style={{ fontSize: '12.5px', color: '#081C24', fontWeight: 600 }}>
-                      Ambient AI Parse: <span style={{ color: '#0F4C5C' }}>"పీకల్లో పిల్లికూతలు" ➔ Expiratory Wheeze (ICD-10 R06.2)</span> • Triage: Sub-acute respiratory strain.
+                      Ambient AI Parse: <span style={{ color: '#0F4C5C' }}>"పీకల్లో పిల్లికూతలు" to Expiratory Wheeze (ICD-10 R06.2)</span> • Triage: Sub-acute respiratory strain.
                     </span>
                   </div>
                 </div>
@@ -4034,11 +4005,11 @@ export default function HeroLanding({
                       <div style={{ fontSize: '12px', fontWeight: 800, color: '#059669', marginBottom: '8px' }}>Chronotherapy Dosage Schedule • Patient Home Delivery</div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
                         <div style={{ background: '#FEF9C3', padding: '10px', borderRadius: '8px', border: '1px solid #FDE047' }}>
-                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#854D0E' }}>☀️ MORNING (After Breakfast)</div>
+                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#854D0E' }}>MORNING (After Breakfast)</div>
                           <div style={{ fontSize: '12.5px', color: '#713F12', fontWeight: 700 }}>1 Green Inhaler Puff (Budecort)</div>
                         </div>
                         <div style={{ background: '#EFF6FF', padding: '10px', borderRadius: '8px', border: '1px solid #BFDBFE' }}>
-                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#1E40AF' }}>🌙 NIGHT (After Dinner)</div>
+                          <div style={{ fontSize: '11px', fontWeight: 800, color: '#1E40AF' }}>NIGHT (After Dinner)</div>
                           <div style={{ fontSize: '12.5px', color: '#1E3A8A', fontWeight: 700 }}>1 Blue Tablet (Montelukast)</div>
                         </div>
                       </div>

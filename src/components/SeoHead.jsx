@@ -8,91 +8,91 @@ import { useLocation } from 'react-router-dom';
  */
 const ROUTE_METADATA = {
   '/': {
-    title: 'AyuSwar AI (ఆయుస్వర) — Sovereign Indic Ambient Clinical Voice Scribe & Triage',
+    title: 'AyuSwar AI (ఆయుస్వర) : Sovereign Indic Ambient Clinical Voice Scribe & Triage',
     description: 'Production-grade ambient clinical voice scribe, acoustic biomarker phenotyping & 108 emergency triage. Powered by Gnani.ai Prisma v3, Timbre TTS & Evon 30B reasoner. Grounded in ABDM M3 FHIR R4.',
     keywords: 'AyuSwar AI, ఆయుస్వర, Clinical Voice Scribe, Indic Voice AI, Gnani AI, Prisma v3, Timbre TTS, Evon 30B, Telugu Medical Speech, ABDM FHIR R4, Primary Health Center AI, Rayalaseema Health Tech, Sanjivani 108, Jan Aushadhi Generic, DPDP Act 2023',
     section: 'Home'
   },
   '/solutions': {
-    title: 'Clinical Solutions & Workflows — AyuSwar AI Indic Healthcare Prototype',
+    title: 'Clinical Solutions & Workflows : AyuSwar AI Indic Healthcare Prototype',
     description: 'Explore ambient clinical documentation, spoken Audio-Rx patient adherence cards, blister pack computer vision scanning, and simulated 108 emergency triage protocols.',
     keywords: 'Ambient Scribing, Audio-Rx, Spoken Prescription, Medicine Blister Scanner, Emergency Triage, ABDM Integration',
     section: 'Solutions'
   },
   '/technology': {
-    title: 'Deep-Tech Architectural Blueprint — AyuSwar AI Technical Specifications',
+    title: 'Deep-Tech Architectural Blueprint : AyuSwar AI Technical Specifications',
     description: 'Zero-cloud ephemeral RAM audio pipeline, quantized edge ONNX speech transcription, deterministic SNOMED CT and WHO ICD-10 ontology crosswalk, and HL7 FHIR R4 JSON schemas.',
     keywords: 'Edge AI Architecture, Ephemeral RAM Audio, DPDP Act 2023, SNOMED CT Crosswalk, ICD-10 Mapping, FHIR R4 JSON',
     section: 'Technology'
   },
   '/scanner': {
-    title: 'Computer Vision Medicine Scanner Demo — AyuSwar AI Pharmaceutical OCR',
+    title: 'Computer Vision Medicine Scanner Demo : AyuSwar AI Pharmaceutical OCR',
     description: 'Interactive demonstration of synthetic medicine blister strip scanning, optical character recognition, Jan Aushadhi generic substitution mapping, and dosage scheduling.',
     keywords: 'Medicine Strip Scanner, Pharmaceutical OCR, Jan Aushadhi Generic Medicine, Drug Interaction Demo, Computer Vision Health',
     section: 'Scanner'
   },
   '/audio-rx': {
-    title: 'Spoken Audio-Rx Studio — Vernacular Prescription Adherence for Patients',
+    title: 'Spoken Audio-Rx Studio : Vernacular Prescription Adherence for Patients',
     description: 'High-contrast vernacular spoken prescription playback with word-by-word karaoke synchronization in Telugu, Hindi, and English to eliminate rural patient medication errors.',
     keywords: 'Spoken Audio-Rx, Vernacular Prescription, Telugu Audio Dosage, Patient Adherence Bharat, WhatsApp Health Audio',
     section: 'Audio-Rx'
   },
   '/acoustic-lab': {
-    title: 'Non-Diagnostic Acoustic Signal Processing Lab — AyuSwar AI DSP Explorer',
+    title: 'Non-Diagnostic Acoustic Signal Processing Lab : AyuSwar AI DSP Explorer',
     description: 'Interactive browser DSP demonstration analyzing vocal audio frequencies, spectral centroid, zero-crossing rate, and spectrograms. For non-diagnostic educational signal exploration.',
     keywords: 'Acoustic Signal Processing, Audio Biomarkers Demo, Vocal Frequency Analysis, Web Audio API DSP, Non-Diagnostic Biomarkers',
     section: 'Acoustic Lab'
   },
   '/language-matrix': {
-    title: 'Indic Language & Dialect Matrix — Regional Speech Recognition Support',
+    title: 'Indic Language & Dialect Matrix : Regional Speech Recognition Support',
     description: 'Vernacular clinical speech support covering Telugu (Rayalaseema, Telangana, Coastal Andhra, Uttarandhra), Hindi dialects, and Indian English with colloquial idiom translation.',
     keywords: 'Indic Language Matrix, Telugu Dialects Healthcare, Rayalaseema Telugu Speech AI, Colloquial Medical Idioms, Vernacular Health ASR',
     section: 'Language Matrix'
   },
   '/benchmarks': {
-    title: 'Clinical Contract & Architectural Benchmarks — AyuSwar AI Verification Suite',
+    title: 'Clinical Contract & Architectural Benchmarks : AyuSwar AI Verification Suite',
     description: 'Real-time execution of 24 contract tests verifying DPDP Act 2023 ephemeral RAM safety, non-diagnostic boundaries, ABDM FHIR R4 schema integrity, and offline edge resilience.',
     keywords: 'Clinical Benchmarks, Automated Contract Tests, DPDP Act Compliance, FHIR Validation, Health AI Verification',
     section: 'Benchmarks'
   },
   '/datasets': {
-    title: 'Synthetic Clinical Datasets & Idiom Lexicon — AyuSwar AI Open Corpus',
+    title: 'Synthetic Clinical Datasets & Idiom Lexicon : AyuSwar AI Open Corpus',
     description: 'Explore synthetic rural OPD consultation transcripts, bilingual doctor-patient dialogues, and colloquial Telugu phrase crosswalks mapped to standard SNOMED CT clinical codes.',
     keywords: 'Synthetic Clinical Datasets, Indic OPD Transcripts, Telugu Clinical Idioms, Open Health Data, Kaggle Health Corpus',
     section: 'Datasets'
   },
   '/emergency': {
-    title: 'Sanjivani 108 Simulated Emergency Distress Triage — AyuSwar AI Prototype',
+    title: 'Sanjivani 108 Simulated Emergency Distress Triage : AyuSwar AI Prototype',
     description: 'Simulated 108 emergency distress demonstration featuring bilingual conversational triage, GPS ambulance tracking simulation, CPR guidance metronome, and hospital pre-alert telemetry.',
     keywords: 'Simulated 108 Emergency, Sanjivani Emergency Triage, CPR Metronome Demo, Ambulance Telemetry Simulation, Emergency Protocol Bharat',
     section: 'Emergency'
   },
   '/prescription/preview': {
-    title: 'ABDM FHIR R4 Prescription Preview — AyuSwar AI Structured Record',
+    title: 'ABDM FHIR R4 Prescription Preview : AyuSwar AI Structured Record',
     description: 'Preview draft electronic health record with HL7 FHIR R4 JSON serialization, digital prescription formatting, and Jan Aushadhi generic substitution for physician review.',
     keywords: 'ABDM FHIR R4, Electronic Prescription Record, Jan Aushadhi Generic, Digital Health Bharat, FHIR JSON Preview',
     section: 'Prescription'
   },
   '/doctor-portal': {
-    title: 'Clinician Consultation Portal — AyuSwar AI Doctor Workspace',
+    title: 'Clinician Consultation Portal : AyuSwar AI Doctor Workspace',
     description: 'Ambient consultation workflow console for attending physicians: live vernacular scribing, draft SOAP notes generation, SNOMED coding review, and instant FHIR export.',
     keywords: 'Doctor OPD Portal, Ambient Clinical Scribe, SOAP Notes Generator, Rural Health Physician Console, Telemedicine Scribe',
     section: 'Doctor Portal'
   },
   '/patient-portal': {
-    title: 'Citizen ABHA Health Record Portal — AyuSwar AI Patient Hub',
+    title: 'Citizen ABHA Health Record Portal : AyuSwar AI Patient Hub',
     description: 'Accessible patient portal for reviewing vernacular audio prescriptions, dosage reminder schedules, Jan Aushadhi cost savings, and Ayushman Bharat health records.',
     keywords: 'Patient Health Portal, ABHA Health Record, Vernacular Spoken Rx, Medicine Reminders, Ayushman Bharat Citizen App',
     section: 'Patient Portal'
   },
   '/auth/doctor': {
-    title: 'Clinician HPR Portal Authentication — AyuSwar AI Indic Healthcare',
+    title: 'Clinician HPR Portal Authentication : AyuSwar AI Indic Healthcare',
     description: 'Physician login and Healthcare Professional Registry (HPR) credential verification for AyuSwar AI ambient clinical operating system.',
     keywords: 'Doctor Login, HPR Authentication, ABDM Clinician Access, Healthcare Professional Registry, Rural PHC Doctor Portal',
     section: 'Authentication'
   },
   '/auth/patient': {
-    title: 'Citizen ABHA Health Record Authentication — AyuSwar AI',
+    title: 'Citizen ABHA Health Record Authentication : AyuSwar AI',
     description: 'Patient login via Ayushman Bharat Health Account (ABHA ID) for reviewing vernacular spoken audio prescriptions and lab reports.',
     keywords: 'Patient Login, ABHA Authentication, Ayushman Bharat Health Account, Citizen Access, Audio Prescriptions',
     section: 'Authentication'
@@ -113,7 +113,7 @@ export default function SeoHead() {
     if (!meta) {
       if (pathname.startsWith('/solutions/')) {
         meta = {
-          title: 'Specialized Clinical Module — AyuSwar AI Indic Healthcare Prototype',
+          title: 'Specialized Clinical Module : AyuSwar AI Indic Healthcare Prototype',
           description: 'Deep-dive into specialized clinical intelligence modules designed for high-volume Indian primary health centers.',
           keywords: 'AyuSwar AI, Clinical Module, Primary Health Center, ABDM FHIR',
           section: 'Solutions'
@@ -153,7 +153,7 @@ export default function SeoHead() {
     setMetaTag('property', 'og:image:type', 'image/jpeg');
     setMetaTag('property', 'og:image:width', '1200');
     setMetaTag('property', 'og:image:height', '630');
-    setMetaTag('property', 'og:image:alt', 'AyuSwar AI Master Clinical Voice Platform Banner — Deepam Heartbeat Logo with Gnani.ai Voice Stack');
+    setMetaTag('property', 'og:image:alt', 'AyuSwar AI Master Clinical Voice Platform Banner : Deepam Heartbeat Logo with Gnani.ai Voice Stack');
 
     // 4. Update Twitter Card tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');

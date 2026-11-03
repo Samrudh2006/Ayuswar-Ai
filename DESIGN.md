@@ -133,3 +133,7 @@ All hues are purposeful and clinical-grade, verified for WCAG 2.2 AAA legibility
 - [x] **No Colored Shadows / Glows:** Never use colored box shadows (`rgba(0, 245, 212, 0.55)` or `rgba(56, 189, 248, 0.4)`).
 - [x] **No Generic Uppercase Eyebrows:** Let headings stand on their own without redundant label badges.
 - [x] **No Default Typography Overuse:** Maintain Albert Sans and native Indic fonts. Never drop back to generic default stacks.
+- [x] **No Em-Dashes (—):** Use colons (`:`), en-dashes (`-`), or commas for natural editorial punctuation.
+- [x] **No Stray Emojis:** Prohibit decorative emojis (⚡, 🌿, ✨, 🚨, 🎙️, ☀️, 🌙, 🇮🇳) in technical UI; reserve styling for crisp clinical typography.
+- [x] **No Icons on Every Noun:** Prune decorative Lucide icons from bullet lists, section headers, and nouns; icons are strictly reserved for functional interactions.
+

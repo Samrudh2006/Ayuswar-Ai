@@ -203,7 +203,7 @@ export default function Navbar({
           textAlign: 'center'
         }}>
           <AlertTriangle size={14} color="#b45309" />
-          <span>Synthetic demo data mode active — All records, metrics, and profiles are simulated fixtures.</span>
+          <span>Synthetic demo data mode active : All records, metrics, and profiles are simulated fixtures.</span>
           <button
             onClick={() => toggleDemoMode(false)}
             style={{
@@ -544,7 +544,7 @@ export default function Navbar({
                       }}
                     >
                       <span>{l.name}</span>
-                      {selectedLanguage === l.code && <span style={{ color: '#0F4C5C', fontWeight: 700 }}>✓</span>}
+                      {selectedLanguage === l.code && <span style={{ color: '#0F4C5C', fontWeight: 700 }}></span>}
                     </button>
                   ))}
                 </div>
@@ -853,7 +853,7 @@ export default function Navbar({
                 </div>
 
                 <Link to="/" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/')}>
-                  <div style={{ fontWeight: 750, color: currentPath === '/' ? '#0F4C5C' : '#091E26' }}>🏠 Home Landing</div>
+                  <div style={{ fontWeight: 750, color: currentPath === '/' ? '#0F4C5C' : '#091E26' }}>Home Landing</div>
                 </Link>
                 
                 {/* Solutions Section */}

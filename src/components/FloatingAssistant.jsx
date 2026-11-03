@@ -677,7 +677,7 @@ export default function FloatingAssistant({
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Sparkles size={13} color="#0F4C5C" />
                     <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F766E' }}>
-                      ⚡ Gnani Timbre Neural Voice (Active)
+                      Gnani Timbre Neural Voice (Active)
                     </span>
                   </div>
 
@@ -875,8 +875,8 @@ export default function FloatingAssistant({
                 }}>
                   <span>
                     {effectiveRole === 'doctor'
-                      ? '⚡ Clinician Shortcuts:'
-                      : (effectiveRole === 'patient' ? '🌿 Health Shortcuts:' : '✨ Explore Shortcuts:')}
+                      ? 'Clinician Shortcuts:'
+                      : (effectiveRole === 'patient' ? 'Health Shortcuts:' : 'Explore Shortcuts:')}
                   </span>
                   <button
                     onClick={() => setShowTextInput(!showTextInput)}
@@ -1069,7 +1069,7 @@ export default function FloatingAssistant({
                         }}
                       >
                         <Activity size={12} color="#DC2626" />
-                        <span>🚨 108</span>
+                        <span>108</span>
                       </button>
                     </>
                   ) : (
@@ -1094,7 +1094,7 @@ export default function FloatingAssistant({
                         }}
                       >
                         <Mic size={12} color="#0F4C5C" />
-                        <span>🎙️ OPD Scribe</span>
+                        <span>OPD Scribe</span>
                       </button>
                       <button
                         onClick={() => handleQuickAction('WhatsApp Audio-Rx')}
@@ -1116,7 +1116,7 @@ export default function FloatingAssistant({
                         }}
                       >
                         <Send size={12} color="#16A34A" />
-                        <span>📲 WhatsApp Rx</span>
+                        <span>WhatsApp Rx</span>
                       </button>
                       <button
                         onClick={() => handleQuickAction('Sanjivani 108')}
@@ -1135,7 +1135,7 @@ export default function FloatingAssistant({
                         }}
                       >
                         <Activity size={12} color="#DC2626" />
-                        <span>🚨 108</span>
+                        <span>108</span>
                       </button>
                     </>
                   )}
@@ -1442,7 +1442,7 @@ export default function FloatingAssistant({
                 onClick={() => setShowAiSettingsModal(false)}
                 style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '16px' }}
               >
-                ✕
+                x
               </button>
             </div>
 
@@ -1483,7 +1483,7 @@ export default function FloatingAssistant({
                 color: '#081C24',
                 lineHeight: 1.5
               }}>
-                🔒 <strong>Zero-Client-Key Security Architecture:</strong>
+                <strong>Zero-Client-Key Security Architecture:</strong>
                 <div style={{ fontSize: '11px', color: '#5A7184', marginTop: '4px' }}>
                   All AI and speech reasoning models run exclusively via authenticated server proxy routes (<code style={{ background: 'rgba(0,0,0,0.06)', padding: '1px 4px', borderRadius: '4px' }}>/api/evon/*</code>). API credentials are never exposed, queried, or stored in your browser.
                 </div>
@@ -1498,7 +1498,7 @@ export default function FloatingAssistant({
                   fontSize: '11.5px',
                   color: '#0F766E'
                 }}>
-                  🔒 <strong>Server-Side Security Guarantee:</strong> In accordance with clinical privacy standards, Gnani Evon credentials (<code>EVON_BASE_URL</code>, <code>EVON_API_KEY</code>) are configured exclusively on the server. If unset, requests fall back to deterministic safety rules labelled FALLBACK.
+                  <strong>Server-Side Security Guarantee:</strong> In accordance with clinical privacy standards, Gnani Evon credentials (<code>EVON_BASE_URL</code>, <code>EVON_API_KEY</code>) are configured exclusively on the server. If unset, requests fall back to deterministic safety rules labelled FALLBACK.
                 </div>
               )}
 
@@ -1513,22 +1513,22 @@ export default function FloatingAssistant({
               }}>
                 {selectedProvider === 'gnani_evon_30b' ? (
                   <>
-                    🧠 <strong>Gnani Evon 30B [PLANNED ARCHITECTURE / SERVER PROXY]:</strong> Official Gnani foundation model (<code>gnani/gnani-evon-v3.3-30B-A3B</code>). Server route <code>/api/evon/chat</code> is architected. Pending host deployment with <code>EVON_BASE_URL</code>, system defaults to Rule-based FALLBACK (Not Evon).
+                    <strong>Gnani Evon 30B [PLANNED ARCHITECTURE / SERVER PROXY]:</strong> Official Gnani foundation model (<code>gnani/gnani-evon-v3.3-30B-A3B</code>). Server route <code>/api/evon/chat</code> is architected. Pending host deployment with <code>EVON_BASE_URL</code>, system defaults to Rule-based FALLBACK (Not Evon).
                   </>
                 ) : selectedProvider === 'local_offline' ? (
                   <>
-                    ✅ <strong>Autonomous Local Indic Engine Active (SIMULATION):</strong> Uses AyuSwar's built-in Indic Clinical Ontology & Triage Rule Engine. No external API keys required.
+                    <strong>Autonomous Local Indic Engine Active (SIMULATION):</strong> Uses AyuSwar's built-in Indic Clinical Ontology & Triage Rule Engine. No external API keys required.
                   </>
                 ) : (
                   <>
-                    ⚡ <strong>Live LLM Mode Active:</strong> Queries will be routed through the selected open-source/free API model with autonomous fallback if limits are reached.
+                    <strong>Live LLM Mode Active:</strong> Queries will be routed through the selected open-source/free API model with autonomous fallback if limits are reached.
                   </>
                 )}
               </div>
 
               {keySavedToast && (
                 <div style={{ background: '#DCFCE7', color: '#166534', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 750, textAlign: 'center' }}>
-                  ✓ AI Brain settings saved successfully!
+                  AI Brain settings saved successfully!
                 </div>
               )}
 
