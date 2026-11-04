@@ -1039,12 +1039,12 @@ export default function HeroLanding({
           BOTTOM METRICS & IMPACT RIBBON (EXACT TO REFERENCE)
           ========================================================================= */}
       <div style={{
-        background: '#FAF8F5',
-        color: '#081C24',
+        background: 'linear-gradient(135deg, #0F4C5C 0%, #083742 100%)',
+        color: '#FFFFFF',
         position: 'relative',
         overflow: 'hidden',
-        borderTop: '2px solid #D0DFE2',
-        borderBottom: '2px solid #D0DFE2'
+        borderTop: '2px solid #D4AF37',
+        borderBottom: '2px solid #D4AF37'
       }}>
         <div style={{
           maxWidth: '1380px',
@@ -1059,44 +1059,44 @@ export default function HeroLanding({
             gap: isMobileView ? '16px 12px' : '24px',
             alignItems: 'center',
             marginBottom: '24px',
-            borderBottom: '1px solid #D0DFE2',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
             paddingBottom: '28px'
           }}>
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <Globe2 size={isMobileView ? 22 : 26} color="#D4AF37" style={{ flexShrink: 0 }} />
+              <Globe2 size={isMobileView ? 22 : 26} color="#FDE047" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#081C24', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#486770', fontWeight: 500 }}>Multilingual Prototype</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Indic Voices</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#E0F2F1', fontWeight: 500 }}>Multilingual Prototype</div>
               </div>
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <Building2 size={isMobileView ? 22 : 26} color="#C2410C" style={{ flexShrink: 0 }} />
+              <Building2 size={isMobileView ? 22 : 26} color="#FB923C" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#081C24', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#486770', fontWeight: 500 }}>Simulated Records</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Synthetic Data</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#E0F2F1', fontWeight: 500 }}>Simulated Records</div>
               </div>
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <Users2 size={isMobileView ? 22 : 26} color="#0F4C5C" style={{ flexShrink: 0 }} />
+              <Users2 size={isMobileView ? 22 : 26} color="#FDE047" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#081C24', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#486770', fontWeight: 500 }}>Human-in-the-Loop</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Clinician Agency</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#E0F2F1', fontWeight: 500 }}>Human-in-the-Loop</div>
               </div>
             </div>
 
             <div className="hero-trust-strip-item" style={{ display: 'flex', alignItems: 'center', gap: isMobileView ? '10px' : '16px', minWidth: 0 }}>
-              <HeartPulse size={isMobileView ? 22 : 26} color="#059669" style={{ flexShrink: 0 }} />
+              <HeartPulse size={isMobileView ? 22 : 26} color="#34D399" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
-                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#081C24', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
-                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#486770', fontWeight: 500 }}>Not a Medical Device</div>
+                <div className="hero-trust-strip-title" style={{ fontFamily: 'var(--font-main)', fontSize: isMobileView ? '15px' : '20px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.3px', lineHeight: 1.2 }}>Assistive Prototype</div>
+                <div className="hero-trust-strip-sub" style={{ fontSize: isMobileView ? '11px' : '12px', color: '#E0F2F1', fontWeight: 500 }}>Not a Medical Device</div>
               </div>
             </div>
           </div>
 
-          <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#2C4A52', letterSpacing: '0.4px', lineHeight: 1.4 }}>
-            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#0F4C5C', fontWeight: 750, textDecoration: 'underline' }}>Samrudh</a> <span style={{ color: '#0F4C5C', fontWeight: 700 }}>(Clinical Voice Prototype)</span>
+          <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.4px', lineHeight: 1.4 }}>
+            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#FDE047', fontWeight: 750, textDecoration: 'underline' }}>Samrudh</a> <span style={{ color: '#FDE047', fontWeight: 700 }}>(Clinical Voice Prototype)</span>
           </div>
         </div>
       </div>
@@ -3651,10 +3651,11 @@ export default function HeroLanding({
           ENTERPRISE FOOTER
           ========================================================================= */}
       <footer style={{
-        background: '#FAF8F5',
-        color: '#081C24',
+        background: 'linear-gradient(135deg, #0F4C5C 0%, #0A3742 100%)',
+        color: '#FFFFFF',
         padding: '60px 24px 30px 24px',
-        borderTop: '2px solid #D0DFE2'
+        borderTop: '3px solid #D4AF37',
+        boxShadow: '0 -4px 24px rgba(15, 76, 92, 0.15)'
       }}>
         <div className="hero-enterprise-footer-grid" style={{
           maxWidth: '1380px',
@@ -3666,70 +3667,70 @@ export default function HeroLanding({
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FFFFFF', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)', flexShrink: 0, padding: '3px' }}>
+              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FAF8F5', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)', flexShrink: 0, padding: '3px' }}>
                 <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" loading="lazy" decoding="async" width={48} height={48} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
-              <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'var(--font-main)', color: '#081C24' }}>
-                Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
+              <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'var(--font-main)', color: '#FFFFFF' }}>
+                Ayu<span style={{ color: '#FDE047' }}>Swar</span> AI
               </span>
             </div>
-            <p style={{ fontSize: '13.5px', color: '#2C4A52', lineHeight: 1.6, maxWidth: '380px', marginBottom: '18px' }}>
+            <p style={{ fontSize: '13.5px', color: '#E0F2F1', lineHeight: 1.6, maxWidth: '380px', marginBottom: '18px' }}>
               The Ambient Clinical Voice Operating System for Bharat. Bridging doctor documentation overload and patient illiteracy across every Indian language.
             </p>
-            <div style={{ fontSize: '11px', color: '#0F4C5C', fontWeight: 700 }}>
+            <div style={{ fontSize: '11px', color: '#FDE047', fontWeight: 750, letterSpacing: '0.4px' }}>
               Sovereign Indic Clinical Voice Scribe & Triage Architecture.
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Clinical Suites</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, color: '#FDE047', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Clinical Suites</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              <Link to="/acoustic-lab" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
+              <Link to="/acoustic-lab" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
                 Acoustic Biomarker Lab
               </Link>
-              <Link to="/scanner" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
+              <Link to="/scanner" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
                 Tesseract Blister OCR
               </Link>
-              <Link to="/prescription/preview" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
+              <Link to="/prescription/preview" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
                 Jan Aushadhi Prescription Rx
               </Link>
-              <Link to="/audio-rx" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
+              <Link to="/audio-rx" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s ease' }}>
                 Vernacular Audio-Rx
               </Link>
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Standards & Open Data</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, color: '#FDE047', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Standards & Open Data</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              <Link to="/technology" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600 }}>
+              <Link to="/technology" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
                 ABDM FHIR R4 Architecture
               </Link>
-              <Link to="/datasets" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600 }}>
+              <Link to="/datasets" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
                 Clinical Datasets & Lexicon
               </Link>
-              <Link to="/language-matrix" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600 }}>
+              <Link to="/language-matrix" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
                 Indic Language Matrix
               </Link>
-              <Link to="/benchmarks" style={{ color: '#2C4A52', textDecoration: 'none', fontWeight: 600 }}>
+              <Link to="/benchmarks" style={{ color: '#FFFFFF', textDecoration: 'none', fontWeight: 600 }}>
                 Verified Audit Benchmarks
               </Link>
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 800, color: '#0F4C5C', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Emergency & Support</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, color: '#FDE047', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Emergency & Support</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              <a href="tel:108" style={{ color: '#B91C1C', textDecoration: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <a href="tel:108" style={{ color: '#FCA5A5', textDecoration: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
                 108 Ambulance Hotline
               </a>
-              <a href="tel:112" style={{ color: '#B91C1C', textDecoration: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <a href="tel:112" style={{ color: '#FCA5A5', textDecoration: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px' }}>
                 112 National Emergency
               </a>
-              <a href="https://github.com/Samrudh2006/Ayuswar-Ai" target="_blank" rel="noopener noreferrer" style={{ color: '#0F4C5C', textDecoration: 'none', fontWeight: 700 }}>
+              <a href="https://github.com/Samrudh2006/Ayuswar-Ai" target="_blank" rel="noopener noreferrer" style={{ color: '#FEF08A', textDecoration: 'none', fontWeight: 750 }}>
                 GitHub Open Source Code
               </a>
-              <span style={{ fontSize: '11px', color: '#486770', fontWeight: 600 }}>
+              <span style={{ fontSize: '11px', color: '#CCFBF1', fontWeight: 600 }}>
                 Synthetic Safe Data Prototype
               </span>
             </div>
@@ -3739,27 +3740,27 @@ export default function HeroLanding({
         <div style={{
           maxWidth: '1380px',
           margin: '0 auto',
-          borderTop: '1px solid #D0DFE2',
+          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
           paddingTop: '24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '12.5px',
-          color: '#486770',
+          color: '#E0F2F1',
           flexWrap: 'wrap',
           gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#0F4C5C', fontWeight: 800, textDecoration: 'underline' }}>Samrudh</a> for Bharat.
+            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#FDE047', fontWeight: 800, textDecoration: 'underline' }}>Samrudh</a> for Bharat.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            <Link to="/privacy" style={{ color: '#2C4A52', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/privacy" style={{ color: '#FFFFFF', fontWeight: 600, textDecoration: 'none' }}>
               Privacy Policy (DPDP Act)
             </Link>
-            <Link to="/terms" style={{ color: '#2C4A52', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/terms" style={{ color: '#FFFFFF', fontWeight: 600, textDecoration: 'none' }}>
               Terms of Clinical Use
             </Link>
-            <Link to="/technology" style={{ color: '#2C4A52', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/technology" style={{ color: '#FFFFFF', fontWeight: 600, textDecoration: 'none' }}>
               ABDM Architecture
             </Link>
           </div>

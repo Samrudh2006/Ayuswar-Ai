@@ -449,9 +449,9 @@ export default function App() {
         <footer 
           className="site-footer"
           style={{
-          background: '#F0EBE1',
-          color: '#2C4A52',
-          borderTop: '1px solid #D0DFE2',
+          background: '#082E37',
+          color: '#E0F2F1',
+          borderTop: '1px solid rgba(212, 175, 55, 0.35)',
           padding: '12px 20px',
           textAlign: 'center',
           fontSize: '12.5px',
@@ -460,7 +460,7 @@ export default function App() {
           position: 'relative'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#C2410C' }}></span>
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }}></span>
             <span>AyuSwar AI is a prototype demo on synthetic data. Not a medical device. Not for diagnosis.</span>
           </div>
         </footer>
