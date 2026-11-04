@@ -699,7 +699,7 @@ export default function PrescriptionScannerView() {
       {liveOcrResult && (
         <div style={{
           background: '#F0FDFA',
-          border: '1.5px solid #2DD4BF',
+          border: '1.5px solid #D4AF37',
           borderRadius: '12px',
           padding: '12px 18px',
           marginBottom: '24px',
@@ -1096,7 +1096,7 @@ export default function PrescriptionScannerView() {
                         </div>
                       ) : (
                         <div className="ayuswar-liquid-prep-pulse">
-                          <Scan size={24} color="#2DD4BF" className="ayuswar-liquid-scan-icon" />
+                          <Scan size={24} color="#0F4C5C" className="ayuswar-liquid-scan-icon" />
                         </div>
                       )}
                     </div>
@@ -1270,7 +1270,7 @@ export default function PrescriptionScannerView() {
               <div style={{ color: '#00A896', fontWeight: 800, marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span>// Tesseract.js Extracted Text Tokens:</span>
                 {liveOcrResult && (
-                  <span style={{ color: '#2DD4BF', fontSize: '10.5px' }}>● LIVE WASM EXTRACTION</span>
+                  <span style={{ color: '#065F46', fontSize: '10.5px' }}>● LIVE WASM EXTRACTION</span>
                 )}
               </div>
               <div style={{ maxHeight: '80px', overflowY: 'auto', whiteSpace: 'pre-wrap' }}>
@@ -1480,7 +1480,7 @@ export default function PrescriptionScannerView() {
           width: 140px;
           height: 165px;
           border-radius: 28px;
-          border: 2px solid #2DD4BF;
+          border: 2px solid #D4AF37;
           background: radial-gradient(circle at 50% 30%, #0F3B4A 0%, #061B23 100%);
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16), inset 0 2px 4px rgba(255, 255, 255, 0.2);
           overflow: hidden;
@@ -1516,7 +1516,7 @@ export default function PrescriptionScannerView() {
           bottom: 0;
           left: 0;
           right: 0;
-          background: linear-gradient(180deg, #2DD4BF 0%, #0F4C5C 80%, #08232C 100%);
+          background: linear-gradient(180deg, #10B981 0%, #0F4C5C 80%, #08232C 100%);
           transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
           z-index: 1;
         }
@@ -1565,7 +1565,7 @@ export default function PrescriptionScannerView() {
 
         .ayuswar-liquid-pct {
           font-size: 14px;
-          color: #2DD4BF;
+          color: #0F4C5C;
         }
 
         .ayuswar-liquid-success-badge {
@@ -1607,7 +1607,7 @@ export default function PrescriptionScannerView() {
         .ayuswar-liquid-privacy-badge {
           font-size: 9.5px;
           font-weight: 750;
-          color: #2DD4BF;
+          color: #0F4C5C;
           background: rgba(45, 212, 191, 0.12);
           border: 1px solid rgba(45, 212, 191, 0.25);
           padding: 2px 8px;

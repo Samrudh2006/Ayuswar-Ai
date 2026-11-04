@@ -786,8 +786,8 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Sparkles size={16} color="#2DD4BF" />
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#2DD4BF', letterSpacing: '0.5px' }}>
+                  <Sparkles size={16} color="#D4AF37" />
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.5px' }}>
                     LIVE WORD-BY-WORD KARAOKE SYNCHRONIZATION
                   </span>
                 </div>
@@ -830,7 +830,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                         fontWeight: isActive ? 850 : 600,
                         color: isActive ? '#061626' : (isPill ? '#FDE68A' : '#D0DFE2'),
                         background: isActive 
-                          ? (token.pill === 'night' ? '#F472B6' : (token.pill === 'morning' ? '#FBBF24' : '#2DD4BF'))
+                          ? (token.pill === 'night' ? '#F472B6' : (token.pill === 'morning' ? '#FBBF24' : '#10B981'))
                           : (isPill ? 'rgba(251, 191, 36, 0.15)' : 'rgba(255, 255, 255, 0.05)'),
                         border: isActive ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.1)',
                         boxShadow: isActive ? '0 0 16px rgba(45, 212, 191, 0.8)' : 'none',
@@ -1437,7 +1437,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 onClick={togglePlayAudio}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '40px', height: '40px', background: '#0A2540', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2DD4BF' }}>
+                    <div style={{ width: '40px', height: '40px', background: '#0A2540', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D4AF37' }}>
                       <Volume2 size={20} />
                     </div>
                     <div>

@@ -1039,7 +1039,7 @@ export default function HeroLanding({
           BOTTOM METRICS & IMPACT RIBBON (EXACT TO REFERENCE)
           ========================================================================= */}
       <div style={{
-        background: 'linear-gradient(135deg, #071F36 0%, #0B2B4C 50%, #061B30 100%)',
+        background: 'linear-gradient(135deg, #08232B 0%, #0F4C5C 50%, #091E26 100%)',
         color: '#ffffff',
         position: 'relative',
         overflow: 'hidden',
@@ -1294,16 +1294,16 @@ export default function HeroLanding({
                   width: '38px',
                   height: '38px',
                   borderRadius: '10px',
-                  background: 'rgba(45, 212, 191, 0.15)',
-                  border: '1.5px solid #2DD4BF',
+                  background: 'rgba(212, 175, 55, 0.15)',
+                  border: '1.5px solid #D4AF37',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#2DD4BF'
+                  color: '#D4AF37'
                 }}>
                   </div>
                 <div>
-                  <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#2DD4BF' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#D4AF37' }}>
                     Closed-Loop Neural Bus Architecture
                   </div>
                   <div style={{ fontSize: '18px', fontWeight: 800, color: '#F8FAFC' }}>
@@ -1315,7 +1315,7 @@ export default function HeroLanding({
               {/* Live Bus Heartbeat */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px 14px', borderRadius: '12px', border: '1px solid #2C4A52' }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34D399', boxShadow: 'none' }} className="animate-ping" />
-                <span style={{ fontSize: '12px', fontWeight: 750, color: '#D0DFE2' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {isNeuralBusPaused ? '⏸️ Paused (Inspection)' : `Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
+                <span style={{ fontSize: '12px', fontWeight: 750, color: '#D0DFE2' }}>BUS CLOCK: 16 kHz Real-Time Synchronous • {`Stage 0${circuitNodeIndex + 1}/04 Active`}</span>
               </div>
             </div>
 
@@ -1325,7 +1325,7 @@ export default function HeroLanding({
               borderRadius: '20px',
               overflow: 'hidden',
               marginBottom: '28px',
-              border: '2px solid #2DD4BF',
+              border: '2px solid #D4AF37',
               boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
               background: '#061325'
             }}>
@@ -1359,12 +1359,12 @@ export default function HeroLanding({
                 border: '1px solid #D0DFE2',
                 padding: '8px 14px',
                 borderRadius: '14px',
-                border: '1.5px solid rgba(45, 212, 191, 0.4)',
+                border: '1.5px solid rgba(212, 175, 55, 0.35)',
                 fontSize: '12px',
                 gap: '8px'
               }}>
-                <span style={{ color: '#2DD4BF', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2DD4BF', boxShadow: 'none' }}></span>
+                <span style={{ color: '#D4AF37', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#D4AF37', boxShadow: 'none' }}></span>
                   16 kHz DSP Waveform
                 </span>
                 {[
@@ -1395,9 +1395,9 @@ export default function HeroLanding({
                     </button>
                   );
                 })}
-                <span style={{ color: '#38BDF8', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ color: '#D4AF37', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
                   Patient Delivery Gateway
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38BDF8', boxShadow: 'none' }}></span>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#D4AF37', boxShadow: 'none' }}></span>
                 </span>
               </div>
             </div>
@@ -1416,7 +1416,7 @@ export default function HeroLanding({
               gap: '24px'
             }}>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#2DD4BF', marginBottom: '4px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#D4AF37', marginBottom: '4px' }}>
                   Node Telemetry [{circuitNodeIndex === 0 ? 'STAGE 01: HARDWARE ACOUSTIC SENSOR' : circuitNodeIndex === 1 ? 'STAGE 02: ADAPTIVE NOISE SUPPRESSION & VAD' : circuitNodeIndex === 2 ? 'STAGE 03: NEURAL SEMANTIC CHIP' : 'STAGE 04: WHATSAPP & SMS DISPATCH GATEWAY'}]
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 750, color: '#F1F5F9' }}>
@@ -1434,7 +1434,7 @@ export default function HeroLanding({
                 </div>
                 <div style={{ borderLeft: '2px solid #2C4A52', paddingLeft: '14px' }}>
                   <div style={{ fontSize: '11px', color: '#94A3B8' }}>{circuitNodeIndex === 0 ? 'Beamforming' : circuitNodeIndex === 1 ? 'Kalman Filter' : circuitNodeIndex === 2 ? 'Clinical Normalizer' : 'Attending Sign-Off'}</div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8' }}>{circuitNodeIndex === 0 ? 'SNR +24 dB' : circuitNodeIndex === 1 ? 'Adaptive VAD Active' : circuitNodeIndex === 2 ? 'WHO ICD-10 Mapped' : '100% DSC Required'}</div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#D4AF37' }}>{circuitNodeIndex === 0 ? 'SNR +24 dB' : circuitNodeIndex === 1 ? 'Adaptive VAD Active' : circuitNodeIndex === 2 ? 'WHO ICD-10 Mapped' : '100% DSC Required'}</div>
                 </div>
               </div>
 
@@ -1514,7 +1514,7 @@ export default function HeroLanding({
                 title: '1. Spectrogram HUD',
                 badge: '88.2% Sensitivity',
                 col: '#0F4C5C',
-                gradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.10) 0%, rgba(45, 212, 191, 0.15) 100%)',
+                gradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.10) 0%, rgba(212, 175, 55, 0.15) 100%)',
                 icon: Activity,
                 rightBox: (
                   <div style={{
@@ -1622,10 +1622,10 @@ export default function HeroLanding({
                     boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#38BDF8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#D4AF37', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         ABDM HL7 FHIR R4
                       </span>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38BDF8', boxShadow: 'none' }} />
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#D4AF37', boxShadow: 'none' }} />
                     </div>
                     <pre style={{
                       margin: 0,
@@ -1714,7 +1714,7 @@ export default function HeroLanding({
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#0284C7', fontWeight: 700 }}>
                         <span>Dr:</span>
-                        <span style={{ flex: 1, height: '5px', background: '#38BDF8', borderRadius: '3px' }} />
+                        <span style={{ flex: 1, height: '5px', background: '#D4AF37', borderRadius: '3px' }} />
                         <span style={{ fontSize: '10px', color: '#334E57' }}>Ch 1</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#059669', fontWeight: 700 }}>
@@ -2001,7 +2001,7 @@ export default function HeroLanding({
                     boxShadow: '0 12px 30px rgba(0,0,0,0.25)'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#2DD4BF', textTransform: 'uppercase' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#D4AF37', textTransform: 'uppercase' }}>
                         FFT Waterfall Display (0–8,000 Hz)
                       </span>
                       <span style={{ fontSize: '10px', color: '#94A3B8', fontFamily: 'monospace' }}>16-bit PCM Linear</span>
@@ -2017,7 +2017,7 @@ export default function HeroLanding({
                             style={{
                               flex: 1,
                               height: `${dynamicH}%`,
-                              background: idx >= 3 && idx <= 5 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #2DD4BF 0%, #0F4C5C 100%)',
+                              background: idx >= 3 && idx <= 5 ? 'linear-gradient(180deg, #F87171 0%, #EF4444 100%)' : 'linear-gradient(180deg, #10B981 0%, #0F4C5C 100%)',
                               borderRadius: '3px',
                               transition: 'height 0.15s ease'
                             }}
@@ -2279,7 +2279,7 @@ export default function HeroLanding({
                       </button>
                     </div>
 
-                    <pre style={{ margin: 0, lineHeight: 1.45, color: '#38BDF8' }}>
+                    <pre style={{ margin: 0, lineHeight: 1.45, color: '#D4AF37' }}>
                       {`{
   "resourceType": "Bundle",
   "id": "ayuswar-encounter-8849",
@@ -2650,7 +2650,7 @@ export default function HeroLanding({
                     {isKaraokePlaying ? <Pause size={18} /> : <Play size={18} fill="#ffffff" />}
                   </button>
                   <div>
-                    <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#2DD4BF', letterSpacing: '1px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#D4AF37', letterSpacing: '1px' }}>
                       Interactive Vernacular Audio-Rx Stream
                     </div>
                     <div style={{ fontSize: '16px', fontWeight: 800, color: '#F8FAFC' }}>
@@ -2667,7 +2667,7 @@ export default function HeroLanding({
                 {/* Scrubber Progress Percentage */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ fontSize: '11px', color: '#94A3B8' }}>Audio Position:</span>
-                  <span style={{ fontSize: '14px', fontWeight: 800, color: '#38BDF8', fontFamily: 'monospace' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 800, color: '#D4AF37', fontFamily: 'monospace' }}>
                     {Math.round(karaokeProgress)}% / 100%
                   </span>
                 </div>
@@ -2723,7 +2723,7 @@ export default function HeroLanding({
                           height: `${dynamicHeight}%`,
                           borderRadius: '3px',
                           background: isPassed
-                            ? 'linear-gradient(180deg, #38BDF8 0%, #0F4C5C 50%, #10B981 100%)'
+                            ? 'linear-gradient(180deg, #D4AF37 0%, #0F4C5C 55%, #059669 100%)'
                             : 'linear-gradient(180deg, #2C4A52 0%, #1E293B 100%)',
                           boxShadow: 'none',
                           transition: 'height 0.12s ease',
@@ -2754,7 +2754,7 @@ export default function HeroLanding({
                     width: '10px',
                     height: '10px',
                     borderRadius: '50%',
-                    background: '#38BDF8',
+                    background: '#D4AF37',
                     border: '2px solid #FFFFFF',
                     boxShadow: 'none'
                   }} />
@@ -2773,7 +2773,7 @@ export default function HeroLanding({
                 aria-valuemax={100}
                 aria-valuenow={karaokeProgress}
                 aria-valuetext={`${karaokeProgress}% audio position`}
-                style={{ width: '100%', accentColor: '#2DD4BF', cursor: 'ew-resize', marginBottom: '24px' }}
+                style={{ width: '100%', accentColor: '#D4AF37', cursor: 'ew-resize', marginBottom: '24px' }}
               />
 
               {/* Synchronized Glowing Word-by-Word Pill Tracker */}
@@ -2801,10 +2801,10 @@ export default function HeroLanding({
                         background: isHighlighted
                           ? 'linear-gradient(135deg, #0F4C5C 0%, #10B981 100%)'
                           : isPast
-                            ? 'rgba(45, 212, 191, 0.15)'
+                            ? 'rgba(212, 175, 55, 0.15)'
                             : 'rgba(30, 41, 59, 0.6)',
                         border: isHighlighted
-                          ? '2px solid #5EEAD4'
+                          ? '2px solid #D4AF37'
                           : isPast
                             ? '1px solid #0F4C5C'
                             : '1px solid #2C4A52',
@@ -2833,7 +2833,7 @@ export default function HeroLanding({
                       <div style={{
                         fontSize: '18px',
                         fontWeight: 800,
-                        color: isHighlighted ? '#ffffff' : isPast ? '#5EEAD4' : '#D0DFE2',
+                        color: isHighlighted ? '#ffffff' : isPast ? '#FEF08A' : '#D0DFE2',
                         textAlign: 'center',
                         fontFamily: 'var(--font-indic), system-ui, sans-serif',
                         lineHeight: 1.55
@@ -3138,7 +3138,7 @@ export default function HeroLanding({
                 <div style={{
                   background: '#061B30',
                   borderRadius: '18px',
-                  border: '2px solid #2DD4BF',
+                  border: '2px solid #D4AF37',
                   padding: '24px',
                   color: '#ffffff',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.18)'
@@ -3518,7 +3518,7 @@ export default function HeroLanding({
                 <div style={{
                   background: '#061B30',
                   borderRadius: '16px',
-                  border: '2px solid #2DD4BF',
+                  border: '2px solid #D4AF37',
                   padding: '20px',
                   fontFamily: 'monospace',
                   fontSize: '11.5px',
@@ -3663,7 +3663,7 @@ export default function HeroLanding({
           ENTERPRISE FOOTER
           ========================================================================= */}
       <footer style={{
-        background: '#061626',
+        background: '#091E26',
         color: '#ffffff',
         padding: '60px 24px 30px 24px',
         borderTop: '1px solid rgba(0, 0, 0, 0.16)'

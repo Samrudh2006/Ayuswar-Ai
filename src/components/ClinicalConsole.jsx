@@ -1100,7 +1100,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#2DD4BF' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#D4AF37' }}>
               OPD Clinical Workflow Master
             </div>
             <div style={{ fontSize: '16px', fontWeight: 850 }}>
@@ -1152,7 +1152,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   padding: '10px 14px',
                   borderRadius: '12px',
                   border: isCurrent 
-                    ? '2px solid #2DD4BF' 
+                    ? '2px solid #D4AF37' 
                     : isDone 
                       ? '1.5px solid #10B981' 
                       : '1px solid rgba(255,255,255,0.15)',
@@ -1172,7 +1172,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: isCurrent ? '#2DD4BF' : isDone ? '#10B981' : 'rgba(255,255,255,0.15)',
+                  background: isCurrent ? '#D4AF37' : isDone ? '#10B981' : 'rgba(255,255,255,0.15)',
                   color: isCurrent ? '#061626' : '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
@@ -1185,7 +1185,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <div style={{ fontSize: '12px', fontWeight: 800, whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                     {item.title}
                   </div>
-                  <div style={{ fontSize: '10.5px', color: isCurrent ? '#2DD4BF' : '#D0DFE2', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '10.5px', color: isCurrent ? '#D4AF37' : '#D0DFE2', whiteSpace: 'nowrap' }}>
                     {item.desc}
                   </div>
                 </div>
@@ -1203,11 +1203,11 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           left: '50%',
           transform: 'translateX(-50%)',
           background: '#061626',
-          color: '#2DD4BF',
+          color: '#D4AF37',
           padding: '10px 22px',
           borderRadius: '30px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
-          border: '2px solid #2DD4BF',
+          border: '2px solid #D4AF37',
           fontSize: '13.5px',
           fontWeight: 850,
           zIndex: 9999,
@@ -1218,12 +1218,12 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         }}>
           <span style={{
             background: 'rgba(45, 212, 191, 0.2)',
-            border: '1px solid #2DD4BF',
+            border: '1px solid #D4AF37',
             padding: '2px 8px',
             borderRadius: '6px',
             fontSize: '11px',
             fontFamily: 'monospace',
-            color: '#2DD4BF'
+            color: '#D4AF37'
           }}>
             SPACEBAR
           </span>
@@ -1362,13 +1362,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     padding: '6px 11px',
                     fontSize: '11.5px',
                     fontWeight: 750,
-                    color: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047',
+                    color: activeLiveSpeaker.includes('Doctor') ? '#10B981' : '#FDE047',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     flexShrink: 0
                   }}
                 >
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: activeLiveSpeaker.includes('Doctor') ? '#2DD4BF' : '#FDE047', animation: isRecording ? 'pulse 1s infinite' : 'none' }} />
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: activeLiveSpeaker.includes('Doctor') ? '#10B981' : '#FDE047', animation: isRecording ? 'pulse 1s infinite' : 'none' }} />
                   <span>{activeLiveSpeaker.includes('Doctor') ? '🩺 Doctor' : '👵 Patient'}</span>
                   <span style={{ fontSize: '9.5px', opacity: 0.65, borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '5px' }}>Auto</span>
                 </div>
@@ -1402,7 +1402,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     <div style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       Elapsed
                     </div>
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: isRecording ? '#EF4444' : '#2DD4BF', fontFamily: 'monospace' }}>
+                    <div style={{ fontSize: '15px', fontWeight: 800, color: isRecording ? '#EF4444' : '#10B981', fontFamily: 'monospace' }}>
                       {formatTimer(recordedSeconds)}
                     </div>
                   </div>
@@ -1444,7 +1444,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                       background: 'rgba(45, 212, 191, 0.1)',
                       border: '1px solid rgba(45, 212, 191, 0.25)',
                       borderRadius: '8px',
-                      color: '#2DD4BF',
+                      color: '#D4AF37',
                       padding: '6px 10px',
                       fontSize: '11px',
                       fontWeight: 750,
@@ -1503,7 +1503,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     padding: '2px 8px',
                     borderRadius: '6px',
                     fontWeight: 800,
-                    border: `1px solid ${pitchCluster?.includes('Doctor') ? '#5EEAD4' : '#FDE68A'}`
+                    border: `1px solid ${pitchCluster?.includes('Doctor') ? '#10B981' : '#FDE68A'}`
                   }}>
                     🎵 Pitch F0: {detectedPitch} Hz ({pitchCluster})
                   </span>
@@ -1881,12 +1881,12 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 width: '48px',
                 height: '48px',
                 border: '3px solid rgba(45, 212, 191, 0.2)',
-                borderTopColor: '#2DD4BF',
+                borderTopColor: '#D4AF37',
                 borderRadius: '50%',
                 margin: '0 auto 14px auto',
                 animation: 'spin 0.8s linear infinite'
               }} />
-              <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0', color: '#2DD4BF' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px 0', color: '#D4AF37' }}>
                 AI Indic Clinical Reasoner Synthesizing Prescription
               </h3>
               <p style={{ fontSize: '13px', color: '#D0DFE2', margin: 0 }}>
@@ -2772,7 +2772,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
             <pre style={{
               background: '#061626',
-              color: '#2DD4BF',
+              color: '#D4AF37',
               padding: '14px',
               borderRadius: '12px',
               fontSize: '11px',

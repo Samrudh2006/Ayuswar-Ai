@@ -154,13 +154,13 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#2DD4BF'
+              color: '#D4AF37'
             }}>
               <Radio size={22} className={isPlaying ? 'animate-pulse' : ''} />
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#2DD4BF' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', color: '#D4AF37' }}>
                   Real-Time Acoustic Telemetry
                 </span>
                 <span style={{
@@ -218,7 +218,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           gap: '14px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Sliders size={18} color="#2DD4BF" />
+            <Sliders size={18} color="#0F4C5C" />
             <span style={{ fontSize: '13px', fontWeight: 700, color: '#D0DFE2' }}>
               DSP Acoustic Filter:
             </span>
@@ -248,9 +248,9 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontWeight: 700,
-                border: filterMode === 'kalman' ? '1.5px solid #2DD4BF' : '1px solid #486770',
+                border: filterMode === 'kalman' ? '1.5px solid #0F4C5C' : '1px solid #486770',
                 background: filterMode === 'kalman' ? 'rgba(0, 0, 0, 0.16)' : 'transparent',
-                color: filterMode === 'kalman' ? '#5EEAD4' : '#94A3B8',
+                color: filterMode === 'kalman' ? '#0F4C5C' : '#94A3B8',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease'
               }}
@@ -275,7 +275,7 @@ function OpdDualSpeakerStudio({ onLaunchInteractiveModal }) {
           </div>
           <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '10px 14px', borderRadius: '10px', border: '1px solid #2C4A52' }}>
             <div style={{ fontSize: '11px', color: '#94A3B8' }}>Diarization Separation (SIMULATION)</div>
-            <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#38BDF8' : '#FBBF24' }}>
+            <div style={{ fontSize: '15px', fontWeight: 800, color: filterMode === 'kalman' ? '#0F4C5C' : '#FBBF24' }}>
               {filterMode === 'kalman' ? 'Dual Speaker Channel' : 'Overlap Detection'}
             </div>
           </div>
@@ -1782,7 +1782,7 @@ export default function DetailedModuleView({
                 transition: 'all 0.15s ease'
               }}
             >
-              <Sparkles size={14} color="#2DD4BF" />
+              <Sparkles size={14} color="#0F4C5C" />
               <span>Interactive UI Tour</span>
             </button>
           </div>
@@ -1860,7 +1860,7 @@ export default function DetailedModuleView({
                     background: currentPage === idx + 1 
                       ? '#0F4C5C' 
                       : idx + 1 < currentPage 
-                      ? '#5EEAD4' 
+                      ? '#D4AF37' 
                       : '#D0DFE2',
                     boxShadow: currentPage === idx + 1 ? '0 0 0 2px rgba(0, 0, 0, 0.16)' : 'none'
                   }}
