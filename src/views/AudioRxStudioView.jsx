@@ -740,9 +740,9 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
       ? '💡 *जन औषधि लाभ:* यह दवाएं पीएमबीजेपी जन औषधि केंद्रों पर 80% कम कीमत में उपलब्ध हैं।'
       : '💡 *Jan Aushadhi Advantage:* Available at PMBJP generic centres with 80% cost savings.';
 
-    const isLocalhost = window.location.origin.includes('localhost');
-    const portalLink = isLocalhost 
-      ? 'https://ayuswar.ai/rx/narayana-rao' 
+    const isDev = Boolean(import.meta.env?.DEV);
+    const portalLink = isDev 
+      ? 'https://ayuswar-ai.vercel.app/audio-rx' 
       : `${window.location.origin}/audio-rx`;
 
     const audioIndicator = isTe

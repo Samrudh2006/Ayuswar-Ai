@@ -765,7 +765,7 @@ export default function HeroLanding({
               maxWidth: '560px',
               marginBottom: '28px'
             }}>
-              <strong style={{ color: '#081C24', fontWeight: 700 }}>AyuSwar AI</strong> is the Ambient Clinical Voice OS that listens, understands and speaks – in every Indian language. Built for every doctor, in every corner of Bharat.
+              <strong style={{ color: '#081C24', fontWeight: 700 }}>AyuSwar AI</strong> helps clinics in India triage patients faster by giving doctors an AI-assisted summary before the appointment starts. Ambient clinical listening across Telugu, Hindi, and English.
             </p>
 
             {/* 5 Distinct Feature Pills */}

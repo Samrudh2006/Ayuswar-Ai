@@ -1,30 +1,26 @@
-# AyuSwar AI — Ambient Clinical Intelligence & Indic Voice Scribe (2026)
+# AyuSwar AI
 
-> AyuSwar AI is a prototype demonstration running on synthetic data. It is not an approved medical device and is not intended for autonomous medical diagnosis.
+> Sovereign ambient clinical voice scribe and 108 emergency triage for Indian healthcare.
 
-AyuSwar AI is an ambient clinical voice intelligence, acoustic signal reasoning, and open health informatics platform designed specifically for high-volume rural Primary Health Centers (PHCs), Community Health Centers (CHCs), and 108 emergency ambulance networks across India. It features deep colloquial dialect comprehension across 7 Indic languages, with a specialized focus on Rayalaseema, Telangana, Coastal Andhra, and Uttarandhra Telugu variants and Hindi colloquial dialects.
+AyuSwar AI is an ambient clinical voice intelligence, acoustic signal reasoning, and health informatics platform designed for Primary Health Centers (PHCs), Community Health Centers (CHCs), and 108 emergency networks across India. It supports colloquial comprehension across 7 Indic languages (Telugu, Hindi, Tamil, Kannada, Marathi, Bengali, and English), translating doctor-patient conversations into structured ABDM FHIR R4 medical notes and vernacular audio prescriptions.
 
-## Core Capabilities & Clinical Modules
+## Platform Modules
 
-- **Ambient OPD Clinical Scribe**: Converts spoken physician-patient multi-lingual dialogues into draft structured SOAP notes and ABDM FHIR R4 electronic health records for physician validation.
-- **On-Device Silero VAD (WebAssembly)**: Local client-side voice activity detection that separates human voice from noisy rural OPD backgrounds with zero cloud latency.
-- **WebRTC SIP Cellular Audio Gateway**: Direct telecom provider interface allowing rural citizens to dial in via standard phone lines with browser-based WebRTC SIP bridges.
-- **Gnani Live 16kHz WebSocket Streaming STT**: Direct byte-by-byte streaming pipeline to Gnani Prisma v3 Indic ASR engines.
-- **Spoken Audio-Rx Studio**: High-contrast vernacular spoken prescription playback with word-by-word karaoke synchronization to overcome patient illiteracy and dosage confusion.
-- **Jan Aushadhi Generic Substitution Engine**: Automated optical & formulary mapping to Pradhan Mantri Bharatiya Janaushadhi Pariyojana (PMBJP) generic alternatives, saving patients up to 86% on essential medications.
-- **Sanjivani 108 Emergency Triage**: Simulated high-acuity triage protocol with conservative rule floor, asynchronous model escalation guardrail, CPR cadence metronome, and hospital pre-alert telemetry.
-- **Indic Vernacular Clinical Ontology**: Deterministic crosswalk mapping visceral regional colloquial idioms (e.g., Telugu 'గుండెల్లో దడ', 'పసలీ చలన', 'పుట్టించే జ్వరం') directly to WHO ICD-10 and SNOMED CT codes without generative hallucination.
+- [Doctor Clinical Console](https://ayuswar-ai.vercel.app/doctor): Ambient OPD clinical voice scribe generating structured SOAP notes and ABDM FHIR records with physician review.
+- [Spoken Audio-Rx Studio](https://ayuswar-ai.vercel.app/audio-rx): Vernacular spoken prescription generator with karaoke timing to combat patient medication errors.
+- [Sanjivani 108 Emergency Dispatch](https://ayuswar-ai.vercel.app/sanjivani): Acuity triage protocol with conservative clinical floor, CPR audio metronome, and telemetry.
+- [Acoustic Biomarker Lab](https://ayuswar-ai.vercel.app/biomarkers): Non-diagnostic screening for respiratory acoustics (wheeze, stridor, crackles).
+- [Prescription Scanner](https://ayuswar-ai.vercel.app/scan): Optical recognition with Jan Aushadhi (PMBJP) generic drug cost-saving alternatives.
+- [Patient Health Portal](https://ayuswar-ai.vercel.app/patient): Vernacular symptom check-in and multi-lingual voice records for rural citizens.
 
-## API & Technical Specifications
+## Technical Documentation & Standards
 
-- **OpenAPI 3.0 Specification**: https://ayuswar-ai.vercel.app/openapi.json
-- **Full Architecture & Evaluation Blueprint**: https://ayuswar-ai.vercel.app/technology
-- **Contract Verification Benchmarks (74 Specs)**: https://ayuswar-ai.vercel.app/benchmarks
-- **LLM Full Context Specification**: https://ayuswar-ai.vercel.app/llms-full.txt
-- **XML Sitemap**: https://ayuswar-ai.vercel.app/sitemap.xml
+- [Deep-Tech Architecture Blueprint](https://ayuswar-ai.vercel.app/technology): Monograph covering acoustic DSP, Gnani Indic voice pipeline, and ABDM M3 sovereign bridge.
+- [Automated Verification Benchmarks](https://ayuswar-ai.vercel.app/benchmarks): 74 passing test specs verifying FHIR schemas, triage floors, and dialect crosswalks.
+- [Full LLM Technical Reference](https://ayuswar-ai.vercel.app/llms-full.txt): Complete system prompts, ontology tables, and integration schemas.
+- [XML Sitemap](https://ayuswar-ai.vercel.app/sitemap.xml): Search engine indexing manifest.
 
-## Data Privacy & Regulatory Invariants
+## Privacy & Safety Guardrails
 
-- **DPDP Act 2023 Sovereign Ephemeral RAM**: Audio data is processed strictly in volatile ephemeral memory inside Indian sovereign boundaries. Zero persistent audio is written to disk or third-party cloud servers.
-- **HL7 FHIR R4 & ABDM**: Structured records conform to Ayushman Bharat Digital Mission (ABDM) draft FHIR R4 JSON schemas.
-- **Conservative Triage Safeguard**: AI models can only escalate emergency priority levels (e.g. Yellow to Red), never downgrade a rule-based clinical emergency floor.
+- [DPDP Act 2023 Ephemeral RAM](https://ayuswar-ai.vercel.app/privacy): Ephemeral in-memory audio processing within Indian boundaries; zero persistent audio storage.
+- [Clinical Safety Sentinel](https://ayuswar-ai.vercel.app/safety): Deterministic rule floors that prevent AI from downgrading clinical emergencies or dosing medications autonomously.

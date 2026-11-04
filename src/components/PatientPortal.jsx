@@ -1408,7 +1408,7 @@ export default function PatientPortal({
                       </span>
                     </div>
                     <p style={{ fontSize: '13.5px', color: '#486770', marginTop: '5px', fontWeight: 500, marginBottom: '6px' }}>
-                      Your personalized citizen health locker & vernacular ambient care companion.
+                      Tell us about your symptoms before your visit. We share an instant vernacular summary with your doctor so they are fully prepared.
                     </p>
                     <AbdmRegistryBadgeRow
                       abhaNumber={activeDemoPatient?.abhaNumber || abhaId}

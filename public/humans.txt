@@ -1,0 +1,12 @@
+/* TEAM */
+Founder & Lead Architect: Samrudh
+Contact: samrudhdwivedula12@gmail.com
+GitHub: https://github.com/Samrudh2006
+Location: Andhra Pradesh & Telangana, India
+
+/* SITE */
+Standards: HTML5, CSS3, ES2024, React 19, Vite, TailwindCSS
+Typography: Albert Sans, IBM Plex Sans
+Color Palette: Deep Emerald (#0F4C5C), Ivory Linen (#FAF8F5), Dark Slate (#091E26), Gold Ochre (#D4AF37)
+Infrastructure: Vercel, Cloudflare Workers, WebAssembly (Silero VAD)
+Compliance: DPDP Act 2023, ABDM M3 FHIR R4

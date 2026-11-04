@@ -138,20 +138,18 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
 }
 
 /**
- * Retrieves Groq API Key from environment variable or browser localStorage
+ * Retrieves Groq API Key from browser localStorage (user-provided) or server environment
  */
 export function getGroqApiKey() {
   if (typeof window !== 'undefined') {
     try {
       const stored = localStorage.getItem('ayuswar_groq_api_key') || 
-                     localStorage.getItem('groq_api_key') || 
-                     localStorage.getItem('VITE_GROQ_API_KEY');
+                     localStorage.getItem('groq_api_key');
       if (stored && stored.trim()) return stored.trim();
     } catch {}
   }
-  const viteKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GROQ_API_KEY) || '';
-  const nodeKey = (typeof process !== 'undefined' && (process.env?.VITE_GROQ_API_KEY || process.env?.GROQ_API_KEY)) || '';
-  return viteKey || nodeKey || '';
+  const nodeKey = (typeof process !== 'undefined' && process.env?.GROQ_API_KEY) || '';
+  return nodeKey || '';
 }
 
 /**

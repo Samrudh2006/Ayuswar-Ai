@@ -1812,6 +1812,10 @@ export default function DoctorPortal({
                       <p style={{ fontSize: '12.5px', color: '#486770', marginTop: '4px', fontWeight: 500, lineHeight: 1.4 }}>
                         Kurnool District Hospital OPD • Ambient Indic Voice Scribe Active
                       </p>
+                      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '6px', fontSize: '11.5px', color: '#0F4C5C', fontWeight: 650 }}>
+                        <span>✓ See full patient summary before they walk in</span>
+                        <span>✓ Save ~9 min documentation time per consultation</span>
+                      </div>
                       <div style={{ fontSize: '10.5px', color: '#698892', marginTop: '2px', fontWeight: 600 }}>
                         ⚠️ Software Simulation Prototype • Non-diagnostic clinical workflow
                       </div>

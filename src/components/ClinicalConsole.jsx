@@ -1558,7 +1558,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{ fontSize: '18px' }}>🎙️</span>
                     <div>
-                      <strong>Microphone Access Blocked in Chrome:</strong> Click the <strong>lock 🔒 or camera/mic icon</strong> in Chrome's address bar (top left near localhost:5173) and choose <strong>"Allow"</strong>, then refresh.
+                      <strong>Microphone Access Blocked in Chrome:</strong> Click the <strong>lock 🔒 or camera/mic icon</strong> in Chrome's address bar (top left near the address bar) and choose <strong>"Allow"</strong>, then refresh.
                       <div style={{ fontSize: '11px', marginTop: '3px', color: '#B45309' }}>
                         💡 Running in <strong>Auto-Simulation mode</strong> so your video recording shows streaming doctor-patient speech without interruption!
                       </div>
