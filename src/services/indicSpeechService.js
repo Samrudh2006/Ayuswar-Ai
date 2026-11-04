@@ -554,9 +554,49 @@ export class IndicSpeechService {
           model: data.model || 'Gnani Prisma v3'
         };
       }
+
+      // Cloudflare Workers AI Whisper Fallback (Edge GPU STT)
+      try {
+        const cfRes = await fetch('/api/cf-ai/transcribe', {
+          method: 'POST',
+          body: audioBlob
+        });
+        if (cfRes.ok) {
+          const cfData = await cfRes.json();
+          if (cfData.text) {
+            return {
+              transcript: cfData.text,
+              provider: 'cloudflare_whisper',
+              model: 'Cloudflare Workers AI (Whisper)'
+            };
+          }
+        }
+      } catch (cfErr) {
+        // Fallback to local pipeline
+      }
+
       return { transcript: null, fallbackRequired: true };
     } catch (err) {
       console.warn('Gnani STT transcription failed, falling back:', err);
+
+      // Cloudflare Workers AI Whisper Fallback on network error
+      try {
+        const cfRes = await fetch('/api/cf-ai/transcribe', {
+          method: 'POST',
+          body: audioBlob
+        });
+        if (cfRes.ok) {
+          const cfData = await cfRes.json();
+          if (cfData.text) {
+            return {
+              transcript: cfData.text,
+              provider: 'cloudflare_whisper',
+              model: 'Cloudflare Workers AI (Whisper)'
+            };
+          }
+        }
+      } catch (cfErr) {}
+
       return { transcript: null, fallbackRequired: true, error: err.message };
     }
   }

@@ -126,6 +126,24 @@ export async function askAyuSwarBrain(prompt, role = 'receptionist', context = {
     }
   }
 
+  // 2. Cloudflare Workers AI Edge Reasoner Fallback (Llama 3.1 8B on Cloudflare Edge GPUs)
+  try {
+    const cfRes = await fetch('/api/cf-ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: cleanPrompt,
+        system: getSystemPromptForRole(role, enrichedContext)
+      })
+    });
+    if (cfRes.ok) {
+      const cfData = await cfRes.json();
+      if (cfData.response) return cfData.response;
+    }
+  } catch (cfErr) {
+    // Cloudflare edge AI pass-through to deterministic memory
+  }
+
   // 2. Safe deterministic fallback if network unavailable
   if (ragMatch?.answer) {
     return ragMatch.answer;

@@ -10,3 +10,4 @@ Typography: Albert Sans, IBM Plex Sans
 Color Palette: Deep Emerald (#0F4C5C), Ivory Linen (#FAF8F5), Dark Slate (#091E26), Gold Ochre (#D4AF37)
 Infrastructure: Vercel, Cloudflare Workers, WebAssembly (Silero VAD)
 Compliance: DPDP Act 2023, ABDM M3 FHIR R4
+
