@@ -1012,9 +1012,9 @@ export default function SanjivaniEmergencyAssistant({
 
                 {/* Live Voice Status Pill */}
                 <div style={{
-                  background: voiceState === 'SPEAKING' ? 'rgba(139, 92, 246, 0.2)' : voiceState === 'THINKING' ? 'rgba(217, 119, 6, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                  border: voiceState === 'SPEAKING' ? '1px solid #8B5CF6' : voiceState === 'THINKING' ? '1px solid #D97706' : '1px solid #10B981',
-                  color: voiceState === 'SPEAKING' ? '#DDD6FE' : voiceState === 'THINKING' ? '#FDE68A' : '#A7F3D0',
+                  background: voiceState === 'SPEAKING' ? 'rgba(212, 175, 55, 0.25)' : voiceState === 'THINKING' ? 'rgba(217, 119, 6, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                  border: voiceState === 'SPEAKING' ? '1px solid #D4AF37' : voiceState === 'THINKING' ? '1px solid #D97706' : '1px solid #10B981',
+                  color: voiceState === 'SPEAKING' ? '#FEF08A' : voiceState === 'THINKING' ? '#FDE68A' : '#A7F3D0',
                   padding: '5px 12px',
                   borderRadius: '20px',
                   fontSize: '11px',
@@ -1107,7 +1107,7 @@ export default function SanjivaniEmergencyAssistant({
                 width: '7px',
                 height: '7px',
                 borderRadius: '50%',
-                background: voiceState === 'SPEAKING' ? '#A855F7' : voiceState === 'THINKING' ? '#F59E0B' : '#10B981'
+                background: voiceState === 'SPEAKING' ? '#D4AF37' : voiceState === 'THINKING' ? '#F59E0B' : '#10B981'
               }}></span>
               <span style={{ color: '#D0DFE2', fontWeight: 700 }}>
                 {voiceState === 'SPEAKING' 

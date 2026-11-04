@@ -408,18 +408,18 @@ export default function PatientHealthGoalsTab({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <span style={{ fontSize: '13px', fontWeight: 750, color: '#081C24' }}>Sleep & Circadian Rhythm</span>
-              <span style={{ background: 'rgba(99, 102, 241, 0.1)', color: '#6366F1', fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '12px' }}>
+              <span style={{ background: 'rgba(15, 76, 92, 0.1)', color: '#0F4C5C', fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '12px' }}>
                 Restorative
               </span>
             </div>
-            <div style={{ fontSize: '28px', fontWeight: 850, color: '#4F46E5', margin: '4px 0 2px 0' }}>
+            <div style={{ fontSize: '28px', fontWeight: 850, color: '#0F4C5C', margin: '4px 0 2px 0' }}>
               {sleepHours} hrs <span style={{ fontSize: '14px', color: '#698892', fontWeight: 600 }}>(Score: {sleepScore}/100)</span>
             </div>
             <div style={{ fontSize: '11.5px', color: '#698892', marginBottom: '12px' }}>
               Deep Sleep: <strong>{deepSleepPercent}% (1h 48m)</strong> • REM: <strong>22%</strong> • Sleep debt: 0m
             </div>
 
-            <div style={{ background: '#F5F3FF', padding: '8px 10px', borderRadius: '8px', border: '1px solid #DDD6FE', fontSize: '11px', color: '#5B21B6', marginBottom: '12px' }}>
+            <div style={{ background: '#FAF8F5', padding: '8px 10px', borderRadius: '8px', border: '1px solid #D0DFE2', fontSize: '11px', color: '#0F4C5C', marginBottom: '12px' }}>
               🌙 <strong>Nocturnal Asthma Protection:</strong> Optimal circadian sleep prevents 4:00 AM bronchial airway dips and cortisol surges.
             </div>
           </div>

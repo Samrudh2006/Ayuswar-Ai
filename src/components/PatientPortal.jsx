@@ -579,8 +579,8 @@ export default function PatientPortal({
       mealContext: 'With Evening Tea/Snack (సాయంత్రం / शाम को)',
       medicine: 'Steam Inhalation + Lozenges',
       purpose: 'Throat soothing & airway clearance',
-      color: '#8B5CF6',
-      bg: 'rgba(139, 92, 246, 0.1)',
+      color: '#D97706',
+      bg: 'rgba(217, 119, 6, 0.1)',
       teluguAudioText: 'సాయంత్రం వేళల్లో వేడి నీళ్ల ఆవిరి పట్టండి మరియు గొంతు నొప్పి తగ్గడానికి ఈ మాత్ర చప్పరించండి.',
       hindiAudioText: 'शाम के समय गर्म पानी की भाप लें और गले की राहत के लिए यह गोली चूसें।'
     },
@@ -1671,7 +1671,7 @@ export default function PatientPortal({
                       </div>
 
                       <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
-                        <Moon size={16} color="#6366F1" style={{ margin: '0 auto 6px auto' }} />
+                        <Moon size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
                         <div style={{ fontSize: '11px', color: '#698892' }}>Sleep</div>
                         <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>7.5 hrs</div>
                         <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Good</span>
@@ -2110,7 +2110,7 @@ export default function PatientPortal({
                           background: isReportSource ? '#F8FAFC' : '#FAF8F5', 
                           padding: '16px', 
                           borderRadius: '14px', 
-                          border: isReportSource ? '1px solid rgba(99, 102, 241, 0.2)' : '1px solid rgba(0, 0, 0, 0.07)', 
+                          border: isReportSource ? '1px solid rgba(15, 76, 92, 0.25)' : '1px solid rgba(0, 0, 0, 0.07)', 
                           boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.03)',
                           position: 'relative',
                           display: 'flex',

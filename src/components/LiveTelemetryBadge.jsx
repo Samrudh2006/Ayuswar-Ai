@@ -152,9 +152,9 @@ export default function LiveTelemetryBadge({ location = 'kurnool', compact = fal
 
         <div 
           title="Direct live HTTP query to FDA 21 CFR Sovereign Drug Label API"
-          style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#E9D5FF' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#D0DFE2' }}
         >
-          <ShieldCheck size={11} color="#C084FC" />
+          <ShieldCheck size={11} color="#34D399" />
           <span>OpenFDA Registry:</span>
           <span style={{ color: '#86EFAC', fontWeight: 700 }}>Live Active</span>
         </div>

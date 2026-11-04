@@ -70,9 +70,9 @@ export default function HandDrawnExplainer() {
       title: 'Guidance',
       subtitle: 'ABDM FHIR & Spoken Rx',
       chip: 'PLANNED',
-      chipColor: '#7C3AED',
-      chipBg: '#F5F3FF',
-      chipBorder: '#DDD6FE',
+      chipColor: '#B45309',
+      chipBg: '#FEFCE8',
+      chipBorder: '#FDE68A',
       icon: Send,
       summary: 'Structures FHIR R4 JSON bundles, regional Gnani voice instructions, and patient WhatsApp delivery.',
       caption: 'Stage 4 [PLANNED]: Future interoperability with ABDM FHIR R4 schema bundles, Gnani TTS, and WhatsApp wa.me.'

@@ -878,7 +878,7 @@ export default function Navbar({
                 </Link>
                 
                 <Link to="/audio-rx" onClick={() => setMobileMenuOpen(false)} style={dropdownItemStyle(currentPath === '/audio-rx')}>
-                  <Volume2 size={18} color="#6366F1" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <Volume2 size={18} color="#0F4C5C" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
                     <div style={{ fontWeight: 700, color: '#091E26', fontSize: '0.825rem' }}>Vernacular Audio-Rx Studio</div>
                     <div style={{ fontSize: '0.7rem', color: '#698892' }}>Spoken dosage instructions</div>

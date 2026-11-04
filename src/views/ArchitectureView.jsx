@@ -45,7 +45,7 @@ export default function ArchitectureView() {
       tag: 'HL7 FHIR R4 Schema',
       desc: 'Open standard composition for patient encounter records, digital signature ready for ABDM exchange.',
       icon: Database,
-      color: '#7C3AED'
+      color: '#0F4C5C'
     },
     {
       title: 'National Data Repository',

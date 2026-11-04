@@ -152,12 +152,12 @@ export default function MobileInnovationHubModal({
       title: 'Offline-Sync',
       desc: `Offline IndexedDB queue for zero-network rural zones (${offlineQueue.length} pending).`,
       icon: WifiOff,
-      color: '#7C3AED',
+      color: '#0F4C5C',
       customContent: (
         <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
           <button 
             onClick={handleAddOfflineRecord}
-            style={{ padding: '4px 8px', borderRadius: '6px', background: '#EDE9FE', color: '#6D28D9', border: '1px solid #DDD6FE', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+            style={{ padding: '4px 8px', borderRadius: '6px', background: '#F0FDFA', color: '#0F4C5C', border: '1px solid #CCFBF1', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
           >
             + Queue Record
           </button>

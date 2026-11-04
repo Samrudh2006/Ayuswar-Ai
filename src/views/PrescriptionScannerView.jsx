@@ -271,8 +271,8 @@ export default function PrescriptionScannerView() {
       extractedText: 'GLYCOMET-500 SR B.No. GM9124 EXP. 11/2026 METFORMIN HYDROCHLORIDE EXTENDED RELEASE IP 500 MG',
       ddiConflict: null,
       contourDetected: true,
-      imagePlaceholderColor: '#FCE7F3',
-      pillColor: '#EC4899',
+      imagePlaceholderColor: '#FFF7ED',
+      pillColor: '#E11D48',
       boundingBoxes: [
         { label: 'BRAND_NAME', text: 'GLYCOMET-500 SR', x: 30, y: 32, w: 240, h: 32, conf: 'High Match' },
         { label: 'ACTIVE_SALT', text: 'METFORMIN HYDROCHLORIDE 500MG', x: 30, y: 72, w: 300, h: 26, conf: 'High Match' },

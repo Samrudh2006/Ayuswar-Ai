@@ -86,8 +86,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Amoxicillin + Clavulanic Acid 625mg (Augmentin)',
       salt: 'Amoxicillin 500mg + Potassium Clavulanate 125mg',
-      pillColor: '#EC4899',
-      colorName: 'Pink Tablet',
+      pillColor: '#F59E0B',
+      colorName: 'Amber Coated Tablet',
       timingTelugu: 'ఉదయం మరియు రాత్రి భోజనం తర్వాత గులాబీ రంగు మాత్ర వేసుకోండి (5 రోజులు).',
       timingHindi: 'सुबह और रात को खाने के बाद गुलाबी गोली लें (5 दिन)।'
     }
@@ -193,8 +193,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Atorvastatin 20mg + Ecosprin 75mg',
       salt: 'Atorvastatin 20mg + Enteric-Coated Aspirin 75mg',
-      pillColor: '#8B5CF6',
-      colorName: 'Violet Enteric Tablet',
+      pillColor: '#D97706',
+      colorName: 'Amber Enteric Tablet',
       timingTelugu: 'రాత్రి భోజనం తర్వాత ఒక మాత్ర వేసుకోవాలి. గుండె రక్తనాళాల్లో కొవ్వు చేరకుండా కాపాడుతుంది.',
       timingHindi: 'रात के खाने के बाद एक गोली लें। यह नसों को साफ रखती है।'
     }
@@ -279,8 +279,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Mebeverine 135mg + Probiotics (Colospa)',
       salt: 'Mebeverine Hydrochloride 135mg',
-      pillColor: '#6366F1',
-      colorName: 'Indigo Coated Tablet',
+      pillColor: '#0284C7',
+      colorName: 'Clinical Blue Tablet',
       timingTelugu: 'భోజనానికి 20 నిమిషాల ముందు రోజుకు రెండు సార్లు వేసుకోండి.',
       timingHindi: 'खाने से 20 मिनट पहले दिन में दो बार लें।'
     }
@@ -344,8 +344,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Cefixime 200mg + Azithromycin 500mg',
       salt: 'Cefixime Trihydrate 200mg + Azithromycin 500mg',
-      pillColor: '#A855F7',
-      colorName: 'Purple Film-Coated Tablet',
+      pillColor: '#C2410C',
+      colorName: 'Terracotta Film-Coated Tablet',
       timingTelugu: 'ఉదయం మరియు రాత్రి భోజనం తర్వాత ఒక మాత్ర (7 రోజులు తప్పనిసరిగా వాడాలి).',
       timingHindi: 'सुबह और रात को खाने के बाद एक गोली 7 दिन तक लगातार लें।'
     }
@@ -409,8 +409,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Pregabalin 75mg + Methylcobalamin 1500mcg (Pregastar-M)',
       salt: 'Pregabalin 75mg + Mecobalamin 1500mcg',
-      pillColor: '#7C3AED',
-      colorName: 'Deep Purple Capsule',
+      pillColor: '#B91C1C',
+      colorName: 'Crimson Red Capsule',
       timingTelugu: 'రాత్రి పడుకునే ముందు మాత్రమే ఒక క్యాప్సూల్ వేసుకోండి. నరాల నొప్పిని తగ్గిస్తుంది.',
       timingHindi: 'रात को सोने से पहले एक कैप्सूल लें। यह नसों का दर्द ठीक करता है।'
     }
@@ -497,8 +497,8 @@ export const CLINICAL_DISEASE_DATASET = [
     firstLineMedication: {
       brand: 'Tamsulosin 0.4mg + Drotaverine 80mg (Urimax-D)',
       salt: 'Tamsulosin Hydrochloride 0.4mg + Drotaverine 80mg',
-      pillColor: '#EC4899',
-      colorName: 'Pink Capsule',
+      pillColor: '#D97706',
+      colorName: 'Ochre Amber Capsule',
       timingTelugu: 'రాత్రి భోజనం తర్వాత ఒక మాత్ర వేసుకోండి. మూత్రనాళాన్ని వదులు చేసి రాయి జారేలా చేస్తుంది.',
       timingHindi: 'रात को खाने के बाद एक कैप्सूल लें ताकि पथरी आसानी से निकल सके।'
     }

@@ -803,7 +803,7 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Rural patients routinely confuse morning vs night medications or struggle with complex inhalation instructions.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-xl font-black text-indigo-600 mb-2">Language Diversity</div>
+                  <div className="text-xl font-black text-amber-700 mb-2">Language Diversity</div>
                   <div className="text-sm font-bold text-slate-900">Vernacular Literacy Gap</div>
                   <div className="text-xs text-slate-500 mt-1">Millions of patients in Bharat navigate medical care in vernacular languages rather than English prescription labels.</div>
                 </div>
@@ -832,8 +832,8 @@ export default function DetailedModuleView({
                     <div className="text-xs font-bold text-rose-400">Crimson Red Tablet</div>
                     <div className="text-[11px] text-slate-300 mt-1">Night After Dinner (రాత్రి నిద్రపోయే ముందు)</div>
                   </div>
-                  <div className="p-4 rounded-xl bg-indigo-950/60 border border-indigo-800">
-                    <div className="text-xs font-bold text-indigo-400">Purple Inhaler</div>
+                  <div className="p-4 rounded-xl bg-orange-950/60 border border-orange-800">
+                    <div className="text-xs font-bold text-orange-400">Terracotta Inhaler</div>
                     <div className="text-[11px] text-slate-300 mt-1">2 Puffs Deep Inhalation (పీల్చి వదలండి)</div>
                   </div>
                 </div>
@@ -861,7 +861,7 @@ export default function DetailedModuleView({
                   </div>
                   <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200">
                     <div className="text-sm font-bold text-slate-900 mb-2">🔊 Hindi (Awadhi / Bundelkhandi) Sample</div>
-                    <div className="text-xs font-serif text-indigo-900 italic bg-white p-4 rounded-xl border border-indigo-200">
+                    <div className="text-xs font-serif text-amber-950 italic bg-white p-4 rounded-xl border border-amber-200">
                       "आरव के माताजी, यह पीली दवाई बच्चे को सुबह नाश्ते के बाद एक चम्मच देनी है। इनहेलर को दबाकर 2 पफ सांस अंदर खिंचवाएं। खाली पेट कभी न दें।"
                     </div>
                   </div>
@@ -1628,7 +1628,7 @@ export default function DetailedModuleView({
                   <div className="text-xs text-slate-500 mt-1">Publishes structured FHIR OPD prescriptions and diagnostic biomarker records.</div>
                 </div>
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="text-xl font-black text-indigo-700 mb-2">M3 Milestone</div>
+                  <div className="text-xl font-black text-teal-800 mb-2">M3 Milestone</div>
                   <div className="text-sm font-bold text-slate-900">HIU Consent Manager</div>
                   <div className="text-xs text-slate-500 mt-1">Patient-mediated granular data access with auto-expiring consent tokens.</div>
                 </div>

@@ -217,8 +217,8 @@ export function generateClinicalProfile(patientName, condition, language = 'Telu
           mealContext: 'After Dinner (రాత్రి భోజనం తర్వాత / रात खाने के बाद)',
           medicine: 'Montelukast 10mg + Bilastine 20mg',
           purpose: 'Nocturnal bronchospasm & allergy prevention',
-          color: '#7C3AED',
-          bg: 'rgba(124, 58, 237, 0.1)',
+          color: '#0F4C5C',
+          bg: 'rgba(15, 76, 92, 0.1)',
           teluguAudioText: 'రాత్రి భోజనం ముగిశాక మోంటెలుకాస్ట్ టాబ్లెట్ వేసుకోండి. రాత్రి నిద్రలో దగ్గు రాకుండా ఉంటుంది.',
           hindiAudioText: 'रात के खाने के बाद मोंटेलुकास्ट की गोली लें ताकि रात को खांसी न उठे।'
         }
@@ -285,8 +285,8 @@ export function generateClinicalProfile(patientName, condition, language = 'Telu
           mealContext: 'After Dinner (రాత్రి భోజనం తర్వాత / रात खाने के बाद)',
           medicine: 'Atorvastatin 10mg',
           purpose: 'Circadian nocturnal cholesterol synthesis reduction',
-          color: '#4F46E5',
-          bg: 'rgba(79, 70, 229, 0.1)',
+          color: '#0F4C5C',
+          bg: 'rgba(15, 76, 92, 0.1)',
           teluguAudioText: 'రాత్రి భోజనం తర్వాత అటోర్వాస్టాటిన్ కొలెస్ట్రాల్ మాత్ర వేసుకోండి. గుండెకు రక్షణ లభిస్తుంది.',
           hindiAudioText: 'रात के खाने के बाद एटोरवास्टेटिन की गोली लें। यह कोलेस्ट्रॉल को कम करती है।'
         }

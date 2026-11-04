@@ -985,9 +985,9 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                 <div style={{
                   padding: '14px',
                   borderRadius: '12px',
-                  background: activePillHighlight === 'night' ? 'rgba(236, 72, 153, 0.18)' : '#FDF2F8',
-                  border: activePillHighlight === 'night' ? '2px solid #EC4899' : '1px solid #FBCFE8',
-                  boxShadow: activePillHighlight === 'night' ? '0 0 16px rgba(236, 72, 153, 0.35)' : 'none',
+                  background: activePillHighlight === 'night' ? 'rgba(194, 65, 12, 0.15)' : '#FFF7ED',
+                  border: activePillHighlight === 'night' ? '2px solid #C2410C' : '1px solid #FED7AA',
+                  boxShadow: activePillHighlight === 'night' ? '0 0 16px rgba(194, 65, 12, 0.25)' : 'none',
                   transform: activePillHighlight === 'night' ? 'scale(1.02)' : 'scale(1)',
                   transition: 'all 0.2s ease'
                 }}>
@@ -1000,13 +1000,13 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                         height: '44px',
                         borderRadius: '10px',
                         objectFit: 'cover',
-                        border: '1.5px solid #EC4899',
+                        border: '1.5px solid #C2410C',
                         flexShrink: 0,
-                        boxShadow: '0 2px 8px rgba(236, 72, 153, 0.3)'
+                        boxShadow: '0 2px 8px rgba(194, 65, 12, 0.25)'
                       }} 
                     />
                     <div>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: '#9D174D' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: '#9A3412' }}>
                         రాత్రి / Night (1 Tab)
                       </div>
                       <div style={{ fontSize: '11px', color: '#BE185D' }}>

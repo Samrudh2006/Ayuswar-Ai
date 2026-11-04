@@ -136,8 +136,8 @@ const INITIAL_DASHBOARD_APPOINTMENTS = [
     time: '11:00 AM',
     type: 'Follow-up (Diabetes)',
     status: 'Upcoming',
-    statusColor: '#6366F1',
-    statusBg: 'rgba(99, 102, 241, 0.1)',
+    statusColor: '#D97706',
+    statusBg: 'rgba(217, 119, 6, 0.1)',
     encounterIndex: 2
   },
   {
@@ -151,8 +151,8 @@ const INITIAL_DASHBOARD_APPOINTMENTS = [
     time: '11:45 AM',
     type: 'Consultation (Cough)',
     status: 'Upcoming',
-    statusColor: '#6366F1',
-    statusBg: 'rgba(99, 102, 241, 0.1)',
+    statusColor: '#D97706',
+    statusBg: 'rgba(217, 119, 6, 0.1)',
     encounterIndex: 0
   },
   {
@@ -215,8 +215,8 @@ const INITIAL_DASHBOARD_APPOINTMENTS = [
     time: '01:45 PM',
     type: 'Consultation (Gastritis & Dyspepsia)',
     status: 'Upcoming',
-    statusColor: '#8B5CF6',
-    statusBg: 'rgba(139, 92, 246, 0.1)',
+    statusColor: '#D97706',
+    statusBg: 'rgba(217, 119, 6, 0.1)',
     encounterIndex: 6
   }
 ];
@@ -450,8 +450,8 @@ export default function DoctorPortal({
       time: newApptForm.time,
       type: `${newApptForm.type} (${newApptForm.complaint.slice(0, 24)}...)`,
       status: 'Upcoming',
-      statusColor: '#6366F1',
-      statusBg: 'rgba(99, 102, 241, 0.1)',
+      statusColor: '#D97706',
+      statusBg: 'rgba(217, 119, 6, 0.1)',
       encounterIndex: 0
     };
 
@@ -2140,7 +2140,7 @@ export default function DoctorPortal({
                         {languageStats.length > 0 ? (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {languageStats.map((item, lIdx) => {
-                              const barColors = ['#0F4C5C', '#10B981', '#D4AF37', '#6366F1'];
+                              const barColors = ['#0F4C5C', '#10B981', '#D4AF37', '#C2410C'];
                               const barColor = barColors[lIdx % barColors.length];
                               return (
                                 <div key={item.language} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

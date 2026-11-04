@@ -1267,8 +1267,8 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
               <div style={{
                 padding: '16px',
                 borderRadius: '12px',
-                border: activePillHighlight === 'night' ? '2.5px solid #EC4899' : '1px solid #D0DFE2',
-                background: activePillHighlight === 'night' ? '#FCE7F3' : '#F8FAFC',
+                border: activePillHighlight === 'night' ? '2.5px solid #C2410C' : '1px solid #D0DFE2',
+                background: activePillHighlight === 'night' ? '#FFF7ED' : '#FAF8F5',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '14px',
@@ -1278,7 +1278,7 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
                 <img 
                   src="/images/medicines/pink_metformin.jpg" 
                   alt="Metformin 500mg SR (Pink Pill)" 
-                  style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #EC4899', flexShrink: 0, boxShadow: '0 2px 8px rgba(236, 72, 153, 0.25)' }} 
+                  style={{ width: '56px', height: '56px', borderRadius: '12px', objectFit: 'cover', border: '2px solid #C2410C', flexShrink: 0, boxShadow: '0 2px 8px rgba(194, 65, 12, 0.25)' }} 
                 />
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>
@@ -1683,16 +1683,16 @@ Patient: Narayana Rao | Age: 62y | Gender: Male | Lang: te-IN
 
           {/* A - Assessment */}
           <div style={{ background: '#FAF8F5', borderRadius: '12px', border: '1px solid #D0DFE2', padding: '16px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#7C3AED', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', marginBottom: '6px' }}>
               A • Assessment (ICD-10 Diagnostic Codes)
             </div>
             <div style={{ fontSize: '13px', fontWeight: 700, color: '#081C24', marginBottom: '4px' }}>
               ICD-10-CM Clinical Coding
             </div>
             <div style={{ fontSize: '12px', color: '#486770', lineHeight: 1.5 }}>
-              • <strong style={{ color: '#6D28D9' }}>K21.9</strong> — Gastro-esophageal reflux disease<br />
-              • <strong style={{ color: '#6D28D9' }}>E11.9</strong> — Type 2 diabetes mellitus (Non-insulin)<br />
-              • <strong style={{ color: '#6D28D9' }}>I10</strong> — Essential (primary) hypertension
+              • <strong style={{ color: '#0F4C5C' }}>K21.9</strong> — Gastro-esophageal reflux disease<br />
+              • <strong style={{ color: '#0F4C5C' }}>E11.9</strong> — Type 2 diabetes mellitus (Non-insulin)<br />
+              • <strong style={{ color: '#0F4C5C' }}>I10</strong> — Essential (primary) hypertension
             </div>
           </div>
 

@@ -1634,14 +1634,14 @@ export default function HeroLanding({
                 num: '4',
                 title: '4. Indic Metaphor',
                 badge: '12 Indic Dialects',
-                col: '#8B5CF6',
-                gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)',
+                col: '#B45309',
+                gradient: 'linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(217, 119, 6, 0.15) 100%)',
                 icon: Languages,
                 rightBox: (
                   <div style={{
-                    background: '#FAF5FF',
+                    background: '#FEFCE8',
                     borderRadius: '14px',
-                    border: '1.5px solid #E9D5FF',
+                    border: '1.5px solid #FDE68A',
                     padding: '12px 14px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -1649,15 +1649,15 @@ export default function HeroLanding({
                     height: '100%'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Metaphor Crosswalk
                       </span>
-                      <span style={{ fontSize: '10px', color: '#6D28D9', fontWeight: 800, background: '#EDE9FE', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '10px', color: '#92400E', fontWeight: 800, background: '#FEF3C7', padding: '2px 6px', borderRadius: '4px' }}>
                         TE to WHO
                       </span>
                     </div>
-                    <div style={{ background: '#FFFFFF', padding: '6px 8px', borderRadius: '8px', border: '1px solid #DDD6FE' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#581C87' }}>"పీకల్లో పిల్లికూతలు"</div>
+                    <div style={{ background: '#FFFFFF', padding: '6px 8px', borderRadius: '8px', border: '1px solid #FDE68A' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: '#78350F' }}>"పీకల్లో పిల్లికూతలు"</div>
                       <div style={{ fontSize: '11px', color: '#7E22CE', marginTop: '2px' }}>ICD-10: R06.2 (Wheezing)</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 650 }}>
@@ -2303,7 +2303,7 @@ export default function HeroLanding({
               {/* FORMAT 4: INDIC METAPHOR RESOLVER */}
               {activeWorkbenchMoat === 'metaphor_resolver' && (
                 <div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(139, 92, 246, 0.1)', color: '#8B5CF6', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(212, 175, 55, 0.15)', color: '#B45309', padding: '4px 12px', borderRadius: '12px', fontSize: '11px', fontWeight: 800, marginBottom: '10px' }}>
                     <span>CULTURAL IDIOM RESOLUTION ENGINE</span>
                   </div>
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
@@ -2325,19 +2325,19 @@ export default function HeroLanding({
                       </thead>
                       <tbody>
                         <tr style={{ borderBottom: '1px solid #D0DFE2' }}>
-                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>గుండెల్లో బండ పెట్టినట్లు బరువు (Telugu)</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0F4C5C' }}>గుండెల్లో బండ పెట్టినట్లు బరువు (Telugu)</td>
                           <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Heavy rock placed on chest"</td>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#081C24' }}>Constricting retrosternal chest pressure</td>
                           <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEE2E2', color: '#DC2626', fontWeight: 750 }}>ICD-10 I20.9 (Angina)</span></td>
                         </tr>
                         <tr style={{ borderBottom: '1px solid #D0DFE2' }}>
-                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>छाती में आग लग रही है (Hindi)</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0F4C5C' }}>छाती में आग लग रही है (Hindi)</td>
                           <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Fire is burning inside chest"</td>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#081C24' }}>Severe epigastric burning pyrosis</td>
                           <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#DBEAFE', color: '#1E40AF', fontWeight: 750 }}>ICD-10 K21.9 (GERD)</span></td>
                         </tr>
                         <tr>
-                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#8B5CF6' }}>ఊపిరి అందక రొప్పుతున్నాడు (Telugu)</td>
+                          <td style={{ padding: '12px 14px', fontWeight: 700, color: '#0F4C5C' }}>ఊపిరి అందక రొప్పుతున్నాడు (Telugu)</td>
                           <td style={{ padding: '12px 14px', color: '#94A3B8' }}>"Breath not reaching, panting"</td>
                           <td style={{ padding: '12px 14px', fontWeight: 700, color: '#081C24' }}>Acute dyspnea / Respiratory distress</td>
                           <td style={{ padding: '12px 14px' }}><span style={{ padding: '3px 8px', borderRadius: '6px', background: '#FEF3C7', color: '#B45309', fontWeight: 750 }}>ICD-10 R06.0 (Dyspnea)</span></td>
@@ -2375,7 +2375,7 @@ export default function HeroLanding({
                     </div>
                     <div style={{ width: '1px', height: '60px', background: '#D0DFE2' }} />
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '24px', fontWeight: 900, color: '#8B5CF6' }}>Planned</div>
+                      <div style={{ fontSize: '24px', fontWeight: 900, color: '#B45309' }}>Planned</div>
                       <div style={{ fontSize: '12px', fontWeight: 750, color: '#081C24' }}>Acoustic Vectors</div>
                       <div style={{ fontSize: '11px', color: '#94A3B8' }}>Web Speech API</div>
                     </div>
@@ -2484,8 +2484,8 @@ export default function HeroLanding({
                     { id: 'hi', name: 'Hindi', native: 'हिन्दी (North India)', col: '#D97706' },
                     { id: 'ta', name: 'Tamil', native: 'தமிழ் (Tamil Nadu)', col: '#059669' },
                     { id: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ (Karnataka)', col: '#2563EB' },
-                    { id: 'mr', name: 'Marathi', native: 'मराठी (Maharashtra)', col: '#8B5CF6' },
-                    { id: 'bn', name: 'Bengali', native: 'বাংলা (West Bengal)', col: '#EC4899' }
+                    { id: 'mr', name: 'Marathi', native: 'मराठी (Maharashtra)', col: '#C2410C' },
+                    { id: 'bn', name: 'Bengali', native: 'বাংলা (West Bengal)', col: '#991B1B' }
                   ].map((chip) => {
                     const isSelected = activeDialectId === chip.id;
                     return (
@@ -3338,8 +3338,8 @@ export default function HeroLanding({
                   { id: 'abdm', label: '2. ABDM HL7 FHIR R4', badge: 'NHA STANDARD', color: '#2563EB' },
                   { id: 'who', label: '3. WHO ICD-10 & SNOMED', badge: 'TAXONOMY', color: '#059669' },
                   { id: 'nfi', label: '4. NFI Pharmacopoeia', badge: 'DRUG SAFETY', color: '#D97706' },
-                  { id: 'gnani_stt', label: '5. Browser Speech API', badge: 'SPEECH ASR', color: '#6366F1' },
-                  { id: 'gnani_tts', label: '6. Spoken Audio-Rx', badge: 'AUDIO-RX', color: '#EC4899' }
+                  { id: 'gnani_stt', label: '5. Browser Speech API', badge: 'SPEECH ASR', color: '#0F4C5C' },
+                  { id: 'gnani_tts', label: '6. Spoken Audio-Rx', badge: 'AUDIO-RX', color: '#C2410C' }
                 ].map((tab) => {
                   const isActive = academicStandardTab === tab.id;
                   return (
@@ -3451,7 +3451,7 @@ export default function HeroLanding({
 
                   {academicStandardTab === 'gnani_stt' && (
                     <div>
-                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(99,102,241,0.1)', color: '#6366F1', padding: '4px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(15,76,92,0.1)', color: '#0F4C5C', padding: '4px 10px', borderRadius: '6px' }}>
                         INDIC SPEECH ARCHITECTURE
                       </span>
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>
@@ -3469,7 +3469,7 @@ export default function HeroLanding({
 
                   {academicStandardTab === 'gnani_tts' && (
                     <div>
-                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(236,72,153,0.1)', color: '#EC4899', padding: '4px 10px', borderRadius: '6px' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(194,65,12,0.1)', color: '#C2410C', padding: '4px 10px', borderRadius: '6px' }}>
                         SPOKEN AUDIO-RX SYNTHESIS
                       </span>
                       <h3 style={{ fontSize: '22px', fontWeight: 900, color: '#081C24', margin: '10px 0 6px 0' }}>

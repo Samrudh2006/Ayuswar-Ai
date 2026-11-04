@@ -113,7 +113,7 @@ export default function LiveScribeSessionModal({
       ],
       prescriptions: [
         { name: 'Pantoprazole Gastro-Resistant 40mg', type: 'Capsule', color: '#F59E0B', colorLabel: '🟡 Yellow Pill', timing: 'Early Morning (06:30 AM)', meal: 'Empty stomach (పరగడుపున)', days: '14 Days' },
-        { name: 'Metformin Sustained Release 500mg', type: 'Tablet', color: '#EC4899', colorLabel: '🟣 Pink Pill', timing: 'Night (08:30 PM)', meal: 'After dinner (భోజనం తర్వాత)', days: '30 Days' }
+        { name: 'Metformin Sustained Release 500mg', type: 'Tablet', color: '#E11D48', colorLabel: 'గులాబీ గోళీ (Rose Pink Tablet)', timing: 'Night (08:30 PM)', meal: 'After dinner (భోజనం తర్వాత)', days: '30 Days' }
       ],
       spokenTeluguRx: 'నమస్కారం నారాయణ రావు గారు, పసుపు రంగు టాబ్లెట్ ఉదయం టిఫిన్ కంటే ముందు వేసుకోండి. గులాబీ రంగు టాబ్లెట్ రాత్రి భోజనం తర్వాత ఒక గోళీ వేసుకోండి.'
     },

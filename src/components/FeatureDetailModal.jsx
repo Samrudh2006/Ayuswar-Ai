@@ -59,7 +59,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       title: 'Tesseract Blister Strip & Paper Rx Scanner',
       badge: 'LAYER 4 • OPTICAL CHARACTER RECOGNITION',
       icon: Scan,
-      color: '#6366F1',
+      color: '#0F4C5C',
       problem: 'Patients frequently bring old crumpled medicine strips to the clinic. Doctors struggle to identify the exact generic compound, leading to accidental double-dosing.',
       solution: 'An in-browser optical recognition pipeline utilizing Tesseract.js WebAssembly and HTML5 Canvas frame analysis to inspect blister strips and paper scripts. Cross-references extracted drug names against India’s National Formulary (NFI) to confirm active salts and Jan Aushadhi generic availability.',
       scientificMetric: 'Recognizes common Indian pharmaceutical blister packaging brands.',
@@ -247,7 +247,7 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
                   navigate('/scanner');
                 }}
                 className="btn-primary"
-                style={{ fontSize: '13px', padding: '9px 18px', background: '#6366F1', display: 'flex', alignItems: 'center', gap: '6px' }}
+                style={{ fontSize: '13px', padding: '9px 18px', background: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <span>📷 Open Blister Scanner</span>
                 <ArrowRight size={14} />

@@ -1079,7 +1079,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           </div>
           <div style={{ background: '#FAF8F5', padding: '8px 12px', borderRadius: '8px', border: '1px solid #D0DFE2' }}>
             <div style={{ fontSize: '10px', color: '#698892', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Sparkles size={11} color="#9333EA" /> Random Blood Sugar
+              <Droplets size={11} color="#B45309" /> Random Blood Sugar
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#091E26' }}>{currentEncounter.vitals.bloodSugar}</div>
           </div>
@@ -1381,9 +1381,9 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                     gap: '5px',
                     padding: '4px 9px',
                     borderRadius: '8px',
-                    background: 'rgba(168, 85, 247, 0.22)',
-                    border: '1px solid rgba(168, 85, 247, 0.4)',
-                    color: '#E9D5FF',
+                    background: 'rgba(212, 175, 55, 0.20)',
+                    border: '1px solid rgba(212, 175, 55, 0.45)',
+                    color: '#FEF08A',
                     fontSize: '11px',
                     fontWeight: 750,
                     whiteSpace: 'nowrap',

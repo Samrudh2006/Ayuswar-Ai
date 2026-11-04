@@ -871,8 +871,8 @@ export default function EmergencyMap({
           onClick={() => setShowTelemetryHUD(!showTelemetryHUD)}
           title="Toggle ALS Telemetry HUD"
           style={{
-            background: showTelemetryHUD ? '#7C3AED' : '#0F1E38',
-            border: showTelemetryHUD ? '1px solid #A78BFA' : '1px solid #1C335A',
+            background: showTelemetryHUD ? '#0F4C5C' : '#0F1E38',
+            border: showTelemetryHUD ? '1px solid #14B8A6' : '1px solid #1C335A',
             color: '#FFF',
             borderRadius: '6px',
             width: '32px',

@@ -224,13 +224,13 @@ export const CLINICAL_ENCOUNTERS = [
       {
         name: 'Telmisartan 40mg',
         type: 'ARB Antihypertensive',
-        color: '#8B5CF6',
-        colorLabel: 'వైలెట్ మాత్ర (Violet Tablet)',
+        color: '#C2410C',
+        colorLabel: 'ఇటుక రంగు మాత్ర (Terracotta Red Tablet)',
         timing: 'Morning early with water',
         slot: 'morning',
         dose: '1 tablet daily',
         duration: '30 days',
-        audioInstructionTelugu: 'ఈ వైలెట్ రంగు మాత్ర ఉదయం నిద్రలేవగానే ఒక గ్లాసు నీళ్లతో రోజూ వేసుకోవాలి.'
+        audioInstructionTelugu: 'ఈ ఎరుపు రంగు మాత్ర ఉదయం నిద్రలేవగానే ఒక గ్లాసు నీళ్లతో రోజూ వేసుకోవాలి.'
       }
     ],
     fullAudioRxTelugu: 'సునీత గారు, ఈ వైలెట్ రంగు మాత్రను రోజూ ఉదయం నిద్రలేవగానే ఒక గ్లాసు నీళ్లతో వేసుకోండి. క్రమం తప్పకుండా బీపీ చెక్ చేయించుకోండి.',
@@ -296,7 +296,7 @@ export const CLINICAL_ENCOUNTERS = [
       {
         name: 'Pregabalin 75mg',
         type: 'Neuropathic Analgesic',
-        color: '#6366F1',
+        color: '#0284C7',
         colorLabel: 'நீல மாத்திரை (Blue Pill)',
         timing: 'Night before sleep',
         slot: 'night',
@@ -556,7 +556,7 @@ export const CLINICAL_ENCOUNTERS = [
       {
         name: 'Oxetacaine + Aluminium Hydroxide Gel',
         type: 'Antacid Gel',
-        color: '#EC4899',
+        color: '#E11D48',
         colorLabel: 'গোলাপি সিরাপ (Pink Gel)',
         timing: 'Night 1 hour after dinner',
         slot: 'night',

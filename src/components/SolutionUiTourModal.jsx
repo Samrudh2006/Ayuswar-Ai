@@ -66,8 +66,8 @@ export default function SolutionUiTourModal({ isOpen, onClose }) {
       tag: 'STAGE 4 • SCHEMAS & COMPLIANCE',
       desc: 'Structures the verified consultation into an immutable HL7 FHIR R4 JSON bundle for Ayushman Bharat Digital Mission interoperability.',
       targetZone: { top: '78%', left: '62%' },
-      badgeColor: '#8B5CF6',
-      badgeBg: '#F5F3FF',
+      badgeColor: '#0F4C5C',
+      badgeBg: '#F0FDFA',
       preview: {
         speaker: 'ABDM Gateway Adapter',
         text: 'Bundle: Encounter, Condition (J45.901), Observation, MedicationRequest',

@@ -496,7 +496,7 @@ export default function AbhaDigitalCard({
 
                 {/* Current Medications */}
                 <div style={{ background: '#FAF8F5', border: '1px solid #D0DFE2', borderRadius: '12px', padding: '10px 8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', fontWeight: 800, color: '#7C3AED', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px' }}>
                     <Pill size={12} />
                     <span>Medications</span>
                   </div>
@@ -505,7 +505,7 @@ export default function AbhaDigitalCard({
                     <div>2. Amlodipine 5</div>
                     <div>3. Budesonide</div>
                   </div>
-                  <div style={{ fontSize: '9px', color: '#7C3AED', fontWeight: 800, marginTop: '4px' }}>
+                  <div style={{ fontSize: '9px', color: '#0F4C5C', fontWeight: 800, marginTop: '4px' }}>
                     View All →
                   </div>
                 </div>
@@ -579,7 +579,7 @@ export default function AbhaDigitalCard({
                 {[
                   { label: 'Prescriptions', icon: Pill, color: '#0F4C5C', bg: '#F0FDFA' },
                   { label: 'Lab Reports', icon: FileText, color: '#0284C7', bg: '#F0F9FF' },
-                  { label: 'Documents', icon: ShieldCheck, color: '#7C3AED', bg: '#F5F3FF' },
+                  { label: 'Documents', icon: ShieldCheck, color: '#0F4C5C', bg: '#F0FDFA' },
                   { label: 'Timeline', icon: Clock, color: '#D97706', bg: '#FFFBEB' }
                 ].map((act, i) => {
                   const Icon = act.icon;
