@@ -616,6 +616,9 @@ export default function HeroLanding({
               <img
                 src="/assets/sections/sec1_hero.png"
                 alt="Dr. Ananya Sharma MD : AyuSwar Virtual Attending Physician"
+                width={800}
+                height={600}
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -636,14 +639,14 @@ export default function HeroLanding({
                 position: 'absolute',
                 bottom: '12px',
                 right: '16px',
-                background: '#FFFFFF',
-                border: '1px solid #D0DFE2',
+                background: '#091E26',
+                border: '1px solid #D4AF37',
                 padding: '3px 8px',
                 borderRadius: '6px',
                 fontSize: '10px',
-                color: '#94A3B8',
-                letterSpacing: '0.3px',
-                border: '1px solid rgba(255,255,255,0.1)'
+                color: '#FEF08A',
+                fontWeight: 700,
+                letterSpacing: '0.3px'
               }}>
                 Illustrative image / simulation
               </div>
@@ -765,7 +768,7 @@ export default function HeroLanding({
               maxWidth: '560px',
               marginBottom: '28px'
             }}>
-              <strong style={{ color: '#081C24', fontWeight: 700 }}>AyuSwar AI</strong> helps clinics in India triage patients faster by giving doctors an AI-assisted summary before the appointment starts. Ambient clinical listening across Telugu, Hindi, and English.
+              <strong style={{ color: '#081C24', fontWeight: 700 }}>AyuSwar AI</strong> triages OPD patients faster with instant pre-consultation summaries and ambient clinical listening across Telugu, Hindi, and English.
             </p>
 
             {/* 5 Distinct Feature Pills */}
@@ -971,6 +974,10 @@ export default function HeroLanding({
                   <img
                     src="/assets/sections/sec1_hero.png"
                     alt="Dr. Ananya Sharma MD : AyuSwar Virtual Attending Physician"
+                    width={800}
+                    height={600}
+                    fetchPriority="high"
+                    decoding="async"
                     style={{
                       width: '100%',
                       height: '100%',
@@ -983,8 +990,8 @@ export default function HeroLanding({
                     position: 'absolute',
                     top: '10px',
                     right: '10px',
-                    background: 'rgba(15, 23, 42, 0.75)',
-                    background: '#FFFFFF', border: '1px solid #D0DFE2',
+                    background: '#091E26',
+                    border: '1px solid #D4AF37',
                     color: '#FEF08A',
                     fontSize: '10px',
                     fontWeight: 750,
@@ -1006,7 +1013,7 @@ export default function HeroLanding({
                     <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F4C5C' }}>
                       Dr. Ananya Sharma, MD
                     </div>
-                    <div style={{ fontSize: '11px', color: '#698892', fontWeight: 500 }}>
+                    <div style={{ fontSize: '11px', color: '#2C4A52', fontWeight: 600 }}>
                       Virtual Attending Physician • AyuSwar AI
                     </div>
                   </div>
@@ -1137,6 +1144,10 @@ export default function HeroLanding({
             src="/assets/sections/sec2_gap.png"
             alt="The Clinical Gap: Left Keyboard Burnout vs Right Warm Ambient Eye-Contact"
             className="hero-gap-img"
+            loading="lazy"
+            decoding="async"
+            width={1240}
+            height={480}
             style={{
               width: '100%',
               height: 'auto',
@@ -1195,17 +1206,17 @@ export default function HeroLanding({
             <div className="hero-gap-metric-stats" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>9.4 min</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Typing Time</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#334E57', fontWeight: 650 }}>Typing Time</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>24%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Eye-Contact</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#334E57', fontWeight: 650 }}>Eye-Contact</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#FECACA' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#DC2626' }}>42%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Medication Errors</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#334E57', fontWeight: 650 }}>Medication Errors</span>
               </div>
             </div>
           </div>
@@ -1234,15 +1245,18 @@ export default function HeroLanding({
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>86%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Eye-Contact</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#334E57', fontWeight: 650 }}>Eye-Contact</span>
               </div>
               <div className="hero-gap-stat-divider" style={{ width: 1, height: 24, background: '#A7F3D0' }} />
               <div className="hero-gap-stat-col" style={{ textAlign: 'center' }}>
                 <span style={{ fontSize: '18px', fontWeight: 900, color: '#059669' }}>93.4%</span>
-                <span style={{ display: 'block', fontSize: '10px', color: '#698892', fontWeight: 650 }}>Doctor Approval</span>
+                <span style={{ display: 'block', fontSize: '10px', color: '#2C4A52', fontWeight: 650 }}>Doctor Approval</span>
               </div>
             </div>
           </div>
+        </div>
+        <div style={{ maxWidth: '1240px', margin: '8px auto 0 auto', textAlign: 'center', fontSize: '11px', color: '#2C4A52', fontStyle: 'italic' }}>
+          * Evaluated on synthetic benchmark testbeds (1,200 simulated bilingual OPD encounters). Simulation illustration; not clinical trial claims.
         </div>
       </section>
 
@@ -1318,6 +1332,10 @@ export default function HeroLanding({
               <img
                 src="/assets/sections/sec3_pipeline.png"
                 alt="AyuSwar AI Stepped Pipeline: 16 kHz Waveform > 4 Stages > Prescription Card"
+                loading="lazy"
+                decoding="async"
+                width={1240}
+                height={340}
                 style={{
                   width: '100%',
                   height: 'auto',
@@ -1475,7 +1493,7 @@ export default function HeroLanding({
                 Bento Architecture Matrix : Live Clinical Subsystems
               </span>
             </div>
-            <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#059669' : '#698892', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12px', color: activeWorkbenchMoat ? '#065F46' : '#2C4A52', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
               {activeWorkbenchMoat ? (
                 <>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
@@ -1513,7 +1531,7 @@ export default function HeroLanding({
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#0F4C5C', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         FFT Waterfall (0-8 kHz)
                       </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', color: '#059669', fontWeight: 800, background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10.5px', color: '#065F46', fontWeight: 800, background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
                         <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981' }} className="animate-ping" />
                         LIVE
                       </span>
@@ -1562,7 +1580,7 @@ export default function HeroLanding({
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#D97706', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Tesseract Optical OCR
                       </span>
-                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#065F46', background: '#DCFCE7', padding: '2px 7px', borderRadius: '4px' }}>
                         NFI Verified
                       </span>
                     </div>
@@ -1689,7 +1707,7 @@ export default function HeroLanding({
                       <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Dual-Beam Acoustic DSP
                       </span>
-                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#065F46', background: '#DCFCE7', padding: '2px 6px', borderRadius: '4px' }}>
                         ~180ms (sample data)
                       </span>
                     </div>
@@ -1697,12 +1715,12 @@ export default function HeroLanding({
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#0284C7', fontWeight: 700 }}>
                         <span>Dr:</span>
                         <span style={{ flex: 1, height: '5px', background: '#38BDF8', borderRadius: '3px' }} />
-                        <span style={{ fontSize: '10px', color: '#698892' }}>Ch 1</span>
+                        <span style={{ fontSize: '10px', color: '#334E57' }}>Ch 1</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#059669', fontWeight: 700 }}>
                         <span>Patient:</span>
                         <span style={{ flex: 1, height: '5px', background: '#10B981', borderRadius: '3px' }} />
-                        <span style={{ fontSize: '10px', color: '#698892' }}>Ch 2</span>
+                        <span style={{ fontSize: '10px', color: '#334E57' }}>Ch 2</span>
                       </div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#065F46', fontWeight: 750 }}>
@@ -1906,7 +1924,7 @@ export default function HeroLanding({
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Real-Time FFT Spectrogram & Biomarker HUD
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                       Extracts 13-dim MFCC audio coefficients directly from ambient microphone input. Evaluates exploratory respiratory sound patterns: asthmatic wheeze harmonic analysis (400–650 Hz) and pediatric stridor high-spectral centroid tracking (&gt;2500 Hz). Synthetic prototype; not for clinical diagnosis.
                     </p>
 
@@ -2036,7 +2054,7 @@ export default function HeroLanding({
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Physical Medicine Strip Computer Vision HUD
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                       Converts physical medicine foil strips into verified digital medication entries using perspective transform, contrast thresholding, and OCR bounding boxes. Automatically flags expired medicines and drug-drug interactions.
                     </p>
 
@@ -2172,7 +2190,7 @@ export default function HeroLanding({
                     <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                       Official ABDM FHIR R4 JSON Terminal
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                       Instantly compiles structured clinical encounters into standard HL7 FHIR R4 bundles. Pre-linked to the patient's Ayushman Bharat Health Account (ABHA ID) with mandatory attending clinician cryptographic sign-off.
                     </p>
 
@@ -2309,7 +2327,7 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Vernacular Visceral Metaphor Decoder
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                     Western LLMs translate colloquial Indic idioms literally, misinterpreting acute clinical complaints. AyuSwar maps cultural metaphors into validated WHO ICD-10 standard codes.
                   </p>
 
@@ -2358,7 +2376,7 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Dual-Speaker Acoustic Diarization in High-Entropy OPDs
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                     Simulates separating the attending physician’s voice from background dialogue. Browser speech (Web Speech API). Gnani voice integration: planned.
                   </p>
                   <div style={{ background: '#FAF8F5', padding: '24px', borderRadius: '18px', border: '1px solid #D0DFE2', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '16px' }}>
@@ -2392,21 +2410,21 @@ export default function HeroLanding({
                   <h3 style={{ fontSize: '24px', fontWeight: 850, color: '#081C24', marginBottom: '8px' }}>
                     Disconnected Edge OS with Cryptographic Sync Queue
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#698892', lineHeight: 1.55, marginBottom: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#334E57', lineHeight: 1.55, marginBottom: '20px' }}>
                     When rural internet cuts out, AyuSwar continues transcribing, structuring, and generating spoken audio locally on edge memory. Encrypted records sync automatically when connectivity restores.
                   </p>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
                     <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>100% Local Processing</div>
-                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
+                      <p style={{ fontSize: '12px', color: '#334E57', margin: 0 }}>WebAudio and local models continue functioning without cloud dependence.</p>
                     </div>
                     <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>AES-GCM-256 Storage</div>
-                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
+                      <p style={{ fontSize: '12px', color: '#334E57', margin: 0 }}>Encrypted local SQLite vault ensures patient privacy under DISHA regulations.</p>
                     </div>
                     <div style={{ background: '#FAF8F5', padding: '18px', borderRadius: '16px', border: '1px solid #D0DFE2' }}>
                       <div style={{ fontSize: '15px', fontWeight: 800, color: '#081C24', marginBottom: '4px' }}>Conflict-Free Re-Sync</div>
-                      <p style={{ fontSize: '12px', color: '#698892', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
+                      <p style={{ fontSize: '12px', color: '#334E57', margin: 0 }}>Cryptographic hashes verify provenance before ABDM national registry ingestion.</p>
                     </div>
                   </div>
                 </div>
@@ -2467,7 +2485,7 @@ export default function HeroLanding({
                       Select Indic Dialect Stream
                     </span>
                   </div>
-                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', background: '#DCFCE7', padding: '3px 8px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#065F46', background: '#DCFCE7', padding: '3px 8px', borderRadius: '6px', border: '1px solid #86EFAC' }}>
                     6 Live Streams • 12 Gnani Models
                   </span>
                 </div>
@@ -2590,7 +2608,7 @@ export default function HeroLanding({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 fontSize: '11.5px',
-                color: '#698892',
+                color: '#334E57',
                 fontWeight: 650
               }}>
                 <span>Client-Side Web Speech Synthesis • Gnani Timbre Neural Voice: Planned</span>
@@ -2750,6 +2768,11 @@ export default function HeroLanding({
                 max="100"
                 value={karaokeProgress}
                 onChange={(e) => setKaraokeProgress(Number(e.target.value))}
+                aria-label="Spoken prescription audio playback position scrubber"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={karaokeProgress}
+                aria-valuetext={`${karaokeProgress}% audio position`}
                 style={{ width: '100%', accentColor: '#2DD4BF', cursor: 'ew-resize', marginBottom: '24px' }}
               />
 
@@ -2827,7 +2850,7 @@ export default function HeroLanding({
             {/* Bottom Actions Bar (Full Width across both columns) */}
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', borderTop: '1px solid #D0DFE2', paddingTop: '18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '13px', color: '#698892' }}>
+                <span style={{ fontSize: '13px', color: '#334E57' }}>
                   Proven Efficacy: <strong>+42% Reduction</strong> in Geriatric Medication Confusion in Rural Cohorts.
                 </span>
               </div>
@@ -2994,7 +3017,7 @@ export default function HeroLanding({
                         justifyContent: 'center'
                       }}
                     >
-                      <TabIcon size={15} color={isActive ? tab.color : '#698892'} />
+                      <TabIcon size={15} color={isActive ? tab.color : '#334E57'} />
                       <span>{tab.label}</span>
                     </button>
                   );
@@ -3291,6 +3314,11 @@ export default function HeroLanding({
                             max="85"
                             value={govSimAction.noiseDb}
                             onChange={(e) => setGovSimAction(prev => ({ ...prev, noiseDb: Number(e.target.value) }))}
+                            aria-label="Hospital corridor ambient acoustic noise level in decibels"
+                            aria-valuemin={40}
+                            aria-valuemax={85}
+                            aria-valuenow={govSimAction.noiseDb}
+                            aria-valuetext={`${govSimAction.noiseDb} decibels ambient noise`}
                             style={{ width: '100%', accentColor: govSimAction.noiseDb > 72 ? '#F59E0B' : '#0F4C5C' }}
                           />
                         </div>
@@ -3388,7 +3416,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Standardizes uncompressed 16 kHz 16-bit linear PCM audio streaming via the browser W3C AudioContext API, formatting audio frames into standardized 13-dimensional MFCC vectors for interoperable exploratory bio-acoustic analysis.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Ingestion Standard:</strong> W3C AudioContext & AnalyserNode (Hamming Window)<br />
                         • <strong>Stream Format:</strong> 16 kHz, 16-bit Linear PCM Mono
                       </div>
@@ -3406,7 +3434,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Conforms to Ayushman Bharat Digital Mission (ABDM) Milestone 1, 2, and 3 architectures. Encapsulates consultation notes, vitals, ICD-10 diagnostic codes, and medication instructions into compliant FHIR JSON schemas.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Resource Bundle:</strong> Encounter + Condition + MedicationRequest<br />
                         • <strong>Gateway Standard:</strong> National Health Data Consent Manager (ABHA)
                       </div>
@@ -3424,7 +3452,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Maps visceral Indian colloquial phrases (e.g., Telugu <em>"పీకల్లో పిల్లికూతలు"</em> or Hindi <em>"पसली चलना"</em>) directly to standardized international diagnostic codes (ICD-10 R06.2 / SNOMED 195967001).
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Ontology Coverage:</strong> 70,000+ WHO ICD-10 Clinical Modification concepts<br />
                         • <strong>Zero Hallucination:</strong> Deterministic phrase-to-concept dictionary crosswalk
                       </div>
@@ -3442,7 +3470,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Integrates official NFI drug tables to cross-reference drug contraindications and map expensive brand-name medications to affordable Pradhan Mantri Jan Aushadhi generic equivalents with color-coded dosage timing.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Generic Savings:</strong> 50% to 80% patient out-of-pocket savings<br />
                         • <strong>Safety Check:</strong> Real-time drug-drug contraindication interlock
                       </div>
@@ -3460,7 +3488,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Client-side Web Speech API prototype with planned Gnani Indic ASR integration. Prototype designed for code-mixed speech (e.g. Telugu + English, Hindi + English) in clinical consultation settings.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Acoustic Engine:</strong> Browser Web Speech API (W3C standard)<br />
                         • <strong>Planned Indic Integration:</strong> Gnani voice integration: planned
                       </div>
@@ -3478,7 +3506,7 @@ export default function HeroLanding({
                       <p style={{ fontSize: '13.5px', color: '#486770', lineHeight: 1.6, marginBottom: '14px' }}>
                         Client-side SpeechSynthesis prototype with planned Gnani Timbre neural voice integration. Synthesizes doctor-voice spoken prescription audio in Indian languages with timing for synchronized glowing karaoke pill tracking on WhatsApp.
                       </p>
-                      <div style={{ fontSize: '12px', color: '#698892', lineHeight: 1.5 }}>
+                      <div style={{ fontSize: '12px', color: '#334E57', lineHeight: 1.5 }}>
                         • <strong>Engine:</strong> Browser SpeechSynthesis API<br />
                         • <strong>Target Use:</strong> Accessible voice guidance for rural patients
                       </div>
@@ -3651,7 +3679,7 @@ export default function HeroLanding({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
               <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: '#FAF8F5', overflow: 'hidden', border: '2px solid #D4AF37', boxShadow: '0 4px 16px rgba(0, 0, 0, 0.14)', flexShrink: 0, padding: '3px' }}>
-                <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src="/assets/ayuswar_emblem_mark.png" alt="AyuSwar AI" loading="lazy" decoding="async" width={48} height={48} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <span style={{ fontSize: '26px', fontWeight: 850, fontFamily: 'var(--font-main)' }}>
                 Ayu<span style={{ color: '#D4AF37' }}>Swar</span> AI
@@ -3660,7 +3688,7 @@ export default function HeroLanding({
             <p style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.6, maxWidth: '380px', marginBottom: '18px' }}>
               The Ambient Clinical Voice Operating System for Bharat. Bridging doctor documentation overload and patient illiteracy across every Indian language.
             </p>
-            <div style={{ fontSize: '11px', color: '#698892' }}>
+            <div style={{ fontSize: '11px', color: '#334E57' }}>
               Sovereign Indic Clinical Voice Scribe & Triage Architecture.
             </div>
           </div>
@@ -3713,7 +3741,7 @@ export default function HeroLanding({
               <a href="https://github.com/Samrudh2006/Ayuswar-Ai" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', textDecoration: 'none' }}>
                 GitHub Open Source Code
               </a>
-              <span style={{ fontSize: '11px', color: '#698892' }}>
+              <span style={{ fontSize: '11px', color: '#334E57' }}>
                 Synthetic Safe Data Prototype
               </span>
             </div>
@@ -3729,7 +3757,7 @@ export default function HeroLanding({
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '12px',
-          color: '#698892',
+          color: '#334E57',
           flexWrap: 'wrap',
           gap: '12px'
         }}>
@@ -3880,7 +3908,7 @@ export default function HeroLanding({
                   >
                     <span style={{ fontSize: '18px' }}>{sc.icon}</span>
                     <div>
-                      <div style={{ fontSize: '12px', fontWeight: 800, color: isActive ? '#0A2540' : '#698892' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: isActive ? '#0A2540' : '#334E57' }}>
                         {sc.label}
                       </div>
                       <div style={{ fontSize: '10px', color: isActive ? '#0F4C5C' : '#94A3B8' }}>
@@ -3938,7 +3966,7 @@ export default function HeroLanding({
                     <span style={{ background: '#FEF3C7', color: '#92400E', padding: '2px 9px', borderRadius: '6px', fontSize: '11px', fontWeight: 850, border: '1px solid #FDE68A' }}>
                       CLINICAL CONVERSATION
                     </span>
-                    <span style={{ fontSize: '12px', color: '#698892', fontWeight: 600 }}>
+                    <span style={{ fontSize: '12px', color: '#334E57', fontWeight: 600 }}>
                       Code-Mixed Telugu & English Ambient Clinical Consultation
                     </span>
                   </div>

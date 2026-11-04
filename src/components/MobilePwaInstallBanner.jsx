@@ -44,9 +44,12 @@ export default function MobilePwaInstallBanner() {
       setDeviceTab('desktop');
     }
 
-    // Check if user dismissed it in this browser session
+    // Check if user dismissed PWA or if cookie consent banner is still pending
+    const hasCookieConsent = (() => {
+      try { return Boolean(localStorage.getItem('ayuswar_cookie_consent')); } catch { return true; }
+    })();
     const isSessionDismissed = sessionStorage.getItem('ayuswar_pwa_dismissed_session') === 'true';
-    if (isSessionDismissed) {
+    if (isSessionDismissed || !hasCookieConsent) {
       setShowBanner(false);
     } else {
       setShowBanner(true);
@@ -80,14 +83,25 @@ export default function MobilePwaInstallBanner() {
       }
     };
 
+    const handleBannerDismissed = (e) => {
+      if (e.detail?.banner === 'cookie') {
+        const isDismissed = sessionStorage.getItem('ayuswar_pwa_dismissed_session') === 'true';
+        if (!isDismissed) {
+          setShowBanner(true);
+        }
+      }
+    };
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
     window.addEventListener('appinstalled', handleAppInstalled);
     window.addEventListener('ayuswar:open-pwa-install', handleExternalOpen);
+    window.addEventListener('ayuswar:bottom-banner-dismissed', handleBannerDismissed);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
       window.removeEventListener('appinstalled', handleAppInstalled);
       window.removeEventListener('ayuswar:open-pwa-install', handleExternalOpen);
+      window.removeEventListener('ayuswar:bottom-banner-dismissed', handleBannerDismissed);
       if (pendingTimerRef.current) clearTimeout(pendingTimerRef.current);
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
     };

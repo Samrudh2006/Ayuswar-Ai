@@ -10,6 +10,9 @@ export default function CookieConsentBanner() {
       const consent = localStorage.getItem('ayuswar_cookie_consent');
       if (!consent) {
         setHasDismissed(false);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('ayuswar:bottom-banner-active', { detail: { banner: 'cookie' } }));
+        }
       }
     } catch {
       setHasDismissed(true);
@@ -21,6 +24,9 @@ export default function CookieConsentBanner() {
       localStorage.setItem('ayuswar_cookie_consent', 'accepted_' + Date.now());
     } catch {}
     setHasDismissed(true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('ayuswar:bottom-banner-dismissed', { detail: { banner: 'cookie' } }));
+    }
   };
 
   if (hasDismissed) return null;

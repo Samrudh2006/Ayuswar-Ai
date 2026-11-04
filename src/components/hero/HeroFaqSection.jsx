@@ -86,6 +86,10 @@ export default function HeroFaqSection({ onSelectModule }) {
             <img
               src="/assets/sections/sec8_faq.png"
               alt="Dr. Ananya Waving Avatar with FAQ Question Bubble"
+              loading="lazy"
+              decoding="async"
+              width={400}
+              height={300}
               style={{
                 width: '100%',
                 height: 'auto',
@@ -100,7 +104,7 @@ export default function HeroFaqSection({ onSelectModule }) {
           <h3 style={{ fontSize: '20px', fontWeight: 850, color: '#081C24', margin: '0 0 6px 0' }}>
             Have Questions? We Have Answers.
           </h3>
-          <p style={{ fontSize: '13.5px', color: '#698892', lineHeight: 1.55, marginBottom: '18px' }}>
+          <p style={{ fontSize: '13.5px', color: '#334E57', lineHeight: 1.55, marginBottom: '18px' }}>
             Explore how AyuSwar handles noisy 72 dB OPD halls, strictly adheres to DPDP Act 2023 RAM-only processing, and ensures 100% human doctor sign-off.
           </p>
 
@@ -163,7 +167,7 @@ export default function HeroFaqSection({ onSelectModule }) {
                   }}
                 >
                   <span>{faq.q}</span>
-                  {isExpanded ? <ChevronUp size={17} color="#0F4C5C" /> : <ChevronDown size={17} color="#698892" />}
+                  {isExpanded ? <ChevronUp size={17} color="#0F4C5C" /> : <ChevronDown size={17} color="#334E57" />}
                 </button>
                 {isExpanded && (
                   <div style={{

@@ -1354,6 +1354,11 @@ export default function AcousticBiomarkerLabView() {
                 step="5"
                 value={liveToneHz}
                 onChange={handleToneSliderChange}
+                aria-label="Acoustic reference tone frequency in Hertz"
+                aria-valuemin={80}
+                aria-valuemax={2000}
+                aria-valuenow={liveToneHz}
+                aria-valuetext={`${liveToneHz} Hertz`}
                 style={{ flex: 1, cursor: 'pointer', accentColor: '#0F4C5C' }}
               />
               <span style={{ fontSize: '13px', fontWeight: 850, color: '#081C24', minWidth: '60px', textAlign: 'right', fontFamily: 'monospace' }}>

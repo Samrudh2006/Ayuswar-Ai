@@ -108,6 +108,26 @@ export default function FloatingAssistant({
   const [selectedProvider, setSelectedProvider] = useState(() => getAiConfig().provider);
   const [keySavedToast, setKeySavedToast] = useState(false);
 
+  // Coordinate with active bottom banners on mobile
+  const [hasBottomBanner, setHasBottomBanner] = useState(() => {
+    try {
+      return !localStorage.getItem('ayuswar_cookie_consent');
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    const handleActive = () => setHasBottomBanner(true);
+    const handleDismissed = () => setHasBottomBanner(false);
+    window.addEventListener('ayuswar:bottom-banner-active', handleActive);
+    window.addEventListener('ayuswar:bottom-banner-dismissed', handleDismissed);
+    return () => {
+      window.removeEventListener('ayuswar:bottom-banner-active', handleActive);
+      window.removeEventListener('ayuswar:bottom-banner-dismissed', handleDismissed);
+    };
+  }, []);
+
   // Determine role: Doctor mode vs Patient mode vs Landing page
   const isDoctorMode = activeView === 'doctor_portal' || activeView === 'console';
   const isPatientMode = activeView === 'patient_portal';
@@ -470,10 +490,10 @@ export default function FloatingAssistant({
 
   return (
     <div
-      className="floating-assistant-container"
+      className={`floating-assistant-container ${hasBottomBanner ? 'has-bottom-banner' : ''}`}
       style={{
         position: 'fixed',
-        bottom: '24px',
+        bottom: hasBottomBanner ? '84px' : '24px',
         right: '26px',
         zIndex: 1200,
         fontFamily: 'var(--font-main)'

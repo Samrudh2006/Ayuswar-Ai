@@ -142,6 +142,9 @@ export default function DoctorAvatarFace({
                   key={frameKey}
                   src={src}
                   alt={doctorName}
+                  width={400}
+                  height={400}
+                  decoding="async"
                   style={{
                     position: 'absolute',
                     inset: 0,
@@ -166,6 +169,9 @@ export default function DoctorAvatarFace({
           <img
             src={avatarUrl}
             alt={doctorName}
+            width={400}
+            height={400}
+            decoding="async"
             style={{
               width: '100%',
               height: '100%',

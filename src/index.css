@@ -1544,11 +1544,16 @@ body {
     padding: 20px 16px !important;
   }
 
-  /* Mobile Bottom Bar & Floating Assistant Viewport Clearance (Resolves Audit Finding 1) */
+  /* Mobile Bottom Bar & Floating Assistant Viewport Clearance (Resolves Audit Finding 1 & Multi-Overlay) */
   .floating-assistant-container {
     bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
     right: 16px !important;
     z-index: 1000 !important;
+    transition: bottom 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .floating-assistant-container.has-bottom-banner {
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .floating-assistant-pill {
@@ -1577,7 +1582,7 @@ body {
     font-size: 14.5px !important;
     line-height: 1.55 !important;
     margin-bottom: 18px !important;
-    color: #334155 !important;
+    color: #2C4A52 !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 3 !important;
     -webkit-box-orient: vertical !important;

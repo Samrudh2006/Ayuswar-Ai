@@ -472,6 +472,11 @@ export default function PatientHealthGoalsTab({
                 step="10"
                 value={peakFlowRate}
                 onChange={e => setPeakFlowRate(Number(e.target.value))}
+                aria-label="Adjust peak flow rate target in liters per minute"
+                aria-valuemin={250}
+                aria-valuemax={550}
+                aria-valuenow={peakFlowRate}
+                aria-valuetext={`${peakFlowRate} L/min`}
                 style={{ flex: 1, accentColor: '#0F4C5C' }}
               />
             </div>
