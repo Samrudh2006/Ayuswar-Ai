@@ -1096,7 +1096,7 @@ export default function HeroLanding({
           </div>
 
           <div style={{ textAlign: 'center', fontSize: isMobileView ? '12px' : '13.5px', fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.4px', lineHeight: 1.4 }}>
-            Voice-First Clinical Scribe & CDSS for Bharat • Built by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#FDE047', fontWeight: 750, textDecoration: 'underline' }}>Samrudh</a> <span style={{ color: '#FDE047', fontWeight: 700 }}>(Clinical Voice Prototype)</span>
+            Voice-First Clinical Scribe & CDSS for Bharat • <span style={{ color: '#FDE047', fontWeight: 750 }}>Sovereign Indic Clinical AI Architecture</span> <span style={{ color: '#FDE047', fontWeight: 700 }}>(Clinical Voice Prototype)</span>
           </div>
         </div>
       </div>
@@ -2687,21 +2687,32 @@ export default function HeroLanding({
                 {/* Background Grid Lines for DAW feel */}
                 
 
-                {/* Mirrored High-Density Acoustic Speech Formant Bars (72 Bars) */}
+                {/* Authentic Conversational Speech Acoustic Waveform (72 Spoken Phoneme Envelopes with Natural Word Pauses) */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', height: '100%', gap: '2px', position: 'relative', zIndex: 1 }}>
                   {[
-                    14, 22, 38, 54, 72, 88, 96, 78, 50, 26, 16, 20,
-                    42, 68, 85, 98, 82, 60, 34, 18, 12, 28, 48, 76,
-                    92, 100, 84, 58, 30, 16, 22, 44, 70, 90, 80, 52,
-                    28, 14, 18, 36, 62, 88, 94, 76, 48, 26, 16, 32,
-                    56, 82, 96, 86, 64, 38, 20, 14, 24, 46, 74, 92,
-                    84, 56, 32, 18, 26, 48, 70, 86, 72, 44, 22, 14
+                    // Word 1: "ఈ" (Ee - initial demonstrative vowel swell & decay)
+                    16, 30, 58, 76, 68, 42, 22, 12,
+                    // Word 2: "ఆకుపచ్చ" (Aakupachcha - explosive double-consonant bursts & vowel crests)
+                    26, 64, 88, 96, 78, 44, 72, 94, 98, 66, 32, 12,
+                    // Word 3: "మాత్ర" (Maatra - warm nasal onset, sustained vocal formants, dental release)
+                    24, 60, 92, 96, 74, 46, 26, 16, 12, 10,
+                    // Word 4: "ఉదయం" (Udayam - liquid consonant glide & soft vowel cadence)
+                    18, 42, 68, 84, 78, 54, 30, 16, 12, 10,
+                    // Word 5: "టిఫిన్ తర్వాత" (Tiffin tharvaatha - sharp retroflex plosive attack & compound duration)
+                    30, 76, 86, 60, 36, 24, 58, 92, 96, 72, 40, 14,
+                    // Word 6: "ఒకటి" (Okati - single dosage unit enunciation)
+                    20, 50, 78, 62, 36, 20, 12, 10,
+                    // Word 7: "వేసుకోవాలి" (Vesukovaali - imperative ingestive directive, expressive peak & gentle trailing cadence)
+                    26, 62, 90, 96, 84, 68, 46, 32, 22, 16, 12, 10
                   ].map((h, i) => {
                     const barProgress = (i / 72) * 100;
                     const isPassed = karaokeProgress >= barProgress;
-                    // Realistic organic human speech formant wobble when playing
-                    const speechWobble = isKaraokePlaying ? Math.sin(i * 0.45 + 1.4) * 16 : 0;
-                    const dynamicHeight = Math.min(100, Math.max(12, h + speechWobble));
+                    // Realistic organic human vocal fold flutter on voiced syllables during speech playback
+                    const isAcousticPause = h <= 14;
+                    const speechWobble = (isKaraokePlaying && !isAcousticPause)
+                      ? (Math.sin(i * 0.85 + (Date.now() / 150)) * 6 + Math.cos(i * 0.42 - (Date.now() / 200)) * 4)
+                      : 0;
+                    const dynamicHeight = Math.min(100, Math.max(10, Math.round(h + speechWobble)));
 
                     return (
                       <div
@@ -3751,7 +3762,7 @@ export default function HeroLanding({
           gap: '12px'
         }}>
           <div>
-            © 2026 AyuSwar AI. Built with precision by <a href="https://github.com/Samrudh2006" target="_blank" rel="noopener noreferrer" style={{ color: '#FDE047', fontWeight: 800, textDecoration: 'underline' }}>Samrudh</a> for Bharat.
+            © 2026 AyuSwar AI. Built with precision for Bharat.
           </div>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             <Link to="/privacy" style={{ color: '#FFFFFF', fontWeight: 600, textDecoration: 'none' }}>
