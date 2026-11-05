@@ -1658,40 +1658,61 @@ export default function PatientPortal({
                     </div>
 
                     <div className="patient-vitals-summary-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
-                        <Heart size={16} color="#EF4444" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#698892' }}>Heart Rate</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                      <div className="stripe-card" style={{ background: '#F8FAFD', padding: '14px 12px 10px 12px', borderRadius: '10px', border: '1px solid #E5EDF5', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                          <Heart size={14} color="#EF4444" />
+                          <span style={{ fontSize: '11px', color: '#50617A', fontWeight: 650 }}>Heart Rate</span>
+                        </div>
+                        <div className="tabular-nums" style={{ fontSize: '16px', fontWeight: 800, color: '#061B31', marginTop: '4px', letterSpacing: '-0.02em' }}>
                           {vitalsHistory?.[0]?.pulse || '76 bpm'}
                         </div>
-                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
+                        <svg width="100%" height="20" viewBox="0 0 100 20" fill="none" style={{ marginTop: '4px', display: 'block' }} aria-hidden="true">
+                          <path d="M0,10 L30,10 L36,4 L42,16 L48,2 L54,18 L60,10 L100,10" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span style={{ fontSize: '10px', color: '#059669', fontWeight: 750, background: '#ECFDF5', padding: '1px 6px', borderRadius: '4px' }}>Normal (72-80)</span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
-                        <Activity size={16} color="#DC2626" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#698892' }}>Blood Pressure</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                      <div className="stripe-card" style={{ background: '#F8FAFD', padding: '14px 12px 10px 12px', borderRadius: '10px', border: '1px solid #E5EDF5', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                          <Activity size={14} color="#0F4C5C" />
+                          <span style={{ fontSize: '11px', color: '#50617A', fontWeight: 650 }}>Blood Pressure</span>
+                        </div>
+                        <div className="tabular-nums" style={{ fontSize: '16px', fontWeight: 800, color: '#061B31', marginTop: '4px', letterSpacing: '-0.02em' }}>
                           {vitalsHistory?.[0]?.bp ? vitalsHistory[0].bp.replace(' mmHg', '') : '132/84'}
                         </div>
-                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>
+                        <svg width="100%" height="20" viewBox="0 0 100 20" fill="none" style={{ marginTop: '4px', display: 'block' }} aria-hidden="true">
+                          <path d="M0,12 Q25,8 50,11 T100,9" stroke="#0F4C5C" strokeWidth="1.8" strokeLinecap="round" />
+                          <path d="M0,16 Q25,14 50,15 T100,14" stroke="#D4AF37" strokeWidth="1.3" strokeDasharray="2 2" strokeLinecap="round" />
+                        </svg>
+                        <span style={{ fontSize: '10px', color: '#059669', fontWeight: 750, background: '#ECFDF5', padding: '1px 6px', borderRadius: '4px' }}>
                           {vitalsHistory?.[0]?.status || 'Normal'}
                         </span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
-                        <Scale size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#698892' }}>Weight</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>
+                      <div className="stripe-card" style={{ background: '#F8FAFD', padding: '14px 12px 10px 12px', borderRadius: '10px', border: '1px solid #E5EDF5', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                          <Scale size={14} color="#2563EB" />
+                          <span style={{ fontSize: '11px', color: '#50617A', fontWeight: 650 }}>Weight</span>
+                        </div>
+                        <div className="tabular-nums" style={{ fontSize: '16px', fontWeight: 800, color: '#061B31', marginTop: '4px', letterSpacing: '-0.02em' }}>
                           {vitalsHistory?.[0]?.weight || '63 kg'}
                         </div>
-                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Normal</span>
+                        <svg width="100%" height="20" viewBox="0 0 100 20" fill="none" style={{ marginTop: '4px', display: 'block' }} aria-hidden="true">
+                          <path d="M0,11 Q30,13 60,9 T100,10" stroke="#2563EB" strokeWidth="1.8" strokeLinecap="round" />
+                        </svg>
+                        <span style={{ fontSize: '10px', color: '#059669', fontWeight: 750, background: '#ECFDF5', padding: '1px 6px', borderRadius: '4px' }}>BMI 22.4 · Ideal</span>
                       </div>
 
-                      <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '12px', border: '1px solid rgba(0, 0, 0, 0.06)', textAlign: 'center' }}>
-                        <Moon size={16} color="#0F4C5C" style={{ margin: '0 auto 6px auto' }} />
-                        <div style={{ fontSize: '11px', color: '#698892' }}>Sleep</div>
-                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#081C24', marginTop: '2px' }}>7.5 hrs</div>
-                        <span style={{ fontSize: '10px', color: '#10B981', fontWeight: 700 }}>Good</span>
+                      <div className="stripe-card" style={{ background: '#F8FAFD', padding: '14px 12px 10px 12px', borderRadius: '10px', border: '1px solid #E5EDF5', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                          <Moon size={14} color="#7C3AED" />
+                          <span style={{ fontSize: '11px', color: '#50617A', fontWeight: 650 }}>Sleep Quality</span>
+                        </div>
+                        <div className="tabular-nums" style={{ fontSize: '16px', fontWeight: 800, color: '#061B31', marginTop: '4px', letterSpacing: '-0.02em' }}>7.5 hrs</div>
+                        <svg width="100%" height="20" viewBox="0 0 100 20" fill="none" style={{ marginTop: '4px', display: 'block' }} aria-hidden="true">
+                          <path d="M0,14 Q25,6 50,7 T100,12" stroke="#7C3AED" strokeWidth="1.8" strokeLinecap="round" />
+                        </svg>
+                        <span style={{ fontSize: '10px', color: '#7C3AED', fontWeight: 750, background: '#F5F3FF', padding: '1px 6px', borderRadius: '4px' }}>88% Rested</span>
                       </div>
                     </div>
                   </div>

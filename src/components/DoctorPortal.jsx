@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
   Users, 
@@ -411,6 +411,24 @@ export default function DoctorPortal({
   const [whatsAppModalPatient, setWhatsAppModalPatient] = useState(null);
   const [activeScribeSessionPatient, setActiveScribeSessionPatient] = useState(null);
   const [patientSearchTerm, setPatientSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
+
+  // Linear-style Command Palette / Spotlight search (Ctrl+K or Cmd+K)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+          searchInputRef.current.select();
+        }
+      } else if (e.key === 'Escape' && document.activeElement === searchInputRef.current) {
+        searchInputRef.current.blur();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
   const [patientTriageFilter, setPatientTriageFilter] = useState('all');
   const [opdViewMode, setOpdViewMode] = useState('queue'); // 'queue' | 'schedule' | 'directory'
   const [isNewAppointmentModalOpen, setIsNewAppointmentModalOpen] = useState(false);
@@ -1698,23 +1716,44 @@ export default function DoctorPortal({
             </button>
 
             <div className="doctor-search-box" style={{ position: 'relative', width: '380px', maxWidth: '100%' }}>
-            <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '14px', top: '12px' }} />
+            <Search size={16} color="#94A3B8" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
             <input 
+              ref={searchInputRef}
               type="text"
-              placeholder="Search patients, reports, or ask AyuSwar..."
+              placeholder="Search patients, tokens, reports... (⌘K)"
               value={patientSearchTerm}
               onChange={e => setPatientSearchTerm(e.target.value)}
               style={{
                 width: '100%',
-                padding: '9px 14px 9px 38px',
+                padding: '9px 48px 9px 38px',
                 borderRadius: '24px',
-                border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
+                boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
                 background: '#FAF8F5',
                 fontSize: '13px',
                 color: '#091E26',
-                outline: 'none'
+                outline: 'none',
+                transition: 'border-color 0.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s cubic-bezier(0.25, 1, 0.5, 1)'
               }}
             />
+            <kbd style={{
+              position: 'absolute',
+              right: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '10.5px',
+              fontWeight: 700,
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
+              borderRadius: '5px',
+              padding: '1.5px 5px',
+              color: '#64748D',
+              fontFamily: 'monospace',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+              pointerEvents: 'none'
+            }}>
+              ⌘K
+            </kbd>
           </div>
         </div>
 
