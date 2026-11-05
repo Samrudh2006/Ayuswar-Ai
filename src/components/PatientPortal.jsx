@@ -71,6 +71,7 @@ import BotanicalWatermark from './BotanicalWatermark';
 import MintIvoryWaveBackground from './MintIvoryWaveBackground';
 import { checkDrugInteractions, calculateMewsScore, getJanAushadhiGenericInfo } from '../data/clinicalSafetySentinel';
 import { DEMO_PATIENTS, DEMO_APPOINTMENTS, formatDemoDate, getRelativeDaysLabel, SampleDataChip } from '../data/demoData';
+import { opdQueueService, STANDARD_OPD_TIME_SLOTS } from '../services/opdQueueService';
 import AbdmRegistryBadgeRow from './AbdmRegistryBadgeRow';
 import { triggerHaptic } from '../utils/haptics';
 
@@ -131,6 +132,15 @@ export default function PatientPortal({
   const [bookingMode, setBookingMode] = useState('In-Person OPD');
   const [bookingReason, setBookingReason] = useState('ఛాతీలో అసౌకర్యం మరియు శ్వాస తీసుకోవడంలో ఇబ్బంది (Chest discomfort & dyspnea)');
   const [bookingSuccessToast, setBookingSuccessToast] = useState(false);
+  const [liveAppointmentsQueue, setLiveAppointmentsQueue] = useState(() => opdQueueService.getQueue());
+
+  // Listen to live OPD appointment booking and queue updates in real-time
+  useEffect(() => {
+    const unsub = opdQueueService.subscribe((updated) => {
+      setLiveAppointmentsQueue(updated);
+    });
+    return () => unsub();
+  }, []);
 
   const [patientQuestion, setPatientQuestion] = useState('');
   const [chatMessages, setChatMessages] = useState([
@@ -2678,32 +2688,60 @@ export default function PatientPortal({
                         </div>
                       </div>
 
-                      {/* Select Time Slot */}
+                      {/* Select Time Slot with Dynamic Real-Time Allocation */}
                       <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24', marginBottom: '6px' }}>
-                          Select Preferred Time Slot
-                        </label>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                          <label style={{ display: 'block', fontSize: '12px', fontWeight: 750, color: '#081C24' }}>
+                            Select Preferred Time Slot
+                          </label>
+                          <span style={{ fontSize: '10.5px', color: '#059669', fontWeight: 750 }}>
+                            ● Real-Time OPD Slot Allocation Active
+                          </span>
+                        </div>
                         <div className="patient-time-slots-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', width: '100%' }}>
-                          {['09:30 AM', '10:15 AM', '11:30 AM', '02:30 PM', '03:15 PM', '04:00 PM', '05:00 PM', '06:00 PM'].map(slot => (
-                            <button
-                              key={slot}
-                              type="button"
-                              onClick={() => setBookingTime(slot)}
-                              style={{
-                                padding: '8px',
-                                borderRadius: '8px',
-                                border: bookingTime === slot ? '2px solid #0F4C5C' : '1px solid #D0DFE2',
-                                background: bookingTime === slot ? '#0A2540' : '#F8FAFC',
-                                color: bookingTime === slot ? '#ffffff' : '#486770',
-                                fontSize: '11.5px',
-                                fontWeight: 750,
-                                cursor: 'pointer',
-                                textAlign: 'center'
-                              }}
-                            >
-                              {slot}
-                            </button>
-                          ))}
+                          {opdQueueService.getSlotsForDate(bookingDate).map(slotObj => {
+                            const isOccupied = !slotObj.isAvailable;
+                            const isSelected = bookingTime === slotObj.time;
+                            return (
+                              <button
+                                key={slotObj.time}
+                                type="button"
+                                disabled={isOccupied}
+                                onClick={() => !isOccupied && setBookingTime(slotObj.time)}
+                                style={{
+                                  padding: '8px 6px',
+                                  borderRadius: '8px',
+                                  border: isSelected 
+                                    ? '2px solid #0F4C5C' 
+                                    : isOccupied 
+                                    ? '1px dashed #CBD5E1' 
+                                    : '1px solid #D0DFE2',
+                                  background: isSelected 
+                                    ? '#0A2540' 
+                                    : isOccupied 
+                                    ? '#F1F5F9' 
+                                    : '#FFFFFF',
+                                  color: isSelected 
+                                    ? '#ffffff' 
+                                    : isOccupied 
+                                    ? '#94A3B8' 
+                                    : '#0F4C5C',
+                                  fontSize: '11px',
+                                  fontWeight: 750,
+                                  cursor: isOccupied ? 'not-allowed' : 'pointer',
+                                  textAlign: 'center',
+                                  opacity: isOccupied ? 0.6 : 1,
+                                  transition: 'all 0.15s ease'
+                                }}
+                                title={isOccupied ? `Occupied by Token ${slotObj.token}` : 'Available Slot'}
+                              >
+                                <div>{slotObj.time}</div>
+                                <div style={{ fontSize: '9px', fontWeight: 700, marginTop: '2px', color: isSelected ? '#A7F3D0' : isOccupied ? '#94A3B8' : '#059669' }}>
+                                  {isOccupied ? 'Booked' : 'Available'}
+                                </div>
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -2772,22 +2810,24 @@ export default function PatientPortal({
                         <button
                           type="button"
                           onClick={() => {
+                            const booked = opdQueueService.bookAppointment({
+                              patientId: activeDemoPatient?.id || 'DEMO-P001',
+                              patientName: patientName,
+                              vernacular: activeDemoPatient?.vernacular || patientName,
+                              phone: emergencyPhone || activeDemoPatient?.phone || '+91 98480 22338',
+                              age: activeDemoPatient?.age || patientProfile?.age || 58,
+                              gender: activeDemoPatient?.genderLabel || patientProfile?.gender || 'Female',
+                              language: selectedLanguage,
+                              abhaId: abhaId,
+                              doctorName: bookingDoctor,
+                              specialty: bookingSpecialty,
+                              date: bookingDate,
+                              time: bookingTime,
+                              mode: bookingMode,
+                              reason: bookingReason
+                            });
                             if (onBookAppointment) {
-                              onBookAppointment({
-                                patientName: patientName,
-                                vernacular: selectedLanguage === 'Telugu' ? 'అనన్య రావు' : 'अनन्या राव',
-                                phone: emergencyPhone || '+91 98480 22334',
-                                age: patientProfile?.age || 28,
-                                gender: patientProfile?.gender || 'Female',
-                                language: selectedLanguage,
-                                abhaId: abhaId,
-                                doctorName: bookingDoctor,
-                                specialty: bookingSpecialty,
-                                date: bookingDate,
-                                time: bookingTime,
-                                mode: bookingMode,
-                                reason: bookingReason
-                              });
+                              onBookAppointment(booked);
                             }
                             setIsBookConsultationModalOpen(false);
                             setBookingSuccessToast(true);
@@ -2819,18 +2859,19 @@ export default function PatientPortal({
                 </div>
               )}
 
-              {/* Upcoming and Past Appointments from Shared Demo Dataset */}
+              {/* Upcoming and Past Appointments from Live Real-Time Queue */}
               {(() => {
-                const patientAppts = DEMO_APPOINTMENTS.filter(a => a.patientId === activeDemoPatient.id);
-                const allAppts = patientAppts.length > 0 ? patientAppts : DEMO_APPOINTMENTS;
+                const currentLive = liveAppointmentsQueue && liveAppointmentsQueue.length > 0 ? liveAppointmentsQueue : opdQueueService.getQueue();
+                const patientAppts = currentLive.filter(a => a.patientId === activeDemoPatient.id || a.patientName === patientName);
+                const allAppts = patientAppts.length > 0 ? patientAppts : currentLive;
                 
                 const upcomingAppts = allAppts
-                  .filter(a => a.status === 'Upcoming' || a.offsetDays >= 0)
-                  .sort((a, b) => a.offsetDays - b.offsetDays);
+                  .filter(a => a.status === 'Upcoming' || a.status === 'Waiting' || a.status === 'In Progress' || a.offsetDays >= 0)
+                  .sort((a, b) => (a.offsetDays || 0) - (b.offsetDays || 0));
                 
                 const pastAppts = allAppts
-                  .filter(a => a.status === 'Completed' || a.offsetDays < 0)
-                  .sort((a, b) => b.offsetDays - a.offsetDays);
+                  .filter(a => a.status === 'Completed' || (a.offsetDays && a.offsetDays < 0))
+                  .sort((a, b) => (b.offsetDays || 0) - (a.offsetDays || 0));
 
                 return (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -2901,6 +2942,11 @@ export default function PatientPortal({
                                   <div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                       <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{appt.doctorName}</span>
+                                      {appt.token && (
+                                        <span style={{ fontSize: '10px', background: 'rgba(245, 158, 11, 0.15)', color: '#B45309', border: '1px solid rgba(245, 158, 11, 0.4)', padding: '2px 7px', borderRadius: '6px', fontWeight: 800 }}>
+                                          Token {appt.token}
+                                        </span>
+                                      )}
                                       {isTeleconsult ? (
                                         <span style={{ fontSize: '10px', background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
                                           📹 Teleconsult
@@ -3051,6 +3097,11 @@ export default function PatientPortal({
                                 <div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span style={{ fontSize: '14px', fontWeight: 800, color: '#081C24' }}>{past.doctorName}</span>
+                                    {past.token && (
+                                      <span style={{ fontSize: '9.5px', background: 'rgba(0, 0, 0, 0.06)', color: '#0F4C5C', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
+                                        {past.token}
+                                      </span>
+                                    )}
                                     <span style={{ fontSize: '10px', background: '#ECFDF5', color: '#065F46', padding: '1px 6px', borderRadius: '6px', fontWeight: 750 }}>
                                       COMPLETED
                                     </span>
@@ -4939,7 +4990,7 @@ export default function PatientPortal({
                 </div>
                 <div>
                   <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>AGE / GENDER</span>
-                  <strong style={{ color: '#081C24' }}>{patientProfile?.age || 28} Yrs • {patientProfile?.gender || 'Female'}</strong>
+                  <strong style={{ color: '#081C24' }}>{activeDemoPatient?.age || patientProfile?.age || 58} Yrs • {activeDemoPatient?.genderLabel || patientProfile?.gender || 'Female'}</strong>
                 </div>
                 <div>
                   <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>ABHA ID</span>
@@ -4947,7 +4998,7 @@ export default function PatientPortal({
                 </div>
                 <div>
                   <span style={{ color: '#698892', display: 'block', fontSize: '10.5px' }}>DATE OF ISSUE</span>
-                  <strong style={{ color: '#081C24' }}>23/10/2026</strong>
+                  <strong style={{ color: '#081C24' }}>{new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' })}</strong>
                 </div>
               </div>
 
@@ -5056,11 +5107,11 @@ export default function PatientPortal({
         onClose={() => setShowWhatsAppRxModal(false)}
         patientData={{
           name: patientName,
-          vernacularName: selectedLanguage === 'Telugu' ? 'నారాయణ రావు' : 'आरव कुमार',
-          phone: emergencyPhone || '+91 98490 12345',
-          cleanPhone: '919849012345',
-          age: patientProfile?.age || 28,
-          gender: patientProfile?.gender || 'Female',
+          vernacularName: activeDemoPatient?.vernacular || (selectedLanguage === 'Telugu' ? 'లక్ష్మి అమ్మ' : 'आरव कुमार'),
+          phone: emergencyPhone || activeDemoPatient?.phone || '+91 98480 22338',
+          cleanPhone: (emergencyPhone || activeDemoPatient?.phone || '919848022338').replace(/\D/g, ''),
+          age: activeDemoPatient?.age || patientProfile?.age || 58,
+          gender: activeDemoPatient?.genderLabel || patientProfile?.gender || 'Female',
           abhaId: abhaId,
           language: selectedLanguage,
           langCode: selectedLanguage === 'Telugu' ? 'te-IN' : 'hi-IN'

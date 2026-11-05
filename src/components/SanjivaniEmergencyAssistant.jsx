@@ -566,9 +566,10 @@ export default function SanjivaniEmergencyAssistant({
               const reply = await processCopilotVoiceCommand(text);
               if (reply && isAiVoiceReplyEnabled && !isAudioMuted) {
                 setVoiceState('SPEAKING');
+                const replyLang = /[\u0C00-\u0C7F]/.test(reply) ? 'te-IN' : (/[\u0900-\u097F]/.test(reply) ? 'hi-IN' : 'en-IN');
                 await speechService.speak(reply, {
                   channel: 'sanjivani_emergency',
-                  langCode: 'en-IN',
+                  langCode: replyLang,
                   onStart: () => setVoiceState('SPEAKING'),
                   onEnd: () => setVoiceState('IDLE')
                 });

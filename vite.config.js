@@ -100,7 +100,7 @@ export default defineConfig(({ mode }) => {
                       container: 'wav'
                     }
                   }),
-                  signal: AbortSignal.timeout(3500)
+                  signal: AbortSignal.timeout(15000)
                 });
 
                 if (gnaniRes.ok) {

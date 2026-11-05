@@ -396,7 +396,15 @@ export default function App() {
             element={
               <DoctorPortal 
                 doctorProfile={currentDoctor || DEFAULT_DOCTOR_PROFILE} 
-                onSelectEncounterAndLaunch={(idx) => navigate(idx !== undefined ? `/clinical-console?encounter=${idx}` : '/clinical-console')}
+                onSelectEncounterAndLaunch={(idx, patientData) => {
+                  const params = new URLSearchParams();
+                  if (idx !== undefined && idx !== null) params.set('encounter', idx);
+                  if (patientData?.patientName || patientData?.name) params.set('name', patientData.patientName || patientData.name);
+                  if (patientData?.token) params.set('token', patientData.token);
+                  if (patientData?.phone) params.set('phone', patientData.phone);
+                  const qs = params.toString();
+                  navigate(qs ? `/clinical-console?${qs}` : '/clinical-console');
+                }}
                 onOpenTechModal={() => navigate('/technology')}
                 onOpenDatasetModal={() => navigate('/datasets')}
                 onLogoutDoctor={() => {
@@ -430,6 +438,9 @@ export default function App() {
               />
             } 
           />
+
+          {/* Vernacular Audio-Rx Deep Link Route for WhatsApp QR & Prescription Listeners */}
+          <Route path="/rx/:abhaId" element={<Navigate to="/patient-portal" replace />} />
 
           {/* Legal & Compliance Routes */}
           <Route path="/privacy" element={<PrivacyPolicyView />} />

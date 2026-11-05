@@ -65,6 +65,9 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryEncounter = searchParams.get('encounter');
+  const queryName = searchParams.get('name');
+  const queryToken = searchParams.get('token');
+  const queryPhone = searchParams.get('phone');
   const parsedIdx = queryEncounter !== null ? parseInt(queryEncounter, 10) : initialEncounterIndex;
   const validInitialIdx = Number.isInteger(parsedIdx) && parsedIdx >= 0 && parsedIdx < CLINICAL_ENCOUNTERS.length ? parsedIdx : 0;
   const [selectedEncounterIndex, setSelectedEncounterIndex] = useState(validInitialIdx);
@@ -140,6 +143,7 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
 
   // Step 3: Voice Note with Gnani API Keys State
   const [isPlayingAudioRx, setIsPlayingAudioRx] = useState(false);
+  const [isSynthesizingAudioRx, setIsSynthesizingAudioRx] = useState(false);
   const [karaokeActiveIndex, setKaraokeActiveIndex] = useState(-1);
   const [activePillSlot, setActivePillSlot] = useState(null); // 'morning' | 'night'
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
@@ -152,6 +156,16 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
   const [showFhirModal, setShowFhirModal] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [scannedStripStatus, setScannedStripStatus] = useState(null);
+  const [customRecipientPhone, setCustomRecipientPhone] = useState(() => queryPhone || currentEncounter.patient.phone || '+91 98490 12345');
+  const [customPatientName, setCustomPatientName] = useState(() => queryName || currentEncounter.patient.name);
+  const [customToken, setCustomToken] = useState(() => queryToken || `OPD-${101 + validInitialIdx}`);
+  const effectiveToken = customToken || `OPD-${101 + selectedEncounterIndex}`;
+
+  // Daily Scheduled Vernacular Voice-Rx Adherence State (0-2 clean controls)
+  const [dailyReminderActive, setDailyReminderActive] = useState(true);
+  const [morningReminderTime, setMorningReminderTime] = useState('08:30 AM');
+  const [nightReminderTime, setNightReminderTime] = useState('08:30 PM');
+  const [isTestingDailyAlert, setIsTestingDailyAlert] = useState(false);
 
   // Refs for timers & audio
   const recordingTimerRef = useRef(null);
@@ -184,7 +198,10 @@ export default function ClinicalConsole({ doctorProfile, initialEncounterIndex =
       }
     } catch (_) {}
     setSelectedLanguage(currentEncounter.langCode.startsWith('te') ? 'te-IN' : 'hi-IN');
+    setCustomRecipientPhone(currentEncounter.patient.phone || '+91 98490 12345');
+    setCustomPatientName(currentEncounter.patient.name);
     setIsPlayingAudioRx(false);
+    setIsSynthesizingAudioRx(false);
     setKaraokeActiveIndex(-1);
     setIsRxSigned(false);
     setActiveStep(1);
@@ -732,17 +749,18 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
   const handleProceedToVoiceNote = () => {
     setActiveStep(3);
     setMaxCompletedStep(prev => Math.max(prev, 3));
-    // Trigger playback after entering Step 3
+    // Trigger smooth voice note generation upon entering Step 3
     setTimeout(() => {
       handlePlayVoiceNote();
-    }, 150);
+    }, 200);
   };
 
   const handlePlayVoiceNote = async () => {
-    if (isPlayingAudioRx) {
+    if (isPlayingAudioRx || isSynthesizingAudioRx) {
       isAudioRxInFlightRef.current = false;
       speechService.stopSpeaking();
       setIsPlayingAudioRx(false);
+      setIsSynthesizingAudioRx(false);
       setKaraokeActiveIndex(-1);
       setActivePillSlot(null);
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
@@ -751,6 +769,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
     if (isAudioRxInFlightRef.current) return;
     isAudioRxInFlightRef.current = true;
+    setIsSynthesizingAudioRx(true);
 
     // Force stop any active microphone recording to prevent loopback
     if (isRecording) {
@@ -763,32 +782,17 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
 
     const dynamicWords = textToSpeak.split(/\s+/).filter(Boolean);
     const tokens = dynamicWords.length > 0 ? dynamicWords.map(w => ({ word: w })) : (currentEncounter.karaokeWordsTelugu || []);
-    let curIdx = 0;
 
-    const startKaraoke = () => {
-      setIsPlayingAudioRx(true);
-      setKaraokeActiveIndex(0);
-      if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
-      
-      const msPerWord = Math.round(480 / playbackSpeed);
-      audioRxTimerRef.current = setInterval(() => {
-        curIdx++;
-        if (curIdx < tokens.length) {
-          setKaraokeActiveIndex(curIdx);
-          const w = tokens[curIdx]?.word || '';
-          if (w.includes('పసుపు') || w.includes('ఆకుపచ్చ') || w.includes('ఉదయం') || w.includes('పీలీ') || w.includes('Metformin')) {
-            setActivePillSlot('morning');
-          } else if (w.includes('నీలం') || w.includes('గులాబీ') || w.includes('రాత్రి') || w.includes('గులాబీ') || w.includes('Ecosprin')) {
-            setActivePillSlot('night');
-          }
-        } else {
-          clearInterval(audioRxTimerRef.current);
-          setIsPlayingAudioRx(false);
-          setKaraokeActiveIndex(-1);
-          setActivePillSlot(null);
-          isAudioRxInFlightRef.current = false;
+    const highlightWordAt = (idx) => {
+      if (idx >= 0 && idx < tokens.length) {
+        setKaraokeActiveIndex(idx);
+        const w = tokens[idx]?.word || '';
+        if (w.includes('పసుపు') || w.includes('ఆకుపచ్చ') || w.includes('ఉదయం') || w.includes('పీలీ') || w.includes('Metformin')) {
+          setActivePillSlot('morning');
+        } else if (w.includes('నీలం') || w.includes('గులాబీ') || w.includes('రాత్రి') || w.includes('Ecosprin')) {
+          setActivePillSlot('night');
         }
-      }, msPerWord);
+      }
     };
 
     // Synthesize voice note using speechService (Routes to /api/gnani/tts or pre-rendered authentic Gnani audio)
@@ -798,19 +802,45 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         langCode: selectedLanguage,
         rate: playbackSpeed,
         onStart: (info) => {
-          startKaraoke();
+          setIsSynthesizingAudioRx(false);
+          setIsPlayingAudioRx(true);
+          highlightWordAt(0);
+
+          // Pacing timer fallback in case audio environment doesn't emit ontimeupdate
+          let stepIdx = 0;
+          const msPerWord = Math.round(480 / playbackSpeed);
+          if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
+          audioRxTimerRef.current = setInterval(() => {
+            stepIdx++;
+            if (stepIdx < tokens.length) {
+              highlightWordAt(stepIdx);
+            }
+          }, msPerWord);
+        },
+        onTimeUpdate: (currentTimeMs, durationMs) => {
+          if (durationMs > 0 && tokens.length > 0) {
+            if (audioRxTimerRef.current) {
+              clearInterval(audioRxTimerRef.current);
+              audioRxTimerRef.current = null;
+            }
+            const progress = Math.min(0.99, currentTimeMs / durationMs);
+            const activeIdx = Math.floor(progress * tokens.length);
+            highlightWordAt(activeIdx);
+          }
         },
         onEnd: () => {
           isAudioRxInFlightRef.current = false;
           setIsPlayingAudioRx(false);
+          setIsSynthesizingAudioRx(false);
           setKaraokeActiveIndex(-1);
           setActivePillSlot(null);
           if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
         },
         onError: (err) => {
           isAudioRxInFlightRef.current = false;
-          console.warn('Gnani voice note playback error:', err);
+          console.warn('Gnani voice note playback notice:', err);
           setIsPlayingAudioRx(false);
+          setIsSynthesizingAudioRx(false);
           setKaraokeActiveIndex(-1);
           setActivePillSlot(null);
           if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
@@ -820,6 +850,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
       isAudioRxInFlightRef.current = false;
       console.warn('Voice note playback error:', err);
       setIsPlayingAudioRx(false);
+      setIsSynthesizingAudioRx(false);
       setKaraokeActiveIndex(-1);
       setActivePillSlot(null);
       if (audioRxTimerRef.current) clearInterval(audioRxTimerRef.current);
@@ -834,6 +865,9 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
   // STEP 4: DISPATCH & HANDOVER
   // =========================================================================
   const handleProceedToDispatch = () => {
+    if (!isRxSigned) {
+      setIsRxSigned(true);
+    }
     setActiveStep(4);
     setMaxCompletedStep(prev => Math.max(prev, 4));
   };
@@ -843,18 +877,118 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
     setSelectedEncounterIndex(nextIdx);
   };
 
+  // Test Audible Vernacular Daily Voice-Rx Alert (Minimal friction demo)
+  const handleTestDailyVoiceAlert = async () => {
+    if (isTestingDailyAlert) return;
+    setIsTestingDailyAlert(true);
+    
+    try {
+      // Pleasant 2-tone hospital chime using Web Audio API
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const chimeCtx = new AudioCtx();
+          const osc1 = chimeCtx.createOscillator();
+          const osc2 = chimeCtx.createOscillator();
+          const gain = chimeCtx.createGain();
+          
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(587.33, chimeCtx.currentTime); // D5
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(880.00, chimeCtx.currentTime + 0.15); // A5
+          
+          gain.gain.setValueAtTime(0.12, chimeCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, chimeCtx.currentTime + 0.6);
+          
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(chimeCtx.destination);
+          
+          osc1.start(chimeCtx.currentTime);
+          osc1.stop(chimeCtx.currentTime + 0.15);
+          osc2.start(chimeCtx.currentTime + 0.15);
+          osc2.stop(chimeCtx.currentTime + 0.6);
+          
+          setTimeout(() => {
+            try { chimeCtx.close(); } catch (e) {}
+          }, 1000);
+        }
+      } catch (e) {}
+
+      const patientName = customPatientName || currentEncounter.patient.name;
+      const isHindi = selectedLanguage.startsWith('hi') || /[\u0900-\u097F]/.test(editableBestMatter || '');
+      const isTelugu = selectedLanguage.startsWith('te') || /[\u0C00-\u0C7F]/.test(editableBestMatter || '');
+
+      let alertText = `${patientName} గారు, ఇది మీ ఉదయం ${morningReminderTime} మందుల సమయం. టిఫిన్ తర్వాత ఆకుపచ్చ మాత్ర ఒకటి వేసుకోండి. కూరల్లో ఉప్పు బాగా తగ్గించండి.`;
+      let alertLang = 'te-IN';
+
+      if (isHindi) {
+        alertText = `${patientName} जी, यह आपकी सुबह ${morningReminderTime} दवा का समय है। नाश्ते के बाद हरी गोली लें। नमक कम करें।`;
+        alertLang = 'hi-IN';
+      } else if (!isTelugu) {
+        alertText = `Hello ${patientName}, this is your morning ${morningReminderTime} medicine reminder. Please take your green tablet after breakfast. Reduce salt in food.`;
+        alertLang = 'en-IN';
+      }
+
+      await speechService.speakText(alertText, {
+        language: alertLang,
+        speed: 1.0,
+        onEnd: () => setIsTestingDailyAlert(false),
+        onError: () => setIsTestingDailyAlert(false)
+      });
+    } catch (err) {
+      setIsTestingDailyAlert(false);
+    }
+  };
+
   const handleDirectWhatsAppSend = () => {
-    const cleanPhone = (currentEncounter.patient.phone || '919849012345').replace(/\D/g, '');
+    let rawPhone = customRecipientPhone || currentEncounter.patient.phone || '919849012345';
+    let cleanPhone = rawPhone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = '91' + cleanPhone;
+    }
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ayuswar-ai.vercel.app';
+    const patientName = customPatientName || currentEncounter.patient.name;
+    const doctorName = doctorProfile?.doctorName || 'Dr. Priya Sharma';
+    const matter = editableBestMatter || currentEncounter.fullAudioRxTelugu || '';
+
+    // Language-aware vernacular greeting
+    const isHindi = selectedLanguage.startsWith('hi') || /[\u0900-\u097F]/.test(matter);
+    const isTelugu = selectedLanguage.startsWith('te') || /[\u0C00-\u0C7F]/.test(matter);
+
+    let greetingLine = `నమస్కారం *${patientName}* గారు,\nమీ డాక్టర్ *${doctorName}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n`;
+    let reminderScheduleLine = '';
+    if (dailyReminderActive) {
+      if (isHindi) {
+        reminderScheduleLine = `\n\n⏰ *दैनिक खुराक समय (Daily Voice-Rx Scheduled):*\n• 🌅 सुबह ${morningReminderTime}: हरी गोली (नाश्ते के बाद)\n• 🌙 रात ${nightReminderTime}: नीली गोली (खाने के बाद)\n🔔 आपके फोन पर सही समय पर दैनिक वॉयस अलर्ट आएगा।\n`;
+      } else if (isTelugu) {
+        reminderScheduleLine = `\n\n⏰ *రోజూ మోతాదు వేళలు (Daily Voice-Rx Scheduled):*\n• 🌅 ఉదయం ${morningReminderTime}: ఆకుపచ్చ మాత్ర (టిఫిన్ తర్వాత)\n• 🌙 రాత్రి ${nightReminderTime}: నీలం మాత్ర (భోజనం తర్వాత)\n🔔 మీ ఫోన్ కు ఈ వేళల్లో ఆటోమేటిక్ ఆడియో అలర్ట్ వస్తుంది.\n`;
+      } else {
+        reminderScheduleLine = `\n\n⏰ *Daily Scheduled Voice-Rx:*\n• 🌅 Morning ${morningReminderTime}: Green pill (After breakfast)\n• 🌙 Night ${nightReminderTime}: Blue pill (After dinner)\n🔔 Daily automated vernacular audio reminder scheduled.\n`;
+      }
+    }
+    let listenLine = `🔊 మీ ఫోన్ లో వాయిస్ నోట్ వినడానికి: ${origin}/rx/${currentEncounter.patient.abhaId}\nABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`;
+
+    if (isHindi) {
+      greetingLine = `नमस्ते *${patientName}* जी,\nआपके डॉक्टर *${doctorName}* का प्रिस्क्रिप्शन ऑडियो नोट:\n\n`;
+      listenLine = `🔊 अपने फोन पर वॉयस नोट सुनने के लिए: ${origin}/rx/${currentEncounter.patient.abhaId}\nABDM हेल्थ रिकॉर्ड्स सत्यापित ✅`;
+    } else if (!isTelugu) {
+      greetingLine = `Hello *${patientName}*,\nPrescription voice note from *${doctorName}*:\n\n`;
+      listenLine = `🔊 Listen to spoken voice note: ${origin}/rx/${currentEncounter.patient.abhaId}\nABDM Health Records Verified ✅`;
+    }
+
     const message = encodeURIComponent(
       `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\n` +
-      `నమస్కారం *${currentEncounter.patient.name}* గారు,\n` +
-      `మీ డాక్టర్ *${doctorProfile?.doctorName || 'Dr. Priya Sharma'}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n` +
-      `"${editableBestMatter}"\n\n` +
-      `🔊 మీ ఫోన్ లో వాయిస్ నోట్ వినడానికి: https://ayuswar.ai/rx/${currentEncounter.patient.abhaId}\n` +
-      `ABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
+      greetingLine +
+      `"${matter}"` +
+      reminderScheduleLine +
+      `\n\n` +
+      listenLine
     );
     window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
   };
+
+  const effectivePatientName = customPatientName || currentEncounter.patient.name;
 
   return (
     <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '16px 24px 80px 24px', fontFamily: 'var(--font-main)' }}>
@@ -863,26 +997,48 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
           TOP BAR & NAVIGATION BACK
           ===================================================================== */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
-        <button
-          onClick={() => navigate('/doctor-portal')}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            borderRadius: '10px',
-            background: '#ffffff',
-            border: '1.5px solid #D0DFE2',
-            color: '#0F4C5C',
-            fontSize: '13px',
-            fontWeight: 750,
-            cursor: 'pointer',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-          }}
-        >
-          <ArrowLeft size={16} />
-          <span>Return to Doctor OPD</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => navigate('/doctor-portal')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              borderRadius: '10px',
+              background: '#ffffff',
+              border: '1.5px solid #D0DFE2',
+              color: '#0F4C5C',
+              fontSize: '13px',
+              fontWeight: 750,
+              cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            }}
+          >
+            <ArrowLeft size={16} />
+            <span>Return to Doctor OPD</span>
+          </button>
+          <button
+            onClick={() => navigate('/patient-portal')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 14px',
+              borderRadius: '10px',
+              background: '#FAF8F5',
+              border: '1px solid #D0DFE2',
+              color: '#486770',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
+            title="Open Citizen Patient Portal (Live Token Tracking & Rx Records)"
+          >
+            <Smartphone size={14} color="#0F4C5C" />
+            <span>Patient Portal</span>
+          </button>
+        </div>
 
         {/* Live Gnani Voice Status Badge */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px' }}>
@@ -936,19 +1092,19 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               fontWeight: 800,
               fontSize: '18px'
             }}>
-              {currentEncounter.patient.name.charAt(0)}
+              {(effectivePatientName.split('(')[0] || effectivePatientName).trim().charAt(0)}
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <h1 style={{ fontSize: '18px', color: '#091E26', fontWeight: 850, margin: 0 }}>
-                  {currentEncounter.patient.name}
+                  {effectivePatientName}
                 </h1>
                 <span style={{ fontSize: '11.5px', background: '#F1F5F9', color: '#486770', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
                   {currentEncounter.patient.gender}, {currentEncounter.patient.age}y
                 </span>
                 <span style={{ fontSize: '11px', background: 'rgba(0, 0, 0, 0.06)', color: '#0F4C5C', padding: '2px 8px', borderRadius: '10px', fontWeight: 750 }}>
-                  OPD Token #{101 + selectedEncounterIndex}
+                  OPD Token: {effectiveToken}
                 </span>
                 <LiveTelemetryBadge location={currentEncounter.patient.location || 'kurnool'} compact={true} />
               </div>
@@ -2262,6 +2418,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <button
                 onClick={handlePlayVoiceNote}
+                disabled={isSynthesizingAudioRx}
                 style={{
                   flex: 1,
                   display: 'flex',
@@ -2270,26 +2427,43 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   gap: '8px',
                   padding: '13px',
                   borderRadius: '12px',
-                  background: isPlayingAudioRx ? '#EF4444' : '#0F4C5C',
+                  background: isPlayingAudioRx ? '#EF4444' : (isSynthesizingAudioRx ? '#083344' : '#0F4C5C'),
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '14px',
                   fontWeight: 800,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)'
+                  cursor: isSynthesizingAudioRx ? 'wait' : 'pointer',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.16)',
+                  transition: 'all 0.2s ease'
                 }}
               >
-                {isPlayingAudioRx ? <Pause size={17} /> : <Play size={17} fill="#ffffff" />}
-                <span>{isPlayingAudioRx ? 'Pause Voice Note' : '▶ Play Spoken Audio Note'}</span>
+                {isSynthesizingAudioRx ? (
+                  <>
+                    <RefreshCw size={17} className="animate-spin" />
+                    <span>Synthesizing with Gnani Timbre...</span>
+                  </>
+                ) : isPlayingAudioRx ? (
+                  <>
+                    <Pause size={17} />
+                    <span>Pause Voice Note</span>
+                  </>
+                ) : (
+                  <>
+                    <Play size={17} fill="#ffffff" />
+                    <span>▶ Play Spoken Audio Note (Gnani Timbre)</span>
+                  </>
+                )}
               </button>
 
               <button
                 onClick={() => {
                   speechService.stopSpeaking();
                   setIsPlayingAudioRx(false);
+                  setIsSynthesizingAudioRx(false);
                   setKaraokeActiveIndex(0);
                   setTimeout(handlePlayVoiceNote, 200);
                 }}
+                disabled={isSynthesizingAudioRx}
                 style={{
                   padding: '13px 16px',
                   borderRadius: '12px',
@@ -2417,29 +2591,26 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               {/* Step 3 -> 4 Proceed Action */}
               <button
                 onClick={handleProceedToDispatch}
-                disabled={!isRxSigned}
                 style={{
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
-                  background: isRxSigned 
-                    ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' 
-                    : '#D0DFE2',
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                   color: '#ffffff',
                   border: 'none',
                   fontSize: '14px',
                   fontWeight: 800,
-                  cursor: isRxSigned ? 'pointer' : 'not-allowed',
+                  cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: isRxSigned ? '0 4px 16px rgba(16, 185, 129, 0.35)' : 'none',
+                  boxShadow: '0 4px 16px rgba(16, 185, 129, 0.35)',
                   transition: 'all 0.2s ease',
                   marginTop: 'auto'
                 }}
               >
-                <span>📲 Proceed to Dispatch & WhatsApp (Step 4 →)</span>
+                <span>{isRxSigned ? '📲 Proceed to Dispatch & WhatsApp (Step 4 →)' : '✍️ Sign & Proceed to WhatsApp (Step 4 →)'}</span>
                 <ArrowRight size={16} />
               </button>
             </div>
@@ -2471,9 +2642,157 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   WhatsApp Vernacular Audio-Rx Delivery
                 </h3>
                 <p style={{ fontSize: '11.5px', color: '#698892', margin: '2px 0 0 0' }}>
-                  Target: {currentEncounter.patient.name} ({currentEncounter.patient.phone || '+91 98490 12345'})
+                  Target: {customPatientName || currentEncounter.patient.name} ({customRecipientPhone || '+91 98490 12345'})
                 </p>
               </div>
+            </div>
+
+            {/* Dynamic Recipient Controls: Patient Name & WhatsApp Number */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <label style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F4C5C' }}>
+                  Patient Full Name:
+                </label>
+                <input
+                  type="text"
+                  value={customPatientName}
+                  onChange={(e) => setCustomPatientName(e.target.value)}
+                  placeholder="e.g. Narayana Rao / Samrudh"
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #D0DFE2',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: '#091E26',
+                    background: '#FAF8F5',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <label style={{ fontSize: '11.5px', fontWeight: 800, color: '#0F4C5C' }}>
+                  WhatsApp Phone:
+                </label>
+                <input
+                  type="tel"
+                  value={customRecipientPhone}
+                  onChange={(e) => setCustomRecipientPhone(e.target.value)}
+                  placeholder="+91 98490 12345"
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #25D366',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: '#091E26',
+                    background: '#F0FDF4',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Zero-friction Daily Scheduled Vernacular Voice-Rx (1-2 clean controls) */}
+            <div style={{
+              background: dailyReminderActive ? 'linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%)' : '#F8FAFC',
+              borderRadius: '14px',
+              padding: '12px 14px',
+              border: dailyReminderActive ? '1.5px solid #10B981' : '1px solid #CBD5E1',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    background: dailyReminderActive ? '#10B981' : '#94A3B8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ffffff'
+                  }}>
+                    <Clock size={15} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>Daily Automated Voice Reminder</span>
+                      {dailyReminderActive && (
+                        <span style={{ fontSize: '10px', background: '#D1FAE5', color: '#065F46', padding: '1px 6px', borderRadius: '10px', fontWeight: 800 }}>
+                          Active ✅
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#64748B' }}>
+                      Patient receives vernacular voice note calls everyday at exact dosage hours
+                    </div>
+                  </div>
+                </div>
+
+                {/* Control 1: Single Toggle Pill (Active by default, 0 extra clicks needed) */}
+                <button
+                  type="button"
+                  onClick={() => setDailyReminderActive(prev => !prev)}
+                  style={{
+                    padding: '5px 12px',
+                    borderRadius: '16px',
+                    border: 'none',
+                    background: dailyReminderActive ? '#10B981' : '#E2E8F0',
+                    color: dailyReminderActive ? '#ffffff' : '#64748B',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <CheckCircle2 size={12} />
+                  <span>{dailyReminderActive ? 'Enabled' : 'Off'}</span>
+                </button>
+              </div>
+
+              {dailyReminderActive && (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', paddingTop: '6px', borderTop: '1px dashed #A7F3D0', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '10px', fontSize: '11px', fontWeight: 700, color: '#047857' }}>
+                    <span>🌅 <strong>Morning:</strong> {morningReminderTime} (Breakfast)</span>
+                    <span>🌙 <strong>Night:</strong> {nightReminderTime} (Dinner)</span>
+                  </div>
+
+                  {/* Control 2: 1-Tap audible simulation button */}
+                  <button
+                    type="button"
+                    onClick={handleTestDailyVoiceAlert}
+                    disabled={isTestingDailyAlert}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '4px 9px',
+                      borderRadius: '8px',
+                      background: '#ffffff',
+                      border: '1px solid #10B981',
+                      color: '#065F46',
+                      fontSize: '11px',
+                      fontWeight: 750,
+                      cursor: isTestingDailyAlert ? 'not-allowed' : 'pointer',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                    }}
+                  >
+                    <Volume2 size={12} />
+                    <span>{isTestingDailyAlert ? 'Playing...' : '🔊 Test 8:30 AM Alert'}</span>
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* WhatsApp Authentic Bubble Preview */}
@@ -2499,7 +2818,13 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                   🏥 AyuSwar Clinical Audio-Rx
                 </div>
                 <div>
-                  నమస్కారం <strong>{currentEncounter.patient.name}</strong> గారు, మీ డాక్టర్ <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma'}</strong> ప్రిస్క్రిప్షన్ ఆడియో నోట్:
+                  {(selectedLanguage.startsWith('hi') || /[\u0900-\u097F]/.test(editableBestMatter || '')) ? (
+                    <>नमस्ते <strong>{customPatientName || currentEncounter.patient.name}</strong> जी, आपके डॉक्टर <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma'}</strong> का प्रिस्क्रिप्शन ऑडियो नोट:</>
+                  ) : (selectedLanguage.startsWith('te') || /[\u0C00-\u0C7F]/.test(editableBestMatter || '')) ? (
+                    <>నమస్కారం <strong>{customPatientName || currentEncounter.patient.name}</strong> గారు, మీ డాక్టర్ <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma'}</strong> ప్రిస్క్రిప్షన్ ఆడియో నోట్:</>
+                  ) : (
+                    <>Hello <strong>{customPatientName || currentEncounter.patient.name}</strong>, prescription voice note from <strong>{doctorProfile?.doctorName || 'Dr. Priya Sharma'}</strong>:</>
+                  )}
                 </div>
                 <div style={{
                   background: '#F0FDFA',
@@ -2511,6 +2836,26 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 }}>
                   "{editableBestMatter}"
                 </div>
+                {dailyReminderActive && (
+                  <div style={{
+                    background: '#ECFDF5',
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+                    border: '1px solid #A7F3D0',
+                    fontSize: '11px',
+                    color: '#065F46',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '2px'
+                  }}>
+                    <div style={{ fontWeight: 800 }}>⏰ Daily Dosage Voice-Rx Scheduled:</div>
+                    <div>• 🌅 {morningReminderTime}: Morning Pill (After breakfast)</div>
+                    <div>• 🌙 {nightReminderTime}: Night Pill (After dinner)</div>
+                    <div style={{ fontSize: '10px', color: '#047857', fontStyle: 'italic', marginTop: '2px' }}>
+                      🔔 Automated voice call & WhatsApp audio alert daily at dosage hours
+                    </div>
+                  </div>
+                )}
                 <div style={{ color: '#0284C7', textDecoration: 'underline', fontSize: '11.5px' }}>
                   🔊 https://ayuswar.ai/rx/{currentEncounter.patient.abhaId}
                 </div>
@@ -2521,28 +2866,52 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
             </div>
 
             {/* 1-Click WhatsApp Trigger Button */}
-            <button
-              onClick={handleDirectWhatsAppSend}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '14px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
-                color: '#ffffff',
-                border: 'none',
-                fontSize: '14px',
-                fontWeight: 800,
-                cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(37, 211, 102, 0.35)'
-              }}
-            >
-              <Smartphone size={18} />
-              <span>📲 Send via WhatsApp to +91 98490 12345</span>
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px' }}>
+              <button
+                onClick={handleDirectWhatsAppSend}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(37, 211, 102, 0.35)',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <Smartphone size={18} />
+                <span>📲 Send Live via WhatsApp to {customPatientName || currentEncounter.patient.name}</span>
+              </button>
+
+              <button
+                onClick={() => setShowWhatsAppModal(true)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '11px',
+                  borderRadius: '10px',
+                  background: '#F1F5F9',
+                  border: '1.5px solid #D0DFE2',
+                  color: '#0F4C5C',
+                  fontSize: '13px',
+                  fontWeight: 800,
+                  cursor: 'pointer'
+                }}
+              >
+                <span>📱 Open Interactive WhatsApp Phone Simulator</span>
+              </button>
+            </div>
           </div>
 
           {/* Handover & Next Patient Card */}
@@ -2800,7 +3169,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `ABDM_FHIR_Rx_${currentEncounter.patient.name.split(' ')[0]}.json`;
+                a.download = `ABDM_FHIR_Rx_${effectivePatientName.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
                 a.click();
               }}
               style={{
@@ -2865,7 +3234,7 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
               </div>
 
               <div style={{ fontSize: '11.5px', color: '#2C4A52', marginBottom: '10px' }}>
-                Patient: <strong>{currentEncounter.patient.name}</strong> • Age/Sex: {currentEncounter.patient.age}y / {currentEncounter.patient.gender} • ABHA: {currentEncounter.patient.abhaId}
+                Patient: <strong>{effectivePatientName}</strong> • Token: <strong>{effectiveToken}</strong> • Age/Sex: {currentEncounter.patient.age}y / {currentEncounter.patient.gender} • ABHA: {currentEncounter.patient.abhaId}
               </div>
 
               <div style={{ fontSize: '12px', fontWeight: 800, color: '#0F4C5C', marginBottom: '6px' }}>Rx Medications:</div>
@@ -2896,10 +3265,10 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         isOpen={showWhatsAppModal}
         onClose={() => setShowWhatsAppModal(false)}
         patientData={{
-          name: currentEncounter.patient.name,
-          vernacularName: currentEncounter.language.includes('Telugu') ? 'నారాయణ రావు' : 'आरव कुमार',
-          phone: currentEncounter.patient.phone || '+91 98490 12345',
-          cleanPhone: (currentEncounter.patient.phone || '919849012345').replace(/\D/g, ''),
+          name: customPatientName || currentEncounter.patient.name,
+          vernacularName: (customPatientName || currentEncounter.patient.name) === 'Narayana Rao' ? 'నారాయణ రావు' : (customPatientName || currentEncounter.patient.name),
+          phone: customRecipientPhone || currentEncounter.patient.phone || '+91 98490 12345',
+          cleanPhone: (customRecipientPhone || currentEncounter.patient.phone || '919849012345').replace(/\D/g, ''),
           age: currentEncounter.patient.age,
           gender: currentEncounter.patient.gender,
           abhaId: currentEncounter.patient.abhaId,

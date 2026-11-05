@@ -605,7 +605,7 @@ export class IndicSpeechService {
    * Ultra-Reliable Native Audio URL Player for Pre-Rendered Gnani Timbre Audio
    * Zero decoding overhead, sub-10ms instantaneous launch, perfect sync.
    */
-  async playAudioUrl(url, { rate = 1.0, onStart = () => {}, onEnd = () => {}, onError = () => {} } = {}) {
+  async playAudioUrl(url, { rate = 1.0, onStart = () => {}, onEnd = () => {}, onError = () => {}, onTimeUpdate = null } = {}) {
     this.stopSpeaking();
     this.isSpeaking = true;
     this.setConversationState('SPEAKING');
@@ -625,6 +625,7 @@ export class IndicSpeechService {
           audio.onplay = null;
           audio.onended = null;
           audio.onerror = null;
+          audio.ontimeupdate = null;
         }
         if (this.currentAudio === audio) {
           this.currentAudio = null;
@@ -635,6 +636,12 @@ export class IndicSpeechService {
         this.isSpeaking = true;
         this.setConversationState('SPEAKING');
         onStart({ provider: 'gnani_timbre' });
+      };
+
+      audio.ontimeupdate = () => {
+        if (typeof onTimeUpdate === 'function' && audio.duration) {
+          onTimeUpdate(audio.currentTime * 1000, audio.duration * 1000);
+        }
       };
 
       audio.onended = () => {
@@ -681,7 +688,7 @@ export class IndicSpeechService {
    * High-Fidelity Audio Buffer Player for Gnani Timbre Audio (WAV)
    * Plays with HTML5 Audio and transparent WebAudio fallback.
    */
-  async playAudioBuffer(arrayBuffer, { rate = 1.0, onStart = () => {}, onEnd = () => {}, onError = () => {} } = {}) {
+  async playAudioBuffer(arrayBuffer, { rate = 1.0, onStart = () => {}, onEnd = () => {}, onError = () => {}, onTimeUpdate = null } = {}) {
     if (!arrayBuffer || arrayBuffer.byteLength < 44) {
       onError('Invalid audio buffer');
       return;
@@ -719,6 +726,7 @@ export class IndicSpeechService {
           audio.onplay = null;
           audio.onended = null;
           audio.onerror = null;
+          audio.ontimeupdate = null;
         }
         if (this.currentAudio === audio) {
           this.currentAudio = null;
@@ -805,6 +813,12 @@ export class IndicSpeechService {
         onStart({ provider: 'gnani_live' });
       };
 
+      audio.ontimeupdate = () => {
+        if (typeof onTimeUpdate === 'function' && audio.duration) {
+          onTimeUpdate(audio.currentTime * 1000, audio.duration * 1000);
+        }
+      };
+
       audio.onended = () => {
         completePlayback();
       };
@@ -836,6 +850,7 @@ export class IndicSpeechService {
     const onStart = options.onStart || (() => {});
     const onEnd = options.onEnd || (() => {});
     const onError = options.onError || (() => {});
+    const onTimeUpdate = options.onTimeUpdate || null;
 
     // Always sanitize text to strip markdown, asterisks, emojis, and bullet points
     let cleanSpeechText = cleanTextForSpeech(text);
@@ -878,7 +893,7 @@ export class IndicSpeechService {
 
     if (instantAudioUrl) {
       this.activeProvider = 'gnani_timbre_native';
-      return await this.playAudioUrl(instantAudioUrl, { rate: options.rate || rate, onStart, onEnd, onError });
+      return await this.playAudioUrl(instantAudioUrl, { rate: options.rate || rate, onStart, onEnd, onError, onTimeUpdate });
     }
 
     // 1. Dynamic Live Synthesis with Gnani Timbre Proxy (/api/gnani/tts)
@@ -904,14 +919,14 @@ export class IndicSpeechService {
             container: 'wav'
           }
         }),
-        signal: AbortSignal.timeout(4000)
+        signal: AbortSignal.timeout(15000)
       });
 
       if (response.ok) {
         this.activeProvider = 'gnani_tts_live';
         this.lastGnaniSuccessTime = Date.now();
         const arrayBuffer = await response.arrayBuffer();
-        return await this.playAudioBuffer(arrayBuffer, { rate: options.rate || rate, onStart, onEnd, onError });
+        return await this.playAudioBuffer(arrayBuffer, { rate: options.rate || rate, onStart, onEnd, onError, onTimeUpdate });
       }
     } catch (err) {
       console.warn('Gnani dynamic TTS fallback to authentic audio:', err);
@@ -923,7 +938,7 @@ export class IndicSpeechService {
       : '/audio/gnani_telugu_rx_narayana_rao.wav';
     try {
       this.activeProvider = 'gnani_tts_static';
-      return await this.playAudioUrl(fallbackStatic, { rate: options.rate || rate, onStart, onEnd, onError });
+      return await this.playAudioUrl(fallbackStatic, { rate: options.rate || rate, onStart, onEnd, onError, onTimeUpdate });
     } catch (e) {
       console.warn('Static Gnani audio load error, trying Web Speech:', e);
     }

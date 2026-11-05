@@ -87,10 +87,15 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
 
   const cprIntervalRef = useRef(null);
+  const cprAudioCtxRef = useRef(null);
 
   useEffect(() => {
     return () => {
       if (cprIntervalRef.current) clearInterval(cprIntervalRef.current);
+      if (cprAudioCtxRef.current) {
+        try { cprAudioCtxRef.current.close().catch(() => {}); } catch {}
+        cprAudioCtxRef.current = null;
+      }
     };
   }, []);
 
@@ -297,17 +302,24 @@ export default function EmergencyTriageView({ onOpenFullConsole }) {
   const handleToggleCprMetronome = () => {
     if (cprMetronomeActive) {
       if (cprIntervalRef.current) clearInterval(cprIntervalRef.current);
+      if (cprAudioCtxRef.current) {
+        try { cprAudioCtxRef.current.close().catch(() => {}); } catch {}
+        cprAudioCtxRef.current = null;
+      }
       cprIntervalRef.current = null;
       setCprMetronomeActive(false);
     } else {
       setCprMetronomeActive(true);
       // 110 BPM CPR pulse audio beep
       const intervalMs = Math.round(60000 / 110);
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = AudioCtx ? new AudioCtx() : null;
+      cprAudioCtxRef.current = ctx;
+
       cprIntervalRef.current = setInterval(() => {
         try {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) {
-            const ctx = new AudioContext();
+          if (ctx) {
+            if (ctx.state === 'suspended') ctx.resume();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.frequency.setValueAtTime(800, ctx.currentTime);
