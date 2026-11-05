@@ -2711,3 +2711,97 @@ body {
     opacity: 1;
   }
 }
+
+/* ==========================================================================
+   Stripe Design System Synthesis (Tone, Typography, Shapes & Motion)
+   Source: Measured DESIGN.md specifications from stripe.com
+   ========================================================================== */
+
+/* 1. Stripe Tight Negative Letter-Spacing Typography */
+h1, .stripe-headline-display {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h2, .stripe-headline-lg {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+h3, .stripe-headline-md {
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* 2. Stripe Tonal Surfaces & Outline Dividers (Depth without heavy fake drop-shadows) */
+.stripe-surface-low {
+  background-color: #F8FAFD;
+}
+
+.stripe-surface-container {
+  background-color: #F5F5FF;
+}
+
+.stripe-surface-high {
+  background-color: #E5EDF5;
+}
+
+.stripe-card {
+  background: #FFFFFF;
+  border: 1px solid #E5EDF5;
+  border-radius: 6px;
+  transition: border-color 0.24s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.24s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.stripe-card:hover {
+  border-color: #CBD5E1;
+}
+
+/* 3. Stripe Button Architecture (Exact measured 40px height, 4-6px radius, snappy deceleration) */
+.stripe-btn-primary {
+  height: 40px;
+  padding: 11.5px 20px 12.5px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  background-color: #0F4C5C;
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  transition: all 0.24s cubic-bezier(0.25, 1, 0.5, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.stripe-btn-primary:hover {
+  background-color: #08232C;
+  transform: translateY(-1px);
+}
+
+.stripe-btn-outline {
+  height: 40px;
+  padding: 11.5px 20px 12.5px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #0F4C5C;
+  border: 1px solid #D0DFE2;
+  transition: all 0.24s cubic-bezier(0.25, 1, 0.5, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.stripe-btn-outline:hover {
+  border-color: #0F4C5C;
+  background-color: #F8FAFD;
+}
+
+/* 4. Stripe-grade 4-Level Text Hierarchy */
+.stripe-text-solid { color: #061B31; }
+.stripe-text-emphasis { color: #000000; }
+.stripe-text-variant { color: #50617A; }
+.stripe-text-muted { color: #64748D; }
