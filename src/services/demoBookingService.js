@@ -132,3 +132,4 @@ export const demoBookingService = {
 };
 
 export default demoBookingService;
+

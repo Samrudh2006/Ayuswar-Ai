@@ -13,3 +13,4 @@ export function escapeHtml(str) {
 }
 
 export default escapeHtml;
+

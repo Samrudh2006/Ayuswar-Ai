@@ -2746,51 +2746,79 @@ export default function PatientPortal({
                             ● Real-Time OPD Slot Allocation Active
                           </span>
                         </div>
-                        <div className="patient-time-slots-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', width: '100%' }}>
-                          {opdQueueService.getSlotsForDate(bookingDate).map(slotObj => {
-                            const isOccupied = !slotObj.isAvailable;
-                            const isSelected = bookingTime === slotObj.time;
-                            return (
-                              <button
-                                key={slotObj.time}
-                                type="button"
-                                disabled={isOccupied}
-                                onClick={() => !isOccupied && setBookingTime(slotObj.time)}
-                                style={{
-                                  padding: '8px 6px',
-                                  borderRadius: '8px',
-                                  border: isSelected 
-                                    ? '2px solid #0F4C5C' 
-                                    : isOccupied 
-                                    ? '1px dashed #CBD5E1' 
-                                    : '1px solid #D0DFE2',
-                                  background: isSelected 
-                                    ? '#0A2540' 
-                                    : isOccupied 
-                                    ? '#F1F5F9' 
-                                    : '#FFFFFF',
-                                  color: isSelected 
-                                    ? '#ffffff' 
-                                    : isOccupied 
-                                    ? '#94A3B8' 
-                                    : '#0F4C5C',
-                                  fontSize: '11px',
-                                  fontWeight: 750,
-                                  cursor: isOccupied ? 'not-allowed' : 'pointer',
-                                  textAlign: 'center',
-                                  opacity: isOccupied ? 0.6 : 1,
-                                  transition: 'all 0.15s ease'
-                                }}
-                                title={isOccupied ? `Occupied by Token ${slotObj.token}` : 'Available Slot'}
-                              >
-                                <div>{slotObj.time}</div>
-                                <div style={{ fontSize: '9px', fontWeight: 700, marginTop: '2px', color: isSelected ? '#A7F3D0' : isOccupied ? '#94A3B8' : '#059669' }}>
-                                  {isOccupied ? 'Booked' : 'Available'}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
+                        {/* Practo-Style Day-Phase Grouped Slots (Morning & Afternoon) */}
+                        {(() => {
+                          const allSlots = opdQueueService.getSlotsForDate(bookingDate);
+                          const morningSlots = allSlots.filter(s => s.time.includes('AM') || s.time.startsWith('12:'));
+                          const afternoonSlots = allSlots.filter(s => !morningSlots.includes(s));
+                          const morningOpen = morningSlots.filter(s => s.isAvailable).length;
+                          const afternoonOpen = afternoonSlots.filter(s => s.isAvailable).length;
+
+                          const renderSlotGroup = (title, icon, openCount, slots) => (
+                            <div style={{ marginBottom: '8px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                                <span style={{ fontSize: '11px', fontWeight: 750, color: '#0F4C5C', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <span>{icon}</span> {title}
+                                </span>
+                                <span style={{ fontSize: '10px', fontWeight: 700, color: openCount > 0 ? '#059669' : '#94A3B8', background: openCount > 0 ? '#ECFDF5' : '#F1F5F9', padding: '1px 6px', borderRadius: '4px' }}>
+                                  {openCount} {openCount === 1 ? 'slot' : 'slots'} open
+                                </span>
+                              </div>
+                              <div className="patient-time-slots-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', width: '100%' }}>
+                                {slots.map(slotObj => {
+                                  const isOccupied = !slotObj.isAvailable;
+                                  const isSelected = bookingTime === slotObj.time;
+                                  return (
+                                    <button
+                                      key={slotObj.time}
+                                      type="button"
+                                      disabled={isOccupied}
+                                      onClick={() => !isOccupied && setBookingTime(slotObj.time)}
+                                      style={{
+                                        padding: '8px 6px',
+                                        borderRadius: '8px',
+                                        border: isSelected 
+                                          ? '2px solid #0F4C5C' 
+                                          : isOccupied 
+                                          ? '1px dashed #CBD5E1' 
+                                          : '1px solid #D0DFE2',
+                                        background: isSelected 
+                                          ? '#0A2540' 
+                                          : isOccupied 
+                                          ? '#F8FAFC' 
+                                          : '#FFFFFF',
+                                        color: isSelected 
+                                          ? '#ffffff' 
+                                          : isOccupied 
+                                          ? '#94A3B8' 
+                                          : '#0F4C5C',
+                                        fontSize: '11px',
+                                        fontWeight: 750,
+                                        cursor: isOccupied ? 'not-allowed' : 'pointer',
+                                        textAlign: 'center',
+                                        opacity: isOccupied ? 0.6 : 1,
+                                        transition: 'all 0.15s ease'
+                                      }}
+                                      title={isOccupied ? `Occupied by Token ${slotObj.token}` : 'Available Slot'}
+                                    >
+                                      <div>{slotObj.time}</div>
+                                      <div style={{ fontSize: '9px', fontWeight: 700, marginTop: '2px', color: isSelected ? '#A7F3D0' : isOccupied ? '#94A3B8' : '#059669' }}>
+                                        {isSelected ? '✓ Selected' : isOccupied ? 'Booked' : 'Available'}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+
+                          return (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                              {renderSlotGroup('Morning Slots (09:00 AM – 12:00 PM)', '🌅', morningOpen, morningSlots)}
+                              {renderSlotGroup('Afternoon / Evening (02:00 PM – 04:00 PM)', '☀️', afternoonOpen, afternoonSlots)}
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Consultation Mode */}
@@ -4312,20 +4340,41 @@ export default function PatientPortal({
                             Purpose: {slot.purpose}
                           </div>
 
-                          {/* Jan Aushadhi Generic & Savings Data */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px', flexWrap: 'wrap' }}>
-                            <span style={{ fontSize: '11px', background: '#DCFCE7', color: '#166534', padding: '2px 8px', borderRadius: '6px', fontWeight: 750, border: '1px solid #BBF7D0' }}>
-                              Jan Aushadhi Generic: {janInfo.genericName}
-                            </span>
-                            <span style={{ fontSize: '11px', color: '#486770' }}>
-                              Branded MRP: <s style={{ color: '#94A3B8' }}>₹{janInfo.brandedMrp}</s> → Jan Aushadhi: <strong style={{ color: '#0D9488' }}>₹{janInfo.janAushadhiPrice}</strong>
-                            </span>
-                            <span style={{ fontSize: '10.5px', background: '#FEF3C7', color: '#92400E', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>
-                              Save {janInfo.savingsPercent}%
-                            </span>
-                            <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#486770', padding: '2px 6px', borderRadius: '4px', fontWeight: 650 }}>
-                              {janInfo.nlemCeiling}
-                            </span>
+                          {/* Tata 1mg-Style Jan Aushadhi Generic Substitute & Price Breakdown Card */}
+                          <div style={{
+                            marginTop: '8px',
+                            background: '#F0FDF4',
+                            border: '1px solid #BBF7D0',
+                            borderRadius: '10px',
+                            padding: '10px 14px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '6px'
+                          }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <span style={{ fontSize: '10px', background: '#DCFCE7', color: '#166534', padding: '2px 8px', borderRadius: '4px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                                  ✓ Jan Aushadhi Generic (PMBJP)
+                                </span>
+                                <span style={{ fontSize: '12px', fontWeight: 800, color: '#14532D' }}>
+                                  {janInfo.genericName}
+                                </span>
+                              </div>
+                              <span style={{ fontSize: '10px', color: '#166534', fontWeight: 700, background: '#FFFFFF', padding: '2px 6px', borderRadius: '4px', border: '1px solid #DCFCE7' }}>
+                                {janInfo.nlemCeiling}
+                              </span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', fontSize: '12px' }}>
+                              <span style={{ color: '#64748B' }}>
+                                Market MRP: <s style={{ color: '#94A3B8' }}>₹{janInfo.brandedMrp}</s>
+                              </span>
+                              <span style={{ color: '#0F766E', fontWeight: 800 }}>
+                                Jan Aushadhi Price: <span style={{ fontSize: '14px', color: '#15803D' }}>₹{janInfo.janAushadhiPrice}</span>
+                              </span>
+                              <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '6px', fontWeight: 850 }}>
+                                Save {janInfo.savingsPercent}% OFF
+                              </span>
+                            </div>
                           </div>
 
                           <div style={{ fontSize: '12px', color: '#006D6D', marginTop: '6px', fontStyle: 'italic' }}>

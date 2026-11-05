@@ -5294,10 +5294,22 @@ export default function DoctorPortal({
                         {(() => {
                           const jan = getJanAushadhiGenericInfo(rx.med);
                           return (
-                            <div style={{ fontSize: '11px', color: '#166534', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                              <span>PMBJP: <strong>{jan.genericName}</strong></span>
-                              <span>• Branded: <s>₹{jan.brandedMrp}</s> → Jan Aushadhi: <strong>₹{jan.janAushadhiPrice}</strong></span>
-                              <span style={{ background: '#DCFCE7', padding: '1px 6px', borderRadius: '4px', fontWeight: 750 }}>Save {jan.savingsPercent}%</span>
+                            <div style={{
+                              fontSize: '11px',
+                              color: '#166534',
+                              marginTop: '5px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px',
+                              flexWrap: 'wrap',
+                              background: '#F0FDF4',
+                              border: '1px solid #BBF7D0',
+                              borderRadius: '6px',
+                              padding: '4px 8px'
+                            }}>
+                              <span style={{ fontWeight: 800, color: '#14532D' }}>PMBJP Generic: {jan.genericName}</span>
+                              <span style={{ color: '#475569' }}>• Market: <s style={{ color: '#94A3B8' }}>₹{jan.brandedMrp}</s> → Jan Aushadhi: <strong style={{ color: '#15803D' }}>₹{jan.janAushadhiPrice}</strong></span>
+                              <span style={{ background: '#DCFCE7', color: '#166534', padding: '1px 6px', borderRadius: '4px', fontWeight: 800 }}>Save {jan.savingsPercent}% OFF</span>
                             </div>
                           );
                         })()}
