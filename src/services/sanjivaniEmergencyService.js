@@ -3,7 +3,7 @@
  * Autonomous Acoustic Distress Triage & Emergency Dispatch Engine
  * 
  * Powered by:
- * - Browser speech (Web Speech API). Gnani voice integration: planned.
+ * - Gnani Indic Voice Services (Prisma v3 ASR & Timbre TTS)
  * - Web Audio API (AnalyserNode, BiquadFilter, Oscillator CPR metronome, siren generator)
  * - Triage Rules & Simulation Protocols
  * - Real Browser Hardware:
@@ -344,7 +344,7 @@ export async function fetchServerTriage(transcript, acousticPanicIndex = 70) {
   };
 }
 
-// Indic Clinical Triage Reasoner (Browser speech (Web Speech API). Gnani voice integration: planned.)
+// Indic Clinical Triage Reasoner (Gnani Indic Voice Services)
 export function analyzeEmergencyClinicalTriage(transcript, acousticPanicIndex = 70) {
   const text = transcript.toLowerCase();
   

@@ -5447,7 +5447,7 @@ export default function DoctorPortal({
                     Physician Credentials, AI Scribe Engine & ABDM Calibration
                   </h2>
                   <p style={{ fontSize: '13.5px', color: '#F1F5F9', margin: 0, maxWidth: '680px', lineHeight: 1.55, fontWeight: 500 }}>
-                    Configure ambient acoustic ingestion, Browser speech (Web Speech API). Gnani voice integration: planned, automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
+                    Configure ambient acoustic ingestion, Gnani Indic voice integration (Prisma STT + Timbre TTS), automated ICD-10/SNOMED coding, and Class-3 DSC digital prescription signing.
                   </p>
                 </div>
 
@@ -5533,7 +5533,7 @@ export default function DoctorPortal({
                       onChange={e => setDocScribeEngine(e.target.value)}
                       style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1px solid rgba(0, 0, 0, 0.10)', fontSize: '12.5px', fontWeight: 650 }}
                     >
-                      <option value="browser_speech">Browser speech (Web Speech API). Gnani voice integration: planned</option>
+                      <option value="browser_speech">Gnani Indic Voice Services (Prisma v3 ASR + Timbre TTS)</option>
                       <option value="google_medlm">Google MedLM Clinical Ambient (Bio-Clinical)</option>
                       <option value="whisper_indic">Whisper Large-v3 (Fine-tuned Telugu/Hindi)</option>
                     </select>

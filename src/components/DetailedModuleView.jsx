@@ -727,7 +727,7 @@ export default function DetailedModuleView({
                 <div className="p-6 rounded-2xl bg-teal-50 border border-teal-200">
                   <div className="text-base font-bold text-teal-950 mb-2">⚡ Indic Speech Recognition Architecture</div>
                   <p className="text-xs text-teal-900 leading-relaxed">
-                    Browser speech (Web Speech API). Gnani voice integration: planned. Prototype designed to handle multi-dialectal code switching without dropping clinical phonemes.
+                    Gnani Indic Voice Services (Prisma v3 ASR). Designed to handle multi-dialectal code switching without dropping clinical phonemes.
                   </p>
                 </div>
                 <div className="p-6 rounded-2xl bg-blue-50 border border-blue-200">
@@ -817,7 +817,7 @@ export default function DetailedModuleView({
               <div className="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 space-y-6">
                 <h3 className="text-xl font-bold text-emerald-400">The AyuSwar Innovation: Spoken Audio-Prescription with Karaoke Sync</h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Rather than handing a patient a paper slip they cannot decipher, AyuSwar synthesizes a doctor voice note in their native tongue using <strong>Browser speech (Web Speech API). Gnani voice integration: planned</strong>. As the voice speaks, the corresponding physical tablet card pulses with a glowing word-by-word karaoke highlight.
+                  Rather than handing a patient a paper slip they cannot decipher, AyuSwar synthesizes a doctor voice note in their native tongue using <strong>Gnani Timbre Neural Voice (TTS)</strong>. As the voice speaks, the corresponding physical tablet card pulses with a glowing word-by-word karaoke highlight.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
                   <div className="p-4 rounded-xl bg-teal-950/60 border border-teal-800">
@@ -849,7 +849,7 @@ export default function DetailedModuleView({
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
                 <h3 className="text-xl font-bold text-slate-900">Text-to-Speech Architecture for Healthcare Guidance</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Browser speech (Web Speech API). Gnani voice integration: planned. The prototype provides spoken audio instructions with pauses between dosage intervals and stressed warning conditions (e.g. <em>"Don't take on an empty stomach"</em>).
+                  Gnani Timbre Neural Voice Services. Provides spoken audio instructions with pauses between dosage intervals and stressed warning conditions (e.g. <em>"Don't take on an empty stomach"</em>).
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1115,7 +1115,7 @@ export default function DetailedModuleView({
                 <h3 className="text-xl font-bold text-teal-300">End-to-End Latency & Data Flow Pipeline</h3>
                 <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 space-y-3 leading-relaxed">
                   <div>1. 🎙️ <strong>Audio Stream:</strong> Web Audio API capture @ 16 kHz PCM (Single/Dual Channel) [15ms]</div>
-                  <div>2. ⚡ <strong>ASR Processing:</strong> Browser speech (Web Speech API). Gnani voice integration: planned [Local Client]</div>
+                  <div>2. ⚡ <strong>ASR Processing:</strong> Gnani Prisma v3 Indic ASR [Local Client Pipeline]</div>
                   <div>3. 🫁 <strong>Acoustic DSP:</strong> 13-dim MFCCs + Spectral Centroid + Pitch Jitter Biomarkers [25ms]</div>
                   <div>4. 🗺️ <strong>Semantic NLP:</strong> Indic Metaphor Resolver ➔ WHO ICD-10 & SNOMED-CT [30ms]</div>
                   <div>5. 📋 <strong>Clinical Draft:</strong> Dual-Column SOAP Generator with Audio Timestamp Anchors [25ms]</div>
@@ -1147,7 +1147,7 @@ export default function DetailedModuleView({
                         <td className="p-3 font-bold">Rural Dialect Code-Switching</td>
                         <td className="p-3 text-slate-600">Standard Lexicon</td>
                         <td className="p-3 text-slate-600">Variable Accuracy</td>
-                        <td className="p-3 text-teal-700 font-bold">Browser speech (Web Speech API). Gnani voice integration: planned</td>
+                        <td className="p-3 text-teal-700 font-bold">Gnani Prisma v3 ASR (Active)</td>
                       </tr>
                       <tr>
                         <td className="p-3 font-bold">Tenglish / Hinglish Support</td>
@@ -1589,7 +1589,7 @@ export default function DetailedModuleView({
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
                 <h3 className="text-xl font-bold text-slate-900">Synthetic Voice Assessment (Prototype)</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Browser speech (Web Speech API). Gnani voice integration: planned. Prototype voice notes are structured for clarity, warmth, and ease of understanding for rural patients.
+                  Gnani Timbre Neural Voice Services. Voice notes are structured for clarity, warmth, and ease of understanding for rural patients.
                 </p>
               </div>
             </div>

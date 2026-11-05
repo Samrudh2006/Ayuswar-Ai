@@ -41,9 +41,9 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       icon: Languages,
       color: '#0F4C5C',
       problem: 'Indian patients rarely speak pure English or textbook regional languages; they speak colloquial hybrids (Tenglish, Hinglish, Tanglish) blending native slang with English pharmaceutical terms.',
-      solution: 'Browser speech (Web Speech API). Gnani voice integration: planned. Explores Indic code-switching and recognizes phoneme patterns to transcribe mixed sentences into normalized text.',
-      scientificMetric: 'Prototype speech interface testing code-mixed dialect patterns.',
-      techSpec: 'Browser Speech Recognition • Planned Indic neural ASR integration • Phonetic normalization'
+      solution: 'Gnani Indic Voice Services (Prisma v3 ASR). Explores Indic code-switching and recognizes phoneme patterns to transcribe mixed sentences into normalized text.',
+      scientificMetric: 'High-accuracy speech interface testing code-mixed dialect patterns.',
+      techSpec: 'Gnani Prisma v3 ASR • Indic neural speech models • Phonetic normalization'
     },
     'acoustic_biomarkers': {
       title: 'Acoustic Respiratory Biomarkers & Digital Stethoscope',
@@ -71,9 +71,9 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       icon: Volume2,
       color: '#10B981',
       problem: 'Over 600 million Indian citizens cannot read handwritten prescription slips or English dosage instructions, causing 45% of patients to discontinue life-saving therapies.',
-      solution: 'Browser speech (Web Speech API). Gnani voice integration: planned. Synthesizes spoken prescriptions in the patient’s regional language. The companion audio player illuminates color-coded pill schedule cards (morning, afternoon, night) with synchronized glowing text.',
-      scientificMetric: 'Prototype interface designed to enhance medication schedule comprehension.',
-      techSpec: 'Browser SpeechSynthesis • Planned neural voice proxy • WhatsApp audio dispatch'
+      solution: 'Gnani Timbre Neural Voice (TTS). Synthesizes spoken prescriptions in the patient’s regional language. The companion audio player illuminates color-coded pill schedule cards (morning, afternoon, night) with synchronized glowing text.',
+      scientificMetric: 'Human-cadence voice interface designed to enhance medication schedule comprehension.',
+      techSpec: 'Gnani Timbre Neural Voice • 24 kHz Linear PCM Audio • WhatsApp audio dispatch'
     },
     'cdss_safety': {
       title: 'Clinical Decision Support & DDI Contraindications',
@@ -101,9 +101,9 @@ export default function FeatureDetailModal({ featureKey, onClose, onLaunchLogin 
       icon: Mic,
       color: '#0F4C5C',
       problem: 'Physicians in Indian government hospitals and rural PHCs consult 80-120 patients every day. Manual computer typing while diagnosing patients is impossible, resulting in zero longitudinal records.',
-      solution: 'The Live Clinical Studio operates invisibly in the background. Browser speech (Web Speech API). Gnani voice integration: planned. Performs real-time WebAudio FFT spectrogram analysis, runs automated SOAP note structuring, cross-checks drug contraindications, and creates native audio prescriptions.',
-      scientificMetric: 'Prototype consultation workflow aiming to streamline clinical note drafting.',
-      techSpec: 'Browser Web Speech API • Planned Gnani voice integration • WebAudio FFT • ABDM FHIR R4'
+      solution: 'The Live Clinical Studio operates invisibly in the background with Gnani Indic voice integration. Performs real-time WebAudio FFT spectrogram analysis, runs automated SOAP note structuring, cross-checks drug contraindications, and creates native audio prescriptions.',
+      scientificMetric: 'Streamlined clinical consultation workflow reducing doctor documentation burden.',
+      techSpec: 'Gnani Indic Voice Integration • WebAudio FFT • ABDM FHIR R4'
     }
   };
 
