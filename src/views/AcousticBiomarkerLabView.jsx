@@ -24,6 +24,7 @@ import { reasonAcousticBiomarkerWithEvon } from '../services/gnaniEvonService';
 import EvonStatusChip from '../components/EvonStatusChip';
 import { earshotDescribe, earshotMatch } from '../services/acousticReasoningService';
 import { computeAcousticDspMetrics, LAB_STATES } from '../services/acousticDspEngine';
+import { escapeHtml } from '../utils/escapeHtml';
 
 export default function AcousticBiomarkerLabView() {
   const { isDemoMode } = useApp();
@@ -605,15 +606,15 @@ export default function AcousticBiomarkerLabView() {
     <div style="text-align: right; font-size: 11px; color: #698892;">
       <div><strong>Report ID:</strong> ${reportId}</div>
       <div><strong>Generated:</strong> ${generatedDate}</div>
-      <div style="margin-top: 4px;"><span class="badge badge-teal">NABL / ABDM M3 Compliant</span></div>
+      <div style="margin-top: 4px;"><span class="badge badge-teal">PROTOTYPE DEMO</span></div>
     </div>
   </div>
 
   <div class="meta-grid">
-    <div><span style="color:#698892; display:block;">Sample Source:</span><strong>${sampleSummary?.fileName || 'Patient Phonation'}</strong></div>
-    <div><span style="color:#698892; display:block;">Duration:</span><strong>${sampleSummary?.durationSec || dspMetrics.durationSec} s</strong></div>
-    <div><span style="color:#698892; display:block;">Sample Rate:</span><strong>${dspMetrics.sampleRate || 44100} Hz</strong></div>
-    <div><span style="color:#698892; display:block;">Signal Type:</span><strong>${dspMetrics.isVoiced ? 'Voiced Phonation' : 'Aperiodic / Unvoiced'}</strong></div>
+    <div><span style="color:#698892; display:block;">Sample Source:</span><strong>${escapeHtml(sampleSummary?.fileName || 'Patient Phonation')}</strong></div>
+    <div><span style="color:#698892; display:block;">Duration:</span><strong>${escapeHtml(sampleSummary?.durationSec || dspMetrics.durationSec)} s</strong></div>
+    <div><span style="color:#698892; display:block;">Sample Rate:</span><strong>${escapeHtml(dspMetrics.sampleRate || 44100)} Hz</strong></div>
+    <div><span style="color:#698892; display:block;">Signal Type:</span><strong>${escapeHtml(dspMetrics.isVoiced ? 'Voiced Phonation' : 'Aperiodic / Unvoiced')}</strong></div>
   </div>
 
   <div class="section-title">Physical Acoustic Measurements (2048-pt FFT DSP)</div>
@@ -671,7 +672,10 @@ export default function AcousticBiomarkerLabView() {
 
   <div class="footer">
     <div>Electronic Medical Record • AyuSwar AI Acoustic Biomarker Sentinel Engine</div>
-    <div style="text-align: right;">Reviewing Physician Signature / Reg. No. _____________________</div>
+    <div style="text-align: right;">Doctor review: pending (demo)</div>
+  </div>
+  <div style="background: #722F37; color: #ffffff; text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 7px 12px; margin-top: 24px; border-radius: 6px; text-transform: uppercase;">
+    PROTOTYPE DEMO · SYNTHETIC SAMPLE DATA · NOT A MEDICAL DOCUMENT
   </div>
 </body>
 </html>`);

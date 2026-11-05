@@ -244,15 +244,15 @@ export default function AbhaDigitalCard({
           <div 
             onClick={() => setShowDossierModal(true)}
             style={{ textAlign: 'center', cursor: 'pointer', flexShrink: 0 }}
-            title="Click to expand detailed digital health dossier"
+            title="Open AyuSwar demo"
           >
             <RealisticAbdmQrCode 
-              value={isDoctorMode ? `abdm://hpr/${dAbhaNum}` : `abdm://abha/${pAbhaId}`} 
+              value={typeof window !== 'undefined' ? `${window.location.origin}/` : 'https://ayuswar-ai.vercel.app/'} 
               size={94} 
               isDoctor={isDoctorMode} 
             />
             <div style={{ fontSize: '9px', color: '#A5F3FC', fontWeight: 750, marginTop: '4px' }}>
-              Scan for Health Profile
+              Open AyuSwar demo
             </div>
           </div>
         </div>

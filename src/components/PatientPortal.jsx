@@ -63,6 +63,9 @@ import { askAyuSwarBrain } from '../services/aiBrainService';
 import { speechService } from '../services/indicSpeechService';
 import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import OpdAppointmentTicketModal from './OpdAppointmentTicketModal';
+import ConsultationVisitSummaryModal from './ConsultationVisitSummaryModal';
+import { demoBookingService } from '../services/demoBookingService';
 import AuthenticQrCode from './AuthenticQrCode';
 import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import PatientHealthGoalsTab from './patient/PatientHealthGoalsTab';
@@ -133,6 +136,10 @@ export default function PatientPortal({
   const [bookingReason, setBookingReason] = useState('ఛాతీలో అసౌకర్యం మరియు శ్వాస తీసుకోవడంలో ఇబ్బంది (Chest discomfort & dyspnea)');
   const [bookingSuccessToast, setBookingSuccessToast] = useState(false);
   const [liveAppointmentsQueue, setLiveAppointmentsQueue] = useState(() => opdQueueService.getQueue());
+  const [demoBookingsList, setDemoBookingsList] = useState(() => demoBookingService.getBookings());
+  const [bookedTicket, setBookedTicket] = useState(null);
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [selectedVisitSummary, setSelectedVisitSummary] = useState(null);
 
   // Listen to live OPD appointment booking and queue updates in real-time
   useEffect(() => {
@@ -2566,7 +2573,27 @@ export default function PatientPortal({
                   marginBottom: '16px'
                 }}>
                   <CheckCircle2 size={18} color="#10B981" />
-                  <span>Consultation Request Sent! Doctor will review and assign your OPD Room Token instantly.</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <span>Booking request saved (demo). Your OPD ticket is ready below.</span>
+                    {bookedTicket && (
+                      <button
+                        onClick={() => setShowTicketModal(true)}
+                        style={{
+                          background: '#0F4C5C',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '5px 12px',
+                          fontSize: '12px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+                        }}
+                      >
+                        View OPD Ticket ↗
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -2810,28 +2837,26 @@ export default function PatientPortal({
                         <button
                           type="button"
                           onClick={() => {
-                            const booked = opdQueueService.bookAppointment({
-                              patientId: activeDemoPatient?.id || 'DEMO-P001',
-                              patientName: patientName,
-                              vernacular: activeDemoPatient?.vernacular || patientName,
-                              phone: emergencyPhone || activeDemoPatient?.phone || '+91 98480 22338',
-                              age: activeDemoPatient?.age || patientProfile?.age || 58,
-                              gender: activeDemoPatient?.genderLabel || patientProfile?.gender || 'Female',
-                              language: selectedLanguage,
-                              abhaId: abhaId,
-                              doctorName: bookingDoctor,
-                              specialty: bookingSpecialty,
-                              date: bookingDate,
-                              time: bookingTime,
-                              mode: bookingMode,
-                              reason: bookingReason
+                            const newTicket = demoBookingService.createBooking({
+                              patientName: patientName || 'Ananya Rao',
+                              patientAge: activeDemoPatient?.age || patientProfile?.age || 28,
+                              patientGender: activeDemoPatient?.genderLabel === 'Male' ? 'M' : 'F',
+                              doctorName: bookingDoctor || 'Dr. Demo Sharma',
+                              department: bookingSpecialty || 'General Medicine',
+                              specialty: bookingSpecialty || 'General Medicine',
+                              date: bookingDate || 'Fri, 6 Nov 2026',
+                              time: bookingTime || '10:30 AM',
+                              mode: bookingMode || 'In-person'
                             });
+                            setBookedTicket(newTicket);
+                            setShowTicketModal(true);
+                            setDemoBookingsList(demoBookingService.getBookings());
                             if (onBookAppointment) {
-                              onBookAppointment(booked);
+                              onBookAppointment(newTicket);
                             }
                             setIsBookConsultationModalOpen(false);
                             setBookingSuccessToast(true);
-                            setTimeout(() => setBookingSuccessToast(false), 5000);
+                            setTimeout(() => setBookingSuccessToast(false), 6000);
                           }}
                           style={{
                             flex: 2,
@@ -2887,9 +2912,33 @@ export default function PatientPortal({
                             Runtime-relative scheduled visits with your care team
                           </div>
                         </div>
-                        <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px' }}>
-                          {upcomingAppts.length} Scheduled
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {demoBookingsList.length > 0 && (
+                            <button
+                              onClick={() => {
+                                demoBookingService.clearBookings();
+                                setDemoBookingsList([]);
+                                setBookedTicket(null);
+                              }}
+                              style={{
+                                fontSize: '11px',
+                                color: '#722F37',
+                                background: '#FFF1F2',
+                                border: '1px solid #FECDD3',
+                                borderRadius: '8px',
+                                padding: '4px 10px',
+                                fontWeight: 750,
+                                cursor: 'pointer'
+                              }}
+                              title="Clears local demo bookings from ayuswar_demo_bookings"
+                            >
+                              Reset demo bookings
+                            </button>
+                          )}
+                          <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0, 0, 0, 0.07)', color: '#0F4C5C', padding: '3px 10px', borderRadius: '12px' }}>
+                            {upcomingAppts.length + demoBookingsList.length} Scheduled
+                          </span>
+                        </div>
                       </div>
 
                       {upcomingAppts.length === 0 ? (
@@ -2904,6 +2953,82 @@ export default function PatientPortal({
                         </div>
                       ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                          {/* Booked Demo Tickets from demoBookingService */}
+                          {demoBookingsList.map((booking) => (
+                            <div
+                              key={booking.id}
+                              style={{
+                                padding: '16px 20px',
+                                borderRadius: '14px',
+                                background: '#FFFBEB',
+                                border: '1.5px solid #F59E0B',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                gap: '14px'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '220px', flex: 1 }}>
+                                <div style={{
+                                  background: '#0F4C5C',
+                                  color: '#ffffff',
+                                  padding: '8px 12px',
+                                  borderRadius: '10px',
+                                  textAlign: 'center',
+                                  fontWeight: 800,
+                                  fontSize: '12px',
+                                  flexShrink: 0
+                                }}>
+                                  <div style={{ fontSize: '9px', textTransform: 'uppercase', color: '#D4AF37', letterSpacing: '0.5px' }}>OPD Token</div>
+                                  <div style={{ fontSize: '15px', fontWeight: 900 }}>{booking.token || 'GM-042'}</div>
+                                </div>
+
+                                <div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                    <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{booking.doctorName}</span>
+                                    <span style={{ fontSize: '10px', background: '#FEF3C7', color: '#B45309', border: '1px solid #FDE68A', padding: '2px 7px', borderRadius: '6px', fontWeight: 800 }}>
+                                      • Requested (demo)
+                                    </span>
+                                    <span style={{ fontSize: '10px', background: '#FAF8F5', color: '#486770', padding: '1px 6px', borderRadius: '6px', fontFamily: 'monospace' }}>
+                                      {booking.ref}
+                                    </span>
+                                  </div>
+                                  <div style={{ fontSize: '12px', color: '#698892', marginTop: '2px' }}>
+                                    {booking.department} • {booking.mode} • {booking.date} at {booking.time}
+                                  </div>
+                                  <div style={{ fontSize: '11px', color: '#722F37', marginTop: '2px', fontWeight: 700 }}>
+                                    DEMO · Prototype preview · Not a real hospital appointment
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <button
+                                  onClick={() => {
+                                    setBookedTicket(booking);
+                                    setShowTicketModal(true);
+                                  }}
+                                  style={{
+                                    background: '#0F4C5C',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    padding: '8px 14px',
+                                    fontSize: '12px',
+                                    fontWeight: 750,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    minHeight: '40px'
+                                  }}
+                                >
+                                  <span>📄 View OPD Ticket</span>
+                                </button>
+                              </div>
+                            </div>
+                          ))}
                           {upcomingAppts.map((appt) => {
                             const isToday = appt.offsetDays === 0;
                             const isTeleconsult = appt.isTeleconsult || appt.type === 'Teleconsult';
@@ -2944,7 +3069,7 @@ export default function PatientPortal({
                                       <span style={{ fontSize: '15px', fontWeight: 800, color: '#081C24' }}>{appt.doctorName}</span>
                                       {appt.token && (
                                         <span style={{ fontSize: '10px', background: 'rgba(245, 158, 11, 0.15)', color: '#B45309', border: '1px solid rgba(245, 158, 11, 0.4)', padding: '2px 7px', borderRadius: '6px', fontWeight: 800 }}>
-                                          Token {appt.token}
+                                          Token {appt.token && appt.token.startsWith('T-') ? appt.token.replace('T-0', 'OPD-10').replace('T-', 'OPD-1') : appt.token}
                                         </span>
                                       )}
                                       {isTeleconsult ? (
@@ -5099,6 +5224,25 @@ export default function PatientPortal({
             </div>
           </div>
         </div>
+      )}
+
+      {/* OPD Appointment Ticket Modal */}
+      {showTicketModal && bookedTicket && (
+        <OpdAppointmentTicketModal
+          isOpen={showTicketModal}
+          onClose={() => setShowTicketModal(false)}
+          ticket={bookedTicket}
+        />
+      )}
+
+      {/* Post-Consultation Visit Summary Modal */}
+      {selectedVisitSummary && (
+        <ConsultationVisitSummaryModal
+          isOpen={!!selectedVisitSummary}
+          onClose={() => setSelectedVisitSummary(null)}
+          summary={selectedVisitSummary}
+          initialApproved={true}
+        />
       )}
 
       {/* WhatsApp Vernacular Audio-Rx Modal */}

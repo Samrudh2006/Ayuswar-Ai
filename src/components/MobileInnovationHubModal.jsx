@@ -106,7 +106,7 @@ export default function MobileInnovationHubModal({
     a.download = `ABDM_FHIR_R4_Bundle_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('ABDM FHIR R4 JSON Bundle exported.');
+    showToast('Sample health-record JSON (demo, unvalidated)');
   };
 
   // Phase 15 trigger: Add Audit Block & verify

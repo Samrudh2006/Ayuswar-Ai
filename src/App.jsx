@@ -21,6 +21,7 @@ import FeedbackPopup from './components/FeedbackPopup';
 import MintIvoryWaveBackground from './components/MintIvoryWaveBackground';
 import { initAllRoutesPreload, lazyWithRetry, preloadModule } from './utils/routePreloader';
 import { initGlobalClickSounds } from './utils/soundEffects';
+import { demoBookingService } from './services/demoBookingService';
 
 // Route-Level Code-Split Components with resilient automatic retry
 const DetailedModuleView = lazyWithRetry(() => import('./components/DetailedModuleView'));
@@ -427,6 +428,7 @@ export default function App() {
                   navigate('/');
                 }}
                 onSwitchPatient={(newProfile) => setCurrentPatient(newProfile)}
+                onBookAppointment={(bookingData) => demoBookingService.createBooking(bookingData)}
               />
             } 
           />
@@ -439,8 +441,8 @@ export default function App() {
             } 
           />
 
-          {/* Vernacular Audio-Rx Deep Link Route for WhatsApp QR & Prescription Listeners */}
-          <Route path="/rx/:abhaId" element={<Navigate to="/patient-portal" replace />} />
+          {/* Public Demo Prescription Slip Route (Serves ONLY bundled demo content) */}
+          <Route path="/rx/:ref" element={<PrescriptionPreviewView isPublicDemoSlip={true} />} />
 
           {/* Legal & Compliance Routes */}
           <Route path="/privacy" element={<PrivacyPolicyView />} />

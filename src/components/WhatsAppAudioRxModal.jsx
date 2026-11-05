@@ -46,6 +46,7 @@ export default function WhatsAppAudioRxModal({
   customMedications = null,
   initialLanguage = 'te'
 }) {
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ayuswar-ai.vercel.app';
   // Default patient fallback
   const defaultPatient = {
     name: 'Narayana Rao',
@@ -127,7 +128,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'మందులు', pill: null },
         { word: 'వాడండి.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nనమస్కారం *${patient.name}* (${patient.vernacularName || ''}) గారు,\n\nమీ డాక్టర్ *${doctorName}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n🟡 *పసుపు రంగు టాబ్లెట్* (Pantoprazole 40mg): ఉదయం ${morningMealTelugu} (${morningTime}) - 1 గోళీ.\n🟣 *గులాబీ రంగు టాబ్లెట్* (Metformin 500mg): రాత్రి ${nightMealTelugu} (${nightTime}) - 1 గోళీ.\n\n🔊 ఆడియో సూచనలు వినడానికి క్లిక్ చేయండి: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nఎమర్జెన్సీ హెల్ప్‌లైన్: 108 / 104\nABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nనమస్కారం *${patient.name}* (${patient.vernacularName || ''}) గారు,\n\nమీ డాక్టర్ *${doctorName}* ప్రిస్క్రిప్షన్ ఆడియో నోట్:\n\n🟡 *పసుపు రంగు టాబ్లెట్* (Pantoprazole 40mg): ఉదయం ${morningMealTelugu} (${morningTime}) - 1 గోళీ.\n🟣 *గులాబీ రంగు టాబ్లెట్* (Metformin 500mg): రాత్రి ${nightMealTelugu} (${nightTime}) - 1 గోళీ.\n\n🔊 ఆడియో సూచనలు వినడానికి క్లిక్ చేయండి: ${origin}/rx/DEMO-RX-001\n\nఎమర్జెన్సీ హెల్ప్‌లైన్: 108 / 104\nABDM హెల్త్ రికార్డ్స్ వెరిఫై చేయబడింది ✅`
     },
     hi: {
       langLabel: 'हिंदी (Hindi)',
@@ -165,7 +166,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'पर', pill: null },
         { word: 'लें।', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्ते *${patient.name}* जी,\n\nआपकी डॉक्टर *${doctorName}* की आवाज में दवा का ऑडियो पर्चा:\n\n🟡 *पीली गोली* (Pantoprazole 40mg): सुबह ${morningMealHindi} (${morningTime}) - 1 गोली।\n🟣 *गुलाबी गोली* (Metformin 500mg): रात ${nightMealHindi} (${nightTime}) - 1 गोली।\n\n🔊 ऑडियो सुनने के लिए लिंक खोलें: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nआपातकालीन सहायता: 108 / 104\nABDM डिजिटल हेल्थ रिकॉर्ड प्रमाणित ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्ते *${patient.name}* जी,\n\nआपकी डॉक्टर *${doctorName}* की आवाज में दवा का ऑडियो पर्चा:\n\n🟡 *पीली गोली* (Pantoprazole 40mg): सुबह ${morningMealHindi} (${morningTime}) - 1 गोली।\n🟣 *गुलाबी गोली* (Metformin 500mg): रात ${nightMealHindi} (${nightTime}) - 1 गोली।\n\n🔊 ऑडियो सुनने के लिए लिंक खोलें: ${origin}/rx/DEMO-RX-001\n\nआपातकालीन सहायता: 108 / 104\nABDM डिजिटल हेल्थ रिकॉर्ड प्रमाणित ✅`
     },
     en: {
       langLabel: 'English (Indic Accent)',
@@ -196,7 +197,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'Stay', pill: null },
         { word: 'healthy.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nHello *${patient.name}*,\n\nAudio Prescription from *${doctorName}*:\n\n🟡 *Yellow Tablet* (Pantoprazole 40mg): Morning ${morningMealEnglish} (${morningTime}) - 1 Tab\n🟣 *Pink Tablet* (Metformin 500mg): Night ${nightMealEnglish} (${nightTime}) - 1 Tab\n\n🔊 Listen to Spoken Rx: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nEmergency: 108 / 104 | ABDM FHIR R4 Verified ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nHello *${patient.name}*,\n\nAudio Prescription from *${doctorName}*:\n\n🟡 *Yellow Tablet* (Pantoprazole 40mg): Morning ${morningMealEnglish} (${morningTime}) - 1 Tab\n🟣 *Pink Tablet* (Metformin 500mg): Night ${nightMealEnglish} (${nightTime}) - 1 Tab\n\n🔊 Listen to Spoken Rx: ${origin}/rx/DEMO-RX-001\n\nEmergency: 108 / 104 | ABDM FHIR R4 Verified ✅`
     },
     ta: {
       langLabel: 'தமிழ் (Tamil)',
@@ -215,7 +216,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'இரவு', pill: 'night' },
         { word: 'நன்றி.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nவணக்கம் *${patient.name}*,\n\nஉங்கள் மருத்துவர் *${doctorName}* மருந்து ஆடியோ குறிப்பு:\n\n🟡 *மஞ்சள் மாத்திரை*: காலை (${morningTime}) - 1 மாத்திரை.\n🟣 *இளஞ்சிவப்பு மாத்திரை*: இரவு (${nightTime}) - 1 மாத்திரை.\n\n🔊 ஆடியோ கேட்க: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nஅவசர உதவி: 108 / 104 ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nவணக்கம் *${patient.name}*,\n\nஉங்கள் மருத்துவர் *${doctorName}* மருந்து ஆடியோ குறிப்பு:\n\n🟡 *மஞ்சள் மாத்திரை*: காலை (${morningTime}) - 1 மாத்திரை.\n🟣 *இளஞ்சிவப்பு மாத்திரை*: இரவு (${nightTime}) - 1 மாத்திரை.\n\n🔊 ஆடியோ கேட்க: ${origin}/rx/DEMO-RX-001\n\nஅவசர உதவி: 108 / 104 ✅`
     },
     mr: {
       langLabel: 'मराठी (Marathi)',
@@ -235,7 +236,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'काळजी', pill: null },
         { word: 'घ्या.', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्कार *${patient.name}* जी,\n\nतुमचे डॉक्टर *${doctorName}* यांचा ऑडिओ सल्ला:\n\n🟡 *पिवळी गोळी*: सकाळी (${morningTime}) - 1 गोळी.\n🟣 *गुलाबी गोळी*: रात्री (${nightTime}) - 1 गोळी.\n\n🔊 ऑडिओ ऐकण्यासाठी: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nआपत्कालीन मदत: 108 / 104 ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nनमस्कार *${patient.name}* जी,\n\nतुमचे डॉक्टर *${doctorName}* यांचा ऑडिओ सल्ला:\n\n🟡 *पिवळी गोळी*: सकाळी (${morningTime}) - 1 गोळी.\n🟣 *गुलाबी गोळी*: रात्री (${nightTime}) - 1 गोळी.\n\n🔊 ऑडिओ ऐकण्यासाठी: ${origin}/rx/DEMO-RX-001\n\nआपत्कालीन मदत: 108 / 104 ✅`
     },
     bn: {
       langLabel: 'বাংলা (Bengali)',
@@ -255,7 +256,7 @@ export default function WhatsAppAudioRxModal({
         { word: 'সুস্থ', pill: null },
         { word: 'থাকুন।', pill: null }
       ],
-      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nনমস্কার *${patient.name}* বাবু,\n\nআপনার ডাক্তার *${doctorName}* এর ভয়েস প্রেসক্রিপশন:\n\n🟡 *হলুদ ট্যাবলেট*: সকাল (${morningTime}) - ১টি।\n🟣 *গোলাপি ট্যাবলেট*: রাত (${nightTime}) - ১টি।\n\n🔊 প্রেসক্রিপশন অডিও শুনতে: https://ayuswar.ai/rx/${patient.abhaId || '91-4521'}\n\nজরুরী হেল্পলাইন: 108 / 104 ✅`
+      whatsappSummary: `🏥 *AyuSwar Hospital AI Clinical Audio-Rx*\n\nনমস্কার *${patient.name}* বাবু,\n\nআপনার ডাক্তার *${doctorName}* এর ভয়েস প্রেসক্রিপশন:\n\n🟡 *হলুদ ট্যাবলেট*: সকাল (${morningTime}) - ১টি।\n🟣 *গোলাপি ট্যাবলেট*: রাত (${nightTime}) - ১টি।\n\n🔊 প্রেসক্রিপশন অডিও শুনতে: ${origin}/rx/DEMO-RX-001\n\nজরুরী হেল্পলাইন: 108 / 104 ✅`
     }
   };
 
@@ -1445,7 +1446,7 @@ Format strictly as JSON with keys "spokenNote" and "whatsappSummary".`;
                         Tap to Replay Spoken Audio-Rx
                       </div>
                       <div style={{ fontSize: '10px', color: '#698892' }}>
-                        ayuswar.ai/rx/{patient.abhaId || '91-4521'}
+                        ayuswar-demo/rx/DEMO-RX-001
                       </div>
                     </div>
                   </div>

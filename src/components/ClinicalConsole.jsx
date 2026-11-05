@@ -3260,6 +3260,26 @@ Format your response strictly as JSON with keys: "subjective", "objective", "ass
         </div>
       )}
 
+      {/* Post-Consultation Visit Summary Modal */}
+      {showVisitSummaryModal && (
+        <ConsultationVisitSummaryModal
+          isOpen={showVisitSummaryModal}
+          onClose={() => setShowVisitSummaryModal(false)}
+          summary={{
+            patientName: effectivePatientName,
+            patientAge: currentEncounter.patient.age || 28,
+            patientGender: currentEncounter.patient.gender || 'Female',
+            ref: `VS-DEMO-${(currentEncounter.patient.abhaId || '1105').replace(/\D/g, '').slice(-4) || '1105'}`,
+            date: new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }),
+            doctorName: doctorProfile?.doctorName || 'Dr. Priya Sharma, MD',
+            notes: editableBestMatter || currentEncounter.fullAudioRxTelugu || 'Doctor-reviewed consultation notes appear here after the visit is completed.',
+            medications: medications.map(m => `${m.name || m.brandName} (${m.dosage})`),
+            followUp: 'Follow-up in 14 days with repeat fasting glucose report.'
+          }}
+          initialApproved={isRxSigned}
+        />
+      )}
+
       {/* WhatsApp Modal */}
       <WhatsAppAudioRxModal 
         isOpen={showWhatsAppModal}

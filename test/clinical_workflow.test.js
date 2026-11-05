@@ -91,7 +91,7 @@ assert.ok(resourceTypes.includes('Patient'), 'Bundle must contain Patient resour
 assert.ok(resourceTypes.includes('Practitioner'), 'Bundle must contain Practitioner resource');
 assert.ok(resourceTypes.includes('Condition'), 'Bundle must contain Condition resource');
 assert.ok(resourceTypes.includes('MedicationRequest'), 'Bundle must contain MedicationRequest resource');
-console.log('✓ Test 6 Passed: ABDM FHIR R4 JSON serialization conforms to official NHA clinical document specs.');
+console.log('✓ Test 6 Passed: FHIR R4 JSON bundle shape smoke test (Bundle, Patient, Practitioner, Condition, MedicationRequest).');
 
 // 6. Diagnostic Reports Database Integrity
 assert.ok(Array.isArray(DIAGNOSTIC_REPORTS_DATABASE) && DIAGNOSTIC_REPORTS_DATABASE.length >= 4, 'Must have at least 4 diagnostic report modalities');

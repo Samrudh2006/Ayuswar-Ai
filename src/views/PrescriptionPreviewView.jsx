@@ -24,7 +24,9 @@ import { generateAbdmFhirR4Bundle, downloadFhirJson } from '../data/clinicalSafe
 import { speechService } from '../services/indicSpeechService';
 import AuthenticQrCode from '../components/AuthenticQrCode';
 
-export default function PrescriptionPreviewView() {
+export default function PrescriptionPreviewView({ isPublicDemoSlip = false }) {
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ayuswar-ai.vercel.app';
+  const isDemoSlipRoute = isPublicDemoSlip || (typeof window !== 'undefined' && window.location.pathname.startsWith('/rx/'));
   const { isDemoMode } = useApp();
 
   // Initial Patient Data
@@ -206,7 +208,7 @@ export default function PrescriptionPreviewView() {
     };
 
     downloadFhirJson(report);
-    showToast('Exported verified ABDM FHIR R4 JSON Bundle with PMBJP coding!');
+    showToast('Sample health-record JSON (demo, unvalidated)');
   };
 
   const handlePrint = () => {
@@ -247,6 +249,25 @@ export default function PrescriptionPreviewView() {
         <span style={{ color: '#94A3B8' }}>/</span>
         <span style={{ color: '#081C24', fontSize: '13px', fontWeight: 700 }}>Data.gov.in & PMBJP Prescription Module</span>
       </div>
+
+      {/* Demo Prescription Slip Top Banner */}
+      {isDemoSlipRoute && (
+        <div style={{
+          background: '#722F37',
+          color: '#ffffff',
+          padding: '12px 20px',
+          borderRadius: '12px',
+          marginBottom: '20px',
+          textAlign: 'center',
+          fontWeight: 850,
+          fontSize: '13.5px',
+          letterSpacing: '1px',
+          textTransform: 'uppercase',
+          boxShadow: '0 4px 14px rgba(114, 47, 55, 0.25)'
+        }}>
+          Demo &#183; sample prescription slip
+        </div>
+      )}
 
       {/* Action Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
@@ -760,17 +781,17 @@ export default function PrescriptionPreviewView() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <AuthenticQrCode 
-              value={`https://ayuswar-ai.vercel.app/prescription/preview?abha=${patient.abhaId}&token=PMBJP-${patient.id}`}
+              value={`${origin}/rx/DEMO-RX-001`}
               size={72}
               isDoctor={false}
               showCenterBadge={true}
             />
             <div>
               <div style={{ fontSize: '11.5px', color: '#059669', fontWeight: 750, marginBottom: '2px' }}>
-                ✓ Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP) Verified Dispense Slip
+                Sample PMBJP price-comparison slip (demo)
               </div>
               <div style={{ fontSize: '11px', color: '#698892' }}>
-                Show this QR slip at any PMBJP Kendra across India for price-capped generic delivery.
+                Opens a sample slip page for demo purposes.
               </div>
             </div>
           </div>
@@ -778,7 +799,6 @@ export default function PrescriptionPreviewView() {
           <div style={{ textAlign: 'right' }}>
             <div style={{ borderBottom: '1px solid #0A2540', width: '200px', marginBottom: '4px' }} />
             <div style={{ fontSize: '13px', fontWeight: 800, color: '#081C24' }}>{patient.doctorName}</div>
-            <div style={{ fontSize: '11px', color: '#698892' }}>Attending Physician Digital Signature (ABDM HPR Verified)</div>
           </div>
         </div>
       </div>

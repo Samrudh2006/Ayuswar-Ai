@@ -63,6 +63,7 @@ import AbhaDigitalCard from './AbhaDigitalCard';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
 import LiveScribeSessionModal from './LiveScribeSessionModal';
 import AuthenticQrCode from './AuthenticQrCode';
+import { escapeHtml } from '../utils/escapeHtml';
 import ClinicalNotificationsDrawer from './ClinicalNotificationsDrawer';
 import DoctorClinicalLibraryTab from './doctor/DoctorClinicalLibraryTab';
 import DoctorAiAssistantTab from './doctor/DoctorAiAssistantTab';
@@ -901,7 +902,7 @@ export default function DoctorPortal({
 
   const handleExportFhir = (rep) => {
     downloadFhirJson(rep);
-    setFhirToast(`ABDM FHIR R4 Bundle serialized and downloaded for ${rep.patient} (${rep.title}). Ready for HIE gateway.`);
+    setFhirToast('Sample health-record JSON (demo, unvalidated)');
     setTimeout(() => setFhirToast(null), 4500);
   };
 
@@ -920,14 +921,14 @@ export default function DoctorPortal({
       const badgeBg = isNorm ? '#dcfce7' : (isHigh ? '#fee2e2' : '#fef3c7');
       return `
         <tr style="border-bottom: 1px solid #D0DFE2;">
-          <td style="padding: 9px 12px; font-family: monospace; font-size: 11px; color: #698892;">${m.loinc || rep.loincCode || '-'}</td>
-          <td style="padding: 9px 12px; font-weight: 600; color: #091E26;">${m.name}</td>
-          <td style="padding: 9px 12px; font-weight: 700; color: ${badgeColor}; font-family: monospace;">${m.result}</td>
-          <td style="padding: 9px 12px; color: #698892;">${m.unit || '-'}</td>
-          <td style="padding: 9px 12px; color: #486770; font-family: monospace;">${m.normalRange || '-'}</td>
+          <td style="padding: 9px 12px; font-family: monospace; font-size: 11px; color: #698892;">${escapeHtml(m.loinc || rep.loincCode || '-')}</td>
+          <td style="padding: 9px 12px; font-weight: 600; color: #091E26;">${escapeHtml(m.name)}</td>
+          <td style="padding: 9px 12px; font-weight: 700; color: ${badgeColor}; font-family: monospace;">${escapeHtml(m.result)}</td>
+          <td style="padding: 9px 12px; color: #698892;">${escapeHtml(m.unit || '-')}</td>
+          <td style="padding: 9px 12px; color: #486770; font-family: monospace;">${escapeHtml(m.normalRange || '-')}</td>
           <td style="padding: 9px 12px;">
             <span style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor}; text-transform: uppercase;">
-              ${m.status}
+              ${escapeHtml(m.status)}
             </span>
           </td>
         </tr>
@@ -938,12 +939,12 @@ export default function DoctorPortal({
       <!DOCTYPE html>
       <html>
         <head>
-          <title>NABL Diagnostic Report — ${rep.patient} (${rep.title})</title>
+          <title>AyuSwar AI — Sample Diagnostic Report — ${escapeHtml(rep.patient)} (${escapeHtml(rep.title)})</title>
           <style>
             @page { size: A4 portrait; margin: 12mm; }
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #091E26; margin: 0; padding: 24px; font-size: 13px; line-height: 1.45; }
             .header-table { width: 100%; border-bottom: 2px solid #0f4c5c; padding-bottom: 12px; margin-bottom: 14px; }
-            .badge-nabl { background: #0f4c5c; color: #ffffff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+            .badge-demo { background: #0f4c5c; color: #ffffff; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
             .demo-box { background: #f8fafc; border: 1px solid #D0DFE2; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 12px; }
             .demo-item strong { display: block; font-size: 10.5px; color: #698892; text-transform: uppercase; margin-bottom: 2px; }
             table.results { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
@@ -952,6 +953,7 @@ export default function DoctorPortal({
             .findings-box { background: #f8fafc; border: 1px solid #D0DFE2; border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; }
             .footer-strip { margin-top: 28px; padding-top: 12px; border-top: 1px solid #D0DFE2; display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; color: #698892; }
             .signature-box { text-align: right; }
+            .demo-footer-band { background: #722F37; color: #ffffff; text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 7px 12px; margin-top: 20px; border-radius: 6px; text-transform: uppercase; }
             @media print {
               body { padding: 0; }
               .no-print { display: none !important; }
@@ -960,34 +962,32 @@ export default function DoctorPortal({
         </head>
         <body>
           <div class="no-print" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; background: #e0f2fe; padding: 10px 14px; border-radius: 6px;">
-            <span style="color: #0369a1; font-weight: 600;">Standard ISO 15189 NABL Diagnostic Report Preview</span>
+            <span style="color: #0369a1; font-weight: 600;">AyuSwar AI — Sample Diagnostic Report Preview</span>
             <button onclick="window.print()" style="background: #0f4c5c; color: #ffffff; border: none; padding: 6px 16px; border-radius: 4px; font-weight: 700; cursor: pointer;">Print Report</button>
           </div>
 
           <table class="header-table">
             <tr>
               <td>
-                <div style="font-size: 18px; font-weight: 900; color: #0f4c5c; letter-spacing: -0.3px;">KURNOOL DISTRICT DIAGNOSTIC CENTER</div>
-                <div style="font-size: 11px; color: #486770; margin-top: 2px;">Department of Health, Medical & Family Welfare • Government of Andhra Pradesh</div>
-                <div style="font-size: 11px; color: #698892; margin-top: 2px;">NABL ISO 15189:2022 Accredited Laboratory • Certificate No: <strong>NABL-MED-2026-AP-9941</strong></div>
+                <div style="font-size: 18px; font-weight: 900; color: #0f4c5c; letter-spacing: -0.3px;">AyuSwar AI &#183; Sample Diagnostic Report</div>
+                <div style="font-size: 11px; color: #486770; margin-top: 2px;">Prototype demo output</div>
               </td>
               <td style="text-align: right;">
-                <span class="badge-nabl">NABL ACCREDITED</span>
-                <div style="font-size: 10.5px; color: #059669; font-weight: 700; margin-top: 6px;">ABDM FHIR R4 Compliant</div>
+                <span class="badge-demo">PROTOTYPE DEMO</span>
               </td>
             </tr>
           </table>
 
           <div class="demo-box">
-            <div class="demo-item"><strong>Patient Name</strong> ${rep.patient}</div>
-            <div class="demo-item"><strong>Age / Gender</strong> ${rep.age || '42'} Y / ${rep.gender || 'Male'}</div>
-            <div class="demo-item"><strong>ABHA Address</strong> ${rep.abhaId || '91-8842-1940-2219@abdm'}</div>
+            <div class="demo-item"><strong>Patient Name</strong> ${escapeHtml(rep.patient)}</div>
+            <div class="demo-item"><strong>Age / Gender</strong> ${escapeHtml(rep.age || '42')} Y / ${escapeHtml(rep.gender || 'Male')}</div>
+            <div class="demo-item"><strong>ABHA Address</strong> ${escapeHtml(rep.abhaId || '91-8842-1940-2219@abdm')}</div>
             <div class="demo-item"><strong>Referred By</strong> Dr. Rajesh Rao, MD</div>
-            <div class="demo-item"><strong>Sample / Accession ID</strong> ${rep.specimenId || 'LAB-2026-X992'}</div>
-            <div class="demo-item"><strong>Date of Collection</strong> ${rep.date || '10 May 2026, 08:30 AM'}</div>
+            <div class="demo-item"><strong>Sample / Accession ID</strong> ${escapeHtml(rep.specimenId || 'LAB-2026-X992')}</div>
+            <div class="demo-item"><strong>Date of Collection</strong> ${escapeHtml(rep.date || '10 May 2026, 08:30 AM')}</div>
           </div>
 
-          <div class="section-title">${rep.title} (LOINC: ${rep.loincCode || '36572-6'})</div>
+          <div class="section-title">${escapeHtml(rep.title)} (LOINC: ${escapeHtml(rep.loincCode || '36572-6')})</div>
           ${(rep.metrics && rep.metrics.length > 0) ? `
             <table class="results">
               <thead>
@@ -1007,24 +1007,27 @@ export default function DoctorPortal({
           ` : ''}
 
           <div class="section-title" style="margin-top: 16px;">Detailed Clinical Findings</div>
-          <div class="findings-box">${rep.findings || 'No acute focal abnormalities visualised.'}</div>
+          <div class="findings-box">${escapeHtml(rep.findings || 'No acute focal abnormalities visualised.')}</div>
 
           <div class="section-title">Definitive Impression & Conclusion</div>
           <div class="findings-box" style="background: #f0fdf4; border-color: #bbf7d0; color: #166534; font-weight: 600;">
-            ${rep.impression || 'Study within clinically acceptable physiological thresholds.'}
+            ${escapeHtml(rep.impression || 'Study within clinically acceptable physiological thresholds.')}
           </div>
 
           <div class="footer-strip">
             <div>
-              <div>Laboratory Accreditation: NABL ISO 15189 • ILAC-MRA Signatory</div>
-              <div style="margin-top: 2px;">This is a system authenticated electronic diagnostic document as per IT Act 2000.</div>
-              <div style="font-family: monospace; margin-top: 3px; font-size: 10px;">SHA256 Auth: a8f419...2b01c9 | LOINC-FHIR-BUNDLE-R4</div>
+              <div>Prototype demo report for evaluation purposes only.</div>
+              <div style="margin-top: 2px;">This is synthetic data generated for clinical workflow prototyping.</div>
             </div>
             <div class="signature-box">
-              <div style="font-family: 'Brush Script MT', cursive, serif; font-size: 18px; color: #0f4c5c;">Dr. V. Sunitha, MD</div>
-              <div style="font-weight: 700; color: #091E26; font-size: 11px;">Dr. V. Sunitha, MD (Path / Radio)</div>
-              <div style="font-size: 10px; color: #698892;">Reg No: APMC-67129 • Consultant Specialist</div>
+              <div style="border: 1px solid #D0DFE2; border-radius: 6px; padding: 8px 14px; background: #FAF8F5; font-size: 11px; color: #64748B; font-weight: 700;">
+                Doctor review: pending (demo)
+              </div>
             </div>
+          </div>
+
+          <div class="demo-footer-band">
+            Prototype demo &#183; synthetic sample data &#183; not a medical document
           </div>
         </body>
       </html>
@@ -6807,14 +6810,13 @@ export default function DoctorPortal({
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <AuthenticQrCode 
-                    value={`https://ayuswar-ai.vercel.app/patient-portal?enc=ENC-2026-091&hpr=${doctorProfile?.hprId || 'DEMO-HPR'}&dr=${encodeURIComponent(doctorName)}`}
+                    value={typeof window !== 'undefined' ? `${window.location.origin}/` : 'https://ayuswar-ai.vercel.app/'}
                     size={68}
                     isDoctor={true}
                     showCenterBadge={false}
                   />
                   <div style={{ fontSize: '11px', color: '#698892', maxWidth: '240px' }}>
-                    ABDM Health Record Token: <strong>HRT-DEMO-9942</strong><br />
-                    Encrypted with SHA-256 digital certificate. Scannable via any smartphone camera.
+                    Scan to view the AyuSwar demo. This is a sample document.
                   </div>
                 </div>
 
