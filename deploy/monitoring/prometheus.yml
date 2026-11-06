@@ -38,3 +38,4 @@ scrape_configs:
         labels:
           subsystem: "triage_gps_dispatch"
           sla_target: "sub_3min"
+

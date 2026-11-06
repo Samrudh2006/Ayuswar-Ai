@@ -132,3 +132,4 @@ services:
       - "4318:4318" # OTLP HTTP receiver
     networks:
       - ayuswar-mesh
+

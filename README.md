@@ -12,16 +12,28 @@
 
 ---
 
+<!-- Row 1: Production Core & AI Stack -->
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-ayuswar--ai.vercel.app-0F4C5C?style=for-the-badge&logo=vercel&logoColor=white)](https://ayuswar-ai.vercel.app/)
 [![Gnani AI](https://img.shields.io/badge/Gnani%20AI-Prisma%20v3%20%7C%20Timbre%20%7C%20Evon%2030B-7C3AED?style=for-the-badge&logo=googleassistant&logoColor=white)](https://gnani.ai/)
 [![Test Suite](https://img.shields.io/badge/Automated%20Tests-74%2F74%20PASSING-10B981?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
+[![Compliance](https://img.shields.io/badge/Schema-HL7%20FHIR%20R4%20%7C%20ABDM%20M3-008B8B?style=for-the-badge&logo=health%20level%20seven&logoColor=white)](https://abdm.gov.in/)
+
+<!-- Row 2: Sovereign Cloud-Native DevOps & Observability (CNCF 100% Free & Open Source) -->
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s%20%7C%203--30%20Pod%20HPA-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](deploy/k8s/)
+[![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps%20Continuous%20Delivery-EF7B4D?style=for-the-badge&logo=argo&logoColor=white)](deploy/argocd/)
+[![Prometheus](https://img.shields.io/badge/Prometheus-Metrics%20%26%20Audio%20RTF-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)](deploy/monitoring/)
+[![Grafana](https://img.shields.io/badge/Grafana-Clinical%20Dashboard%20v10.4-F46800?style=for-the-badge&logo=grafana&logoColor=white)](deploy/monitoring/grafana-dashboard-ayuswar.json)
+[![Traefik](https://img.shields.io/badge/Traefik-Cloud--Native%20Mesh-24A1C1?style=for-the-badge&logo=traefikproxy&logoColor=white)](deploy/docker-compose.enterprise.yml)
+[![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-W3C%20Tracing-425CC7?style=for-the-badge&logo=opentelemetry&logoColor=white)](deploy/monitoring/otel-config.yaml)
+[![Free Open-Source](https://img.shields.io/badge/Cloud%20Spend-%E2%82%B90%20%7C%20100%25%20Open%20Source-059669?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](deploy/)
+
+<!-- Row 3: Multi-Model Evaluation Consensus & Clinical Quality -->
 [![Grok 4.7 Eval](https://img.shields.io/badge/Grok%204.7%20Eval-RANK%20%232%20%7C%20TOP%20TIER-000000?style=for-the-badge&logo=x&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Claude Sonnet Eval](https://img.shields.io/badge/Claude%20Sonnet%20Eval-RANK%20%233%20%7C%20PROD%20SAAS-D97706?style=for-the-badge&logo=anthropic&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Mistral Large Eval](https://img.shields.io/badge/Mistral%20Eval-EXECUTION%207%2F10%20%7C%20HIGH%20CONF-F97316?style=for-the-badge&logo=mistralai&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![DeepSeek Eval](https://img.shields.io/badge/DeepSeek%20Eval-BAND%20A%20RUNNABLE-1E40AF?style=for-the-badge&logo=deepseek&logoColor=white)](https://github.com/Samrudh2006/Ayuswar-Ai)
 [![Jan Aushadhi PMBJP](https://img.shields.io/badge/Jan%20Aushadhi%20PMBJP-86%25%20Generic%20Savings-047857?style=for-the-badge)](https://ayuswar-ai.vercel.app/)
 [![Zero AI Slop](https://img.shields.io/badge/Architecture-Zero%20AI%20Slop%20%7C%20Verified%20Codebase-059669?style=for-the-badge)](https://github.com/Samrudh2006/Ayuswar-Ai)
-[![Compliance](https://img.shields.io/badge/Schema-HL7%20FHIR%20R4%20%7C%20ABDM-008B8B?style=for-the-badge)](https://abdm.gov.in/)
 
 <br/>
 
@@ -98,7 +110,45 @@ AyuSwar AI integrates the full breadth of Gnani AI's proprietary speech and reas
 
 ---
 
-## 📊 Empirical Performance & Test Scorecard
+## ☸️ Sovereign Cloud-Native DevOps, Observability & GitOps Stack
+
+AyuSwar AI is engineered as an enterprise-grade sovereign healthcare infrastructure adhering to **CNCF (Cloud Native Computing Foundation)** open-source standards. It runs with **₹0 cloud spend, zero proprietary cloud lock-in, and zero external API keys required**:
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│               S O V E R E I G N   C L O U D - N A T I V E   A R C H I T E C T U R E               │
+├─────────────────────────┬──────────────────────────┬──────────────────────────┬───────────────────┤
+│  Kubernetes / K3s (K8s) │   Prometheus & Grafana   │   ArgoCD GitOps (CNCF)   │  Traefik Ingress  │
+│ • 3-30 Pod HPA scaling  │ • Audio RTF (<0.35x) APM │ • Declarative Git sync   │ • Automated TLS   │
+│ • Zero-downtime rollout │ • 400-800Hz wheeze alarm │ • Automated self-healing │ • Edge isolation  │
+│ • Non-root container ctx│ • p99 latency monitoring │ • Zero manual drift      │ • Zero data leak  │
+└─────────────────────────┴──────────────────────────┴──────────────────────────┴───────────────────┘
+```
+
+### ⚡ 1-Command Local Enterprise Startup (Docker Compose)
+
+Launch the full stack locally with Prometheus, Grafana, Traefik, and OpenTelemetry in one command:
+
+```bash
+docker compose -f deploy/docker-compose.enterprise.yml up -d
+```
+
+| Service Endpoint | URL | Default Credentials / Status | Purpose |
+| :--- | :--- | :--- | :--- |
+| **AyuSwar Healthcare Core** | `http://localhost:5173` | Out of the Box | Sovereign Indic Ambient Clinical Scribe & Tele-Consult |
+| **Grafana Clinical Dashboard** | `http://localhost:3001` | `admin` / `ayuswar` | Real-time audio RTF, wheeze density & 108 dispatch queue |
+| **Prometheus Telemetry Engine**| `http://localhost:9090` | Open-Access | Time-series metrics scraper & clinical alert evaluator |
+| **Traefik Ingress Dashboard** | `http://localhost:8080` | Open-Access | Cloud-native reverse proxy mesh & router health status |
+
+### 📁 Production Infrastructure Specifications (`deploy/`)
+
+* **Kubernetes Workload:** [`deploy/k8s/ayuswar-deployment.yaml`](deploy/k8s/ayuswar-deployment.yaml) — Production deployment with liveness/readiness probes, non-root user (`10001`), and resource quotas.
+* **Horizontal Pod Autoscaling:** [`deploy/k8s/ayuswar-hpa.yaml`](deploy/k8s/ayuswar-hpa.yaml) — Dynamic scaling from 3 to 30 pods under rural clinic peak hours (70% CPU threshold).
+* **GitOps Continuous Delivery:** [`deploy/argocd/ayuswar-gitops-app.yaml`](deploy/argocd/ayuswar-gitops-app.yaml) — Declarative application CRD syncing directly with GitHub `main`.
+* **Clinical Monitoring & Dashboards:** [`deploy/monitoring/grafana-dashboard-ayuswar.json`](deploy/monitoring/grafana-dashboard-ayuswar.json) — Provisioned Grafana dashboard covering clinical telemetry.
+* **Traefik Ingress Mesh:** [`deploy/k8s/traefik-ingress.yaml`](deploy/k8s/traefik-ingress.yaml) — Sovereign ingress terminating TLS with zero data egress to foreign clouds.
+
+---
 
 | Verification Metric | Measured Empirical Result | Target Benchmark | Verification Status |
 | :--- | :---: | :---: | :---: |

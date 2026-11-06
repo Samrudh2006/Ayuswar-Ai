@@ -59,3 +59,4 @@ kubectl get hpa -n ayuswar-health
 kubectl apply -f deploy/argocd/ayuswar-gitops-app.yaml -n argocd
 ```
 ArgoCD automatically detects updates in Git repository `main` branch, validates zero-defect health checks, and performs automated self-healing without manual deployment intervention.
+
