@@ -549,9 +549,9 @@ export default function DoctorPortal({
   const [capturedOcrImage, setCapturedOcrImage] = useState(null);
   const [ocrSearchQuery, setOcrSearchQuery] = useState('');
   const [customOcrResult, setCustomOcrResult] = useState(null);
-  const ocrVideoRef = React.useRef ? React.useRef(null) : { current: null };
-  const ocrStreamRef = React.useRef ? React.useRef(null) : { current: null };
-  const ocrFileInputRef = React.useRef ? React.useRef(null) : { current: null };
+  const ocrVideoRef = useRef(null);
+  const ocrStreamRef = useRef(null);
+  const ocrFileInputRef = useRef(null);
 
   // Physician Settings State Suite
   const [docScribeEngine, setDocScribeEngine] = useState('browser_speech');

@@ -15,7 +15,7 @@ if (!CHROME_PATH) {
 // 1. Read emblem mark cleanly as Base64 (strictly NO BOM)
 const emblemPath = path.resolve(process.cwd(), 'public/assets/ayuswar_emblem_mark.png');
 const emblemBuf = fs.readFileSync(emblemPath);
-const emblemBase64 = emblemBuf.toString('base64').trim();
+let emblemBase64 = emblemBuf.toString('base64').trim();
 
 // Verify no BOM
 if (emblemBase64.charCodeAt(0) === 0xFEFF) {

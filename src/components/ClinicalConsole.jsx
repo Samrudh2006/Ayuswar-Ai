@@ -42,6 +42,7 @@ import LiveTelemetryBadge from './LiveTelemetryBadge';
 import { fetchLiveDrugLabel, fetchLiveIcd10Codes } from '../services/liveMedicalDataService';
 import { CLINICAL_ENCOUNTERS } from '../data/clinicalEncounters';
 import WhatsAppAudioRxModal from './WhatsAppAudioRxModal';
+import ConsultationVisitSummaryModal from './ConsultationVisitSummaryModal';
 import { 
   speechService, 
   normalizeCodeMixedClinicalText, 

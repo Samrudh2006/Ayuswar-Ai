@@ -1285,7 +1285,7 @@ export default function PatientPortal({
                   background: '#ffffff',
                   borderRadius: '16px',
                   boxShadow: '0 18px 45px rgba(0, 0, 0, 0.11)',
-                  border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)',
+                  border: '1px solid rgba(0, 0, 0, 0.06)',
                   padding: '14px',
                   zIndex: 200
                 }}
@@ -4643,7 +4643,7 @@ export default function PatientPortal({
               <div className="patient-settings-grid" style={{ display: 'grid', gridTemplateColumns: isMobileScreen ? '1fr' : 'repeat(2, 1fr)', gap: '22px', width: '100%', boxSizing: 'border-box' }}>
                 
                 {/* 1. AyuSwar Indic Voice & Dialect Engine */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0, 0, 0, 0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F4C5C' }}>
                       <Languages size={20} />
@@ -4729,7 +4729,7 @@ export default function PatientPortal({
                 </div>
 
                 {/* 2. Omnichannel Alerts & Tele-Dispatch */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(37, 99, 235, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563EB' }}>
                       <Smartphone size={20} />
@@ -4797,7 +4797,7 @@ export default function PatientPortal({
                 </div>
 
                 {/* 3. Emergency Caregiver Escalation & 108 SOS */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#DC2626' }}>
                       <PhoneCall size={20} />
@@ -4854,7 +4854,7 @@ export default function PatientPortal({
                 </div>
 
                 {/* 4. ABDM & ABHA Health Locker Consent Governance */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}>
                       <ShieldCheck size={20} />
@@ -4921,7 +4921,7 @@ export default function PatientPortal({
                 </div>
 
                 {/* 5. Family Locker & Caregiver Privacy Controls */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(217, 119, 6, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
                       <UserCheck size={20} />
@@ -4969,7 +4969,7 @@ export default function PatientPortal({
                 </div>
 
                 {/* 6. Rural PHC Offline Mode & Low Data Compression */}
-                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid rgba(0, 0, 0, 0.06)', boxShadow: '0 4px 18px -2px rgba(0, 0, 0, 0.03)', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284C7' }}>
                       <WifiOff size={20} />

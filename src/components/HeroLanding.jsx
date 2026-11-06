@@ -1361,7 +1361,6 @@ export default function HeroLanding({
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 background: '#FFFFFF',
-                border: '1px solid #D0DFE2',
                 padding: '8px 14px',
                 borderRadius: '14px',
                 border: '1.5px solid rgba(212, 175, 55, 0.35)',

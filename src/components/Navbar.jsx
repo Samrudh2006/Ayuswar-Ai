@@ -507,7 +507,7 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                aria-label="Select Interface Language"
+                aria-label={`Select Interface Language. Current: ${currentLangObj.name}`}
                 aria-haspopup="listbox"
                 aria-expanded={langMenuOpen}
                 style={{
@@ -523,7 +523,6 @@ export default function Navbar({
                   fontWeight: 650,
                   cursor: 'pointer'
                 }}
-                aria-label={`Language selector. Current: ${currentLangObj.name}`}
               >
                 <span>{currentLangObj.label}</span>
                 <ChevronDown size={12} />
@@ -689,7 +688,6 @@ export default function Navbar({
                 justifyContent: 'center',
                 transition: 'all 0.15s ease'
               }}
-              aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
