@@ -952,30 +952,69 @@ export default function AcousticBiomarkerLabView() {
         ctx.stroke();
         ctx.shadowBlur = 0;
       } else {
-        const barCount = 48;
-        const barWidth = (canvas.width / barCount) - 2;
+        // High-Definition Clinical Mel-Spectrogram & 3D Wheeze Waterfall Engine
+        const sampleRate = audioContextRef.current ? audioContextRef.current.sampleRate : 44100;
+        const nyquist = sampleRate / 2;
+        const barCount = 64;
+        const barWidth = canvas.width / barCount;
+
+        // Clinical 400 - 800 Hz Wheeze Window Bounding Coordinates
+        const wheezeXStart = (400 / nyquist) * canvas.width * 2.8;
+        const wheezeXEnd = (800 / nyquist) * canvas.width * 2.8;
+
+        // Translucent Wheeze Danger Band (400 - 800 Hz)
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+        ctx.fillRect(wheezeXStart, 0, Math.max(30, wheezeXEnd - wheezeXStart), canvas.height);
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.25)';
+        ctx.setLineDash([3, 3]);
+        ctx.strokeRect(wheezeXStart, 0, Math.max(30, wheezeXEnd - wheezeXStart), canvas.height);
+        ctx.setLineDash([]);
+
+        // Continuous Spectral Density Fill Curve (Smooth Mel Envelope)
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
 
         for (let i = 0; i < barCount; i++) {
-          const index = Math.floor(i * (bufferLength / barCount) * 0.5);
-          const barHeight = (freqData[index] / 255) * canvas.height * 0.9;
-          const x = i * (barWidth + 2);
+          const index = Math.floor(i * (bufferLength / barCount) * 0.45);
+          const rawVal = freqData[index] || 0;
+          const barHeight = (rawVal / 255) * canvas.height * 0.88;
+          const x = i * barWidth;
           const y = canvas.height - barHeight;
 
-          const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
-          grad.addColorStop(0, '#0F4C5C');
-          grad.addColorStop(0.5, '#00F5D4');
-          grad.addColorStop(1, '#D4AF37');
+          // Multi-layer 3D Depth Spectral Ribbon
+          const grad = ctx.createLinearGradient(0, canvas.height, 0, y);
+          if (x >= wheezeXStart && x <= wheezeXEnd && rawVal > 110) {
+            grad.addColorStop(0, '#7F1D1D');
+            grad.addColorStop(0.5, '#EF4444');
+            grad.addColorStop(1, '#FCA5A5');
+          } else {
+            grad.addColorStop(0, '#042F2E');
+            grad.addColorStop(0.4, '#0F4C5C');
+            grad.addColorStop(0.8, '#00F5D4');
+            grad.addColorStop(1, '#D4AF37');
+          }
 
           ctx.fillStyle = grad;
-          ctx.fillRect(x, y, barWidth, barHeight);
+          ctx.fillRect(x, y, barWidth - 1.5, barHeight);
+
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x + barWidth / 2, y);
         }
 
-        // Frequency guides
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.font = '10px monospace';
-        ctx.fillText('100 Hz', 10, 18);
-        ctx.fillText('1 kHz (Speech Mids)', canvas.width * 0.35, 18);
-        ctx.fillText('4 kHz (Treble)', canvas.width - 90, 18);
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(0, 245, 212, 0.04)';
+        ctx.fill();
+
+        // Clinical Frequency Calibration Grid
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.font = '9.5px monospace';
+        ctx.fillText('100 Hz', 10, 16);
+        ctx.fillStyle = '#F87171';
+        ctx.fillText('400-800 Hz (Wheeze Zone)', Math.max(20, wheezeXStart + 4), 16);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.fillText('2.5 kHz (Speech)', canvas.width * 0.62, 16);
+        ctx.fillText('4 kHz', canvas.width - 45, 16);
       }
 
       // VU level feedback
