@@ -1,0 +1,98 @@
+# ==============================================================================
+# AYUSWAR AI — PRODUCTION KUBERNETES (K8s / K3s) DEPLOYMENT SPECIFICATION
+# 100% Free & Open-Source Cloud-Native Standard
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ayuswar-clinical-engine
+  namespace: ayuswar-health
+  labels:
+    app.kubernetes.io/name: ayuswar-ai
+    app.kubernetes.io/instance: ayuswar-prod
+    app.kubernetes.io/version: "2.5.0"
+    app.kubernetes.io/component: sovereign-clinical-runtime
+    app.kubernetes.io/part-of: national-health-grid
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ayuswar-ai
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ayuswar-ai
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+        prometheus.io/path: "/metrics"
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: ayuswar-core
+          image: ghcr.io/samrudh2006/ayuswar-ai:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: metrics
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: ABDM_ENVIRONMENT
+              value: "sandbox_m3_certified"
+            - name: GNANI_INDIC_PIPELINE
+              value: "active_sovereign_timbre"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          livenessProbe:
+            httpGet:
+              path: /index.html
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ayuswar-service
+  namespace: ayuswar-health
+  labels:
+    app.kubernetes.io/name: ayuswar-ai
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: ayuswar-ai

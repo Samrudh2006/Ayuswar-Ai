@@ -1,0 +1,40 @@
+# ==============================================================================
+# AYUSWAR AI — PROMETHEUS SCRAPE CONFIGURATION (100% Free & Open Source)
+# ==============================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+rule_files:
+  - "/etc/prometheus/prometheus-alerts.yml"
+
+scrape_configs:
+  # 1. AyuSwar Clinical Edge DSP & Frontend Metrics
+  - job_name: "ayuswar_edge_runtime"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["ayuswar-app:5173", "ayuswar-app:80"]
+        labels:
+          tier: "edge_audio_dsp"
+          cluster: "sovereign_local_mesh"
+          region: "ap-south-1"
+
+  # 2. Gnani Indic Voice Pipeline Telemetry (Simulated Scrape Target)
+  - job_name: "gnani_indic_telemetry"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["ayuswar-app:80"]
+        labels:
+          pipeline: "gnani_prisma_v3_timbre"
+          engine: "indic_phonetic_aligner"
+
+  # 3. Sanjivani-108 Emergency Mesh Telemetry
+  - job_name: "sanjivani_108_emergency"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["ayuswar-app:80"]
+        labels:
+          subsystem: "triage_gps_dispatch"
+          sla_target: "sub_3min"

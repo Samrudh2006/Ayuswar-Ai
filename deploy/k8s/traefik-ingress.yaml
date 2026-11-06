@@ -1,0 +1,24 @@
+# ==============================================================================
+# AYUSWAR AI — TRAEFIK / INGRESS SPECIFICATION (100% Free Open-Source Ingress)
+# ==============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ayuswar-ingress
+  namespace: ayuswar-health
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: "web,websecure"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  rules:
+    - host: "ayuswar.mohfw.gov.in"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ayuswar-service
+                port:
+                  number: 80

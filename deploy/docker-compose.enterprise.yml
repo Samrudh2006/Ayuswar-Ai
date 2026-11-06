@@ -1,0 +1,134 @@
+# ==============================================================================
+# AYUSWAR AI (ఆయుస్వర) — ENTERPRISE CLOUD-NATIVE DOCKER COMPOSE STACK
+# 100% Free & Open Source (₹0 / No Paid AWS / No API Keys Required)
+# ==============================================================================
+# Services Included:
+#  1. ayuswar-app:    AyuSwar AI Sovereign Healthcare Web & Edge Runtime (Port 5173 / 3000)
+#  2. prometheus:     CNCF Open-Source Observability & Time-Series Engine (Port 9090)
+#  3. grafana:        Clinical Operations & DSP Latency Dashboard (Port 3001)
+#  4. traefik:        Cloud-Native Ingress & Reverse Proxy Service Mesh (Port 80, 8080)
+#  5. otel-collector: OpenTelemetry Telemetry Collector for W3C Distributed Tracing
+# ==============================================================================
+
+version: '3.8'
+
+networks:
+  ayuswar-mesh:
+    driver: bridge
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. AyuSwar AI Sovereign Healthcare Application Runtime
+  # ----------------------------------------------------------------------------
+  ayuswar-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: ayuswar-clinical-engine
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_DEPLOYMENT_MODE=enterprise_sovereign
+      - VITE_TELEMETRY_ENABLED=true
+      - PROMETHEUS_METRICS_PORT=9090
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - ayuswar-mesh
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ayuswar.rule=Host(`ayuswar.local`) || PathPrefix(`/`)"
+      - "traefik.http.services.ayuswar.loadbalancer.server.port=5173"
+
+  # ----------------------------------------------------------------------------
+  # 2. Prometheus v2.51.0 (CNCF Graduated Open-Source Metrics Engine)
+  # ----------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: ayuswar-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus-alerts.yml:/etc/prometheus/prometheus-alerts.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - ayuswar-mesh
+
+  # ----------------------------------------------------------------------------
+  # 3. Grafana v10.4.0 (Open-Source Clinical Operations Dashboard)
+  # ----------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: ayuswar-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=ayuswar
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/ayuswar-clinical-dashboard.json
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./monitoring/grafana-dashboard-ayuswar.json:/var/lib/grafana/dashboards/ayuswar-clinical-dashboard.json:ro
+    depends_on:
+      - prometheus
+    networks:
+      - ayuswar-mesh
+
+  # ----------------------------------------------------------------------------
+  # 4. Traefik v3.0 (Cloud-Native Reverse Proxy & Intelligent Ingress)
+  # ----------------------------------------------------------------------------
+  traefik:
+    image: traefik:v3.0
+    container_name: ayuswar-traefik-mesh
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "8080:8080" # Traefik Web UI Dashboard
+    command:
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - ayuswar-mesh
+
+  # ----------------------------------------------------------------------------
+  # 5. OpenTelemetry Collector (Vendor-Agnostic Telemetry Backbone)
+  # ----------------------------------------------------------------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: ayuswar-otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./monitoring/otel-config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+    networks:
+      - ayuswar-mesh

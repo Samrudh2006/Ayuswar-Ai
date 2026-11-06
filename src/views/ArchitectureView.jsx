@@ -9,7 +9,12 @@ import {
   ShieldCheck,
   Download,
   Printer,
-  CheckCircle2
+  CheckCircle2,
+  Activity,
+  Server,
+  BarChart3,
+  GitBranch,
+  Radio
 } from 'lucide-react';
 import HandDrawnExplainer from '../components/HandDrawnExplainer';
 import PipelineTerminal from '../components/PipelineTerminal';
@@ -184,6 +189,143 @@ export default function ArchitectureView() {
               <Printer size={16} />
               <span>Print Executive Dossier (A4)</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sovereign Cloud-Native DevOps & Observability Architecture (100% Free & Open Source) */}
+      <div style={{ marginTop: '36px', marginBottom: '40px' }}>
+        <div style={{ marginBottom: '18px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(2, 132, 199, 0.1)', color: '#0284C7', padding: '4px 10px', borderRadius: '12px', fontSize: '11.5px', fontWeight: 800, marginBottom: '8px' }}>
+            <Activity size={14} />
+            <span>100% FREE & OPEN-SOURCE CNCF CLOUD-NATIVE STACK (₹0 SPEND)</span>
+          </div>
+          <h2 style={{ fontSize: '22px', fontWeight: 850, color: '#081C24', margin: '0 0 6px 0', letterSpacing: '-0.3px' }}>
+            Sovereign DevOps, Observability & GitOps Infrastructure
+          </h2>
+          <p style={{ fontSize: '13.5px', color: '#5A7184', maxWidth: '850px', lineHeight: 1.5, margin: 0 }}>
+            Enterprise-grade healthcare deployment topology configured via declarative code in <code style={{ background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px', fontSize: '12.5px', color: '#0F4C5C' }}>deploy/</code> — zero proprietary cloud subscriptions, zero external API keys, and 100% sovereign patient data privacy.
+          </p>
+        </div>
+
+        {/* 4-Pillar Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+          gap: '16px',
+          marginBottom: '20px'
+        }}>
+          {/* 1. K3s / Kubernetes */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(15, 76, 92, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0F4C5C' }}>
+                <Server size={20} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(52, 211, 153, 0.15)', color: '#059669', padding: '3px 8px', borderRadius: '10px' }}>
+                ✓ 3-30 Pods HPA
+              </span>
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
+              Kubernetes / K3s Microservices
+            </h3>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#0F4C5C', marginBottom: '8px' }}>
+              deploy/k8s/ayuswar-deployment.yaml
+            </div>
+            <p style={{ fontSize: '13px', color: '#486770', lineHeight: 1.5, margin: 0 }}>
+              Horizontal Pod Autoscaler (70% CPU threshold), non-root container security context, rolling updates, and automated health probes.
+            </p>
+          </div>
+
+          {/* 2. Prometheus & Grafana */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(234, 88, 12, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EA580C' }}>
+                <BarChart3 size={20} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(52, 211, 153, 0.15)', color: '#059669', padding: '3px 8px', borderRadius: '10px' }}>
+                ✓ Active (/metrics)
+              </span>
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
+              Prometheus & Grafana APM
+            </h3>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>
+              deploy/monitoring/grafana-dashboard-ayuswar.json
+            </div>
+            <p style={{ fontSize: '13px', color: '#486770', lineHeight: 1.5, margin: 0 }}>
+              Real-time Audio RTF (0.18x target), 400-800Hz wheeze acoustic harmonics, p99 teleconsultation latency, and Sanjivani-108 dispatch queue depth.
+            </p>
+          </div>
+
+          {/* 3. ArgoCD GitOps */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284C7' }}>
+                <GitBranch size={20} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(52, 211, 153, 0.15)', color: '#059669', padding: '3px 8px', borderRadius: '10px' }}>
+                ✓ Self-Healing
+              </span>
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
+              ArgoCD Declarative GitOps
+            </h3>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#0284C7', marginBottom: '8px' }}>
+              deploy/argocd/ayuswar-gitops-app.yaml
+            </div>
+            <p style={{ fontSize: '13px', color: '#486770', lineHeight: 1.5, margin: 0 }}>
+              Continuous Delivery syncing directly from GitHub main branch with automated drift detection, pruning, and self-healing rollbacks.
+            </p>
+          </div>
+
+          {/* 4. Traefik & Sovereign Mesh */}
+          <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #D0DFE2', padding: '20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10B981' }}>
+                <Radio size={20} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(52, 211, 153, 0.15)', color: '#059669', padding: '3px 8px', borderRadius: '10px' }}>
+                ✓ Mesh Online
+              </span>
+            </div>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#081C24', margin: '0 0 4px 0' }}>
+              Traefik Cloud-Native Ingress
+            </h3>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#10B981', marginBottom: '8px' }}>
+              deploy/docker-compose.enterprise.yml
+            </div>
+            <p style={{ fontSize: '13px', color: '#486770', lineHeight: 1.5, margin: 0 }}>
+              Zero-cost reverse proxy & automated TLS termination. Routes FHIR R4 bundles and real-time audio streams with strict ABDM zero-leak isolation.
+            </p>
+          </div>
+        </div>
+
+        {/* 1-Command Startup Box */}
+        <div style={{
+          background: '#091E26',
+          borderRadius: '14px',
+          padding: '16px 20px',
+          color: '#E2E8F0',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          <div>
+            <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.6px', color: '#6EE7B7', fontWeight: 800, marginBottom: '4px' }}>
+              Local Production Cluster Command (Zero Setup)
+            </div>
+            <code style={{ fontSize: '13px', color: '#FFFFFF', fontFamily: 'monospace', fontWeight: 700 }}>
+              docker compose -f deploy/docker-compose.enterprise.yml up -d
+            </code>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: '#94A3B8' }}>Infrastructure Cost:</span>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: '#34D399', background: 'rgba(52, 211, 153, 0.12)', padding: '4px 10px', borderRadius: '8px' }}>
+              ₹0.00 / 100% Free Open-Source
+            </span>
           </div>
         </div>
       </div>

@@ -1,0 +1,36 @@
+# ==============================================================================
+# AYUSWAR AI — PROMETHEUS CLINICAL ALERTING RULES
+# ==============================================================================
+
+groups:
+  - name: ayuswar_clinical_alerts
+    rules:
+      - alert: HighAcousticProcessingLatency
+        expr: ayuswar_audio_rtf > 0.40
+        for: 1m
+        labels:
+          severity: warning
+          tier: edge_dsp
+        annotations:
+          summary: "Audio Real-Time Factor exceeded 0.40x threshold"
+          description: "Stethoscope spectrogram or Gnani TTS latency is degrading clinical consultation experience."
+
+      - alert: CriticalWheezeSpikeAlert
+        expr: rate(ayuswar_wheeze_detections_total[5m]) > 10
+        for: 30s
+        labels:
+          severity: critical
+          tier: clinical_safety
+        annotations:
+          summary: "Abnormal cluster of acute pediatric/geriatric wheeze events detected"
+          description: "400-800Hz wheeze acoustic harmonics triggered across active OPD consultations."
+
+      - alert: EmergencyAmbulanceDispatchDelay
+        expr: rate(ayuswar_sanjivani_108_dispatches[15m]) > 5
+        for: 2m
+        labels:
+          severity: high
+          tier: emergency_108
+        annotations:
+          summary: "High volume of Sanjivani-108 emergency handovers"
+          description: "Immediate triage protocol active; GPS dispatch queue under load."
